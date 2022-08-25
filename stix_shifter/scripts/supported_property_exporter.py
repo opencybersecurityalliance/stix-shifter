@@ -33,7 +33,10 @@ CONNECTORS = {
     "proofpoint": "Proofpoint (SIEM API)",
     # "infoblox": "Infoblox BloxOne Threat Defense",
     "cybereason": "Cybereason",
-    "paloalto": "PaloAlto Cortex XDR"
+    "paloalto": "PaloAlto Cortex XDR",
+    "sentinelone": "SentinelOne",
+    "reaqta": "ReaQta",
+    "darktrace": "Darktrace"
 }
 
 STIX_OPERATORS ={

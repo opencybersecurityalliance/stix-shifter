@@ -13,6 +13,15 @@ from . import encoders
 from . import object_scopers
 
 
+def stix_strptime(date_string):
+    stix_date_format = "%Y-%m-%dT%H:%M:%S.%fz"
+    stix_date_format_secs = "%Y-%m-%dT%H:%M:%Sz"
+    try:
+        return datetime.strptime(date_string, stix_date_format)
+    except ValueError:
+        return datetime.strptime(date_string, stix_date_format_secs)
+
+
 class SplunkSearchTranslator:
     """ The core translator class. Instances should not be re-used """
 
@@ -43,29 +52,31 @@ class SplunkSearchTranslator:
             translated_query_str = translator.translate(expression.comparison_expression)
 
             if qualifier:
+                # timestamp pattern according to STIX spec
+                ts_pattern = r"t'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?Z'"
+
                 # start time pattern
-                st_pattern = r"(STARTt'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z')"
+                st_pattern = f"(START{ts_pattern})"
                 # stop time pattern
-                et_pattern = r"(STOPt'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z')"
+                et_pattern = f"(STOP{ts_pattern})"
 
                 # find start and stop time from qualifier string
                 st_arr = re.findall(st_pattern, qualifier)
                 et_arr = re.findall(et_pattern, qualifier)
 
-                stix_date_format = "%Y-%m-%dT%H:%M:%S.%fz"
                 splunk_date_format = "%m/%d/%Y:%H:%M:%S"
                 earliest, latest = "", ""
 
                 if st_arr:
                     # replace START and single quotes with empty char in date string
-                    earliest = re.sub(r"(STARTt|')", '', st_arr[0] if st_arr else "")
-                    earliest_obj = datetime.strptime(earliest, stix_date_format)
+                    earliest = re.sub(r"(STARTt|')", '', st_arr[0][0] if st_arr else "")
+                    earliest_obj = stix_strptime(earliest)
                     earliest_dt = earliest_obj.strftime(splunk_date_format)
 
                 if et_arr:
                     # replace STOP and single quotes with empty char in date string
-                    latest = re.sub(r"(STOPt|')", '', et_arr[0] if et_arr else "")
-                    latest_obj = datetime.strptime(latest, stix_date_format)
+                    latest = re.sub(r"(STOPt|')", '', et_arr[0][0] if et_arr else "")
+                    latest_obj = stix_strptime(latest)
                     latest_dt = latest_obj.strftime(splunk_date_format)
 
                 # prepare splunk SPL query
@@ -163,12 +174,21 @@ class _ObservationExpressionTranslator:
 
     def _build_comparison(self, expression, object_scoping, field_mapping):
         comparator = self._lookup_comparison_operator(self, expression.comparator)
+
         if isinstance(comparator, str):
-            splunk_comparison = self._maybe_negate("{} {} {}".format(
-                field_mapping,
-                comparator,
-                encoders.simple(expression.value)
-            ), expression.negated)
+            if comparator == "encoders.like":
+                comparison = encoders.like(field_mapping, expression.value)
+            elif comparator == "encoders.set":
+                comparison = encoders.set(field_mapping, expression.value)
+            elif comparator == "encoders.matches":
+                comparison = encoders.matches(field_mapping, expression.value)
+            else:
+                comparison = "{} {} {}".format(
+                    field_mapping,
+                    comparator,
+                    encoders.simple(expression.value)
+                )
+            splunk_comparison = self._maybe_negate(comparison, expression.negated)
 
             if isinstance(self.dmm, CarBaseQueryTranslator):
                 return "({} AND {})".format(object_scoping, splunk_comparison)
@@ -196,6 +216,7 @@ def _test_for_earliest_latest(query_string) -> bool:
 def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options):
     result_limit = options['result_limit']
     time_range = options['time_range']
+    index = options.get('index')
     x = SplunkSearchTranslator(pattern, data_model_mapping, result_limit, time_range)
     translated_query = x.translate(pattern)
     has_earliest_latest = _test_for_earliest_latest(translated_query)
@@ -210,6 +231,9 @@ def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options)
             fields += ", "
         else:
             fields += field
+
+    if index:
+        translated_query = f'index={index} {translated_query}'
 
     if not has_earliest_latest:
         translated_query += ' earliest="{earliest}" | head {result_limit}'.format(earliest=time_range, result_limit=result_limit)

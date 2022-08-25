@@ -1,0 +1,354 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "srcIp",
+        "dstIp",
+        "srcMachineIP"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": [
+        "srcIp",
+        "dstIp",
+        "srcMachineIP"
+      ]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": [
+        "srcPort"
+      ],
+      "dst_port": [
+        "dstPort"
+      ],
+      "protocols[*]": [
+        "netProtocolName"
+      ],
+      "src_ref.value": [
+        "srcIp"
+      ],
+      "dst_ref.value": [
+        "dstIp"
+      ],
+       "extensions.'x-sentinelone-network-action'.connection_status": [
+        "netConnStatus"
+      ],
+      "extensions.'x-sentinelone-network-action'.event_direction": [
+        "netEventDirection"
+      ]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": [
+        "dnsRequest",
+        "dnsResponse",
+        "loginAccountDomain"
+      ]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": [
+        "url"
+      ]
+    }
+  },
+  "process": {
+    "fields": {
+      "command_line": [
+        "srcProcCmdLine",
+        "tgtProcCmdLine"
+      ],
+      "created_time": [
+        "srcProcStartTime",
+        "tgtProcStartTime",
+        "srcProcParentStartTime"
+      ],
+      "pid": [
+        "srcProcPid",
+        "tgtProcPid",
+        "srcProcParentPid"
+      ],
+      "creator_user_ref.user_id": [
+        "srcProcUser",
+        "tgtProcUser"
+      ],
+      "parent_ref.pid": [
+        "srcProcParentPid"
+      ],
+      "parent_ref.created_time": [
+        "srcProcParentStartTime"
+      ],
+      "extensions.'x-sentinelone-process'.name": [
+        "srcProcName",
+        "srcProcParentName",
+        "tgtProcName"
+      ],
+      "extensions.'x-sentinelone-process'.integrity_level": [
+        "srcProcIntegrityLevel",
+        "tgtProcIntegrityLevel"
+      ],
+      "extensions.'x-sentinelone-process'.publisher": [
+        "srcProcPublisher",
+        "tgtProcPublisher"
+      ],
+      "extensions.'x-sentinelone-process'.story_line_id": [
+        "srcProcStorylineId",
+        "tgtProcStorylineId"
+      ],
+      "x_unique_id": [
+        "srcProcUid",
+        "tgtProcUid",
+        "srcProcParentUid"
+      ],
+      "extensions.'x-sentinelone-process'.signed_status": [
+        "srcProcSignedStatus",
+        "tgtProcSignedStatus"
+      ],
+      "extensions.'x-sentinelone-process'.verified_status": [
+        "srcProcVerifiedStatus",
+        "tgtProcVerifiedStatus"
+      ],
+      "extensions.'x-sentinelone-process'.signature_invalid_reason": [
+        "srcProcReasonSignatureInvalid",
+        "tgtProcReasonSignatureInvalid"
+      ],
+      "extensions.'x-sentinelone-process'.sub_system": [
+        "srcProcSubsystem",
+        "tgtProcSubsystem"
+      ],
+      "extensions.'x-sentinelone-process'.session_id": [
+        "srcProcSessionId",
+        "tgtProcSessionId"
+      ],
+      "extensions.'x-sentinelone-process'.active_content_type": [
+        "srcProcActiveContentType",
+        "tgtProcActiveContentType"
+      ],
+      "extensions.'x-sentinelone-process'.active_content_fileid": [
+        "srcProcActiveContentFileId",
+        "tgtProcActiveContentFileId"
+      ],
+      "extensions.'x-sentinelone-process'.active_content_path": [
+        "srcProcActiveContentPath",
+        "tgtProcActiveContentPath"
+      ],
+      "extensions.'x-sentinelone-process'.active_content_hash": [
+        "srcProcActiveContentHash",
+        "tgtProcActiveContentHash"
+      ],
+      "extensions.'x-sentinelone-process'.active_content_signed_status": [
+        "srcProcActiveContentSignedStatus",
+        "tgtProcActiveContentSignedStatus"
+      ]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": [
+        "fileFullName"
+      ],
+      "size": [
+        "tgtFileSize"
+      ],
+      "hashes.MD5": [
+        "tgtFileMd5",
+        "tgtFileOldMd5",
+        "srcProcImageMd5",
+        "tgtProcImageMd5"
+      ],
+      "hashes.'SHA-1'": [
+        "tgtFileSha1",
+        "tgtFileOldSha1",
+        "srcProcImageSha1",
+        "tgtProcImageSha1"
+      ],
+      "hashes.'SHA-256'": [
+        "tgtFileSha256",
+        "tgtFileOldSha256",
+        "srcProcImageSha256",
+        "tgtProcImageSha256"
+      ],
+      "parent_directory_ref.path": [
+        "tgtFilePath",
+        "tgtFileOldPath",
+        "srcProcImagePath",
+        "tgtProcImagePath",
+        "srcProcParentImagePath"
+      ],
+      "ctime": [
+        "tgtFileCreatedAt"
+      ],
+      "mtime": [
+        "tgtFileModifiedAt"
+      ],
+      "extensions.'x-sentinelone-file'.file_type": [
+        "tgtFileType"
+      ],
+      "extensions.'x-sentinelone-file'.file_extension": [
+        "tgtFileExtension"
+      ],
+      "extensions.'x-sentinelone-file'.file_description": [
+        "tgtFileDescription"
+      ],
+      "extensions.'x-sentinelone-file'.file_location": [
+        "tgtFileLocation"
+      ],
+      "extensions.'x-sentinelone-file'.file_id": [
+        "tgtFileId"
+      ],
+      "extensions.'x-sentinelone-file'.convicted_by": [
+        "tgtFileConvictedBy"
+      ]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": [
+        "tgtFilePath",
+        "tgtFileOldPath",
+        "srcProcImagePath",
+        "tgtProcImagePath",
+        "srcProcParentImagePath"
+      ]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": [
+        "loginAccountSid",
+        "srcProcUser",
+        "tgtProcUser"
+      ],
+      "account_login": [
+        "loginsUserName"
+      ],
+      "is_privileged": [
+        "loginIsAdministratorEquivalent"
+      ],
+      "display_name": [
+        "loginAccountName"
+      ],
+      "extensions.'x-sentinelone-login'.login_type": [
+        "loginType"
+      ],
+      "extensions.'x-sentinelone-login'.base_type": [
+        "loginsBaseType"
+      ],
+      "extensions.'x-sentinelone-login'.login_failure_reason": [
+        "loginFailureReason"
+      ],
+      "extensions.'x-sentinelone-login'.session_id": [
+        "loginSessionId"
+      ]
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": [
+        "registryKeyPath",
+        "registryPath"
+      ],
+      "values[*]": [
+        "registryValue"
+      ],
+      "extensions.'x-sentinelone-registry'.value_type": [
+        "registryValueType"
+      ],
+      "extensions.'x-sentinelone-registry'.full_size": [
+        "registryValueFullSize"
+      ],
+      "extensions.'x-sentinelone-registry'.old_value_type": [
+        "registryOldValueType"
+      ],
+      "extensions.'x-sentinelone-registry'.old_value": [
+        "registryOldValue"
+      ],
+      "extensions.'x-sentinelone-registry'.old_value_full_size": [
+        "registryOldValueFullSize"
+      ]
+    }
+  },
+  "x-sentinelone-indicator": {
+    "fields": {
+      "indicator_name": [
+        "indicatorName"
+      ],
+      "indicator_category": [
+        "indicatorCategory"
+      ],
+      "indicator_description": [
+        "indicatorDescription"
+      ],
+      "indicator_metadata": [
+        "indicatorMetadata"
+      ]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": [
+        "endpointName"
+      ],
+      "ip_refs[*].value": [
+        "srcIp",
+        "dstIp"
+      ],
+      "extensions.'x-sentinelone-endpoint'.endpoint_os": ["endpointOs"],
+      "extensions.'x-sentinelone-endpoint'.agent_version": ["agentVersion"],
+      "extensions.'x-sentinelone-endpoint'.agent_uuid": ["agentUuid"],
+      "extensions.'x-sentinelone-endpoint'.machine_type": ["endpointMachineType"]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "action": [
+        "eventType"
+      ],
+      "category[*]": [
+        "objectType"
+      ],
+      "created": [
+        "eventTime"
+      ],
+      "host_ref": [
+        "endpointName"
+      ],
+      "url_ref": [
+        "url"
+      ],
+      "file_ref": [
+        "fileFullName"
+      ],
+      "process_ref": [
+        "srcProcPid",
+        "tgtProcPid",
+        "srcProcParentPid"
+      ],
+      "parent_process_ref": [
+        "srcProcParentPid"
+      ],
+      "agent": [
+        "agentName"
+      ],
+      "user_ref": [
+        "srcProcUser",
+        "tgtProcUser"
+      ],
+      "domain_ref": [
+        "dnsRequest",
+        "dnsResponse",
+        "loginAccountDomain"
+      ],
+      "registry_ref": [
+        "registryKeyPath",
+        "registryPath"
+      ]
+    }
+  }
+}

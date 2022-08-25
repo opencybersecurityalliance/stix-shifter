@@ -34,6 +34,7 @@ class QueryTranslator(BaseQueryTranslator):
         # append '-' as prefix and 'minutes' as suffix in time_range to convert minutes in SPL query format
         time_range = '-' + str(time_range) + 'minutes'
         translate_options['time_range'] = time_range
+        translate_options['index'] = self.options.get('index')
 
         query_string = query_constructor.translate_pattern(
             antlr_parsing_object, self, DEFAULT_SEARCH_KEYWORD, translate_options)
