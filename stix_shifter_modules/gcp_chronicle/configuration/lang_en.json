@@ -9,7 +9,7 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
          "selfSignedCert": {
-                "label": "Private Key - Mandatory Field",
+                "label": "Private Key (Required)",
                 "description": "Private Key which is mandatory field used in authentication to make API calls"
             }
     },

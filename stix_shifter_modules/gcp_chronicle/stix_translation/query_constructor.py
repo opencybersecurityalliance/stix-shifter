@@ -48,7 +48,7 @@ class QueryStringPatternTranslator:
         :return: dict
         """
 
-        _json_path = path.dirname(path.realpath(__file__)) + "/" + rel_path_of_file
+        _json_path = path.dirname(path.abspath(__file__)) + "/" + rel_path_of_file
         try:
             if path.exists(_json_path):
                 with open(_json_path, encoding='utf-8') as f_obj:
