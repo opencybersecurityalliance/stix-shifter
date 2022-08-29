@@ -106,13 +106,13 @@ Work on a new stix-shifter connector occurs after the project has been forked an
 Open a terminal and navigate to your local stix-shifter directory. Run the host with the following command:
 
 ```
-python main.py host "<STIX Identity Object>" "<Host IP address>:<Host Port>"
+python main.py host "<STIX Identity Object>" "<Host IP address>:<Host Port>" "[SSL Certificate]" "[SSL Key]"
 ```
 
 As an example:
 
 ```
-python main.py host '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "Bundle","identity_class": "events"}' "192.168.122.83:5000"
+python main.py host '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "Bundle","identity_class": "events"}' "127.0.0.1:5000" "" ""
 ```
 
 #### Calling the proxy host
