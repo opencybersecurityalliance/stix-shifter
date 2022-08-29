@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Amazon Athena"
+            "displayName": "Amazon Athena",
+            "group": "aws"
         },
         "help": {
             "type": "link",

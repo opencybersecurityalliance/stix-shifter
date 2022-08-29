@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Amazon CloudWatch Logs"
+            "displayName": "Amazon CloudWatch Logs",
+            "group": "aws"
         },
         "help": {
             "type": "link",
