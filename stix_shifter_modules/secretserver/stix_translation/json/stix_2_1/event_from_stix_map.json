@@ -1,0 +1,35 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["IpAddress", "Server"],
+       "src_ip": ["IpAddress"],
+        "dst_ip": ["Server"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": [
+        "url"
+      ]
+    }
+  },
+
+  "x-secret": {
+    "fields": {
+      "secret_name": ["SecretName"],
+      "username": ["EmailAddress"],
+      "secret_id": ["ItemId"],
+      "user_id": ["UserId"],
+      "server_user_name" : ["Username"]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "event_name": ["EventSubject"],
+      "description": ["EventNote"],
+      "finding_type": ["EventDetails"],
+      "time_observed": ["EventTime"]
+    }
+  }
+}
+
