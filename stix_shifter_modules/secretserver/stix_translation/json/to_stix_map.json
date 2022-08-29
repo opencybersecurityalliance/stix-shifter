@@ -1,10 +1,4 @@
 {
-  "username": [
-    {
-    "key": "user-account.user_name"
-  }
-  ],
-
   "IpAddress": [
     {
       "key": "ipv4-addr.value",
@@ -46,7 +40,7 @@
 
   "EventSubject" :
     {
-      "key": "x-ibm-finding.name",
+      "key": "x-ibm-finding.event_name",
       "object": "finding"
     },
   "EventNote":
@@ -76,6 +70,14 @@
    },
   "UserId": {
       "key": "x-secret.user_id",
+       "object": "secret"
+   },
+   "EmailAddress": {
+      "key": "x-secret.username",
+       "object": "secret"
+   },
+   "Username": {
+      "key": "x-secret.server_user_name",
        "object": "secret"
    }
 }
