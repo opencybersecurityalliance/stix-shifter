@@ -14,28 +14,21 @@
     }
   },
 
-  "user-account": {
-    "fields": {
-      "user_id": [
-        "UserId"
-      ]
-    }
-  },
   "x-secret": {
     "fields": {
       "secret_name": ["SecretName"],
-      "user_name": ["username"],
+      "username": ["EmailAddress"],
       "secret_id": ["ItemId"],
-      "user_id": ["UserId"]
+      "user_id": ["UserId"],
+      "server_user_name" : ["Username"]
     }
   },
   "x-ibm-finding": {
     "fields": {
-      "name": ["EventSubject"],
+      "event_name": ["EventSubject"],
       "description": ["EventNote"],
       "finding_type": ["EventDetails"],
       "time_observed": ["EventTime"]
     }
   }
 }
-
