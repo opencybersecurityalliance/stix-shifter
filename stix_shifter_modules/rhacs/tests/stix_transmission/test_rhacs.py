@@ -317,7 +317,7 @@ class TestRhacsConnection(unittest.TestCase):
         mock_api_client.return_value = None
         mock_result_limit.return_value = 10
 
-        query = json.dumps('{query=Lifecycle Stage:"RUNTIME"%2BViolation Time:>=06/28/2022}')
+        query = json.dumps('Lifecycle Stage:"RUNTIME"+Violation Time:>=06/28/2022')
 
         transmission = stix_transmission.StixTransmission('rhacs',
                                                           self.connection(),
@@ -502,7 +502,7 @@ class TestRhacsConnection(unittest.TestCase):
         mock_api_client.return_value = None
         mock_result_limit.return_value = 10
 
-        query = json.dumps('{query=Lifecycle Stage:"RUNTIME"%2BViolation Time:>=06/28/2022}')
+        query = json.dumps('Lifecycle Stage:"RUNTIME"+Violation Time:>=06/28/2022')
 
         transmission = stix_transmission.StixTransmission('rhacs',
                                                           self.connection(),
@@ -686,7 +686,7 @@ class TestRhacsConnection(unittest.TestCase):
         mock_api_client.return_value = None
         mock_result_limit.return_value = 10
 
-        query = json.dumps('{query=Lifecycle Stage:"DEPLOY"%2BViolation Time:>=06/28/2022}')
+        query = json.dumps('Lifecycle Stage:"DEPLOY"+Violation Time:>=06/28/2022')
 
         transmission = stix_transmission.StixTransmission('rhacs',
                                                           self.connection(),
@@ -724,7 +724,7 @@ class TestRhacsConnection(unittest.TestCase):
     def test_x_ibm_finding_query(self, mock_api_client):
         """ test to check query of x-ibm-finding element """
         mock_api_client.return_value = None
-        query = json.dumps('{query=Lifecycle Stage:"RUNTIME"%2BViolation Time:>=06/30/2022}')
+        query = json.dumps('Lifecycle Stage:"RUNTIME"+Violation Time:>=06/28/2022')
 
         transmission = stix_transmission.StixTransmission('rhacs',
                                                           self.connection(),
@@ -741,7 +741,7 @@ class TestRhacsConnection(unittest.TestCase):
     def test_x_rhacs_deployment_query(self, mock_api_client):
         """ test to check query of x-rhacs-deployment element """
         mock_api_client.return_value = None
-        query = json.dumps('{query=Deployment:"app-manager"%2BViolation Time:>=06/30/2022}')
+        query = json.dumps('Deployment:"app-manager"+Violation Time:>=06/01/2022')
 
         transmission = stix_transmission.StixTransmission('rhacs',
                                                           self.connection(),
@@ -758,7 +758,7 @@ class TestRhacsConnection(unittest.TestCase):
     def test_x_rhacs_cluster_query(self, mock_api_client):
         """ test to check query of x-rhacs-deployment element """
         mock_api_client.return_value = None
-        query = json.dumps('{query=Cluster:"cp4s-cluster"%2BViolation Time:>=06/30/2022}')
+        query = json.dumps('Cluster:"cp4s-cluster"+Violation Time:>=06/01/2022')
 
         transmission = stix_transmission.StixTransmission('rhacs',
                                                           self.connection(),
@@ -787,7 +787,7 @@ class TestRhacsConnection(unittest.TestCase):
         mock_api_client.return_value = None
         mock_result_limit.return_value = 10
 
-        query = json.dumps('{query=Lifecycle Stage:"RUNTIME"%2BViolation Time:>=06/28/2022}')
+        query = json.dumps('Lifecycle Stage:"RUNTIME"+Violation Time:>=06/28/2022')
 
         transmission = stix_transmission.StixTransmission('rhacs',
                                                           self.connection(),

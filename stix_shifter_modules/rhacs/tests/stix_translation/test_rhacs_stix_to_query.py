@@ -8,7 +8,7 @@ translation = stix_translation.StixTranslation()
 
 def _remove_timestamp_from_query(queries):
     """ removes timestamp from query """
-    pattern = r'%2BViolation\s*Time:>=\d{2}/\d{2}/\d{4}'
+    pattern = r'\+Violation\s*Time:>=\d{2}/\d{2}/\d{4}'
     if isinstance(queries, list):
         val = [re.sub(pattern, '', str(query)) for query in queries]
     elif isinstance(queries, str):
@@ -48,7 +48,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-ibm-finding:severity = 2]"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Severity:"LOW_SEVERITY"%2BViolation Time:>=06/30/2021']
+        queries = ['Severity:"LOW_SEVERITY"+Violation Time:>=06/30/2021']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -57,7 +57,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-ibm-finding:severity = 40]"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Severity:"MEDIUM_SEVERITY"%2BViolation Time:>=06/30/2021']
+        queries = ['Severity:"MEDIUM_SEVERITY"+Violation Time:>=06/30/2021']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -66,7 +66,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-ibm-finding:severity = 70]"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Severity:"HIGH_SEVERITY"%2BViolation Time:>=06/30/2021']
+        queries = ['Severity:"HIGH_SEVERITY"+Violation Time:>=06/30/2021']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -75,7 +75,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-ibm-finding:severity = 90]"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Severity:"CRITICAL_SEVERITY"%2BViolation Time:>=06/30/2021']
+        queries = ['Severity:"CRITICAL_SEVERITY"+Violation Time:>=06/30/2021']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -84,7 +84,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-rhacs-cluster:name = 'cp4s-cluster']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Cluster:"cp4s-cluster"%2BViolation Time:>=06/30/2022']
+        queries = ['Cluster:"cp4s-cluster"+Violation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -93,7 +93,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-rhacs-cluster:name LIKE 'cp4s']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Cluster:r/cp4s.*%2BViolation Time:>=06/30/2022']
+        queries = ['Cluster:r/cp4s.*+Violation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -102,7 +102,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-rhacs-cluster:name MATCHES 'cp4.*']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Cluster:r/cp4.*%2BViolation Time:>=06/30/2022']
+        queries = ['Cluster:r/cp4.*+Violation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -111,7 +111,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-rhacs-cluster:name != 'cp4s-cluster']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Cluster:!"cp4s-cluster"%2BViolation Time:>=06/30/2022']
+        queries = ['Cluster:!"cp4s-cluster"+Violation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -122,8 +122,8 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         if len(query['queries']) > 1:
             query['queries'] = _multiple_observation_query(query['queries'])
-        queries = ['Cluster:"cp4s-cluster"%2BViolation Time:>=06/30/2021',
-                   'Cluster:"rhacs-cluster"%2BViolation Time:>=06/30/2022']
+        queries = ['Cluster:"cp4s-cluster"+Violation Time:>=08/26/2022',
+                   'Cluster:"rhacs-cluster"+Violation Time:>=08/26/2022']
         queries = _multiple_observation_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -133,8 +133,8 @@ class TestQueryTranslator(unittest.TestCase):
                        "x-ibm-finding:extensions.'x-rhacs-finding'.violation_state = 'RESOLVED']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Violation State:"RESOLVED"%2BPolicy:"Unauthorized Network"'
-                   '%2BViolation Time:>=06/30/2022']
+        queries = ['Violation State:"RESOLVED"+Policy:"Unauthorized Network"'
+                   '+Violation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -143,7 +143,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-rhacs-cluster:id LIKE 'dbe']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Cluster ID:r/dbe.*%2BViolation Time:>=06/30/2022']
+        queries = ['Cluster ID:r/dbe.*+Violation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -156,7 +156,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "START t'2022-06-22T08:43:10.003Z' STOP t'2022-06-23T10:43:10.005Z'"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Deployment:"app-manager"%2BNamespace:"cp4s"%2BViolation Time:>=06/22/2022']
+        queries = ['Deployment:"app-manager"+Namespace:"cp4s"+Violation Time:>=06/22/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -166,8 +166,8 @@ class TestQueryTranslator(unittest.TestCase):
                        "AND x-rhacs-deployment:isactive = 'true']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Inactive Deployment:True%2BDeployment:"app-manager"%2BNamespace:'
-                   '"cp4s"%2BViolation Time:>=06/30/2022']
+        queries = ['Inactive Deployment:True+Deployment:"app-manager"+Namespace:'
+                   '"cp4s"+Violation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -176,7 +176,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-ibm-finding:name  NOT = '90-Day Image Age']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Policy:!"90-Day Image Age"%2BViolation Time:>=06/30/2022']
+        queries = ['Policy:!"90-Day Image Age"+Violation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -185,7 +185,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-rhacs-deployment:isactive = 'true']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Inactive Deployment:True%2BViolation Time:>=06/30/2022']
+        queries = ['Inactive Deployment:True+Violation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -194,7 +194,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-rhacs-deployment:isactive = 'false']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Inactive Deployment:False%2BViolation Time:>=06/30/2022']
+        queries = ['Inactive Deployment:False+Violation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -210,9 +210,9 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         if len(query['queries']) > 1:
             query['queries'] = _multiple_observation_query(query['queries'])
-        queries = ['Inactive Deployment:True%2BDeployment:"app-manager"%2BNamespace:"cp4s"'
-                   '%2BViolation Time:>=06/22/2022',
-                   'Policy:!"90-Day Image Age"%2BViolation Time:>=06/15/2022']
+        queries = ['Inactive Deployment:True+Deployment:"app-manager"+Namespace:"cp4s"'
+                   '+Violation Time:>=06/22/2022',
+                   'Policy:!"90-Day Image Age"+Violation Time:>=06/15/2022']
         queries = _multiple_observation_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -221,7 +221,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-rhacs-deployment:name != 'app-manager']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Deployment:!"app-manager"%2BViolation Time:>=06/30/2022']
+        queries = ['Deployment:!"app-manager"+Violation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -230,7 +230,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-rhacs-deployment:name NOT LIKE 'app']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Deployment:!r/app.*%2BViolation Time:>=06/30/2022']
+        queries = ['Deployment:!r/app.*+Violation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -259,8 +259,8 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         if len(query['queries']) > 1:
             query['queries'] = _multiple_observation_query(query['queries'])
-        queries = ['Category:"Docker CIS"%2BViolation Time:>=06/22/2022',
-                   'Deployment:"app-manager"%2BViolation Time:>=06/15/2022']
+        queries = ['Category:"Docker CIS"+Violation Time:>=06/22/2022',
+                   'Deployment:"app-manager"+Violation Time:>=06/15/2022']
         queries = _multiple_observation_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -278,8 +278,8 @@ class TestQueryTranslator(unittest.TestCase):
                        "AND x-ibm-finding:extensions.'x-rhacs-finding'.violation_state = 'ACTIVE']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Violation State:"ACTIVE"%2BLifecycle Stage:"RUNTIME"'
-                   '%2BViolation Time:>=06/30/2022']
+        queries = ['Violation State:"ACTIVE"+Lifecycle Stage:"RUNTIME"'
+                   '+Violation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -290,8 +290,8 @@ class TestQueryTranslator(unittest.TestCase):
                        " x-ibm-finding:extensions.'x-rhacs-finding'.resource_type = 'DEPLOYMENT']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ['Resource Type:"DEPLOYMENT"%2BViolation State:"ACTIVE"%2BLifecycle Stage:"RUNTIME"'
-                   '%2BViolation Time:>=06/30/2022']
+        queries = ['Resource Type:"DEPLOYMENT"+Violation State:"ACTIVE"+Lifecycle Stage:"RUNTIME"'
+                   '+Violation Time:>=06/30/2022']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -307,7 +307,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-ibm-finding:time_observed = t'2022-07-04T00:00:00.030Z' AND " \
                        "x-ibm-finding:extensions.'x-rhacs-finding'.lifecycle_stage = 'runtime']"
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
-        queries = ['Lifecycle Stage:"RUNTIME"%2BViolation Time:07/04/2022']
+        queries = ['Lifecycle Stage:"RUNTIME"+Violation Time:07/04/2022']
         self._test_query_assertions(query, queries)
 
     def test_violation_multiple_observation_query(self):
@@ -319,7 +319,7 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('rhacs', 'query', '{}', stix_pattern)
         if len(query['queries']) > 1:
             query['queries'] = _multiple_observation_query(query['queries'])
-        queries = ['Violation Time:07/04/2022', 'Lifecycle Stage:"RUNTIME"%2BViolation Time:>=06/15/2022']
+        queries = ['Violation Time:07/04/2022', 'Lifecycle Stage:"RUNTIME"+Violation Time:>=06/15/2022']
         queries = _multiple_observation_query(queries)
         self._test_query_assertions(query, queries)
 

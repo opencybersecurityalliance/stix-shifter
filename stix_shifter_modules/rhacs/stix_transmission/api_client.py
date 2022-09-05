@@ -1,3 +1,4 @@
+from urllib.parse import quote
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 
 class APIClient:
@@ -32,6 +33,7 @@ class APIClient:
            :param query: Data Source Query
            :return: Response Object
         """
+        query = quote(query)
         endpoint = self.ALERTS_ENDPOINT + "?query=" + query
         return self.client.call_api(endpoint, 'GET', headers=self.client.headers,
                                     timeout=self.timeout)

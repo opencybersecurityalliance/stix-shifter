@@ -3,7 +3,6 @@ import re
 import json
 import logging
 from os import path
-from urllib.parse import quote
 from datetime import datetime, timedelta
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, \
     ComparisonExpression, ComparisonComparators, Pattern, \
@@ -300,7 +299,7 @@ class QueryStringPatternTranslator:
                 QueryStringPatternTranslator._parse_time_range(qualifier, self.options["time_range"])
             QueryStringPatternTranslator._check_time_range_values(converted_timestamp)
             self.timeframe += converted_timestamp
-            final_query = f'{query}{quote("+")}Violation Time:>=' \
+            final_query = f'{query}+Violation Time:>=' \
                           f'{QueryStringPatternTranslator._format_datetime(converted_timestamp[0])}'
         return final_query
 
@@ -384,8 +383,6 @@ class QueryStringPatternTranslator:
         :param expression: expression object
         """
         operator = self._lookup_comparison_operator(expression.operator)
-        if operator == '+':
-            operator = quote(operator)
         expression_01 = self._parse_expression(expression.expr1)
         expression_02 = self._parse_expression(expression.expr2)
         if not expression_01 or not expression_02:
