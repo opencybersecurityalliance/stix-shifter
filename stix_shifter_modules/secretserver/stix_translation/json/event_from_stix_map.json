@@ -13,6 +13,11 @@
       ]
     }
   },
+   "user-account": {
+    "fields": {
+      "user_name": "username"
+    }
+  },
   "email-addr": {
         "fields": {
             "value": "EmailAddress"
@@ -36,4 +41,3 @@
     }
   }
 }
-
