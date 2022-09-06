@@ -103,7 +103,7 @@ class Connector(BaseSyncConnector):
         :param res_dict: dict, log
         :return: str, element name
         """
-        element_name = res_dict['data']['pathResultCounts'][0]['featureDescriptor']['elementInstanceType']
+        element_name = res_dict['data']['queryLimits']['groupingFeature']['elementInstanceType']
         return element_name
 
     def ping_connection(self):
