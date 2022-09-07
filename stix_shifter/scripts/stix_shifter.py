@@ -21,7 +21,6 @@ HOST = 'host'
 MAPPING = 'mapping'
 MODULES = 'modules'
 
-
 def main():
     """
     Stix-shifter can either be called to either translate or transmit.
@@ -195,6 +194,8 @@ def main():
         options = {}
         if 'options' in args and args.options:
             options = json.loads(args.options)
+            log.debug("options: " + args.options)
+
 
         module = process_dialects(args_module_dialects, options)[0]
 
