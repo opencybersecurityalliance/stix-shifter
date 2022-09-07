@@ -21,3 +21,17 @@ class SeverityToScore(ValueTransformer):
 
         except KeyError:
             LOGGER.error("Cannot convert string to severity scale value")
+
+
+class ToIsactive(ValueTransformer):
+    """value transformer to convert inactive value to Isactive value """
+
+    @staticmethod
+    def transform(inactive):
+
+        if (isinstance(inactive, bool)):
+            isactive = not inactive
+        else:
+            isactive = False
+
+        return isactive

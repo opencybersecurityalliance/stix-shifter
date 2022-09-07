@@ -284,6 +284,7 @@ class Connector(BaseSyncConnector):
             if commondata.get('deployment') is not None:
                 dt_common['deployment'] = commondata['deployment']['name']
                 dt_common['deploymentId'] = commondata['deployment']['id']
+                dt_common['inactive'] = commondata['deployment']['inactive']
         return dt_common
 
     @staticmethod
@@ -332,11 +333,10 @@ class Connector(BaseSyncConnector):
                 dt_containernm = {}
                 dt_container['id'] = containerdata['containerImage'].get('id')
 
-                dt_containernm['registry'] = containerdata['containerImage'].get('name') \
-                    .get('registry')
+                dt_containernm['registry'] = containerdata['containerImage'].get('name').get('registry')
                 dt_containernm['remote'] = containerdata['containerImage'].get('name').get('remote')
                 dt_containernm['tag'] = containerdata['containerImage'].get('name').get('tag')
-                dt_containernm['full_name'] = containerdata['containerImage'].get('name') \
+                dt_containernm['fullName'] = containerdata['containerImage'].get('name') \
                     .get('fullName')
 
                 dt_container['name'] = dt_containernm

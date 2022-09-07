@@ -1,8 +1,8 @@
-from urllib.parse import quote
+import requests
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 
-class APIClient:
 
+class APIClient:
     PING_ENDPOINT = 'v1/ping'
     ALERTS_ENDPOINT = 'v1/alerts'
 
@@ -14,10 +14,10 @@ class APIClient:
             headers['Authorization'] = "Bearer " + self.auth.get('token')
         url_modifier_function = None
         self.client = RestApiClient(connection.get('host'),
-                                 connection.get('port', None),
-                                 headers,
-                                 url_modifier_function=url_modifier_function
-                                 )
+                                    connection.get('port', None),
+                                    headers,
+                                    url_modifier_function=url_modifier_function
+                                    )
         self.timeout = connection['options'].get('timeout')
 
     def ping_data_source(self):
@@ -33,7 +33,7 @@ class APIClient:
            :param query: Data Source Query
            :return: Response Object
         """
-        query = quote(query)
+        query = requests.utils.quote(query)
         endpoint = self.ALERTS_ENDPOINT + "?query=" + query
         return self.client.call_api(endpoint, 'GET', headers=self.client.headers,
                                     timeout=self.timeout)
