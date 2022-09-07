@@ -99,5 +99,3 @@ class TestQueryTranslator(unittest.TestCase, object):
         assert len(query['queries']) == 1
         assert query['queries'] == [where_statement]
 
-
-        # AND (entry_time >= 1548678241009 OR entry_time <= 1548680041009) limit 10000
