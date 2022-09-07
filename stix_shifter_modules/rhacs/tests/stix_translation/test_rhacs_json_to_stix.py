@@ -16,68 +16,70 @@ data_source = {
 options = {}
 
 data = {
-    "findingType": "violation",
-    "alertId": "85068e91-84c2-4b11-ab4e-0bd02169e1ec",
-    "cluster": "cp4s-cluster",
-    "clusterId": "9346e392-6ac5-4247-be91-9b292b9a1eb7",
-    "namespace": "sample-project1",
-    "namespaceId": "bafd2e2e-782e-4a31-aec0-1b3646e236f6",
-    "deployment": "app-manager",
-    "deploymentId": "ffc4276e-299c-4564-ba69-dea90a0ded18",
-    "lifecycleStage": "RUNTIME",
-    "policyName": "Unauthorized Network Flow",
-    "policyId": "1b74ffdd-8e67-444c-9814-1c23863c8ccb",
-    "description": "This policy generates a violation for the network flows that "
-                   "fall outside baselines for which \"alert on anomalous violations\" is set.",
-    "rationale": "The network baseline is a list of flows that are allowed, "
-                 "and once it is frozen, any flow outside that is a concern.",
-    "remediation": "Evaluate this network flow. If deemed to be okay, "
-                   "add it to the baseline. If not, investigate further as required.",
-    "disabled": False,
-    "categories": [
-        "Anomalous Activity"
-    ],
-    "eventSource": "DEPLOYMENT_EVENT",
-    "severity": "HIGH_SEVERITY",
-    "lastUpdated": None,
-    "sortName": "Unauthorized Network Flow",
-    "sortLifecycleStage": "RUNTIME",
-    "violationState": "ACTIVE",
-    "firstObserved": "2022-07-04T07:03:17.940725664Z",
-    "lastObserved": "2022-07-04T07:03:17.940725664Z",
-    "violationMessage": "Unexpected network flow found in deployment. "
-                    "Source name: \"django-psql-example\". Destination name: \"postgresql\". "
-                    "Destination port: \"5432\". Protocol: \"L4_PROTOCOL_TCP\".",
-    "containerName": "postgresql",
-    "containerImage": {
-        "id": "sha256:e3537a12097946baba447c1e0e00306cca045cfe9e9ff4149334fde4e54d6985",
-        "name": {
-            "registry": "image-registry.openshift-image-registry.svc:5000",
-            "remote": "openshift/postgresql",
-            "tag": "",
-            "full_name": "image-registry.openshift-image-registry."
-                         "svc:5000/openshift/postgresql@sha256:"
-                         "e3537a12097946baba447c1e0e00306cca045cfe9e9ff4149334fde4e54d6985"
+            "findingType": "violation",
+            "alertId": "474037ca-e615-4f16-b50c-f8197b9d37ae",
+            "policyName": "Unauthorized Network Flow",
+            "policyId": "1b74ffdd-8e67-444c-9814-1c23863c8ccb",
+            "description": "This policy generates a violation for the network "
+                           "flows that fall outside baselines for "
+                           "which \"alert on anomalous violations\" is set.",
+            "rationale": "The network baseline is a list of flows that are "
+                         "allowed, and once it is frozen, any flow outside that is a concern.",
+            "remediation": "Evaluate this network flow. If deemed to be okay, "
+                           "add it to the baseline. If not, investigate further as required.",
+            "disabled": False,
+            "categories": [
+                "Anomalous Activity"
+            ],
+            "severity": "HIGH_SEVERITY",
+            "eventSource": "DEPLOYMENT_EVENT",
+            "sortName": "Unauthorized Network Flow",
+            "sortLifecycleStage": "RUNTIME",
+            "lifecycleStage": "RUNTIME",
+            "clusterId": "fdbec9d7-5913-4ad0-8bb7-404386e311a8",
+            "cluster": "cp4s-cluster",
+            "namespace": "sample-app1",
+            "namespaceId": "2c91b5dc-bf07-4075-ab54-568ecd40c584",
+            "violationState": "ACTIVE",
+            "deployment": "postgresql",
+            "deploymentId": "ac359411-1c5d-4e5a-9283-d651f3f7f246",
+            "inactive": False,
+            "firstObserved": "2022-09-06T13:29:30.352918776Z",
+            "lastObserved": "2022-09-06T13:29:30.352918776Z",
+            "violationMessage": "Unexpected network flow found in deployment. "
+                                "Source name: \"django-psql-persistent\". "
+                                "Destination name: \"postgresql\". "
+                                "Destination port: \"5432\". Protocol: \"L4_PROTOCOL_TCP\".",
+            "containerName": "postgresql",
+            "containerImage": {
+                "id": "sha256:1896ab7cbfc4ade742b23ca45f410a1c58a520095c2507619c3346afec125ecc",
+                "name": {
+                    "registry": "image-registry.openshift-image-registry.svc:5000",
+                    "remote": "openshift/postgresql",
+                    "tag": "",
+                    "fullName": "image-registry.openshift-image-registry.svc:5000/openshift/postgr"
+                                "esql@sha256:1896ab7cbfc4ade742b23ca45f410a1"
+                                "c58a520095c2507619c3346afec125ecc"
+                }
+            },
+            "networkFlow": {
+                "netflow_protocol": "L4_PROTOCOL_TCP",
+                "netflow_source": {
+                    "name": "django-psql-persistent",
+                    "entity_type": "DEPLOYMENT",
+                    "deployment_namespace": "sample-app1",
+                    "deployment_type": "DeploymentConfig",
+                    "port": 0
+                },
+                "netflow_destination": {
+                    "name": "postgresql",
+                    "entity_type": "DEPLOYMENT",
+                    "deployment_namespace": "sample-app1",
+                    "deployment_type": "DeploymentConfig",
+                    "port": 5432
+                }
+            }
         }
-    },
-    "networkFlow": {
-        "netflow_protocol": "L4_PROTOCOL_TCP",
-        "netflow_source": {
-            "name": "django-psql-example",
-            "entity_type": "DEPLOYMENT",
-            "deployment_namespace": "sample-project1",
-            "deployment_type": "DeploymentConfig",
-            "port": 0
-        },
-        "netflow_destination": {
-            "name": "postgresql",
-            "entity_type": "DEPLOYMENT",
-            "deployment_namespace": "sample-project1",
-            "deployment_type": "DeploymentConfig",
-            "port": 5432
-        }
-    }
-}
 
 
 class TestRhacsResultsToStix(unittest.TestCase):
@@ -142,10 +144,10 @@ class TestRhacsResultsToStix(unittest.TestCase):
         cluster_obj = TestRhacsResultsToStix.get_first_of_type(objects.values(), 'x-rhacs-cluster')
 
         assert cluster_obj is not None
-        assert cluster_obj['cluster_name'] == 'cp4s-cluster'
-        assert cluster_obj['cluster_id'] == '9346e392-6ac5-4247-be91-9b292b9a1eb7'
-        assert cluster_obj['namespace'] == 'sample-project1'
-        assert cluster_obj['namespace_id'] == 'bafd2e2e-782e-4a31-aec0-1b3646e236f6'
+        assert cluster_obj['name'] == 'cp4s-cluster'
+        assert cluster_obj['cluster_id'] == 'fdbec9d7-5913-4ad0-8bb7-404386e311a8'
+        assert cluster_obj['namespace'] == 'sample-app1'
+        assert cluster_obj['namespace_id'] == '2c91b5dc-bf07-4075-ab54-568ecd40c584'
 
     def test_x_rhacs_deployment_json_to_stix(self):
         """to test x-rhacs-deployment stix object properties"""
@@ -164,8 +166,8 @@ class TestRhacsResultsToStix(unittest.TestCase):
 
         deployment_obj = TestRhacsResultsToStix.get_first_of_type(objects.values(), 'x-rhacs-deployment')
         assert deployment_obj is not None
-        assert deployment_obj['deployment_name'] == 'app-manager'
-        assert deployment_obj['deployment_id'] == 'ffc4276e-299c-4564-ba69-dea90a0ded18'
+        assert deployment_obj['deployment_name'] == 'postgresql'
+        assert deployment_obj['deployment_id'] == 'ac359411-1c5d-4e5a-9283-d651f3f7f246'
 
     def test_x_ibm_finding_json_to_stix(self):
         """to test x-ibm-finding stix object properties"""
@@ -188,9 +190,9 @@ class TestRhacsResultsToStix(unittest.TestCase):
         assert finding_obj["type"] == 'x-ibm-finding'
         assert finding_obj["finding_type"] == 'violation'
         assert finding_obj["extensions"]['x-rhacs-finding']['alert_id'] == \
-               '85068e91-84c2-4b11-ab4e-0bd02169e1ec'
+               '474037ca-e615-4f16-b50c-f8197b9d37ae'
         assert finding_obj["extensions"]['x-rhacs-finding']['lifecycle_stage'] == 'RUNTIME'
-        assert finding_obj["extensions"]['x-rhacs-finding']['state'] == 'ACTIVE'
+        assert finding_obj["extensions"]['x-rhacs-finding']['violation_state'] == 'ACTIVE'
         assert finding_obj['name'] == 'Unauthorized Network Flow'
         assert finding_obj['severity'] == 75
 
@@ -214,11 +216,11 @@ class TestRhacsResultsToStix(unittest.TestCase):
         assert container_obj is not None
         assert container_obj["type"] == 'x-rhacs-container'
         assert container_obj["container_name"] == 'postgresql'
-        assert container_obj["container_image"]['id'] == 'sha256:e3537a12097946baba447c1e0e00306' \
-                                                         'cca045cfe9e9ff4149334fde4e54d6985'
-        assert container_obj["container_image"]['name']['registry'] == 'image-registry.openshift-' \
-                                                                       'image-registry.svc:5000'
-        assert container_obj["container_image"]['name']['remote'] == 'openshift/postgresql'
+        assert container_obj["image"]['id'] == 'sha256:1896ab7cbfc4ade742b23ca45f' \
+                                               '410a1c58a520095c2507619c3346afec125ecc'
+        assert container_obj["image"]['name']['remote'] == 'openshift/postgresql'
+        assert container_obj["image"]['name']['registry'] == 'image-registry.openshift-' \
+                                                             'image-registry.svc:5000'
 
     def test_x_rhacs_policy_json_to_stix(self):
         """to test x-rhacs-policy stix object properties"""
@@ -265,9 +267,9 @@ class TestRhacsResultsToStix(unittest.TestCase):
         assert network_obj is not None
         assert network_obj["type"] == 'x-rhacs-networkflow'
         assert network_obj["protocol"] == 'L4_PROTOCOL_TCP'
-        assert network_obj["source"]['name'] == 'django-psql-example'
+        assert network_obj["source"]['name'] == 'django-psql-persistent'
         assert network_obj["source"]['entity_type'] == 'DEPLOYMENT'
-        assert network_obj["source"]['deployment_namespace'] == 'sample-project1'
+        assert network_obj["source"]['deployment_namespace'] == 'sample-app1'
         assert network_obj["source"]['deployment_type'] == 'DeploymentConfig'
         assert network_obj["destination"]['name'] == 'postgresql'
         assert network_obj["destination"]['deployment_type'] == 'DeploymentConfig'
