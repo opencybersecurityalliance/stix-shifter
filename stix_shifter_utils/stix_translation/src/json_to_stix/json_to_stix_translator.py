@@ -4,7 +4,7 @@ import uuid
 import json
 
 from stix_shifter_utils.utils.helpers import dict_merge
-from stix_shifter_utils.stix_translation.src.json_to_stix import observable
+from stix_shifter_utils.stix_translation.src.json_to_stix import observable, id_contributing_properties
 from stix2validator import validate_instance, print_results, ValidationOptions
 from datetime import datetime
 from stix_shifter_utils.utils import logger
@@ -73,10 +73,7 @@ class DataSourceObjToStixObj:
 
         if options.get("stix_2.1"):
             self.spec_version = "2.1"
-            current_dir = path.abspath(path.dirname(__file__))
-            contributing_properties_definitions_path = path.abspath(path.join(current_dir, "id_contributing_properties.json"))
-            with open(contributing_properties_definitions_path, 'r') as f:
-                self.contributing_properties_definitions =  json.load(f)
+            self.contributing_properties_definitions = id_contributing_properties.properties
         else:
             self.spec_version = "2.0"
             self.bundle["spec_version"] = "2.0"
