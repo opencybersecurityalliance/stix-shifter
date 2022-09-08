@@ -29,12 +29,13 @@ INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install
     from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
 
     class EntryPoint(BaseEntryPoint):
-        def __init__(self, connection={}, configuration={}, options={}):
-            super().__init__(connection, configuration, options)
-            self.set_async(False)
-            if connection:
-                self.setup_transmission_basic(connection, configuration)
-            self.setup_translation_simple(dialect_default='default')
+
+    def __init__(self, connection={}, configuration={}, options={}):
+        super().__init__(connection, configuration, options)
+        self.set_async(False)
+        if connection:
+            self.setup_transmission_basic(connection, configuration)
+        self.setup_translation_simple(dialect_default='default')
     ```
 
 8. Implement input configuration of the connector in `stix_shifter_modules/lab_connector/configuration`
@@ -61,7 +62,26 @@ INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install
 10. Implement stix transmission module. 
 
     * You need to implement four functionalities of the transmission module which are `ping`, `query`, `status` and `results`. 
-    * First step, create a class called `APIClient()` in `stix_shifter_modules/lab_connector/stix_transmission/api_client.py` where you initialize the connection and configurations needed for data source API requests. This class also includes the utility functions needed for the major functionalities of the connector.
+    * First create a class called `APIClient()` in `stix_shifter_modules/lab_connector/stix_transmission/api_client.py`. This is where you initialize the connection and configurations needed for the data source API requests. This class also includes the utility functions needed for the major functionalities of the connector.
+    * Create a file called `connector.py` if it doesn't yet exist and add the following code to the top of the file:
+
+    ```
+    import datetime
+    import json
+    from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+    from .api_client import APIClient
+    from stix_shifter_utils.utils.error_response import ErrorResponder
+    from stix_shifter_utils.utils import logger
+
+
+    class Connector(BaseSyncConnector):
+
+        def __init__(self, connection, configuration):
+            self.api_client = APIClient(connection, configuration)
+            self.logger = logger.set_logger(__name__)
+            self.connector = __name__.split('.')[1]
+    ```
+    * Now we can add the required transmission functions
 
     ### Ping
 
@@ -69,44 +89,42 @@ INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install
 
     ```
     def ping_connection(self):
-            response = self.api_client.ping_data_source()
-            response_code = response.get('code')
-            response_txt = response.get('message')
-            return_obj = dict()
-            return_obj['success'] = False
+        response = self.api_client.ping_data_source()
+        response_code = response.get('code')
+        response_txt = response.get('message')
+        return_obj = dict()
+        return_obj['success'] = False
 
-            if len(response) > 0 and response_code == 200:
-                return_obj['success'] = True
-            else:
-                ErrorResponder.fill_error(return_obj, response, ['message'], error=response_txt, connector=self.connector)
-            return return_obj
+        if len(response) > 0 and response_code == 200:
+            return_obj['success'] = True
+        else:
+            ErrorResponder.fill_error(return_obj, response, ['message'], error=response_txt, connector=self.connector)
+        return return_obj
     ```
 
     * Define and implement `ping_data_source()` function inside `APIClient()`:
 
     ```
     def ping_data_source(self):
-            # Pings the data source
-            response = {"code": 200, "message": "All Good!"}
-            try:
-                cnx = lab_connector.connector.connect(user=self.user, password=self.password, 
-                                              host=self.host, database=self.database, 
-                                              port=self.port, auth_plugin=self.auth_plugin)  
+        # Pings the data source
+        response = {"code": 200, "message": "All Good!"}
+        try:
+            cnx = mysql.connector.connect(user=self.user, password=self.password, 
+                                          host=self.host, database=self.database, 
+                                          port=self.port, auth_plugin=self.auth_plugin)  
 
+        except mysql.connector.Error as err:
+            response["code"] = err.errno
 
-            except lab_connector.connector.Error as err:
-                response["code"] = err.errno
-
-
-                if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                    response["message"] = "Something is wrong with your user name or password"
-                elif err.errno == errorcode.ER_BAD_DB_ERROR:
-                    response["message"] = "Database does not exist"
-                else:
-                    response["message"] = err
-            else:
-                cnx.close()
-            return response
+            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+                response["message"] = "Something is wrong with your user name or password"
+            elif err.errno == errorcode.ER_BAD_DB_ERROR:
+                response["message"] = "Database does not exist"
+            else:
+                response["message"] = err
+        else:
+            cnx.close()
+        return response
     ```
 
     ### Query 
@@ -123,16 +141,16 @@ INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install
 
     ```
     def create_results_connection(self, query, offset, length):
-            return_obj = dict()
-            response = self.api_client.run_search(query, start=offset, rows=length)
-            response_code = response.get('code')
-            response_txt = response.get('message')
-            if response_code == 200:
-                return_obj['success'] = True
-                return_obj['data'] = response.get('result')
-            else:
-                ErrorResponder.fill_error(return_obj, response, ['message'], error=response_txt, connector=self.connector)
-            return return_obj
+        return_obj = dict()
+        response = self.api_client.run_search(query, start=offset, rows=length)
+        response_code = response.get('code')
+        response_txt = response.get('message')
+        if response_code == 200:
+            return_obj['success'] = True
+            return_obj['data'] = response.get('result')
+        else:
+            ErrorResponder.fill_error(return_obj, response, ['message'], error=response_txt, connector=self.connector)
+        return return_obj
     ```
 
     * Define and implement a function named `run_search(self, query, offset, length)`  in `APIClient()` class.
@@ -141,10 +159,11 @@ INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install
 
     * You can now run all the transmission CLI command from your workspace to tests
 
-11. Implement Datasource results to STIX translation
+11. Implement data source results to STIX translation
     
-    * Make sure datasource returns the results in JSON format
+    * Make sure the data source returns the results in JSON format
     * Implement ResultsTranslator(JSONToStix) class
+
     ```
     from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 
