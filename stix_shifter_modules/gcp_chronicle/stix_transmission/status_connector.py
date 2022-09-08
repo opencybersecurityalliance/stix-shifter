@@ -105,7 +105,11 @@ class StatusConnector(BaseStatusConnector):
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         except ValueError as v_err:
-            response_dict['message'] = f'cannot parse {v_err}'
+            if 'Could not deserialize key data' in str(v_err):
+                response_dict['message'] = v_err
+                response_dict['code'] = 1015
+            else:
+                response_dict['message'] = f'cannot parse {v_err}'
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         except Exception as err:

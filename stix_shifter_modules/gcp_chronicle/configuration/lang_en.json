@@ -10,7 +10,7 @@
         },
          "selfSignedCert": {
                 "label": "Private Key (Required)",
-                "description": "Private Key which is mandatory field used in authentication to make API calls"
+                "description": "Private Key is a mandatory authentication parameter to communicate with the GCP Chronicle security datasource."
             }
     },
     "configuration": {

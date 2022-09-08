@@ -1269,3 +1269,92 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         assert 'to' not in result_response["data"][0]["event"]["network"]["email"].keys()
         assert 'emailAddresses' not in result_response["data"][0]["event"]["principal"]["user"].keys()
 
+    def test_invalid_private_key_for_ping(self, mock_credentials, mock_auth):
+        """ test invalid private key for ping"""
+        mock_credentials.return_value = None
+        mock_http = mock_auth.return_value
+        mock_http.request.side_effect = ValueError("Could not deserialize key data")
+        transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
+        ping_response = transmission.ping()
+        assert ping_response is not None
+        assert ping_response['success'] is False
+        assert "Could not deserialize key data" in ping_response['error']
+        assert ping_response['code'] == "authentication_fail"
+
+    def test_invalid_private_key_for_transmit_query(self, mock_credentials, mock_auth):
+        """ test invalid private key for transmit query"""
+        query = json.dumps({
+            "ruleText": "rule rule_1657176728 { meta: author = \"ibm cp4s user\" description = \"Create event rule "
+                        "that should generate detections\" events: ($udm.network.http.user_agent = /(?s)glbc\\/v0.0.0 "
+                        "\\(linux\\/amd64\\) kubernetes\\/\\$Format\\/leader-election/ nocase) condition: $udm}",
+            "startTime": "2022-06-28T00:00:00.030Z",
+            "endTime": "2022-06-29T00:00:00.030Z"
+        })
+        mock_credentials.return_value = None
+        mock_http = mock_auth.return_value
+        mock_http.request.side_effect = ValueError("Could not deserialize key data")
+        transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
+        query_response = transmission.query(query)
+        assert query_response is not None
+        assert query_response['success'] is False
+        assert "Could not deserialize key data" in query_response['error']
+        assert query_response['code'] == "authentication_fail"
+
+    def test_results_with_invalid_private_key(self, mock_credentials, mock_auth):
+        """ test invalid private key in transmit results"""
+        search_id = "oh_1234:ru_1234"
+        mock_credentials.return_value = None
+        mock_http = mock_auth.return_value
+        mock_http.request.side_effect = ValueError("Could not deserialize key data")
+        transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
+        result_response = transmission.results(search_id, 0, 2)
+        assert result_response is not None
+        assert result_response['success'] is False
+        assert "Could not deserialize key data" in result_response['error']
+        assert result_response['code'] == "authentication_fail"
+
+    def test_invalid_private_key_for_retrohunt(self, mock_credentials, mock_auth):
+        """ test invalid private key for run retrohunt api call"""
+        query = json.dumps({
+            "ruleText": "rule rule_1657176728 { meta: author = \"ibm cp4s user\" description = \"Create event rule "
+                        "that should generate detections\" events: ($udm.network.http.user_agent = /(?s)glbc\\/v0.0.0 "
+                        "\\(linux\\/amd64\\) kubernetes\\/\\$Format\\/leader-election/ nocase) condition: $udm}",
+            "startTime": "2022-06-28T00:00:00.030Z",
+            "endTime": "2022-06-29T00:00:00.030Z"
+        })
+        mock_credentials.return_value = None
+        mock_http = mock_auth.return_value
+        mock_create_rule_response = (MockCodeResponse(200), json.dumps({"ruleId": "ru_1234"}))
+        mock_http.request.side_effect = [mock_create_rule_response, ValueError("Could not deserialize key data")]
+        transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
+        query_response = transmission.query(query)
+        assert query_response is not None
+        assert query_response['success'] is False
+        assert "Could not deserialize key data" in query_response['error']
+        assert query_response['code'] == "authentication_fail"
+
+    def test_status_with_invalid_private_key(self, mock_credentials, mock_auth):
+        """ test invalid private key for transmit status"""
+        search_id = "oh_1234:ru_1234"
+        mock_credentials.return_value = None
+        mock_http = mock_auth.return_value
+        mock_http.request.side_effect = ValueError("Could not deserialize key data")
+        transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
+        status_response = transmission.status(search_id)
+        assert status_response is not None
+        assert status_response['success'] is False
+        assert "Could not deserialize key data" in status_response['error']
+        assert status_response['code'] == "authentication_fail"
+
+    def test_delete_query_with_invalid_private_key(self, mock_credentials, mock_auth):
+        """ test invalid private key in transmit delete"""
+        search_id = "oh_1234:ru_1234"
+        mock_credentials.return_value = None
+        mock_http = mock_auth.return_value
+        mock_http.request.side_effect = ValueError("Could not deserialize key data")
+        transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
+        delete_response = transmission.delete(search_id)
+        assert delete_response is not None
+        assert delete_response['success'] is False
+        assert "Could not deserialize key data" in delete_response['error']
+        assert delete_response['code'] == "authentication_fail"

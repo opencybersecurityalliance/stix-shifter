@@ -509,7 +509,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[file:hashes.'SHA-1' = '6cbce4a295c163791b60fc23d285e6d84f28ee4c'] OR [file:size >10 OR " \
                        "network-traffic:src_port <= 52221] AND [process:command_line ='\"MsMpEng.exe\"']START " \
                        "t'2022-05-01T00:00:00.030Z' STOP t'2022-05-05T00:00:00.030Z' OR [ipv4-addr:value = " \
-                       "'168.149.184.42']START t'2022-05-01T00:00:00.030Z' STOP t'2022-05-10T00:00:00.030Z' "
+                       "'168.149.184.42']START t'2022-05-01T00:00:00Z' STOP t'2022-05-10T00:00:00.030Z' "
         query = translation.translate('gcp_chronicle', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["{'ruleText': 'rule cp4s_gcp_udi_rule_1659680259 { meta: author = \"ibm cp4s user\" description = "
@@ -535,6 +535,6 @@ class TestQueryTranslator(unittest.TestCase):
                    "{ meta: author = \"ibm cp4s user\" description = \"Create event rule that should generate "
                    "detections\" events: any $udm.src.ip = \"168.149.184.42\" nocase or any $udm.target.ip = "
                    "\"168.149.184.42\" nocase or any $udm.principal.ip = \"168.149.184.42\" nocase condition: $udm}', "
-                   "'startTime': '2022-05-01T00:00:00.030Z', 'endTime': '2022-05-10T00:00:00.030Z'}"]
+                   "'startTime': '2022-05-01T00:00:00Z', 'endTime': '2022-05-10T00:00:00.030Z'}"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)

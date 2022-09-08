@@ -20,6 +20,11 @@
           "references": "principal_ip"
         },
         {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        },
+        {
           "key": "x-ibm-finding.src_ip_ref",
           "object": "security_result",
           "references": "principal_ip"
@@ -457,6 +462,11 @@
           "references": "src_ip"
         },
         {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        },
+        {
           "key": "x-oca-event.ip_refs",
           "object": "event",
           "references": [
@@ -747,6 +757,11 @@
           "key": "network-traffic.dst_ref",
           "object": "nt",
           "references": "dst_ip"
+        },
+        {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
         },
         {
           "key": "x-ibm-finding.dst_ip_ref",
@@ -1199,8 +1214,7 @@
         "questions": {
           "key": "network-traffic.extensions.dns-ext.questions",
           "object": "nt",
-          "group": "true",
-          "transformer": "FormatDnsExtension"
+          "group": "true"
         }
       },
       "dhcp": {

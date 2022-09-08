@@ -44,6 +44,14 @@ class DeleteConnector(BaseDeleteConnector):
             response_dict['message'] = "Invalid Client Email"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
+        except ValueError as d_ex:
+            if 'Could not deserialize key data' in str(d_ex):
+                response_dict['message'] = d_ex
+                response_dict['code'] = 1015
+            else:
+                response_dict['message'] = f'cannot parse {d_ex}'
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+
         except Exception as d_err:
             if "timed out" in str(d_err):
                 response_dict['code'] = 120

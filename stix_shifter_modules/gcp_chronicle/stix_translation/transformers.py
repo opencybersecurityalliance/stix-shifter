@@ -43,17 +43,6 @@ class ValidateUrl(ValueTransformer):
         return None
 
 
-class FormatDnsExtension(ValueTransformer):
-    """ remove unused field from dns"""
-
-    @staticmethod
-    def transform(obj):
-        for question in obj:
-            if 'prevalence' in question:
-                del question['prevalence']
-        return obj
-
-
 class FilterValidEmail(ValueTransformer):
     """ Validate email address format """
 
@@ -67,5 +56,3 @@ class FilterValidEmail(ValueTransformer):
                     return em
             return None
         return obj
-
-

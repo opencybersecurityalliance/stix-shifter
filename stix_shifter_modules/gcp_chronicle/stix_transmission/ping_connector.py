@@ -44,7 +44,11 @@ class PingConnector(BasePingConnector):
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         except ValueError as v_ex:
-            response_dict['message'] = f'cannot parse {v_ex}'
+            if 'Could not deserialize key data' in str(v_ex):
+                response_dict['message'] = v_ex
+                response_dict['code'] = 1015
+            else:
+                response_dict['message'] = f'cannot parse {v_ex}'
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         except Exception as ex:

@@ -86,7 +86,11 @@ class ResultsConnector(BaseResultsConnector):
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         except ValueError as r_ex:
-            response_dict['message'] = f'cannot parse {r_ex}'
+            if 'Could not deserialize key data' in str(r_ex):
+                response_dict['message'] = r_ex
+                response_dict['code'] = 1015
+            else:
+                response_dict['message'] = f'cannot parse {r_ex}'
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         except Exception as exp:
