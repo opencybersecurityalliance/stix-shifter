@@ -145,9 +145,10 @@ class DataSourceObjToStixObj:
                                 else:
                                     unwrap_ind = i+1
                                 
-                                parent_key_ind = self._get_tag_ind(ref, object_tag_ref_map, create_on_absence=False, unwrap=unwrap_ind)
-                                if parent_key_ind:
-                                    return_value.append(parent_key_ind)
+                                self._get_tag_ind(ref, object_tag_ref_map, create_on_absence=False, unwrap=unwrap_ind)
+
+                            if ref in object_tag_ref_map['refs']:
+                                return_value = object_tag_ref_map['refs'][ref]
                     else:
                         return_value = self._get_tag_ind(references, object_tag_ref_map, create_on_absence=False)
                         # if the property has unwrap true and is not a list, convert to list
@@ -158,16 +159,15 @@ class DataSourceObjToStixObj:
                         return None
                     return_value = value
 
-            # if unwrap and isinstance(return_value, dict):
-            #     print( key_list, unwrap, references, observable_key, return_value)
-            #     return_value = remove_null(return_value)
+            if unwrap and isinstance(return_value, dict):
+                return_value = remove_null(return_value)
 
             return return_value
         except Exception as e:
             raise Exception("Error in json_to_stix_translator._compose_value_object: %s" % e)
 
 
-    def _get_tag_ind(self, tag, object_tag_ref_map, create_on_absence=False, unwrap=False, property_key=None):
+    def _get_tag_ind(self, tag, object_tag_ref_map, create_on_absence=False, unwrap=False, property_key=None, ref_tag=None):
         """
         Gets the stringified index of the observable object from the `object_tag_ref_map` cached dictionary if it exists
         or creates otherwise.
@@ -175,6 +175,9 @@ class DataSourceObjToStixObj:
         tag_ind = None
         tag_ind_str = None
         try:
+            if not ref_tag:
+                ref_tag = tag
+
             # if the datasource fields is a collection of json object than we need to unwrap it and create multiple objects
             if unwrap:
                 tag = tag + '_' + str(unwrap)
@@ -182,6 +185,12 @@ class DataSourceObjToStixObj:
             if tag in object_tag_ref_map['tags']:
                 tag_ind = object_tag_ref_map['tags'][tag]['i']
                 object_tag_ref_map['tags'][tag]['n'] += 1
+
+                if ref_tag in object_tag_ref_map['refs'] and tag_ind not in object_tag_ref_map['refs'][ref_tag]:
+                    object_tag_ref_map['refs'][ref_tag].append(tag_ind)
+                    if not self.spec_version == "2.1":
+                        object_tag_ref_map['refs'][ref_tag].sort()
+
             elif create_on_absence:
                 tag_ind_str = str(object_tag_ref_map[UUID5_NAMESPACE])
                 if self.spec_version == "2.1":
@@ -191,6 +200,7 @@ class DataSourceObjToStixObj:
 
                 object_tag_ref_map[UUID5_NAMESPACE] += 1
                 object_tag_ref_map['tags'][tag] = {'i': tag_ind, 'n': 0}
+                object_tag_ref_map['refs'][ref_tag] = [tag_ind]
                 
             if tag_ind is not None:
                 if not tag_ind_str:
@@ -305,6 +315,7 @@ class DataSourceObjToStixObj:
                     property_key = config_keys[1]
                     parent_key = prop['object'] if 'object' in prop else type_name
                     substitute_key = prop['ds_key'] if 'ds_key' in prop else None
+                    ref_tag = parent_key
 
                     if False is cybox and not substitute_key:
                         value = self._compose_value_object(data, config_keys[2:], observable_key=key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap, group=group, object_key_ind=object_key_ind)
@@ -331,16 +342,16 @@ class DataSourceObjToStixObj:
 
                     if not references and unwrap and isinstance(value, list):
                         for i, val_el in enumerate(value):
-                            parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, unwrap=i+1, property_key=property_key)
+                            parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, unwrap=i+1, property_key=property_key, ref_tag=ref_tag)
                             self._add_property(type_name, property_key, parent_key_ind, val_el, objects, group=group)
                     elif not references and unwrap and isinstance(data, list):
                         enum_value = find('.'.join(config_keys[2:]), value)
                         for i, val_el in enumerate(enum_value):
                             val_el_new = nested_set(value, config_keys[2:], val_el)
-                            parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, unwrap=i+1, property_key=property_key)
+                            parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, unwrap=i+1, property_key=property_key, ref_tag=ref_tag)
                             self._add_property(type_name, property_key, parent_key_ind, val_el_new, objects, group=group)
                     else:
-                        parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, property_key=property_key)
+                        parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, property_key=property_key, ref_tag=ref_tag)
                         self._add_property(type_name, property_key, parent_key_ind, value, objects, group=group)
         except Exception as e:
             raise Exception("Error in json_to_stix_translator._handle_value: %s : %s" % (e, e.__traceback__.tb_lineno))
@@ -398,7 +409,7 @@ class DataSourceObjToStixObj:
 
             # create normal type objects
             if isinstance(obj, dict):
-                object_tag_ref_map = {UUID5_NAMESPACE: 0, 'tags': {}, 'non_ref_props': {}, 'out_cybox': {}, 'ds_key_cybox': {}}
+                object_tag_ref_map = {UUID5_NAMESPACE: 0, 'tags': {}, 'refs': {}, 'non_ref_props': {}, 'out_cybox': {}, 'ds_key_cybox': {}}
 
                 self._handle_properties(ds_map, obj, object_map, object_tag_ref_map)
                 # special case:
