@@ -148,9 +148,9 @@ class DataSourceObjToStixObj:
                                 self._get_tag_ind(ref, object_tag_ref_map, create_on_absence=False, unwrap=unwrap_ind)
 
                             if ref in object_tag_ref_map['refs']:
-                                return_value = object_tag_ref_map['refs'][ref]
+                                return_value.extend(object_tag_ref_map['refs'][ref])
                     else:
-                        return_value = self._get_tag_ind(references, object_tag_ref_map, create_on_absence=False)
+                        return_value = self._get_tag_ind(references, object_tag_ref_map, create_on_absence=False, unwrap=object_key_ind)
                         # if the property has unwrap true and is not a list, convert to list
                         if unwrap is True and not isinstance(return_value, list):
                             return_value = [return_value]
