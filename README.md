@@ -102,7 +102,7 @@ Please read our [guidelines for contributing](https://github.com/opencybersecuri
 
 If you want to create a new connector for STIX-shifter, see the [developer guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-stix-adapter.md)
 
-There are also a few [Jupyter Notebook labs](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/notebooks) that cover the CLI commands and dev process.
+There are also a few [Jupyter Notebook labs](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/lab) that cover the CLI commands and dev process.
 
 ## Licensing
 

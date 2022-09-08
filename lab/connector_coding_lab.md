@@ -5,17 +5,25 @@ This is a hands on lab to start implementing a connector module in STIX-shifter 
 
 ## Prerequisites
 
-Github account
-Basic knowledge of Git such as forking, committing, branching, pulling, and merging
-Working knowledge of the Python programming language. This lab will use Python 3.9
-An IDE to write Python code, such as VS Code.
+1. Github account
+2. Basic knowledge of Git such as forking, committing, branching, pulling, and merging
+3. Working knowledge of the Python programming language. This lab will use Python 3.6
+4. An IDE to write Python code, such as VS Code.
 
 ## Steps
 
-1. Make a copy of `stix_shifter_modules/synchronous_template` module
-2. Change the name to `lab_connector`   
+1. Open stix-shifter folder in VS Code IDE
+2. Open a terminal in VS code
+3. Make sure you are in `stix-shifter/` parent directory
+4. Create a python virtual environment
+```
+virtualenv -p python3 virtualenv && source virtualenv/bin/activate
+INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install
+```
+5. Make a copy of `stix_shifter_modules/synchronous_template` module
+6. Change the name to `lab_connector`   
     You should have connector module skeleton for the new connector name lab_connector
-3. Implement `EntryPoint()` class in `stix_shifter_modules/lab_connector/entry_point.py`. 
+7. Implement `EntryPoint()` class in `stix_shifter_modules/lab_connector/entry_point.py`. 
 
     ```
     from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
@@ -29,13 +37,13 @@ An IDE to write Python code, such as VS Code.
             self.setup_translation_simple(dialect_default='default')
     ```
 
-4. Implement input configuration of the connector in `stix_shifter_modules/lab_connector/configuration`
+8. Implement input configuration of the connector in `stix_shifter_modules/lab_connector/configuration`
 
     * Implement connection and configuration of the connector in config.json file. you can copy the content from https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/configuration/config.json for this lab
     
     * You can also implement the language definition of the input configuration for the UI label and description in lang_en.json(for English) file. you can copy the content from https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/configuration/lang_en.json for this lab.
 
-5. Implement stix to query translation
+9. Implement stix to query translation
 
     * Go to `stix_shifter_modules/lab_connector/stix_translation`
 
@@ -45,13 +53,12 @@ An IDE to write Python code, such as VS Code.
 
     * Update `stix_shifter_modules/lab_connector/stix_translation/json/operators.json` with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/json/operators.json
 
-    ### correct?
     * QueryTranslator() class can be left as it `stix_shifter_modules/mysql/stix_translation/query_translator.py`
     * Update `stix_shifter_modules/lab_connector/stix_translation/query_constructor.py` with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/query_constructor.py
 
     * You can now run the basic query translation CLI command from your workspace to tests
 
-6. Implement stix transmission module. 
+10. Implement stix transmission module. 
 
     * You need to implement four functionalities of the transmission module which are `ping`, `query`, `status` and `results`. 
     * First step, create a class called `APIClient()` in `stix_shifter_modules/lab_connector/stix_transmission/api_client.py` where you initialize the connection and configurations needed for data source API requests. This class also includes the utility functions needed for the major functionalities of the connector.
@@ -75,7 +82,7 @@ An IDE to write Python code, such as VS Code.
             return return_obj
     ```
 
-* Define and implement `ping_data_source()` function inside `APIClient()`:
+    * Define and implement `ping_data_source()` function inside `APIClient()`:
 
     ```
     def ping_data_source(self):
@@ -134,8 +141,21 @@ An IDE to write Python code, such as VS Code.
 
     * You can now run all the transmission CLI command from your workspace to tests
 
-7. Implement `ErrorMapper()` class in `stix_shifter_modules/lab_connector/stix_transmission/error_mapper.py` for mapping any API specific error code message for the return object. This same content can be used: https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_transmission/error_mapper.py
+11. Implement Datasource results to STIX translation
+    
+    * Make sure datasource returns the results in JSON format
+    * Implement ResultsTranslator(JSONToStix) class
+    ```
+    from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 
-8. Add any data source specific dependency to the stix_shifter_modules/lab_connector/requirements.txt.  In this case add `mysql-connector-python==8.0.25`
+    class ResultsTranslator(JSONToStix):
+        pass    
+    ```
+    * There's no pre-processing needed fo the results 
+    * The parent utility class JSONToStix automatically translates the results into STIX. 
 
-9. You also need to create a `README.md` for the connector which includes the details of the API or SDK used in the connector and also some sample commands and the results `stix_shifter_modules/lab_connector/README.md`
+12. Implement `ErrorMapper()` class in `stix_shifter_modules/lab_connector/stix_transmission/error_mapper.py` for mapping any API specific error code message for the return object. This same content can be used: https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_transmission/error_mapper.py
+
+13. Add any data source specific dependency to the stix_shifter_modules/lab_connector/requirements.txt.  In this case add `mysql-connector-python==8.0.25`
+
+14. You also need to create a `README.md` for the connector which includes the details of the API or SDK used in the connector and also some sample commands and the results `stix_shifter_modules/lab_connector/README.md`
