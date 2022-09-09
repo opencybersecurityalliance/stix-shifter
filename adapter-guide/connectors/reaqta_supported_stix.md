@@ -1,4 +1,4 @@
-##### Updated on 06/01/22
+##### Updated on 07/27/22
 ## ReaQta
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -54,10 +54,10 @@
 | network-traffic | dst_ref | remoteAddrV6 |
 | network-traffic | dst_port | remotePort |
 | <br> | | |
-| process | extensions.x-process-ext.process_uid | id |
+| process | x_unique_id | id |
 | process | extensions.x-reaqta-process.logon_id | logonId |
 | process | extensions.x-reaqta-process.no_gui | noGui |
-| process | extensions.x-process-ext.parent_process_uid | parentId |
+| process | x_unique_id | parentId |
 | process | pid | pid |
 | process | pid | ppid |
 | process | parent_ref | ppid |

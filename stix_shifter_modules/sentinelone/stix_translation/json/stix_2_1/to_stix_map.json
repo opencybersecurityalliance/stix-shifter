@@ -100,7 +100,7 @@
       "object": "process_file"
     },
     {
-      "key": "process.binary_ref",
+      "key": "process.image_ref",
       "object": "process",
       "references": "process_file"
     }
@@ -111,7 +111,7 @@
       "object": "process_file"
     },
     {
-      "key": "process.binary_ref",
+      "key": "process.image_ref",
       "object": "process",
       "references": "process_file"
     }
@@ -130,7 +130,7 @@
       "object": "process_file"
     },
     {
-      "key": "process.binary_ref",
+      "key": "process.image_ref",
       "object": "process",
       "references": "process_file"
     }
@@ -141,7 +141,7 @@
       "object": "process_file"
     },
     {
-      "key": "process.binary_ref",
+      "key": "process.image_ref",
       "object": "process",
       "references": "process_file"
     }
@@ -160,7 +160,7 @@
       "object": "process_file"
     },
     {
-      "key": "process.binary_ref",
+      "key": "process.image_ref",
       "object": "process",
       "references": "process_file"
     }
@@ -171,7 +171,7 @@
       "object": "process_file"
     },
     {
-      "key": "process.binary_ref",
+      "key": "process.image_ref",
       "object": "process",
       "references": "process_file"
     }
@@ -357,7 +357,7 @@
   },
   "srcProcStartTime": [
     {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "process"
     },
     {
@@ -367,7 +367,7 @@
   ],
   "tgtProcStartTime": [
     {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "process"
     },
     {
@@ -377,7 +377,7 @@
   ],
   "srcProcParentStartTime": [
     {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "parent_process"
     },
     {
@@ -498,15 +498,15 @@
     "object": "process"
   },
   "srcProcUid": {
-    "key": "process.extensions.x-sentinelone-process-ext.process_unique_id",
+    "key": "process.x_unique_id",
     "object": "process"
   },
   "tgtProcUid": {
-    "key": "process.extensions.x-sentinelone-process-ext.process_unique_id",
+    "key": "process.x_unique_id",
     "object": "process"
   },
   "srcProcParentUid": {
-    "key": "process.extensions.x-sentinelone-process-ext.process_unique_id",
+    "key": "process.x_unique_id",
     "object": "process"
   },
   "srcProcSignedStatus": {

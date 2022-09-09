@@ -867,8 +867,8 @@
       }
     ],
     "entity_id": {
-      "key": "x-ecs-process.entity_id",
-      "object": "x_process"
+      "key": "process.x_unique_id",
+      "object": "process"
     },
     "exit_code": {
       "key": "x-ecs-process.exit_code",
@@ -888,8 +888,8 @@
         "object": "process_parent"
       },
       "entity_id": {
-        "key": "x-ecs-process.parent_entity_id",
-        "object": "x_process"
+        "key": "process.x_unique_id",
+        "object": "process_parent"
       },
       "exit_code": {
         "key": "x-ecs-process.parent_exit_code",

@@ -1,4 +1,4 @@
-{
+properties = {
     "artifact": [[ "MD5", "SHA-1", "SHA-256", "SHA-512" ], "payload_bin"],
     "autonomous-system": ["number"],
     "directory": ["path"],
@@ -11,7 +11,7 @@
     "mac-addr": ["value"],
     "mutex": ["name"],
     "network-traffic": ["start", "src_ref", "dst_ref", "src_port", "dst_port", "protocols"],
-    "process": [],
+    "process": ["x_unique_id"],
     "software": ["name", "cpe", "vendor", "version"],
     "url": ["value"],
     "user-account": ["account_type", "user_id", "account_login"],

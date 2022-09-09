@@ -101,7 +101,7 @@
         "srcProcStorylineId",
         "tgtProcStorylineId"
       ],
-      "extensions.'x-sentinelone-process'.process_unique_id": [
+      "x_unique_id": [
         "srcProcUid",
         "tgtProcUid",
         "srcProcParentUid"
