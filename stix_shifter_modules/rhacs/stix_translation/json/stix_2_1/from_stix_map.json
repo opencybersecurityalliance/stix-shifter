@@ -1,0 +1,50 @@
+{
+  "x-rhacs-cluster": {
+    "fields": {
+      "name": [
+        "Cluster"
+      ],
+      "id": [
+        "Cluster ID"
+      ],
+      "namespace": [
+        "Namespace"
+      ]
+    }
+  },
+  "x-rhacs-deployment": {
+    "fields": {
+      "name": [
+        "Deployment"
+      ],
+      "isactive": [
+        "Inactive Deployment"
+      ]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "name": [
+        "Policy"
+      ],
+      "time_observed": [
+        "Violation Time"
+      ],
+      "severity": [
+        "Severity"
+      ],
+      "extensions.'x-rhacs-finding'.categories[*]": [
+        "Category"
+      ],
+      "extensions.'x-rhacs-finding'.lifecycle_stage": [
+        "Lifecycle Stage"
+      ],
+      "extensions.'x-rhacs-finding'.violation_state": [
+        "Violation State"
+      ],
+      "extensions.'x-rhacs-finding'.resource_type": [
+        "Resource Type"
+      ]
+    }
+  }
+}
