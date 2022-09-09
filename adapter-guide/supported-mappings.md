@@ -1,4 +1,4 @@
-# Currently supported STIX objects and properties
+﻿# Currently supported STIX objects and properties
 Each connector supports a set of STIX objects and properties as defined in the connector's mapping files. There is also a set of common STIX properties that all cyber observable objects must contain. See [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for more information on STIX objects.
 ## Common cyber observable properties
 - created
@@ -37,3 +37,4 @@ Stix-shifter currently offers connector support for the following cybersecurity 
 - [SentinelOne](connectors/sentinelone_supported_stix.md)
 - [IBM Security ReaQta](connectors/reaqta_supported_stix.md)
 - [Darktrace](connectors/darktrace_supported_stix.md)
+- [RHACS(StackRox)](connectors/rhacs_supported_stix.md)
