@@ -1,5 +1,5 @@
 ##### Updated on 09/09/22
-## ReaQta
+## IBM Security ReaQta
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
 |--|--|
