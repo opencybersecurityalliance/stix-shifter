@@ -15,12 +15,15 @@
   },
    "user-account": {
     "fields": {
-      "user_name": "username"
+      "user_name": ["username"],
+       "user_id": [
+        "UserId"
+      ]
     }
   },
   "email-addr": {
         "fields": {
-            "value": "EmailAddress"
+            "value": ["EmailAddress"]
         }
     },
   "x-secret": {
@@ -28,7 +31,6 @@
       "secret_name": ["SecretName"],
       "username": ["Unique_Identtification"],
       "secret_id": ["ItemId"],
-      "user_id": ["UserId"],
       "server_user_name" : ["Username"]
     }
   },
