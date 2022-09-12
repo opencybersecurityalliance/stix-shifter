@@ -1,4 +1,14 @@
 {
+  "username": [
+    {
+    "key": "user-account.user_name"
+  }
+  ],
+  "EmailAddress":
+    {
+      "key": "email-addr.value",
+      "object": "email-addr"
+    },
   "IpAddress": [
     {
       "key": "ipv4-addr.value",
@@ -58,7 +68,6 @@
      "key": "x-ibm-finding.time_observed",
       "object": "finding"
   },
-
   "SecretName":
    {
       "key": "x-secret.secret_name",
@@ -72,7 +81,8 @@
       "key": "x-secret.user_id",
        "object": "secret"
    },
-   "EmailAddress": {
+
+   "Unique_Identtification": {
       "key": "x-secret.username",
        "object": "secret"
    },
