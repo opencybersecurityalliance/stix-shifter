@@ -4,6 +4,9 @@
     "key": "user-account.user_name"
   }
   ],
+  "UserId" :{
+    "key": "user-account.user_id"
+  },
   "EmailAddress":
     {
       "key": "email-addr.value",
