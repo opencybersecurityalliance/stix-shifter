@@ -13,11 +13,20 @@
       ]
     }
   },
-
+   "user-account": {
+    "fields": {
+      "user_name": "username"
+    }
+  },
+  "email-addr": {
+        "fields": {
+            "value": "EmailAddress"
+        }
+    },
   "x-secret": {
     "fields": {
       "secret_name": ["SecretName"],
-      "username": ["EmailAddress"],
+      "username": ["Unique_Identtification"],
       "secret_id": ["ItemId"],
       "user_id": ["UserId"],
       "server_user_name" : ["Username"]
@@ -32,4 +41,3 @@
     }
   }
 }
-
