@@ -124,7 +124,7 @@ Here's an example of the content of lang_en.json file:
 ### 9. Implement stix to query translation
 
 * Go to `stix_shifter_modules/lab_connector/stix_translation`
-
+* First step is to create a file named `from_stix_map.json` that contains STIX Objects to datasource fields  mapping.
 * Update `stix_shifter_modules/lab_connector/stix_translation/json/from_stix_map.json` file with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/json/from_stix_map.json
 
 * If data source API offers one schema type the dialect prefix can be removed
@@ -162,6 +162,7 @@ class APIClient():
         self.port = connection.get("port")
         self.auth_plugin = 'mysql_native_password'
 ```
+* The connector uses `mysql-connector-python` python package. Therefore, create `stix_shifter_modules/mysql/requirements.txt` file inside the module and specify this dependency: `mysql-connector-python==8.0.25`
 
 * Create a file called `connector.py` if it doesn't yet exist and add the following code to the top of the file:
 
