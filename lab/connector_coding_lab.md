@@ -9,7 +9,8 @@ This is a hands on lab to start implementing a connector module in STIX-shifter 
 * Basic knowledge of Git such as forking, committing, branching, pulling, and merging
 * Working knowledge of the Python programming language. This lab will use Python 3.6
 * An IDE to write Python code, such as VS Code.
-
+* Knowledge about the datasource API that includes API request, response, datatype and schema.
+* Knowledge about STIX 2.1. To learn go to [STIX2.1](http://docs.oasis-open.org/cti/stix/v2.1/cs02/stix-v2.1-cs02.html).
 ## Steps
 
 ### 1. Open stix-shifter folder in VS Code IDE
