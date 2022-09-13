@@ -44,7 +44,42 @@ def __init__(self, connection={}, configuration={}, options={}):
 
 ### 8. Implement input configuration of the connector in `stix_shifter_modules/lab_connector/configuration`
 
-* A json file needs to be created that contains configuration parameters for each module. The configuration json file is required in order to validate the module specific parameters for a successful translation and transmission call. Please follow this naming convention when you create the file: config.json. Here's an example of the content of config.json file:
+* A json file needs to be created that contains configuration parameters for each module. The configuration json file is required in order to validate the module specific parameters for a successful translation and transmission call. Please follow this naming convention when you create the file: config.json. 
+* Two top level json objects needs to be preset in the file: `connection` and `configuration`.
+* The child attributes of the connection object should be the parameters required for making API calls which can be used by multiple users and role levels.
+* Here's an example of the connection object:
+```
+"connection": {
+        "type": {
+            "displayName": "Lab Connector"
+        },
+        "host": {
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
+        },
+        "port": {
+            "type": "number",
+            "default": 3306,
+            "min": 1,
+            "max": 65535
+        },
+        "database": {
+            "type": "text"
+        },
+        "help": {
+            "type": "link",
+        },
+        "options": {
+            "table": {
+                "type": "text",
+                "optional": false
+            }
+        }
+    }
+```
+
+* The configuration object should contain the parameters that are required for API authentication for individual users and roles.
+* Here's an example of the configuration object:
 
 ```
 "configuration": {
