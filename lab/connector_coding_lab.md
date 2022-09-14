@@ -24,23 +24,26 @@ python3 -m pip install --upgrade pip
 INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install
 ```
 
-### 5. Make a copy of the `stix_shifter_modules/synchronous_template` module
+### 5. Make a copy of the `stix_shifter_modules/demo_template` module
 ### 6. Change the name to `lab_connector`   
     
 * You should have a connector module skeleton for the new connector named lab_connector
-### 7. Implement `EntryPoint()` class in `stix_shifter_modules/lab_connector/entry_point.py`. 
+### 7. Create the module entry points
+
+* Implement `EntryPoint()` class in `stix_shifter_modules/lab_connector/entry_point.py`. 
+* The EntryPoint class acts as a gateway to the various methods used by the translation and transmission classes.
 
 ```
 from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
 
 class EntryPoint(BaseEntryPoint):
 
-def __init__(self, connection={}, configuration={}, options={}):
-    super().__init__(connection, configuration, options)
-    self.set_async(False)
-    if connection:
-        self.setup_transmission_basic(connection, configuration)
-    self.setup_translation_simple(dialect_default='default')
+    def __init__(self, connection={}, configuration={}, options={}):
+        super().__init__(connection, configuration, options)
+        self.set_async(False)
+        if connection:
+            self.setup_transmission_basic(connection, configuration)
+        self.setup_translation_simple(dialect_default='default')
 ```
 
 ### 8. Implement input configuration of the connector in `stix_shifter_modules/lab_connector/configuration`
@@ -124,19 +127,30 @@ Here's an example of the content of lang_en.json file:
 ### 9. Implement stix to query translation
 
 * Go to `stix_shifter_modules/lab_connector/stix_translation`
-* First step is to create a file named `from_stix_map.json` that contains STIX Objects to datasource fields  mapping.
-* Update `stix_shifter_modules/lab_connector/stix_translation/json/from_stix_map.json` file with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/json/from_stix_map.json
 
-* If data source API offers one schema type the dialect prefix can be removed
+* Edit the from_stix_map(`from_stix_map.json`) JSON files
+    * `from_stix_map.json` file contains STIX Objects to datasource fields  mapping.
+    * The mapping of STIX objects and properties to data source fields determine how a STIX pattern is translated to a data source query.
+    * Update `stix_shifter_modules/lab_connector/stix_translation/json/from_stix_map.json` file with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/json/from_stix_map.json
 
-* Update `stix_shifter_modules/lab_connector/stix_translation/json/operators.json` with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/json/operators.json
+    ***Note:*** If data source API offers more than one schema type then the dialect prefix can be added. For example: `dialect1_from_stix_map.json`
+
+* Edit the `operators.json` file:
+    * The operators.json file maps the STIX pattern operators to the data source query operators. Change the comparator values to match the operators supported in your data source.
+    * Update `stix_shifter_modules/lab_connector/stix_translation/json/operators.json` with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/json/operators.json
 
 * QueryTranslator() class can be left as it `stix_shifter_modules/mysql/stix_translation/query_translator.py`
-* Update `stix_shifter_modules/lab_connector/stix_translation/query_constructor.py` with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/query_constructor.py
+* Edit the query constructor file:
+    * When a STIX pattern is translated by STIX-shifter, it is first parsed with ANTLR 4 into nested expression objects. The native data source query is constructed from these nested objects.
+    * The parsing is recursively run through QueryStringPatternTranslator._parse_expression, which is found in query_constructor.py.
+    * The query_constructor.py file is where the native query is built from the ANTLR parsing.
+    * Update `stix_shifter_modules/lab_connector/stix_translation/query_constructor.py` with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/query_constructor.py
 
 * Run the query translation CLI command from your workspace to verify the query translation:
 
-`python main.py translate lab_connector query {} "[ipv4-addr:value = '127.0.0.1'] START t'2022-07-01T00:00:00.000Z' STOP t'2022-07-27T00:05:00.000Z'" '{"table":"demo_db"}'`
+```
+python main.py translate lab_connector query {} "[ipv4-addr:value = '127.0.0.1'] START t'2022-07-01T00:00:00.000Z' STOP t'2022-07-27T00:05:00.000Z'" '{"table":"demo_db"}'
+```
 
 ### 10. Implement stix transmission module. 
 
