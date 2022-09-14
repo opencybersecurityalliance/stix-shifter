@@ -119,7 +119,7 @@ Here's an example of the content of lang_en.json file:
 
 * For this lab, copy the entire content from https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/configuration/lang_en.json for this lab.
 
-**Note** For more details about the configuration JSON, go to [Configuratin  JSON](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-configuration-json.md)
+**Note** For more details about the configuration JSON, go to [Configuration JSON](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-configuration-json.md)
 
 ### 9. Implement stix to query translation
 
