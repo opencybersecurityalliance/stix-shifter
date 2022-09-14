@@ -9,7 +9,8 @@ This is a hands on lab to start implementing a connector module in STIX-shifter 
 * Basic knowledge of Git such as forking, committing, branching, pulling, and merging
 * Working knowledge of the Python programming language. This lab will use Python 3.6
 * An IDE to write Python code, such as VS Code.
-
+* Knowledge about the datasource API that includes API request, response, datatype and schema.
+* Knowledge about STIX 2.0. To learn about STIX Cyber Observable Objects go to [STIX 2.0](https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html).
 ## Steps
 
 ### 1. Open stix-shifter folder in VS Code IDE
@@ -44,14 +45,86 @@ def __init__(self, connection={}, configuration={}, options={}):
 
 ### 8. Implement input configuration of the connector in `stix_shifter_modules/lab_connector/configuration`
 
-* Implement connection and configuration of the connector in config.json file. you can copy the content from https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/configuration/config.json for this lab
+* A json file needs to be created that contains configuration parameters for each module. The configuration json file is required in order to validate the module specific parameters for a successful translation and transmission call. Please follow this naming convention when you create the file: config.json. 
+* Two top level json objects needs to be preset in the file: `connection` and `configuration`.
+* The child attributes of the connection object should be the parameters required for making API calls which can be used by multiple users and role levels.
+* Here's an example of the connection object:
+```
+"connection": {
+        "type": {
+            "displayName": "Lab Connector"
+        },
+        "host": {
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
+        },
+        "port": {
+            "type": "number",
+            "default": 3306,
+            "min": 1,
+            "max": 65535
+        },
+        "database": {
+            "type": "text"
+        },
+        "help": {
+            "type": "link",
+        },
+        "options": {
+            "table": {
+                "type": "text",
+                "optional": false
+            }
+        }
+    }
+```
 
-* You can also implement the language definition of the input configuration for the UI label and description in lang_en.json(for English) file. you can copy the content from https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/configuration/lang_en.json for this lab.
+* The configuration object should contain the parameters that are required for API authentication for individual users and roles.
+* Here's an example of the configuration object:
+
+```
+"configuration": {
+        "auth": {
+            "type" : "fields",
+            "username": {
+                "type": "password"
+            },
+            "password": {
+                "type": "password"
+            }
+        }
+    }
+```
+
+* For this lab, copy the entire content from https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/configuration/config.json.
+
+* A second json file is required to translate the parameters defined in config.json for the UI. This file is necessary in order to help the UI framework show the parameters in human readable format. For english language, create a file named `lang_en.json`. 
+
+Here's an example of the content of lang_en.json file:
+
+```
+"configuration": {
+        "auth": {
+            "username": {
+                "label": "Username",
+                "description": "Username with access to the database"
+            },
+            "password": {
+                "label": "Password",
+                "description": "Password of the user with access to the database"
+            }
+        }
+    }
+```
+
+* For this lab, copy the entire content from https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/configuration/lang_en.json for this lab.
+
+**Note** For more details about the configuration JSON, go to [Configuration JSON](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-configuration-json.md)
 
 ### 9. Implement stix to query translation
 
 * Go to `stix_shifter_modules/lab_connector/stix_translation`
-
+* First step is to create a file named `from_stix_map.json` that contains STIX Objects to datasource fields  mapping.
 * Update `stix_shifter_modules/lab_connector/stix_translation/json/from_stix_map.json` file with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/json/from_stix_map.json
 
 * If data source API offers one schema type the dialect prefix can be removed
@@ -61,7 +134,9 @@ def __init__(self, connection={}, configuration={}, options={}):
 * QueryTranslator() class can be left as it `stix_shifter_modules/mysql/stix_translation/query_translator.py`
 * Update `stix_shifter_modules/lab_connector/stix_translation/query_constructor.py` with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/query_constructor.py
 
-* You can now run the basic query translation CLI command from your workspace to tests
+* Run the query translation CLI command from your workspace to verify the query translation:
+
+`python main.py translate lab_connector query {} "[ipv4-addr:value = '127.0.0.1'] START t'2022-07-01T00:00:00.000Z' STOP t'2022-07-27T00:05:00.000Z'" '{"table":"demo_db"}'`
 
 ### 10. Implement stix transmission module. 
 
@@ -87,6 +162,7 @@ class APIClient():
         self.port = connection.get("port")
         self.auth_plugin = 'mysql_native_password'
 ```
+* The connector uses `mysql-connector-python` python package. Therefore, create `stix_shifter_modules/mysql/requirements.txt` file inside the module and specify this dependency: `mysql-connector-python==8.0.25`
 
 * Create a file called `connector.py` if it doesn't yet exist and add the following code to the top of the file:
 
@@ -187,25 +263,25 @@ def create_results_connection(self, query, offset, length):
 #### Ping CLI Command
 
 ```
-python main.py transmit mysql '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' ping
+python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' ping
 ```
 
 #### Query CLI Command
 
 ```
-python main.py transmit mysql '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' query "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 
+python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' query "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 
 ```
 
 #### Status CLI Command
 
 ```
-python main.py transmit mysql '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' status "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 
+python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' status "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 
 ```
 
 #### Results CLI Command
 
 ```
-python main.py transmit mysql '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' results "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 0 100
+python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' results "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 0 100
 ```
 
 ## Results Translation
@@ -213,6 +289,9 @@ python main.py transmit mysql '{"host": "localhost", "database":"demo_db", "opti
 ### 11. Implement data source results to STIX translation
     
 * Make sure the data source returns the results in JSON format
+* Go to `stix_shifter_modules/lab_connector/stix_translation`
+* Create a JSON file named `to_stix_map.json` that maps datasource fields to STIX objects. 
+* For this lab, update `stix_shifter_modules/lab_connector/stix_translation/json/to_stix_map.json` file with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/json/from_stix_map.json
 * Implement the `ResultsTranslator(JSONToStix)` class in `results_translator.py`
 
 ```
@@ -222,7 +301,13 @@ class ResultsTranslator(JSONToStix):
     pass    
 ```
      
-* The parent utility class JSONToStix automatically translates the results into STIX. 
+* The parent utility class JSONToStix automatically translates the results into STIX.
+
+* Run the results translation command to verify:
+
+```
+python main.py translate mysql results '{ "type":"identity","id":"identity--20a77a37-911e-468f-a165-28da7d02985b", "name":"MySQL Database", "identity_class":"system", "created": "2022-04-07T20:35:41.042Z", "modified": "2022-04-07T20:35:41.042Z" }' '[ { "source_ipaddr": "10.0.0.9",  "dest_ipaddr": "10.0.0.9",  "url": "www.example.org",  "filename": "spreadsheet.doc",  "sha256hash": "b0795d1f264efa26bf464612a95bba710c10d3de594d888b6282c48f15690459",  "md5hash": "0a556fbb7d3c184fad0a625afccd2b62",  "file_path": "C:/PHOTOS",  "username": "root", "source_port": 143,  "dest_port": 8080,  "protocol": "udp",  "entry_time": 1617123877.0,  "system_name": "demo_system",  "severity": 2,  "magnitude": 1 } ]' '{"table":"demo_table"}'
+```
 
 ### 12. Implement the `ErrorMapper()` class in `stix_shifter_modules/lab_connector/stix_transmission/error_mapper.py` 
 
@@ -234,5 +319,5 @@ class ResultsTranslator(JSONToStix):
 ### 14. The entire end-to-end query flow can now be tested with the CLI `execute` command:
 
 ```
-python main.py execute mysql mysql '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "mysql","identity_class": "system"}' '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table", "stix_2.1": true}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' "[ipv4-addr:value = '10.0.0.9']"
+python main.py execute lab_connector lab_connector '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "mysql","identity_class": "system"}' '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table", "stix_2.1": true}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' "[ipv4-addr:value = '10.0.0.9']"
 ```
