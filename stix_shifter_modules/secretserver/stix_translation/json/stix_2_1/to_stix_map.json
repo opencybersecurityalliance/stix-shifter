@@ -80,11 +80,6 @@
       "key": "x-secret.secret_id",
        "object": "secret"
    },
-  "UserId": {
-      "key": "x-secret.user_id",
-       "object": "secret"
-   },
-
    "Unique_Identtification": {
       "key": "x-secret.username",
        "object": "secret"
