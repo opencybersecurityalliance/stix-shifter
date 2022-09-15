@@ -15,13 +15,13 @@
   },
    "user-account": {
     "fields": {
-      "user_name": "username",
-      "user_id": "UserId"
+      "user_name": ["username"],
+      "user_id": ["UserId"]
     }
   },
   "email-addr": {
         "fields": {
-            "value": "EmailAddress"
+            "value": ["EmailAddress"]
         }
     },
   "x-secret": {
