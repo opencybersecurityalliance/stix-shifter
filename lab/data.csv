@@ -1,0 +1,14 @@
+source_ipaddr,dest_ipaddr,url,filename,sha256hash,md5hash,file_path,username,source_port,dest_port,protocol,entry_time,system_name,severity,magnitude
+varchar(100),varchar(100),varchar(100),varchar(100),varchar(100),varchar(100),varchar(100),varchar(100),int,int,varchar(100),double,varchar(100),int,int
+192.168.16.4,213.213.142.5,www.example.org,photos.exe,2bc21ad4860422599ef29e6d23d354625a67a53d1ff8e09f7ce392ce7e779dc4,276134d96a0648c24505b455150cb41a,C:/PHOTOS,97bd1036example.org,143,8080,udp,1617123877000,demo_system,8,5
+10.0.0.9,192.168.16.4,www.example.com,calendar.doc,a2c0dd1eeed012132907c1cc8dcca1f77a12c537d7d875f3627c440502f295c2,60f7ec355f60c768bc684ccf718d48d7,user/preferences/lib,root,143,8080,udp,1617123877000,demo_system,2,1
+172.16.25.9,10.0.0.9,www.example.net,photos.exe,b0795d1f264efa26bf464612a95bba710c10d3de594d888b6282c48f15690459,276134d96a0648c24505b455150cb41a,usr/bin,root,143,8080,udp,1617123877000,demo_system,7,4
+10.0.0.9,10.0.0.9,www.example.com,calendar.doc,d502e7541b1a79ba77a010634beb6eedd178f1110535bc73f96a50c891eed1ef,60f7ec355f60c768bc684ccf718d48d7,user/preferences/lib,1eeb5a46example.org,143,8080,udp,1617123877000,demo_system,2,1
+192.168.16.4,10.0.0.9,www.example.com,appointment.xml,fe095939f684e9c3d3c5d9aa15436e1b1de9c22cee23afa8332e226560ea2b2f,9affc3c0175130f9ac80b086d7949291,C:/PHOTOS,root,143,8080,udp,1617123877000,demo_system,6,5
+172.16.25.9,172.16.25.9,www.example.org,photos.exe,3be262c0c7a91818a3795a814cda5efaae0a759f77b8050921b5aea099093357,276134d96a0648c24505b455150cb41a,user/preferences/lib,15e6d6f7example.org,143,8080,udp,1617123877000,demo_system,3,2
+10.0.0.9,213.213.142.5,www.example.net,calendar.doc,a8db77b872512df0fd15943a79efb4e16c745cd8122efaf948b3c56d463e4b70,60f7ec355f60c768bc684ccf718d48d7,user/preferences/lib,user,143,8080,udp,1617123877000,demo_system,2,1
+192.168.16.4,10.0.0.9,www.example.com,calendar.doc,63fcbaa237eb8d9a3f32ecf850831fd283512b30ece26ee8bc43ec013edf2210,60f7ec355f60c768bc684ccf718d48d7,C:/PHOTOS,admin,143,8080,udp,1617123877000,demo_system,6,5
+172.16.25.9,192.168.16.4,www.example.net,appointment.xml,e2df00798b677eaba24393c340913de955d16b0920af6e5a5f1d3a1b4f8669e5,9affc3c0175130f9ac80b086d7949291,C:/PHOTOS,user,143,8080,tcp,1617123877000,demo_system,1,1
+10.0.0.9,192.168.16.4,www.example.net,photos.exe,efe833b6172b3eb4be1e73dfe56f589f7b1ad86493b8a1b3ec5f018fb037d7c6,276134d96a0648c24505b455150cb41a,C:/PHOTOS,root,143,8080,udp,1617123877000,demo_system,4,3
+172.16.25.9,10.0.0.9,www.example.com,photos.exe,3be262c0c7a91818a3795a814cda5efaae0a759f77b8050921b5aea099093357,276134d96a0648c24505b455150cb41a,user/preferences/lib,admin,143,8080,tcp,1617123877000,demo_system,6,4
+10.0.0.9,10.0.0.9,www.example.org,spreadsheet.doc,b0795d1f264efa26bf464612a95bba710c10d3de594d888b6282c48f15690459,0a556fbb7d3c184fad0a625afccd2b62,C:/PHOTOS,root,143,8080,udp,1617123877000,demo_system,2,1
