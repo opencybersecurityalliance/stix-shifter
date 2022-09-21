@@ -1,11 +1,5 @@
 import json
-
-class StixObjectIdEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, StixObjectId):
-            return obj.object_id
-        # Let the base class default method raise the TypeError
-        return json.JSONEncoder.default(self, obj)
+import json_fix # Do not remove this import, it is used silently to enable StixObjectId.__json__ function
 
 
 class StixObjectId(object):
@@ -30,6 +24,9 @@ class StixObjectId(object):
 
     def __radd__(self, other):
         return other + str(self.object_id)
+    
+    def __json__(self):
+        return self.__str__()
 
     def split(self, sep=None):
         return self.object_id.split(sep=sep)
