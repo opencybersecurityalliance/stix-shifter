@@ -1,11 +1,10 @@
 import json
-import json_fix
+import json_fix # Do not remove this import, it is used silently to enable StixObjectId.__json__ function
 
 
 class StixObjectId(object):
     object_id:str = None
     def __init__(self, object_id):
-        json_fix
         self.object_id = object_id
 
     def __str__(self):
