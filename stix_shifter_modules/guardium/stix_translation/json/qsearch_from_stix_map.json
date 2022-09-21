@@ -10,22 +10,22 @@
     },
     "ipv4-addr": {
       "fields": {
-        "value": ["Client IP", "Server"],
-        "src_ip": ["Client IP"],
+        "value": ["ClientIP", "Server"],
+        "src_ip": ["ClientIP"],
         "dst_ip": ["Server"]
       }
     },
     "ipv6-addr": {
       "fields": {
-        "value": ["Client IP", "Server"],
-        "src_ip": ["Client IP"],
+        "value": ["ClientIP", "Server"],
+        "src_ip": ["ClientIP"],
         "dst_ip": ["Server"]
       }
     },
     "network-traffic": {
       "fields": {
         "dst_ref.value": ["Server"],
-        "src_ref.value":["Client IP"]
+        "src_ref.value":["ClientIP"]
       }
     },
      "user-account": {

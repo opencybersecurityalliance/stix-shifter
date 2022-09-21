@@ -35,8 +35,10 @@ CONNECTORS = {
     "cybereason": "Cybereason",
     "paloalto": "PaloAlto Cortex XDR",
     "sentinelone": "SentinelOne",
-    "reaqta": "ReaQta",
-    "darktrace": "Darktrace"
+    "reaqta": "IBM Security ReaQta",
+    "darktrace": "Darktrace",
+    "rhacs": "Red Hat Advanced Cluster Security for Kubernetes (StackRox)",
+    "ibm_security_verify": "IBM Security Verify"
 }
 
 STIX_OPERATORS ={

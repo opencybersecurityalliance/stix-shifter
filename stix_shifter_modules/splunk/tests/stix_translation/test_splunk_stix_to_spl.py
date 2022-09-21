@@ -214,6 +214,12 @@ class TestStixToSpl(unittest.TestCase, object):
         queries = f'search (src_port = 37020) earliest="06/01/2016:01:30:00" latest="06/01/2016:02:20:00" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
+    def test_start_stop_qualifiers_seconds(self):
+        stix_pattern = "[network-traffic:src_port = 37020] START t'2016-06-01T01:30:00Z' STOP t'2016-06-01T02:20:00Z'"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search (src_port = 37020) earliest="06/01/2016:01:30:00" latest="06/01/2016:02:20:00" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
     def test_issubset_operator(self):
         stix_pattern = "[ipv4-addr:value ISSUBSET '198.51.100.0/24']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
@@ -225,6 +231,13 @@ class TestStixToSpl(unittest.TestCase, object):
         options = {"time_range": 25, "result_limit": 5000}
         query = translation.translate('splunk', 'query', '{}', stix_pattern, options)
         queries = f'search ((src_ip = "192.168.122.83") OR (dest_ip = "192.168.122.83")) earliest="-25minutes" | head 5000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
+    def test_custom_index(self):
+        stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
+        options = {"index": "my_index"}
+        query = translation.translate('splunk', 'query', '{}', stix_pattern, options)
+        queries = f'search index=my_index ((src_ip = "192.168.122.83") OR (dest_ip = "192.168.122.83")) earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
     def test_custom_mapping(self):

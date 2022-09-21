@@ -92,15 +92,28 @@ response = translation.translate('<MODULE NAME>', 'query', '{}', '<STIX PATTERN>
 print(response)
 ```
 
+If you would like to dump the result as a string in stix 2.1 version, you need to use `StixObjectIdEncoder` as `cls` in json.dumps:
+```
+from stix_shifter.stix_translation import stix_translation
+from stix_shifter_utils.utils.helpers import StixObjectIdEncoder
+
+translation = stix_translation.StixTranslation()
+response = translation.translate('<MODULE NAME>', 'query', '', '<STIX PATTERN>', '{"stix_2.1": true, ... <OTHER_OPTIONS>}')
+
+result_string = json.dumps(response, cls=StixObjectIdEncoder)
+```
+
 ## Contributing
 
 We are thrilled you are considering contributing! We welcome all contributors.
 
 Please read our [guidelines for contributing](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/CONTRIBUTING.md).
 
-## Guide for creating new connectors
+## Developer Guides
 
 If you want to create a new connector for STIX-shifter, see the [developer guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-stix-adapter.md)
+
+There are also a few [Jupyter Notebook labs](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/lab) that cover the CLI commands and dev process.
 
 ## Licensing
 

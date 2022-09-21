@@ -1,5 +1,5 @@
-##### Updated on 06/01/22
-## ReaQta
+##### Updated on 09/09/22
+## IBM Security ReaQta
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
 |--|--|
@@ -54,10 +54,10 @@
 | network-traffic | dst_ref | remoteAddrV6 |
 | network-traffic | dst_port | remotePort |
 | <br> | | |
-| process | extensions.x-process-ext.process_uid | id |
+| process | x_unique_id | id |
 | process | extensions.x-reaqta-process.logon_id | logonId |
 | process | extensions.x-reaqta-process.no_gui | noGui |
-| process | extensions.x-process-ext.parent_process_uid | parentId |
+| process | x_unique_id | parentId |
 | process | pid | pid |
 | process | pid | ppid |
 | process | parent_ref | ppid |
@@ -136,7 +136,7 @@
 | x-oca-event | process_ref | etwCallerProcessId |
 | x-oca-event | code | etwEventId |
 | x-oca-event | extensions.x-reaqta-etw.etw_event_record_id | etwEventRecordId |
-| x-oca-event | extensions.x-reaqta-etw.etw_event_record_id | etwEventVersion |
+| x-oca-event | extensions.x-reaqta-etw.etw_event_version | etwEventVersion |
 | x-oca-event | extensions.x-reaqta-etw.etw_failure_reason | etwFailureReason |
 | x-oca-event | extensions.x-reaqta-etw.etw_home_directory | etwHomeDirectory |
 | x-oca-event | file_ref | etwHomePath |

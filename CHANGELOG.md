@@ -16,6 +16,89 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 -------------------------------------
 
+## 4.3.0 (2022-09-09)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+* CLI and coding tutorials [#1105](https://github.com/opencybersecurityalliance/stix-shifter/pull/1105)
+* Adding RHACS(StackRox) UDI connector [#1055](https://github.com/opencybersecurityalliance/stix-shifter/pull/1055)
+* Added Utility for normalization of connectors [#1078](https://github.com/opencybersecurityalliance/stix-shifter/pull/1078)
+* CrowdStrike: Added User-Agent string to API Client for tracking [#1064](https://github.com/opencybersecurityalliance/stix-shifter/pull/1064)
+* Process unique ID [#1051](https://github.com/opencybersecurityalliance/stix-shifter/pull/1051)
+* Added matcher lib support for 2.1 [#960](https://github.com/opencybersecurityalliance/stix-shifter/pull/960)
+* In query Enhancement [#1022](https://github.com/opencybersecurityalliance/stix-shifter/pull/1022)
+* Infoblox add docstrings for module [#719](https://github.com/opencybersecurityalliance/stix-shifter/pull/719)
+* Release/3.3.x json to stix [#598](https://github.com/opencybersecurityalliance/stix-shifter/pull/598)
+
+### Fixes:
+
+* Id contributing properties from json to py [#1093](https://github.com/opencybersecurityalliance/stix-shifter/pull/1093)
+* splunk: fix STIX timestamp processing [#1084](https://github.com/opencybersecurityalliance/stix-shifter/pull/1084)
+* Fixing absolute path for id_contributing_properties.json [#1079](https://github.com/opencybersecurityalliance/stix-shifter/pull/1079)
+* Fix mapping and added hex to int transformer [#1068](https://github.com/opencybersecurityalliance/stix-shifter/pull/1068)
+* Downgrade boto3 version to 1.21.21 [#1036](https://github.com/opencybersecurityalliance/stix-shifter/pull/1036)
+* Fix the length of the results of Qradar connector [#1034](https://github.com/opencybersecurityalliance/stix-shifter/pull/1034)
+* Revert "Change certificate parameter type for consistency" [#1031](https://github.com/opencybersecurityalliance/stix-shifter/pull/1031)
+* reaqta: enable certification authentication [#1028](https://github.com/opencybersecurityalliance/stix-shifter/pull/1028)
+* fix configuration in proofpoint and sumologic [#745](https://github.com/opencybersecurityalliance/stix-shifter/pull/745)
+* Validator review code change for Proofpoint [#739](https://github.com/opencybersecurityalliance/stix-shifter/pull/739)
+
+### Dependency update:
+
+
+--------------------------------------
+
+
+## 4.2.0 (2022-06-29)
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+* Added reaqta from_stix generate script [#977](https://github.com/opencybersecurityalliance/stix-shifter/pull/977)
+* Change certificate parameter type [#1000](https://github.com/opencybersecurityalliance/stix-shifter/pull/1000)
+* splunk: add index to options [#993](https://github.com/opencybersecurityalliance/stix-shifter/pull/993)
+* Best practices document for connector development [#986](https://github.com/opencybersecurityalliance/stix-shifter/pull/986)
+* Update supported attributes and overview readme [#976](https://github.com/opencybersecurityalliance/stix-shifter/pull/976)
+* Guardium rel 1.10 [#958](https://github.com/opencybersecurityalliance/stix-shifter/pull/958)
+* Updated the readme mappings for darktrace. [#942](https://github.com/opencybersecurityalliance/stix-shifter/pull/942)
+* Added Darktrace UDI connector. [#896](https://github.com/opencybersecurityalliance/stix-shifter/pull/896)
+* Update table of mappings for ReaQta and IN operator support [#937](https://github.com/opencybersecurityalliance/stix-shifter/pull/937)
+* Updated the Readme mapping files [#932](https://github.com/opencybersecurityalliance/stix-shifter/pull/932)
+* Adding SentinelOne UDI connector [#888](https://github.com/opencybersecurityalliance/stix-shifter/pull/888)
+* Reaqta connector [#879](https://github.com/opencybersecurityalliance/stix-shifter/pull/879)
+
+### Fixes:
+
+* Fixed unique_cybox_objects storing [#1005](https://github.com/opencybersecurityalliance/stix-shifter/pull/1005)
+* fallback to random UUID if STIX object contains no defined id contributing properties [#990](https://github.com/opencybersecurityalliance/stix-shifter/pull/990)
+* error_test timeouts on translate and status [#987](https://github.com/opencybersecurityalliance/stix-shifter/pull/987)
+* fix two deprecation warnings [#940](https://github.com/opencybersecurityalliance/stix-shifter/pull/940)
+* splunk: fix mapping of process command line [#918] [#971](https://github.com/opencybersecurityalliance/stix-shifter/pull/971)
+* splunk: fix incorrect dst_ref.value mapping [#919] [#970](https://github.com/opencybersecurityalliance/stix-shifter/pull/970)
+* splunk: fix translation of IN, LIKE, and MATCHES [#789] [#969](https://github.com/opencybersecurityalliance/stix-shifter/pull/969)
+* fix eventType mapping for reaqta connector [#967](https://github.com/opencybersecurityalliance/stix-shifter/pull/967)
+* Reaqta: Fix network traffic for inbound and mapping update [#952](https://github.com/opencybersecurityalliance/stix-shifter/pull/952)
+* Remove deprecated SourceImage field from aql search [#950](https://github.com/opencybersecurityalliance/stix-shifter/pull/950)
+* Reaqta: implemented grater/less fields translation, fixed from_stix fields sorting, fixed unittests [#938](https://github.com/opencybersecurityalliance/stix-shifter/pull/938)
+* Reaqta Connector:Update mapping and unittest [#964](https://github.com/opencybersecurityalliance/stix-shifter/pull/964)
+* Fixed stix parsing with setvalue types [#907](https://github.com/opencybersecurityalliance/stix-shifter/pull/907)
+
+### Dependency update:
+
+* Bump boto3 from 1.21.5 to 1.22.10 [#935](https://github.com/opencybersecurityalliance/stix-shifter/pull/935)
+* Bump xmltodict from 0.12.0 to 0.13.0 [#934](https://github.com/opencybersecurityalliance/stix-shifter/pull/934)
+* Bump stix2-matcher from 2.0.1 to 2.0.2 [#915](https://github.com/opencybersecurityalliance/stix-shifter/pull/915)
+
+
+--------------------------------------
+
+
 ## 4.1.0 (2022-04-12)
 ### Breaking changes:
 

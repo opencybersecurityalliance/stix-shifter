@@ -11,7 +11,7 @@
       "extensions.'x-reaqta-data'.fsname": ["filename"],
       "extensions.'x-reaqta-program'.arch": ["service.arch"],
       "extensions.'x-reaqta-program'.fsname": ["filename"],
-      "hashes.'MD5'": ["md5"],
+      "hashes.MD5": ["md5"],
       "hashes.'SHA-1'": ["sha1"],
       "hashes.'SHA-256'": ["sha256"],
       "name": ["consumer.script.filename", "filename"],
@@ -68,7 +68,6 @@
   },
   "x-ibm-finding": {
     "fields": {
-      "category": ["eventType"],
       "dst_ip_ref.value": ["ip"],
       "extensions.'x-reaqta-avdetection'.av_scan_reason": ["antimalware.scanReason"],
       "extensions.'x-reaqta-avdetection'.av_threat_info_array": ["antimalware.threatInfo"],
@@ -96,6 +95,7 @@
   "x-oca-event": {
     "fields": {
       "agent": ["antimalware.appName"],
+      "category": ["eventType"],
       "code": ["eventId", "eventdata.etwEventId"],
       "extensions.'x-reaqta-amsi'.content_name": ["antimalware.contentName"],
       "extensions.'x-reaqta-amsi'.scan_result": ["antimalware.scanResult"],

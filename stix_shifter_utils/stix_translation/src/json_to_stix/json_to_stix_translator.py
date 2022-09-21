@@ -1,9 +1,10 @@
+from os import path
 import re
 import uuid
 import json
 
 from stix_shifter_utils.utils.helpers import dict_merge
-from stix_shifter_utils.stix_translation.src.json_to_stix import observable
+from stix_shifter_utils.stix_translation.src.json_to_stix import observable, id_contributing_properties
 from stix2validator import validate_instance, print_results, ValidationOptions
 from datetime import datetime
 from stix_shifter_utils.utils import logger
@@ -72,8 +73,7 @@ class DataSourceObjToStixObj:
 
         if options.get("stix_2.1"):
             self.spec_version = "2.1"
-            with open("stix_shifter_utils/stix_translation/src/json_to_stix/id_contributing_properties.json", 'r') as f:
-                self.contributing_properties_definitions =  json.load(f)
+            self.contributing_properties_definitions = id_contributing_properties.properties
         else:
             self.spec_version = "2.0"
             self.bundle["spec_version"] = "2.0"
@@ -352,9 +352,9 @@ class DataSourceObjToStixObj:
                     cybox_properties[contr_prop] = cybox[contr_prop] 
             
             if cybox_properties:
-                unique_id = cybox_type + "--" + str(uuid.uuid5(namespace=uuid.UUID(UUID5_NAMESPACE), name=json.dumps(cybox_properties)))
+                unique_id = cybox_type + "--" + str(uuid.uuid5(namespace=uuid.UUID(UUID5_NAMESPACE), name=json.dumps(cybox_properties, sort_keys=True, ensure_ascii=False, separators=(",", ":"))))
 
-        else: # STIX process or custom object used UUID4 for identifier
+        if not unique_id: # STIX process or custom object used UUID4 for identifier
             unique_id = "{}--{}".format(cybox_type, str(uuid.uuid4()))
 
         return unique_id
@@ -418,7 +418,7 @@ class DataSourceObjToStixObj:
 
                         if unique_id not in object_refs:
                             object_refs.append(unique_id)
-                            self.unique_cybox_objects[key] = value
+                            self.unique_cybox_objects[unique_id] = value
 
                 observation["object_refs"] = object_refs
                 observation["spec_version"] = "2.1"
