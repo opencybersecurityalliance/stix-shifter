@@ -1,7 +1,7 @@
 {
   "username": [
     {
-    "key": "user-account.user_name"
+    "key": "user-account.display_name"
   }
   ],
   "UserId" :{
