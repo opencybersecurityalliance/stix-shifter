@@ -15,7 +15,7 @@
   },
    "user-account": {
     "fields": {
-      "user_name": ["username"],
+      "display_name": ["username"],
       "user_id": ["UserId"]
     }
   },
