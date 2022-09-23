@@ -16,6 +16,43 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 -------------------------------------
 
+## 4.3.0 (2022-09-09)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+* CLI and coding tutorials [#1105](https://github.com/opencybersecurityalliance/stix-shifter/pull/1105)
+* Adding RHACS(StackRox) UDI connector [#1055](https://github.com/opencybersecurityalliance/stix-shifter/pull/1055)
+* Added Utility for normalization of connectors [#1078](https://github.com/opencybersecurityalliance/stix-shifter/pull/1078)
+* CrowdStrike: Added User-Agent string to API Client for tracking [#1064](https://github.com/opencybersecurityalliance/stix-shifter/pull/1064)
+* Process unique ID [#1051](https://github.com/opencybersecurityalliance/stix-shifter/pull/1051)
+* Added matcher lib support for 2.1 [#960](https://github.com/opencybersecurityalliance/stix-shifter/pull/960)
+* In query Enhancement [#1022](https://github.com/opencybersecurityalliance/stix-shifter/pull/1022)
+* Infoblox add docstrings for module [#719](https://github.com/opencybersecurityalliance/stix-shifter/pull/719)
+* Release/3.3.x json to stix [#598](https://github.com/opencybersecurityalliance/stix-shifter/pull/598)
+
+### Fixes:
+
+* Id contributing properties from json to py [#1093](https://github.com/opencybersecurityalliance/stix-shifter/pull/1093)
+* splunk: fix STIX timestamp processing [#1084](https://github.com/opencybersecurityalliance/stix-shifter/pull/1084)
+* Fixing absolute path for id_contributing_properties.json [#1079](https://github.com/opencybersecurityalliance/stix-shifter/pull/1079)
+* Fix mapping and added hex to int transformer [#1068](https://github.com/opencybersecurityalliance/stix-shifter/pull/1068)
+* Downgrade boto3 version to 1.21.21 [#1036](https://github.com/opencybersecurityalliance/stix-shifter/pull/1036)
+* Fix the length of the results of Qradar connector [#1034](https://github.com/opencybersecurityalliance/stix-shifter/pull/1034)
+* Revert "Change certificate parameter type for consistency" [#1031](https://github.com/opencybersecurityalliance/stix-shifter/pull/1031)
+* reaqta: enable certification authentication [#1028](https://github.com/opencybersecurityalliance/stix-shifter/pull/1028)
+* fix configuration in proofpoint and sumologic [#745](https://github.com/opencybersecurityalliance/stix-shifter/pull/745)
+* Validator review code change for Proofpoint [#739](https://github.com/opencybersecurityalliance/stix-shifter/pull/739)
+
+### Dependency update:
+
+
+--------------------------------------
+
+
 ## 4.2.0 (2022-06-29)
 ### Breaking changes:
 
