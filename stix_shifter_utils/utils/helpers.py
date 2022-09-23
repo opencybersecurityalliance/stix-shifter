@@ -2,6 +2,21 @@ import json
 import json_fix # Do not remove this import, it is used silently to enable StixObjectId.__json__ function
 
 
+class StixObjectIdIterator:
+    def __init__(self, stix_object) -> None:
+        self.stix_object = stix_object
+        self.index = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if not self.index:
+            self.index += 1
+            return self.stix_object.object_id
+        raise StopIteration
+
+
 class StixObjectId(object):
     object_id:str = None
     def __init__(self, object_id):
@@ -27,6 +42,9 @@ class StixObjectId(object):
     
     def __json__(self):
         return self.__str__()
+
+    def __iter__(self):
+        return StixObjectIdIterator(self)
 
     def split(self, sep=None):
         return self.object_id.split(sep=sep)
