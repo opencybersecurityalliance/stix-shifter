@@ -1,0 +1,37 @@
+{
+  "int_supported_fields": [
+    "Severity"
+  ],
+  "string_supported_fields": [
+    "Cluster",
+    "Cluster ID",
+    "Deployment",
+    "Namespace",
+    "Policy",
+    "Category"
+  ],
+  "boolean_supported_fields": [
+    "Inactive Deployment"
+  ],
+  "timestamp_supported_fields": [
+    "Violation Time"
+  ],
+  "enum_supported_fields": [
+    "Violation State",
+    "Lifecycle Stage",
+    "Resource Type"
+  ],
+  "enum_supported_values": {
+    "Violation State": [
+      "ACTIVE",
+      "RESOLVED"
+    ],
+    "Lifecycle Stage": [
+      "RUNTIME",
+      "DEPLOY"
+    ],
+    "Resource Type": [
+      "DEPLOYMENT"
+    ]
+  }
+}

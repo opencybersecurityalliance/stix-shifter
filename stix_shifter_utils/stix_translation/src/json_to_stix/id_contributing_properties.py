@@ -1,4 +1,4 @@
-{
+properties = {
     "artifact": [[ "MD5", "SHA-1", "SHA-256", "SHA-512" ], "payload_bin"],
     "autonomous-system": ["number"],
     "directory": ["path"],
