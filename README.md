@@ -92,16 +92,6 @@ response = translation.translate('<MODULE NAME>', 'query', '{}', '<STIX PATTERN>
 print(response)
 ```
 
-If you would like to dump the result as a string in stix 2.1 version, you need to use `StixObjectIdEncoder` as `cls` in json.dumps:
-```
-from stix_shifter.stix_translation import stix_translation
-from stix_shifter_utils.utils.helpers import StixObjectIdEncoder
-
-translation = stix_translation.StixTranslation()
-response = translation.translate('<MODULE NAME>', 'query', '', '<STIX PATTERN>', '{"stix_2.1": true, ... <OTHER_OPTIONS>}')
-
-result_string = json.dumps(response, cls=StixObjectIdEncoder)
-```
 
 ## Contributing
 
