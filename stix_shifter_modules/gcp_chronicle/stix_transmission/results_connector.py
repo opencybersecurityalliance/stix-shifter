@@ -10,70 +10,106 @@ import re
 
 class ResultsConnector(BaseResultsConnector):
     EMAIL_PATTERN = re.compile(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
+    GCP_MAX_PAGE_SIZE = 1000
 
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_results_connection(self, search_id, offset, length):
+    def create_results_connection(self, search_id, offset, length, metadata=None):
         """
         Fetching the results using search id, offset and length
         :param search_id: str, search id generated in transmit query
         :param offset: str, offset value
         :param length: str, length value
+        :param metadata: str
         :return: dict
         """
         return_obj = {}
         response_dict = {}
+        response_text = {}
         result = []
-        next_page_token = '0'
         result_count = 0
-        page_size = self.api_client.result_limit
+        local_result_count = 0
 
         try:
-            response_wrapper = self.api_client.get_search_results(search_id, next_page_token, page_size)
-            response_text = json.loads(response_wrapper[1])
-            if response_wrapper[0].status == 200:
-                if 'detections' in response_text.keys():
-                    result_count += len(response_text['detections'])
-                    result.append(response_text['detections'])
-                    # make api call again, if there is next page token in the response and results fetched is less than
-                    # the result limit of the connector.
-                    while 'nextPageToken' in response_text.keys():
-                        if result_count < self.api_client.result_limit:
-                            page_size = self.api_client.result_limit - result_count
+            if metadata:
+                result_count, next_page_token = metadata.split(':')
+                result_count = int(result_count)
+                total_records = int(length)
+                if abs(self.api_client.result_limit - result_count) < total_records:
+                    total_records = abs(self.api_client.result_limit - result_count)
+            else:
+                result_count, next_page_token = 0, '0'
+                total_records = int(offset) + int(length)
+                if self.api_client.result_limit < total_records:
+                    total_records = self.api_client.result_limit
+
+            if total_records <= ResultsConnector.GCP_MAX_PAGE_SIZE:
+                page_size = total_records
+            else:
+                page_size = ResultsConnector.GCP_MAX_PAGE_SIZE
+
+            if (result_count == 0 and next_page_token == '0') or (
+                    next_page_token != '0' and result_count < self.api_client.result_limit):
+                response_wrapper = self.api_client.get_search_results(search_id, next_page_token, page_size)
+                response_text = json.loads(response_wrapper[1])
+                if response_wrapper[0].status == 200:
+                    if 'detections' in response_text.keys():
+                        result_count += len(response_text['detections'])
+                        local_result_count += len(response_text['detections'])
+                        result.append(response_text['detections'])
+                        while 'nextPageToken' in response_text.keys():
+                            if not metadata and result_count < total_records:
+                                remaining_records = total_records - result_count
+
+                            elif metadata and local_result_count < total_records:
+                                remaining_records = total_records - local_result_count
+
+                            else:
+                                break
+
+                            if remaining_records > ResultsConnector.GCP_MAX_PAGE_SIZE:
+                                page_size = ResultsConnector.GCP_MAX_PAGE_SIZE
+                            else:
+                                page_size = remaining_records
+
+                            next_page_token = response_text['nextPageToken']
                             next_response = self.api_client.get_search_results(search_id,
-                                                                               response_text['nextPageToken'],
+                                                                               next_page_token,
                                                                                page_size)
                             response_text = json.loads(next_response[1])
                             if next_response[0].status == 200:
                                 if 'detections' in response_text.keys():
                                     result_count += len(response_text['detections'])
+                                    local_result_count += len(response_text['detections'])
                                     result.append(response_text['detections'])
                             else:
-                                response_dict['code'] = next_response[0].status
-                                response_dict['message'] = response_text['error'].get('message')
-                                ErrorResponder.fill_error(return_obj, response_dict, ['message'],
-                                                          connector=self.connector)
                                 return_obj = self.invalid_response(return_obj, response_dict,
                                                                    next_response[0].status, response_text)
+                                result = []
                                 break
+
+                    if result:
+                        return_obj['success'] = True
+                        final_result = ResultsConnector.get_results_data(result)
+                        if metadata:
+                            return_obj['data'] = final_result if final_result else []
                         else:
-                            break
-                return_obj['success'] = True
-                if result:
-                    final_result = ResultsConnector.get_results_data(result)
-                    return_obj['data'] = final_result[int(offset):(int(offset) + int(length))] if final_result else []
+                            return_obj['data'] = final_result[int(offset): total_records] if final_result else []
+                        return_obj['metadata'] = str(result_count) + ':' + response_text.get('nextPageToken', '0')
+                    else:
+                        if not return_obj.get('error') and return_obj.get('success') is not False:
+                            return_obj['success'] = True
+                            return_obj['data'] = []
+
                 else:
-                    return_obj['data'] = []
-                # delete the error details if partial results are fetched
-                if 'code' in return_obj and 'error' in return_obj and return_obj['data']:
-                    del return_obj['code']
-                    del return_obj['error']
+                    return_obj = self.invalid_response(return_obj, response_dict, response_wrapper[0].status,
+                                                       response_text)
             else:
-                return_obj = self.invalid_response(return_obj, response_dict, response_wrapper[0].status,
-                                                   response_text)
+                return_obj['success'] = True
+                return_obj['data'] = []
 
         except ServerNotFoundError:
             response_dict['code'] = 1010
@@ -103,12 +139,17 @@ class ResultsConnector(BaseResultsConnector):
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         finally:
-            if 'code' in response_dict:
-                if response_dict['code'] not in (1010, 1015):
-                    self.api_client.delete_search(search_id)
-            else:
-                self.api_client.delete_search(search_id)
+            try:
+                if not return_obj.get('data') or result_count >= self.api_client.result_limit or \
+                        response_dict.get('message') or not response_text.get('nextPageToken'):
+                    if 'code' in response_dict:
+                        if response_dict['code'] not in (1010, 1015):
+                            self.api_client.delete_search(search_id)
+                    else:
+                        self.api_client.delete_search(search_id)
 
+            except Exception:
+                self.logger.info("User doesn't have permission to delete the search id")
         return return_obj
 
     def invalid_response(self, return_obj, response_dict, status, response_text):
@@ -116,6 +157,7 @@ class ResultsConnector(BaseResultsConnector):
         handle error response
         :return dict
         """
+
         response_dict['code'] = status
         response_dict['message'] = response_text['error'].get('message')
         ErrorResponder.fill_error(return_obj, response_dict, ['message'],

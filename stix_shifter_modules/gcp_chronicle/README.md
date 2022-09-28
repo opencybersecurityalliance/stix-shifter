@@ -201,7 +201,8 @@ results
                 ]
             }
         }
-    ]
+    ],
+   "metadata": "1:abc"
 }
 ```
 
@@ -521,7 +522,8 @@ results
                 ]
             }
         }
-    ]
+    ],
+   "metadata": "1:abc"
 }
 ```
 

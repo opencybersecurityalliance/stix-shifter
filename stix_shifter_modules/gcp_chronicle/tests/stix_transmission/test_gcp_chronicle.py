@@ -724,10 +724,8 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
         result_response = transmission.results(search_id, 0, 2)
         assert result_response is not None
-        assert result_response["data"] is not None
-        assert result_response['success'] is True
-        assert result_response["data"][0]["event"]["metadata"]["productLogId"] == "823rb4e123k4"
-        assert result_response["data"][0]["detection"]["ruleName"] == "rule_1657020065"
+        assert result_response['success'] is False
+        assert "rule with ID ru_1234 could not be found" in result_response['error']
 
     def test_status_response_with_state_running(self, mock_credentials, mock_auth):
         """test running status for transmit status"""

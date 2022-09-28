@@ -5,7 +5,7 @@ from httplib2 import ServerNotFoundError
 import json
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.error_response import ErrorResponder
-
+import time
 
 class InvalidResponseException(Exception):
     pass
@@ -149,7 +149,12 @@ class APIClient:
 
         list_detection_endpoint = self.host + "/" + list_detection
 
-        return self.http_client.request(list_detection_endpoint, 'GET')
+        response = self.http_client.request(list_detection_endpoint, 'GET')
+
+        while response[0].status == 429:  # add sleep of 1 sec when resource exhaustion happens
+            time.sleep(1)
+            response = self.http_client.request(list_detection_endpoint, 'GET')
+        return response
 
     def delete_search(self, search_id):
         """
@@ -163,7 +168,6 @@ class APIClient:
 
         delete = self.QUERY_ENDPOINT + "/" + delete_id[1]
         delete_endpoint = self.host + "/" + delete
-
         return self.http_client.request(delete_endpoint, 'DELETE')
 
     def create_http_client(self):
