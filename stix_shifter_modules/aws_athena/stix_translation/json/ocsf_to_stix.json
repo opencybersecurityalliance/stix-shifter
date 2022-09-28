@@ -1,0 +1,790 @@
+{
+    "activity": {
+        "key": "x-oca-event.action",
+        "object": "aws_event",
+        "type_hint": "string"
+    },
+    "activity_id": {
+        "key": "x-oca-event.code",
+        "object": "aws_event",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "api": {
+        "operation": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "request": {
+            "flags": {
+                "key": "",
+                "object": "",
+                "type_hint": [
+                    "string"
+                ]
+            },
+            "uid": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            }
+        },
+        "response": {
+            "code": {
+                "key": "",
+                "object": "",
+                "transformer": "ToInteger",
+                "type_hint": "integer"
+            },
+            "error": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "error_message": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "flags": {
+                "key": "",
+                "object": "",
+                "type_hint": [
+                    "string"
+                ]
+            },
+            "message": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            }
+        },
+        "service": {
+            "labels": {
+                "key": "",
+                "object": "",
+                "type_hint": [
+                    "string"
+                ]
+            },
+            "name": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "uid": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "version": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            }
+        },
+        "version": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        }
+    },
+    "category_name": {
+        "key": "x-oca-event.action",
+        "object": "aws_event",
+        "type_hint": "string"
+    },
+    "category_uid": {
+        "key": "x-oca-event.code",
+        "object": "aws_event",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "class_name": {
+        "key": "",
+        "object": "",
+        "type_hint": "string"
+    },
+    "class_uid": {
+        "key": "",
+        "object": "",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "cloud": {
+        "account_type": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "account_type_id": {
+            "key": "",
+            "object": "",
+            "transformer": "ToInteger",
+            "type_hint": "integer"
+        },
+        "account_uid": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "org_uid": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "project_uid": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "provider": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "region": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "resource_uid": {
+            "key": "",
+            "object": "",
+            "type_hint": "resource_uid"
+        },
+        "zone": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        }
+    },
+    "count": {
+        "key": "",
+        "object": "",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "duration": {
+        "key": "",
+        "object": "",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "end_time": {
+        "key": "",
+        "object": "",
+        "type_hint": "timestamp"
+    },
+    "enrichments": {
+        "data": {
+            "key": "",
+            "object": "",
+            "type_hint": "json"
+        },
+        "name": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "provider": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "type": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "value": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        }
+    },
+    "http_request": {
+        "args": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "http_headers": {
+            "name": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "value": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            }
+        },
+        "http_method": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "prefix": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "referrer": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "uid": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "url": {
+            "key": "",
+            "object": "",
+            "type_hint": "url"
+        },
+        "user_agent": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "version": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "x_forwarded_for": {
+            "key": "",
+            "object": "",
+            "type_hint": [
+                "ip"
+            ]
+        }
+    },
+    "identity": {
+        "authorizations": {
+            "decision": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "policy": {
+                "desc": {
+                    "key": "",
+                    "object": "",
+                    "type_hint": "string"
+                },
+                "group": {
+                    "desc": {
+                        "key": "",
+                        "object": "",
+                        "type_hint": "string"
+                    },
+                    "name": {
+                        "key": "",
+                        "object": "",
+                        "type_hint": "string"
+                    },
+                    "privileges": {
+                        "key": "",
+                        "object": "",
+                        "type_hint": [
+                            "string"
+                        ]
+                    },
+                    "type": {
+                        "key": "",
+                        "object": "",
+                        "type_hint": "string"
+                    },
+                    "uid": {
+                        "key": "",
+                        "object": "",
+                        "type_hint": "string"
+                    }
+                },
+                "name": {
+                    "key": "",
+                    "object": "",
+                    "type_hint": "string"
+                },
+                "uid": {
+                    "key": "",
+                    "object": "",
+                    "type_hint": "string"
+                },
+                "version": {
+                    "key": "",
+                    "object": "",
+                    "type_hint": "string"
+                }
+            }
+        },
+        "idp": {
+            "name": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "uid": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            }
+        },
+        "invoked_by": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "message": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "session": {
+            "created_time": {
+                "key": "",
+                "object": "",
+                "type_hint": "timestamp"
+            },
+            "credential_uid": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "expiration_time": {
+                "key": "",
+                "object": "",
+                "type_hint": "timestamp"
+            },
+            "issuer": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "mfa": {
+                "key": "",
+                "object": "",
+                "type_hint": "boolean"
+            },
+            "uid": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            }
+        },
+        "user": {
+            "account_type": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "account_type_id": {
+                "key": "",
+                "object": "",
+                "transformer": "ToInteger",
+                "type_hint": "integer"
+            },
+            "account_uid": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "credential_uid": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "domain": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "email_addr": {
+                "key": "",
+                "object": "",
+                "type_hint": "email"
+            },
+            "groups": {
+                "desc": {
+                    "key": "",
+                    "object": "",
+                    "type_hint": "string"
+                },
+                "name": {
+                    "key": "",
+                    "object": "",
+                    "type_hint": "string"
+                },
+                "privileges": {
+                    "key": "",
+                    "object": "",
+                    "type_hint": [
+                        "string"
+                    ]
+                },
+                "type": {
+                    "key": "",
+                    "object": "",
+                    "type_hint": "string"
+                },
+                "uid": {
+                    "key": "",
+                    "object": "",
+                    "type_hint": "string"
+                }
+            },
+            "name": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "org_uid": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "session_uid": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "session_uuid": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "type": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "type_id": {
+                "key": "",
+                "object": "",
+                "transformer": "ToInteger",
+                "type_hint": "integer"
+            },
+            "uid": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "uuid": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            }
+        }
+    },
+    "message": {
+        "key": "",
+        "object": "",
+        "type_hint": "string"
+    },
+    "metadata": {
+        "correlation_uid": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "labels": {
+            "key": "",
+            "object": "",
+            "type_hint": [
+                "string"
+            ]
+        },
+        "logged_time": {
+            "key": "",
+            "object": "",
+            "type_hint": "timestamp"
+        },
+        "modified_time": {
+            "key": "",
+            "object": "",
+            "type_hint": "timestamp"
+        },
+        "processed_time": {
+            "key": "",
+            "object": "",
+            "type_hint": "timestamp"
+        },
+        "product": {
+            "feature": {
+                "name": {
+                    "key": "",
+                    "object": "",
+                    "type_hint": "string"
+                },
+                "uid": {
+                    "key": "",
+                    "object": "",
+                    "type_hint": "string"
+                },
+                "version": {
+                    "key": "",
+                    "object": "",
+                    "type_hint": "string"
+                }
+            },
+            "lang": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "name": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "path": {
+                "key": "",
+                "object": "",
+                "type_hint": "path"
+            },
+            "uid": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "vendor_name": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            },
+            "version": {
+                "key": "",
+                "object": "",
+                "type_hint": "string"
+            }
+        },
+        "sequence": {
+            "key": "",
+            "object": "",
+            "transformer": "ToInteger",
+            "type_hint": "integer"
+        },
+        "uid": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "version": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        }
+    },
+    "observables": {
+        "name": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "type": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "type_id": {
+            "key": "",
+            "object": "",
+            "transformer": "ToInteger",
+            "type_hint": "integer"
+        },
+        "value": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        }
+    },
+    "profiles": {
+        "key": "",
+        "object": "",
+        "type_hint": [
+            "string"
+        ]
+    },
+    "raw_data": {
+        "key": "",
+        "object": "",
+        "type_hint": "string"
+    },
+    "ref_event_code": {
+        "key": "",
+        "object": "",
+        "type_hint": "string"
+    },
+    "ref_event_name": {
+        "key": "",
+        "object": "",
+        "type_hint": "string"
+    },
+    "ref_event_uid": {
+        "key": "",
+        "object": "",
+        "type_hint": "string"
+    },
+    "ref_time": {
+        "key": "",
+        "object": "",
+        "type_hint": "string"
+    },
+    "resources": {
+        "account_uid": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "cloud_partition": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "criticality": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "details": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "group_name": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "labels": {
+            "key": "",
+            "object": "",
+            "type_hint": [
+                "string"
+            ]
+        },
+        "name": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "owner": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "region": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "type": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "uid": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        }
+    },
+    "severity": {
+        "key": "",
+        "object": "",
+        "type_hint": "string"
+    },
+    "severity_id": {
+        "key": "x-ibm-finding.severity",
+        "object":  "aws_findings",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "src_endpoint": {
+        "intermediate_ips": {
+            "key": "",
+            "object": "",
+            "type_hint": [
+                "ip"
+            ]
+        },
+        "name": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        },
+        "port": {
+            "key": "",
+            "object": "",
+            "type_hint": "port"
+        },
+        "svc_name": {
+            "key": "",
+            "object": "",
+            "type_hint": "string"
+        }
+    },
+    "start_time": {
+        "key": "",
+        "object": "",
+        "type_hint": "timestamp"
+    },
+    "status": {
+        "key": "",
+        "object": "",
+        "type_hint": "string"
+    },
+    "status_code": {
+        "key": "",
+        "object": "",
+        "type_hint": "string"
+    },
+    "status_detail": {
+        "key": "",
+        "object": "",
+        "type_hint": "string"
+    },
+    "status_id": {
+        "key": "",
+        "object": "",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "time": {
+        "key": "",
+        "object": "",
+        "type_hint": "timestamp"
+    },
+    "timezone_offset": {
+        "key": "",
+        "object": "",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "type_name": {
+        "key": "",
+        "object": "",
+        "type_hint": "string"
+    },
+    "type_uid": {
+        "key": "",
+        "object": "",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "unmapped": {
+        "profiles": {
+            "key": "",
+            "object": "",
+            "type_hint": [
+                "string"
+            ]
+        }
+    }
+}
