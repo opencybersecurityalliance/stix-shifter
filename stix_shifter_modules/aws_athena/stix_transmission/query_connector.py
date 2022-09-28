@@ -7,7 +7,8 @@ import uuid
 # static lookup for athena service types
 service_types = {
                 'guardduty': ['guardduty_database_name', 'guardduty_table_name'],
-                'vpcflow': ['vpcflow_database_name', 'vpcflow_table_name']
+                'vpcflow': ['vpcflow_database_name', 'vpcflow_table_name'],
+                'ocsf': ['ocsf_database_name', 'ocsf_table_name']
                 }
 
 
@@ -44,7 +45,7 @@ class QueryConnector(BaseQueryConnector):
                 if config not in self.connection.keys():
                     raise InvalidParameterException("{} is required for {} query operation".format(config,
                                                                                                    query_service_type))
-            table_config = self.connection[config_details[0]] + "." + self.connection[config_details[1]]
+            table_config = self.connection[config_details[0]] + '."' + self.connection[config_details[1]] + '"'
             select_statement = "SELECT * FROM %s WHERE " % (table_config)
             # for multiple observation operators union and intersect, select statement will be added
             if 'UNION' in query[query_service_type] or 'INTERSECT' in query[query_service_type]:

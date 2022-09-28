@@ -1,0 +1,12 @@
+{
+  "x-oca-event": {
+    "fields": {
+      "code": [
+        "category_uid"
+      ],
+      "action": [
+        "category_name"
+      ]
+    }
+  }
+}

@@ -21,6 +21,14 @@
             "type": "text",
             "optional": true
         },
+        "ocsf_database_name": {
+            "type": "text",
+            "optional": true
+        },
+        "ocsf_table_name": {
+            "type": "text",
+            "optional": true
+        },
         "guardduty_database_name": {
             "type": "text",
             "optional": true
