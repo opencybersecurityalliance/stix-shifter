@@ -97,7 +97,6 @@ class StixTranslation:
                         if not language or language == query_translator.get_language():
                             dialects_used += 1
                             transform_result = entry_point.transform_query(dialect, data)
-                            {'success': False, 'connector': 'qradar', 'code': 'mapping_error', 'error': "qradar connector error => data mapping error : Unable to map the following STIX objects and properties: ['ipv4-addrx:value'] to data source fields"}
                             if 'error' in transform_result:
                                 error = transform_result['error']
                             if 'code' in transform_result:
