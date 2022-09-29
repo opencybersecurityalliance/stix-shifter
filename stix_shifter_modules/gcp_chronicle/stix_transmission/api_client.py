@@ -148,13 +148,7 @@ class APIClient:
             list_detection = f"{self.QUERY_ENDPOINT}/{search_result[1]}/detections?page_size={page_size}"
 
         list_detection_endpoint = self.host + "/" + list_detection
-
-        response = self.http_client.request(list_detection_endpoint, 'GET')
-
-        while response[0].status == 429:  # add sleep of 1 sec when resource exhaustion happens
-            time.sleep(1)
-            response = self.http_client.request(list_detection_endpoint, 'GET')
-        return response
+        return self.http_client.request(list_detection_endpoint, 'GET')
 
     def delete_search(self, search_id):
         """

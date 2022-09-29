@@ -144,8 +144,10 @@ class ResultsConnector(BaseResultsConnector):
                         response_dict.get('message') or not response_text.get('nextPageToken'):
                     if 'code' in response_dict:
                         if response_dict['code'] not in (1010, 1015):
+                            self.logger.debug("Deleting the search id in results_connector")
                             self.api_client.delete_search(search_id)
                     else:
+                        self.logger.debug("Deleting the search id in results_connector")
                         self.api_client.delete_search(search_id)
 
             except Exception:
