@@ -58,13 +58,19 @@ class APIClient():
             cursor.execute(query)  
             result_collection = cursor.fetchall()
             results_list = []
+            row_count = int(rows)
 
             # Put table data in JSON format
-            for tuple in result_collection:
+            for index, tuple in enumerate(result_collection):
+                if index < int(start):
+                    continue
+                if row_count < 1:
+                    break
                 results_object = {}
                 for index, datum in enumerate(tuple):
                     results_object[column_list[index]] = datum
                 results_list.append(results_object)
+                row_count -= 1
 
             response["result"] = results_list
 

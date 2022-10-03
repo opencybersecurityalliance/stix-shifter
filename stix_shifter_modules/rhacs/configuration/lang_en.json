@@ -1,0 +1,24 @@
+{
+    "connection": {
+        "host": {
+            "label": "Management IP address or Hostname",
+            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+        },
+        "port": {
+            "label": "Host Port",
+            "description": "Set the port number that is associated with the Host name or IP"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "token": {
+                "label": "API Token",
+                "description": "Token with readonly access to the alert API"
+            }
+        }
+    }
+}

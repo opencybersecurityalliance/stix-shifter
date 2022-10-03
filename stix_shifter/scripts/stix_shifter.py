@@ -294,7 +294,7 @@ def main():
                     # Collect all results
                     results += result["data"]
                 else:
-                    raise RuntimeError("Fetching results failed; see log for details")
+                    raise RuntimeError("Fetching results failed; see log for details" + str(result))
             else:
                 log.error(str(search_result))
                 exit(0)

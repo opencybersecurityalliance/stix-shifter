@@ -1,4 +1,4 @@
-##### Updated on 06/01/22
+##### Updated on 07/28/22
 ## SentinelOne
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -98,8 +98,8 @@
 | process | extensions.x-sentinelone-process.story_line_id | tgtProcStorylineId |
 | process | extensions.x-sentinelone-process.integrity_level | srcProcIntegrityLevel |
 | process | extensions.x-sentinelone-process.integrity_level | tgtProcIntegrityLevel |
-| process | extensions.x-sentinelone-process.process_unique_id | srcProcUid |
-| process | extensions.x-sentinelone-process.process_unique_id | tgtProcUid |
+| process | x_unique_id | srcProcUid |
+| process | x_unique_id | tgtProcUid |
 | process | extensions.x-sentinelone-process.signed_status | srcProcSignedStatus |
 | process | extensions.x-sentinelone-process.signed_status | tgtProcSignedStatus |
 | process | extensions.x-sentinelone-process.publisher | srcProcPublisher |
@@ -122,7 +122,7 @@
 | process | extensions.x-sentinelone-process.active_content_hash | tgtProcActiveContentHash |
 | process | extensions.x-sentinelone-process.active_content_signed_status | srcProcActiveContentSignedStatus |
 | process | extensions.x-sentinelone-process.active_content_signed_status | tgtProcActiveContentSignedStatus |
-| process | extensions.x-sentinelone-process.process_unique_id | srcProcParentUid |
+| process | x_unique_id | srcProcParentUid |
 | <br> | | |
 | url | value | url |
 | <br> | | |

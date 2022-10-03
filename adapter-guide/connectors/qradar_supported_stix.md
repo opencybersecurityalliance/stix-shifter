@@ -1,4 +1,4 @@
-##### Updated on 06/01/22
+##### Updated on 07/26/22
 ## IBM QRadar
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -109,6 +109,7 @@
 | process | parent_ref | "Parent Process ID" |
 | process | binary_ref | TargetImage |
 | process | extensions.windows-service-ext.service_dll_refs | ServiceFileName |
+| process | x_unique_id | "Process Guid" |
 | <br> | | |
 | software | name | applicationname |
 | <br> | | |

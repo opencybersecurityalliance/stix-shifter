@@ -1,0 +1,116 @@
+{
+  "UserName": {
+    "key": "user-account.user_id"
+  },
+  "LogSourceId": {
+    "key": "x-custom-object.log_source_id",
+    "object": "x-custom-object",
+    "transformer": "SampleDataTransformer"
+  },
+  "Magnitude": {
+    "key": "x-custom-object.magnitude",
+    "object": "x-custom-object"
+  },
+  "SourceIpV4": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    }
+  ],
+  "DestinationIpV4": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
+  "SourceIpV6": [
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    }
+  ],
+  "DestinationIpV6": [
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
+  "EventCount": {
+    "key": "number_observed",
+    "cybox": false,
+    "transformer": "ToInteger"
+  },
+  "StartTime": [
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp",
+      "cybox": false
+    }
+  ],
+  "Url": {
+    "key": "url.value"
+  },
+  "FileName": {
+    "key": "file.name"
+  },
+  "Payload": {
+    "key": "artifact.payload_bin"
+  },
+  "DestinationPort": {
+    "key": "network-traffic.dst_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "SourcePort": {
+    "key": "network-traffic.src_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "NetworkProtocol": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "transformer": "ToLowercaseArray"
+  },
+  "DomainName": {
+    "key": "domain-name.value"
+  },
+  "Process": {
+    "Path": [
+      {
+        "object": "proc",
+        "key": "process.command_line"
+      }
+    ],
+    "Pid": [
+      {
+        "object": "proc",
+        "key": "process.id"
+      }
+    ]
+  }
+}

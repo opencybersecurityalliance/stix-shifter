@@ -13,6 +13,15 @@ from . import encoders
 from . import object_scopers
 
 
+def stix_strptime(date_string):
+    stix_date_format = "%Y-%m-%dT%H:%M:%S.%fz"
+    stix_date_format_secs = "%Y-%m-%dT%H:%M:%Sz"
+    try:
+        return datetime.strptime(date_string, stix_date_format)
+    except ValueError:
+        return datetime.strptime(date_string, stix_date_format_secs)
+
+
 class SplunkSearchTranslator:
     """ The core translator class. Instances should not be re-used """
 
@@ -49,29 +58,31 @@ class SplunkSearchTranslator:
             translated_query_str = translator.translate(expression.comparison_expression)
 
             if qualifier:
+                # timestamp pattern according to STIX spec
+                ts_pattern = r"t'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?Z'"
+
                 # start time pattern
-                st_pattern = r"(STARTt'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z')"
+                st_pattern = f"(START{ts_pattern})"
                 # stop time pattern
-                et_pattern = r"(STOPt'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z')"
+                et_pattern = f"(STOP{ts_pattern})"
 
                 # find start and stop time from qualifier string
                 st_arr = re.findall(st_pattern, qualifier)
                 et_arr = re.findall(et_pattern, qualifier)
 
-                stix_date_format = "%Y-%m-%dT%H:%M:%S.%fz"
                 splunk_date_format = "%m/%d/%Y:%H:%M:%S"
                 earliest, latest = "", ""
 
                 if st_arr:
                     # replace START and single quotes with empty char in date string
-                    earliest = re.sub(r"(STARTt|')", '', st_arr[0] if st_arr else "")
-                    earliest_obj = datetime.strptime(earliest, stix_date_format)
+                    earliest = re.sub(r"(STARTt|')", '', st_arr[0][0] if st_arr else "")
+                    earliest_obj = stix_strptime(earliest)
                     earliest_dt = earliest_obj.strftime(splunk_date_format)
 
                 if et_arr:
                     # replace STOP and single quotes with empty char in date string
-                    latest = re.sub(r"(STOPt|')", '', et_arr[0] if et_arr else "")
-                    latest_obj = datetime.strptime(latest, stix_date_format)
+                    latest = re.sub(r"(STOPt|')", '', et_arr[0][0] if et_arr else "")
+                    latest_obj = stix_strptime(latest)
                     latest_dt = latest_obj.strftime(splunk_date_format)
 
                 # prepare splunk SPL query
