@@ -1,0 +1,369 @@
+{
+    "activity": {
+        "key": "x-oca-event.action",
+        "object": "aws_event",
+        "type_hint": "string"
+    },
+    "activity_id": {
+        "key": "x-oca-event.code",
+        "object": "aws_event",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "category_name": {
+        "key": "x-oca-event.action",
+        "object": "aws_event",
+        "type_hint": "string"
+    },
+    "category_uid": {
+        "key": "x-oca-event.code",
+        "object": "aws_event",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "class_name": {
+        "key": "x-oca-event.module",
+        "object": "aws_event",
+        "type_hint": "string"
+    },
+    "class_uid": {
+        "key": "x-oca-event.extensions.x-cloud-api.class_uid",
+        "object": "aws_event",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "cloud": {
+        "account_type": {
+            "key": "x-ocsf-cloud.account_type",
+            "object": "ocsf_cloud_api",
+            "type_hint": "string"
+        },
+        "account_type_id": {
+            "key": "x-ocsf-cloud.account_type_id",
+            "object": "ocsf_cloud_api",
+            "transformer": "ToInteger",
+            "type_hint": "integer"
+        },
+        "account_uid": {
+            "key": "x-ocsf-cloud.account_uid",
+            "object": "ocsf_cloud_api",
+            "type_hint": "string"
+        },
+        "org_uid": {
+            "key": "x-ocsf-cloud.org_uid",
+            "object": "ocsf_cloud_api",
+            "type_hint": "string"
+        },
+        "project_uid": {
+            "key": "x-ocsf-cloud.project_uid",
+            "object": "ocsf_cloud_api",
+            "type_hint": "string"
+        },
+        "provider": {
+            "key": "x-ocsf-cloud.provider",
+            "object": "ocsf_cloud_api",
+            "type_hint": "string"
+        },
+        "region": {
+            "key": "x-ocsf-cloud.region",
+            "object": "ocsf_cloud_api",
+            "type_hint": "string"
+        },
+        "resource_uid": {
+            "key": "x-ocsf-cloud.resource_uid",
+            "object": "ocsf_cloud_api",
+            "type_hint": "resource_uid"
+        },
+        "zone": {
+            "key": "x-ocsf-cloud.zone",
+            "object": "ocsf_cloud_api",
+            "type_hint": "string"
+        }
+    },
+    "count": [
+        {
+            "cybox": false,
+            "key": "number_observed",
+            "transformer": "ToInteger"
+        },
+        {
+            "key": "x-ibm-finding.event_count",
+            "object": "findings",
+            "transformer": "ToInteger"
+        }
+    ],
+    "duration": {
+        "key": "x-oca-event.duration",
+        "object": "aws_event",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "end_time": [
+        {
+            "key": "x-ibm-finding.end",
+            "object": "findings",
+            "transformer": "EpochSecondsToTimestamp"
+        },
+        {
+            "cybox": false,
+            "key": "last_observed",
+            "transformer": "EpochSecondsToTimestamp"
+        }
+    ],
+    "enrichments": {
+        "data": {
+            "key": "x-ocsf-enrichments.data",
+            "object": "ocsf_enrichments",
+            "type_hint": "json"
+        },
+        "name": {
+            "key": "x-ocsf-enrichments.name",
+            "object": "ocsf_enrichments",
+            "type_hint": "string"
+        },
+        "provider": {
+            "key": "x-ocsf-enrichments.provider",
+            "object": "ocsf_enrichments",
+            "type_hint": "string"
+        },
+        "type": {
+            "key": "x-ocsf-enrichments.type",
+            "object": "ocsf_enrichments",
+            "type_hint": "string"
+        },
+        "value": {
+            "key": "x-ocsf-enrichments.value",
+            "object": "ocsf_enrichments",
+            "type_hint": "string"
+        }
+    },
+    "message": {
+        "key": "x-ocsf-event.message",
+        "object": "ocsf_base",
+        "type_hint": "string"
+    },
+    "metadata": {
+        "correlation_uid": {
+            "key": "x-ocsf-metadata.correlation_uid",
+            "object": "ocsf_metadata",
+            "type_hint": "string"
+        },
+        "labels": {
+            "key": "x-ocsf-metadata.labels",
+            "object": "ocsf_metadata",
+            "type_hint": [
+                "string"
+            ]
+        },
+        "logged_time": {
+            "key": "x-ocsf-metadata.logged_time",
+            "object": "ocsf_metadata",
+            "type_hint": "timestamp"
+        },
+        "modified_time": {
+            "key": "x-ocsf-metadata.modified_time",
+            "object": "ocsf_metadata",
+            "type_hint": "timestamp"
+        },
+        "processed_time": {
+            "key": "x-ocsf-metadata.processed_time",
+            "object": "ocsf_metadata",
+            "type_hint": "timestamp"
+        },
+        "product": {
+            "feature": {
+                "name": {
+                    "key": "x-ocsf-metadata.product_feature_name",
+                    "object": "ocsf_metadata",
+                    "type_hint": "string"
+                },
+                "uid": {
+                    "key": "x-ocsf-metadata.product_feature_uid",
+                    "object": "ocsf_metadata",
+                    "type_hint": "string"
+                },
+                "version": {
+                    "key": "x-ocsf-metadata.product_feature_version",
+                    "object": "ocsf_metadata",
+                    "type_hint": "string"
+                }
+            },
+            "lang": {
+                "key": "x-ocsf-metadata.product_lang",
+                "object": "ocsf_metadata",
+                "type_hint": "string"
+            },
+            "name": {
+                "key": "x-ocsf-metadata.product_name",
+                "object": "ocsf_metadata",
+                "type_hint": "string"
+            },
+            "path": {
+                "key": "x-ocsf-metadata.product_path",
+                "object": "ocsf_metadata",
+                "type_hint": "path"
+            },
+            "uid": {
+                "key": "x-ocsf-metadata.product_uid",
+                "object": "ocsf_metadata",
+                "type_hint": "string"
+            },
+            "vendor_name": {
+                "key": "x-ocsf-metadata.product_vendor_name",
+                "object": "ocsf_metadata",
+                "type_hint": "string"
+            },
+            "version": {
+                "key": "x-ocsf-metadata.product_version",
+                "object": "ocsf_metadata",
+                "type_hint": "string"
+            }
+        },
+        "sequence": {
+            "key": "x-ocsf-metadata.sequence",
+            "object": "ocsf_metadata",
+            "transformer": "ToInteger",
+            "type_hint": "integer"
+        },
+        "uid": {
+            "key": "x-ocsf-metadata.uid",
+            "object": "ocsf_metadata",
+            "type_hint": "string"
+        },
+        "version": {
+            "key": "x-ocsf-metadata.version",
+            "object": "ocsf_metadata",
+            "type_hint": "string"
+        }
+    },
+    "observables": {
+        "name": {
+            "key": "x-ibm-finding.name",
+            "object": "findings",
+            "type_hint": "string"
+        },
+        "type": {
+            "key": "x-ibm-finding.finding_type",
+            "object": "findings",
+            "type_hint": "string"
+        },
+        "type_id": {
+            "key": "x-ibm-finding.alert_id",
+            "object": "findings",
+            "transformer": "ToInteger",
+            "type_hint": "integer"
+        },
+        "value": {
+            "key": "x-ibm-finding.description",
+            "object": "findings",
+            "type_hint": "string"
+        }
+    },
+    "profiles": {
+        "key": "x-ocsf-event.profiles",
+        "object": "ocsf_base",
+        "type_hint": [
+            "string"
+        ]
+    },
+    "raw_data": {
+        "key": "x-ocsf-event.raw_data",
+        "object": "ocsf_base",
+        "type_hint": "string"
+    },
+    "ref_event_code": {
+        "key": "x-ocsf-event.ref_event_code",
+        "object": "ocsf_base",
+        "type_hint": "string"
+    },
+    "ref_event_name": {
+        "key": "x-ocsf-event.ref_event_name",
+        "object": "ocsf_base",
+        "type_hint": "string"
+    },
+    "ref_event_uid": {
+        "key": "x-ocsf-event.ref_event_uid",
+        "object": "ocsf_base",
+        "type_hint": "string"
+    },
+    "ref_time": {
+        "key": "x-ocsf-event.ref_time",
+        "object": "ocsf_base",
+        "type_hint": "string"
+    },
+    "severity": {
+        "key": "x-ocsf-event.severity",
+        "object": "ocsf_base",
+        "type_hint": "string"
+    },
+    "severity_id": {
+        "key": "x-ibm-finding.severity",
+        "object": "findings",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "start_time": [
+        {
+            "key": "x-ibm-finding.start",
+            "object": "findings",
+            "transformer": "EpochSecondsToTimestamp"
+        },
+        {
+            "cybox": false,
+            "key": "first_observed",
+            "transformer": "EpochSecondsToTimestamp"
+        }
+    ],
+    "status": {
+        "key": "x-ocsf-event.status",
+        "object": "ocsf_base",
+        "type_hint": "string"
+    },
+    "status_code": {
+        "key": "x-ocsf-event.status_code",
+        "object": "ocsf_base",
+        "type_hint": "string"
+    },
+    "status_detail": {
+        "key": "x-ocsf-event.status_detail",
+        "object": "ocsf_base",
+        "type_hint": "string"
+    },
+    "status_id": {
+        "key": "x-ocsf-event.status_id",
+        "object": "ocsf_base",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "time": {
+        "key": "x-oca-event.created",
+        "object": "aws_event",
+        "type_hint": "timestamp"
+    },
+    "timezone_offset": {
+        "key": "x-oca-event.timezone",
+        "object": "aws_event",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "type_name": {
+        "key": "x-ocsf-event.type_name",
+        "object": "ocsf_base",
+        "type_hint": "string"
+    },
+    "type_uid": {
+        "key": "x-ocsf-event.type_uid",
+        "object": "ocsf_base",
+        "transformer": "ToInteger",
+        "type_hint": "integer"
+    },
+    "unmapped": {
+        "profiles": {
+            "key": "x-ocsf-event.profiles",
+            "object": "ocsf_base",
+            "type_hint": [
+                "string"
+            ]
+        }
+    }
+}
