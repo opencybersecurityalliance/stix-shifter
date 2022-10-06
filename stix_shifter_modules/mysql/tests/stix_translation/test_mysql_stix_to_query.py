@@ -87,3 +87,15 @@ class TestQueryTranslator(unittest.TestCase, object):
 
     def test_all_mappings_stix_2_1(self):
         _test_mappings(FROM_STIX_MAPPINGS_2_1, "2.1")
+
+    def test_start_stop_qualifiers_with_one_observation(self):
+        start_time_01 = "t'2016-06-01T01:30:00.123Z'"
+        stop_time_01 = "t'2016-06-01T02:20:00.123Z'"
+        unix_start_time_01 = 1464744600123
+        unix_stop_time_01 = 1464747600123
+        stix_pattern = "[url:value = 'www.example.com'] START {} STOP {}".format(start_time_01, stop_time_01)
+        query = _translate_query(stix_pattern, {"table": "demo_table"})
+        where_statement = "SELECT * FROM demo_table WHERE url = 'www.example.com' AND (entry_time >= {} AND entry_time <= {}) limit 10000".format(unix_start_time_01, unix_stop_time_01)
+        assert len(query['queries']) == 1
+        assert query['queries'] == [where_statement]
+

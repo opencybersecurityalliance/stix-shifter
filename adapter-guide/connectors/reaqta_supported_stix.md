@@ -1,5 +1,5 @@
-##### Updated on 07/27/22
-## ReaQta
+##### Updated on 09/09/22
+## IBM Security ReaQta
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
 |--|--|
@@ -136,7 +136,7 @@
 | x-oca-event | process_ref | etwCallerProcessId |
 | x-oca-event | code | etwEventId |
 | x-oca-event | extensions.x-reaqta-etw.etw_event_record_id | etwEventRecordId |
-| x-oca-event | extensions.x-reaqta-etw.etw_event_record_id | etwEventVersion |
+| x-oca-event | extensions.x-reaqta-etw.etw_event_version | etwEventVersion |
 | x-oca-event | extensions.x-reaqta-etw.etw_failure_reason | etwFailureReason |
 | x-oca-event | extensions.x-reaqta-etw.etw_home_directory | etwHomeDirectory |
 | x-oca-event | file_ref | etwHomePath |

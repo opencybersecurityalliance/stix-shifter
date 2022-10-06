@@ -4,11 +4,11 @@ import uuid
 import json
 
 from stix_shifter_utils.utils.helpers import dict_merge
-from stix_shifter_utils.stix_translation.src.json_to_stix import observable
+from stix_shifter_utils.stix_translation.src.json_to_stix import observable, id_contributing_properties
 from stix2validator import validate_instance, print_results, ValidationOptions
 from datetime import datetime
 from stix_shifter_utils.utils import logger
-from stix_shifter_utils.utils.helpers import StixObjectId, StixObjectIdEncoder
+from stix_shifter_utils.utils.helpers import StixObjectId
 
 # "ID Contributing Properties" taken from https://docs.oasis-open.org/cti/stix/v2.1/csprd01/stix-v2.1-csprd01.html#_Toc16070594
 UUID5_NAMESPACE = "00abedb4-aa42-466c-9c01-fed23315a9b7"
@@ -37,7 +37,7 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
     if options.get('stix_validator'):
         if ds2stix.spec_version == "2.1":
             # Serialize and Deserialize bundle to covert StixObjectIds to strings
-            bundle_obj = json.dumps(ds2stix.bundle, sort_keys=False, cls=StixObjectIdEncoder)
+            bundle_obj = json.dumps(ds2stix.bundle, sort_keys=False)
             bundle_obj = json.loads(bundle_obj)
         else:
             bundle_obj = ds2stix.bundle
@@ -73,10 +73,7 @@ class DataSourceObjToStixObj:
 
         if options.get("stix_2.1"):
             self.spec_version = "2.1"
-            current_dir = path.abspath(path.dirname(__file__))
-            contributing_properties_definitions_path = path.abspath(path.join(current_dir, "id_contributing_properties.json"))
-            with open(contributing_properties_definitions_path, 'r') as f:
-                self.contributing_properties_definitions =  json.load(f)
+            self.contributing_properties_definitions = id_contributing_properties.properties
         else:
             self.spec_version = "2.0"
             self.bundle["spec_version"] = "2.0"
