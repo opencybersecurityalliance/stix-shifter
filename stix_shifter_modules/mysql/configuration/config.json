@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "MySQL"
+            "displayName": "MySQL",
+            "group": "mysql"
         },
         "host": {
             "type": "text",

@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "STIX Bundle"
+            "displayName": "STIX Bundle",
+            "group": "stixbundle"
         },
         "url": {
             "type": "text",

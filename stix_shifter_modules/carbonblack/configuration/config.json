@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Carbon Black Response"
+            "displayName": "Carbon Black Response",
+            "group": "carbonblack"
         },
         "host": {
             "type": "text",

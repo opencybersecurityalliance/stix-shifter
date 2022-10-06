@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "IBM® Cloud Security Advisor"
+            "displayName": "IBM® Cloud Security Advisor",
+            "group": "securityadvisor"
         },
         "host": {
             "type": "text",

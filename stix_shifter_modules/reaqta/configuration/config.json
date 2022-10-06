@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "IBM Security ReaQta"
+            "displayName": "IBM Security ReaQta",
+            "group": "reaqta"
         },
         "host": {
             "type": "text",
