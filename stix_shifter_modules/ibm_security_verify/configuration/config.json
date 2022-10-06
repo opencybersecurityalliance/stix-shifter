@@ -2,7 +2,7 @@
     "connection": {
         "type": {
             "displayName": "IBM Security Verify",
-            "type": "connectorType"
+            "group": "verify"
         },
         "host": {
             "type": "text",
