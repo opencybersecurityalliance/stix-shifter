@@ -210,7 +210,6 @@ class ResultsConnector(BaseResultsConnector):
                 events = ResultsConnector.format_registry_result(events, noun)
                 events = ResultsConnector.format_software_result(events, noun)
                 events = ResultsConnector.format_user_account(events, noun)
-        events = ResultsConnector.validate_guardduty_event(events)
         if 'network' in events['event'].keys():
             events = ResultsConnector.format_network_event(events)
         if 'securityResult' in events['event'].keys():
@@ -352,24 +351,6 @@ class ResultsConnector(BaseResultsConnector):
             if 'software' in events['event'][noun]['asset'].keys():
                 if "name" not in events['event'][noun]['asset']['software'].keys():
                     events['event'][noun]['asset']['software']['name'] = 'unknown'
-        return events
-
-    @staticmethod
-    def validate_guardduty_event(events):
-        """
-        validate guardduty event
-        :param events: dict
-        :return: dict
-        """
-        # change the target location name to principal location name if resource role is target in AWS Guardduty
-        if events.get('event', {}).get('metadata', {}).get('productName') == 'AWS GuardDuty' and \
-                events.get('event', {}).get('additional', {}).get('resourceRole') == 'TARGET':
-            if events.get('event', {}).get('target', {}).get('location', {}).get('name', "") != "":
-                if 'principal' in events.get('event', {}) and 'location' in events['event'].get('principal', {}):
-                    if events['event']['principal']['location'].get('name', "") == "":
-                        events['event']['principal']['location']['name'] = events['event']['target']['location']['name']
-                        del events['event']['target']['location']['name']
-
         return events
 
     @staticmethod
