@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Datadog"
+            "displayName": "Datadog",
+            "group": "datadog"
         },
         "site_url": {
             "type": "text",

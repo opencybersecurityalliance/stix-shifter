@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Infoblox"
+            "displayName": "Infoblox",
+            "group": "infoblox"
         },
         "host": {
             "type": "text",
