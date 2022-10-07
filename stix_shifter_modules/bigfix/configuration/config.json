@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "BigFix"
+            "displayName": "BigFix",
+            "group": "bigfix"
         },
         "host": {
             "type": "text",
