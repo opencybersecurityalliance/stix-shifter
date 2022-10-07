@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Carbon Black Cloud"
+            "displayName": "Carbon Black Cloud",
+            "group": "carbonblack"
         },
         "host": {
             "type": "text",

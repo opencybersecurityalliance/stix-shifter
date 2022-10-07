@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "SumoLogic"
+            "displayName": "SumoLogic",
+            "group": "sumologic"
         },
         "region": {
             "type": "text"
