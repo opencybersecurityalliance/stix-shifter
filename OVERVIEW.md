@@ -159,7 +159,7 @@ List updated: October 29, 2021
 |       [IBM Security ReaQta](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/reaqta_supported_stix.md)                           | reaqta             | Default    | IBM Security | Yes         | Yes          | Released     |
 |       [IBM Security Verify](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/ibm_security_verify_supported_stix.md)                           | ibm_security_verify             | Default    | IBM Security | Yes         | Yes          | Released     |
 |       [Red Hat Advanced Cluster Security for Kubernetes (StackRox)](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/rhacs_supported_stix.md)                           | rhacs             | Default    | IBM Security | Yes         | Yes          | Released     |
-
+|      [GCP Chronicle](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/gcp_chronicle_supported_stix.md)                   | gcp_chronicle              | Default    | IBM Security | Yes         | Yes          | Released     |
 
 
 ## How to use

@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Proofpoint"
+            "displayName": "Proofpoint",
+            "group": "proofpoint"
         },
         "host": {
             "type": "text"
