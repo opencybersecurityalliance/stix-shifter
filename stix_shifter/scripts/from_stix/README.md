@@ -1,8 +1,8 @@
 # FROM_STIX mapping file generate
 
 This script will generate:
-    1. from_stix_map_sorted.json file from existing from_stix_map.json (sorted and linted) and 
-    2. from_stix_map_generated.json file from to_stix_map.json
+- from_stix_map_sorted.json file from existing from_stix_map.json (sorted and linted) and 
+- from_stix_map_generated.json file from to_stix_map.json
 and put them in ./var/from_stix folder (git ignored), in the root of the project
  
 You can use from_stix_map_sorted.json and from_stix_map_generated.json to compare the differences or/and use from_stix_map_generated.json as actual from_stix mapping file. 
