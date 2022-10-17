@@ -44,10 +44,6 @@ class BaseEntryPoint:
         json_path = os.path.dirname(module.__file__)
         json_path = os.path.abspath(json_path)
         json_path = os.path.join(json_path, 'json')
-        if os.path.isdir(json_path):
-            to_stix = os.path.join(json_path, 'to_stix_map.json')
-            if not os.path.isfile(to_stix):
-                raise Exception(to_stix + ' is not found')
 
         if connection:
             validation_obj = {'connection': connection, 'configuration': configuration}
