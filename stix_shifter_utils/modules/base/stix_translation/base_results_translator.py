@@ -38,7 +38,7 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
         else:
             to_stix_path = os.path.join(stix_2_0_mapping_directory_path, mapping_file)
 
-        if not os.path.isfile(to_stix_path):
+        if os.path.isdir(stix_2_0_mapping_directory_path) and not os.path.isfile(to_stix_path):
             raise Exception('BaseResultTranslator Error: ' + to_stix_path + ' is not found')
 
         return self.read_json(to_stix_path, options)
