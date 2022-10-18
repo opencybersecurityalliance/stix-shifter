@@ -43,6 +43,7 @@ if [ ! -z "${IMAGE_URL}" ]; then
   PROJECT_NAME=$FILENAME
   PROJECT_NAME=${PROJECT_NAME:${#FILE_PREFIX}}
   PROJECT_NAME=${PROJECT_NAME%%:*}
+  PROJECT_NAME_WITHOUT_DASH=$PROJECT_NAME
   # echo "$FILENAME"
   # exit 1
 
@@ -58,7 +59,7 @@ else
   FILENAME=`find ${DIST_DIR} -name ${FILE_PREFIX}*-*.whl | head -n 1`
 
   if [ -z "$FILENAME" ]; then
-    echo "File is not found, expected file name sample: ${DIST_DIR}/${FILE_PREFIX}cloudsql-1.0.0-py2.py3-none-any.whl"
+    echo "File is not found $FILENAME, expected file name sample: ${DIST_DIR}/${FILE_PREFIX}cloudsql-1.0.0-py2.py3-none-any.whl"
     exit 1
   fi
   FILENAME=${FILENAME:${#DIST_DIR}+1}
@@ -67,6 +68,7 @@ else
   PROJECT_NAME=$FILENAME
   PROJECT_NAME=${PROJECT_NAME:${#FILE_PREFIX}}
   PROJECT_NAME=${PROJECT_NAME%%-*}
+  PROJECT_NAME_WITHOUT_DASH=$PROJECT_NAME
   PROJECT_NAME=${PROJECT_NAME//_/-}
 
   PROJECT_VERSION=$FILENAME
@@ -170,16 +172,16 @@ if [ ! -z "${IMAGE_URL}" ]; then
   echo "Pulling ${IMAGE_URL}"
   docker pull ${IMAGE_URL}
   IMAGE_LOCAL_URL=${IMAGE_URL}
-  IMAGE_PUSH_URL=${REPOSITORY}/${NAMESPACE}/${FILE_PREFIX}${PROJECT_NAME}:${TAG}
+  IMAGE_PUSH_URL=${REPOSITORY}/${NAMESPACE}/${FILE_PREFIX}${PROJECT_NAME_WITHOUT_DASH}:${TAG}
   # exit 0
 else
-  IMAGE_LOCAL_URL=${FILE_PREFIX}${PROJECT_NAME}:${TAG}
+  IMAGE_LOCAL_URL=${FILE_PREFIX}${PROJECT_NAME_WITHOUT_DASH}:${TAG}
   IMAGE_PUSH_URL=${REPOSITORY}/${NAMESPACE}/${IMAGE_LOCAL_URL}
   echo "Building image..."
-  docker build --no-cache -t ${IMAGE_LOCAL_URL} --build-arg APP=${FILENAME%.whl} --build-arg VERSION=${PROJECT_VERSION} .
+  docker build --no-cache -t ${IMAGE_LOCAL_URL} --build-arg APP=${FILENAME%.whl} --build-arg VERSION=${PROJECT_VERSION} . --platform linux/amd64
 fi
 
-IMAGE_POD_URL=image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/${FILE_PREFIX}${PROJECT_NAME}:${TAG}
+IMAGE_POD_URL=image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/${FILE_PREFIX}${PROJECT_NAME_WITHOUT_DASH}:${TAG}
 
 echo "retagging image... ${IMAGE_LOCAL_URL} > ${IMAGE_PUSH_URL}"
 docker tag ${IMAGE_LOCAL_URL} ${IMAGE_PUSH_URL}
