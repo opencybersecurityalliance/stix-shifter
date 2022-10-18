@@ -39,3 +39,4 @@ Stix-shifter currently offers connector support for the following cybersecurity 
 - [Darktrace](connectors/darktrace_supported_stix.md)
 - [Red Hat Advanced Cluster Security for Kubernetes (StackRox)](connectors/rhacs_supported_stix.md)
 - [IBM Security Verify](connectors/ibm_security_verify_supported_stix.md)
+- [GCP Chronicle](connectors/gcp_chronicle_supported_stix.md)

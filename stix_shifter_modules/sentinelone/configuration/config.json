@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "SentinelOne"
+            "displayName": "SentinelOne",
+            "group": "sentinelone"
         },
         "host": {
             "type": "text",

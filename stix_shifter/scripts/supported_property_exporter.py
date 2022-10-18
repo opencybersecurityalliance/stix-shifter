@@ -38,7 +38,8 @@ CONNECTORS = {
     "reaqta": "IBM Security ReaQta",
     "darktrace": "Darktrace",
     "rhacs": "Red Hat Advanced Cluster Security for Kubernetes (StackRox)",
-    "ibm_security_verify": "IBM Security Verify"
+    "ibm_security_verify": "IBM Security Verify",
+    "gcp_chronicle": "GCP Chronicle"
 }
 
 STIX_OPERATORS ={

@@ -1,0 +1,1660 @@
+{
+  "event": {
+    "principal": {
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "principal_ip",
+          "unwrap": true,
+          "transformer": "FilterIPv4List"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "principal_ip",
+          "unwrap": true,
+          "transformer": "FilterIPv6List"
+        },
+        {
+          "key": "network-traffic.src_ref",
+          "object": "nt",
+          "references": "principal_ip"
+        },
+        {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        },
+        {
+          "key": "x-ibm-finding.src_ip_ref",
+          "object": "security_result",
+          "references": "principal_ip"
+        },
+        {
+          "key": "x-oca-event.ip_refs",
+          "object": "event",
+          "references": [
+            "principal_ip"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-oca-asset.ip_refs",
+          "object": "principal_asset",
+          "references": [
+            "principal_ip"
+          ]
+        }
+      ],
+      "port": [
+        {
+          "key": "network-traffic.src_port",
+          "object": "nt",
+          "transformer": "ToInteger"
+        },
+        {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        }
+      ],
+      "mac": [
+        {
+          "key": "mac-addr.value",
+          "object": "principal_mac",
+          "unwrap": true
+        },
+        {
+          "key": "x-oca-asset.mac_refs",
+          "object": "principal_asset",
+          "references": [
+            "principal_mac"
+          ]
+        },
+        {
+          "key": "ipv4-addr.resolves_to_refs",
+          "object": "principal_ip",
+          "references": [
+            "principal_mac"
+          ]
+        },
+        {
+          "key": "ipv6-addr.resolves_to_refs",
+          "object": "principal_ip",
+          "references": [
+            "principal_mac"
+          ]
+        }
+      ],
+      "url": [
+        {
+          "key": "url.value",
+          "object": "principal_url",
+          "transformer": "ValidateUrl"
+        },
+        {
+          "key": "x-oca-event.url_ref",
+          "object": "event",
+          "references": "principal_url"
+        }
+      ],
+      "domain": {
+        "name": [
+          {
+            "key": "domain-name.value",
+            "object": "principal_domain"
+          },
+          {
+            "key": "x-oca-event.domain_ref",
+            "object": "event",
+            "references": "principal_domain"
+          }
+        ],
+        "status": {
+          "key": "domain-name.extensions.x-gcp-chronicle-domain-ext.status",
+          "object": "principal_domain"
+        }
+      },
+      "application": {
+        "key": "x-oca-event.extensions.x-gcp-chronicle-event-ext.src_appservice",
+        "object": "event"
+      },
+      "hostname": [
+        {
+          "key": "x-oca-asset.hostname",
+          "object": "principal_asset"
+        },
+        {
+          "key": "x-oca-event.host_ref",
+          "object": "event",
+          "references": "principal_asset"
+        }
+      ],
+      "assetId": {
+        "key": "x-oca-asset.extensions.x-gcp-chronicle-asset-ext.asset_id",
+        "object": "principal_asset"
+      },
+      "location": {
+        "name": {
+          "key": "x-oca-event.extensions.x-gcp-chronicle-event-ext.src_location",
+          "object": "event"
+        },
+        "city": {
+          "key": "x-oca-asset.extensions.x-gcp-chronicle-asset-ext.city",
+          "object": "principal_asset"
+        },
+        "countryOrRegion": {
+          "key": "x-oca-asset.extensions.x-gcp-chronicle-asset-ext.country_or_region",
+          "object": "principal_asset"
+        }
+      },
+      "asset": {
+        "category": {
+          "key": "x-oca-asset.extensions.x-gcp-chronicle-asset-ext.category",
+          "object": "principal_asset"
+        },
+        "type": {
+          "key": "x-oca-asset.extensions.x-gcp-chronicle-asset-ext.type",
+          "object": "principal_asset"
+        },
+        "platformSoftware": {
+          "platform": [
+            {
+              "key": "software.name",
+              "object": "principal_os_software"
+            },
+            {
+              "key": "x-ibm-finding.src_os_ref",
+              "object": "security_result",
+              "references": "principal_os_software"
+            }
+          ],
+          "platformVersion": {
+            "key": "software.version",
+            "object": "principal_os_software"
+          }
+        },
+        "hardware": {
+          "cpuPlatform": {
+            "key": "x-oca-asset.extensions.x-gcp-chronicle-asset-ext.hw_cpu_platform",
+            "object": "principal_asset"
+          },
+          "manufacturer": {
+            "key": "x-oca-asset.extensions.x-gcp-chronicle-asset-ext.hw_manufacturer",
+            "object": "principal_asset"
+          },
+          "serialNumber": {
+            "key": "x-oca-asset.extensions.x-gcp-chronicle-asset-ext.hw_serial_number",
+            "object": "principal_asset"
+          }
+        },
+        "attribute": {
+          "cloud": {
+            "environment": {
+              "key": "x-oca-asset.extensions.x-gcp-chronicle-asset-ext.cloud_environment",
+              "object": "principal_asset"
+            },
+            "availabilityZone": {
+              "key": "x-oca-asset.extensions.x-gcp-chronicle-asset-ext.cloud_availability_zone",
+              "object": "principal_asset"
+            }
+          }
+        },
+        "software": {
+          "name": [
+            {
+              "key": "software.name",
+              "object": "principal_software"
+            },
+            {
+              "key": "x-ibm-finding.src_application_ref",
+              "object": "security_result",
+              "references": "principal_software"
+            }
+          ],
+          "version": {
+            "key": "software.version",
+            "object": "principal_software"
+          }
+        }
+      },
+      "user": {
+        "userid": [
+          {
+            "key": "user-account.user_id",
+            "object": "principal_user"
+          },
+          {
+            "key": "process.creator_user_ref",
+            "object": "principal_process",
+            "references": "principal_user"
+          },
+          {
+            "key": "x-oca-event.user_ref",
+            "object": "event",
+            "references": "principal_user"
+          }
+        ],
+        "userDisplayName": {
+          "key": "user-account.display_name",
+          "object": "principal_user"
+        },
+        "accountType": {
+          "key": "user-account.extensions.x-gcp-chronicle-user-ext.type",
+          "object": "principal_user"
+        },
+        "windowsSid": {
+          "key": "user-account.extensions.windows-account-ext.sid",
+          "object": "principal_user"
+        },
+        "emailAddresses": [
+          {
+            "key": "email-addr.value",
+            "object": "principal_email",
+            "unwrap": true
+          }
+        ]
+      },
+      "process": {
+        "file": {
+          "fullPath": [
+            {
+              "key": "file.name",
+              "object": "principal_process_file",
+              "transformer": "ToFileName"
+            },
+            {
+              "key": "directory.path",
+              "object": "principal_process_directory",
+              "transformer": "ToDirectoryPath"
+            },
+            {
+              "key": "file.parent_directory_ref",
+              "object": "principal_process_file",
+              "references": "principal_process_directory"
+            },
+            {
+              "key": "process.image_ref",
+              "object": "principal_process",
+              "references": "principal_process_file"
+            },
+            {
+              "key": "x-oca-event.file_ref",
+              "object": "event",
+              "references": "principal_process_file"
+            }
+          ],
+          "size": {
+            "key": "file.size",
+            "object": "principal_process_file",
+            "transformer": "ToInteger"
+          },
+          "md5": [
+            {
+              "key": "file.hashes.MD5",
+              "object": "principal_process_file"
+            },
+            {
+              "key": "process.image_ref",
+              "object": "principal_process",
+              "references": "principal_process_file"
+            }
+          ],
+          "sha1": {
+            "key": "file.hashes.SHA-1",
+            "object": "principal_process_file"
+          },
+          "sha256": [
+            {
+              "key": "file.hashes.SHA-256",
+              "object": "principal_process_file"
+            },
+            {
+              "key": "process.image_ref",
+              "object": "principal_process",
+              "references": "principal_process_file"
+            }
+          ],
+          "lastModificationTime": {
+            "key": "file.mtime",
+            "object": "principal_process_file"
+          },
+          "mimeType": {
+            "key": "file.extensions.x-gcp-chronicle-file-ext.mime_type",
+            "object": "principal_process_file"
+          },
+          "fileType": {
+            "key": "file.extensions.x-gcp-chronicle-file-ext.file_type",
+            "object": "principal_process_file"
+          }
+        },
+        "commandLine": {
+          "key": "process.command_line",
+          "object": "principal_process"
+        },
+        "parentProcess": {
+          "commandLine": {
+            "key": "process.command_line",
+            "object": "principal_parent_process"
+          },
+          "file": {
+            "fullPath": [
+              {
+                "key": "file.name",
+                "object": "principal_parent_process_file",
+                "transformer": "ToFileName"
+              },
+              {
+                "key": "directory.path",
+                "object": "principal_parent_process_directory",
+                "transformer": "ToDirectoryPath"
+              },
+              {
+                "key": "file.parent_directory_ref",
+                "object": "principal_parent_process_file",
+                "references": "principal_parent_process_directory"
+              },
+              {
+                "key": "process.image_ref",
+                "object": "principal_parent_process",
+                "references": "principal_parent_process_file"
+              }
+            ]
+          },
+          "pid": [
+            {
+              "key": "process.pid",
+              "object": "principal_parent_process",
+              "transformer": "ToInteger"
+            },
+            {
+              "key": "process.parent_ref",
+              "object": "principal_process",
+              "references": "principal_parent_process"
+            },
+            {
+              "key": "x-oca-event.parent_process_ref",
+              "object": "event",
+              "references": "principal_parent_process"
+            }
+          ]
+        },
+        "pid": [
+          {
+            "key": "process.pid",
+            "object": "principal_process",
+            "transformer": "ToInteger"
+          },
+          {
+            "key": "x-oca-event.process_ref",
+            "object": "event",
+            "references": "principal_process"
+          }
+        ]
+      },
+      "resource": {
+        "resourceType": {
+          "key": "x-gcp-chronicle-resource.resource_type",
+          "object": "principal_resource"
+        },
+        "resourceSubtype": {
+          "key": "x-gcp-chronicle-resource.resource_subtype",
+          "object": "principal_resource"
+        },
+        "name": [
+          {
+            "key": "x-gcp-chronicle-resource.name",
+            "object": "principal_resource"
+          },
+          {
+            "key": "x-oca-event.extensions.x-gcp-chronicle-event-ext.src_resource_ref",
+            "object": "event",
+            "references": "principal_resource"
+          }
+        ],
+        "attribute": {
+          "cloud": {
+            "availabilityZone": {
+              "key": "x-gcp-chronicle-resource.availability_zone",
+              "object": "principal_resource"
+            },
+            "environment": {
+              "key": "x-gcp-chronicle-resource.environment",
+              "object": "principal_resource"
+            }
+          }
+        }
+      }
+    },
+    "src": {
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "src_ip",
+          "unwrap": true,
+          "transformer": "FilterIPv4List"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "src_ip",
+          "unwrap": true,
+          "transformer": "FilterIPv6List"
+        },
+        {
+          "key": "network-traffic.src_ref",
+          "object": "nt",
+          "references": "src_ip"
+        },
+        {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        },
+        {
+          "key": "x-oca-event.ip_refs",
+          "object": "event",
+          "references": [
+            "src_ip"
+          ],
+          "group": true
+        }
+      ],
+      "port": {
+        "key": "network-traffic.src_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+      },
+      "mac": [
+        {
+          "key": "mac-addr.value",
+          "object": "src_mac",
+          "unwrap": true
+        },
+        {
+          "key": "ipv4-addr.resolves_to_refs",
+          "object": "src_ip",
+          "references": [
+            "src_mac"
+          ]
+        },
+        {
+          "key": "ipv6-addr.resolves_to_refs",
+          "object": "src_ip",
+          "references": [
+            "src_mac"
+          ]
+        }
+      ],
+      "url": {
+        "key": "url.value",
+        "object": "src_url",
+        "transformer": "ValidateUrl"
+      },
+      "domain": {
+        "name": {
+          "key": "domain-name.value",
+          "object": "src_domain"
+        },
+        "status": {
+          "key": "domain-name.extensions.x-gcp-chronicle-domain-ext.status",
+          "object": "src_domain"
+        }
+      },
+      "registry": {
+        "registryKey": {
+          "key": "windows-registry-key.key",
+          "object": "src_registry"
+        },
+        "registryValues": {
+          "key": "windows-registry-key.values",
+          "object": "src_registry",
+          "transformer": "FormatToStixRegistryValue"
+        }
+      },
+      "asset": {
+        "platformSoftware": {
+          "platform": {
+            "key": "software.name",
+            "object": "src_os_software"
+          },
+          "platformVersion": {
+            "key": "software.version",
+            "object": "src_os_software"
+          }
+        },
+        "software": {
+          "name": {
+            "key": "software.name",
+            "object": "src_software"
+          },
+          "version": {
+            "key": "software.version",
+            "object": "src_software"
+          }
+        }
+      },
+      "user": {
+        "userid": [
+          {
+            "key": "user-account.user_id",
+            "object": "src_user"
+          },
+          {
+            "key": "process.creator_user_ref",
+            "object": "src_process",
+            "references": "src_user"
+          }
+        ],
+        "userDisplayName": {
+          "key": "user-account.display_name",
+          "object": "src_user"
+        },
+        "accountType": {
+          "key": "user-account.extensions.x-gcp-chronicle-user-ext.type",
+          "object": "src_user"
+        },
+        "windowsSid": {
+          "key": "user-account.extensions.windows-account-ext.sid",
+          "object": "src_user"
+        },
+        "emailAddresses": {
+          "key": "email-addr.value",
+          "object": "src_email",
+          "unwrap": true
+        }
+      },
+      "file": {
+        "fullPath": [
+          {
+            "key": "file.name",
+            "object": "src_file",
+            "transformer": "ToFileName"
+          },
+          {
+            "key": "directory.path",
+            "object": "src_directory",
+            "transformer": "ToDirectoryPath"
+          },
+          {
+            "key": "file.parent_directory_ref",
+            "object": "src_file",
+            "references": "src_directory"
+          }
+        ],
+        "size": {
+          "key": "file.size",
+          "object": "src_file",
+          "transformer": "ToInteger"
+        },
+        "md5": {
+          "key": "file.hashes.MD5",
+          "object": "src_file"
+        },
+        "sha1": {
+          "key": "file.hashes.SHA-1",
+          "object": "src_file"
+        },
+        "sha256": {
+          "key": "file.hashes.SHA-256",
+          "object": "src_file"
+        },
+        "lastModificationTime": {
+          "key": "file.mtime",
+          "object": "src_file"
+        },
+        "mimeType": {
+          "key": "file.extensions.x-gcp-chronicle-file-ext.mime_type",
+          "object": "src_file"
+        },
+        "fileType": {
+          "key": "file.extensions.x-gcp-chronicle-file-ext.file_type",
+          "object": "src_file"
+        }
+      },
+      "process": {
+        "file": {
+          "fullPath": [
+            {
+              "key": "file.name",
+              "object": "src_process_file",
+              "transformer": "ToFileName"
+            },
+            {
+              "key": "directory.path",
+              "object": "src_process_directory",
+              "transformer": "ToDirectoryPath"
+            },
+            {
+              "key": "file.parent_directory_ref",
+              "object": "src_process_file",
+              "references": "src_process_directory"
+            },
+            {
+              "key": "process.image_ref",
+              "object": "src_process",
+              "references": "src_process_file"
+            }
+          ],
+          "size": {
+            "key": "file.size",
+            "object": "src_process_file",
+            "transformer": "ToInteger"
+          },
+          "md5": [
+            {
+              "key": "file.hashes.MD5",
+              "object": "src_process_file"
+            },
+            {
+              "key": "process.image_ref",
+              "object": "src_process",
+              "references": "src_process_file"
+            }
+          ],
+          "sha1": {
+            "key": "file.hashes.SHA-1",
+            "object": "src_process_file"
+          },
+          "sha256": [
+            {
+              "key": "file.hashes.SHA-256",
+              "object": "src_process_file"
+            },
+            {
+              "key": "process.image_ref",
+              "object": "src_process",
+              "references": "src_process_file"
+            }
+          ],
+          "lastModificationTime": {
+            "key": "file.mtime",
+            "object": "src_process_file"
+          },
+          "mimeType": {
+            "key": "file.extensions.x-gcp-chronicle-file-ext.mime_type",
+            "object": "src_process_file"
+          },
+          "fileType": {
+            "key": "file.extensions.x-gcp-chronicle-file-ext.file_type",
+            "object": "src_process_file"
+          }
+        },
+        "commandLine": {
+          "key": "process.command_line",
+          "object": "src_process"
+        },
+        "pid": {
+          "key": "process.pid",
+          "object": "src_process",
+          "transformer": "ToInteger"
+        }
+      },
+      "resource": {
+        "resourceType": {
+          "key": "x-gcp-chronicle-resource.resource_type",
+          "object": "src_resource"
+        },
+        "resourceSubtype": {
+          "key": "x-gcp-chronicle-resource.resource_subtype",
+          "object": "src_resource"
+        },
+        "name": {
+          "key": "x-gcp-chronicle-resource.name",
+          "object": "src_resource"
+        },
+        "attribute": {
+          "cloud": {
+            "availabilityZone": {
+              "key": "x-gcp-chronicle-resource.availability_zone",
+              "object": "src_resource"
+            },
+            "environment": {
+              "key": "x-gcp-chronicle-resource.environment",
+              "object": "src_resource"
+            }
+          }
+        }
+      }
+    },
+    "target": {
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip",
+          "unwrap": true,
+          "transformer": "FilterIPv4List"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_ip",
+          "unwrap": true,
+          "transformer": "FilterIPv6List"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "nt",
+          "references": "dst_ip"
+        },
+        {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        },
+        {
+          "key": "x-ibm-finding.dst_ip_ref",
+          "object": "security_result",
+          "references": "dst_ip"
+        },
+        {
+          "key": "x-oca-event.ip_refs",
+          "object": "event",
+          "references": [
+            "dst_ip"
+          ],
+          "group": true
+        }
+      ],
+      "port": [
+        {
+          "key": "network-traffic.dst_port",
+          "object": "nt",
+          "transformer": "ToInteger"
+        },
+        {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        }
+      ],
+      "mac": [
+        {
+          "key": "mac-addr.value",
+          "object": "dst_mac",
+          "unwrap": true
+        },
+        {
+          "key": "ipv4-addr.resolves_to_refs",
+          "object": "dst_ip",
+          "references": [
+            "dst_mac"
+          ]
+        },
+        {
+          "key": "ipv6-addr.resolves_to_refs",
+          "object": "dst_ip",
+          "references": [
+            "dst_mac"
+          ]
+        }
+      ],
+      "url": {
+        "key": "url.value",
+        "object": "dst_url",
+        "transformer": "ValidateUrl"
+      },
+      "domain": {
+        "name": {
+          "key": "domain-name.value",
+          "object": "dst_domain"
+        },
+        "status": {
+          "key": "domain-name.extensions.x-gcp-chronicle-domain-ext.status",
+          "object": "dst_domain"
+        }
+      },
+      "registry": {
+        "registryKey": [
+          {
+            "key": "windows-registry-key.key",
+            "object": "target_registry"
+          },
+          {
+            "key": "x-oca-event.registry_ref",
+            "object": "event",
+            "references": "target_registry"
+          }
+        ],
+        "registryValues": {
+          "key": "windows-registry-key.values",
+          "object": "target_registry",
+          "transformer": "FormatToStixRegistryValue"
+        }
+      },
+      "application": {
+        "key": "x-oca-event.extensions.x-gcp-chronicle-event-ext.target_appservice",
+        "object": "event"
+      },
+      "hostname": {
+        "key": "x-oca-event.extensions.x-gcp-chronicle-event-ext.target_hostname",
+        "object": "event"
+      },
+      "location": {
+        "name": [
+          {
+            "key": "x-oca-event.extensions.x-gcp-chronicle-event-ext.target_location",
+            "object": "event"
+          }
+        ]
+      },
+      "asset": {
+        "platformSoftware": {
+          "platform": [
+            {
+              "key": "software.name",
+              "object": "target_os_software"
+            },
+            {
+              "key": "x-ibm-finding.dst_os_ref",
+              "object": "security_result",
+              "references": "target_os_software"
+            }
+          ],
+          "platformVersion": {
+            "key": "software.version",
+            "object": "target_os_software"
+          }
+        },
+        "software": {
+          "name": [
+            {
+              "key": "software.name",
+              "object": "target_software"
+            },
+            {
+              "key": "x-ibm-finding.dst_application_ref",
+              "object": "security_result",
+              "references": "target_software"
+            }
+          ],
+          "version": {
+            "key": "software.version",
+            "object": "target_software"
+          }
+        }
+      },
+      "user": {
+        "userid": [
+          {
+            "key": "user-account.user_id",
+            "object": "dst_user"
+          },
+          {
+            "key": "process.creator_user_ref",
+            "object": "target_process",
+            "references": "dst_user"
+          }
+        ],
+        "userDisplayName": {
+          "key": "user-account.display_name",
+          "object": "dst_user"
+        },
+        "accountType": {
+          "key": "user-account.extensions.x-gcp-chronicle-user-ext.type",
+          "object": "dst_user"
+        },
+        "windowsSid": {
+          "key": "user-account.extensions.windows-account-ext.sid",
+          "object": "dst_user"
+        },
+        "emailAddresses": [
+          {
+            "key": "email-addr.value",
+            "object": "target_email",
+            "unwrap": true
+          }
+        ]
+      },
+      "file": {
+        "fullPath": [
+          {
+            "key": "file.name",
+            "object": "target_file",
+            "transformer": "ToFileName"
+          },
+          {
+            "key": "directory.path",
+            "object": "target_directory",
+            "transformer": "ToDirectoryPath"
+          },
+          {
+            "key": "file.parent_directory_ref",
+            "object": "target_file",
+            "references": "target_directory"
+          }
+        ],
+        "size": {
+          "key": "file.size",
+          "object": "target_file",
+          "transformer": "ToInteger"
+        },
+        "md5": {
+          "key": "file.hashes.MD5",
+          "object": "target_file"
+        },
+        "sha1": {
+          "key": "file.hashes.SHA-1",
+          "object": "target_file"
+        },
+        "sha256": {
+          "key": "file.hashes.SHA-256",
+          "object": "target_file"
+        },
+        "lastModificationTime": {
+          "key": "file.mtime",
+          "object": "target_file"
+        },
+        "mimeType": {
+          "key": "file.extensions.x-gcp-chronicle-file-ext.mime_type",
+          "object": "target_file"
+        },
+        "fileType": {
+          "key": "file.extensions.x-gcp-chronicle-file-ext.file_type",
+          "object": "target_file"
+        }
+      },
+      "process": {
+        "file": {
+          "fullPath": [
+            {
+              "key": "file.name",
+              "object": "target_process_file",
+              "transformer": "ToFileName"
+            },
+            {
+              "key": "process.image_ref",
+              "object": "target_process",
+              "references": "target_process_file"
+            },
+            {
+              "key": "directory.path",
+              "object": "target_process_directory",
+              "transformer": "ToDirectoryPath"
+            },
+            {
+              "key": "file.parent_directory_ref",
+              "object": "target_process_file",
+              "references": "target_process_directory"
+            }
+          ],
+          "size": {
+            "key": "file.size",
+            "object": "target_process_file",
+            "transformer": "ToInteger"
+          },
+          "md5": [
+            {
+              "key": "file.hashes.MD5",
+              "object": "target_process_file"
+            },
+            {
+              "key": "process.image_ref",
+              "object": "target_process",
+              "references": "target_process_file"
+            }
+          ],
+          "sha1": {
+            "key": "file.hashes.SHA-1",
+            "object": "target_process_file"
+          },
+          "sha256": [
+            {
+              "key": "file.hashes.SHA-256",
+              "object": "target_process_file"
+            },
+            {
+              "key": "process.image_ref",
+              "object": "target_process",
+              "references": "target_process_file"
+            }
+          ],
+          "lastModificationTime": {
+            "key": "file.mtime",
+            "object": "target_process_file"
+          },
+          "mimeType": {
+            "key": "file.extensions.x-gcp-chronicle-file-ext.mime_type",
+            "object": "target_process_file"
+          },
+          "fileType": {
+            "key": "file.extensions.x-gcp-chronicle-file-ext.file_type",
+            "object": "target_process_file"
+          }
+        },
+        "commandLine": {
+          "key": "process.command_line",
+          "object": "target_process"
+        },
+        "parentProcess": {
+          "commandLine": {
+            "key": "process.command_line",
+            "object": "target_parent_process"
+          },
+          "file": {
+            "fullPath": [
+              {
+                "key": "file.name",
+                "object": "target_parent_process_file",
+                "transformer": "ToFileName"
+              },
+              {
+                "key": "directory.path",
+                "object": "target_parent_process_directory",
+                "transformer": "ToDirectoryPath"
+              },
+              {
+                "key": "file.parent_directory_ref",
+                "object": "target_parent_process_file",
+                "references": "target_parent_process_directory"
+              },
+              {
+                "key": "process.image_ref",
+                "object": "target_parent_process",
+                "references": "target_parent_process_file"
+              }
+            ]
+          },
+          "pid": [
+            {
+              "key": "process.pid",
+              "object": "target_parent_process",
+              "transformer": "ToInteger"
+            },
+            {
+              "key": "process.parent_ref",
+              "object": "target_process",
+              "references": "target_parent_process"
+            }
+          ]
+        },
+        "pid": [
+          {
+            "key": "process.pid",
+            "object": "target_process",
+            "transformer": "ToInteger"
+          },
+          {
+            "key": "x-oca-event.cross_process_target_ref",
+            "object": "event",
+            "references": "target_process"
+          }
+        ]
+      },
+      "resource": {
+        "resourceType": {
+          "key": "x-gcp-chronicle-resource.resource_type",
+          "object": "target_resource"
+        },
+        "resourceSubtype": {
+          "key": "x-gcp-chronicle-resource.resource_subtype",
+          "object": "target_resource"
+        },
+        "name": [
+          {
+            "key": "x-gcp-chronicle-resource.name",
+            "object": "target_resource"
+          },
+          {
+            "key": "x-oca-event.extensions.x-gcp-chronicle-event-ext.target_resource_ref",
+            "object": "event",
+            "references": "target_resource"
+          }
+        ],
+        "attribute": {
+          "cloud": {
+            "availabilityZone": {
+              "key": "x-gcp-chronicle-resource.availability_zone",
+              "object": "target_resource"
+            },
+            "environment": {
+              "key": "x-gcp-chronicle-resource.environment",
+              "object": "target_resource"
+            }
+          }
+        }
+      }
+    },
+    "network": {
+      "ipProtocol": {
+        "key": "network-traffic.protocols",
+        "object": "nt",
+        "group": true,
+        "transformer": "ToLowercaseArray"
+      },
+      "applicationProtocol": {
+        "key": "network-traffic.protocols",
+        "object": "nt",
+        "group": true,
+        "transformer": "ToLowercaseArray"
+      },
+      "sentBytes": {
+        "key": "network-traffic.src_byte_count",
+        "object": "nt",
+        "transformer": "ToInteger"
+      },
+      "receivedBytes": {
+        "key": "network-traffic.dst_byte_count",
+        "object": "nt",
+        "transformer": "ToInteger"
+      },
+      "dnsDomain": {
+        "key": "domain-name.value",
+        "object": "domain"
+      },
+      "sessionDuration": {
+        "key": "network-traffic.extensions.x-gcp-chronicle-network-ext.session_duration",
+        "object": "nt"
+      },
+      "sessionId": {
+        "key": "network-traffic.extensions.x-gcp-chronicle-network-ext.session_id",
+        "object": "nt"
+      },
+      "direction": {
+        "key": "network-traffic.extensions.x-gcp-chronicle-network-ext.direction",
+        "object": "nt"
+      },
+      "ftp": {
+        "command": {
+          "key": "network-traffic.extensions.ftp-ext.command",
+          "object": "nt"
+        }
+      },
+      "dns": {
+        "id": {
+          "key": "network-traffic.extensions.dns-ext.query_id",
+          "object": "nt"
+        },
+        "opcode": {
+          "key": "network-traffic.extensions.dns-ext.opcode",
+          "object": "nt"
+        },
+        "responseCode": {
+          "key": "network-traffic.extensions.dns-ext.response_code",
+          "object": "nt"
+        },
+        "questions": {
+          "key": "network-traffic.extensions.dns-ext.questions",
+          "object": "nt",
+          "group": "true"
+        }
+      },
+      "dhcp": {
+        "clientHostname": {
+          "key": "network-traffic.extensions.dhcp-ext.client_hostname",
+          "object": "nt"
+        },
+        "opcode": {
+          "key": "network-traffic.extensions.dhcp-ext.opcode",
+          "object": "nt"
+        },
+        "sname": {
+          "key": "network-traffic.extensions.dhcp-ext.server_name",
+          "object": "nt"
+        },
+        "transactionId": {
+          "key": "network-traffic.extensions.dhcp-ext.transaction_id",
+          "object": "nt"
+        },
+        "type": {
+          "key": "network-traffic.extensions.dhcp-ext.message_type",
+          "object": "nt"
+        }
+      },
+      "http": {
+        "method": {
+          "key": "network-traffic.extensions.http-ext.request_method",
+          "object": "nt"
+        },
+        "responseCode": {
+          "key": "network-traffic.extensions.http-ext.response_code",
+          "object": "nt"
+        },
+        "userAgent": {
+          "key": "network-traffic.extensions.http-ext.user_agent",
+          "object": "nt"
+        },
+        "referralUrl": {
+          "key": "url.value",
+          "object": "url",
+          "transformer": "ValidateUrl"
+        }
+      },
+      "tls": {
+        "cipher": {
+          "key": "network-traffic.extensions.tls-ext.cipher",
+          "object": "nt"
+        },
+        "version": {
+          "key": "network-traffic.extensions.tls-ext.version",
+          "object": "nt"
+        },
+        "versionProtocol": {
+          "key": "network-traffic.extensions.tls-ext.version_protocol",
+          "object": "nt"
+        },
+        "curve": {
+          "key": "network-traffic.extensions.tls-ext.elliptical_curve",
+          "object": "nt"
+        },
+        "nextProtocol": {
+          "key": "network-traffic.extensions.tls-ext.next_protocol",
+          "object": "nt"
+        },
+        "server": {
+          "ja3s": {
+            "key": "network-traffic.extensions.tls-ext.server_ja3_hash",
+            "object": "nt"
+          },
+          "certificate": {
+            "version": [
+              {
+                "key": "x509-certificate.version",
+                "object": "server_cert"
+              },
+              {
+                "key": "network-traffic.extensions.tls-ext.server_certificate_ref",
+                "object": "nt",
+                "references": "server_cert"
+
+              }
+            ],
+            "serial": [
+              {
+                "key": "x509-certificate.serial_number",
+                "object": "server_cert"
+              },
+              {
+                "key": "network-traffic.extensions.tls-ext.server_certificate_ref",
+                "object": "nt",
+                "references": "server_cert"
+
+              }
+            ],
+            "issuer": [
+              {
+                "key": "x509-certificate.issuer",
+                "object": "server_cert"
+              },
+              {
+                "key": "network-traffic.extensions.tls-ext.server_certificate_ref",
+                "object": "nt",
+                "references": "server_cert"
+
+              }
+            ],
+            "notBefore": {
+              "key": "x509-certificate.validity_not_before",
+              "object": "server_cert"
+            },
+            "notAfter": {
+              "key": "x509-certificate.validity_not_after",
+              "object": "server_cert"
+            },
+            "subject": [
+              {
+                "key": "x509-certificate.subject",
+                "object": "server_cert"
+              },
+              {
+                "key": "network-traffic.extensions.tls-ext.server_certificate_ref",
+                "object": "nt",
+                "references": "server_cert"
+
+              }],
+            "md5": {
+              "key": "x509-certificate.hashes.MD5",
+              "object": "server_cert"
+            },
+            "sha1": {
+              "key": "x509-certificate.hashes.SHA-1",
+              "object": "server_cert"
+            },
+            "sha256": {
+              "key": "x509-certificate.hashes.SHA-256",
+              "object": "server_cert"
+            }
+          }
+        },
+        "client": {
+          "ja3": {
+            "key": "network-traffic.extensions.tls-ext.client_ja3_hash",
+            "object": "nt"
+          },
+          "serverName": {
+            "key": "network-traffic.extensions.tls-ext.server_host_name",
+            "object": "nt"
+          },
+          "certificate": {
+            "version": [
+              {
+                "key": "x509-certificate.version",
+                "object": "client_cert"
+              },
+              {
+                "key": "network-traffic.extensions.tls-ext.client_certificate_ref",
+                "object": "nt",
+                "references": "client_cert"
+
+              }
+            ],
+            "serial": [
+              {
+                "key": "x509-certificate.serial_number",
+                "object": "client_cert"
+              },
+            {
+                "key": "network-traffic.extensions.tls-ext.client_certificate_ref",
+                "object": "nt",
+                "references": "client_cert"
+
+              }],
+            "issuer": [
+              {
+                "key": "x509-certificate.issuer",
+                "object": "client_cert"
+              },
+            {
+                "key": "network-traffic.extensions.tls-ext.client_certificate_ref",
+                "object": "nt",
+                "references": "client_cert"
+
+              }],
+            "notBefore": {
+              "key": "x509-certificate.validity_not_before",
+              "object": "client_cert"
+            },
+            "notAfter": {
+              "key": "x509-certificate.validity_not_after",
+              "object": "client_cert"
+            },
+            "subject": [
+              {
+                "key": "x509-certificate.subject",
+                "object": "client_cert"
+              },
+              {
+                "key": "network-traffic.extensions.tls-ext.client_certificate_ref",
+                "object": "nt",
+                "references": "client_cert"
+              }
+            ],
+            "md5": {
+              "key": "x509-certificate.hashes.MD5",
+              "object": "client_cert"
+            },
+            "sha1": {
+              "key": "x509-certificate.hashes.SHA-1",
+              "object": "client_cert"
+            },
+            "sha256": {
+              "key": "x509-certificate.hashes.SHA-256",
+              "object": "client_cert"
+            }
+          }
+        }
+      },
+      "smtp": {
+        "serverResponse": {
+          "key": "network-traffic.extensions.smtp-ext.server_response",
+          "object": "nt"
+        }
+      },
+      "asn": {
+        "key": "autonomous-system.number",
+        "object": "asn",
+        "transformer": "ToInteger"
+      },
+      "email": {
+        "subject": {
+          "key": "email-message.subject",
+          "object": "em",
+          "unwrap": true
+        },
+        "isMultipart": {
+          "key": "email-message.is_multipart",
+          "object": "em"
+        },
+        "from": [
+          {
+            "key": "email-addr.value",
+            "object": "email_from",
+            "transformer" : "FilterValidEmail"
+          },
+          {
+            "key": "email-message.from_ref",
+            "object": "em",
+            "references": "email_from"
+          },
+          {
+            "key": "x-oca-event.extensions.x-gcp-chronicle-event-ext.email_message_ref",
+            "object": "event",
+            "references": "em"
+          }
+        ],
+        "to": [
+          {
+            "key": "email-addr.value",
+            "object": "email_to",
+            "unwrap": true
+          },
+          {
+            "key": "email-message.to_refs",
+            "object": "em",
+            "references": [
+              "email_to"
+            ]
+          }
+        ],
+        "cc": [
+          {
+            "key": "email-addr.value",
+            "object": "email_cc",
+            "unwrap": true
+          },
+          {
+            "key": "email-message.cc_refs",
+            "object": "em",
+            "references": [
+              "email_cc"
+            ]
+          }
+        ],
+        "bcc": [
+          {
+            "key": "email-addr.value",
+            "object": "email_bcc",
+            "unwrap": true
+          },
+          {
+            "key": "email-message.bcc_refs",
+            "object": "em",
+            "references": [
+              "email_bcc"
+            ]
+          }
+        ]
+      }
+    },
+    "securityResult": {
+      "about": {
+        "email": {
+          "key": "email-addr.value",
+          "object": "security_email",
+          "transformer" : "FilterValidEmail"
+        },
+        "url": [
+          {
+            "key": "url.value",
+            "object": "security_url",
+            "transformer": "ValidateUrl"
+          },
+          {
+            "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result-ext.url_ref",
+            "object": "security_result",
+            "references": "security_url"
+          }
+        ]
+      },
+      "findingType": {
+        "key": "x-ibm-finding.finding_type",
+        "object": "security_result"
+      },
+      "threatName": {
+        "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result-ext.threat_name",
+        "object": "security_result"
+      },
+      "ruleName": {
+        "key": "x-ibm-finding.rule_names",
+        "object": "security_result",
+        "transformer": "ValueToList"
+      },
+      "alertState": {
+        "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result-ext.alert_state",
+        "object": "security_result"
+      },
+      "severity": {
+        "key": "x-ibm-finding.severity",
+        "object": "security_result"
+      },
+      "category": {
+        "key": "x-ibm-finding.finding_type",
+        "object": "security_result"
+      },
+      "summary": {
+        "key": "x-ibm-finding.name",
+        "object": "security_result"
+      },
+      "threatId": {
+        "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result-ext.threat_id",
+        "object": "security_result"
+      },
+      "threatStatus": {
+        "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result-ext.threat_status",
+        "object": "security_result"
+      },
+      "description": {
+        "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result-ext.description",
+        "object": "security_result"
+      },
+      "action": {
+        "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result-ext.actions_taken",
+        "object": "security_result"
+      }
+    },
+    "metadata": {
+      "eventType": {
+        "key": "x-oca-event.action",
+        "object": "event"
+      },
+      "productLogId": {
+        "key": "x-oca-event.code",
+        "object": "event"
+      },
+      "eventTimestamp": [
+        {
+          "key": "x-oca-event.created",
+          "object": "event"
+        },
+        {
+          "key": "first_observed",
+          "cybox": false
+        },
+        {
+          "key": "last_observed",
+          "cybox": false
+        }
+      ],
+      "description": {
+        "key": "x-oca-event.extensions.x-gcp-chronicle-event-ext.description",
+        "object": "event"
+      },
+      "productName": {
+        "key": "x-oca-event.agent",
+        "object": "event"
+      },
+      "vendorName": {
+        "key": "x-oca-event.provider",
+        "object": "event"
+      },
+      "productEventType": {
+        "key": "x-oca-event.outcome",
+        "object": "event"
+      }
+    },
+    "about": {
+      "file": {
+        "fullPath": [
+          {
+            "key": "file.name",
+            "object": "about_file",
+            "transformer": "ToFileName"
+          },
+          {
+            "key": "directory.path",
+            "object": "about_directory",
+            "transformer": "ToDirectoryPath"
+          },
+          {
+            "key": "file.parent_directory_ref",
+            "object": "about_file",
+            "references": "about_directory"
+          },
+          {
+            "key": "email-message.extensions.x-gcp-chronicle-email-message-ext.file_ref",
+            "object": "em",
+            "references": "about_file"
+          }
+        ],
+        "size": {
+          "key": "file.size",
+          "object": "about_file",
+          "transformer": "ToInteger"
+        },
+        "md5": {
+          "key": "file.hashes.MD5",
+          "object": "about_file"
+        },
+        "sha1": {
+          "key": "file.hashes.SHA-1",
+          "object": "about_file"
+        },
+        "sha256": {
+          "key": "file.hashes.SHA-256",
+          "object": "about_file"
+        },
+        "mimeType": {
+          "key": "file.extensions.x-gcp-chronicle-file-ext.mime_type",
+          "object": "about_file"
+        },
+        "lastModificationTime": {
+          "key": "file.modified",
+          "object": "about_file"
+        },
+        "fileType": {
+          "key": "file.extensions.x-gcp-chronicle-file-ext.file_type",
+          "object": "about_file"
+        }
+      }
+    },
+    "additional": {
+      "detectorId": {
+        "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result-ext.aws_detector_id",
+        "object": "security_result"
+      },
+      "archived": {
+        "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result-ext.aws_archived",
+        "object": "security_result"
+      },
+      "count": {
+        "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result-ext.aws_count",
+        "object": "security_result"
+      },
+      "imageId": {
+        "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result-ext.aws_image_id",
+        "object": "security_result"
+      },
+      "resourceRole": {
+        "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result-ext.aws_resource_role",
+        "object": "security_result"
+      }
+    }
+  }
+}
