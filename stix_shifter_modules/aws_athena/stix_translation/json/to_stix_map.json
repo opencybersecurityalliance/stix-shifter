@@ -2,12 +2,12 @@
   "ocsf": {
     "activity": {
       "key": "x-oca-event.action",
-      "object": "aws_event",
+      "object": "x_oca_event",
       "type_hint": "string"
     },
     "activity_id": {
       "key": "x-oca-event.code",
-      "object": "aws_event",
+      "object": "x_oca_event",
       "transformer": "ToInteger",
       "type_hint": "integer"
     },
@@ -96,23 +96,23 @@
     },
     "category_name": {
       "key": "x-oca-event.action",
-      "object": "aws_event",
+      "object": "x_oca_event",
       "type_hint": "string"
     },
     "category_uid": {
       "key": "x-oca-event.code",
-      "object": "aws_event",
+      "object": "x_oca_event",
       "transformer": "ToInteger",
       "type_hint": "integer"
     },
     "class_name": {
       "key": "x-oca-event.module",
-      "object": "aws_event",
+      "object": "x_oca_event",
       "type_hint": "string"
     },
     "class_uid": {
       "key": "x-oca-event.extensions.x-cloud-api.class_uid",
-      "object": "aws_event",
+      "object": "x_oca_event",
       "transformer": "ToInteger",
       "type_hint": "integer"
     },
@@ -178,7 +178,7 @@
     ],
     "duration": {
       "key": "x-oca-event.duration",
-      "object": "aws_event",
+      "object": "x_oca_event",
       "transformer": "ToInteger",
       "type_hint": "integer"
     },
@@ -196,87 +196,87 @@
     ],
     "enrichments": {
       "data": {
-        "key": "x-ocsf-cloud.enrichments.data",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-enrichments.data",
+        "object": "enrichments",
         "type_hint": "json"
       },
       "name": {
-        "key": "x-ocsf-cloud.enrichments.name",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-enrichments.name",
+        "object": "enrichments",
         "type_hint": "string"
       },
       "provider": {
-        "key": "x-ocsf-cloud.enrichments.provider",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-enrichments.provider",
+        "object": "enrichments",
         "type_hint": "string"
       },
       "type": {
-        "key": "x-ocsf-cloud.enrichments.type",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-enrichments.type",
+        "object": "enrichments",
         "type_hint": "string"
       },
       "value": {
-        "key": "x-ocsf-cloud.enrichments.value",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-enrichments.value",
+        "object": "enrichments",
         "type_hint": "string"
       }
     },
     "http_request": {
       "args": {
-        "key": "x-ocsf-cloud.http_request.value",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-http-request.value",
+        "object": "http_request",
         "type_hint": "string"
       },
       "http_headers": {
         "name": {
-          "key": "x-ocsf-cloud.http_request.http_headers_name",
+          "key": "x-ocsf-http-request.http_headers_name",
           "object": "ocsf_cloud_api",
           "type_hint": "string"
         },
         "value": {
-          "key": "x-ocsf-cloud.http_request.http_headers_value",
-          "object": "ocsf_cloud_api",
+          "key": "x-ocsf-http-request.http_headers_value",
+          "object": "http_request",
           "type_hint": "string"
         }
       },
       "http_method": {
-        "key": "x-ocsf-cloud.http_request.http_method",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-http-request.http_method",
+        "object": "http_request",
         "type_hint": "string"
       },
       "prefix": {
-        "key": "x-ocsf-cloud.http_request.prefix",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-http-request.prefix",
+        "object": "http_request",
         "type_hint": "string"
       },
       "referrer": {
-        "key": "x-ocsf-cloud.http_request.referrer",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-http-request.referrer",
+        "object": "http_request",
         "type_hint": "string"
       },
       "uid": {
-        "key": "x-ocsf-cloud.http_request.uid",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-http-request.uid",
+        "object": "http_request",
         "type_hint": "string"
       },
       "url": {
-        "key": "x-ocsf-cloud.http_request.url",
-        "object": "ocsf_cloud_api",
+        "key": "url.value",
+        "object": "url",
         "type_hint": "url"
       },
       "user_agent": {
         "key": "x-ocsf-cloud.http_request.user_agent",
-        "object": "ocsf_cloud_api",
+        "object": "http_request",
         "type_hint": "string"
       },
       "version": {
-        "key": "x-ocsf-cloud.http_request.version",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-http-request.version",
+        "object": "http_request",
         "type_hint": "string"
       },
       "x_forwarded_for": {
-        "key": "x-ocsf-cloud.http_request.x_forwarded_for",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-http-request.x_forwarded_for",
+        "object": "http_request",
         "type_hint": [
           "ip"
         ]
@@ -398,28 +398,28 @@
       "user": {
         "account_type": {
           "key": "user-account.account_type",
-          "object": "aws_user",
+          "object": "user",
           "type_hint": "string"
         },
         "account_type_id": {
           "key": "user-account.extensions.aws-account-ext.account_type_id",
-          "object": "aws_user",
+          "object": "user",
           "transformer": "ToInteger",
           "type_hint": "integer"
         },
         "account_uid": {
           "key": "user-account.user_id",
-          "object": "aws_user",
+          "object": "user",
           "type_hint": "string"
         },
         "credential_uid": {
           "key": "user-account.extensions.aws-account-ext.credential_uid",
-          "object": "aws_user",
+          "object": "user",
           "type_hint": "string"
         },
         "domain": {
           "key": "user-account.extensions.aws-account-ext.domain",
-          "object": "aws_user",
+          "object": "user",
           "type_hint": "string"
         },
         "email_addr": {
@@ -430,71 +430,71 @@
         "groups": {
           "desc": {
             "key": "user-account.extensions.aws-account-ext.group_desc",
-            "object": "aws_user",
+            "object": "user",
             "type_hint": "string"
           },
           "name": {
             "key": "user-account.extensions.aws-account-ext.group_name",
-            "object": "aws_user",
+            "object": "user",
             "type_hint": "string"
           },
           "privileges": {
             "key": "user-account.extensions.aws-account-ext.group_privileges",
-            "object": "aws_user",
+            "object": "user",
             "type_hint": [
               "string"
             ]
           },
           "type": {
             "key": "user-account.extensions.aws-account-ext.group_type",
-            "object": "aws_user",
+            "object": "user",
             "type_hint": "string"
           },
           "uid": {
             "key": "user-account.extensions.aws-account-ext.group_uid",
-            "object": "aws_user",
+            "object": "user",
             "type_hint": "string"
           }
         },
         "name": {
           "key": "user-account.display_name",
-          "object": "aws_user",
+          "object": "user",
           "type_hint": "string"
         },
         "org_uid": {
           "key": "user-account.extensions.aws-account-ext.org_uid",
-          "object": "aws_user",
+          "object": "user",
           "type_hint": "string"
         },
         "session_uid": {
           "key": "user-account.extensions.aws-account-ext.session_uid",
-          "object": "aws_user",
+          "object": "user",
           "type_hint": "string"
         },
         "session_uuid": {
           "key": "user-account.extensions.aws-account-ext.session_uuid",
-          "object": "aws_user",
+          "object": "user",
           "type_hint": "string"
         },
         "type": {
           "key": "user-account.extensions.aws-account-ext.type",
-          "object": "aws_user",
+          "object": "user",
           "type_hint": "string"
         },
         "type_id": {
           "key": "user-account.extensions.aws-account-ext.type_id",
-          "object": "aws_user",
+          "object": "user",
           "transformer": "ToInteger",
           "type_hint": "integer"
         },
         "uid": {
           "key": "user-account.extensions.aws-account-ext.uid",
-          "object": "aws_user",
+          "object": "user",
           "type_hint": "string"
         },
         "uuid": {
           "key": "user-account.extensions.aws-account-ext.uuid",
-          "object": "aws_user",
+          "object": "user",
           "type_hint": "string"
         }
       }
@@ -506,95 +506,95 @@
     },
     "metadata": {
       "correlation_uid": {
-        "key": "x-ocsf-cloud.metadata.correlation_uid",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-metadata.correlation_uid",
+        "object": "metadata",
         "type_hint": "string"
       },
       "labels": {
-        "key": "x-ocsf-cloud.metadata.labels",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-metadata.labels",
+        "object": "metadata",
         "type_hint": [
           "string"
         ]
       },
       "logged_time": {
-        "key": "x-ocsf-cloud.metadata.logged_time",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-metadata.logged_time",
+        "object": "metadata",
         "type_hint": "timestamp"
       },
       "modified_time": {
-        "key": "x-ocsf-cloud.metadata.modified_time",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-metadata.modified_time",
+        "object": "metadata",
         "type_hint": "timestamp"
       },
       "processed_time": {
-        "key": "x-ocsf-cloud.metadata.processed_time",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-metadata.processed_time",
+        "object": "metadata",
         "type_hint": "timestamp"
       },
       "product": {
         "feature": {
           "name": {
-            "key": "x-ocsf-cloud.metadata.product_feature_name",
-            "object": "ocsf_cloud_api",
+            "key": "software.extension.product.feature_name",
+            "object": "software",
             "type_hint": "string"
           },
           "uid": {
-            "key": "x-ocsf-cloud.metadata.product_feature_uid",
-            "object": "ocsf_cloud_api",
+            "key": "software.extension.product.feature_uid",
+            "object": "software",
             "type_hint": "string"
           },
           "version": {
-            "key": "x-ocsf-cloud.metadata.product_feature_version",
-            "object": "ocsf_cloud_api",
+            "key": "software.extension.product.feature_version",
+            "object": "software",
             "type_hint": "string"
           }
         },
         "lang": {
-          "key": "x-ocsf-cloud.metadata.product_lang",
-          "object": "ocsf_cloud_api",
+          "key": "software.languages",
+          "object": "software",
           "type_hint": "string"
         },
         "name": {
-          "key": "x-ocsf-cloud.metadata.product_name",
-          "object": "ocsf_cloud_api",
+          "key": "software.name",
+          "object": "software",
           "type_hint": "string"
         },
         "path": {
-          "key": "x-ocsf-cloud.metadata.product_path",
-          "object": "ocsf_cloud_api",
+          "key": "software.extension.product.path",
+          "object": "software",
           "type_hint": "path"
         },
         "uid": {
-          "key": "x-ocsf-cloud.metadata.product_uid",
-          "object": "ocsf_cloud_api",
+          "key": "software.extension.product.uid",
+          "object": "software",
           "type_hint": "string"
         },
         "vendor_name": {
-          "key": "x-ocsf-cloud.metadata.product_vendor_name",
-          "object": "ocsf_cloud_api",
+          "key": "software.vendor",
+          "object": "software",
           "type_hint": "string"
         },
         "version": {
-          "key": "x-ocsf-cloud.metadata.product_version",
-          "object": "ocsf_cloud_api",
+          "key": "software.version",
+          "object": "software",
           "type_hint": "string"
         }
       },
       "sequence": {
-        "key": "x-ocsf-cloud.metadata.sequence",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-metadata.sequence",
+        "object": "metadata",
         "transformer": "ToInteger",
         "type_hint": "integer"
       },
       "uid": {
-        "key": "x-ocsf-cloud.metadata.uid",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-metadata.uid",
+        "object": "metadata",
         "type_hint": "string"
       },
       "version": {
-        "key": "x-ocsf-cloud.metadata.version",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-metadata.version",
+        "object": "metadata",
         "type_hint": "string"
       }
     },
@@ -655,60 +655,60 @@
     },
     "resources": {
       "account_uid": {
-        "key": "x-ocsf-cloud.resources.account_uid",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-resources.account_uid",
+        "object": "resources",
         "type_hint": "string"
       },
       "cloud_partition": {
-        "key": "x-ocsf-cloud.resources.cloud_partition",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-resources.cloud_partition",
+        "object": "resources",
         "type_hint": "string"
       },
       "criticality": {
-        "key": "x-ocsf-cloud.resources.criticality",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-resources.criticality",
+        "object": "resources",
         "type_hint": "string"
       },
       "details": {
-        "key": "x-ocsf-cloud.resources.details",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-resources.details",
+        "object": "resources",
         "type_hint": "string"
       },
       "group_name": {
-        "key": "x-ocsf-cloud.resources.group_name",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-resources.group_name",
+        "object": "resources",
         "type_hint": "string"
       },
       "labels": {
-        "key": "x-ocsf-cloud.resources.labels",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-resources.labels",
+        "object": "resources",
         "type_hint": [
           "string"
         ]
       },
       "name": {
-        "key": "x-ocsf-cloud.resources.name",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-resources.name",
+        "object": "resources",
         "type_hint": "string"
       },
       "owner": {
-        "key": "x-ocsf-cloud.resources.owner",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-resources.owner",
+        "object": "resources",
         "type_hint": "string"
       },
       "region": {
-        "key": "x-ocsf-cloud.resources.region",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-resources.region",
+        "object": "resources",
         "type_hint": "string"
       },
       "type": {
-        "key": "x-ocsf-cloud.resources.type",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-resources.type",
+        "object": "resources",
         "type_hint": "string"
       },
       "uid": {
-        "key": "x-ocsf-cloud.resources.uid",
-        "object": "ocsf_cloud_api",
+        "key": "x-ocsf-resources.uid",
+        "object": "resources",
         "type_hint": "string"
       }
     },
@@ -801,12 +801,12 @@
     },
     "time": {
       "key": "x-oca-event.created",
-      "object": "aws_event",
+      "object": "x_oca_event",
       "type_hint": "timestamp"
     },
     "timezone_offset": {
       "key": "x-oca-event.timezone",
-      "object": "aws_event",
+      "object": "x_oca_event",
       "transformer": "ToInteger",
       "type_hint": "integer"
     },
