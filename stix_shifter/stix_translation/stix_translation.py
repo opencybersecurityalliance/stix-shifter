@@ -1,4 +1,6 @@
 import importlib
+import io
+import re
 import sys
 import traceback
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException, \
@@ -8,6 +10,10 @@ from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils.param_validator import param_validator
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.logger import exception_to_string
+
+from sigma.parser.collection import SigmaCollectionParser
+from sigma.configuration import SigmaConfiguration
+from sigma.backends.discovery import getBackend
 
 RESULTS = 'results'
 QUERY = 'query'
@@ -20,6 +26,23 @@ OPERATOR_MAPPING_ERROR = "Unable to map the following STIX Operators:"
 ATTRIBUTE_MAPPING_ERROR = "Unable to map the following STIX objects and properties:"
 DEFAULT_DIALECT = 'default'
 
+#TODO: Make this somehow discoverable
+SIGMA_BACKEND_MODULES = {
+    "qradar" : "qradar",
+    "splunk" : "splunk",
+    "aws_athena" : "athena",
+    "elastic_ecs" : "elasticsearch",
+    "arcsight" : "arcsight",
+    "mysql" : "sql",
+    "sumologic" : "sumologic"
+}
+
+SIGMA_MAPPINGS = '''
+fieldmappings:
+  Image: NewProcessName
+  ParentImage: ParentProcessName
+  ParentCommandLine: NO_MAPPING
+'''
 
 class StixTranslation:
     """
@@ -83,6 +106,28 @@ class StixTranslation:
                     sys.setrecursionlimit(recursion_limit)
 
                 if translate_type == QUERY:
+                    # Detect SIGMA YML, if so then use SIGMA parser
+                    if re.search(r'^title:', data, re.MULTILINE) and re.search(r'^detection:', data, re.MULTILINE) and re.search(r'^logsource:', data, re.MULTILINE):
+                        backend_module = ""
+                        if module in SIGMA_BACKEND_MODULES:
+                            backend_module = SIGMA_BACKEND_MODULES[ module ]
+                        else:
+                            raise Exception("SIGMA query was detected, but no sigmac backend was found for module " + module)
+
+                        queries = []
+                        self.logger.debug("Loading sigmac backend " + backend_module)
+                        sigma_config = SigmaConfiguration()
+                        f = io.StringIO(data)
+                        parser = SigmaCollectionParser(f, sigma_config)
+
+                        sigma_backend = getBackend(backend_module)(sigma_config, {'rulecomment': False})
+                        sigma_result = parser.generate(sigma_backend)
+
+                        if sigma_result:
+                            queries += sigma_result
+
+                        return {"queries":queries}
+
                     # Carbon Black combines the mapping files into one JSON using process and binary keys.
                     # The query constructor has some logic around which of the two are used.
                     queries = []
