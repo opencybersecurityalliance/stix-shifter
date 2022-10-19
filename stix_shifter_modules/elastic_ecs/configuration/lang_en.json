@@ -14,7 +14,7 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "indices": {
-            "label": "Indices (Optional)",
+            "label": "Indices",
             "description": "To search specific Elasticsearch indices, specify a single index or multiple indices in a comma separated list",
             "placeholder": "index1,index2"
         },
