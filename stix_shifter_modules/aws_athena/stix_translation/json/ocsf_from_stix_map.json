@@ -1,11 +1,547 @@
 {
+  "aws-account-ext": {
+    "fields": {
+      "account_type_id": [
+        "account_type_id"
+      ],
+      "credential_uid": [
+        "credential_uid"
+      ],
+      "domain": [
+        "domain"
+      ],
+      "group_desc": [
+        "desc"
+      ],
+      "group_name": [
+        "name"
+      ],
+      "group_privileges": [
+        "privileges"
+      ],
+      "group_type": [
+        "type"
+      ],
+      "group_uid": [
+        "uid"
+      ],
+      "org_uid": [
+        "org_uid"
+      ],
+      "session_uid": [
+        "session_uid"
+      ],
+      "session_uuid": [
+        "session_uuid"
+      ],
+      "type": [
+        "type"
+      ],
+      "type_id": [
+        "type_id"
+      ],
+      "uid": [
+        "uid"
+      ],
+      "uuid": [
+        "uuid"
+      ]
+    }
+  },
+  "email-addr": {
+    "fields": {
+      "value": [
+        "email_addr"
+      ]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "intermediate_ips"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": [
+        "intermediate_ips"
+      ]
+    }
+  },
+  "software": {
+    "fields": {
+      "extension.product.feature_name": [
+        "name"
+      ],
+      "extension.product.feature_uid": [
+        "uid"
+      ],
+      "extension.product.feature_version": [
+        "version"
+      ],
+      "extension.product.path": [
+        "path"
+      ],
+      "extension.product.uid": [
+        "uid"
+      ],
+      "languages": [
+        "lang"
+      ],
+      "name": [
+        "name"
+      ],
+      "vendor": [
+        "vendor_name"
+      ],
+      "version": [
+        "version"
+      ]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": [
+        "url"
+      ]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "account_type": [
+        "account_type"
+      ],
+      "display_name": [
+        "name"
+      ],
+      "extensions.'aws-account-ext'.account_type_id": [
+        "account_type_id"
+      ],
+      "extensions.'aws-account-ext'.credential_uid": [
+        "credential_uid"
+      ],
+      "extensions.'aws-account-ext'.domain": [
+        "domain"
+      ],
+      "extensions.'aws-account-ext'.group_desc": [
+        "desc"
+      ],
+      "extensions.'aws-account-ext'.group_name": [
+        "name"
+      ],
+      "extensions.'aws-account-ext'.group_privileges": [
+        "privileges"
+      ],
+      "extensions.'aws-account-ext'.group_type": [
+        "type"
+      ],
+      "extensions.'aws-account-ext'.group_uid": [
+        "uid"
+      ],
+      "extensions.'aws-account-ext'.org_uid": [
+        "org_uid"
+      ],
+      "extensions.'aws-account-ext'.session_uid": [
+        "session_uid"
+      ],
+      "extensions.'aws-account-ext'.session_uuid": [
+        "session_uuid"
+      ],
+      "extensions.'aws-account-ext'.type": [
+        "type"
+      ],
+      "extensions.'aws-account-ext'.type_id": [
+        "type_id"
+      ],
+      "extensions.'aws-account-ext'.uid": [
+        "uid"
+      ],
+      "extensions.'aws-account-ext'.uuid": [
+        "uuid"
+      ],
+      "user_id": [
+        "account_uid"
+      ]
+    }
+  },
+  "x-cloud-api": {
+    "fields": {
+      "class_uid": [
+        "class_uid"
+      ]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "alert_id": [
+        "type_id"
+      ],
+      "description": [
+        "value"
+      ],
+      "end": [
+        "end_time"
+      ],
+      "event_count": [
+        "count"
+      ],
+      "finding_type": [
+        "type"
+      ],
+      "name": [
+        "name"
+      ],
+      "severity": [
+        "severity_id"
+      ],
+      "start": [
+        "start_time"
+      ]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "extensions.'x-oca-endpoint-ext'.port": [
+        "port"
+      ],
+      "extensions.'x-oca-endpoint-ext'.svc_name": [
+        "svc_name"
+      ],
+      "ip_refs[*].value": [
+        "intermediate_ips"
+      ],
+      "name": [
+        "name"
+      ]
+    }
+  },
+  "x-oca-endpoint-ext": {
+    "fields": {
+      "port": [
+        "port"
+      ],
+      "svc_name": [
+        "svc_name"
+      ]
+    }
+  },
   "x-oca-event": {
     "fields": {
+      "action": [
+        "activity",
+        "category_name"
+      ],
       "code": [
+        "activity_id",
         "category_uid"
       ],
-      "action": [
-        "category_name"
+      "created": [
+        "time"
+      ],
+      "duration": [
+        "duration"
+      ],
+      "extensions.'x-cloud-api'.class_uid": [
+        "class_uid"
+      ],
+      "module": [
+        "class_name"
+      ],
+      "timezone": [
+        "timezone_offset"
+      ]
+    }
+  },
+  "x-ocsf-cloud": {
+    "fields": {
+      "account_type": [
+        "account_type"
+      ],
+      "account_type_id": [
+        "account_type_id"
+      ],
+      "account_uid": [
+        "account_uid"
+      ],
+      "api_version": [
+        "version"
+      ],
+      "http_request.user_agent": [
+        "user_agent"
+      ],
+      "message": [
+        "message"
+      ],
+      "operation": [
+        "operation"
+      ],
+      "org_uid": [
+        "org_uid"
+      ],
+      "profiles": [
+        "profiles"
+      ],
+      "project_uid": [
+        "project_uid"
+      ],
+      "provider": [
+        "provider"
+      ],
+      "raw_data": [
+        "raw_data"
+      ],
+      "ref_event_code": [
+        "ref_event_code"
+      ],
+      "ref_event_name": [
+        "ref_event_name"
+      ],
+      "ref_event_uid": [
+        "ref_event_uid"
+      ],
+      "ref_time": [
+        "ref_time"
+      ],
+      "region": [
+        "region"
+      ],
+      "request_flags": [
+        "flags"
+      ],
+      "request_uid": [
+        "uid"
+      ],
+      "resource_uid": [
+        "resource_uid"
+      ],
+      "response_code": [
+        "code"
+      ],
+      "response_error": [
+        "error"
+      ],
+      "response_error_message": [
+        "error_message"
+      ],
+      "response_flags": [
+        "flags"
+      ],
+      "response_message": [
+        "message"
+      ],
+      "service_labels": [
+        "labels"
+      ],
+      "service_name": [
+        "name"
+      ],
+      "service_uid": [
+        "uid",
+        "version"
+      ],
+      "severity": [
+        "severity"
+      ],
+      "status": [
+        "status"
+      ],
+      "status_code": [
+        "status_code"
+      ],
+      "status_detail": [
+        "status_detail"
+      ],
+      "status_id": [
+        "status_id"
+      ],
+      "type_name": [
+        "type_name"
+      ],
+      "type_uid": [
+        "type_uid"
+      ],
+      "zone": [
+        "zone"
+      ]
+    }
+  },
+  "x-ocsf-enrichments": {
+    "fields": {
+      "data": [
+        "data"
+      ],
+      "name": [
+        "name"
+      ],
+      "provider": [
+        "provider"
+      ],
+      "type": [
+        "type"
+      ],
+      "value": [
+        "value"
+      ]
+    }
+  },
+  "x-ocsf-http-request": {
+    "fields": {
+      "http_headers_name": [
+        "name"
+      ],
+      "http_headers_value": [
+        "value"
+      ],
+      "http_method": [
+        "http_method"
+      ],
+      "prefix": [
+        "prefix"
+      ],
+      "referrer": [
+        "referrer"
+      ],
+      "uid": [
+        "uid"
+      ],
+      "value": [
+        "args"
+      ],
+      "version": [
+        "version"
+      ],
+      "x_forwarded_for": [
+        "x_forwarded_for"
+      ]
+    }
+  },
+  "x-ocsf-identity": {
+    "fields": {
+      "authorizations.decision": [
+        "decision"
+      ],
+      "authorizations.name": [
+        "name"
+      ],
+      "authorizations.policy_desc": [
+        "desc"
+      ],
+      "authorizations.policy_group_desc": [
+        "desc"
+      ],
+      "authorizations.policy_group_namee": [
+        "name"
+      ],
+      "authorizations.policy_group_privileges": [
+        "privileges"
+      ],
+      "authorizations.policy_group_type": [
+        "type"
+      ],
+      "authorizations.policy_group_uid": [
+        "uid"
+      ],
+      "authorizations.uid": [
+        "uid"
+      ],
+      "authorizations.version": [
+        "version"
+      ],
+      "idp.name": [
+        "name"
+      ],
+      "idp.uid": [
+        "uid"
+      ],
+      "invoked_by": [
+        "invoked_by"
+      ],
+      "message": [
+        "message"
+      ],
+      "session.created_time": [
+        "created_time"
+      ],
+      "session.credential_uid": [
+        "credential_uid"
+      ],
+      "session.expiration_time": [
+        "expiration_time"
+      ],
+      "session.issuer": [
+        "issuer"
+      ],
+      "session.mfa": [
+        "mfa"
+      ],
+      "session.uid": [
+        "uid"
+      ]
+    }
+  },
+  "x-ocsf-metadata": {
+    "fields": {
+      "correlation_uid": [
+        "correlation_uid"
+      ],
+      "labels": [
+        "labels"
+      ],
+      "logged_time": [
+        "logged_time"
+      ],
+      "modified_time": [
+        "modified_time"
+      ],
+      "processed_time": [
+        "processed_time"
+      ],
+      "sequence": [
+        "sequence"
+      ],
+      "uid": [
+        "uid"
+      ],
+      "version": [
+        "version"
+      ]
+    }
+  },
+  "x-ocsf-resources": {
+    "fields": {
+      "account_uid": [
+        "account_uid"
+      ],
+      "cloud_partition": [
+        "cloud_partition"
+      ],
+      "criticality": [
+        "criticality"
+      ],
+      "details": [
+        "details"
+      ],
+      "group_name": [
+        "group_name"
+      ],
+      "labels": [
+        "labels"
+      ],
+      "name": [
+        "name"
+      ],
+      "owner": [
+        "owner"
+      ],
+      "region": [
+        "region"
+      ],
+      "type": [
+        "type"
+      ],
+      "uid": [
+        "uid"
       ]
     }
   }
