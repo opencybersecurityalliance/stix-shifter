@@ -1,5 +1,22 @@
 {
   "ocsf": {
+    "_time": [
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "last_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "x-ibm-finding.time_observed",
+        "object": "ibm_finding",
+        "transformer": "EpochToTimestamp"
+      }
+    ],
     "activity": {
       "key": "x-oca-event.action",
       "object": "x_oca_event",
@@ -173,7 +190,7 @@
       {
         "key": "x-ibm-finding.event_count",
         "transformer": "ToInteger",
-        "object": "findings"
+        "object": "ibm_finding"
       }
     ],
     "duration": {
@@ -185,7 +202,7 @@
     "end_time": [
       {
         "key": "x-ibm-finding.end",
-        "object": "findings",
+        "object": "ibm_finding",
         "transformer": "EpochSecondsToTimestamp"
       },
       {
@@ -265,7 +282,7 @@
         "type_hint": "url"
       },
       "user_agent": {
-        "key": "x-ocsf-cloud.http_request.user_agent",
+        "key": "x-ocsf-http-request.user_agent",
         "object": "http_request",
         "type_hint": "string"
       },
@@ -601,23 +618,23 @@
     "observables": {
       "name": {
         "key": "x-ibm-finding.name",
-        "object": "findings",
+        "object": "ibm_finding",
         "type_hint": "string"
       },
       "type": {
         "key": "x-ibm-finding.finding_type",
-        "object": "findings",
+        "object": "ibm_finding",
         "type_hint": "string"
       },
       "type_id": {
         "key": "x-ibm-finding.alert_id",
-        "object": "findings",
+        "object": "ibm_finding",
         "transformer": "ToInteger",
         "type_hint": "integer"
       },
       "value": {
         "key": "x-ibm-finding.description",
-        "object": "findings",
+        "object": "ibm_finding",
         "type_hint": "string"
       }
     },
@@ -654,11 +671,18 @@
       "type_hint": "string"
     },
     "resources": {
-      "account_uid": {
-        "key": "x-ocsf-resources.account_uid",
-        "object": "resources",
-        "type_hint": "string"
-      },
+      "account_uid": [
+        {
+          "key": "x-ocsf-resources.account_uid",
+          "object": "resources",
+          "type_hint": "string"
+        },
+        {
+          "key": "x-ocsf-resources.cloud_api_ref",
+          "object": "resources",
+          "references": "ocsf_cloud_api"
+        }
+      ],
       "cloud_partition": {
         "key": "x-ocsf-resources.cloud_partition",
         "object": "resources",
@@ -719,11 +743,15 @@
     },
     "severity_id": {
       "key": "x-ibm-finding.severity",
-      "object": "findings",
+      "object": "ibm_finding",
       "transformer": "ToInteger",
       "type_hint": "integer"
     },
     "src_endpoint": {
+      "ip": {
+        "key": "ipv4-addr.value",
+        "object": "ip"
+      },
       "intermediate_ips": [
         {
           "key": "ipv4-addr.value",
@@ -769,7 +797,7 @@
     "start_time": [
       {
         "key": "x-ibm-finding.start",
-        "object": "findings",
+        "object": "ibm_finding",
         "transformer": "EpochSecondsToTimestamp"
       },
       {
@@ -810,25 +838,26 @@
       "transformer": "ToInteger",
       "type_hint": "integer"
     },
-    "type_name": {
-      "key": "x-ocsf-cloud.type_name",
-      "object": "ocsf_cloud_api",
-      "type_hint": "string"
-    },
+    "type_name": [
+      {
+        "key": "x-ocsf-cloud.type_name",
+        "object": "ocsf_cloud_api",
+        "type_hint": "string"
+      },
+      {
+        "key": "x-ocsf-cloud.resources_ref",
+        "object": "ocsf_cloud_api",
+        "references": [
+          "resources"
+        ],
+        "group": true
+      }
+    ],
     "type_uid": {
       "key": "x-ocsf-cloud.type_uid",
       "object": "ocsf_cloud_api",
       "transformer": "ToInteger",
       "type_hint": "integer"
-    },
-    "unmapped": {
-      "profiles": {
-        "key": "x-ocsf-cloud.profiles",
-        "object": "ocsf_cloud_api",
-        "type_hint": [
-          "string"
-        ]
-      }
     }
   },
   "vpcflow": {

@@ -1,6 +1,7 @@
 from stix_shifter.stix_translation import stix_translation
 import unittest
 import re
+import json
 
 translation = stix_translation.StixTranslation()
 
@@ -53,7 +54,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "lower('172.31.76.105')) AND start BETWEEN 1601541790 AND 1604054590) LIMIT 10000"
         },
         {
-            "ocsf": "(lower(intermediate_ips) = lower('172.31.76.105') AND _time BETWEEN 1601541790000 AND 1604054590000) LIMIT 10000"
+            "ocsf": "(lower(src_endpoint.intermediate_ips) = lower('172.31.76.105') AND _time BETWEEN 1601541790000 AND 1604054590000) LIMIT 10000"
         }]
         self._test_query_assertions(query, queries)
 
@@ -152,7 +153,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "1601541790 AND 1604054590)) LIMIT 10000"
         },
         {
-            "ocsf": "((lower(intermediate_ips) = lower('18.210.22.128') OR lower(intermediate_ips) = lower('172.31.60.104')) AND _time BETWEEN 1601541790000 AND 1604054590000) LIMIT 10000"
+            "ocsf": "((lower(src_endpoint.intermediate_ips) = lower('18.210.22.128') OR lower(src_endpoint.intermediate_ips) = lower('172.31.60.104')) AND _time BETWEEN 1601541790000 AND 1604054590000) LIMIT 10000"
         }]
         self._test_query_assertions(query, queries)
 
@@ -216,7 +217,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "start BETWEEN 1588322590 AND 1604054590) LIMIT 10000"
         },
         {
-            "ocsf": "(NOT lower(intermediate_ips) = lower('172.31.60.104') AND _time BETWEEN 1588322590000 AND 1604054590000) LIMIT 10000"
+            "ocsf": "(NOT lower(src_endpoint.intermediate_ips) = lower('172.31.60.104') AND _time BETWEEN 1588322590000 AND 1604054590000) LIMIT 10000"
         }
         ]
         queries = _remove_timestamp_from_query(queries)
