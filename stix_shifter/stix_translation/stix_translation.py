@@ -23,18 +23,23 @@ DIALECTS = 'dialects'
 SUPPORTED_ATTRIBUTES = "supported_attributes"
 MAPPING_ERROR = "Unable to map the following STIX objects and properties:"
 OPERATOR_MAPPING_ERROR = "Unable to map the following STIX Operators:"
-ATTRIBUTE_MAPPING_ERROR = "Unable to map the following STIX objects and properties:"
+ATTRIBUTE_MAPPING_ERROR = "Unable to map tsphe following STIX objects and properties:"
 DEFAULT_DIALECT = 'default'
 
 #TODO: Make this somehow discoverable
+# Backend names need to match what is returned in the getBackendList() method in discovery.py
+# https://github.com/SigmaHQ/sigma/blob/24b1c5fec881d63f8002f5b057ad051979e88bb5/tools/sigma/backends/discovery.py#L25
+# The key is the STIX-shifter module name, value is the Sigma backend name
 SIGMA_BACKEND_MODULES = {
     "qradar" : "qradar",
-    "splunk" : "splunk",
-    "aws_athena" : "athena",
-    "elastic_ecs" : "elasticsearch",
-    "arcsight" : "arcsight",
-    "mysql" : "sql",
-    "sumologic" : "sumologic"
+    "splunk" : "splunk", #should this be splunk or splunkdm?
+    "aws_athena" : "athena", #limited use since it needs to query against a schema defined in the to-STIX mapping
+    "elastic_ecs" : "es-qs", #es-rule, es-eql, es-rule-eql, es-qs
+    "arcsight" : "arcsight", #arcsight, asrsight-esms
+    "mysql" : "sql", #TODO: pass in table name to be queried
+    #"sumologic" : "sumologic", #not working
+    "datadog": "datadog-logs",
+    #"carbonblack" : "carbonblack" #not working
 }
 
 SIGMA_MAPPINGS = '''
@@ -107,7 +112,9 @@ class StixTranslation:
 
                 if translate_type == QUERY:
                     # Detect SIGMA YML, if so then use SIGMA parser
+                    print("IS IT SIGMA?")
                     if re.search(r'^title:', data, re.MULTILINE) and re.search(r'^detection:', data, re.MULTILINE) and re.search(r'^logsource:', data, re.MULTILINE):
+                        print("SIGMA")
                         backend_module = ""
                         if module in SIGMA_BACKEND_MODULES:
                             backend_module = SIGMA_BACKEND_MODULES[ module ]
@@ -116,10 +123,12 @@ class StixTranslation:
 
                         queries = []
                         self.logger.debug("Loading sigmac backend " + backend_module)
+                        print("setting config")
                         sigma_config = SigmaConfiguration()
                         f = io.StringIO(data)
+                        print("setting parser")
                         parser = SigmaCollectionParser(f, sigma_config)
-
+                        print("setting backend")
                         sigma_backend = getBackend(backend_module)(sigma_config, {'rulecomment': False})
                         sigma_result = parser.generate(sigma_backend)
 
