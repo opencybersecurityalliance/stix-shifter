@@ -838,21 +838,11 @@
       "transformer": "ToInteger",
       "type_hint": "integer"
     },
-    "type_name": [
-      {
-        "key": "x-ocsf-cloud.type_name",
-        "object": "ocsf_cloud_api",
-        "type_hint": "string"
-      },
-      {
-        "key": "x-ocsf-cloud.resources_ref",
-        "object": "ocsf_cloud_api",
-        "references": [
-          "resources"
-        ],
-        "group": true
-      }
-    ],
+    "type_name": {
+      "key": "x-ocsf-cloud.type_name",
+      "object": "ocsf_cloud_api",
+      "type_hint": "string"
+    },
     "type_uid": {
       "key": "x-ocsf-cloud.type_uid",
       "object": "ocsf_cloud_api",
