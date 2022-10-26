@@ -56,12 +56,12 @@ class ResultsConnector(BaseResultsConnector):
                 result_list.append(response_dict)
             results = result_list[offset:total_records]
             # Flattening the response
-            if not service_type == 'oscf':
+            if service_type == 'ocsf':
+                formatted_result = self.format_result_ocsf(results)
+            else:
                 flatten_result_cleansed = self.flatten_result(results, service_type)
                 # Unflatten results using to_stix_map keys to avoid lengthy key value
                 formatted_result = self.format_result(flatten_result_cleansed, service_type)
-            else:
-                formatted_result = results
             return_obj['success'] = True
             return_obj['data'] = formatted_result
             # Delete output files(search_id.csv, search_id.csv.metadata) in s3 bucket
@@ -174,6 +174,13 @@ class ResultsConnector(BaseResultsConnector):
                 formatted_result.append(service_log_dict)
             flattened_obj = dict()
             obj_to_unflatten = dict()
+        return formatted_result
+
+    def format_result_ocsf(self, results):
+        formatted_result = []
+        for obj in results:
+            formatted_result.append({'ocsf': obj} )
+
         return formatted_result
 
     def gen_dict_extract(self, key_to_search, var):
