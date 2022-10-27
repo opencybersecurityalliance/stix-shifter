@@ -1,6 +1,7 @@
 from stix_shifter.stix_translation import stix_translation
 import unittest
 import re
+import json
 
 translation = stix_translation.StixTranslation()
 
@@ -10,7 +11,7 @@ def _remove_timestamp_from_query(queries):
     for query in queries:
         for key, value in query.items():
             query = re.sub(r'AND\supdatedat\sBETWEEN\s(\'(\d{4})(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)Z\')\sAND\s\'(\d{4})'
-                           r'(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)Z\'|AND\sstarttime\sBETWEEN\s\d+\sAND\s\d+', "", value)
+                           r'(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)Z\'|AND\sstart\sBETWEEN\s\d+\sAND\s\d+', "", value)
             timestamp_removed.append({key: query})
     return timestamp_removed
 
@@ -50,7 +51,10 @@ class TestQueryTranslator(unittest.TestCase):
                          "AND '2020-10-30T10:43:10.003Z') LIMIT 10000"
         }, {
             "vpcflow": "((lower(sourceaddress) = lower('172.31.76.105') OR lower(destinationaddress) = "
-                       "lower('172.31.76.105')) AND starttime BETWEEN 1601541790 AND 1604054590) LIMIT 10000"
+                       "lower('172.31.76.105')) AND start BETWEEN 1601541790 AND 1604054590) LIMIT 10000"
+        },
+        {
+            "ocsf": "(lower(src_endpoint.intermediate_ips) = lower('172.31.76.105') AND _time BETWEEN 1601541790000 AND 1604054590000) LIMIT 10000"
         }]
         self._test_query_assertions(query, queries)
 
@@ -66,7 +70,7 @@ class TestQueryTranslator(unittest.TestCase):
                          "(lower('TCP'),lower('IGP')) AND updatedat BETWEEN '2020-10-01T08:43:10.003Z' AND "
                          "'2020-10-30T10:43:10.003Z') LIMIT 10000"
         }, {
-            "vpcflow": "(CAST(protocol AS varchar) IN ('6', '9') AND starttime BETWEEN 1601541790 AND 1604054590) "
+            "vpcflow": "(CAST(protocol AS varchar) IN ('6', '9') AND start BETWEEN 1601541790 AND 1604054590) "
                        "LIMIT 10000"
         }]
         self._test_query_assertions(query, queries)
@@ -83,7 +87,7 @@ class TestQueryTranslator(unittest.TestCase):
                          ")) LIKE lower('172.31.60.104') AND updatedat BETWEEN '2020-10-01T08:43:10.003Z' AND "
                          "'2020-10-30T10:43:10.003Z') LIMIT 10000"
         }, {
-            "vpcflow": "(lower(sourceaddress) LIKE lower('172.31.60.104') AND starttime BETWEEN 1601541790 AND "
+            "vpcflow": "(lower(sourceaddress) LIKE lower('172.31.60.104') AND start BETWEEN 1601541790 AND "
                        "1604054590) LIMIT 10000"
         }]
         self._test_query_assertions(query, queries)
@@ -101,7 +105,7 @@ class TestQueryTranslator(unittest.TestCase):
                          "'$.instancedetails.networkinterfaces.0.privateipaddress') as varchar), '\\d+') AND "
                          "updatedat BETWEEN '2020-10-01T08:43:10.003Z' AND '2020-10-30T10:43:10.003Z') LIMIT 10000"
         }, {
-            "vpcflow": "(REGEXP_LIKE(CAST(sourceaddress as varchar), '\\d+') AND starttime BETWEEN 1601541790 AND "
+            "vpcflow": "(REGEXP_LIKE(CAST(sourceaddress as varchar), '\\d+') AND start BETWEEN 1601541790 AND "
                        "1604054590) LIMIT 10000"
         }]
         self._test_query_assertions(query, queries)
@@ -144,9 +148,12 @@ class TestQueryTranslator(unittest.TestCase):
         }, {
             "vpcflow": "((((lower(sourceaddress) = lower('18.210.22.128') OR lower(destinationaddress) = "
                        "lower('18.210.22.128')) OR (lower(sourceaddress) = lower('172.31.60.104') OR "
-                       "lower(destinationaddress) = lower('172.31.60.104'))) AND starttime BETWEEN 1601541790 AND "
-                       "1604054590) UNION (CAST(sourceport AS varchar) = '22' AND starttime BETWEEN "
+                       "lower(destinationaddress) = lower('172.31.60.104'))) AND start BETWEEN 1601541790 AND "
+                       "1604054590) UNION (CAST(sourceport AS varchar) = '22' AND start BETWEEN "
                        "1601541790 AND 1604054590)) LIMIT 10000"
+        },
+        {
+            "ocsf": "((lower(src_endpoint.intermediate_ips) = lower('18.210.22.128') OR lower(src_endpoint.intermediate_ips) = lower('172.31.60.104')) AND _time BETWEEN 1601541790000 AND 1604054590000) LIMIT 10000"
         }]
         self._test_query_assertions(query, queries)
 
@@ -158,7 +165,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "t'2020-10-30T10:43:10.003Z'"
         query = translation.translate('aws_athena', 'query', '{}', stix_pattern)
         queries = [{
-            "vpcflow": "(CAST(starttime as REAL) >= 1601629810 AND starttime BETWEEN 1601541790 AND 1604054590) "
+            "vpcflow": "(CAST(starttime as REAL) >= 1601629810 AND start BETWEEN 1601541790 AND 1604054590) "
                        "LIMIT 10000"
         }]
         self._test_query_assertions(query, queries)
@@ -175,7 +182,7 @@ class TestQueryTranslator(unittest.TestCase):
                          ")) LIKE lower('172.31.60.104') AND updatedat BETWEEN '2020-10-01T08:43:10.003Z' AND "
                          "'2020-10-30T10:43:10.003Z') LIMIT 10000"
         }, {
-            "vpcflow": "(lower(sourceaddress) LIKE lower('172.31.60.104') AND starttime BETWEEN 1601541790 AND "
+            "vpcflow": "(lower(sourceaddress) LIKE lower('172.31.60.104') AND start BETWEEN 1601541790 AND "
                        "1604054590) LIMIT 10000"
         }]
         queries = _remove_timestamp_from_query(queries)
@@ -207,8 +214,12 @@ class TestQueryTranslator(unittest.TestCase):
         }, {
             "vpcflow": "((NOT lower(sourceaddress) = lower('172.31.60.104') OR (NOT lower(sourceaddress) = "
                        "lower('172.31.60.104') OR NOT lower(destinationaddress) = lower('172.31.60.104'))) AND "
-                       "starttime BETWEEN 1588322590 AND 1604054590) LIMIT 10000"
-        }]
+                       "start BETWEEN 1588322590 AND 1604054590) LIMIT 10000"
+        },
+        {
+            "ocsf": "(NOT lower(src_endpoint.intermediate_ips) = lower('172.31.60.104') AND _time BETWEEN 1588322590000 AND 1604054590000) LIMIT 10000"
+        }
+        ]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -223,8 +234,11 @@ class TestQueryTranslator(unittest.TestCase):
             "guardduty": "(lower(json_extract_scalar(service,'$.eventfirstseen')) = lower('2020-09-22T10:09:11Z') "
                          "AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-10-30T10:43:10.003Z') LIMIT 10000"
         }, {
-            "vpcflow": "(CAST(starttime AS varchar) = '1600769351' AND starttime BETWEEN 1588322590 AND 1604054590) "
+            "vpcflow": "(CAST(starttime AS varchar) = '1600769351' AND start BETWEEN 1588322590 AND 1604054590) "
                        "LIMIT 10000"
+        },
+        {
+            "ocsf": "(CAST(start_time AS varchar) = '1600769351' AND _time BETWEEN 1588322590000 AND 1604054590000) LIMIT 10000"
         }
         ]
         self._test_query_assertions(query, queries)
