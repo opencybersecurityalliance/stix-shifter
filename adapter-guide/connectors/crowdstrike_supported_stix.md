@@ -1,4 +1,4 @@
-##### Updated on 06/01/22
+##### Updated on 10/28/22
 ## CrowdStrike Falcon
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |

@@ -1,4 +1,4 @@
-##### Updated on 06/01/22
+##### Updated on 10/28/22
 ## Amazon Athena
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -28,6 +28,10 @@
 | domain-name | resolves_to_refs | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
 | domain-name | value | service_action_dnsrequestaction_domain |
 | <br> | | |
+| email-addr | value | email_addr |
+| <br> | | |
+| ipv4-addr | value | ip |
+| ipv4-addr | value | intermediate_ips |
 | ipv4-addr | value | sourceaddress |
 | ipv4-addr | x_aws_interface_id | sourceaddress |
 | ipv4-addr | value | destinationaddress |
@@ -56,6 +60,7 @@
 | ipv4-addr | x_aws_interface_id | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
 | ipv4-addr | x_aws_ip_type | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
 | <br> | | |
+| ipv6-addr | value | intermediate_ips |
 | ipv6-addr | value | sourceaddress |
 | ipv6-addr | x_aws_interface_id | sourceaddress |
 | ipv6-addr | value | destinationaddress |
@@ -75,8 +80,37 @@
 | network-traffic | dst_port | service_action_networkconnectionaction_remoteportdetails_port |
 | network-traffic | protocols | service_action_networkconnectionaction_protocol |
 | <br> | | |
+| software | extension.product.feature_name | name |
+| software | extension.product.feature_uid | uid |
+| software | extension.product.feature_version | version |
+| software | languages | lang |
+| software | name | name |
+| software | extension.product.path | path |
+| software | extension.product.uid | uid |
+| software | vendor | vendor_name |
+| software | version | version |
 | software | name | resource_instancedetails_platform |
 | <br> | | |
+| url | value | url |
+| <br> | | |
+| user-account | account_type | account_type |
+| user-account | extensions.aws-account-ext.account_type_id | account_type_id |
+| user-account | user_id | account_uid |
+| user-account | extensions.aws-account-ext.credential_uid | credential_uid |
+| user-account | extensions.aws-account-ext.domain | domain |
+| user-account | extensions.aws-account-ext.group_desc | desc |
+| user-account | extensions.aws-account-ext.group_name | name |
+| user-account | extensions.aws-account-ext.group_privileges | privileges |
+| user-account | extensions.aws-account-ext.group_type | type |
+| user-account | extensions.aws-account-ext.group_uid | uid |
+| user-account | display_name | name |
+| user-account | extensions.aws-account-ext.org_uid | org_uid |
+| user-account | extensions.aws-account-ext.session_uid | session_uid |
+| user-account | extensions.aws-account-ext.session_uuid | session_uuid |
+| user-account | extensions.aws-account-ext.type | type |
+| user-account | extensions.aws-account-ext.type_id | type_id |
+| user-account | extensions.aws-account-ext.uid | uid |
+| user-account | extensions.aws-account-ext.uuid | uuid |
 | user-account | user_id | resource_accesskeydetails_principalid |
 | user-account | account_login | resource_accesskeydetails_username |
 | <br> | | |
@@ -97,12 +131,20 @@
 | x-aws-vpc | security_group_id | resource_instancedetails_networkinterfaces_0_securitygroups_0_groupid |
 | x-aws-vpc | security_group_name | resource_instancedetails_networkinterfaces_0_securitygroups_0_groupname |
 | <br> | | |
+| x-ibm-finding | time_observed | _time |
+| x-ibm-finding | event_count | count |
+| x-ibm-finding | end | end_time |
+| x-ibm-finding | name | name |
+| x-ibm-finding | finding_type | type |
+| x-ibm-finding | alert_id | type_id |
+| x-ibm-finding | description | value |
+| x-ibm-finding | severity | severity_id |
+| x-ibm-finding | start | start_time |
 | x-ibm-finding | src_ip_ref | sourceaddress |
 | x-ibm-finding | dst_ip_ref | destinationaddress |
 | x-ibm-finding | start | starttime |
 | x-ibm-finding | end | endtime |
 | x-ibm-finding | finding_type | action |
-| x-ibm-finding | name | name |
 | x-ibm-finding | src_ip_ref | resource_instancedetails_networkinterfaces_0_privateipaddress |
 | x-ibm-finding | dst_ip_ref | service_action_networkconnectionaction_remoteipdetails_ipaddressv4 |
 | x-ibm-finding | dst_geolocation | service_action_networkconnectionaction_remoteipdetails_ipaddressv4 |
@@ -115,9 +157,120 @@
 | x-ibm-finding | src_ip_ref | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
 | x-ibm-finding | severity | severity |
 | x-ibm-finding | name | title |
-| x-ibm-finding | finding_type | type |
 | x-ibm-finding | description | description |
 | x-ibm-finding | src_os_ref | resource_instancedetails_platform |
 | x-ibm-finding | start | service_eventfirstseen |
 | x-ibm-finding | end | service_eventlastseen |
+| <br> | | |
+| x-oca-asset | ip_refs | intermediate_ips |
+| x-oca-asset | name | name |
+| x-oca-asset | extensions.x-oca-endpoint-ext.port | port |
+| x-oca-asset | extensions.x-oca-endpoint-ext.svc_name | svc_name |
+| <br> | | |
+| x-oca-event | action | activity |
+| x-oca-event | code | activity_id |
+| x-oca-event | action | category_name |
+| x-oca-event | code | category_uid |
+| x-oca-event | module | class_name |
+| x-oca-event | extensions.x-cloud-api.class_uid | class_uid |
+| x-oca-event | duration | duration |
+| x-oca-event | created | time |
+| x-oca-event | timezone | timezone_offset |
+| <br> | | |
+| x-ocsf-cloud | operation | operation |
+| x-ocsf-cloud | request_flags | flags |
+| x-ocsf-cloud | request_uid | uid |
+| x-ocsf-cloud | response_code | code |
+| x-ocsf-cloud | response_error | error |
+| x-ocsf-cloud | response_error_message | error_message |
+| x-ocsf-cloud | response_flags | flags |
+| x-ocsf-cloud | response_message | message |
+| x-ocsf-cloud | service_labels | labels |
+| x-ocsf-cloud | service_name | name |
+| x-ocsf-cloud | service_uid | uid |
+| x-ocsf-cloud | service_uid | version |
+| x-ocsf-cloud | api_version | version |
+| x-ocsf-cloud | account_type | account_type |
+| x-ocsf-cloud | account_type_id | account_type_id |
+| x-ocsf-cloud | account_uid | account_uid |
+| x-ocsf-cloud | org_uid | org_uid |
+| x-ocsf-cloud | project_uid | project_uid |
+| x-ocsf-cloud | provider | provider |
+| x-ocsf-cloud | region | region |
+| x-ocsf-cloud | resource_uid | resource_uid |
+| x-ocsf-cloud | zone | zone |
+| x-ocsf-cloud | message | message |
+| x-ocsf-cloud | profiles | profiles |
+| x-ocsf-cloud | raw_data | raw_data |
+| x-ocsf-cloud | ref_event_code | ref_event_code |
+| x-ocsf-cloud | ref_event_name | ref_event_name |
+| x-ocsf-cloud | ref_event_uid | ref_event_uid |
+| x-ocsf-cloud | ref_time | ref_time |
+| x-ocsf-cloud | severity | severity |
+| x-ocsf-cloud | status | status |
+| x-ocsf-cloud | status_code | status_code |
+| x-ocsf-cloud | status_detail | status_detail |
+| x-ocsf-cloud | status_id | status_id |
+| x-ocsf-cloud | type_name | type_name |
+| x-ocsf-cloud | type_uid | type_uid |
+| <br> | | |
+| x-ocsf-enrichments | data | data |
+| x-ocsf-enrichments | name | name |
+| x-ocsf-enrichments | provider | provider |
+| x-ocsf-enrichments | type | type |
+| x-ocsf-enrichments | value | value |
+| <br> | | |
+| x-ocsf-http-request | value | args |
+| x-ocsf-http-request | http_headers_name | name |
+| x-ocsf-http-request | http_headers_value | value |
+| x-ocsf-http-request | http_method | http_method |
+| x-ocsf-http-request | prefix | prefix |
+| x-ocsf-http-request | referrer | referrer |
+| x-ocsf-http-request | uid | uid |
+| x-ocsf-http-request | user_agent | user_agent |
+| x-ocsf-http-request | version | version |
+| x-ocsf-http-request | x_forwarded_for | x_forwarded_for |
+| <br> | | |
+| x-ocsf-identity | authorizations.decision | decision |
+| x-ocsf-identity | authorizations.policy_desc | desc |
+| x-ocsf-identity | authorizations.policy_group_desc | desc |
+| x-ocsf-identity | authorizations.policy_group_namee | name |
+| x-ocsf-identity | authorizations.policy_group_privileges | privileges |
+| x-ocsf-identity | authorizations.policy_group_type | type |
+| x-ocsf-identity | authorizations.policy_group_uid | uid |
+| x-ocsf-identity | authorizations.name | name |
+| x-ocsf-identity | authorizations.uid | uid |
+| x-ocsf-identity | authorizations.version | version |
+| x-ocsf-identity | idp.name | name |
+| x-ocsf-identity | idp.uid | uid |
+| x-ocsf-identity | invoked_by | invoked_by |
+| x-ocsf-identity | message | message |
+| x-ocsf-identity | session.created_time | created_time |
+| x-ocsf-identity | session.credential_uid | credential_uid |
+| x-ocsf-identity | session.expiration_time | expiration_time |
+| x-ocsf-identity | session.issuer | issuer |
+| x-ocsf-identity | session.mfa | mfa |
+| x-ocsf-identity | session.uid | uid |
+| <br> | | |
+| x-ocsf-metadata | correlation_uid | correlation_uid |
+| x-ocsf-metadata | labels | labels |
+| x-ocsf-metadata | logged_time | logged_time |
+| x-ocsf-metadata | modified_time | modified_time |
+| x-ocsf-metadata | processed_time | processed_time |
+| x-ocsf-metadata | sequence | sequence |
+| x-ocsf-metadata | uid | uid |
+| x-ocsf-metadata | version | version |
+| <br> | | |
+| x-ocsf-resources | account_uid | account_uid |
+| x-ocsf-resources | cloud_api_ref | account_uid |
+| x-ocsf-resources | cloud_partition | cloud_partition |
+| x-ocsf-resources | criticality | criticality |
+| x-ocsf-resources | details | details |
+| x-ocsf-resources | group_name | group_name |
+| x-ocsf-resources | labels | labels |
+| x-ocsf-resources | name | name |
+| x-ocsf-resources | owner | owner |
+| x-ocsf-resources | region | region |
+| x-ocsf-resources | type | type |
+| x-ocsf-resources | uid | uid |
 | <br> | | |
