@@ -2,6 +2,7 @@ from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_tr
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 from stix_shifter_modules.aws_athena.entry_point import EntryPoint
 import unittest
+import json
 
 MODULE = "aws_athena"
 entry_point = EntryPoint()
@@ -452,3 +453,45 @@ class TestAwsResultsToStix(unittest.TestCase):
         assert custom_object['partition'] == 'aws'
         assert custom_object['schemaversion'] == 2.0
         assert custom_object['updatedat'] == '2020-09-12T09:25:34.086Z'
+
+    def test_ocsf_translation_prop(self):
+        """
+        to test the common stix object properties
+        """
+        result_file = open('stix_shifter_modules/aws_athena/tests/stix_translation/json/ocsf_results.json', 'r').read()
+        data = json.loads(result_file)
+        
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
+
+        assert result_bundle['type'] == 'bundle'
+        result_bundle_objects = result_bundle['objects']
+
+        result_bundle_identity = result_bundle_objects[0]
+        assert result_bundle_identity['type'] == data_source['type']
+        assert result_bundle_identity['id'] == data_source['id']
+        assert result_bundle_identity['name'] == data_source['name']
+        assert result_bundle_identity['identity_class'] == data_source['identity_class']
+
+        observed_data = result_bundle_objects[1]
+        assert observed_data['id'] is not None
+        assert observed_data['type'] == "observed-data"
+        assert observed_data['created_by_ref'] == result_bundle_identity['id']
+        assert observed_data['created'] is not None
+        assert observed_data['modified'] is not None
+        assert observed_data['number_observed'] is not None
+
+        assert 'objects' in observed_data
+        objects = observed_data['objects']
+        user_account = TestAwsResultsToStix.get_first_of_type(objects.values(), 'user-account')
+        assert user_account is not None, 'user-account object type not found'
+        assert user_account.keys() == {'type', 'extensions', 'display_name', 'user_id'}
+        assert user_account['type'] == 'user-account'
+        assert user_account['user_id'] == '011222333553'
+        assert user_account['display_name'] == 'backup'
+
+        x_ibm_finding = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
+        assert x_ibm_finding is not None, 'x-ibm-finding object type not found'
+        assert x_ibm_finding.keys() == {'type', 'time_observed', 'severity'}
+        assert x_ibm_finding['time_observed'] == '2020-10-07T08:08:37.000Z'
+        assert x_ibm_finding['severity'] == 0
