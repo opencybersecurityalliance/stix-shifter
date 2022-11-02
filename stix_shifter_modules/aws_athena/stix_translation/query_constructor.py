@@ -11,6 +11,12 @@ TIMESTAMP_PATTERN = r"\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z"
 PROTOCOL_LOOKUP_JSON_FILE = 'json/network_protocol_map.json'
 GUARDDUTY_CONFIG = 'json/guardduty_config.json'
 
+ARRAY_TYPE_COLUMNS = {
+    'ocsf': {
+        'resources.': {'from': 'UNNEST(resources) as t(resource)', 'where': 'resource.'}
+    }
+}
+
 
 class QueryStringPatternTranslator:
 
@@ -20,7 +26,7 @@ class QueryStringPatternTranslator:
         self._time_range = time_range
         self.service_type = self.dmm.dialect
         self._protocol_lookup_needed = True if self.service_type in ['vpcflow'] else False
-        self._epoch_time = True if self.service_type in ['vpcflow'] else False
+        self._epoch_time = True if self.service_type in ['vpcflow', 'ocsf'] else False
         self.qualifier_string = ''
         self.translated = self.parse_expression(pattern)
 
@@ -257,18 +263,22 @@ class QueryStringPatternTranslator:
             if self.service_type == 'guardduty':
                 startstopattr = 'updatedat'
             elif self.service_type == 'vpcflow':
-                startstopattr = 'starttime'
+                startstopattr = 'start'
+            elif self.service_type == 'ocsf':
+                startstopattr = '_time'
+                start_stop_list[0] = int(start_stop_list[0]*1000)
+                start_stop_list[1] = int(start_stop_list[1]*1000)
 
-            qualifier_string = "AND {datetime_field} BETWEEN {starttime} AND " \
+            qualifier_string = "AND {datetime_field} BETWEEN {start} AND " \
                                "{stoptime}".format(datetime_field=startstopattr,
-                                                   starttime=start_stop_list[0],
+                                                   start=start_stop_list[0],
                                                    stoptime=start_stop_list[1])
             return qualifier_string
         except (KeyError, IndexError, TypeError) as e:
             raise e
 
     @staticmethod
-    def _parse_mapped_fields(expression, value, comparator, mapped_fields_array):
+    def _parse_mapped_fields(expression, value, comparator, mapped_fields_array, service_type):
         """
         Mapping the stix object with their corresponding property, from stix service type json will be used for
         mapping
@@ -289,6 +299,14 @@ class QueryStringPatternTranslator:
                 values = tuple(map(lambda x: "lower('{}')".format(x), value))
                 value = "({value})".format(value=','.join(values))
         for mapped_field in mapped_fields_array:
+
+            # Format UNNEST columns
+            if service_type in ARRAY_TYPE_COLUMNS:
+                for column_name, column in ARRAY_TYPE_COLUMNS[service_type].items():
+                    if mapped_field.startswith(column_name):
+                        mapped_field = '##' + column['from'] + '##' + mapped_field.replace(column_name, column['where'])
+                        break
+                    
             if (expression.comparator == ComparisonComparators.In and digit_chk) or \
                     (expression.comparator in [ComparisonComparators.Equal, ComparisonComparators.NotEqual,
                                                ComparisonComparators.Like] and str(value).isdigit()) or (
@@ -457,7 +475,7 @@ class QueryStringPatternTranslator:
             value = self._format_like(expression.value)
         else:
             value = expression.value
-        comparison_string = self._parse_mapped_fields(expression, value, comparator, mapped_fields_array)
+        comparison_string = self._parse_mapped_fields(expression, value, comparator, mapped_fields_array, self.service_type)
         return comparison_string
 
     def parse_expression(self, pattern: Pattern):
