@@ -13,6 +13,7 @@ class APIClient:
         if 'token' in self.auth:
             headers['Authorization'] = "Bearer " + self.auth.get('token')
         url_modifier_function = None
+        #Added self-signed certificate parameter for verification.
         self.client = RestApiClient(connection.get('host'),
                                     connection.get('port', None),
                                     headers,
