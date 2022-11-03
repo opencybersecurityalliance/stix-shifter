@@ -402,7 +402,7 @@ class QueryStringPatternTranslator:
         for values in value:
             split_field_name = original_field_name
             if original_field_name in self.config_map["enum_supported_fields"]:
-                if not re.match(r'^/(?s).*/$', values):
+                if not re.match(r'(?s).*/$', values):
                     values = values.upper()
                 mapped_field_type = "enum"
             if mapped_field_type == "enum":
