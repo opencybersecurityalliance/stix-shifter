@@ -7,7 +7,8 @@ import uuid
 # static lookup for athena service types
 service_types = {
                 'guardduty': ['guardduty_database_name', 'guardduty_table_name'],
-                'vpcflow': ['vpcflow_database_name', 'vpcflow_table_name']
+                'vpcflow': ['vpcflow_database_name', 'vpcflow_table_name'],
+                'ocsf': ['ocsf_database_name', 'ocsf_table_name']
                 }
 
 
@@ -44,8 +45,15 @@ class QueryConnector(BaseQueryConnector):
                 if config not in self.connection.keys():
                     raise InvalidParameterException("{} is required for {} query operation".format(config,
                                                                                                    query_service_type))
-            table_config = self.connection[config_details[0]] + "." + self.connection[config_details[1]]
-            select_statement = "SELECT * FROM %s WHERE " % (table_config)
+            table_config = self.connection[config_details[0]] + '."' + self.connection[config_details[1]] + '"'
+            other_tables = ''
+            match = re.search("##UNNEST.*?##", query[query_service_type])
+            if match and match.group():
+                match_str = str(match.group())
+                query[query_service_type] = query[query_service_type].replace(match_str, '')
+                other_tables = ', %s ' % match_str.replace('#', '')
+
+            select_statement = "SELECT %s.* FROM %s%s WHERE " % (table_config, table_config, other_tables)
             # for multiple observation operators union and intersect, select statement will be added
             if 'UNION' in query[query_service_type] or 'INTERSECT' in query[query_service_type]:
                 query_string = re.sub(r'\(\(', '(({}'.format(select_statement), query[query_service_type], 1)

@@ -16,6 +16,34 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 -------------------------------------
 
+## 4.4.0 (2022-10-06)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+*Add optional group parameter to connector configs [#1094](https://github.com/opencybersecurityalliance/stix-shifter/pull/1094)
+*Adding GCP Chronicle UDI Connector [#1075](https://github.com/opencybersecurityalliance/stix-shifter/pull/1075)
+*Update Secretserver mappings [#1092](https://github.com/opencybersecurityalliance/stix-shifter/pull/1092)
+*Connector template for lab [#1117](https://github.com/opencybersecurityalliance/stix-shifter/pull/1117)
+
+### Fixes:
+
+*Get rid of StixObjectIdEncoder [#1124](https://github.com/opencybersecurityalliance/stix-shifter/pull/1124)
+*Fixed IBM Security Verify config file [#1125](https://github.com/opencybersecurityalliance/stix-shifter/pull/1125)
+*edits to coding lab [#1120](https://github.com/opencybersecurityalliance/stix-shifter/pull/1120)
+*Update epoch time to 10 digits for demo data [#1119](https://github.com/opencybersecurityalliance/stix-shifter/pull/1119)
+*update coding lab [#1114](https://github.com/opencybersecurityalliance/stix-shifter/pull/1114)
+*Lab fixes [#1116](https://github.com/opencybersecurityalliance/stix-shifter/pull/1116)
+
+### Dependency update:
+
+*Bump colorlog from 6.6.0 to 6.7.0 in /stix_shifter [#1095](https://github.com/opencybersecurityalliance/stix-shifter/pull/1095)
+
+--------------------------------------
+
 ## 4.3.0 (2022-09-09)
 
 ### Breaking changes:
