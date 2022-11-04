@@ -1,5 +1,5 @@
 ##### Updated on 11/04/22
-## Secret Server
+## IBM Security Verify Privilege Vault
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
 |--|--|
