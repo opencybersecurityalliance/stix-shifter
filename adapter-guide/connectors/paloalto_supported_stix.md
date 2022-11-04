@@ -1,4 +1,4 @@
-##### Updated on 06/01/22
+##### Updated on 11/04/22
 ## PaloAlto Cortex XDR
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -15,7 +15,85 @@
 | <= | <= |
 | IN | in |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties for Xdr_data
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **ipv4-addr**:value | action_local_ip, action_remote_ip, agent_ip_addresses |
+| **ipv6-addr**:value | agent_ip_addresses_v6, dst_agent_ip_addresses_v6 |
+| **network-traffic**:src_port | action_local_port |
+| **network-traffic**:dst_port | action_remote_port |
+| **network-traffic**:protocols[*] | action_network_protocol |
+| **network-traffic**:src_ref.value | action_local_ip, agent_ip_addresses |
+| **network-traffic**:dst_ref.value | action_remote_ip |
+| **network-traffic**:src_packets | action_pkts_sent |
+| **network-traffic**:dst_packets | action_pkts_received |
+| **file**:name | action_file_name, action_process_image_name, actor_process_image_name, causality_actor_process_image_name, os_actor_process_image_name |
+| **file**:size | action_file_size |
+| **file**:hashes.MD5 | action_file_md5, action_module_md5, action_process_image_md5 |
+| **file**:hashes.'SHA-1' | action_file_authenticode_sha1 |
+| **file**:hashes.'SHA-2' | action_file_authenticode_sha2 |
+| **file**:hashes.'SHA-256' | action_file_sha256, action_module_sha256, action_process_image_sha256 |
+| **file**:accessed | action_file_access_time, actor_process_file_access_time, os_actor_process_file_access_time |
+| **file**:modified | action_file_mod_time, actor_process_file_mod_time, os_actor_process_file_mod_time |
+| **file**:created | action_file_create_time |
+| **file**:parent_directory_ref.path | action_file_path, action_process_image_path, action_registry_file_path, actor_process_image_path, causality_actor_process_image_path, os_actor_process_image_path |
+| **directory**:path | action_file_path, action_process_image_path, action_registry_file_path, actor_process_image_path, causality_actor_process_image_path, os_actor_process_image_path |
+| **process**:command_line | action_process_image_command_line, actor_process_command_line, causality_actor_process_command_line, os_actor_process_command_line |
+| **process**:created | action_process_file_create_time, actor_process_file_create_time, causality_actor_process_file_create_time, os_actor_process_file_create_time |
+| **process**:name | action_process_image_name, actor_process_image_name, causality_actor_process_image_name, os_actor_process_image_name |
+| **process**:pid | action_module_process_os_pid, action_process_os_pid, actor_process_os_pid, causality_actor_process_os_pid, os_actor_process_os_pid, action_process_requested_parent_pid, action_thread_parent_pid, action_thread_child_pid |
+| **process**:parent_ref.pid | action_process_requested_parent_pid, action_thread_parent_pid |
+| **process**:child_refs.pid | action_thread_child_pid |
+| **process**:creator_user_ref.user_id | action_process_username |
+| **process**:parent_ref.name | causality_actor_process_image_name, os_actor_process_image_name |
+| **process**:binary_ref.name | action_process_image_name, actor_process_image_name |
+| **process**:binary_ref.hashes.MD5 | action_process_image_md5 |
+| **process**:binary_ref.hashes.'SHA-256' | action_process_image_sha256 |
+| **process**:binary_ref.parent_directory_ref.path | action_process_image_path, actor_process_image_path, causality_actor_process_image_path, os_actor_process_image_path |
+| **domain-name**:value | auth_domain, dst_host_metadata_domain, host_metadata_domain |
+| **url**:value | dst_action_url_category |
+| **windows-registry-key**:key | action_registry_key_name |
+| **windows-registry-key**:values[*] | action_registry_value_name |
+| **mac-addr**:value | mac, associated_mac, dst_associated_mac, dst_mac |
+| **user-account**:user_id | actor_primary_user_sid, action_process_user_sid |
+| **user-account**:display_name | actor_primary_username, action_process_username |
+| **user-account**:account_login | actor_process_logon_id |
+| **x-paloalto-file**:extension | action_file_extension |
+| **x-paloalto-file**:file_description | action_file_info_description |
+| **x-paloalto-process**:extension | actor_process_image_extension |
+| **x-paloalto-process**:execution_time | action_process_instance_execution_time, actor_process_execution_time |
+| **x-oca-asset**:hostname | agent_hostname |
+| **x-oca-asset**:ip_refs[*].value | action_local_ip, action_remote_ip, agent_ip_addresses_v6, agent_ip_addresses, dst_agent_ip_addresses_v6 |
+| **x-oca-asset**:mac_refs[*].value | mac, associated_mac, dst_associated_mac, dst_mac |
+| **x-paloalto-evtlog**:description | action_evtlog_description |
+| **x-paloalto-evtlog**:message | action_evtlog_message |
+| **x-oca-event**:code | event_id |
+| **x-oca-event**:category[*] | event_type |
+| **x-oca-event**:action | event_sub_type |
+| **x-oca-event**:created | event_timestamp |
+| **x-oca-event**:agent | agent_hostname |
+| **x-oca-event**:url_ref.value | dst_action_url_category |
+| **x-oca-event**:file_ref.name | action_file_name |
+| **x-oca-event**:process_ref.pid | action_module_process_os_pid, action_process_os_pid, actor_process_os_pid, causality_actor_process_os_pid, os_actor_process_os_pid |
+| **x-oca-event**:process_ref.name | action_process_image_name, actor_process_image_name |
+| **x-oca-event**:process_ref.command_line | action_process_image_command_line, actor_process_command_line |
+| **x-oca-event**:process_ref.binary_ref.name | action_process_image_name, actor_process_image_name |
+| **x-oca-event**:process_ref.parent_ref.name | causality_actor_process_command_line, os_actor_process_command_line |
+| **x-oca-event**:process_ref.parent_ref.pid | action_process_requested_parent_pid, action_thread_parent_pid |
+| **x-oca-event**:process_ref.parent_ref.command_line | causality_actor_process_command_line, os_actor_process_command_line |
+| **x-oca-event**:parent_process_ref.name | causality_actor_process_image_name, os_actor_process_image_name |
+| **x-oca-event**:parent_process_ref.pid | action_process_requested_parent_pid, action_thread_parent_pid |
+| **x-oca-event**:parent_process_ref.command_line | causality_actor_process_command_line, os_actor_process_command_line |
+| **x-oca-event**:process_ref.creator_user_ref.user_id | action_process_username |
+| **x-oca-event**:process_ref.binary_ref.hashes.MD5 | action_process_image_md5 |
+| **x-oca-event**:process_ref.binary_ref.hashes.'SHA-256' | action_process_image_sha256 |
+| **x-oca-event**:domain_ref.value | auth_domain, dst_host_metadata_domain, host_metadata_domain |
+| **x-oca-event**:registry_ref.key | action_registry_key_name |
+| **x-oca-event**:registry_ref.values[*] | action_registry_value_name |
+| **x-paloalto-network**:creation_time | action_network_creation_time |
+| **x-paloalto-network**:hostname | host_metadata_hostname, action_external_hostname |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | action_file_path |
