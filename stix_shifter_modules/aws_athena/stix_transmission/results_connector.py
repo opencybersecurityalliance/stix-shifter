@@ -14,70 +14,119 @@ class AccessDeniedException(Exception):
 
 
 class ResultsConnector(BaseResultsConnector):
+    # https://docs.aws.amazon.com/athena/latest/APIReference/API_GetQueryResults.html#API_GetQueryResults_RequestSyntax
+    # Athena MaxResults count is 1000 when calling get_query_results
+    ATHENA_MAX_RESULTS_SIZE = 1000
+
     def __init__(self, client, s3_client):
         self.client = client
         self.s3_client = s3_client
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_results_connection(self, search_id, offset, length):
+    def create_results_connection(self, search_id, offset, length, metadata=None):
         """
         Fetching the results using search id, offset and length
         :param search_id: str, search id generated in transmit query
-        :param offset: str, offset value
+        :param offset: str, offset value, not used in AWS requests
         :param length: str, length value
+        :param metadata: str, None or string in format "<NextToken>:::json(<schema_columns>)"
         :return: dict
         """
+
         return_obj = dict()
         response_dict = dict()
         try:
-            offset = int(offset)
-            length = int(length)
-            total_records = offset+length
-            search_id, service_type = search_id.split(':')[0], search_id.split(':')[1]
-            if 'dummy' in search_id:
-                return_obj = {'success': True, 'data': []}
-                return return_obj
-            paginator = self.client.get_paginator('get_query_results')
-            get_query_response = paginator.paginate(QueryExecutionId=search_id)
+            next_page_token = None
+            schema_columns = []
             result_response_list = []
-            for page in get_query_response:
-                result_response_list.extend(page['ResultSet']['Rows'])
-            # Formatting the response from api
-            schema_columns = result_response_list[0]['Data']
-            schema_columns = [list(x.values()) for x in schema_columns]
-            schema_columns_list = [column_name for sublist in schema_columns for column_name in sublist]
-            schema_row_values = result_response_list[1:]
-            result_list = []
-            for row in schema_row_values:
-                row_values = [list('-') if list(x.values()) == [] else list(x.values()) for x in row['Data']]
-                row_value_list = [row_value for sublist in row_values for row_value in sublist]
-                response_dict = dict(zip(schema_columns_list, row_value_list))
-                result_list.append(response_dict)
-            results = result_list[offset:total_records]
-            # Flattening the response
-            if service_type == 'ocsf':
-                formatted_result = self.format_result_ocsf(results)
+            process_on = True
+
+            if metadata:
+                next_page_token, schema_columns_str = metadata.split(':::')
+                schema_columns = json.loads(schema_columns_str)
+
+            if next_page_token == 'COMPLETE': # we got to the end of the iteration, stop here
+                return_obj['success'] = True
+                return_obj['data'] = []
             else:
-                flatten_result_cleansed = self.flatten_result(results, service_type)
-                # Unflatten results using to_stix_map keys to avoid lengthy key value
-                formatted_result = self.format_result(flatten_result_cleansed, service_type)
-            return_obj['success'] = True
-            return_obj['data'] = formatted_result
-            # Delete output files(search_id.csv, search_id.csv.metadata) in s3 bucket
-            get_query_response = self.client.get_query_execution(QueryExecutionId=search_id)
-            s3_output_location = get_query_response['QueryExecution']['ResultConfiguration']['OutputLocation']
-            s3_output_bucket_with_file = s3_output_location.split('//')[1]
-            s3_output_bucket = s3_output_bucket_with_file.split('/')[0]
-            s3_output_key = '/'.join(s3_output_bucket_with_file.split('/')[1:])
-            s3_output_key_metadata = s3_output_key + '.metadata'
-            delete = dict()
-            delete['Objects'] = [{'Key': s3_output_key}, {'Key': s3_output_key_metadata}]
-            # Api call to delete s3 object
-            delete_object = self.s3_client.delete_objects(Bucket=s3_output_bucket, Delete=delete)
-            if delete_object.get('Errors'):
-                message = delete_object.get('Errors')[0].get('Message')
-                raise AccessDeniedException(message)
+                length = int(length)
+
+                search_id, service_type = search_id.split(':')[0], search_id.split(':')[1]
+                if 'dummy' in search_id:
+                    return_obj = {'success': True, 'data': []}
+                    return return_obj
+                    
+                if length > self.ATHENA_MAX_RESULTS_SIZE:
+                    page_size = self.ATHENA_MAX_RESULTS_SIZE
+                else:
+                    page_size = length
+
+                received_result_count = 0
+                while process_on:
+                    if received_result_count + page_size > length:
+                        page_size = length - received_result_count
+
+                    if next_page_token:
+                        result = self.client.get_query_results(QueryExecutionId=search_id, NextToken=next_page_token, MaxResults=page_size)
+                    else:
+                        result = self.client.get_query_results(QueryExecutionId=search_id, MaxResults=page_size)
+
+                    if 'NextToken' in result and len(result['NextToken']) > 1:
+                        next_page_token = result['NextToken']
+                    else:
+                        next_page_token = 'COMPLETE'
+                        process_on = False
+
+                    if not schema_columns: # this means that this is the first call for the search_id and the first row will contain schema_columns
+                        schema_columns = result['ResultSet']['Rows'][0]['Data']
+                        result_response_list.extend(result['ResultSet']['Rows'][1:])
+                    else:
+                        result_response_list.extend(result['ResultSet']['Rows'])
+
+                    received_result_count = len(result_response_list)
+
+                    if received_result_count >= length:
+                        process_on = False
+
+                schema_columns_list = [list(x.values()) for x in schema_columns]
+                schema_columns_list = [column_name for sublist in schema_columns_list for column_name in sublist]
+                schema_row_values = result_response_list
+                result_list = []
+                for row in schema_row_values:
+                    row_values = [list('-') if list(x.values()) == [] else list(x.values()) for x in row['Data']]
+                    row_value_list = [row_value for sublist in row_values for row_value in sublist]
+                    response_dict = dict(zip(schema_columns_list, row_value_list))
+                    result_list.append(response_dict)
+                results = result_list
+
+                # Flattening the response
+                if service_type == 'ocsf':
+                    formatted_result = self.format_result_ocsf(results)
+                else:
+                    flatten_result_cleansed = self.flatten_result(results, service_type)
+                    # Unflatten results using to_stix_map keys to avoid lengthy key value
+                    formatted_result = self.format_result(flatten_result_cleansed, service_type)
+                return_obj['success'] = True
+                return_obj['data'] = formatted_result
+
+                if next_page_token:
+                    return_obj['metadata'] = next_page_token + ':::' + json.dumps(schema_columns)
+                if next_page_token == 'COMPLETE':
+                    # Delete output files(search_id.csv, search_id.csv.metadata) in s3 bucket
+                    get_query_response = self.client.get_query_execution(QueryExecutionId=search_id)
+                    s3_output_location = get_query_response['QueryExecution']['ResultConfiguration']['OutputLocation']
+                    s3_output_bucket_with_file = s3_output_location.split('//')[1]
+                    s3_output_bucket = s3_output_bucket_with_file.split('/')[0]
+                    s3_output_key = '/'.join(s3_output_bucket_with_file.split('/')[1:])
+                    s3_output_key_metadata = s3_output_key + '.metadata'
+                    delete = dict()
+                    delete['Objects'] = [{'Key': s3_output_key}, {'Key': s3_output_key_metadata}]
+                    # Api call to delete s3 object
+                    delete_object = self.s3_client.delete_objects(Bucket=s3_output_bucket, Delete=delete)
+                    if delete_object.get('Errors'):
+                        message = delete_object.get('Errors')[0].get('Message')
+                        raise AccessDeniedException(message)
         except Exception as ex:
             return_obj = dict()
             response_dict['__type'] = ex.__class__.__name__
