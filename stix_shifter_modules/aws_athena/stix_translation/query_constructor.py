@@ -490,8 +490,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     :param options: dict, time_range defaults to 5 and result_limit defaults to 10000
     :return: dict, AWS Athena SQL query
     """
-    result_limit = options['result_limit']
     time_range = options['time_range']
     query = QueryStringPatternTranslator(pattern, data_model_mapping, time_range)
-    query_string = "({condition}) LIMIT {result_limit}".format(condition=query.translated, result_limit=result_limit)
+    query_string = "({condition})".format(condition=query.translated)
     return [{query.service_type: query_string}]
