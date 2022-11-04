@@ -1,4 +1,4 @@
-##### Updated on 09/09/22
+##### Updated on 11/04/22
 ## IBM Security Verify
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -7,7 +7,58 @@
 | = | = |
 | IN | = |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **user-account**:user_id | data.user_id |
+| **user-account**:account_login | data.username |
+| **user-account**:account_type | data.sourcetype |
+| **ipv4-addr**:value | data.origin |
+| **domain-name**:type | domain-name |
+| **domain-name**:value | tenantname |
+| **x-oca-event**:action | data.action |
+| **x-oca-event**:category | event_type |
+| **x-oca-event**:module | servicename |
+| **x-oca-event**:outcome | data.result |
+| **x-oca-event**:agent | data.sourcetype |
+| **x-oca-event**:ip_refs[*].value | ip |
+| **x-oca-event**:domain_ref.value | tenantname |
+| **x-oca-event**:user_ref | username |
+| **x-oca-event**:provider | ', I, B, M,  , S, e, c, u, r, i, t, y,  , V, e, r, i, f, y,  , E, v, e, n, t, ' |
+| **x-oca-event**:extensions.'x-iam-ext'.subcategory | data.subtype |
+| **x-oca-event**:extensions.'x-iam-ext'.realm | data.realm |
+| **x-oca-event**:extensions.'x-iam-ext'.browser_agent | data.devicetype |
+| **x-oca-event**:extensions.'x-iam-ext'.provider_id | data.providerid |
+| **x-oca-event**:extensions.'x-iam-ext'.application_id | data.applicationid |
+| **x-oca-event**:extensions.'x-iam-ext'.application_type | data.applicationtype |
+| **x-oca-event**:extensions.'x-iam-ext'.application_name | data.applicationname |
+| **x-oca-event**:extensions.'x-iam-ext'.cause | data.cause |
+| **x-oca-event**:extensions.'x-iam-ext'.target | data.target |
+| **x-oca-event**:extensions.'x-iam-ext'.deleted | data.deleted |
+| **x-oca-event**:extensions.'x-iam-ext'.performedby_clientname | data.performedby_clientname |
+| **x-oca-event**:extensions.'x-iam-ext'.performedby_realm | data.performedby_realm |
+| **x-oca-event**:extensions.'x-iam-ext'.performedby_username | data.performedby_username |
+| **x-oca-event**:extensions.'x-iam-ext'.targetid | data.targetid |
+| **x-oca-event**:extensions.'x-iam-ext'.targetid_realm | data.targetid_realm |
+| **x-oca-event**:extensions.'x-iam-ext'.targetid_username | data.targetid_username |
+| **x-oca-event**:extensions.'x-iam-ext'.continent_name | geoip.continent_name |
+| **x-oca-event**:extensions.'x-iam-ext'.country_iso_code | geoip.country_iso_code |
+| **x-oca-event**:extensions.'x-iam-ext'.country_name | geoip.country_name |
+| **x-oca-event**:extensions.x-iam-ext.location_lon | geoip.lon |
+| **x-oca-event**:extensions.'x-iam-ext'.location_lat | geoip.lat |
+| **x-oca-event**:extensions.'x-iam-ext'.city_name | geoip.city_name |
+| **x-oca-event**:extensions.'x-iam-ext'.policy_action | data.policy_action |
+| **x-oca-event**:extensions.'x-iam-ext'.policy_name | data.policy_name |
+| **x-oca-event**:extensions.'x-iam-ext'.rule_name | data.rule_name |
+| **x-oca-event**:extensions.'x-iam-ext'.decision_reason | data.decision_reason |
+| **x-oca-event**:extensions.'x-iam-ext'.risk_level | data.risk_level |
+| **x-oca-event**:extensions.'x-iam-ext'.risk_score | data.risk_score |
+| **x-oca-event**:extensions.'x-iam-ext'.deviceid | data.deviceid |
+| **x-oca-event**:extensions.'x-iam-ext'.is_device_compliant | data.mdmiscompliant |
+| **x-oca-event**:extensions.'x-iam-ext'.is_device_managed | data.mdmismanaged |
+| **x-oca-event**:extensions.'x-iam-ext'.mdm_customerid | data.billingid |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | domain-name | value | tenantname |
