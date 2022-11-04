@@ -382,7 +382,7 @@ class TestAWSConnection(unittest.TestCase):
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.boto3.client')
     def test_create_query_connection(mock_start_query):
         mock_start_query.return_value = AWSMockJsonResponse()
-        query = """{"vpcflow": "endtime >= 1588310653 AND starttime BETWEEN 1588322590 AND 1604054590 LIMIT 10000"}"""
+        query = """{"vpcflow": "endtime >= 1588310653 AND starttime BETWEEN 1588322590 AND 1604054590"}"""
         transmission = stix_transmission.StixTransmission('aws_athena', CONNECTION, CONFIGURATION)
         query_response = transmission.query(query)
 
@@ -396,7 +396,7 @@ class TestAWSConnection(unittest.TestCase):
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.boto3.client')
     def test_create_query_exception(mock_start_query):
         mock_start_query.return_value = MockExceptionResponse()
-        query = """{"vpcflow": "endtime >= 1588310653 AND starttime BETWEEN 1588322590 AND 1604054590 LIMIT 10000"}"""
+        query = """{"vpcflow": "endtime >= 1588310653 AND starttime BETWEEN 1588322590 AND 1604054590"}"""
         transmission = stix_transmission.StixTransmission('aws_athena', CONNECTION, CONFIGURATION)
         query_response = transmission.query(query)
 
