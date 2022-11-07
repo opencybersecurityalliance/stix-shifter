@@ -9,7 +9,10 @@
   "ipv4-addr": {
     "fields": {
       "value": [
-        "src_endpoint.intermediate_ips"
+        "src_endpoint.ip",
+        "dst_endpoint.ip",
+        "src_endpoint.intermediate_ips",
+        "dst_endpoint.intermediate_ips"
       ]
     }
   },
@@ -163,7 +166,9 @@
   "x-oca-event": {
     "fields": {
       "action": [
-        "activity",
+        "activity"
+      ],
+      "category": [
         "category_name"
       ],
       "code": [

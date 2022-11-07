@@ -112,7 +112,7 @@
       }
     },
     "category_name": {
-      "key": "x-oca-event.action",
+      "key": "x-oca-event.category",
       "object": "x_oca_event",
       "type_hint": "string"
     },

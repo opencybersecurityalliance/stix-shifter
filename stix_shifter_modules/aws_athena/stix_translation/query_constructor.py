@@ -13,7 +13,9 @@ GUARDDUTY_CONFIG = 'json/guardduty_config.json'
 
 ARRAY_TYPE_COLUMNS = {
     'ocsf': {
-        'resources.': {'from': 'UNNEST(resources) as t(resource)', 'where': 'resource.'}
+        'resources.': {'from': 'UNNEST(resources) as t(resource)', 'where': 'resource.'},
+        'src_endpoint.intermediate_ips.': {'from': 'UNNEST(src_endpoint.intermediate_ips) as t(src_intermediate_ips)', 'where': 'src_intermediate_ips.'},
+        'dst_endpoint.intermediate_ips.': {'from': 'UNNEST(dst_endpoint.intermediate_ips) as t(dst_intermediate_ips)', 'where': 'dst_intermediate_ips.'}
     }
 }
 
@@ -265,7 +267,7 @@ class QueryStringPatternTranslator:
             elif self.service_type == 'vpcflow':
                 startstopattr = 'start'
             elif self.service_type == 'ocsf':
-                startstopattr = '_time'
+                startstopattr = 'time'
                 start_stop_list[0] = int(start_stop_list[0]*1000)
                 start_stop_list[1] = int(start_stop_list[1]*1000)
 
