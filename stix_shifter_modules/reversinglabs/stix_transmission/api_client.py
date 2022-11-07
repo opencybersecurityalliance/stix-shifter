@@ -1,4 +1,4 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 import json
 import hashlib
 from aiohttp import BasicAuth
@@ -15,7 +15,7 @@ class APIClient():
 
         connection['host'] = 'data.reversinglabs.com'
         url_modifier_function = None
-        self.client = RestApiClient(host=connection.get('host'),
+        self.client = RestApiClientAsync(host=connection.get('host'),
                                     port=None,
                                     headers=headers,
                                     url_modifier_function=url_modifier_function,

@@ -1398,7 +1398,7 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['status'] == "RUNNING"
         assert ping_response['progress'] is not None
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host_ping(self, mock_ping):
         """Test Invalid host"""
         mock_ping.side_effect = ClientConnectionError("Invalid Host")
@@ -1408,7 +1408,7 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['success'] is False
         assert "Invalid Host" in ping_response['error']
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host_status(self, mock_ping):
         """Test Invalid host"""
         mock_ping.side_effect = ClientConnectionError("Invalid Host")
@@ -1419,7 +1419,7 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['success'] is False
         assert "Invalid Host" in ping_response['error']
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host_query(self, mock_create_search):
         """ test to check query of process """
 
@@ -1440,7 +1440,7 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response['success'] is False
         assert "Invalid Host" in query_response['error']
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host_result(self, mock_result):
         """Test Invalid host"""
         mock_result.side_effect = ClientConnectionError("Invalid Host")

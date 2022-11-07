@@ -1,7 +1,7 @@
 import time
 from datetime import datetime, timedelta
 import json
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
@@ -16,7 +16,7 @@ class APIClient:
         self.connector = __name__.split('.')[1]
         self.auth = configuration.get('auth')
         headers = {'Accept': 'application/json'}
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port'),
                                     headers,
                                     cert_verify=connection.get('selfSignedCert', True)

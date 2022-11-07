@@ -36,7 +36,7 @@ class TestTransmission(unittest.TestCase):
     ###############################
     ## PING
     ###############################
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping(self, mock_ping):
         response = {"threat": [{"id": "3a7c0318-e985-11eb-93d6-438342be5508","type": "HOST","host": "xbug.uk.to"}],"record_count": 1}
         mock_ping.side_effect = [get_mock_response(200, json.dumps(response), 'byte')]
@@ -44,7 +44,7 @@ class TestTransmission(unittest.TestCase):
         ping_response = transmission.ping()
         self.assertEqual(ping_response, {'success': True})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping_failure(self, mock_ping):
         response = {"error": [{"message": "Invalid type hst --- type must be one of (host, ip, url, email, hash)"}]}
         mock_ping.side_effect = [get_mock_response(400, json.dumps(response), 'byte')]
@@ -52,7 +52,7 @@ class TestTransmission(unittest.TestCase):
         ping_response = transmission.ping()
         self.assertEqual(ping_response, {'code': 'invalid_parameter','connector': 'infoblox','error': 'infoblox connector error => {"error": [{"message": "Invalid type hst --- type must be one of (host, ip, url, email, hash)"}]}','success': False})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping_auth_failure(self, mock_ping):
         response = '<html><head><title>401 Authorization Required</title></head><body><center><h1>401 Authorization Required</h1></center><hr><center>nginx</center></body></html>'
         mock_ping.side_effect = [get_mock_response(401, response, 'byte')]
@@ -63,7 +63,7 @@ class TestTransmission(unittest.TestCase):
             'error': 'infoblox connector error => <html><head><title>401 Authorization Required</title></head><body><center><h1>401 Authorization Required</h1></center><hr><center>nginx</center></body></html>',
             'success': False})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping_unknown_failure(self, mock_ping):
         response = {"error": {"code": "InternalError",}}
         mock_ping.side_effect = [get_mock_response(503, json.dumps(response), 'byte')]
@@ -71,7 +71,7 @@ class TestTransmission(unittest.TestCase):
         ping_response = transmission.ping()
         self.assertEqual(ping_response, {'code': 'unknown','connector': 'infoblox','error': 'infoblox connector error => {"error": {"code": "InternalError"}}','success': False})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping_unknown_code(self, mock_ping):
         response = {"error": {"code": "InternalError",}}
         mock_ping.side_effect = [get_mock_response(None, json.dumps(response), 'byte')]
@@ -79,7 +79,7 @@ class TestTransmission(unittest.TestCase):
         ping_response = transmission.ping()
         self.assertEqual(ping_response, {'code': 'unknown','connector': 'infoblox','error': 'infoblox connector error => {"error": {"code": "InternalError"}}','success': False})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping_exception(self, mock_ping):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
@@ -153,7 +153,7 @@ class TestDnsEventTransmission(unittest.TestCase):
 
         return json.dumps(response)
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_invalid_param(self, mock_query):
         payload = {"error": [{"message": "Invalid arguments, t0/t1 are required parameters"}]}
         mock_query.side_effect = [get_mock_response(400, json.dumps(payload))]
@@ -161,7 +161,7 @@ class TestDnsEventTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(), 0, 10)
         self.assertEqual(results_response, {"code": "invalid_parameter", 'connector': 'infoblox', "error": 'infoblox connector error => '+ payload["error"][0]["message"],"success": False})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_auth_failure(self, mock_query):
         payload = '<html><head><title>401 Authorization Required</title></head><body><center><h1>401 Authorization Required</h1></center><hr><center>nginx</center></body></html>'
         mock_query.side_effect = [get_mock_response(401, payload, 'byte')]
@@ -169,7 +169,7 @@ class TestDnsEventTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(), 0, 10)
         self.assertEqual(results_response, {"code": "authentication_fail", 'connector': 'infoblox', "error": 'infoblox connector error => '+payload,"success": False})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_no_results(self, mock_query):
         payload = {"result": [],"status_code": "200"}
         mock_query.side_effect = [get_mock_response(200, json.dumps(payload))]
@@ -177,7 +177,7 @@ class TestDnsEventTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(), 0, 10)
         self.assertEqual(results_response, {'data': [], 'success': True})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_all_results(self, mock_query):
         payload = {"result": [{"qip": "1.1.1.1"},{"qip": "1.1.1.2"}],"status_code": "200"}
         mock_query.side_effect = [get_mock_response(200, json.dumps(payload))]
@@ -185,7 +185,7 @@ class TestDnsEventTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(), 0, 1)
         self.assertEqual(results_response, {"success": True,"data": [{"dnsEventData": {"qip": "1.1.1.1"}}]})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_max_fetch(self, mock_query):
         mock_query.side_effect = [get_mock_response(200, json.dumps({"result": [{"qip": "1.1.1.1"}]})),get_mock_response(200, json.dumps({"result": [{"qip": "1.1.1.2"}]})),
                 get_mock_response(200, json.dumps({"result": [{"qip": "1.1.1.3"}]})),get_mock_response(200, json.dumps({"result": [{"qip": "1.1.1.4"}]})),
@@ -200,7 +200,7 @@ class TestDnsEventTransmission(unittest.TestCase):
                 {"dnsEventData": {"qip": "1.1.1.5"}},{"dnsEventData": {"qip": "1.1.1.6"}},{"dnsEventData": {"qip": "1.1.1.7"}},{"dnsEventData": {"qip": "1.1.1.8"}},
                 {"dnsEventData": {"qip": "1.1.1.9"}},{"dnsEventData": {"qip": "1.1.1.10"}}]})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_too_many_results(self, mock_query):
         mock_query.side_effect = [
                 get_mock_response(200, json.dumps({"result": [{"qip": "1.1.1.1"}, {"qip": "1.1.1.2"}]})),get_mock_response(200, json.dumps({"result": [{"qip": "1.1.1.3"}, {"qip": "1.1.1.4"}]})),
@@ -211,7 +211,7 @@ class TestDnsEventTransmission(unittest.TestCase):
         self.assertEqual(results_response, {"success": True,"data": [
                 {"dnsEventData": {"qip": "1.1.1.1"}},{"dnsEventData": {"qip": "1.1.1.2"}},{"dnsEventData": {"qip": "1.1.1.3"}},{"dnsEventData": {"qip": "1.1.1.4"}}]})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_min_range(self, mock_query):
         mock_query.side_effect = [
                 get_mock_response(200, json.dumps({"result": [{"qip": "1.1.1.5"}, {"qip": "1.1.1.6"}]})),
@@ -222,7 +222,7 @@ class TestDnsEventTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(), 4, 3)
         self.assertEqual(results_response, {"success": True,"data": [{"dnsEventData": {"qip": "1.1.1.5"}},{"dnsEventData": {"qip": "1.1.1.6"}},{"dnsEventData": {"qip": "1.1.1.7"}}]})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_different_offsets(self, mock_results):
         mocks = [(get_mock_response(200, self._get_response(500)))]
 
@@ -311,7 +311,7 @@ class TestDnsEventTransmission(unittest.TestCase):
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 1)
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_exception(self, mock_ping):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
@@ -347,7 +347,7 @@ class TestDossierTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(), 0, 10)
         self.assertEqual(results_response, {'code': 'unknown', 'connector': 'infoblox', 'error': "infoblox connector error => 'threat_type'", 'success': False})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_invalid_param(self, mock_query):
         payload = {"status": "error","error": "unknown target type"}
         mock_query.side_effect = [get_mock_response(400, json.dumps(payload))]
@@ -355,7 +355,7 @@ class TestDossierTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(threat_type="unknown_type"), 0, 10)
         self.assertEqual(results_response, {'code': 'invalid_parameter', 'connector': 'infoblox', 'error': 'infoblox connector error => unknown target type','success': False})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_auth_failure(self, mock_query):
         payload = '<html><head><title>401 Authorization Required</title></head><body><center><h1>401 Authorization Required</h1></center><hr><center>nginx</center></body></html>'
         mock_query.side_effect = [get_mock_response(401, payload, 'byte')]
@@ -363,7 +363,7 @@ class TestDossierTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(threat_type="unknown_type"), 0, 10)
         self.assertEqual(results_response, {'code': 'authentication_fail', 'connector': 'infoblox', 'error': 'infoblox connector error => '+payload,'success': False})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_no_results_1(self, mock_query):
         payload = {"status": "success","job": {"create_time": "2021-08-01T20:55:48.542Z"},"results": []}
         mock_query.side_effect = [get_mock_response(200, json.dumps(payload))]
@@ -371,7 +371,7 @@ class TestDossierTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(threat_type="host"), 0, 10)
         self.assertEqual(results_response, {'data': [], 'success': True})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_no_results_2(self, mock_query):
         payload = {"status": "success","job": {"create_time": "2021-08-01T20:55:48.542Z"},"results": [{"status": "success","data": {"duration": 243602755,"items": []}}]}
         mock_query.side_effect = [get_mock_response(200, json.dumps(payload))]
@@ -379,7 +379,7 @@ class TestDossierTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(threat_type="host"), 0, 10)
         self.assertEqual(results_response, {'data': [], 'success': True})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_all_results(self, mock_query):
         payload = {"status": "success","job": {"create_time": "2021-08-01T20:55:48.542Z"},"results": [
             {"status": "success","data": {"duration": 243602755,"items": [{"Domain": "","Hostname": "example.com","IP": "1.1.1.1","Last_Seen": 1627808194,"NameServer": "", "Record_Type": "A"}]}}]}
@@ -389,7 +389,7 @@ class TestDossierTransmission(unittest.TestCase):
         self.assertEqual(results_response, {"success": True,"data": [{"dossierData": {"job": {"create_time": "2021-08-01T20:55:48.542Z"},
                 "results": [{"data": {"items": [{"Domain": "","Hostname": "example.com","IP": "1.1.1.1","Last_Seen": 1627808194,"NameServer": "","Record_Type": "A"}]}}]}}]})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_too_many_results(self, mock_query):
         payload = {"status": "success","job": {"create_time": "2021-08-01T20:55:48.542Z"},"results": [{"status": "success","data": {"duration": 243602755,"items": [
             {"Hostname": "example.com", "IP": "1.1.1.1"},{"Hostname": "example.com", "IP": "1.1.1.2"},{"Hostname": "example.com", "IP": "1.1.1.3"},
@@ -401,7 +401,7 @@ class TestDossierTransmission(unittest.TestCase):
             "results": [{"data": {"items": [{"Hostname": "example.com", "IP": "1.1.1.1"}]}}]}},{
             "dossierData": {"job": {"create_time": "2021-08-01T20:55:48.542Z"},"results": [{"data": {"items": [{"Hostname": "example.com", "IP": "1.1.1.2"}]}}]}}]})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_min_range(self, mock_query):
         payload = {"status": "success","job": {"create_time": "2021-08-01T20:55:48.542Z"},"results": [{"status": "success","data": {"duration": 243602755,
             "items": [{"Hostname": "example.com", "IP": "1.1.1.1"},{"Hostname": "example.com", "IP": "1.1.1.2"},{"Hostname": "example.com", "IP": "1.1.1.3"},
@@ -412,7 +412,7 @@ class TestDossierTransmission(unittest.TestCase):
         self.assertEqual(results_response, {"success": True,"data": [
                 {"dossierData": {"job": {"create_time": "2021-08-01T20:55:48.542Z"},"results": [{"data": {"items": [{"Hostname": "example.com", "IP": "1.1.1.5"}]}}]}}]})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_different_offsets(self, mock_results):
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
 
@@ -482,7 +482,7 @@ class TestDossierTransmission(unittest.TestCase):
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 1)
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_exception(self, mock_ping):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
@@ -517,7 +517,7 @@ class TestTideDbTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(), 0, 10)
         self.assertEqual(results_response, {'code': 'unknown', 'connector': 'infoblox', 'error': "infoblox connector error => 'threat_type'", 'success': False})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_invalid_param(self, mock_query):
         payload = {"status": "error","error": "unknown target type"}
         mock_query.side_effect = [get_mock_response(400, json.dumps(payload))]
@@ -525,7 +525,7 @@ class TestTideDbTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(threat_type="unknown_type"), 0, 10)
         self.assertEqual(results_response, {'code': 'invalid_parameter', 'connector': 'infoblox', 'error': 'infoblox connector error => unknown target type','success': False})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_auth_failure(self, mock_query):
         payload = '<html><head><title>401 Authorization Required</title></head><body><center><h1>401 Authorization Required</h1></center><hr><center>nginx</center></body></html>'
         mock_query.side_effect = [get_mock_response(401, payload, 'byte')]
@@ -533,7 +533,7 @@ class TestTideDbTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(threat_type="unknown_type"), 0, 10)
         self.assertEqual(results_response, {'code': 'authentication_fail', 'connector': 'infoblox', 'error': 'infoblox connector error => ' + payload,'success': False})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_no_results(self, mock_query):
         payload = {"threat": []}
         mock_query.side_effect = [get_mock_response(200, json.dumps(payload))]
@@ -541,7 +541,7 @@ class TestTideDbTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(threat_type="host"), 0, 10)
         self.assertEqual(results_response, {'data': [], 'success': True})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_all_results(self, mock_query):
         payload = {"threat": [{"id": "1af2936f-9d33-11eb-8943-6962d4bdf9de","type": "HOST","host": "1-lntesasanpaolo-portaleweb.xyz","domain": "1-lntesasanpaolo-portaleweb.xyz",
                 "tld": "xyz","profile": "IID","property": "Phishing_Generic","class": "Phishing","threat_level": 100,"confidence": 100,"detected": "2021-04-14T15:04:26.116Z",
@@ -564,7 +564,7 @@ class TestTideDbTransmission(unittest.TestCase):
         })
 
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_too_many_results(self, mock_query):
         payload = {
             "threat": [
@@ -589,7 +589,7 @@ class TestTideDbTransmission(unittest.TestCase):
             ]
         })
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_min_range(self, mock_query):
         payload = {"threat": [{"ip": "1.1.1.1"},{"ip": "1.1.1.2"},{"ip": "1.1.1.3"},{"ip": "1.1.1.4"},{"ip": "1.1.1.5"}]}
         mock_query.side_effect = [get_mock_response(200, json.dumps(payload))]
@@ -597,7 +597,7 @@ class TestTideDbTransmission(unittest.TestCase):
         results_response = transmission.results(self._get_query(threat_type="host"), 4, 10)
         self.assertEqual(results_response, {"success": True,"data": [{"tideDbData": {"ip": "1.1.1.5"}}]})
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_different_offsets(self, mock_results):
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
 
@@ -667,7 +667,7 @@ class TestTideDbTransmission(unittest.TestCase):
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 1)
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_exception(self, mock_ping):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)

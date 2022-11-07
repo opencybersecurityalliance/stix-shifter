@@ -1,14 +1,14 @@
 import datetime
 import json
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils import logger
 
 
-class GuardApiClient(RestApiClient):
+class GuardApiClient(RestApiClientAsync):
 
     def __init__(self, params, host, port, headers,
                  url_modifier_function, cert_verify, sni, auth):
-        self.client = RestApiClient(host, port, headers, url_modifier_function, cert_verify, sni, auth)
+        self.client = RestApiClientAsync(host, port, headers, url_modifier_function, cert_verify, sni, auth)
         self.logger = logger.set_logger(__name__)
         self.url = params["url"]
         self.secret = params["client_secret"]

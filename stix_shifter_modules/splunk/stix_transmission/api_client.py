@@ -1,4 +1,4 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 import json
 
 class APIClient():
@@ -20,7 +20,7 @@ class APIClient():
         self.endpoint_start = 'services/'
         self.authenticated = False
         headers = dict()
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port'),
                                     headers,
                                     cert_verify=connection.get('selfSignedCert', True),

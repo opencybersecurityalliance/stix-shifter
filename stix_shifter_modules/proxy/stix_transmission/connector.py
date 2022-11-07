@@ -1,7 +1,7 @@
 import copy
 import json
 from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 
 
 class Connector(BaseConnector):
@@ -9,7 +9,7 @@ class Connector(BaseConnector):
         self.request_http_path = "https://{}:{}".format(connection['options']['proxy_host'], connection['options']['proxy_port'])
         self.timeout = connection['options']['timeout']
         self.connection, self.configuration = self._unwrap_connection_options(copy.deepcopy(connection), copy.deepcopy(configuration))
-        self.client = RestApiClient(connection['options']['proxy_host'], connection['options']['proxy_port'], url_modifier_function=lambda host_port, endpoint, headers: f'https://{host_port}{endpoint}', cert_verify=connection['options'].get('proxy_cert'))
+        self.client = RestApiClientAsync(connection['options']['proxy_host'], connection['options']['proxy_port'], url_modifier_function=lambda host_port, endpoint, headers: f'https://{host_port}{endpoint}', cert_verify=connection['options'].get('proxy_cert'))
 
     async def ping_connection(self):
         data = json.dumps({"connection": self.connection, "configuration": self.configuration})

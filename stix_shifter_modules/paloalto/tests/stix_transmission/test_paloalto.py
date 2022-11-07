@@ -411,7 +411,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert "The provided API Key does not have the required RBAC permissions to run this API" in \
                status_response['error']
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_max_quota_exception(self, mock_quota_response):
         """test maximum quota threshold exception"""
         response = {'reply': {'license_quota': 5, 'additional_purchased_quota': 0.0, 'used_quota': 5.01, 'eval_quota': 0.0}}
@@ -425,7 +425,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert query_response['code'] == "service_unavailable"
         assert "query usage exceeded max daily quota" in query_response['error']
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_max_additional_quota_exception(self, mock_quota_response):
         """test maximum additional quota threshold exception"""
         response = {'reply': {'license_quota': 5, 'additional_purchased_quota': 10.0, 'used_quota': 12, 'eval_quota': 0.0}}
@@ -439,7 +439,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert query_response['code'] == "service_unavailable"
         assert "query usage exceeded max daily quota" in query_response['error']
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_quota_invalid_json_exception(self, mock_quota_response):
         """test quota invalid json exception"""
         mocked_return_value = "invalid json"
@@ -452,7 +452,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert 'error' in query_response
         assert "Cannot parse response" in query_response["error"]
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host(self, mock_ping):
         """Test Invalid host"""
         mock_ping.side_effect = ClientConnectionError("Invalid Host")
@@ -463,7 +463,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert "Invalid Host" in ping_response['error']
         assert ping_response['code'] == "service_unavailable"
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host_for_status(self, mock_query):
         """Test Invalid host for Status API"""
         mock_query.side_effect = ClientConnectionError("Invalid Host")
@@ -474,7 +474,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert "Invalid Host" in status_response['error']
         assert status_response['code'] == "service_unavailable"
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host_for_results(self, mock_query):
         """Test Invalid host for Results API"""
         mock_query.side_effect = ClientConnectionError("Invalid Host")
@@ -485,7 +485,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert "Invalid Host" in results_response['error']
         assert results_response['code'] == "service_unavailable"
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_timeout_error(self, mock_ping):
         """Test Timeout Error"""
         mock_ping.side_effect = TimeoutError("timeout_error (30 sec)")

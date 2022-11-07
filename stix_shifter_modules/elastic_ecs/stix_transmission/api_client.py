@@ -1,5 +1,5 @@
 import base64
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils import logger
 import json
 import re
@@ -39,7 +39,7 @@ class APIClient():
             elif 'access_token' in auth:
                 headers['Authorization'] = "Bearer " + auth['access_token']
 
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port'),
                                     headers,
                                     url_modifier_function=url_modifier_function,

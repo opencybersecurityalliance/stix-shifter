@@ -1,6 +1,6 @@
 import json
 
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 
 DEFAULT_FIELDS = [
     "*",
@@ -22,7 +22,7 @@ class APIClient():
         headers['Accept'] = 'application/json'
         headers['Content-Type'] = 'application/json'
         self.org_key = auth.get('org_key')
-        self.client = RestApiClient(
+        self.client = RestApiClientAsync(
             connection.get('host'),
             connection.get('port'),
             headers,

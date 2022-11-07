@@ -71,7 +71,7 @@ class TestVerifyConnection(unittest.TestCase, object):
 
 
     @patch("stix_shifter_modules.ibm_security_verify.stix_transmission.api_client.APIClient.generate_token")
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_all_response(self, mock_results_response, mock_generate_token):
         mock_generate_token.return_value = get_mock_response(200, '{"code": 200}')
         # from https://community.ibm.com/community/user/security/blogs/adam-case/2019/05/30/get-event-log-details-and-sso-activity-from-ibm-cl

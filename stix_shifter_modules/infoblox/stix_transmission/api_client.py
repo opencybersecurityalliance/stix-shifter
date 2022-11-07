@@ -6,7 +6,7 @@ See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adap
 """
 import json
 
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils import logger
 
 _USER_AGENT = 'IBV1StixShifter/1.0'
@@ -25,7 +25,7 @@ class APIClient:
         logger (logger): internal logger
         timeout (int): connection timeout
         result_limit (int): max number of entries in response
-        client (RestApiClient): HTTP Infoblox client
+        client (RestApiClientAsync): HTTP Infoblox client
     """
     def __init__(self, connection, configuration):
         self.logger = logger.set_logger(__name__)
@@ -45,7 +45,7 @@ class APIClient:
             self.logger.warning("The length exceeds length limit. Use default length: %s", _MAX_RESULT)
             self.result_limit = _MAX_RESULT
 
-        self.client = RestApiClient(host_port,
+        self.client = RestApiClientAsync(host_port,
                                     None,
                                     headers,
                                     url_modifier_function,
@@ -60,7 +60,7 @@ class APIClient:
         NOTE: Even with multiple dialects, PING uses a single one of them to check the status of all of the APIs.
 
         :return: response object
-        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClient.ResponseWrapper
+        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.ResponseWrapper
         """
         # Pings the data source
         endpoint = 'tide/api/data/threats/state'
@@ -83,7 +83,7 @@ class APIClient:
         :param range_end: ending range index (used to limit results)
         :type range_end: int
         :return: response object
-        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClient.ResponseWrapper
+        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.ResponseWrapper
         :throw: RuntimeError if unknown dialect provided
         """
 
@@ -111,7 +111,7 @@ class APIClient:
         :param range_end: ending range index (used to limit results)
         :type range_end: int
         :return: response object
-        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClient.ResponseWrapper
+        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.ResponseWrapper
         """
 
         endpoint = 'api/dnsdata/v2/dns_event'
@@ -176,7 +176,7 @@ class APIClient:
         :param range_end: ending range index (used to limit results)
         :type range_end: int
         :return: response object
-        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClient.ResponseWrapper
+        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.ResponseWrapper
         """
         endpoint = 'tide/api/services/intel/lookup/indicator'
         headers = dict()
@@ -235,7 +235,7 @@ class APIClient:
         :param range_end: ending range index (used to limit results)
         :type range_end: int
         :return: response object
-        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClient.ResponseWrapper
+        :rtype: stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.ResponseWrapper
         """
         endpoint = 'tide/api/data/threats/state'
         headers = dict()

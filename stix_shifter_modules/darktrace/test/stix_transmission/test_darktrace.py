@@ -41,7 +41,7 @@ class TestDarktraceConnection(unittest.TestCase, object):
         assert ping_response is not None
         assert ping_response['success'] is True
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping_box(self, mock_ping_source):
         """ test to check ping_data_source function"""
 
@@ -57,7 +57,7 @@ class TestDarktraceConnection(unittest.TestCase, object):
         assert ping_response is not None
         assert ping_response.response.status_code == 200
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_get_search_results(self, mock_ping_source):
         """ test to check ping_data_source function"""
 

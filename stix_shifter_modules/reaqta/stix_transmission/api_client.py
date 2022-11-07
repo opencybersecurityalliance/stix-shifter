@@ -1,4 +1,4 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 import requests
 from datetime import datetime, timedelta
 import json
@@ -13,7 +13,7 @@ class APIClient():
         url_modifier_function = None
         auth = configuration.get('auth')
 
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port'),
                                     self.headers,
                                     url_modifier_function=url_modifier_function,

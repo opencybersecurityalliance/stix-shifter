@@ -71,7 +71,7 @@ class TestArcsightConnection(TestCase):
         assert ping_response['code'] == 'authentication_fail'
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api', autospec=True)
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api', autospec=True)
     @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id', new_callable=AsyncMock)
     def test_create_query_connection(mock_session_id, mock_query_res):
         """to create the query search and get search id"""
@@ -88,7 +88,7 @@ class TestArcsightConnection(TestCase):
         assert 'search_id' in query_response
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api', autospec=True)
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api', autospec=True)
     @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id', new_callable=AsyncMock)
     def test_create_query_error(mock_session_id, mock_query_res):
         """query search error check"""
@@ -127,7 +127,7 @@ class TestArcsightConnection(TestCase):
         assert query_response['code'] == 'service_unavailable'
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_create_results(mock_create_results):
         """to get the search results"""
         response = {
@@ -193,7 +193,7 @@ class TestArcsightConnection(TestCase):
         assert 'data' in results_response
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_create_results_registry(mock_create_results):
         """to get search result with registry - connector specific"""
         response = {
@@ -250,7 +250,7 @@ class TestArcsightConnection(TestCase):
         assert 'data' in results_response
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_create_results_empty(mock_create_results):
         """to get query results with empty response"""
         response = {}
@@ -286,7 +286,7 @@ class TestArcsightConnection(TestCase):
         assert results_response['code'] == 'service_unavailable'
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_result_error(mock_delete_error):
         """to get error in result search"""
         error = {"errors": [{'code': 1009, 'message': 'Server session not found'}]}
@@ -301,7 +301,7 @@ class TestArcsightConnection(TestCase):
         assert result_response['code'] == 'service_unavailable'
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_delete_query_connection(mock_delete_query):
         """to delete the query search using search id"""
         mock_delete_query.return_value = get_mock_response(200, "", 'byte')
@@ -313,7 +313,7 @@ class TestArcsightConnection(TestCase):
         assert delete_response['success'] is True
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_delete_query_error(mock_delete_error):
         """to delete the query with invalid session id - error"""
         error = {"errors": [{"code": 1002, "message": "User session BCP7NIkbiLBkXx2FwdkU7ma9O7bJAWng1k. is not valid"}]}
@@ -346,7 +346,7 @@ class TestArcsightConnection(TestCase):
         assert delete_response['code'] == 'service_unavailable'
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_create_status(mock_create_status):
         """to get search status of the query - COMPLETED"""
         response = {'status': 'complete', 'result_type': 'histogram', 'hit': 1004,
@@ -362,7 +362,7 @@ class TestArcsightConnection(TestCase):
         assert status_response['status'] == 'COMPLETED'
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_create_status_running(mock_create_status):
         """to get search status of the query - RUNNING"""
         response = {'status': 'running', 'result_type': 'histogram', 'hit': 2000,
@@ -379,7 +379,7 @@ class TestArcsightConnection(TestCase):
         assert status_response['status'] == 'RUNNING'
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_create_status_complete(mock_create_status):
         """to get search status of the query - COMPLETED"""
         response = {'status': 'running', 'result_type': 'histogram', 'hit': 5000,
@@ -411,7 +411,7 @@ class TestArcsightConnection(TestCase):
         assert 'error' in status_response
 
     @staticmethod
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_status_error(mock_delete_error):
         """to get error when check with invalid user session id"""
         error = {"errors": [{"code": 1002, "message": "User session BCP7NIkbiLBkXx2FwdkU7ma9O7bJAWng1k. is not valid"}]}

@@ -1,6 +1,6 @@
 """Apiclient for MSATP"""
 import json
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 
 DEFAULT_LIMIT = 10000
 DEFAULT_OFFSET = 0
@@ -24,7 +24,7 @@ class APIClient:
             if 'access_token' in auth and auth['access_token']:
                 headers['Authorization'] = "Bearer " + auth['access_token']
 
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port', None),
                                     headers,
                                     url_modifier_function=url_modifier_function,

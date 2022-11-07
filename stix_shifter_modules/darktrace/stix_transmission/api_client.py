@@ -1,4 +1,4 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils import logger
 import hmac
 import hashlib
@@ -18,7 +18,7 @@ class APIClient:
         headers = {}
         url_modifier_function = None
         self.auth = configuration.get('auth')
-        self.client = RestApiClient(connection.get('host'), port=None,
+        self.client = RestApiClientAsync(connection.get('host'), port=None,
                                     headers=headers, cert_verify=False,
                                     url_modifier_function=url_modifier_function
                                     )

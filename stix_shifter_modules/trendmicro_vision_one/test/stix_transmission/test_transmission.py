@@ -54,7 +54,7 @@ class TestTransmission(unittest.TestCase):
         check_async = entry_point.is_async()
         self.assertFalse(check_async)
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping(self, mock_ping):
         response = {
             "data": [
@@ -70,7 +70,7 @@ class TestTransmission(unittest.TestCase):
         ping_response = transmission.ping()
         self.assertTrue(ping_response["success"])
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping_failure(self, mock_ping):
         response = {
             "error": {
@@ -84,7 +84,7 @@ class TestTransmission(unittest.TestCase):
         self.assertFalse(ping_response["success"])
         self.assertEqual(ping_response["code"], "invalid_parameter")
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping_auth_failure(self, mock_ping):
         response = {
             "error": {
@@ -105,7 +105,7 @@ class TestTransmission(unittest.TestCase):
         self.assertFalse(ping_response["success"])
         self.assertEqual(ping_response["code"], "authentication_fail")
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping_unknown_failure(self, mock_ping):
         response = {
             "error": {
@@ -118,7 +118,7 @@ class TestTransmission(unittest.TestCase):
         self.assertFalse(ping_response["success"])
         self.assertEqual(ping_response["code"], "unknown")
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping_unknown_code(self, mock_ping):
         response = {
             "error": {
@@ -131,7 +131,7 @@ class TestTransmission(unittest.TestCase):
         self.assertFalse(ping_response["success"])
         self.assertEqual(ping_response["code"], "unknown")
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping_exception(self, mock_ping):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
@@ -145,7 +145,7 @@ class TestTransmission(unittest.TestCase):
         self.assertTrue(query_response["success"])
         self.assertEqual(query_response["search_id"], query)
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_param_failure(self, mock_query):
         payload = {
             "error": {
@@ -160,7 +160,7 @@ class TestTransmission(unittest.TestCase):
         self.assertEqual(results_response["code"], "invalid_parameter")
         self.assertEqual(results_response["error"], "trendmicro_vision_one connector error => " + payload["error"]["message"])
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_auth_failure(self, mock_query):
         payload = {
             "error": {
@@ -182,7 +182,7 @@ class TestTransmission(unittest.TestCase):
         self.assertEqual(results_response["code"], 'authentication_fail')
         self.assertEqual(results_response["error"], "trendmicro_vision_one connector error => " + payload["error"]["message"])
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_timeout(self, mock_query):
         payload = {
             "error": {
@@ -197,7 +197,7 @@ class TestTransmission(unittest.TestCase):
         self.assertEqual(results_response["code"], "unknown")
         self.assertEqual(results_response["error"], "trendmicro_vision_one connector error => " + payload["error"]["message"])
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_reach_max_fetch_count(self, mock_results):
         mock_responses = []
         for i in range(0, 10):
@@ -209,7 +209,7 @@ class TestTransmission(unittest.TestCase):
         # 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 -> reach max_fetch_count -> break
         self.assertEqual(len(result_response["data"]), 10)
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_last_partial(self, mock_results):
         mock_responses = []
         for i in range(0, 7):
@@ -221,7 +221,7 @@ class TestTransmission(unittest.TestCase):
         # 3 + 3 + 3 + 3 + 3 + 3 + 2 -> break
         self.assertEqual(len(result_response["data"]), 20)
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_insufficient(self, mock_results):
         mock_responses = []
         for i in range(0, 6):
@@ -234,7 +234,7 @@ class TestTransmission(unittest.TestCase):
         # 3 + 3 + 3 + 3 + 3 + 3 + 0-> break
         self.assertEqual(len(result_response["data"]), 18)
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_sufficient(self, mock_results):
         mock_responses = []
         for i in range(0, 5):
@@ -246,7 +246,7 @@ class TestTransmission(unittest.TestCase):
         # 4 + 4 + 4 + 4 + 4 -> break
         self.assertEqual(len(result_response["data"]), 20)
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_last_empty(self, mock_results):
         mock_responses = []
         for i in range(0, 3):
@@ -259,7 +259,7 @@ class TestTransmission(unittest.TestCase):
         # 4 + 4 + 4 + 0 -> break
         self.assertEqual(len(result_response["data"]), 12)
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_exceed_length_limit(self, mock_results):
         mock_responses = []
         for i in range(0, 2):
@@ -270,7 +270,7 @@ class TestTransmission(unittest.TestCase):
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 1000)
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_no_offset(self, mock_results):
         mock_results.side_effect = [
             (get_mock_response(200, self._get_response(500))),
@@ -310,7 +310,7 @@ class TestTransmission(unittest.TestCase):
         self.assertTrue(result_response["success"])
         self.assertEqual(len(result_response["data"]), 0)
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_result_exception(self, mock_ping):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)

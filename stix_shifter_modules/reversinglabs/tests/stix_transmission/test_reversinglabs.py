@@ -48,7 +48,7 @@ config = {
 
 
 class TestReversingLabsConnection(unittest.TestCase, object):
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_reversinglabs_ping(self, mock_ping_response):
         mock_ping_response.return_value = get_mock_response(200, '', 'byte')
 
@@ -58,7 +58,7 @@ class TestReversingLabsConnection(unittest.TestCase, object):
         assert ping_response is not None
         assert ping_response['success']
     
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_reversinglabs_ping_exception(self, mock_ping_response):
         mock_ping_response.side_effect = Exception('an error occured retriving ping information')
  
@@ -67,7 +67,7 @@ class TestReversingLabsConnection(unittest.TestCase, object):
         assert ping_response is not None
         assert ping_response['success'] is False
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_reversinglabs_results(self, mock_result_connection):
         mock_result_connection.return_value = get_mock_response(200, json.dumps(DATA), 'byte')
 
