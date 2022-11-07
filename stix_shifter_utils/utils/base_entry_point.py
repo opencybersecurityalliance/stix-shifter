@@ -4,6 +4,7 @@ import os
 import functools
 import json
 import glob
+from inspect import iscoroutinefunction
 from stix_shifter_utils.utils.module_discovery import dialect_list
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
@@ -243,7 +244,10 @@ class BaseEntryPoint:
 
     @transmission
     async def create_query_connection(self, query):
-        return await self.__query_connector.create_query_connection(query)
+        result = self.__query_connector.create_query_connection(query)
+        if iscoroutinefunction(result):
+            result = await result
+        return result
 
     def set_status_connector(self, connector):
         if not (isinstance(connector, (BaseConnector, BaseStatusConnector)) or issubclass(connector, BaseConnector)):
@@ -252,9 +256,14 @@ class BaseEntryPoint:
 
     @transmission
     async def create_status_connection(self, search_id, metadata=None):
+        result = None
         if metadata:
-            return await self.__status_connector.create_status_connection(search_id, metadata)
-        return await self.__status_connector.create_status_connection(search_id)
+            result = self.__status_connector.create_status_connection(search_id, metadata)
+        else:
+            result = self.__status_connector.create_status_connection(search_id)
+        if iscoroutinefunction(result):
+            result = await result
+        return result
 
     def set_results_connector(self, connector):
         if not isinstance(connector, (BaseConnector, BaseResultsConnector)):
@@ -263,15 +272,26 @@ class BaseEntryPoint:
 
     @transmission
     async def create_results_connection(self, search_id, offset, length, metadata=None):
+        result = None
         if metadata:
-            return await self.__results_connector.create_results_connection(search_id, offset, length, metadata)
-        return await self.__results_connector.create_results_connection(search_id, offset, length)
+            result = self.__results_connector.create_results_connection(search_id, offset, length, metadata)
+        else:
+            result = self.__results_connector.create_results_connection(search_id, offset, length)
+        if iscoroutinefunction(result):
+            result = await result
+        return result
+
 
     @transmission
     async def create_results_stix_connection(self, search_id, offset, length, data_source, metadata=None):
+        result = None
         if metadata:
-            return await self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source, metadata) 
-        return await self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source)
+            result = self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source, metadata) 
+        else:
+            result = self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source)
+        if iscoroutinefunction(result):
+            result = await result
+        return result        
 
     def set_delete_connector(self, connector):
         if not isinstance(connector, (BaseConnector, BaseDeleteConnector)):
@@ -280,7 +300,11 @@ class BaseEntryPoint:
 
     @transmission
     async def delete_query_connection(self, search_id):
-        return await self.__delete_connector.delete_query_connection(search_id)
+        result = self.__delete_connector.delete_query_connection(search_id)
+        if iscoroutinefunction(result):
+            result = await result
+        return result   
+
 
     def set_ping_connector(self, connector):
         if not isinstance(connector, (BaseConnector, BasePingConnector)):
@@ -289,7 +313,10 @@ class BaseEntryPoint:
 
     @transmission
     async def ping_connection(self):
-        return await self.__ping_connector.ping_connection()
+        result = self.__ping_connector.ping_connection()
+        if iscoroutinefunction(result):
+            result = await result
+        return result   
 
     def set_async(self, is_async):
         self.__async = is_async

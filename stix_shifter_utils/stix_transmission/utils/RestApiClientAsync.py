@@ -1,15 +1,16 @@
-import requests
-from requests_toolbelt.adapters import host_header_ssl
-from requests.packages.urllib3.util.retry import Retry
-from stix_shifter_utils.stix_transmission.utils.timeout_http_adapter import TimeoutHTTPAdapter
-import sys
+from aiohttp_retry import RetryClient, ExponentialRetry
+from aiohttp import ClientTimeout
+import aiohttp
 from collections.abc import Mapping
+import concurrent
 import os
 import errno
-import uuid
-from stix_shifter_utils.utils import logger
+import sys
 import threading
+import uuid
 
+from stix_shifter_utils.utils import logger
+ 
 # This is a simple HTTP client that can be used to access the REST API
 
 RETRY_MAX_DEFAULT = 1
@@ -40,7 +41,7 @@ def exception_catcher(func, *args, **kwargs):
         return ex
 
 
-class RestApiClient:
+class RestApiClientAsync:
     # cert_verify can be
     #  True -- do proper signed cert check that is in trust store,
     #  False -- skip all cert checks,
@@ -80,7 +81,7 @@ class RestApiClient:
         self.auth = auth
 
     # This method is used to set up an HTTP request and send it to the server
-    def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
+    async def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
         try:
             # covnert server cert to file
             if self.server_cert_file_content_exists is True:
@@ -101,37 +102,42 @@ class RestApiClient:
                     self.server_ip, endpoint, actual_headers)
             else:
                 url = 'https://' + self.server_ip + '/' + endpoint
+            
+            
             try:
-                session = requests.Session()
-                retry_strategy = Retry(total=self.retry_max, backoff_factor=0, status_forcelist=[429, 500, 502, 503, 504],
-                                       allowed_methods=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"])
-                session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
+                # TODO: remove this
+                self.server_cert_content = False
 
-                if self.sni is not None:
-                    # only use the tool belt session in case of SNI for safety
-                    session.mount('https://', host_header_ssl.HostHeaderSSLAdapter(max_retries=self.retry_max))
-                    actual_headers["Host"] = self.sni
-                else:
-                    session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
-                call = getattr(session, method.lower())
-                it = InterruptableThread(exception_catcher, call, url, headers=actual_headers, params=urldata, data=data,
-                                         verify=self.server_cert_content,
-                                         timeout=(self.connect_timeout, timeout),
-                                         auth=self.auth)
-                it.start()
-                it.join(timeout)
-                if it.is_alive():
-                    raise Exception(f'timeout_error ({timeout} sec)')
-                response = it.result
-                if isinstance(response, Exception):
-                    raise response
-                if 'headers' in dir(response) and isinstance(response.headers, Mapping) and \
-                   'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
-                    self.logger.error("WARNING: " +
-                                      response.headers['Content-Type'], file=sys.stderr)
-                return ResponseWrapper(response)
+                client_timeout = ClientTimeout(connect=self.connect_timeout, total=timeout)
+                retry_options = ExponentialRetry(attempts=self.retry_max, statuses=[429, 500, 502, 503, 504])
+                async with RetryClient(retry_options=retry_options) as client:
+                    call = getattr(client, method.lower()) 
+
+                    if self.sni is not None:
+                        # only use the tool belt session in case of SNI for safety
+                        actual_headers["Host"] = self.sni
+
+                    # TODO verify the verify_ssl
+                    async with call(url, headers=actual_headers, params=urldata, data=data,
+                                            verify_ssl=self.server_cert_content,
+                                            timeout=client_timeout,
+                                            auth=self.auth) as response:
+
+                        respWrapper = ResponseWrapper(response)
+                        await respWrapper.wait()
+
+                        if 'headers' in dir(response) and isinstance(response.headers, Mapping) and \
+                            'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
+
+                            self.logger.error("WARNING: " + response.headers['Content-Type'], file=sys.stderr)
+                        return respWrapper
+            except aiohttp.client_exceptions.ServerTimeoutError as e:
+                # TODO unhendled error error
+                raise Exception(f'server timeout_error ({self.connect_timeout} sec)')
+            except concurrent.futures._base.TimeoutError as e:
+                raise Exception(f'timeout_error ({timeout} sec)')
             except Exception as e:
-                self.logger.error('exception occured during requesting url: ' + str(e))
+                self.logger.error('exception occured during requesting url: ' + str(e) + " " + str(type(e)))
                 raise e
         finally:
             if self.server_cert_file_content_exists is True:
@@ -150,23 +156,48 @@ class RestApiClient:
 
 
 class ResponseWrapper:
+    _content = None
+    _headers = None
+    _code = None
+
     def __init__(self, response):
         self.response = response
 
+    async def wait(self):
+        self._content = await self.response.content.read()
+        self._headers = self.response.headers
+        self._code = self.response.status
+    
     def read(self):
-        return self.response.content
+        return self._content
 
     def raise_for_status(self):
         return self.response.raise_for_status()
 
     @property
     def headers(self):
-        return self.response.headers
+        return self._headers
+
+    @property
+    def content(self):
+        return self._content
 
     @property
     def bytes(self):
-        return self.response.content
+        return self._content
 
     @property
     def code(self):
-        return self.response.status_code
+        return self._code
+
+    @headers.setter
+    def headers(self, v):
+        self._headers = v
+
+    @content.setter
+    def content(self, v):
+        self._content = v
+
+    @code.setter
+    def code(self, v):
+        self._code = v
