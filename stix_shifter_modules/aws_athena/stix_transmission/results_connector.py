@@ -228,8 +228,13 @@ class ResultsConnector(BaseResultsConnector):
     def format_result_ocsf(self, results):
         formatted_result = []
         for obj in results:
-            formatted_result.append({'ocsf': obj} )
-
+            json_obj = {}
+            for k, v in obj.items():
+                try:
+                    json_obj[k] = json.loads(v)
+                except Exception:
+                    json_obj[k] = v
+            formatted_result.append({'ocsf': json_obj} )
         return formatted_result
 
     def gen_dict_extract(self, key_to_search, var):
