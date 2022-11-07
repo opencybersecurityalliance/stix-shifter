@@ -161,14 +161,20 @@ class BaseEntryPoint:
         return self.__dialect_to_results_translator[self.__dialect_default[self.__options.get(OPTION_LANGUAGE, "stix")]]
 
     @translation
-    def parse_query(self, data):
+    async def parse_query(self, data):
         translator = self.get_query_translator()
-        return translator.parse_query(data)
+        result = translator.parse_query(data)
+        if iscoroutinefunction(result):
+            result = await result
+        return result
 
     @translation
-    def transform_query(self, dialect, data):
+    async def transform_query(self, dialect, data):
         translator = self.get_query_translator(dialect)
-        return translator.transform_query(data)
+        result = translator.transform_query(data)
+        if iscoroutinefunction(result):
+            result = await result
+        return result
 
     @translation
     def translate_results(self, data_source, data):
