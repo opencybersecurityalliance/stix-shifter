@@ -27,7 +27,7 @@ class QueryStringPatternTranslator:
         self.comparator_lookup = self.dmm.map_comparator()
         self._time_range = time_range
         self.service_type = self.dmm.dialect
-        self._protocol_lookup_needed = True if self.service_type in ['vpcflow'] else False
+        self._protocol_lookup_needed = True if self.service_type in ['vpcflow', 'ocsf'] else False
         self._epoch_time = True if self.service_type in ['vpcflow', 'ocsf'] else False
         self.qualifier_string = ''
         self.translated = self.parse_expression(pattern)

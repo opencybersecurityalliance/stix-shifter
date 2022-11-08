@@ -61,7 +61,9 @@
         "connection_info.tcp_flags"
       ],
       "protocol": [
-        "connection_info.protocol_name",
+        "connection_info.protocol_name"
+      ],
+      "protocols[*]": [
         "connection_info.protocol_num"
       ],
       "src_byte_count": [
