@@ -1,4 +1,4 @@
-##### Updated on 06/01/22
+##### Updated on 11/04/22
 ## Datadog
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -8,7 +8,55 @@
 | = | : |
 | IN | : |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties for Events
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **domain-name**:value | host |
+| **artifact**:payload_bin | text |
+| **x-datadog-event**:priority | priority |
+| **x-datadog-event**:monitor_id | monitor_id |
+| **x-datadog-event**:tags | tags |
+| **x-datadog-event**:is_aggregate | unaggregated |
+| **x-datadog-event**:alert_type | alert_type |
+| **x-ibm-finding**:start | start |
+| **x-ibm-finding**:end | end |
+| **x-ibm-finding**:time_observed | date_happened |
+| **x-oca-event**:code | id, id_str |
+| **x-oca-event**:outcome | title |
+| **x-oca-event**:module | source |
+| **x-oca-event**:agent | device_name |
+| **x-oca-event**:created | date_happened |
+| **x-oca-event**:original_ref.payload_bin | text |
+| **x-oca-event**:domain_ref.value | host |
+| <br> | |
+### Searchable STIX objects and properties for Processes
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **domain-name**:value | host |
+| **artifact**:payload_bin | text |
+| **user-account**:user_id | user |
+| **process**:command_line | cmdline |
+| **process**:pid | pid |
+| **process**:creator_user_ref | user |
+| **process**:created_time | timestamp, start |
+| **process**:parent_ref | ppid |
+| **x-datadog-event**:priority | priority |
+| **x-datadog-event**:monitor_id | monitor_id |
+| **x-datadog-event**:tags | tags |
+| **x-datadog-event**:is_aggregate | unaggregated |
+| **x-datadog-event**:alert_type | alert_type |
+| **x-ibm-finding**:start | start |
+| **x-ibm-finding**:end | end |
+| **x-ibm-finding**:time_observed | date_happened |
+| **x-oca-event**:code | id, id_str |
+| **x-oca-event**:outcome | title |
+| **x-oca-event**:module | source |
+| **x-oca-event**:agent | device_name |
+| **x-oca-event**:created | date_happened |
+| **x-oca-event**:original_ref.payload_bin | text |
+| **x-oca-event**:domain_ref.value | host |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | text |
