@@ -11,7 +11,7 @@ def _remove_timestamp_from_query(queries):
     for query in queries:
         for key, value in query.items():
             query = re.sub(r'AND\supdatedat\sBETWEEN\s(\'(\d{4})(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)Z\')\sAND\s\'(\d{4})'
-                           r'(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)Z\'|AND\sstart\sBETWEEN\s\d+\sAND\s\d+', "", value)
+                           r'(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)Z\'|AND\sstart\sBETWEEN\s\d+\sAND\s\d+|AND\stime\sBETWEEN\s\d+\sAND\s\d+', "", value)
             timestamp_removed.append({key: query})
     return timestamp_removed
 
@@ -27,7 +27,12 @@ class TestQueryTranslator(unittest.TestCase):
         """
         self.assertIsInstance(query, dict)
         self.assertIsInstance(query['queries'], list)
+        if len(queries) == 3:
+            print('1', queries[2]['ocsf'])
         for each_query in query.get('queries'):
+            if 'ocsf' in each_query:
+                print('2', each_query['ocsf'])
+
             self.assertIn(each_query, queries)
 
     def test_network_exp(self):
@@ -54,7 +59,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "lower('172.31.76.105')) AND start BETWEEN 1601541790 AND 1604054590)"
         },
         {
-            "ocsf": "((lower(src_endpoint.ip) = lower('172.31.76.105') OR lower(dst_endpoint.ip) = lower('172.31.76.105')) AND time BETWEEN 1601541790000 AND 1604054590000)"
+            "ocsf": "((lower(dst_endpoint.ip) = lower('172.31.76.105') OR lower(src_endpoint.ip) = lower('172.31.76.105')) AND time BETWEEN 1601541790000 AND 1604054590000)"
         }]
         self._test_query_assertions(query, queries)
 
@@ -88,6 +93,8 @@ class TestQueryTranslator(unittest.TestCase):
         }, {
             "vpcflow": "(lower(sourceaddress) LIKE lower('172.31.60.104') AND start BETWEEN 1601541790 AND "
                        "1604054590)"
+        }, {
+            "ocsf": "(lower(src_endpoint.ip) LIKE lower('172.31.60.104') AND time BETWEEN 1601541790000 AND 1604054590000)"
         }]
         self._test_query_assertions(query, queries)
 
@@ -106,6 +113,8 @@ class TestQueryTranslator(unittest.TestCase):
         }, {
             "vpcflow": "(REGEXP_LIKE(CAST(sourceaddress as varchar), '\\d+') AND start BETWEEN 1601541790 AND "
                        "1604054590)"
+        }, {
+            "ocsf": "(REGEXP_LIKE(CAST(src_endpoint.ip as varchar), '\d+') AND time BETWEEN 1601541790000 AND 1604054590000)"
         }]
         self._test_query_assertions(query, queries)
 
@@ -152,7 +161,9 @@ class TestQueryTranslator(unittest.TestCase):
                        "1601541790 AND 1604054590))"
         },
         {
-            "ocsf": "(((lower(src_endpoint.ip) = lower('18.210.22.128') OR lower(dst_endpoint.ip) = lower('18.210.22.128')) OR (lower(src_endpoint.ip) = lower('172.31.60.104') OR lower(dst_endpoint.ip) = lower('172.31.60.104'))) AND time BETWEEN 1601541790000 AND 1604054590000)"
+            "ocsf": "((((lower(dst_endpoint.ip) = lower('18.210.22.128') OR lower(src_endpoint.ip) = lower('18.210.22.128')) "
+            "OR (lower(dst_endpoint.ip) = lower('172.31.60.104') OR lower(src_endpoint.ip) = lower('172.31.60.104'))) AND time BETWEEN 1601541790000 AND 1604054590000) "
+            "UNION (CAST(src_endpoint.port AS varchar) = '22' AND time BETWEEN 1601541790000 AND 1604054590000))"
         }]
         self._test_query_assertions(query, queries)
 
@@ -182,6 +193,8 @@ class TestQueryTranslator(unittest.TestCase):
         }, {
             "vpcflow": "(lower(sourceaddress) LIKE lower('172.31.60.104') AND start BETWEEN 1601541790 AND "
                        "1604054590)"
+        }, {
+            "ocsf": "(lower(src_endpoint.ip) LIKE lower('172.31.60.104') AND time BETWEEN 1601541790 AND 1604054590)"
         }]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -215,7 +228,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "start BETWEEN 1588322590 AND 1604054590)"
         },
         {
-            "ocsf": "((NOT lower(src_endpoint.ip) = lower('172.31.60.104') OR NOT lower(dst_endpoint.ip) = lower('172.31.60.104')) AND time BETWEEN 1588322590000 AND 1604054590000)"
+            "ocsf": "((NOT lower(src_endpoint.ip) = lower('172.31.60.104') OR (NOT lower(dst_endpoint.ip) = lower('172.31.60.104') OR NOT lower(src_endpoint.ip) = lower('172.31.60.104'))) AND time BETWEEN 1588322590000 AND 1604054590000)"
         }
         ]
         queries = _remove_timestamp_from_query(queries)
