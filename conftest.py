@@ -3,7 +3,7 @@ import re
 
 collect_ignore = []
 TEST_BASE_DIR = ''
-TEST_FILE_PATTERN = re.compile('test_.*\.py')
+TEST_FILE_PATTERN = re.compile('test_.*.py')
 
 def build_ignores(start_path_str, skip=False):
     start_path = Path(start_path_str)
