@@ -4,7 +4,7 @@ import os
 import functools
 import json
 import glob
-from inspect import iscoroutinefunction
+from inspect import isawaitable
 from stix_shifter_utils.utils.module_discovery import dialect_list
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
@@ -164,7 +164,7 @@ class BaseEntryPoint:
     async def parse_query(self, data):
         translator = self.get_query_translator()
         result = translator.parse_query(data)
-        if iscoroutinefunction(result):
+        if isawaitable(result):
             result = await result
         return result
 
@@ -172,7 +172,7 @@ class BaseEntryPoint:
     async def transform_query(self, dialect, data):
         translator = self.get_query_translator(dialect)
         result = translator.transform_query(data)
-        if iscoroutinefunction(result):
+        if isawaitable(result):
             result = await result
         return result
 
@@ -181,7 +181,7 @@ class BaseEntryPoint:
         translator = self.get_results_translator()
         try:
             result = translator.translate_results(data_source, data)
-            if iscoroutinefunction(result):
+            if isawaitable(result):
                 result = await result
             return result
         except Exception as ex:
@@ -254,7 +254,7 @@ class BaseEntryPoint:
     @transmission
     async def create_query_connection(self, query):
         result = self.__query_connector.create_query_connection(query)
-        if iscoroutinefunction(result):
+        if isawaitable(result):
             result = await result
         return result
 
@@ -270,7 +270,7 @@ class BaseEntryPoint:
             result = self.__status_connector.create_status_connection(search_id, metadata)
         else:
             result = self.__status_connector.create_status_connection(search_id)
-        if iscoroutinefunction(result):
+        if isawaitable(result):
             result = await result
         return result
 
@@ -286,7 +286,7 @@ class BaseEntryPoint:
             result = self.__results_connector.create_results_connection(search_id, offset, length, metadata)
         else:
             result = self.__results_connector.create_results_connection(search_id, offset, length)
-        if iscoroutinefunction(result):
+        if isawaitable(result):
             result = await result
         return result
 
@@ -298,7 +298,7 @@ class BaseEntryPoint:
             result = self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source, metadata) 
         else:
             result = self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source)
-        if iscoroutinefunction(result):
+        if isawaitable(result):
             result = await result
         return result        
 
@@ -310,7 +310,7 @@ class BaseEntryPoint:
     @transmission
     async def delete_query_connection(self, search_id):
         result = self.__delete_connector.delete_query_connection(search_id)
-        if iscoroutinefunction(result):
+        if isawaitable(result):
             result = await result
         return result   
 
@@ -323,7 +323,7 @@ class BaseEntryPoint:
     @transmission
     async def ping_connection(self):
         result = self.__ping_connector.ping_connection()
-        if iscoroutinefunction(result):
+        if isawaitable(result):
             result = await result
         return result   
 

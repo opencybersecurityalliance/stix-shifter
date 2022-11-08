@@ -37,7 +37,7 @@ class BaseResultsConnector(object, metaclass=ABCMeta):
         if result.get('success'):
             data = result['data']
             data = data[:int(length)]
-            result = entry_point.translate_results(data_source, json.dumps(data))
+            result = await entry_point.translate_results(data_source, json.dumps(data))
             stats.append({'action': 'translation', 'time': int(time.time()*1000)})
         result['stats'] = stats
         if metadata:
