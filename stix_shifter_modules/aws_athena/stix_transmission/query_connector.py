@@ -48,11 +48,14 @@ class QueryConnector(BaseQueryConnector):
                                                                                                    query_service_type))
             table_config = self.connection[config_details[0]] + '."' + self.connection[config_details[1]] + '"'
             other_tables = ''
-            match = re.search("##UNNEST.*?##", query[query_service_type])
-            if match and match.group():
-                match_str = str(match.group())
-                query[query_service_type] = query[query_service_type].replace(match_str, '')
-                other_tables = ', %s ' % match_str.replace('#', '')
+            findall = re.finditer("##UNNEST.*?##", query[query_service_type])
+            if findall:
+                for match in findall:
+                    if match.group():
+                        match_str = str(match.group())
+                        query[query_service_type] = query[query_service_type].replace(match_str, '')
+                        other_tables = ', %s ' % match_str.replace('##', '')
+
             if query_service_type == 'ocsf':
                 columns = self.column_list(self.connection[config_details[1]])
                 column_cast = []

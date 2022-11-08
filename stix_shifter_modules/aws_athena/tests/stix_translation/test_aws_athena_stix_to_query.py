@@ -27,12 +27,7 @@ class TestQueryTranslator(unittest.TestCase):
         """
         self.assertIsInstance(query, dict)
         self.assertIsInstance(query['queries'], list)
-        if len(queries) == 3:
-            print('1', queries[2]['ocsf'])
         for each_query in query.get('queries'):
-            if 'ocsf' in each_query:
-                print('2', each_query['ocsf'])
-
             self.assertIn(each_query, queries)
 
     def test_network_exp(self):
