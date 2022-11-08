@@ -9,16 +9,72 @@
   "ipv4-addr": {
     "fields": {
       "value": [
-        "src_endpoint.ip",
-        "dst_endpoint.ip"
+        "dst_endpoint.ip",
+        "src_endpoint.ip"
       ]
     }
   },
   "ipv6-addr": {
     "fields": {
       "value": [
-        "src_endpoint.ip",
+        "dst_endpoint.ip",
+        "src_endpoint.ip"
+      ]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "dst_byte_count": [
+        "traffic.bytes_in"
+      ],
+      "dst_packets": [
+        "traffic.packets_in"
+      ],
+      "dst_port": [
+        "dst_endpoint.port"
+      ],
+      "dst_ref.value": [
         "dst_endpoint.ip"
+      ],
+      "extensions.'x-network-ext'.boundary": [
+        "connection_info.boundary"
+      ],
+      "extensions.'x-network-ext'.boundary_id": [
+        "connection_info.boundary_id"
+      ],
+      "extensions.'x-network-ext'.bytes": [
+        "traffic.bytes"
+      ],
+      "extensions.'x-network-ext'.direction": [
+        "connection_info.direction"
+      ],
+      "extensions.'x-network-ext'.direction_id": [
+        "connection_info.direction_id"
+      ],
+      "extensions.'x-network-ext'.packets": [
+        "traffic.packets"
+      ],
+      "extensions.'x-network-ext'.protocol_ver": [
+        "connection_info.protocol_ver"
+      ],
+      "extensions.'x-network-ext'.tcp_flags": [
+        "connection_info.tcp_flags"
+      ],
+      "protocol": [
+        "connection_info.protocol_name",
+        "connection_info.protocol_num"
+      ],
+      "src_byte_count": [
+        "traffic.bytes_out"
+      ],
+      "src_packets": [
+        "traffic.packets_out"
+      ],
+      "src_port": [
+        "src_endpoint.port"
+      ],
+      "src_ref.value": [
+        "src_endpoint.ip"
       ]
     }
   },
@@ -126,6 +182,9 @@
       "description": [
         "observables.value"
       ],
+      "dst_ip_ref.value": [
+        "dst_endpoint.ip"
+      ],
       "end": [
         "end_time"
       ],
@@ -141,23 +200,55 @@
       "severity": [
         "severity_id"
       ],
+      "src_ip_ref.value": [
+        "src_endpoint.ip"
+      ],
       "start": [
         "start_time"
+      ],
+      "time_observed": [
+        "_time"
       ]
     }
   },
   "x-oca-asset": {
     "fields": {
-      "extensions.'x-oca-endpoint-ext'.port": [
-        "src_endpoint.port"
+      "extensions.'x-dst-endpoint'.instance_uid": [
+        "dst_endpoint.instance_uid"
       ],
-      "extensions.'x-oca-endpoint-ext'.svc_name": [
+      "extensions.'x-dst-endpoint'.interface_uid": [
+        "dst_endpoint.interface_uid"
+      ],
+      "extensions.'x-dst-endpoint'.subnet_uid": [
+        "dst_endpoint.subnet_uid"
+      ],
+      "extensions.'x-dst-endpoint'.svc_name": [
+        "dst_endpoint.svc_name"
+      ],
+      "extensions.'x-dst-endpoint'.vpc_uid": [
+        "dst_endpoint.vpc_uid"
+      ],
+      "extensions.'x-src-endpoint'.instance_uid": [
+        "src_endpoint.instance_uid"
+      ],
+      "extensions.'x-src-endpoint'.interface_uid": [
+        "src_endpoint.interface_uid"
+      ],
+      "extensions.'x-src-endpoint'.subnet_uid": [
+        "src_endpoint.subnet_uid"
+      ],
+      "extensions.'x-src-endpoint'.svc_name": [
         "src_endpoint.svc_name"
       ],
+      "extensions.'x-src-endpoint'.vpc_uid": [
+        "src_endpoint.vpc_uid"
+      ],
       "ip_refs[*].value": [
-        "src_endpoint.intermediate_ips"
+        "dst_endpoint.ip",
+        "src_endpoint.ip"
       ],
       "name": [
+        "dst_endpoint.name",
         "src_endpoint.name"
       ]
     }
@@ -186,6 +277,12 @@
       "module": [
         "class_name"
       ],
+      "network_ref.dst_ref.value": [
+        "dst_endpoint.ip"
+      ],
+      "network_ref.src_ref.value": [
+        "dst_endpoint.ip"
+      ],
       "timezone": [
         "timezone_offset"
       ]
@@ -205,9 +302,6 @@
       "api_version": [
         "api.version"
       ],
-      "http_request.user_agent": [
-        "http_request.user_agent"
-      ],
       "message": [
         "message"
       ],
@@ -218,8 +312,7 @@
         "cloud.org_uid"
       ],
       "profiles": [
-        "profiles",
-        "unmapped.profiles"
+        "profiles"
       ],
       "project_uid": [
         "cloud.project_uid"
@@ -343,6 +436,9 @@
       ],
       "uid": [
         "http_request.uid"
+      ],
+      "user_agent": [
+        "http_request.user_agent"
       ],
       "value": [
         "http_request.args"
