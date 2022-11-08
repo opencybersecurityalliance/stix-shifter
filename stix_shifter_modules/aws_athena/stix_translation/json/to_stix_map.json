@@ -1138,29 +1138,29 @@
       {
         "key": "network-traffic.start",
         "object": "nt",
-        "transformer": "EpochToTimestamp"
+        "transformer": "EpochSecondsToTimestamp"
       },
       {
         "key": "x-ibm-finding.start",
         "object": "ibm_finding",
-        "transformer": "EpochToTimestamp"
+        "transformer": "EpochSecondsToTimestamp"
       },
       {
         "key": "first_observed",
         "cybox": false,
-        "transformer": "EpochToTimestamp"
+        "transformer": "EpochSecondsToTimestamp"
       }
     ],
     "endtime": [
       {
         "key": "network-traffic.end",
         "object": "nt",
-        "transformer": "EpochToTimestamp"
+        "transformer": "EpochSecondsToTimestamp"
       },
       {
         "key": "x-ibm-finding.end",
         "object": "ibm_finding",
-        "transformer": "EpochToTimestamp"
+        "transformer": "EpochSecondsToTimestamp"
       },
       {
         "key": "last_observed",

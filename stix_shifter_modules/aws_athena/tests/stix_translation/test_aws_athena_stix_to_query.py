@@ -54,7 +54,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "lower('172.31.76.105')) AND start BETWEEN 1601541790 AND 1604054590)"
         },
         {
-            "ocsf": "(lower(src_endpoint.intermediate_ips) = lower('172.31.76.105') AND _time BETWEEN 1601541790000 AND 1604054590000)"
+            "ocsf": "((lower(src_endpoint.ip) = lower('172.31.76.105') OR lower(dst_endpoint.ip) = lower('172.31.76.105')) AND time BETWEEN 1601541790000 AND 1604054590000)"
         }]
         self._test_query_assertions(query, queries)
 
@@ -152,7 +152,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "1601541790 AND 1604054590))"
         },
         {
-            "ocsf": "((lower(src_endpoint.intermediate_ips) = lower('18.210.22.128') OR lower(src_endpoint.intermediate_ips) = lower('172.31.60.104')) AND _time BETWEEN 1601541790000 AND 1604054590000)"
+            "ocsf": "(((lower(src_endpoint.ip) = lower('18.210.22.128') OR lower(dst_endpoint.ip) = lower('18.210.22.128')) OR (lower(src_endpoint.ip) = lower('172.31.60.104') OR lower(dst_endpoint.ip) = lower('172.31.60.104'))) AND time BETWEEN 1601541790000 AND 1604054590000)"
         }]
         self._test_query_assertions(query, queries)
 
@@ -215,7 +215,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "start BETWEEN 1588322590 AND 1604054590)"
         },
         {
-            "ocsf": "(NOT lower(src_endpoint.intermediate_ips) = lower('172.31.60.104') AND _time BETWEEN 1588322590000 AND 1604054590000)"
+            "ocsf": "((NOT lower(src_endpoint.ip) = lower('172.31.60.104') OR NOT lower(dst_endpoint.ip) = lower('172.31.60.104')) AND time BETWEEN 1588322590000 AND 1604054590000)"
         }
         ]
         queries = _remove_timestamp_from_query(queries)
@@ -235,7 +235,7 @@ class TestQueryTranslator(unittest.TestCase):
             "vpcflow": "(CAST(starttime AS varchar) = '1600769351' AND start BETWEEN 1588322590 AND 1604054590)"
         },
         {
-            "ocsf": "(CAST(start_time AS varchar) = '1600769351' AND _time BETWEEN 1588322590000 AND 1604054590000)"
+            "ocsf": "(CAST(start_time AS varchar) = '1600769351' AND time BETWEEN 1588322590000 AND 1604054590000)"
         }
         ]
         self._test_query_assertions(query, queries)
