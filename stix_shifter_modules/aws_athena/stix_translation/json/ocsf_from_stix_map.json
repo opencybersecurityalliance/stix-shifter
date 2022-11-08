@@ -10,16 +10,15 @@
     "fields": {
       "value": [
         "src_endpoint.ip",
-        "dst_endpoint.ip",
-        "src_endpoint.intermediate_ips",
-        "dst_endpoint.intermediate_ips"
+        "dst_endpoint.ip"
       ]
     }
   },
   "ipv6-addr": {
     "fields": {
       "value": [
-        "src_endpoint.intermediate_ips"
+        "src_endpoint.ip",
+        "dst_endpoint.ip"
       ]
     }
   },
