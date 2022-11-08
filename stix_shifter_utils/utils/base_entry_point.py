@@ -177,10 +177,13 @@ class BaseEntryPoint:
         return result
 
     @translation
-    def translate_results(self, data_source, data):
+    async def translate_results(self, data_source, data):
         translator = self.get_results_translator()
         try:
-            return translator.translate_results(data_source, data)
+            result = translator.translate_results(data_source, data)
+            if iscoroutinefunction(result):
+                result = await result
+            return result
         except Exception as ex:
             result = {}
             ErrorResponder.fill_error(result, message_struct={'exception': ex})
