@@ -1,4 +1,4 @@
-##### Updated on 11/04/22
+##### Updated on 11/09/22
 ## Amazon Athena
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -58,8 +58,26 @@
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **email-addr**:value | identity.user.email_addr |
-| **ipv4-addr**:value | src_endpoint.intermediate_ips |
-| **ipv6-addr**:value | src_endpoint.intermediate_ips |
+| **ipv4-addr**:value | dst_endpoint.ip, src_endpoint.ip |
+| **ipv6-addr**:value | dst_endpoint.ip, src_endpoint.ip |
+| **network-traffic**:dst_byte_count | traffic.bytes_in |
+| **network-traffic**:dst_packets | traffic.packets_in |
+| **network-traffic**:dst_port | dst_endpoint.port |
+| **network-traffic**:dst_ref.value | dst_endpoint.ip |
+| **network-traffic**:extensions.'x-network-ext'.boundary | connection_info.boundary |
+| **network-traffic**:extensions.'x-network-ext'.boundary_id | connection_info.boundary_id |
+| **network-traffic**:extensions.'x-network-ext'.bytes | traffic.bytes |
+| **network-traffic**:extensions.'x-network-ext'.direction | connection_info.direction |
+| **network-traffic**:extensions.'x-network-ext'.direction_id | connection_info.direction_id |
+| **network-traffic**:extensions.'x-network-ext'.packets | traffic.packets |
+| **network-traffic**:extensions.'x-network-ext'.protocol_ver | connection_info.protocol_ver |
+| **network-traffic**:extensions.'x-network-ext'.tcp_flags | connection_info.tcp_flags |
+| **network-traffic**:protocol | connection_info.protocol_name |
+| **network-traffic**:protocols[*] | connection_info.protocol_num |
+| **network-traffic**:src_byte_count | traffic.bytes_out |
+| **network-traffic**:src_packets | traffic.packets_out |
+| **network-traffic**:src_port | src_endpoint.port |
+| **network-traffic**:src_ref.value | src_endpoint.ip |
 | **software**:extension.product.feature_name | metadata.product.feature.name |
 | **software**:extension.product.feature_uid | metadata.product.feature.uid |
 | **software**:extension.product.feature_version | metadata.product.feature.version |
@@ -90,32 +108,45 @@
 | **user-account**:user_id | identity.user.account_uid |
 | **x-ibm-finding**:alert_id | observables.type_id |
 | **x-ibm-finding**:description | observables.value |
+| **x-ibm-finding**:dst_ip_ref.value | dst_endpoint.ip |
 | **x-ibm-finding**:end | end_time |
 | **x-ibm-finding**:event_count | count |
 | **x-ibm-finding**:finding_type | observables.type |
 | **x-ibm-finding**:name | observables.name |
 | **x-ibm-finding**:severity | severity_id |
+| **x-ibm-finding**:src_ip_ref.value | src_endpoint.ip |
 | **x-ibm-finding**:start | start_time |
-| **x-oca-asset**:extensions.'x-oca-endpoint-ext'.port | src_endpoint.port |
-| **x-oca-asset**:extensions.'x-oca-endpoint-ext'.svc_name | src_endpoint.svc_name |
-| **x-oca-asset**:ip_refs[*].value | src_endpoint.intermediate_ips |
-| **x-oca-asset**:name | src_endpoint.name |
-| **x-oca-event**:action | activity, category_name |
+| **x-ibm-finding**:time_observed | _time |
+| **x-oca-asset**:extensions.'x-dst-endpoint'.instance_uid | dst_endpoint.instance_uid |
+| **x-oca-asset**:extensions.'x-dst-endpoint'.interface_uid | dst_endpoint.interface_uid |
+| **x-oca-asset**:extensions.'x-dst-endpoint'.subnet_uid | dst_endpoint.subnet_uid |
+| **x-oca-asset**:extensions.'x-dst-endpoint'.svc_name | dst_endpoint.svc_name |
+| **x-oca-asset**:extensions.'x-dst-endpoint'.vpc_uid | dst_endpoint.vpc_uid |
+| **x-oca-asset**:extensions.'x-src-endpoint'.instance_uid | src_endpoint.instance_uid |
+| **x-oca-asset**:extensions.'x-src-endpoint'.interface_uid | src_endpoint.interface_uid |
+| **x-oca-asset**:extensions.'x-src-endpoint'.subnet_uid | src_endpoint.subnet_uid |
+| **x-oca-asset**:extensions.'x-src-endpoint'.svc_name | src_endpoint.svc_name |
+| **x-oca-asset**:extensions.'x-src-endpoint'.vpc_uid | src_endpoint.vpc_uid |
+| **x-oca-asset**:ip_refs[*].value | dst_endpoint.ip, src_endpoint.ip |
+| **x-oca-asset**:name | dst_endpoint.name, src_endpoint.name |
+| **x-oca-event**:action | activity |
+| **x-oca-event**:category | category_name |
 | **x-oca-event**:code | activity_id, category_uid |
 | **x-oca-event**:created | time |
 | **x-oca-event**:duration | duration |
 | **x-oca-event**:extensions.'x-cloud-api'.class_uid | class_uid |
 | **x-oca-event**:module | class_name |
+| **x-oca-event**:network_ref.dst_ref.value | dst_endpoint.ip |
+| **x-oca-event**:network_ref.src_ref.value | dst_endpoint.ip |
 | **x-oca-event**:timezone | timezone_offset |
 | **x-ocsf-cloud**:account_type | cloud.account_type |
 | **x-ocsf-cloud**:account_type_id | cloud.account_type_id |
 | **x-ocsf-cloud**:account_uid | cloud.account_uid |
 | **x-ocsf-cloud**:api_version | api.version |
-| **x-ocsf-cloud**:http_request.user_agent | http_request.user_agent |
 | **x-ocsf-cloud**:message | message |
 | **x-ocsf-cloud**:operation | api.operation |
 | **x-ocsf-cloud**:org_uid | cloud.org_uid |
-| **x-ocsf-cloud**:profiles | profiles, unmapped.profiles |
+| **x-ocsf-cloud**:profiles | profiles |
 | **x-ocsf-cloud**:project_uid | cloud.project_uid |
 | **x-ocsf-cloud**:provider | cloud.provider |
 | **x-ocsf-cloud**:raw_data | raw_data |
@@ -154,6 +185,7 @@
 | **x-ocsf-http-request**:prefix | http_request.prefix |
 | **x-ocsf-http-request**:referrer | http_request.referrer |
 | **x-ocsf-http-request**:uid | http_request.uid |
+| **x-ocsf-http-request**:user_agent | http_request.user_agent |
 | **x-ocsf-http-request**:value | http_request.args |
 | **x-ocsf-http-request**:version | http_request.version |
 | **x-ocsf-http-request**:x_forwarded_for | http_request.x_forwarded_for |
@@ -263,6 +295,7 @@
 | ipv4-addr | x_aws_interface_id | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
 | ipv4-addr | x_aws_ip_type | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
 | <br> | | |
+| ipv6-addr | value | ip |
 | ipv6-addr | value | intermediate_ips |
 | ipv6-addr | value | sourceaddress |
 | ipv6-addr | x_aws_interface_id | sourceaddress |
@@ -270,6 +303,24 @@
 | ipv6-addr | value | resource_instancedetails_networkinterfaces_0_ipv6addresses_0 |
 | ipv6-addr | x_aws_interface_id | resource_instancedetails_networkinterfaces_0_ipv6addresses_0 |
 | <br> | | |
+| network-traffic | src_port | port |
+| network-traffic | src_ref | ip |
+| network-traffic | dst_port | port |
+| network-traffic | dst_ref | ip |
+| network-traffic | protocol | protocol_num |
+| network-traffic | protocol | protocol_name |
+| network-traffic | extensions.x-network-ext.tcp_flags | tcp_flags |
+| network-traffic | extensions.x-network-ext.protocol_ver | protocol_ver |
+| network-traffic | extensions.x-network-ext.direction | direction |
+| network-traffic | extensions.x-network-ext.boundary_id | boundary_id |
+| network-traffic | extensions.x-network-ext.boundary | boundary |
+| network-traffic | extensions.x-network-ext.direction_id | direction_id |
+| network-traffic | dst_packets | packets_in |
+| network-traffic | src_packets | packets_out |
+| network-traffic | extensions.x-network-ext.packets | packets |
+| network-traffic | dst_byte_count | bytes_in |
+| network-traffic | src_byte_count | bytes_out |
+| network-traffic | extensions.x-network-ext.bytes | bytes |
 | network-traffic | src_ref | sourceaddress |
 | network-traffic | dst_ref | destinationaddress |
 | network-traffic | src_port | sourceport |
@@ -342,6 +393,8 @@
 | x-ibm-finding | alert_id | type_id |
 | x-ibm-finding | description | value |
 | x-ibm-finding | severity | severity_id |
+| x-ibm-finding | src_ip_ref | ip |
+| x-ibm-finding | dst_ip_ref | ip |
 | x-ibm-finding | start | start_time |
 | x-ibm-finding | src_ip_ref | sourceaddress |
 | x-ibm-finding | dst_ip_ref | destinationaddress |
@@ -365,18 +418,28 @@
 | x-ibm-finding | start | service_eventfirstseen |
 | x-ibm-finding | end | service_eventlastseen |
 | <br> | | |
+| x-oca-asset | extensions.x-src-endpoint.svc_name | svc_name |
+| x-oca-asset | ip_refs | ip |
 | x-oca-asset | ip_refs | intermediate_ips |
+| x-oca-asset | extensions.x-src-endpoint.interface_uid | interface_uid |
+| x-oca-asset | extensions.x-src-endpoint.vpc_uid | vpc_uid |
+| x-oca-asset | extensions.x-src-endpoint.instance_uid | instance_uid |
+| x-oca-asset | extensions.x-src-endpoint.subnet_uid | subnet_uid |
 | x-oca-asset | name | name |
-| x-oca-asset | extensions.x-oca-endpoint-ext.port | port |
-| x-oca-asset | extensions.x-oca-endpoint-ext.svc_name | svc_name |
+| x-oca-asset | extensions.x-dst-endpoint.svc_name | svc_name |
+| x-oca-asset | extensions.x-dst-endpoint.interface_uid | interface_uid |
+| x-oca-asset | extensions.x-dst-endpoint.vpc_uid | vpc_uid |
+| x-oca-asset | extensions.x-dst-endpoint.instance_uid | instance_uid |
+| x-oca-asset | extensions.x-dst-endpoint.subnet_uid | subnet_uid |
 | <br> | | |
 | x-oca-event | action | activity |
 | x-oca-event | code | activity_id |
-| x-oca-event | action | category_name |
+| x-oca-event | category | category_name |
 | x-oca-event | code | category_uid |
 | x-oca-event | module | class_name |
 | x-oca-event | extensions.x-cloud-api.class_uid | class_uid |
 | x-oca-event | duration | duration |
+| x-oca-event | network_ref | ip |
 | x-oca-event | created | time |
 | x-oca-event | timezone | timezone_offset |
 | <br> | | |
