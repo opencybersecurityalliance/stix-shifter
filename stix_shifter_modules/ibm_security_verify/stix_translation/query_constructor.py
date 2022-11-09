@@ -1,6 +1,7 @@
 import json
 import logging
 import re
+from datetime import datetime, timedelta
 from typing import Union
 
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
@@ -140,9 +141,9 @@ class QueryStringPatternTranslator:
         start = qualifier_split[1]
         stop = qualifier_split[3]
         # convert timepestamp to millisecond which will be passed to rest service
-        start_epoach = transformer.transform(start)
-        stop_epoach = transformer.transform(stop)
-
+      
+        start_epoach = self.get_epoch_time(start)
+        stop_epoach = self.get_epoch_time(stop)
         qualified_query = "%s&from=%s&to=%s" % (
             expression, start_epoach, stop_epoach)
         return qualified_query
@@ -238,6 +239,24 @@ class QueryStringPatternTranslator:
 
     def parse_expression(self, pattern: Pattern):
         return self._parse_expression(pattern)
+    
+    @staticmethod
+    def get_epoch_time(timestamp):
+        
+        """
+        Converting timestamp (YYYY-MM-DDThh:mm:ss.000Z) to 13-digit Unix time (epoch + milliseconds)
+        :param timestamp: str, timestamp
+        :return: int, epoch time
+        """
+        time_patterns = ['%Y-%m-%dT%H:%M:%SZ', '%Y-%m-%dT%H:%M:%S.%fZ']
+        epoch = datetime(1970, 1, 1)
+        for time_pattern in time_patterns:
+            try:
+                converted_time = int(((datetime.strptime(timestamp, time_pattern) - epoch).total_seconds()) * 1000)
+                return converted_time
+            except ValueError:
+                pass
+        raise NotImplementedError("cannot convert the timestamp {} to milliseconds".format(timestamp))
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
