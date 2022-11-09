@@ -112,7 +112,7 @@
       }
     },
     "category_name": {
-      "key": "x-oca-event.action",
+      "key": "x-oca-event.category",
       "object": "x_oca_event",
       "type_hint": "string"
     },
@@ -203,12 +203,12 @@
       {
         "key": "x-ibm-finding.end",
         "object": "ibm_finding",
-        "transformer": "EpochSecondsToTimestamp"
+        "transformer": "EpochToTimestamp"
       },
       {
         "key": "last_observed",
         "cybox": false,
-        "transformer": "EpochSecondsToTimestamp"
+        "transformer": "EpochToTimestamp"
       }
     ],
     "enrichments": {
@@ -748,10 +748,51 @@
       "type_hint": "integer"
     },
     "src_endpoint": {
-      "ip": {
-        "key": "ipv4-addr.value",
-        "object": "ip"
+      "port": {
+        "key": "network-traffic.src_port",
+        "object": "nt",
+        "transformer": "ToInteger"
       },
+      "svc_name": {
+        "key": "x-oca-asset.extensions.x-src-endpoint.svc_name",
+        "object": "asset",
+        "type_hint": "string"
+      },
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "src_ip",
+          "transformer": "CheckIPv4"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "src_ip",
+          "transformer": "CheckIPv6"
+        },
+        {
+          "key": "network-traffic.src_ref",
+          "object": "nt",
+          "references": "src_ip"
+        },
+        {
+          "key": "x-ibm-finding.src_ip_ref",
+          "object": "finding",
+          "references": "src_ip"
+        },
+        {
+          "key": "x-oca-asset.ip_refs",
+          "object": "host",
+          "references": [
+            "src_ip"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        }
+      ],
       "intermediate_ips": [
         {
           "key": "ipv4-addr.value",
@@ -778,32 +819,201 @@
           "unwrap": true
         }
       ],
+      "interface_uid": {
+        "key": "x-oca-asset.extensions.x-src-endpoint.interface_uid",
+        "object": "asset",
+        "type_hint": "string"
+      },
+      "vpc_uid": {
+        "key": "x-oca-asset.extensions.x-src-endpoint.vpc_uid",
+        "object": "asset",
+        "type_hint": "string"
+      },
+      "instance_uid": {
+        "key": "x-oca-asset.extensions.x-src-endpoint.instance_uid",
+        "object": "asset",
+        "type_hint": "string"
+      },
+      "subnet_uid": {
+        "key": "x-oca-asset.extensions.x-src-endpoint.subnet_uid",
+        "object": "asset",
+        "type_hint": "string"
+      },
       "name": {
         "key": "x-oca-asset.name",
         "object": "asset",
         "type_hint": "string"
-      },
+      }
+    },
+    "dst_endpoint": {
       "port": {
-        "key": "x-oca-asset.extensions.x-oca-endpoint-ext.port",
-        "object": "asset",
-        "type_hint": "string"
+        "key": "network-traffic.dst_port",
+        "object": "nt",
+        "transformer": "ToInteger"
       },
       "svc_name": {
-        "key": "x-oca-asset.extensions.x-oca-endpoint-ext.svc_name",
+        "key": "x-oca-asset.extensions.x-dst-endpoint.svc_name",
         "object": "asset",
         "type_hint": "string"
+      },
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip",
+          "transformer": "CheckIPv4"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_ip",
+          "transformer": "CheckIPv6"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "nt",
+          "references": "dst_ip"
+        },
+        {
+          "key": "x-ibm-finding.dst_ip_ref",
+          "object": "finding",
+          "references": "dst_ip"
+        },
+        {
+          "key": "x-oca-asset.ip_refs",
+          "object": "host",
+          "references": [
+            "dst_ip"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        }
+      ],
+      "intermediate_ips": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ipv4",
+          "unwrap": true,
+          "transformer": "FilterIPv4List",
+          "type_hint": [
+            "ip"
+          ]
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_ipv6",
+          "unwrap": true,
+          "transformer": "FilterIPv6List"
+        },
+        {
+          "key": "x-oca-asset.ip_refs",
+          "object": "asset",
+          "references": [
+            "dst_ipv4",
+            "dst_ipv6"
+          ],
+          "unwrap": true
+        }
+      ],
+      "interface_uid": {
+        "key": "x-oca-asset.extensions.x-dst-endpoint.interface_uid",
+        "object": "asset",
+        "type_hint": "string"
+      },
+      "vpc_uid": {
+        "key": "x-oca-asset.extensions.x-dst-endpoint.vpc_uid",
+        "object": "asset",
+        "type_hint": "string"
+      },
+      "instance_uid": {
+        "key": "x-oca-asset.extensions.x-dst-endpoint.instance_uid",
+        "object": "asset",
+        "type_hint": "string"
+      },
+      "subnet_uid": {
+        "key": "x-oca-asset.extensions.x-dst-endpoint.subnet_uid",
+        "object": "asset",
+        "type_hint": "string"
+      },
+      "name": {
+        "key": "x-oca-asset.name",
+        "object": "asset",
+        "type_hint": "string"
+      }
+    },
+    "connection_info": {
+      "protocol_num": {
+        "key": "network-traffic.protocol",
+        "object": "nt",
+        "transformer": "ProtocolNumToName"
+      },
+      "protocol_name": {
+        "key": "network-traffic.protocol",
+        "object": "nt"
+      },
+      "tcp_flags": {
+        "key": "network-traffic.extensions.x-network-ext.tcp_flags",
+        "object": "nt"
+      },
+      "protocol_ver": {
+        "key": "network-traffic.extensions.x-network-ext.protocol_ver",
+        "object": "nt"
+      },
+      "direction": {
+        "key": "network-traffic.extensions.x-network-ext.direction",
+        "object": "nt"
+      },
+      "boundary_id": {
+        "key": "network-traffic.extensions.x-network-ext.boundary_id",
+        "object": "nt"
+      },
+      "boundary": {
+        "key": "network-traffic.extensions.x-network-ext.boundary",
+        "object": "nt"
+      },
+      "direction_id": {
+        "key": "network-traffic.extensions.x-network-ext.direction_id",
+        "object": "nt"
+      }
+    },
+    "traffic": {
+      "packets_in": {
+        "key": "network-traffic.dst_packets",
+        "object": "nt"
+      },
+      "packets_out": {
+        "key": "network-traffic.src_packets",
+        "object": "nt"
+      },
+      "packets": {
+        "key": "network-traffic.extensions.x-network-ext.packets",
+        "object": "nt"
+      },
+      "bytes_in": {
+        "key": "network-traffic.dst_byte_count",
+        "object": "nt"
+      },
+      "bytes_out": {
+        "key": "network-traffic.src_byte_count",
+        "object": "nt"
+      },
+      "bytes": {
+        "key": "network-traffic.extensions.x-network-ext.bytes",
+        "object": "nt"
       }
     },
     "start_time": [
       {
         "key": "x-ibm-finding.start",
         "object": "ibm_finding",
-        "transformer": "EpochSecondsToTimestamp"
+        "transformer": "EpochToTimestamp"
       },
       {
         "key": "first_observed",
         "cybox": false,
-        "transformer": "EpochSecondsToTimestamp"
+        "transformer": "EpochToTimestamp"
       }
     ],
     "status": {
@@ -955,7 +1165,7 @@
       {
         "key": "last_observed",
         "cybox": false,
-        "transformer": "EpochSecondsToTimestamp"
+        "transformer": "EpochToTimestamp"
       }
     ],
     "account": [
