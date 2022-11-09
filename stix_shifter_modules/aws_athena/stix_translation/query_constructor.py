@@ -14,8 +14,8 @@ GUARDDUTY_CONFIG = 'json/guardduty_config.json'
 ARRAY_TYPE_COLUMNS = {
     'ocsf': {
         'resources.': {'from': 'UNNEST(resources) as t(resource)', 'where': 'resource.'},
-        'src_endpoint.intermediate_ips.': {'from': 'UNNEST(src_endpoint.intermediate_ips) as t(src_intermediate_ips)', 'where': 'src_intermediate_ips.'},
-        'dst_endpoint.intermediate_ips.': {'from': 'UNNEST(dst_endpoint.intermediate_ips) as t(dst_intermediate_ips)', 'where': 'dst_intermediate_ips.'}
+        'src_endpoint.intermediate_ips': {'from': 'UNNEST(src_endpoint.intermediate_ips) as t(src_intermediate_ips)', 'where': 'src_intermediate_ips'},
+        'dst_endpoint.intermediate_ips': {'from': 'UNNEST(dst_endpoint.intermediate_ips) as t(dst_intermediate_ips)', 'where': 'dst_intermediate_ips'}
     }
 }
 

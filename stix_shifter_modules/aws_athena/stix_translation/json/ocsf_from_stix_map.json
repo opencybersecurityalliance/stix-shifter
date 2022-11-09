@@ -9,7 +9,9 @@
   "ipv4-addr": {
     "fields": {
       "value": [
+        "dst_endpoint.intermediate_ips",
         "dst_endpoint.ip",
+        "src_endpoint.intermediate_ips",
         "src_endpoint.ip"
       ]
     }
@@ -17,7 +19,9 @@
   "ipv6-addr": {
     "fields": {
       "value": [
+        "dst_endpoint.intermediate_ips",
         "dst_endpoint.ip",
+        "src_endpoint.intermediate_ips",
         "src_endpoint.ip"
       ]
     }
@@ -61,9 +65,7 @@
         "connection_info.tcp_flags"
       ],
       "protocol": [
-        "connection_info.protocol_name"
-      ],
-      "protocols[*]": [
+        "connection_info.protocol_name",
         "connection_info.protocol_num"
       ],
       "src_byte_count": [
@@ -246,8 +248,7 @@
         "src_endpoint.vpc_uid"
       ],
       "ip_refs[*].value": [
-        "dst_endpoint.ip",
-        "src_endpoint.ip"
+        "dst_endpoint.intermediate_ips"
       ],
       "name": [
         "dst_endpoint.name",
