@@ -42,12 +42,11 @@ class StixTransmission:
 
     def respond_error(func):
         @functools.wraps(func)
-        def wrapper_func(self, *args, **kwargs):
+        async def wrapper_func(self, *args, **kwargs):
             try:
                 if self.init_error:
                     raise self.init_error
-
-                return func(self, *args, **kwargs)
+                return await func(self, *args, **kwargs)
             except Exception as ex:
                 return_obj = dict()
                 ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)

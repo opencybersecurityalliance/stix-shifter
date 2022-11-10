@@ -1,8 +1,8 @@
 from aiohttp_retry import RetryClient, ExponentialRetry
 from aiohttp import ClientTimeout
+from asyncio.exceptions import TimeoutError
 import aiohttp
 from collections.abc import Mapping
-import concurrent
 import os
 import errno
 import sys
@@ -134,7 +134,7 @@ class RestApiClientAsync:
             except aiohttp.client_exceptions.ServerTimeoutError as e:
                 # TODO unhendled error error
                 raise Exception(f'server timeout_error ({self.connect_timeout} sec)')
-            except concurrent.futures._base.TimeoutError as e:
+            except TimeoutError as e:
                 raise Exception(f'timeout_error ({timeout} sec)')
             except Exception as e:
                 self.logger.error('exception occured during requesting url: ' + str(e) + " " + str(type(e)))
