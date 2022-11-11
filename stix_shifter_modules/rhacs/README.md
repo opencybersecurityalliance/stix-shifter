@@ -18,6 +18,10 @@
    |Alert by id Endpoint|https://<{fqdn}>v1/alerts/alertid|GET
    |Ping Endpoint|https://<{fqdn}>v1/ping|GET
    
+### Note
+- RHACS(StackRox) supports both ca and self-signed certificates. Below given transmit and execute examples are based on self-signed. In case of trusted ca issued server certificate, it is not required to pass sni and self-signed parameter as they are optional.  
+
+
 ### Format for calling stix-shifter from the command line
 ```
 python main.py `<translate or transmit>` `<translator_module>` `<query or result>` `<STIX identity object>` `<data>`

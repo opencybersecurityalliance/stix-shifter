@@ -19,11 +19,11 @@
         },
         "sni": {
             "type": "text",
-            "optional": false
+            "optional": true
         },
         "selfSignedCert": {
             "type": "password",
-            "optional": false
+            "optional": true
         }
     },
     "configuration": {
