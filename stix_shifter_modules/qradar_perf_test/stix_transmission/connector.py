@@ -23,10 +23,10 @@ class Connector(BaseSyncConnector):
                                     auth=auth,
                                     url_modifier_function=lambda host_port, endpoint, headers: f'{endpoint}')
 
-    def ping_connection(self):
+    async def ping_connection(self):
         return_obj = dict()
 
-        response = self.client.call_api(self.bundle_url, 'head', timeout=self.timeout)
+        response = await self.client.call_api(self.bundle_url, 'head', timeout=self.timeout)
         response_txt = response.raise_for_status()
 
         if response.code == 200:
@@ -38,9 +38,9 @@ class Connector(BaseSyncConnector):
             ErrorResponder.fill_error(return_obj, response_txt, ['message'], connector=self.connector)
         return return_obj
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         return_obj = dict()
-        response = self.client.call_api(self.bundle_url, 'get', timeout=self.timeout)
+        response = await self.client.call_api(self.bundle_url, 'get', timeout=self.timeout)
 
         if response.code != 200:
             response_txt = response.raise_for_status()
