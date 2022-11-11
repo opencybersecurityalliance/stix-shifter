@@ -166,7 +166,7 @@ List updated: October 29, 2021
 
 ### Prerequisites
 
-Python 3.6 is required to use stix-shifter.
+Python 3.8 or greater is required to use stix-shifter.
 
 Stix-shifter provides several functions: `translate` and `transmit` are the primary functions, `execute` offers a way to test the complete stix-shifter flow.
 
