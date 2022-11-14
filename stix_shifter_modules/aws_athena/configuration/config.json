@@ -55,6 +55,10 @@
                 "type": "password",
                 "optional": true
             },
+            "aws_assume_role_external_id": {
+                "type": "password",
+                "optional": true
+            },
             "aws_secret_access_key": {
                 "type": "password"
             }
