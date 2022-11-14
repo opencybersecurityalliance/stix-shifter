@@ -56,7 +56,7 @@
                 "description": "AWS IAM Role is required for only AWS role-based authentication"
             },
             "aws_assume_role_external_id": {
-                "label": "AWS IAM Role Assume External ID",
+                "label": "External ID for AWS Assume Role",
                 "description": "External ID is optional for using in AWS role-based authentication"
             },
             "aws_secret_access_key": {
