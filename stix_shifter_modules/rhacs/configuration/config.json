@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Red Hat Advanced Cluster Security for Kubernetes (StackRox)"
+            "displayName": "Red Hat Advanced Cluster Security for Kubernetes (StackRox)",
+            "group": "rhacs"
         },
         "host": {
             "type": "text",
