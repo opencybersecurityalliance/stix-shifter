@@ -1,8 +1,8 @@
 adal==1.2.7
 antlr4-python3-runtime==4.8
-boto3==1.21.21
+boto3==1.26.5
 flask==2.0.3
-pyOpenSSL==21.0.0
+pyOpenSSL==22.1.0
 flatten_json==0.1.13
 python-dateutil==2.8.2
 requests_toolbelt==0.9.1

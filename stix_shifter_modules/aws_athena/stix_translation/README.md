@@ -93,13 +93,13 @@ STOP t'2020-11-30T10:43:10.003Z'"
 {
     "queries": [
         {
-            "vpcflow": "((lower(sourceaddress) = lower('172.31.76.105') OR lower(destinationaddress) = lower('172.31.76.105')) AND start BETWEEN 1588322590 AND 1606732990) LIMIT 10000"
+            "vpcflow": "((lower(sourceaddress) = lower('172.31.76.105') OR lower(destinationaddress) = lower('172.31.76.105')) AND start BETWEEN 1588322590 AND 1606732990)"
         },
         {
-            "guardduty": "((lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.0.privateipaddress')) = lower('172.31.76.105') OR lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.1.privateipaddress')) = lower('172.31.76.105') OR lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.0.publicip')) = lower('172.31.76.105') OR lower(json_extract_scalar(service,'$.action.networkconnectionaction.remoteipdetails.ipaddressv4')) = lower('172.31.76.105') OR lower(json_extract_scalar(service,'$.action.portprobeaction.remoteipdetails.ipaddressv4')) = lower('172.31.76.105') OR lower(json_extract_scalar(service,'$.action.awsapicallaction.remoteipdetails.ipaddressv4')) = lower('172.31.76.105')) AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-11-30T10:43:10.003Z') LIMIT 10000"
+            "guardduty": "((lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.0.privateipaddress')) = lower('172.31.76.105') OR lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.1.privateipaddress')) = lower('172.31.76.105') OR lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.0.publicip')) = lower('172.31.76.105') OR lower(json_extract_scalar(service,'$.action.networkconnectionaction.remoteipdetails.ipaddressv4')) = lower('172.31.76.105') OR lower(json_extract_scalar(service,'$.action.portprobeaction.remoteipdetails.ipaddressv4')) = lower('172.31.76.105') OR lower(json_extract_scalar(service,'$.action.awsapicallaction.remoteipdetails.ipaddressv4')) = lower('172.31.76.105')) AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-11-30T10:43:10.003Z')"
         },
         {
-            "ocsf": "(lower(src_endpoint.intermediate_ips) = lower('172.31.76.105') AND _time BETWEEN 1588322590000 AND 1606732990000) LIMIT 10000"
+            "ocsf": "(lower(src_endpoint.intermediate_ips) = lower('172.31.76.105') AND _time BETWEEN 1588322590000 AND 1606732990000)"
         }
     ]
 }
@@ -113,7 +113,7 @@ STOP t'2020-11-30T10:43:10.003Z'"
  \"guardduty_database_name\":\"logs_db\",\"guardduty_table_name\":\"gd_logs\"}" "{\"auth\":{\"aws_access_key_id\": 
  \"xxxx\", 
  \"aws_secret_access_key\": \"yyyy\"}}" query "{\"guardduty\": \"((lower(json_extract_scalar(resource,'$
- .instancedetails.networkinterfaces.0.privateipaddress')) = lower('172.31.76.105') OR lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.1.privateipaddress')) = lower('172.31.76.105') OR lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.0.publicip')) = lower('172.31.76.105') OR lower(json_extract_scalar(service,'$.action.networkconnectionaction.remoteipdetails.ipaddressv4')) = lower('172.31.76.105') OR lower(json_extract_scalar(service,'$.action.portprobeaction.remoteipdetails.ipaddressv4')) = lower('172.31.76.105') OR lower(json_extract_scalar(service,'$.action.awsapicallaction.remoteipdetails.ipaddressv4')) = lower('172.31.76.105')) AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-11-30T10:43:10.003Z') LIMIT 10000\"}"
+ .instancedetails.networkinterfaces.0.privateipaddress')) = lower('172.31.76.105') OR lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.1.privateipaddress')) = lower('172.31.76.105') OR lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.0.publicip')) = lower('172.31.76.105') OR lower(json_extract_scalar(service,'$.action.networkconnectionaction.remoteipdetails.ipaddressv4')) = lower('172.31.76.105') OR lower(json_extract_scalar(service,'$.action.portprobeaction.remoteipdetails.ipaddressv4')) = lower('172.31.76.105') OR lower(json_extract_scalar(service,'$.action.awsapicallaction.remoteipdetails.ipaddressv4')) = lower('172.31.76.105')) AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-11-30T10:43:10.003Z')\"}"
 ```
 
 #### Transmit query: VPCFlow query is passed to STIX transmission module
@@ -123,7 +123,7 @@ transmit aws_athena "{\"region\": \"us-east-1\", \"s3_bucket_location\": \"s3://
 \"vpcflow_database_name\":\"logs_db\", \"vpcflow_table_name\":\"vpc_flow_log\", 
 \"guardduty_database_name\":\"logs_db\",\"guardduty_table_name\":\"gd_logs\"}" "{\"auth\":{\"aws_access_key_id\": \"xxxx\", 
 \"aws_secret_access_key\": \"yyyy\"}}" query "{\"vpcflow\": \"((lower(sourceaddress) = lower('172.31.76.105') OR lower
-(destinationaddress) = lower('172.31.76.105')) AND starttime BETWEEN 1588322590 AND 1606732990) LIMIT 10000\"}"
+(destinationaddress) = lower('172.31.76.105')) AND starttime BETWEEN 1588322590 AND 1606732990)\"}"
 ```
 
 #### GuardDuty Search id: 
@@ -376,10 +376,10 @@ translate aws_athena query '{}' "[x-ibm-finding:name = '146.168.246.36 is perfor
 {
     "queries": [
         {
-            "guardduty": "(lower(title) = lower('146.168.246.36 is performing SSH brute force attacks against i-03d7e6195920aa4c0.') AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-11-30T10:43:10.003Z') LIMIT 10000"
+            "guardduty": "(lower(title) = lower('146.168.246.36 is performing SSH brute force attacks against i-03d7e6195920aa4c0.') AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-11-30T10:43:10.003Z')"
         },
         {
-            "ocsf": "(lower(observables.name) = lower('146.168.246.36 is performing SSH brute force attacks against i-03d7e6195920aa4c0.') AND _time BETWEEN 1588322590000 AND 1606732990000) LIMIT 10000"
+            "ocsf": "(lower(observables.name) = lower('146.168.246.36 is performing SSH brute force attacks against i-03d7e6195920aa4c0.') AND _time BETWEEN 1588322590000 AND 1606732990000)"
         }
     ]
 }
@@ -399,10 +399,10 @@ translate aws_athena query '{}' "([network-traffic:src_port = '3389'] OR [domain
 {
     "queries": [
         {
-            "vpcflow": "(CAST(sourceport AS varchar) = '3389' AND start BETWEEN 1588322590 AND 1606732990) LIMIT 10000"
+            "vpcflow": "(CAST(sourceport AS varchar) = '3389' AND start BETWEEN 1588322590 AND 1606732990)"
         },
         {
-            "guardduty": "(((CAST(json_extract_scalar(service,'$.action.networkconnectionaction.localportdetails.port') AS varchar) = '3389' OR CAST(json_extract_scalar(service,'$.action.portprobeaction.localportdetails.port') AS varchar) = '3389') AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-11-30T10:43:10.003Z') UNION ((lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.0.privatednsname')) = lower('guarddutyc2activityb.com') OR lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.1.privatednsname')) = lower('guarddutyc2activityb.com') OR lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.0.publicdnsname')) = lower('guarddutyc2activityb.com') OR lower(json_extract_scalar(service,'$.action.dnsrequestaction.domain')) = lower('guarddutyc2activityb.com')) AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-11-30T10:43:10.003Z')) LIMIT 10000"
+            "guardduty": "(((CAST(json_extract_scalar(service,'$.action.networkconnectionaction.localportdetails.port') AS varchar) = '3389' OR CAST(json_extract_scalar(service,'$.action.portprobeaction.localportdetails.port') AS varchar) = '3389') AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-11-30T10:43:10.003Z') UNION ((lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.0.privatednsname')) = lower('guarddutyc2activityb.com') OR lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.1.privatednsname')) = lower('guarddutyc2activityb.com') OR lower(json_extract_scalar(resource,'$.instancedetails.networkinterfaces.0.publicdnsname')) = lower('guarddutyc2activityb.com') OR lower(json_extract_scalar(service,'$.action.dnsrequestaction.domain')) = lower('guarddutyc2activityb.com')) AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-11-30T10:43:10.003Z'))"
         }
     ]
 }
@@ -422,13 +422,13 @@ translate aws_athena query '{}' "([x-aws-details:account_id = '979326520502'] AN
 {
     "queries": [
         {
-            "vpcflow": "((CAST(account AS varchar) = '979326520502' AND start BETWEEN 1588322590 AND 1606732990) INTERSECT (lower(action) = lower('accept') AND start BETWEEN 1588322590 AND 1606732990)) LIMIT 10000"
+            "vpcflow": "((CAST(account AS varchar) = '979326520502' AND start BETWEEN 1588322590 AND 1606732990) INTERSECT (lower(action) = lower('accept') AND start BETWEEN 1588322590 AND 1606732990))"
         },
         {
-            "guardduty": "((CAST(accountid AS varchar) = '979326520502' AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-11-30T10:43:10.003Z') INTERSECT (lower(type) = lower('accept') AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-11-30T10:43:10.003Z')) LIMIT 10000"
+            "guardduty": "((CAST(accountid AS varchar) = '979326520502' AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-11-30T10:43:10.003Z') INTERSECT (lower(type) = lower('accept') AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND '2020-11-30T10:43:10.003Z'))"
         },
         {
-            "ocsf": "(lower(observables.type) = lower('accept') AND _time BETWEEN 1588322590000 AND 1606732990000) LIMIT 10000"
+            "ocsf": "(lower(observables.type) = lower('accept') AND _time BETWEEN 1588322590000 AND 1606732990000)"
         }
     ]
 }

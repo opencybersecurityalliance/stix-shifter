@@ -13,7 +13,9 @@ GUARDDUTY_CONFIG = 'json/guardduty_config.json'
 
 ARRAY_TYPE_COLUMNS = {
     'ocsf': {
-        'resources.': {'from': 'UNNEST(resources) as t(resource)', 'where': 'resource.'}
+        'resources.': {'from': 'UNNEST(resources) as t(resource)', 'where': 'resource.'},
+        'src_endpoint.intermediate_ips.': {'from': 'UNNEST(src_endpoint.intermediate_ips) as t(src_intermediate_ips)', 'where': 'src_intermediate_ips.'},
+        'dst_endpoint.intermediate_ips.': {'from': 'UNNEST(dst_endpoint.intermediate_ips) as t(dst_intermediate_ips)', 'where': 'dst_intermediate_ips.'}
     }
 }
 
@@ -25,7 +27,7 @@ class QueryStringPatternTranslator:
         self.comparator_lookup = self.dmm.map_comparator()
         self._time_range = time_range
         self.service_type = self.dmm.dialect
-        self._protocol_lookup_needed = True if self.service_type in ['vpcflow'] else False
+        self._protocol_lookup_needed = True if self.service_type in ['vpcflow', 'ocsf'] else False
         self._epoch_time = True if self.service_type in ['vpcflow', 'ocsf'] else False
         self.qualifier_string = ''
         self.translated = self.parse_expression(pattern)
@@ -265,7 +267,7 @@ class QueryStringPatternTranslator:
             elif self.service_type == 'vpcflow':
                 startstopattr = 'start'
             elif self.service_type == 'ocsf':
-                startstopattr = '_time'
+                startstopattr = 'time'
                 start_stop_list[0] = int(start_stop_list[0]*1000)
                 start_stop_list[1] = int(start_stop_list[1]*1000)
 
@@ -490,8 +492,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     :param options: dict, time_range defaults to 5 and result_limit defaults to 10000
     :return: dict, AWS Athena SQL query
     """
-    result_limit = options['result_limit']
     time_range = options['time_range']
     query = QueryStringPatternTranslator(pattern, data_model_mapping, time_range)
-    query_string = "({condition}) LIMIT {result_limit}".format(condition=query.translated, result_limit=result_limit)
+    query_string = "({condition})".format(condition=query.translated)
     return [{query.service_type: query_string}]
