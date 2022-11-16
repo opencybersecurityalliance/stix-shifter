@@ -114,9 +114,7 @@ class QueryStringPatternTranslator:
 
             # Some values are formatted differently based on how they're being compared
             elif expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
-                print(expression.value)
                 value = self._format_match(expression.value)
-                print(value)
             # should be (x, y, z, ...)
             elif expression.comparator == ComparisonComparators.In:
                 value = self._format_set(expression.value)
