@@ -277,6 +277,20 @@ class TestStixtoQuery(unittest.TestCase, object):
         test_query = ['(process.name : /^cmd\\.exe .*/ OR process.parent.name : /^cmd\\.exe .*/)']
         _test_query_assertions(translated_query, test_query)
 
+    def test_like_operator(self):
+        stix_pattern = "[process:command_line LIKE 'cmd.exe /_ %']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = ['(process.command_line : "cmd.exe /? *" OR powershell.command.value : "cmd.exe /? *")']
+        _test_query_assertions(translated_query, test_query)
+
+    def test_like_operator_with_backslash(self):
+        stix_pattern = r"[process:binary_ref.name LIKE 'C:\\Windows\\System32\\%']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = [r'(process.executable : C\:\\Windows\\System32\\* OR process.parent.executable : C\:\\Windows\\System32\\*)']
+        _test_query_assertions(translated_query, test_query)
+
     def test_process_references(self):
         stix_pattern = "[process:binary_ref.name = 'node' OR process:parent_ref.name = 'node']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
