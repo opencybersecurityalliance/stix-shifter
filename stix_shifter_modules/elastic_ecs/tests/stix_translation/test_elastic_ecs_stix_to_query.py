@@ -266,7 +266,15 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "[artifact:payload_bin MATCHES '1*']"  # Elastic search does not support PCRE
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['event.original : 1*']
+        test_query = ['event.original : /1*/']
+        _test_query_assertions(translated_query, test_query)
+
+    def test_match_operator_with_backslash(self):
+        # STIX uses backslash as escape, so to match a literal . in RE you need double-backslash
+        stix_pattern = r"[process:name MATCHES '^cmd\\.exe .*']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = ['(process.name : /^cmd\\.exe .*/ OR process.parent.name : /^cmd\\.exe .*/)']
         _test_query_assertions(translated_query, test_query)
 
     def test_process_references(self):
