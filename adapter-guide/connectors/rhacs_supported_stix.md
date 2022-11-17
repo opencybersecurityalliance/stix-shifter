@@ -1,4 +1,4 @@
-##### Updated on 09/09/22
+##### Updated on 11/04/22
 ## Red Hat Advanced Cluster Security for Kubernetes (StackRox)
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -14,7 +14,23 @@
 | <= | :<= |
 | OR | OR |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **x-rhacs-cluster**:name | Cluster |
+| **x-rhacs-cluster**:id | Cluster ID |
+| **x-rhacs-cluster**:namespace | Namespace |
+| **x-rhacs-deployment**:name | Deployment |
+| **x-rhacs-deployment**:isactive | Inactive Deployment |
+| **x-ibm-finding**:name | Policy |
+| **x-ibm-finding**:time_observed | Violation Time |
+| **x-ibm-finding**:severity | Severity |
+| **x-ibm-finding**:extensions.'x-rhacs-finding'.categories[*] | Category |
+| **x-ibm-finding**:extensions.'x-rhacs-finding'.lifecycle_stage | Lifecycle Stage |
+| **x-ibm-finding**:extensions.'x-rhacs-finding'.violation_state | Violation State |
+| **x-ibm-finding**:extensions.'x-rhacs-finding'.resource_type | Resource Type |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | process | name | name |
