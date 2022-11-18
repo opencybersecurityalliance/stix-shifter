@@ -48,6 +48,8 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _format_match(value) -> str:
+        # Escape value as necessary first
+        value = value.replace('/', '\\/')
         # Elasticsearch regex is always anchored, so they don't support ^ and $
         # 3.9+: value = value.removeprefix('^').removesuffix('$')
         value = value[1:] if value.startswith('^') else value
