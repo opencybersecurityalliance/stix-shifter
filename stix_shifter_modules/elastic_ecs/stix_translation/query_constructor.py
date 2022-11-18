@@ -48,6 +48,19 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _format_match(value) -> str:
+        # Elasticsearch regex is always anchored, so they don't support ^ and $
+        # 3.9+: value = value.removeprefix('^').removesuffix('$')
+        value = value[1:] if value.startswith('^') else value
+        value = value[:-1] if value.endswith('$') else value
+        # No support for generic character types
+        # Modify a regex with a regex - this oughta be fun
+        # Not sure how to handle \h, \H, \v, \V, and \N
+        value = re.sub(r"([^\\])\\d", r"\1[0-9]", value)
+        value = re.sub(r"([^\\])\\D", r"\1[^0-9]", value)
+        value = re.sub(r"([^\\])\\s", r"\1[ \t\n\r\f\v]", value)
+        value = re.sub(r"([^\\])\\S", r"\1[^ \t\n\r\f\v]", value)
+        value = re.sub(r"([^\\])\\w", r"\1[a-zA-Z0-9_]", value)
+        value = re.sub(r"([^\\])\\W", r"\1[^a-zA-Z0-9_]", value)
         return '/{}/'.format(value)
 
     @staticmethod
