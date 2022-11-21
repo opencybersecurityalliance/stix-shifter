@@ -91,7 +91,7 @@ class QueryStringPatternTranslator:
                     expression.comparator == ComparisonComparators.GreaterThanOrEqual or \
                     expression.comparator == ComparisonComparators.LessThanOrEqual:
                 # Check whether value is in datetime format, Ex: process.created
-                pattern = "^\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z$"
+                pattern = r"^\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z$"
                 try:
                     match = bool(re.search(pattern, value))
                 except:
@@ -251,7 +251,7 @@ def _test_or_add_milliseconds(timestamp) -> str:
     # remove single quotes around timestamp
     timestamp = re.sub("'", "", timestamp)
     # check for 3-decimal milliseconds
-    pattern = "\.\d+Z$"
+    pattern = r"\.\d+Z$"
     if not bool(re.search(pattern, timestamp)):
         timestamp = re.sub('Z$', '.000Z', timestamp)
     return timestamp
@@ -259,7 +259,7 @@ def _test_or_add_milliseconds(timestamp) -> str:
 
 def _test_START_STOP_format(query_string) -> bool:
     # Matches STARTt'1234-56-78T00:00:00.123Z'STOPt'1234-56-78T00:00:00.123Z'
-    pattern = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
+    pattern = r"START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
     match = re.search(pattern, query_string)
     return bool(match)
 
@@ -272,7 +272,7 @@ def _test_timerange_format(query_string) -> bool:
 
 
 def _test_timestamp(timestamp) -> bool:
-    pattern = "^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
+    pattern = r"^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
     match = re.search(pattern, timestamp)
     return bool(match)
 
