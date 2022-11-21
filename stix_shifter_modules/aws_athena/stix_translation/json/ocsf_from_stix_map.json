@@ -60,8 +60,7 @@
       "extensions.'x-network-ext'.tcp_flags": [
         "connection_info.tcp_flags"
       ],
-      "protocol": [
-        "connection_info.protocol_name",
+      "protocols[*]": [
         "connection_info.protocol_num"
       ],
       "src_byte_count": [
