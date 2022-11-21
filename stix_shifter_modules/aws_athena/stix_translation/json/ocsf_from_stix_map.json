@@ -60,9 +60,6 @@
       "extensions.'x-network-ext'.tcp_flags": [
         "connection_info.tcp_flags"
       ],
-      "protocol": [
-        "connection_info.protocol_name"
-      ],
       "protocols[*]": [
         "connection_info.protocol_num"
       ],
@@ -244,10 +241,6 @@
       ],
       "extensions.'x-src-endpoint'.vpc_uid": [
         "src_endpoint.vpc_uid"
-      ],
-      "ip_refs[*].value": [
-        "dst_endpoint.ip",
-        "src_endpoint.ip"
       ],
       "name": [
         "dst_endpoint.name",
