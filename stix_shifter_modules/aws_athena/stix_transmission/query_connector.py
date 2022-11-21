@@ -54,7 +54,7 @@ class QueryConnector(BaseQueryConnector):
                     if match.group():
                         match_str = str(match.group())
                         query[query_service_type] = query[query_service_type].replace(match_str, '')
-                        other_tables = ', %s ' % match_str.replace('##', '')
+                        other_tables += ' %s%s%s ' % ('LEFT JOIN ', match_str.replace('##', ''), ' ON TRUE ')
 
             if query_service_type == 'ocsf':
                 columns = self.column_list(self.connection[config_details[1]])
