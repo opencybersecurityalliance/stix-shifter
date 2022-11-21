@@ -1,4 +1,4 @@
-{ 
+{
   "email-addr": {
     "fields": {
       "value": [
@@ -9,9 +9,7 @@
   "ipv4-addr": {
     "fields": {
       "value": [
-        "dst_endpoint.intermediate_ips",
         "dst_endpoint.ip",
-        "src_endpoint.intermediate_ips",
         "src_endpoint.ip"
       ]
     }
@@ -19,9 +17,7 @@
   "ipv6-addr": {
     "fields": {
       "value": [
-        "dst_endpoint.intermediate_ips",
         "dst_endpoint.ip",
-        "src_endpoint.intermediate_ips",
         "src_endpoint.ip"
       ]
     }
@@ -246,9 +242,6 @@
       ],
       "extensions.'x-src-endpoint'.vpc_uid": [
         "src_endpoint.vpc_uid"
-      ],
-      "ip_refs[*].value": [
-        "dst_endpoint.intermediate_ips"
       ],
       "name": [
         "dst_endpoint.name",
