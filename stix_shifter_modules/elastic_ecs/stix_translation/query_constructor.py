@@ -44,6 +44,10 @@ class QueryStringPatternTranslator:
             return value
 
     @staticmethod
+    def _format_match(value) -> str:
+        return '/{}/'.format(value)
+
+    @staticmethod
     def _escape_value(value, comparator=None) -> str:
         if isinstance(value, str):
             return '{}'.format(value.replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)'))
@@ -109,8 +113,8 @@ class QueryStringPatternTranslator:
                 expression.value = transformer.transform(expression.value)
 
             # Some values are formatted differently based on how they're being compared
-            # if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
-            #    value = self._format_match(expression.value)
+            elif expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
+                value = self._format_match(expression.value)
             # should be (x, y, z, ...)
             elif expression.comparator == ComparisonComparators.In:
                 value = self._format_set(expression.value)
