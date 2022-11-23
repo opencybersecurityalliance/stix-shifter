@@ -19,166 +19,132 @@
     ],
     "activity": {
       "key": "x-oca-event.action",
-      "object": "x_oca_event",
-      "type_hint": "string"
+      "object": "x_oca_event"
     },
     "activity_id": {
       "key": "x-oca-event.code",
       "object": "x_oca_event",
-      "transformer": "ToInteger",
-      "type_hint": "integer"
+      "transformer": "ToInteger"
     },
     "api": {
       "operation": {
         "key": "x-ocsf-cloud.operation",
-        "object": "ocsf_cloud_api",
-        "type_hint": "string"
+        "object": "ocsf_cloud_api"
       },
       "request": {
         "flags": {
           "key": "x-ocsf-cloud.request_flags",
           "object": "ocsf_cloud_api",
-          "transformer": "ToLowercaseArray",
-          "type_hint": [
-            "string"
-          ]
+          "transformer": "ToLowercaseArray"
         },
         "uid": {
           "key": "x-ocsf-cloud.request_uid",
-          "object": "ocsf_cloud_api",
-          "type_hint": "string"
+          "object": "ocsf_cloud_api"
         }
       },
       "response": {
         "code": {
           "key": "x-ocsf-cloud.response_code",
           "object": "ocsf_cloud_api",
-          "transformer": "ToInteger",
-          "type_hint": "integer"
+          "transformer": "ToInteger"
         },
         "error": {
           "key": "x-ocsf-cloud.response_error",
-          "object": "ocsf_cloud_api",
-          "type_hint": "string"
+          "object": "ocsf_cloud_api"
         },
         "error_message": {
           "key": "x-ocsf-cloud.response_error_message",
-          "object": "ocsf_cloud_api",
-          "type_hint": "string"
+          "object": "ocsf_cloud_api"
         },
         "flags": {
           "key": "x-ocsf-cloud.response_flags",
           "object": "ocsf_cloud_api",
-          "transformer": "ToLowercaseArray",
-          "type_hint": [
-            "string"
-          ]
+          "transformer": "ToLowercaseArray"
         },
         "message": {
           "key": "x-ocsf-cloud.response_message",
-          "object": "ocsf_cloud_api",
-          "type_hint": "string"
+          "object": "ocsf_cloud_api"
         }
       },
       "service": {
         "labels": {
           "key": "x-ocsf-cloud.service_labels",
           "object": "ocsf_cloud_api",
-          "transformer": "ToLowercaseArray",
-          "type_hint": [
-            "string"
-          ]
+          "transformer": "ToLowercaseArray"
         },
         "name": {
           "key": "x-ocsf-cloud.service_name",
-          "object": "ocsf_cloud_api",
-          "type_hint": "string"
+          "object": "ocsf_cloud_api"
         },
         "uid": {
           "key": "x-ocsf-cloud.service_uid",
-          "object": "ocsf_cloud_api",
-          "type_hint": "string"
+          "object": "ocsf_cloud_api"
         },
         "version": {
           "key": "x-ocsf-cloud.service_uid",
-          "object": "ocsf_cloud_api",
-          "type_hint": "string"
+          "object": "ocsf_cloud_api"
         }
       },
       "version": {
         "key": "x-ocsf-cloud.api_version",
-        "object": "ocsf_cloud_api",
-        "type_hint": "string"
+        "object": "ocsf_cloud_api"
       }
     },
     "category_name": {
       "key": "x-oca-event.category",
-      "object": "x_oca_event",
-      "type_hint": "string"
+      "object": "x_oca_event"
     },
     "category_uid": {
       "key": "x-oca-event.code",
       "object": "x_oca_event",
-      "transformer": "ToInteger",
-      "type_hint": "integer"
+      "transformer": "ToInteger"
     },
     "class_name": {
       "key": "x-oca-event.module",
-      "object": "x_oca_event",
-      "type_hint": "string"
+      "object": "x_oca_event"
     },
     "class_uid": {
       "key": "x-oca-event.extensions.x-cloud-api.class_uid",
       "object": "x_oca_event",
-      "transformer": "ToInteger",
-      "type_hint": "integer"
+      "transformer": "ToInteger"
     },
     "cloud": {
       "account_type": {
         "key": "x-ocsf-cloud.account_type",
-        "object": "ocsf_cloud_api",
-        "type_hint": "string"
+        "object": "ocsf_cloud_api"
       },
       "account_type_id": {
         "key": "x-ocsf-cloud.account_type_id",
         "object": "ocsf_cloud_api",
-        "transformer": "ToInteger",
-        "type_hint": "integer"
+        "transformer": "ToInteger"
       },
       "account_uid": {
         "key": "x-ocsf-cloud.account_uid",
-        "object": "ocsf_cloud_api",
-        "type_hint": "string"
+        "object": "ocsf_cloud_api"
       },
       "org_uid": {
         "key": "x-ocsf-cloud.org_uid",
-        "object": "ocsf_cloud_api",
-        "type_hint": "string"
+        "object": "ocsf_cloud_api"
       },
       "project_uid": {
         "key": "x-ocsf-cloud.project_uid",
-        "object": "ocsf_cloud_api",
-        "type_hint": "string"
+        "object": "ocsf_cloud_api"
       },
       "provider": {
         "key": "x-ocsf-cloud.provider",
-        "object": "ocsf_cloud_api",
-        "type_hint": "string"
+        "object": "ocsf_cloud_api"
       },
       "region": {
         "key": "x-ocsf-cloud.region",
-        "object": "ocsf_cloud_api",
-        "type_hint": "string"
+        "object": "ocsf_cloud_api"
       },
       "resource_uid": {
         "key": "x-ocsf-cloud.resource_uid",
-        "object": "ocsf_cloud_api",
-        "type_hint": "resource_uid"
+        "object": "ocsf_cloud_api"
       },
       "zone": {
         "key": "x-ocsf-cloud.zone",
-        "object": "ocsf_cloud_api",
-        "type_hint": "string"
+        "object": "ocsf_cloud_api"
       }
     },
     "count": [
@@ -196,8 +162,7 @@
     "duration": {
       "key": "x-oca-event.duration",
       "object": "x_oca_event",
-      "transformer": "ToInteger",
-      "type_hint": "integer"
+      "transformer": "ToInteger"
     },
     "end_time": [
       {
@@ -214,468 +179,374 @@
     "enrichments": {
       "data": {
         "key": "x-ocsf-enrichments.data",
-        "object": "enrichments",
-        "type_hint": "json"
+        "object": "enrichments"
       },
       "name": {
         "key": "x-ocsf-enrichments.name",
-        "object": "enrichments",
-        "type_hint": "string"
+        "object": "enrichments"
       },
       "provider": {
         "key": "x-ocsf-enrichments.provider",
-        "object": "enrichments",
-        "type_hint": "string"
+        "object": "enrichments"
       },
       "type": {
         "key": "x-ocsf-enrichments.type",
-        "object": "enrichments",
-        "type_hint": "string"
+        "object": "enrichments"
       },
       "value": {
         "key": "x-ocsf-enrichments.value",
-        "object": "enrichments",
-        "type_hint": "string"
+        "object": "enrichments"
       }
     },
     "http_request": {
       "args": {
         "key": "x-ocsf-http-request.value",
-        "object": "http_request",
-        "type_hint": "string"
+        "object": "http_request"
       },
       "http_headers": {
         "name": {
           "key": "x-ocsf-http-request.http_headers_name",
-          "object": "ocsf_cloud_api",
-          "type_hint": "string"
+          "object": "ocsf_cloud_api"
         },
         "value": {
           "key": "x-ocsf-http-request.http_headers_value",
-          "object": "http_request",
-          "type_hint": "string"
+          "object": "http_request"
         }
       },
       "http_method": {
         "key": "x-ocsf-http-request.http_method",
-        "object": "http_request",
-        "type_hint": "string"
+        "object": "http_request"
       },
       "prefix": {
         "key": "x-ocsf-http-request.prefix",
-        "object": "http_request",
-        "type_hint": "string"
+        "object": "http_request"
       },
       "referrer": {
         "key": "x-ocsf-http-request.referrer",
-        "object": "http_request",
-        "type_hint": "string"
+        "object": "http_request"
       },
       "uid": {
         "key": "x-ocsf-http-request.uid",
-        "object": "http_request",
-        "type_hint": "string"
+        "object": "http_request"
       },
       "url": {
         "key": "url.value",
-        "object": "url",
-        "type_hint": "url"
+        "object": "url"
       },
       "user_agent": {
         "key": "x-ocsf-http-request.user_agent",
-        "object": "http_request",
-        "type_hint": "string"
+        "object": "http_request"
       },
       "version": {
         "key": "x-ocsf-http-request.version",
-        "object": "http_request",
-        "type_hint": "string"
+        "object": "http_request"
       },
       "x_forwarded_for": {
         "key": "x-ocsf-http-request.x_forwarded_for",
-        "object": "http_request",
-        "type_hint": [
-          "ip"
-        ]
+        "object": "http_request"
       }
     },
     "identity": {
       "authorizations": {
         "decision": {
           "key": "x-ocsf-identity.authorizations.decision",
-          "object": "x-ocsf-identity",
-          "type_hint": "string"
+          "object": "x-ocsf-identity"
         },
         "policy": {
           "desc": {
             "key": "x-ocsf-identity.authorizations.policy_desc",
-            "object": "x-ocsf-identity",
-            "type_hint": "string"
+            "object": "x-ocsf-identity"
           },
           "group": {
             "desc": {
               "key": "x-ocsf-identity.authorizations.policy_group_desc",
-              "object": "x-ocsf-identity",
-              "type_hint": "string"
+              "object": "x-ocsf-identity"
             },
             "name": {
               "key": "x-ocsf-identity.authorizations.policy_group_namee",
-              "object": "x-ocsf-identity",
-              "type_hint": "string"
+              "object": "x-ocsf-identity"
             },
             "privileges": {
               "key": "x-ocsf-identity.authorizations.policy_group_privileges",
-              "object": "x-ocsf-identity",
-              "type_hint": [
-                "string"
-              ]
+              "object": "x-ocsf-identity"
             },
             "type": {
               "key": "x-ocsf-identity.authorizations.policy_group_type",
-              "object": "x-ocsf-identity",
-              "type_hint": "string"
+              "object": "x-ocsf-identity"
             },
             "uid": {
               "key": "x-ocsf-identity.authorizations.policy_group_uid",
-              "object": "x-ocsf-identity",
-              "type_hint": "string"
+              "object": "x-ocsf-identity"
             }
           },
           "name": {
             "key": "x-ocsf-identity.authorizations.name",
-            "object": "x-ocsf-identity",
-            "type_hint": "string"
+            "object": "x-ocsf-identity"
           },
           "uid": {
             "key": "x-ocsf-identity.authorizations.uid",
-            "object": "x-ocsf-identity",
-            "type_hint": "string"
+            "object": "x-ocsf-identity"
           },
           "version": {
             "key": "x-ocsf-identity.authorizations.version",
-            "object": "x-ocsf-identity",
-            "type_hint": "string"
+            "object": "x-ocsf-identity"
           }
         }
       },
       "idp": {
         "name": {
           "key": "x-ocsf-identity.idp.name",
-          "object": "x-ocsf-identity",
-          "type_hint": "string"
+          "object": "x-ocsf-identity"
         },
         "uid": {
           "key": "x-ocsf-identity.idp.uid",
-          "object": "x-ocsf-identity",
-          "type_hint": "string"
+          "object": "x-ocsf-identity"
         }
       },
       "invoked_by": {
         "key": "x-ocsf-identity.invoked_by",
-        "object": "x-ocsf-identity",
-        "type_hint": "string"
+        "object": "x-ocsf-identity"
       },
       "message": {
         "key": "x-ocsf-identity.message",
-        "object": "x-ocsf-identity",
-        "type_hint": "string"
+        "object": "x-ocsf-identity"
       },
       "session": {
         "created_time": {
           "key": "x-ocsf-identity.session.created_time",
-          "object": "x-ocsf-identity",
-          "type_hint": "timestamp"
+          "object": "x-ocsf-identity"
         },
         "credential_uid": {
           "key": "x-ocsf-identity.session.credential_uid",
-          "object": "x-ocsf-identity",
-          "type_hint": "string"
+          "object": "x-ocsf-identity"
         },
         "expiration_time": {
           "key": "x-ocsf-identity.session.expiration_time",
-          "object": "x-ocsf-identity",
-          "type_hint": "timestamp"
+          "object": "x-ocsf-identity"
         },
         "issuer": {
           "key": "x-ocsf-identity.session.issuer",
-          "object": "x-ocsf-identity",
-          "type_hint": "string"
+          "object": "x-ocsf-identity"
         },
         "mfa": {
           "key": "x-ocsf-identity.session.mfa",
-          "object": "x-ocsf-identity",
-          "type_hint": "boolean"
+          "object": "x-ocsf-identity"
         },
         "uid": {
           "key": "x-ocsf-identity.session.uid",
-          "object": "x-ocsf-identity",
-          "type_hint": "string"
+          "object": "x-ocsf-identity"
         }
       },
       "user": {
         "account_type": {
           "key": "user-account.account_type",
-          "object": "user",
-          "type_hint": "string"
+          "object": "user"
         },
         "account_type_id": {
           "key": "user-account.extensions.aws-account-ext.account_type_id",
           "object": "user",
-          "transformer": "ToInteger",
-          "type_hint": "integer"
+          "transformer": "ToInteger"
         },
         "account_uid": {
           "key": "user-account.user_id",
-          "object": "user",
-          "type_hint": "string"
+          "object": "user"
         },
         "credential_uid": {
           "key": "user-account.extensions.aws-account-ext.credential_uid",
-          "object": "user",
-          "type_hint": "string"
+          "object": "user"
         },
         "domain": {
           "key": "user-account.extensions.aws-account-ext.domain",
-          "object": "user",
-          "type_hint": "string"
+          "object": "user"
         },
         "email_addr": {
           "key": "email-addr.value",
-          "object": "email_addr",
-          "type_hint": "email"
+          "object": "email_addr"
         },
         "groups": {
           "desc": {
             "key": "user-account.extensions.aws-account-ext.group_desc",
-            "object": "user",
-            "type_hint": "string"
+            "object": "user"
           },
           "name": {
             "key": "user-account.extensions.aws-account-ext.group_name",
-            "object": "user",
-            "type_hint": "string"
+            "object": "user"
           },
           "privileges": {
             "key": "user-account.extensions.aws-account-ext.group_privileges",
-            "object": "user",
-            "type_hint": [
-              "string"
-            ]
+            "object": "user"
           },
           "type": {
             "key": "user-account.extensions.aws-account-ext.group_type",
-            "object": "user",
-            "type_hint": "string"
+            "object": "user"
           },
           "uid": {
             "key": "user-account.extensions.aws-account-ext.group_uid",
-            "object": "user",
-            "type_hint": "string"
+            "object": "user"
           }
         },
         "name": {
           "key": "user-account.display_name",
-          "object": "user",
-          "type_hint": "string"
+          "object": "user"
         },
         "org_uid": {
           "key": "user-account.extensions.aws-account-ext.org_uid",
-          "object": "user",
-          "type_hint": "string"
+          "object": "user"
         },
         "session_uid": {
           "key": "user-account.extensions.aws-account-ext.session_uid",
-          "object": "user",
-          "type_hint": "string"
+          "object": "user"
         },
         "session_uuid": {
           "key": "user-account.extensions.aws-account-ext.session_uuid",
-          "object": "user",
-          "type_hint": "string"
+          "object": "user"
         },
         "type": {
           "key": "user-account.extensions.aws-account-ext.type",
-          "object": "user",
-          "type_hint": "string"
+          "object": "user"
         },
         "type_id": {
           "key": "user-account.extensions.aws-account-ext.type_id",
           "object": "user",
-          "transformer": "ToInteger",
-          "type_hint": "integer"
+          "transformer": "ToInteger"
         },
         "uid": {
           "key": "user-account.extensions.aws-account-ext.uid",
-          "object": "user",
-          "type_hint": "string"
+          "object": "user"
         },
         "uuid": {
           "key": "user-account.extensions.aws-account-ext.uuid",
-          "object": "user",
-          "type_hint": "string"
+          "object": "user"
         }
       }
     },
     "message": {
       "key": "x-ocsf-cloud.message",
-      "object": "ocsf_cloud_api",
-      "type_hint": "string"
+      "object": "ocsf_cloud_api"
     },
     "metadata": {
       "correlation_uid": {
         "key": "x-ocsf-metadata.correlation_uid",
-        "object": "metadata",
-        "type_hint": "string"
+        "object": "metadata"
       },
       "labels": {
         "key": "x-ocsf-metadata.labels",
-        "object": "metadata",
-        "type_hint": [
-          "string"
-        ]
+        "object": "metadata"
       },
       "logged_time": {
         "key": "x-ocsf-metadata.logged_time",
-        "object": "metadata",
-        "type_hint": "timestamp"
+        "object": "metadata"
       },
       "modified_time": {
         "key": "x-ocsf-metadata.modified_time",
-        "object": "metadata",
-        "type_hint": "timestamp"
+        "object": "metadata"
       },
       "processed_time": {
         "key": "x-ocsf-metadata.processed_time",
-        "object": "metadata",
-        "type_hint": "timestamp"
+        "object": "metadata"
       },
       "product": {
         "feature": {
           "name": {
             "key": "software.extension.product.feature_name",
-            "object": "software",
-            "type_hint": "string"
+            "object": "software"
           },
           "uid": {
             "key": "software.extension.product.feature_uid",
-            "object": "software",
-            "type_hint": "string"
+            "object": "software"
           },
           "version": {
             "key": "software.extension.product.feature_version",
-            "object": "software",
-            "type_hint": "string"
+            "object": "software"
           }
         },
         "lang": {
           "key": "software.languages",
-          "object": "software",
-          "type_hint": "string"
+          "object": "software"
         },
         "name": {
           "key": "software.name",
-          "object": "software",
-          "type_hint": "string"
+          "object": "software"
         },
         "path": {
           "key": "software.extension.product.path",
-          "object": "software",
-          "type_hint": "path"
+          "object": "software"
         },
         "uid": {
           "key": "software.extension.product.uid",
-          "object": "software",
-          "type_hint": "string"
+          "object": "software"
         },
         "vendor_name": {
           "key": "software.vendor",
-          "object": "software",
-          "type_hint": "string"
+          "object": "software"
         },
         "version": {
           "key": "software.version",
-          "object": "software",
-          "type_hint": "string"
+          "object": "software"
         }
       },
       "sequence": {
         "key": "x-ocsf-metadata.sequence",
         "object": "metadata",
-        "transformer": "ToInteger",
-        "type_hint": "integer"
+        "transformer": "ToInteger"
       },
       "uid": {
         "key": "x-ocsf-metadata.uid",
-        "object": "metadata",
-        "type_hint": "string"
+        "object": "metadata"
       },
       "version": {
         "key": "x-ocsf-metadata.version",
-        "object": "metadata",
-        "type_hint": "string"
+        "object": "metadata"
       }
     },
     "observables": {
       "name": {
         "key": "x-ibm-finding.name",
-        "object": "ibm_finding",
-        "type_hint": "string"
+        "object": "ibm_finding"
       },
       "type": {
         "key": "x-ibm-finding.finding_type",
-        "object": "ibm_finding",
-        "type_hint": "string"
+        "object": "ibm_finding"
       },
       "type_id": {
         "key": "x-ibm-finding.alert_id",
         "object": "ibm_finding",
-        "transformer": "ToInteger",
-        "type_hint": "integer"
+        "transformer": "ToInteger"
       },
       "value": {
         "key": "x-ibm-finding.description",
-        "object": "ibm_finding",
-        "type_hint": "string"
+        "object": "ibm_finding"
       }
     },
     "profiles": {
       "key": "x-ocsf-cloud.profiles",
-      "object": "ocsf_cloud_api",
-      "type_hint": [
-        "string"
-      ]
+      "object": "ocsf_cloud_api"
     },
     "raw_data": {
       "key": "x-ocsf-cloud.raw_data",
-      "object": "ocsf_cloud_api",
-      "type_hint": "string"
+      "object": "ocsf_cloud_api"
     },
     "ref_event_code": {
       "key": "x-ocsf-cloud.ref_event_code",
-      "object": "ocsf_cloud_api",
-      "type_hint": "string"
+      "object": "ocsf_cloud_api"
     },
     "ref_event_name": {
       "key": "x-ocsf-cloud.ref_event_name",
-      "object": "ocsf_cloud_api",
-      "type_hint": "string"
+      "object": "ocsf_cloud_api"
     },
     "ref_event_uid": {
       "key": "x-ocsf-cloud.ref_event_uid",
-      "object": "ocsf_cloud_api",
-      "type_hint": "string"
+      "object": "ocsf_cloud_api"
     },
     "ref_time": {
       "key": "x-ocsf-cloud.ref_time",
-      "object": "ocsf_cloud_api",
-      "type_hint": "string"
+      "object": "ocsf_cloud_api"
     },
     "resources": {
       "account_uid": [
         {
           "key": "x-ocsf-resources.account_uid",
-          "object": "resources",
-          "type_hint": "string"
+          "object": "resources"
         },
         {
           "key": "x-ocsf-resources.cloud_api_ref",
@@ -685,67 +556,53 @@
       ],
       "cloud_partition": {
         "key": "x-ocsf-resources.cloud_partition",
-        "object": "resources",
-        "type_hint": "string"
+        "object": "resources"
       },
       "criticality": {
         "key": "x-ocsf-resources.criticality",
-        "object": "resources",
-        "type_hint": "string"
+        "object": "resources"
       },
       "details": {
         "key": "x-ocsf-resources.details",
-        "object": "resources",
-        "type_hint": "string"
+        "object": "resources"
       },
       "group_name": {
         "key": "x-ocsf-resources.group_name",
-        "object": "resources",
-        "type_hint": "string"
+        "object": "resources"
       },
       "labels": {
         "key": "x-ocsf-resources.labels",
-        "object": "resources",
-        "type_hint": [
-          "string"
-        ]
+        "object": "resources"
       },
       "name": {
         "key": "x-ocsf-resources.name",
-        "object": "resources",
-        "type_hint": "string"
+        "object": "resources"
       },
       "owner": {
         "key": "x-ocsf-resources.owner",
-        "object": "resources",
-        "type_hint": "string"
+        "object": "resources"
       },
       "region": {
         "key": "x-ocsf-resources.region",
-        "object": "resources",
-        "type_hint": "string"
+        "object": "resources"
       },
       "type": {
         "key": "x-ocsf-resources.type",
-        "object": "resources",
-        "type_hint": "string"
+        "object": "resources"
       },
       "uid": {
         "key": "x-ocsf-resources.uid",
-        "object": "resources",
-        "type_hint": "string"
+        "object": "resources"
       }
     },
     "severity": {
       "key": "x-ocsf-cloud.severity",
-      "object": "ocsf_cloud_api",
-      "type_hint": "string"
+      "object": "ocsf_cloud_api"
     },
     "severity_id": {
       "key": "x-ibm-finding.severity",
       "object": "ibm_finding",
-      "transformer": "ToInteger",
-      "type_hint": "integer"
+      "transformer": "ToInteger"
     },
     "src_endpoint": {
       "port": {
@@ -755,8 +612,7 @@
       },
       "svc_name": {
         "key": "x-oca-asset.extensions.x-src-endpoint.svc_name",
-        "object": "asset",
-        "type_hint": "string"
+        "object": "asset"
       },
       "ip": [
         {
@@ -798,10 +654,7 @@
           "key": "ipv4-addr.value",
           "object": "src_ipv4",
           "unwrap": true,
-          "transformer": "FilterIPv4List",
-          "type_hint": [
-            "ip"
-          ]
+          "transformer": "FilterIPv4List"
         },
         {
           "key": "ipv6-addr.value",
@@ -821,28 +674,23 @@
       ],
       "interface_uid": {
         "key": "x-oca-asset.extensions.x-src-endpoint.interface_uid",
-        "object": "asset",
-        "type_hint": "string"
+        "object": "asset"
       },
       "vpc_uid": {
         "key": "x-oca-asset.extensions.x-src-endpoint.vpc_uid",
-        "object": "asset",
-        "type_hint": "string"
+        "object": "asset"
       },
       "instance_uid": {
         "key": "x-oca-asset.extensions.x-src-endpoint.instance_uid",
-        "object": "asset",
-        "type_hint": "string"
+        "object": "asset"
       },
       "subnet_uid": {
         "key": "x-oca-asset.extensions.x-src-endpoint.subnet_uid",
-        "object": "asset",
-        "type_hint": "string"
+        "object": "asset"
       },
       "name": {
         "key": "x-oca-asset.name",
-        "object": "asset",
-        "type_hint": "string"
+        "object": "asset"
       }
     },
     "dst_endpoint": {
@@ -853,8 +701,7 @@
       },
       "svc_name": {
         "key": "x-oca-asset.extensions.x-dst-endpoint.svc_name",
-        "object": "asset",
-        "type_hint": "string"
+        "object": "asset"
       },
       "ip": [
         {
@@ -896,10 +743,7 @@
           "key": "ipv4-addr.value",
           "object": "dst_ipv4",
           "unwrap": true,
-          "transformer": "FilterIPv4List",
-          "type_hint": [
-            "ip"
-          ]
+          "transformer": "FilterIPv4List"
         },
         {
           "key": "ipv6-addr.value",
@@ -919,28 +763,23 @@
       ],
       "interface_uid": {
         "key": "x-oca-asset.extensions.x-dst-endpoint.interface_uid",
-        "object": "asset",
-        "type_hint": "string"
+        "object": "asset"
       },
       "vpc_uid": {
         "key": "x-oca-asset.extensions.x-dst-endpoint.vpc_uid",
-        "object": "asset",
-        "type_hint": "string"
+        "object": "asset"
       },
       "instance_uid": {
         "key": "x-oca-asset.extensions.x-dst-endpoint.instance_uid",
-        "object": "asset",
-        "type_hint": "string"
+        "object": "asset"
       },
       "subnet_uid": {
         "key": "x-oca-asset.extensions.x-dst-endpoint.subnet_uid",
-        "object": "asset",
-        "type_hint": "string"
+        "object": "asset"
       },
       "name": {
         "key": "x-oca-asset.name",
-        "object": "asset",
-        "type_hint": "string"
+        "object": "asset"
       }
     },
     "connection_info": {
@@ -1018,46 +857,38 @@
     ],
     "status": {
       "key": "x-ocsf-cloud.status",
-      "object": "ocsf_cloud_api",
-      "type_hint": "string"
+      "object": "ocsf_cloud_api"
     },
     "status_code": {
       "key": "x-ocsf-cloud.status_code",
-      "object": "ocsf_cloud_api",
-      "type_hint": "string"
+      "object": "ocsf_cloud_api"
     },
     "status_detail": {
       "key": "x-ocsf-cloud.status_detail",
-      "object": "ocsf_cloud_api",
-      "type_hint": "string"
+      "object": "ocsf_cloud_api"
     },
     "status_id": {
       "key": "x-ocsf-cloud.status_id",
       "object": "ocsf_cloud_api",
-      "transformer": "ToInteger",
-      "type_hint": "integer"
+      "transformer": "ToInteger"
     },
     "time": {
       "key": "x-oca-event.created",
-      "object": "x_oca_event",
-      "type_hint": "timestamp"
+      "object": "x_oca_event"
     },
     "timezone_offset": {
       "key": "x-oca-event.timezone",
       "object": "x_oca_event",
-      "transformer": "ToInteger",
-      "type_hint": "integer"
+      "transformer": "ToInteger"
     },
     "type_name": {
       "key": "x-ocsf-cloud.type_name",
-      "object": "ocsf_cloud_api",
-      "type_hint": "string"
+      "object": "ocsf_cloud_api"
     },
     "type_uid": {
       "key": "x-ocsf-cloud.type_uid",
       "object": "ocsf_cloud_api",
-      "transformer": "ToInteger",
-      "type_hint": "integer"
+      "transformer": "ToInteger"
     }
   },
   "vpcflow": {

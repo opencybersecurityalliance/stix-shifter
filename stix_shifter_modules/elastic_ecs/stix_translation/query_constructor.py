@@ -37,14 +37,32 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _format_like(value) -> str:
-        # Replacing value with % to * and _ to ? for to support Like comparator
         if isinstance(value, str):
-            return '{}'.format(value.replace('%', '*').replace('_', '?'))
-        else:
-            return value
+            # Escape value as necessary first
+            value = value.replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)').replace(':', '\\:')
+            # Replacing value with % to * and _ to ? for to support Like comparator
+            value = value.replace('%', '*').replace('_', '?')
+            if ' ' in value:
+                value = '"{}"'.format(value)
+        return value
 
     @staticmethod
     def _format_match(value) -> str:
+        # Escape value as necessary first
+        value = value.replace('/', '\\/')
+        # Elasticsearch regex is always anchored, so they don't support ^ and $
+        # 3.9+: value = value.removeprefix('^').removesuffix('$')
+        value = value[1:] if value.startswith('^') else value
+        value = value[:-1] if value.endswith('$') else value
+        # No support for generic character types
+        # Modify a regex with a regex - this oughta be fun
+        # Not sure how to handle \h, \H, \v, \V, and \N
+        value = re.sub(r"([^\\])\\d", r"\1[0-9]", value)
+        value = re.sub(r"([^\\])\\D", r"\1[^0-9]", value)
+        value = re.sub(r"([^\\])\\s", r"\1[ \t\n\r\f\v]", value)
+        value = re.sub(r"([^\\])\\S", r"\1[^ \t\n\r\f\v]", value)
+        value = re.sub(r"([^\\])\\w", r"\1[a-zA-Z0-9_]", value)
+        value = re.sub(r"([^\\])\\W", r"\1[^a-zA-Z0-9_]", value)
         return '/{}/'.format(value)
 
     @staticmethod
@@ -73,7 +91,7 @@ class QueryStringPatternTranslator:
                     expression.comparator == ComparisonComparators.GreaterThanOrEqual or \
                     expression.comparator == ComparisonComparators.LessThanOrEqual:
                 # Check whether value is in datetime format, Ex: process.created
-                pattern = "^\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z$"
+                pattern = r"^\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z$"
                 try:
                     match = bool(re.search(pattern, value))
                 except:
@@ -233,7 +251,7 @@ def _test_or_add_milliseconds(timestamp) -> str:
     # remove single quotes around timestamp
     timestamp = re.sub("'", "", timestamp)
     # check for 3-decimal milliseconds
-    pattern = "\.\d+Z$"
+    pattern = r"\.\d+Z$"
     if not bool(re.search(pattern, timestamp)):
         timestamp = re.sub('Z$', '.000Z', timestamp)
     return timestamp
@@ -241,7 +259,7 @@ def _test_or_add_milliseconds(timestamp) -> str:
 
 def _test_START_STOP_format(query_string) -> bool:
     # Matches STARTt'1234-56-78T00:00:00.123Z'STOPt'1234-56-78T00:00:00.123Z'
-    pattern = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
+    pattern = r"START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
     match = re.search(pattern, query_string)
     return bool(match)
 
@@ -254,7 +272,7 @@ def _test_timerange_format(query_string) -> bool:
 
 
 def _test_timestamp(timestamp) -> bool:
-    pattern = "^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
+    pattern = r"^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
     match = re.search(pattern, timestamp)
     return bool(match)
 

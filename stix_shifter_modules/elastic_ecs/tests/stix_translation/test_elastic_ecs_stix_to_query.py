@@ -274,7 +274,37 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = r"[process:name MATCHES '^cmd\\.exe .*']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['(process.name : /^cmd\\.exe .*/ OR process.parent.name : /^cmd\\.exe .*/)']
+        test_query = ['(process.name : /cmd\\.exe .*/ OR process.parent.name : /cmd\\.exe .*/)']
+        _test_query_assertions(translated_query, test_query)
+
+    def test_match_operator_with_anchors(self):
+        # Elastic search does not support ^ and $
+        stix_pattern = r"[process:name MATCHES '^cmd\\..*$']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = ['(process.name : /cmd\\..*/ OR process.parent.name : /cmd\\..*/)']
+        _test_query_assertions(translated_query, test_query)
+
+    def test_match_operator_with_classes(self):
+        # Elastic search does not support ^ and $
+        stix_pattern = r"[artifact:payload_bin MATCHES 'a\\wb\\dc']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = ['event.original : /a[a-zA-Z0-9_]b[0-9]c/']
+        _test_query_assertions(translated_query, test_query)
+
+    def test_like_operator(self):
+        stix_pattern = "[process:command_line LIKE 'cmd.exe /_ %']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = ['(process.command_line : "cmd.exe /? *" OR powershell.command.value : "cmd.exe /? *")']
+        _test_query_assertions(translated_query, test_query)
+
+    def test_like_operator_with_backslash(self):
+        stix_pattern = r"[process:binary_ref.name LIKE 'C:\\Windows\\System32\\%']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = [r'(process.executable : C\:\\Windows\\System32\\* OR process.parent.executable : C\:\\Windows\\System32\\*)']
         _test_query_assertions(translated_query, test_query)
 
     def test_process_references(self):
