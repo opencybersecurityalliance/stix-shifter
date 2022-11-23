@@ -7,7 +7,7 @@
         "host": {
             "type": "text",
             "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$",
-            "default": "graph.microsoft.com"
+            "default": "api.loganalytics.io"
         },
         "port": {
             "type": "number",
@@ -23,14 +23,24 @@
             "type": "text",
             "optional": true
         },
+        "workspaceId": {
+            "type": "text",
+            "optional": true
+        },
         "selfSignedCert": {
             "type": "password",
             "optional": true
+        },
+        "options": {
+            "api": {
+                "type": "text",
+                "default": "Log Analytics"
+            }
         }
     },
     "configuration": {
         "auth": {
-            "type" : "fields",
+            "type": "fields",
             "tenant": {
                 "type": "password"
             },

@@ -29,18 +29,18 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_file_comp_exp(self):
         stix_pattern = "[file:name = 'services.exe']"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        queries = ["(fileStates/any(query1:tolower(query1/name) eq 'services.exe')) and (eventDateTime ge "
-                   "2019-12-24T09:21:51.505Z and eventDateTime le 2019-12-24T09:26:51.505Z)"]
+        queries = ["(fileStates/any(query1:tolower(query1/name) eq 'services.exe')) and "
+                   "(eventDateTime ge 2022-07-13T11:44:14.660Z and eventDateTime le 2022-07-13T11:49:14.660Z)"]
 
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_process_comp_exp(self):
         stix_pattern = "[process:name = 'svchost.exe']"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
@@ -50,9 +50,8 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_network_comp_exp(self):
-        stix_pattern = "[ipv4-addr:value = '172.16.2.22'] START t'2019-09-10T08:43:10.003Z' STOP " \
-                       "t'2019-09-23T10:43:10.453Z'"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        stix_pattern = "[ipv4-addr:value = '172.16.2.22'] START t'2019-09-10T08:43:10.003Z' STOP t'2019-09-23T10:43:10.453Z'"
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
@@ -69,7 +68,7 @@ class TestQueryTranslator(unittest.TestCase):
     def test_file_directory_exp(self):
         stix_pattern = "[file:parent_directory_ref.path = 'system32']" \
                        "START t'2019-10-01T08:43:10.003Z' STOP t'2019-10-30T10:43:10.003Z'"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = ["(fileStates/any(query1:contains(tolower(query1/path), 'system32'))) and ("
@@ -81,7 +80,7 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_directory_path_exp(self):
         stix_pattern = "[directory:path = 'windows']"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = ["((fileStates/any(query1:contains(tolower(query1/path), 'windows')) or "
@@ -94,7 +93,7 @@ class TestQueryTranslator(unittest.TestCase):
     def test_noteq_comp_exp(self):
         stix_pattern = "[process:name != 'services.exe'] START t'2019-09-10T08:43:10.003Z' STOP " \
                        "t'2019-09-23T10:43:10.453Z'"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
@@ -106,7 +105,7 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_like_comp_exp(self):
         stix_pattern = "[file:name LIKE 'svc']"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = ["(fileStates/any(query1:contains(tolower(query1/name), 'svc'))) and (eventDateTime ge "
@@ -116,7 +115,7 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_matches_comp_exp(self):
         stix_pattern = "[file:name MATCHES 'serv']"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = ["(fileStates/any(query1:contains(tolower(query1/name), 'serv'))) and (eventDateTime ge "
@@ -127,7 +126,7 @@ class TestQueryTranslator(unittest.TestCase):
     def test_custom_in_comp_exp(self):
         stix_pattern = "[x-msazure-sentinel:tenant_id NOT IN ('Sb73e5ba','b73e5ba8')" \
                        "AND x-ibm-finding:name LIKE 'Suspicious']"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = ["(contains(tolower(title), 'Suspicious') and tolower(azureTenantId) ne "
@@ -138,7 +137,7 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_in_comp_exp(self):
         stix_pattern = "[process:name IN ('services.exe', 'svchost.exe')]"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = ["((processes/any(query1:tolower(query1/name) eq 'services.exe') or "
@@ -152,7 +151,7 @@ class TestQueryTranslator(unittest.TestCase):
     def test_comb_comparison_exp_1(self):
         stix_pattern = "[process:name IN ('services.exe', 'svchost.exe') OR file:name = 'notepad.exe'] START " \
                        "t'2019-09-10T08:43:10.003Z' STOP t'2019-09-23T10:43:10.453Z'"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = ["(fileStates/any(query1:tolower(query1/name) eq 'notepad.exe') or "
@@ -168,7 +167,7 @@ class TestQueryTranslator(unittest.TestCase):
     def test_comb_comparison_exp_2(self):
         stix_pattern = "[network-traffic:src_port = '454' OR process:name NOT = 'powershell.exe'] START " \
                        "t'2019-09-10T08:43:10.003Z' STOP t'2019-09-23T10:43:10.453Z'"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = ["((processes/any(query1:tolower(query1/name) ne 'powershell.exe') "
@@ -183,7 +182,7 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_comb_observation_obs(self):
         stix_pattern = "[process:name = 'services.exe'] OR [network-traffic:dst_port >= 100]"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
@@ -207,7 +206,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "([process:pid IN (110,220)] OR [network-traffic:src_ref.value = '52.94.233.129' AND " \
                        "user-account:account_last_login = '2019-09-23T10:43:10.453Z']) START " \
                        "t'2019-09-10T08:43:10.003Z' STOP t'2019-09-23T10:43:10.453Z'"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
@@ -228,7 +227,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "x-msazure-sentinel-alert:vendor = 'Microsoft'] AND [" \
                        "x-msazure-sentinel-alert:provider LIKE 'Microsoft']) START " \
                        "t'2019-09-10T08:43:10.003Z' STOP t'2019-09-23T10:43:10.453Z'"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = ["((fileStates/any(query1:query1/fileHash/hashType eq 'sha1') and fileStates/any(query1:contains("
@@ -255,22 +254,22 @@ class TestQueryTranslator(unittest.TestCase):
                        "[x-ibm-finding:severity = 'test severity'] AND " \
                        "[x-ibm-finding:src_geolocation = 'canada'] AND" \
                        "[x-ibm-finding:dst_geolocation = 'us']"
-        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern, options={"api": "Graph Security"})
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         print(query['queries'])
 
         queries = ["(tolower(title) eq 'photos') and (eventDateTime ge 2021-10-08T00:18:50.449Z and eventDateTime le "
-                    "2021-10-08T00:23:50.449Z)",
-                    "(tolower(category) eq 'test type') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
-                    "eventDateTime le 2021-10-08T00:23:50.449Z)",
-                    "(tolower(description) eq 'test description') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
-                    "eventDateTime le 2021-10-08T00:23:50.449Z)",
-                    "(tolower(severity) eq 'test severity') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
-                    "eventDateTime le 2021-10-08T00:23:50.449Z)",
-                    "(networkConnections/any(query5:tolower(query5/sourceLocation) eq 'canada')) and (eventDateTime "
-                    "ge 2021-10-08T00:18:50.449Z and eventDateTime le 2021-10-08T00:23:50.449Z)",
-                    "(networkConnections/any(query6:tolower(query6/destinationLocation) eq 'us')) and (eventDateTime "
-                    "ge 2021-10-08T00:18:50.449Z and eventDateTime le 2021-10-08T00:23:50.449Z)"]
+                   "2021-10-08T00:23:50.449Z)",
+                   "(tolower(category) eq 'test type') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
+                   "eventDateTime le 2021-10-08T00:23:50.449Z)",
+                   "(tolower(description) eq 'test description') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
+                   "eventDateTime le 2021-10-08T00:23:50.449Z)",
+                   "(tolower(severity) eq 'test severity') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
+                   "eventDateTime le 2021-10-08T00:23:50.449Z)",
+                   "(networkConnections/any(query5:tolower(query5/sourceLocation) eq 'canada')) and (eventDateTime "
+                   "ge 2021-10-08T00:18:50.449Z and eventDateTime le 2021-10-08T00:23:50.449Z)",
+                   "(networkConnections/any(query6:tolower(query6/destinationLocation) eq 'us')) and (eventDateTime "
+                   "ge 2021-10-08T00:18:50.449Z and eventDateTime le 2021-10-08T00:23:50.449Z)"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)

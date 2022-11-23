@@ -1,10 +1,8 @@
 from stix_shifter_modules.azure_sentinel.entry_point import EntryPoint
-
 from unittest.mock import patch
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
 
-import json
 
 class AzureSentinelMockResponse:
 
@@ -25,23 +23,24 @@ class AdalMockResponse:
         return context_response
 
 
-@patch('stix_shifter_modules.azure_sentinel.stix_transmission.connector.adal.AuthenticationContext')
-@patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.__init__')
+@patch('stix_shifter_modules.azure_sentinel.stix_transmission.Graph Security.connector.adal.AuthenticationContext')
+@patch('stix_shifter_modules.azure_sentinel.stix_transmission.Graph Security.api_client.APIClient.__init__')
 class TestAzureSentinalConnection(unittest.TestCase):
     def config(self):
         return {
-                "auth": {
-                    "tenant": "abc12345",
-                    "clientId": "abc12345",
-                    "clientSecret": "abc12345",
-                    }
-                }
+            "auth": {
+                "tenant": "abc12345",
+                "clientId": "abc12345",
+                "clientSecret": "abc12345",
+            }
+        }
 
     def connection(self):
         return {
-                "host": "abc.amazon.com",
-                "port": 443
-                }
+            "host": "abc.amazon.com",
+            "port": 443,
+            "options": {"api": "Graph Security"}
+        }
 
     def test_is_async(self, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
@@ -51,7 +50,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
 
         assert check_async is False
 
-    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.ping_box')
+    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.Graph Security.api_client.APIClient.ping_box')
     def test_ping_endpoint(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = AdalMockResponse
@@ -66,7 +65,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success']
 
-    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.ping_box')
+    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.Graph Security.api_client.APIClient.ping_box')
     def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = AdalMockResponse
@@ -102,7 +101,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
         assert 'search_id' in query_response
         assert query_response['search_id'] == query
 
-    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.Graph Security.api_client.APIClient.run_search',
            autospec=True)
     def test_results_all_response(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
@@ -160,9 +159,9 @@ class TestAzureSentinalConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient'
+    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.Graph Security.api_client.APIClient'
            '.next_page_run_search', autospec=True)
-    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.Graph Security.api_client.APIClient.run_search',
            autospec=True)
     def test_results_paging_response(self, mock_results_response, mock_next_page_response, mock_api_client,
                                      mock_generate_token):
@@ -259,7 +258,7 @@ class TestAzureSentinalConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.Graph Security.api_client.APIClient.run_search',
            autospec=True)
     def test_results_response_exception(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
