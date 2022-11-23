@@ -13,10 +13,13 @@ class APIClient:
         if 'token' in self.auth:
             headers['Authorization'] = "Bearer " + self.auth.get('token')
         url_modifier_function = None
+        # Added self-signed certificate parameter for verification
         self.client = RestApiClient(connection.get('host'),
                                     connection.get('port', None),
                                     headers,
-                                    url_modifier_function=url_modifier_function
+                                    url_modifier_function=url_modifier_function,
+                                    sni=connection.get('sni', None),
+                                    cert_verify=connection.get('selfSignedCert', True)
                                     )
         self.timeout = connection['options'].get('timeout')
 
