@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Splunk"
+            "displayName": "Splunk",
+            "group": "splunk"
         },
         "host": {
             "type": "text",

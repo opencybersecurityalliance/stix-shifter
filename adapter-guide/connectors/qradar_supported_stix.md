@@ -1,4 +1,4 @@
-##### Updated on 06/01/22
+##### Updated on 11/04/22
 ## IBM QRadar
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -16,7 +16,151 @@
 | MATCHES | MATCHES |
 | ISSUBSET | INCIDR |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties for Events
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **ipv4-addr**:value | sourceaddress, destinationaddress, identityip |
+| **ipv6-addr**:value | sourceaddress, destinationaddress |
+| **url**:value | URL |
+| **mac-addr**:value | sourcemac, destinationmac |
+| **file**:name | Filename |
+| **file**:hashes.'SHA-256' | "SHA256 Hash" |
+| **file**:hashes.MD5 | "MD5 Hash" |
+| **file**:hashes.'SHA-1' | "SHA1 Hash" |
+| **file**:parent_directory_ref | "File Path" |
+| **file**:parent_directory_ref.path | "File Path" |
+| **directory**:path | "File Path" |
+| **network-traffic**:src_port | sourceport |
+| **network-traffic**:dst_port | destinationport |
+| **network-traffic**:protocols[*] | protocolid |
+| **network-traffic**:start | starttime |
+| **network-traffic**:end | endtime |
+| **network-traffic**:src_ref.value | sourceaddress, sourcemac |
+| **network-traffic**:dst_ref.value | destinationaddress, destinationmac |
+| **user-account**:user_id | username |
+| **user-account**:account_login | username |
+| **artifact**:payload_bin | UTF8(payload) |
+| **domain-name**:value | DOMAINNAME(domainid), UrlHost |
+| **x-qradar**:qid | qid |
+| **x-qradar**:magnitude | magnitude |
+| **x-qradar**:log_source_id | logsourceid |
+| **x-qradar**:device_type | devicetype |
+| **x-qradar**:category_id | category |
+| **x-qradar**:high_level_category_id | highlevelcategory |
+| **x-qradar**:direction | eventdirection |
+| **x-qradar**:severity | severity |
+| **x-qradar**:credibility | credibility |
+| **x-qradar**:relevance | relevance |
+| **x-qradar**:domain_id | domainid |
+| **x-qradar**:has_offense | hasoffense |
+| **x-qradar**:INOFFENSE | INOFFENSE |
+| **x-ibm-finding**:name | "CRE Name" |
+| **x-ibm-finding**:description | "CRE Description" |
+| **x-ibm-finding**:severity | severity |
+| **x-ibm-finding**:start | starttime |
+| **x-ibm-finding**:end | endtime |
+| **x-ibm-finding**:magnitude | magnitude |
+| **x-ibm-finding**:event_count | eventcount |
+| **x-ibm-finding**:src_geolocation | sourcegeographiclocation |
+| **x-ibm-finding**:dst_geolocation | destinationgeographiclocation |
+| **x-ibm-finding**:rule_names[*] | rulename(creeventlist) |
+| **process**:pid | "Process ID" |
+| **process**:name | "Process Name", Image, ParentImage, TargetImage |
+| **process**:binary_ref.name | Image, TargetImage |
+| **process**:binary_ref.parent_directory_ref.path | Image, TargetImage |
+| **process**:parent_ref.binary_ref.name | ParentImage |
+| **process**:command_line | "Process CommandLine", ParentCommandLine |
+| **process**:parent_ref.command_line | ParentCommandLine |
+| **process**:extensions.'windows-service-ext'.service_dll_refs[*].name | ServiceFileName |
+| **process**:x_unique_id | "Process Guid" |
+| **x-oca-event**:action | QIDNAME(qid) |
+| **x-oca-event**:code | EventID |
+| **x-oca-event**:outcome | CATEGORYNAME(category) |
+| **x-oca-event**:category | CATEGORYNAME(highlevelcategory) |
+| **x-oca-event**:created | devicetime |
+| **x-oca-event**:agent | LOGSOURCENAME(logsourceid) |
+| **x-oca-event**:provider | LOGSOURCETYPENAME(devicetype) |
+| **x-oca-event**:process_ref.command_line | "Process CommandLine" |
+| **x-oca-event**:process_ref.binary_ref.name | Image, TargetImage |
+| **x-oca-event**:process_ref.parent_ref.command_line | ParentCommandLine |
+| **x-oca-event**:process_ref.creator_user_ref.user_id | username |
+| **x-oca-event**:process_ref.name | "Process Name" |
+| **x-oca-event**:process_ref.pid | "Process ID" |
+| **x-oca-event**:parent_process_ref.command_line | ParentCommandLine |
+| **x-oca-event**:parent_process_ref.binary_ref.name | ParentImage |
+| **x-oca-event**:domain_ref.value | DOMAINNAME(domainid), UrlHost |
+| **x-oca-event**:file_ref.name | Filename |
+| **x-oca-event**:host_ref.hostname | identityhostname, "Machine ID" |
+| **x-oca-event**:host_ref.ip_refs[*].value | identityip, sourceaddress |
+| **x-oca-event**:registry_ref.key | ObjectName, "Registry Key" |
+| **x-oca-event**:user_ref.user_id | username |
+| **x-oca-event**:url_ref.value | URL |
+| **x-oca-event**:original_ref.payload_bin | UTF8(payload), Message |
+| **x-oca-asset**:hostname | identityhostname, "Machine ID" |
+| **x-oca-asset**:ip_refs[*].value | identityip, sourceaddress |
+| **x-oca-asset**:mac_refs[*].value | sourcemac |
+| **windows-registry-key**:key | ObjectName, "Registry Key" |
+| **windows-registry-key**:values[*].name | "Registry Value Name" |
+| <br> | |
+### Searchable STIX objects and properties for Flows
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **ipv4-addr**:value | sourceaddress, destinationaddress |
+| **ipv6-addr**:value | sourcev6, destinationv6 |
+| **file**:name | Filename |
+| **file**:size | filesize |
+| **file**:hashes.'SHA-256' | "SHA256 Hash" |
+| **file**:hashes.MD5 | "MD5 Hash" |
+| **file**:hashes.'SHA-1' | "SHA1 Hash" |
+| **file**:'mime-type' | contenttype |
+| **domain-name**:value | dnsdomainname |
+| **url**:value | dnsdomainname, tlsservernameindication, httphost |
+| **network-traffic**:src_port | sourceport |
+| **network-traffic**:dst_port | destinationport |
+| **network-traffic**:protocols[*] | protocolid |
+| **network-traffic**:start | starttime |
+| **network-traffic**:end | endtime |
+| **network-traffic**:src_ref.value | sourceaddress, sourcev6 |
+| **network-traffic**:dst_ref.value | destinationaddress, destinationv6 |
+| **network-traffic**:src_byte_count | sourcebytes |
+| **network-traffic**:dst_byte_count | destinationbytes |
+| **network-traffic**:src_packets | sourcepackets |
+| **network-traffic**:dst_packets | destinationpackets |
+| **network-traffic**:extensions.'http-request-ext'.request_header.Host | httphost |
+| **network-traffic**:extensions.'http-request-ext'.request_header.Referer | httpreferrer |
+| **network-traffic**:extensions.'http-request-ext'.request_header.Server | httpserver |
+| **network-traffic**:extensions.'http-request-ext'.request_header.'User-Agent' | httpuseragent |
+| **network-traffic**:extensions.'http-request-ext'.request_header.'Content-Type' | contenttype |
+| **network-traffic**:extensions.'http-request-ext'.request_version | httpversion |
+| **network-traffic**:ipfix.flowId | flowid |
+| **software**:name | applicationname |
+| **artifact**:payload_bin | flowsourcepayload, flowdestinationpayload |
+| **x-qradar**:qid | qid |
+| **x-qradar**:qid_name | QIDNAME(qid) |
+| **x-qradar**:flow_source | flowsource |
+| **x-qradar**:flow_interface_id | flowinterfaceid |
+| **x-qradar**:flow_interface | flowinterface |
+| **x-qradar**:geographic | geographic |
+| **x-qradar**:category_name | CATEGORYNAME(category) |
+| **x-qradar**:credibility | credibility |
+| **x-qradar**:severity | flowseverity |
+| **x-qradar**:direction | eventdirection |
+| **x-qradar**:relevance | relevance |
+| **x-qradar**:first_packet_time | firstpackettime |
+| **x-qradar**:last_packet_time | lastpackettime |
+| **x-qradar**:application_id | applicationid |
+| **x-qradar**:application_name | applicationname |
+| **x-qradar**:flow_type | flowtype |
+| **x-qradar**:file_entropy | fileentropy |
+| **x-qradar**:http_response_code | httpresponsecode |
+| **x-qradar**:tls_server_name_indication | tlsservernameindication |
+| **x-qradar**:tls_ja3_hash | tlsja3hash |
+| **x-qradar**:tls_ja3s_hash | tlsja3shash |
+| **x-qradar**:suspect_content_descriptions | suspectcontentdescriptions |
+| **x-qradar**:has_offense | hasoffense |
+| **x-qradar**:INOFFENSE | INOFFENSE |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | UTF8(payload) |
@@ -109,6 +253,7 @@
 | process | parent_ref | "Parent Process ID" |
 | process | binary_ref | TargetImage |
 | process | extensions.windows-service-ext.service_dll_refs | ServiceFileName |
+| process | x_unique_id | "Process Guid" |
 | <br> | | |
 | software | name | applicationname |
 | <br> | | |

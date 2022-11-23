@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "IBM® Guardium"
+            "displayName": "IBM® Guardium",
+            "group": "guardium"
         },
         "host": {
             "type": "text",

@@ -50,7 +50,7 @@
         "object": "asset"
       },
       "id": {
-        "key": "process.extensions.x-process-ext.process_uid",
+        "key": "process.x_unique_id",
         "object": "process"
       },
       "logonId": {
@@ -62,7 +62,7 @@
         "object": "process"
       },
       "parentId": {
-        "key": "process.extensions.x-process-ext.parent_process_uid",
+        "key": "process.x_unique_id",
         "object": "parent_process"
       },
       "pid": [
@@ -211,7 +211,7 @@
           "object": "asset"
         },
         "id": {
-          "key": "process.extensions.x-process-ext.process_uid",
+          "key": "process.x_unique_id",
           "object": "accessorProcess_process"
         },
         "logonId": {
@@ -223,7 +223,7 @@
           "object": "accessorProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-process-ext.parent_process_uid",
+          "key": "process.x_unique_id",
           "object": "accessorProcess_parent_process"
         },
         "pid": [
@@ -379,7 +379,7 @@
           "object": "asset"
         },
         "id": {
-          "key": "process.extensions.x-process-ext.process_uid",
+          "key": "process.x_unique_id",
           "object": "allocatorProc_process"
         },
         "logonId": {
@@ -391,7 +391,7 @@
           "object": "allocatorProc_process"
         },
         "parentId": {
-          "key": "process.extensions.x-process-ext.parent_process_uid",
+          "key": "process.x_unique_id",
           "object": "allocatorProc_parent_process"
         },
         "pid": [
@@ -581,7 +581,7 @@
           "object": "asset"
         },
         "id": {
-          "key": "process.extensions.x-process-ext.process_uid",
+          "key": "process.x_unique_id",
           "object": "childProcess_process"
         },
         "logonId": {
@@ -593,7 +593,7 @@
           "object": "childProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-process-ext.parent_process_uid",
+          "key": "process.x_unique_id",
           "object": "childProcess_parent_process"
         },
         "pid": [
@@ -842,7 +842,7 @@
           "object": "asset"
         },
         "id": {
-          "key": "process.extensions.x-process-ext.process_uid",
+          "key": "process.x_unique_id",
           "object": "engineProcess_process"
         },
         "logonId": {
@@ -854,7 +854,7 @@
           "object": "engineProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-process-ext.parent_process_uid",
+          "key": "process.x_unique_id",
           "object": "engineProcess_parent_process"
         },
         "pid": [
@@ -1068,7 +1068,7 @@
         "object": "etw_event"
       },
       "etwEventVersion": {
-        "key": "x-oca-event.extensions.x-reaqta-etw.etw_event_record_id",
+        "key": "x-oca-event.extensions.x-reaqta-etw.etw_event_version",
         "object": "etw_event"
       },
       "etwFailureReason": {
@@ -1649,7 +1649,7 @@
           "object": "asset"
         },
         "id": {
-          "key": "process.extensions.x-process-ext.process_uid",
+          "key": "process.x_unique_id",
           "object": "serviceProcess_process"
         },
         "logonId": {
@@ -1661,7 +1661,7 @@
           "object": "serviceProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-process-ext.parent_process_uid",
+          "key": "process.x_unique_id",
           "object": "serviceProcess_parent_process"
         },
         "pid": [
@@ -1837,7 +1837,7 @@
           "object": "asset"
         },
         "id": {
-          "key": "process.extensions.x-process-ext.process_uid",
+          "key": "process.x_unique_id",
           "object": "targetProcess_process"
         },
         "logonId": {
@@ -1849,7 +1849,7 @@
           "object": "targetProcess_process"
         },
         "parentId": {
-          "key": "process.extensions.x-process-ext.parent_process_uid",
+          "key": "process.x_unique_id",
           "object": "targetProcess_parent_process"
         },
         "pid": [
