@@ -14,6 +14,4 @@ class ResultsTranslator(JSONToStix):
       if result.get('_raw'):
         result['mime_type_raw'] = 'text/plain'
     
-    data = json.dumps(results, indent=4)
-
-    return super().translate_results(data_source, data)
+    return super().translate_results(data_source, results)

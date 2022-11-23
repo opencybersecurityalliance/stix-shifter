@@ -22,8 +22,7 @@ class ResultsTranslator(JSONToStix):
             
             result['payload'] = self.update_net_traffic_flow(payload)
 
-        data = json.dumps(results)
-        return super().translate_results(data_source, data)
+        return super().translate_results(data_source, results)
 
     def update_net_traffic_flow(self, payload):
         result_data = payload.get('data')

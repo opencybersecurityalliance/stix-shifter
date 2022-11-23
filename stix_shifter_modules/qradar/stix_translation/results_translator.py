@@ -1,6 +1,9 @@
 import json
 
+from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
+from stix_shifter_utils.stix_translation.src.utils.exceptions import TranslationResultException
+
 
 class ResultsTranslator(JSONToStix):
 
@@ -22,6 +25,8 @@ class ResultsTranslator(JSONToStix):
       if result.get('flowdestinationpayload'):
         result['mime_type_flowdestinationpayload'] = 'application/octet-stream'
 
-    data = json.dumps(results, indent=4)
-
-    return super().translate_results(data_source, data)
+    datasrc = json.loads(data_source)
+    try:
+      results = json_to_stix_translator.convert_to_stix(datasrc, self.map_data, results, self.transformers, self.options, self.callback)
+    except Exception as ex:
+      raise TranslationResultException("Error when converting results to STIX: {}".format(ex))

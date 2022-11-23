@@ -26,9 +26,7 @@ class ResultTranslator(JSONToStix):
                 if event.get('original'):
                     result['event']['mime_type_event'] = 'text/plain'
         
-        data = json.dumps(results, indent=4)
-
-        results = super().translate_results(data_source, data)
+        results = super().translate_results(data_source, results)
         json_data = json.loads(data)
 
         if len(results['objects']) - 1 == len(json_data):

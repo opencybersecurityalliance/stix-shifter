@@ -14,8 +14,7 @@ class JSONToStixObservablesDecorator(JSONToStix):
         json_data = json.loads(data)
         # Decorate the findings with std observables at this step
         self.decorateFindingsWithObjects(json_data, self.map_data)
-        data = json.dumps(json_data)
-        return super().translate_results(data_source, data)
+        return super().translate_results(data_source, json_data)
     
     # Decorate the finding with dynamically identified cyber observables
     def decorateFindingsWithObjects(self,data, mapping_overriden): 

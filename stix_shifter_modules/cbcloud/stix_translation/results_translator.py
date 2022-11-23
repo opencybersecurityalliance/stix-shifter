@@ -57,6 +57,5 @@ class ResultsTranslator(JSONToStix):
                     elif len(json_entry[key]) > 1:
                         json_entry[key] = f"[{', '.join(str(x) for x in json_entry[key])}]"
 
-        data = json.dumps(json_data)
         # Throw the updated JSON data to JSONToStix for translation to STIX
-        return super().translate_results(data_source, data)
+        return super().translate_results(data_source, json_data)
