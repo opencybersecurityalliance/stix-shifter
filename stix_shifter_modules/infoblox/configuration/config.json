@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Infoblox"
+            "displayName": "Infoblox",
+            "group": "infoblox"
         },
         "host": {
             "type": "text",
@@ -18,7 +19,7 @@
             "default": "https://docs.infoblox.com/pages/viewpage.action?pageId=34510138"
         },
         "cert": {
-            "type": "certificate",
+            "type": "password",
             "optional": true
         },
         "sni": {
@@ -26,7 +27,7 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "certificate",
+            "type": "password",
             "optional": true
         }
     },

@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Microsoft Defender for Endpoint"
+            "displayName": "Microsoft Defender for Endpoint",
+            "group": "azure"
         },
         "host": {
             "type": "text",
@@ -22,7 +23,7 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "certificate",
+            "type": "password",
             "optional": true
         }
     },

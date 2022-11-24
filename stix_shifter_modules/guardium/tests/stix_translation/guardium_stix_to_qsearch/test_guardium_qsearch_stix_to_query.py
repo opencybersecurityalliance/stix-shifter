@@ -16,8 +16,8 @@ translation = stix_translation.StixTranslation()
 def _test_query_assertions(queries, num, filters):
     count = 0
     for query in queries:
-        if filters in query:
-            count += 1
+        if filters in query or category in query:
+            count = 1
     assert count == num
 
 
@@ -73,13 +73,13 @@ class TestQueryTranslator(unittest.TestCase, object):
         stix_pattern = "[ user-account:db_user='MARCI' AND ipv4-addr:value = '1.2.3.4']"
         query = _translate_query(stix_pattern)
         filters = "name=DB User&value=MARCI&isGroup=false"
-        _test_query_assertions(query['queries'], 2, filters)
+        _test_query_assertions(query['queries'], 1, filters)
         #filters = "name=Server&value=1.2.3.4&isGroup=false"
         #_test_query_assertions(query['queries'], 1, filters)
         filters = "name=Client IP&value=1.2.3.4&isGroup=false"
         _test_query_assertions(query['queries'], 1, filters)
         filters = "name=DB User&value=MARCI&isGroup=false"
-        _test_query_assertions(query['queries'], 2, filters)
+        _test_query_assertions(query['queries'], 1, filters)
         filters = "name=Server&value=1.2.3.4&isGroup=false"
         _test_query_assertions(query['queries'], 1, filters)
 

@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "MySQL"
+            "displayName": "MySQL",
+            "group": "mysql"
         },
         "host": {
             "type": "text",
@@ -21,7 +22,7 @@
             "default": "https://www.ibm.com/docs/en/cloud-paks/cp-security/1.6.0?topic=administering-universal-data-insights-connectors"
         },
         "cert": {
-            "type": "certificate",
+            "type": "password",
             "optional": true
         },
         "sni": {
@@ -29,7 +30,7 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "certificate",
+            "type": "password",
             "optional": true
         },
         "options": {

@@ -24,7 +24,8 @@ The following example JSON contains the appropriate parameters that each module 
 {
     "connection": {
         "type": {
-            "default": "QRadar"
+            "default": "QRadar",
+            "group": "qradar"
         },
         "host": {
             "type": "text",
@@ -49,7 +50,7 @@ The following example JSON contains the appropriate parameters that each module 
             "type": "number"
         },
         "cert": {
-            "type": "certificate",
+            "type": "password",
             "optional": true
         },
         "sni": {
@@ -57,7 +58,7 @@ The following example JSON contains the appropriate parameters that each module 
             "optional": true
         },
         "selfSignedCert": {
-            "type": "certificate",
+            "type": "password",
             "optional": true
         }
     },

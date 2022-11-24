@@ -12,9 +12,9 @@ class APIClient():
         self.headers['Accept'] = 'application/json'
         url_modifier_function = None
         auth = configuration.get('auth')
-        self.host = connection.get('host')
+
         self.client = RestApiClient(connection.get('host'),
-                                    None,
+                                    connection.get('port'),
                                     self.headers,
                                     url_modifier_function=url_modifier_function,
                                     cert_verify=connection.get('selfSignedCert', True),

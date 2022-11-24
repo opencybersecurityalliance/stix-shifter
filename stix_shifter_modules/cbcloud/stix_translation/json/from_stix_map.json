@@ -32,7 +32,8 @@
       "parent_ref.name": ["parent_name"],
       "parent_ref.binary_ref.name": ["parent_name"],
       "parent_ref.binary_ref.hashes.MD5": ["parent_hash"],
-      "parent_ref.binary_ref.hashes.'SHA-256'": ["parent_hash"]
+      "parent_ref.binary_ref.hashes.'SHA-256'": ["parent_hash"],
+      "x_unique_id": ["process_guid", "parent_guid"]
     }
   },
   "software": {

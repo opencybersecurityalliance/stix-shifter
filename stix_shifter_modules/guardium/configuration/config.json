@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "IBM® Guardium"
+            "displayName": "IBM® Guardium",
+            "group": "guardium"
         },
         "host": {
             "type": "text",
@@ -22,7 +23,7 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "certificate",
+            "type": "password",
             "optional": true
         },
         "client_id": {

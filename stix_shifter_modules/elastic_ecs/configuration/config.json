@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Elastic Search (ECS)"
+            "displayName": "Elastic Search (ECS)",
+            "group": "elastic"
         },
         "host": {
             "type": "text",
@@ -26,7 +27,7 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "certificate",
+            "type": "password",
             "optional": true
         }
     },

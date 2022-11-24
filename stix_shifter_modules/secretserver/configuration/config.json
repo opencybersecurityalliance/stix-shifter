@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "IBM Security Verify Privilege Vault"
+            "displayName": "IBM Security Verify Privilege Vault",
+            "group": "secretserver"
         },
         "host": {
             "type": "text",
@@ -23,7 +24,7 @@
             "optional": true
         },
         "selfSignedCert": {
-            "type": "certificate",
+            "type": "password",
             "optional": true
         },
         "options": {

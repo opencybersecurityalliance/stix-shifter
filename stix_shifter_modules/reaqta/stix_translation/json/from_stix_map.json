@@ -11,7 +11,7 @@
       "extensions.'x-reaqta-data'.fsname": ["filename"],
       "extensions.'x-reaqta-program'.arch": ["service.arch"],
       "extensions.'x-reaqta-program'.fsname": ["filename"],
-      "hashes.'MD5'": ["md5"],
+      "hashes.MD5": ["md5"],
       "hashes.'SHA-1'": ["sha1"],
       "hashes.'SHA-256'": ["sha256"],
       "name": ["consumer.script.filename", "filename"],

@@ -29,9 +29,9 @@ class Connector(BaseSyncConnector):
 
     # We re-implement this method so we can fetch all the "bindings", as their method only
     # returns the first for some reason
-    def match(self, pattern, observed_data_sdos, verbose=False):
-        compiled_pattern = Pattern(pattern)
-        matcher = MatchListener(observed_data_sdos, verbose)
+    def match(self, pattern, observed_data_sdos, verbose=False, stix_version='2.0'):
+        compiled_pattern = Pattern(pattern, stix_version=stix_version)
+        matcher = MatchListener(observed_data_sdos, verbose, stix_version=stix_version)
         compiled_pattern.walk(matcher)
 
         found_bindings = matcher.matched()
@@ -64,8 +64,10 @@ class Connector(BaseSyncConnector):
     def create_results_connection(self, search_id, offset, length):
         observations = []
         return_obj = dict()
+        is_stix_21 = self.connection['options'].get("stix_2.1")
+        stix_version = '2.1' if is_stix_21 else '2.0'
 
-        if self.test_START_STOP_format(search_id):
+        if not is_stix_21 and self.test_START_STOP_format(search_id):
             # Remove leading 't' before timestamps from search_id. search_id is the stix pattern
             search_id = re.sub("(?<=START\s)t|(?<=STOP\s)t", "", search_id)
 
@@ -86,23 +88,49 @@ class Connector(BaseSyncConnector):
                 bundle = json.loads(response_txt)
 
                 if "stix_validator" in self.connection['options'] and self.connection['options'].get("stix_validator") is True:
-                    results = validate_instance(bundle)
+                    results = validate_instance(bundle, stix_version=stix_version)
 
                     if results.is_valid is not True:
                         ErrorResponder.fill_error(return_obj,  message='Invalid Objects in STIX Bundle.', connector=self.connector)
                         return return_obj
 
-                for obj in bundle["objects"]:
-                    if obj["type"] == "observed-data":
-                        observations.append(obj)
+                if is_stix_21:
+                    observations = [bundle]
+                else:
+                    for obj in bundle["objects"]:
+                        if obj["type"] == "observed-data":
+                            observations.append(obj)
 
                 # Pattern match
                 try:
-                    results = self.match(search_id, observations, False)
+                    results = self.match(search_id, observations, False, stix_version)
+                    if is_stix_21:
+                        v21_results = []
+                        v21_observed_data = []
+                        v21_cboxes = {}
+                        for obs_obj in results:
+                            if "objects" in obs_obj:
+                                for obj in obs_obj["objects"]:
+                                    if obj['type'] == "observed-data":
+                                        v21_observed_data.append(obj)
+                                    elif obj['type'] != "identity":
+                                        v21_cboxes[obj['id']] = obj
+
+                        v21_observed_data = v21_observed_data[int(offset):int(offset + length)]
+                        v21_results.extend(v21_observed_data)
+                        for observed_data in v21_observed_data:
+                            for ref in observed_data['object_refs']:
+                                if ref in v21_cboxes:
+                                    v21_results.append(v21_cboxes[ref])
+                                    del v21_cboxes[ref]
+                        
+                        results = v21_results
+                    else:
+                        results = results[int(offset):int(offset + length)]
 
                     if len(results) != 0:
                         return_obj['success'] = True
-                        return_obj['data'] = results[int(offset):int(offset + length)]
+                        return_obj['data'] = results
                     else:
                         return_obj['success'] = True
                         return_obj['data'] = []
