@@ -321,3 +321,19 @@ class TestDarktraceConnection(unittest.TestCase, object):
 
         assert results_response is not None
         assert results_response['success'] is False
+
+    @patch('stix_shifter_modules.darktrace.stix_transmission.api_client.APIClient.get_search_results')
+    def test_timeout_error(self, mock_results_response):
+        mock_results_response.side_effect = TimeoutError("Request Timeout")
+
+        query = json.dumps({"queries": ["{\"search\": \"(@fields.query:pop.gmail.com)\", \"fields\": [], \"timeframe\":"
+                                        " \"custom\", \"time\": {\"from\": \"2022-03-16T09:23:20.894000Z\", "
+                                        "\"to\": \"2022-03-16T09:28:20.894000Z\"}}"]})
+
+        transmission = stix_transmission.StixTransmission('darktrace', self.connection(), self.config())
+        results_response = transmission.results(query, 0, 1)
+
+        assert results_response is not None
+        assert results_response['success'] is False
+        assert results_response['code'] == 'service_unavailable'
+        assert 'Request Timeout' in results_response['error']
