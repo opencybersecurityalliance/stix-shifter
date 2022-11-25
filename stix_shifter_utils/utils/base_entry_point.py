@@ -5,6 +5,7 @@ import functools
 import json
 import glob
 from inspect import isawaitable
+
 from stix_shifter_utils.utils.module_discovery import dialect_list
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator

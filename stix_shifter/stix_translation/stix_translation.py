@@ -1,6 +1,8 @@
 import importlib
 import sys
 import traceback
+
+from stix_shifter_utils.utils.async_utils import run_in_thread
 from stix_shifter_utils.stix_translation.src.utils.exceptions import DataMappingException, \
     UnsupportedDataSourceException, UnsupportedLanguageException
 from stix_shifter_utils.utils.module_discovery import process_dialects
@@ -30,23 +32,7 @@ class StixTranslation:
         self.args = []
         self.logger = logger.set_logger(__name__)
 
-    async def translate(self, module, translate_type, data_source, data, options={}, recursion_limit=1000):
-        """
-        Translated queries to a specified format
-        :param module: What module to use
-        :type module: one of connector modules: 'qradar', 'template'
-        :param translate_type: translation of a query or result set must be one of: 'parse', 'mapping' 'query', 'results'
-        :type translate_type: str
-        :param data: the data to translate
-        :type data: str
-        :param options: translation options { stix_validator: bool }
-        :type options: dict
-        :param recursion_limit: maximum depth of Python interpreter stack
-        :type recursion_limit: int
-        :return: translated results
-        :rtype: str
-        """
-
+    async def translate_async(self, module, translate_type, data_source, data, options={}, recursion_limit=1000):
         module, dialects = process_dialects(module, options)
         try:
             try:
@@ -123,7 +109,8 @@ class StixTranslation:
                     return await entry_point.parse_query(data)
             elif translate_type == RESULTS:
                 # Converting data from the datasource to STIX objects
-                return await entry_point.translate_results(data_source, data)
+                result = entry_point.translate_results(data_source, data)
+                return await result
             elif translate_type == MAPPING:
                 mappings = entry_point.get_mapping()
                 return mappings
@@ -142,3 +129,24 @@ class StixTranslation:
             response = dict()
             ErrorResponder.fill_error(response, message_struct={'exception': ex}, connector=module)
             return response
+
+    
+    def translate(self, module, translate_type, data_source, data, options={}, recursion_limit=1000):
+        """
+        Translated queries to a specified format
+        :param module: What module to use
+        :type module: one of connector modules: 'qradar', 'template'
+        :param translate_type: translation of a query or result set must be one of: 'parse', 'mapping' 'query', 'results'
+        :type translate_type: str
+        :param data: the data to translate
+        :type data: str
+        :param options: translation options { stix_validator: bool }
+        :type options: dict
+        :param recursion_limit: maximum depth of Python interpreter stack
+        :type recursion_limit: int
+        :return: translated results
+        :rtype: str
+        """
+        return run_in_thread(self.translate_async, module, translate_type, data_source, data, options, recursion_limit)
+
+       
