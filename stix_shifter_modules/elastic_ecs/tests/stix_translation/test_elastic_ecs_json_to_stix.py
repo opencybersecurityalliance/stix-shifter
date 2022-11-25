@@ -330,7 +330,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         proc_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'process')
         assert (proc_object is not None), 'process object type not found'
         assert (proc_object.keys() ==
-                {'type', 'pid', 'name', 'created', 'opened_connection_refs', 'creator_user_ref', 'binary_ref', 'parent_ref'})
+                {'type', 'pid', 'name', 'created', 'opened_connection_refs', 'creator_user_ref', 'binary_ref', 'parent_ref', 'x_unique_id'})
         assert (proc_object['type'] == 'process')
         assert (proc_object['pid'] == 609)
         assert (proc_object['created'] == '2019-04-10T11:33:57.571Z')

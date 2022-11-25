@@ -69,6 +69,9 @@ class AWSComposeMockResponse:
     def __getitem__(self, prop):
         return self.object[prop]
 
+    def __contains__(self, prop):
+        return prop in self.object
+
     def get(self, prop, default=None):
         return self.object.get(prop, default)
 

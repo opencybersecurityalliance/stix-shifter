@@ -406,7 +406,7 @@ class TestAWSConnection(unittest.TestCase):
     def test_create_query_connection(mock_start_query):
         mock_start_query.return_value = get_aws_mock_response(AWSMockJsonResponse.start_query_execution(**{}))
         
-        query = """{"vpcflow": "endtime >= 1588310653 AND starttime BETWEEN 1588322590 AND 1604054590 LIMIT 10000"}"""
+        query = """{"vpcflow": "endtime >= 1588310653 AND starttime BETWEEN 1588322590 AND 1604054590"}"""
         transmission = stix_transmission.StixTransmission('aws_athena', CONNECTION, CONFIGURATION)
         query_response = transmission.query(query)
 
@@ -420,7 +420,7 @@ class TestAWSConnection(unittest.TestCase):
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_create_query_exception(mock_start_query):
         mock_start_query.side_effect = MockExceptionResponse.start_query_execution()
-        query = """{"vpcflow": "endtime >= 1588310653 AND starttime BETWEEN 1588322590 AND 1604054590 LIMIT 10000"}"""
+        query = """{"vpcflow": "endtime >= 1588310653 AND starttime BETWEEN 1588322590 AND 1604054590"}"""
         transmission = stix_transmission.StixTransmission('aws_athena', CONNECTION, CONFIGURATION)
         query_response = transmission.query(query)
 
@@ -464,11 +464,10 @@ class TestAWSConnection(unittest.TestCase):
         assert 'error' in results_response
 
     @staticmethod
-    @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.getPaginatedResult')
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.makeRequest')
-    def test_create_results_connection(mock_results, mock_paginated_results):
-        mock_paginated_results.return_value = get_aws_mock_response(AWSMockJsonResponse.get_query_paginated_results(**{}))
+    def test_create_results_connection(mock_results):
         mock_results.side_effect = [
+            get_aws_mock_response(AWSMockJsonResponse.get_query_results(**{})),
             get_aws_mock_response(AWSMockJsonResponse.get_query_execution(**{})),
             get_aws_mock_response(AWSMockJsonResponse.delete_objects(**{})),
         ]
@@ -477,6 +476,7 @@ class TestAWSConnection(unittest.TestCase):
         length = 2
         transmission = stix_transmission.StixTransmission('aws_athena', CONNECTION, CONFIGURATION)
         results_response = transmission.results(search_id, offset, length)
+        print(results_response)
 
         assert results_response is not None
         assert 'success' in results_response

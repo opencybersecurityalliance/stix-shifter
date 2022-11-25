@@ -14,26 +14,28 @@ from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
 class APIClient():
-    
+
     def __init__(self, connection, configuration):
-         self.url = "https://"+connection["host"]
-         self.auth_token_url = "/SecretServer/oauth2/token"
-         self.secret_detail = "/SecretServer/api/v1/secrets"
-         self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
-         self.connect_timeout = int(self.connect_timeout)
-         self.server_cert_content = False
-         self.auth = None
-         self.sni = None
-         self.retry_max = 1
-         self.logger = logger.set_logger(__name__)
-         self.server_cert_file_content_exists = False
-         self.url_modifier_function = None
-         self.headers = {
-             'Content-Type': 'application/x-www-form-urlencoded'
-         }
-         self.payload = 'username=%s&password=%s&grant_type=password' % (
-             configuration["auth"]["username"], configuration["auth"]["password"])
-         self.server_ip = connection["host"]
+        self.url = "https://" + connection["host"]
+        self.auth_token_url = "/SecretServer/oauth2/token"
+        self.secret_detail = "/SecretServer/api/v1/secrets"
+        self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
+        self.connect_timeout = int(self.connect_timeout)
+        self.server_cert_content = False
+        self.auth = None
+        self.sni = None
+        self.retry_max = 1
+        self.logger = logger.set_logger(__name__)
+        self.server_cert_file_content_exists = False
+        self.url_modifier_function = None
+        self.headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        self.payload = 'username=%s&password=%s&grant_type=password' % (
+            configuration["auth"]["username"], configuration["auth"]["password"])
+        self.server_ip = connection["host"]
+
+        self.secret_server_userdetail_url = "SecretServer/api/v1/users/"
 
     async def get_token(self):
         response = await RestApiClientAsync.call_api(self, self.auth_token_url, 'GET', headers=self.headers,
@@ -71,8 +73,8 @@ class APIClient():
                 respObj.error_type = ""
                 respObj.status_code = 200
                 content = '{"search_id": "' + \
-                              str(response) + \
-                              '", "data": {"message":  "Search id generated."}}'
+                          str(response) + \
+                          '", "data": {"message":  "Search id generated."}}'
                 respObj._content = bytes(content, 'utf-8')
             else:
                 respObj.code = "404"
@@ -113,10 +115,14 @@ class APIClient():
                 self.endDate = timestamp[1]
             else:
                 self.startDate = date.today()
-                self.endDate = self.startDate - timedelta(days = 1)
-            response = await self.get_response()
-            return response
-  
+
+                self.endDate = self.startDate - timedelta(days=1)
+            resp = await self.get_response()
+            page_size = 100
+            resp = resp[(index_from * page_size):(fetch_size * page_size)]
+            return resp
+
+
     def decode_searchId(self):
         # These value (date, self.query) must be present.
         try:
@@ -162,6 +168,19 @@ class APIClient():
         for obj in eventData['rows']:
             obj = dict(zip(col, obj))
             collection.append(obj)
+        for item in collection:
+            if "[Check Out]" in item["EventSubject"]:
+                item["EventSubject"] = "Check Out"
+            elif "[Check In]" in item["EventSubject"]:
+                item["EventSubject"] = "Check In"
+        # {key: ("Check Out" if  "[Check Out]" in val["EventSubject"] else "chec in")   for col in collection for(key,val) in col.items()}
+
+        # {item["EventSubject"]: ("[Check Out]" if "[Check Out]" in item["EventSubject"]
+        #                         "[Check In]"  if "[Check In]" in item["EventSubject"])
+        # for item in collection
+        # "[Check Out]" in [val = item["EventSubject"]] for item in collection]:
+        #     print('true')
+
         return collection
 
     async def get_Secret(self):
@@ -199,13 +218,16 @@ class APIClient():
             updateSecret.append(next)
         for item in eventDetail:
             for getId in updateSecret:
-                if (item['ItemId'] == getId['id']):
-                    data = getId['items']
-                    for secret in data:
-                        if (secret['fieldName'] == 'Server'):
-                            secretCollection[str(secret['fieldName'])] = str(secret['itemValue'])
-                            item.update(secretCollection)
+                if type(getId) is dict:
+                    if 'id' in getId:
+                        if (item['ItemId'] == getId['id']):
+                            data = getId['items']
+                            for secret in data:
+                                if (secret['fieldName'] == 'Server') or (secret['fieldName'] == 'Username'):
+                                    secretCollection[str(secret['fieldName'])] = str(secret['itemValue'])
+                                    item.update(secretCollection)
                             updateCollection.append(item)
+
         return updateCollection
 
     async def delete_search(self, search_id):

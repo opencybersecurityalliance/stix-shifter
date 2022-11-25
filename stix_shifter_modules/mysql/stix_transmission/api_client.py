@@ -60,18 +60,24 @@ class APIClient():
                     # Uncomment to see data on newly populated table
                     # query = "select * from {} limit 1".format(self.table)
 
-                    await cursor.execute(query)  
-                    result_collection = await cursor.fetchall()
-                    results_list = []
+            await cursor.execute(query)  
+            result_collection = await cursor.fetchall()
+            results_list = []
+            row_count = int(rows)
 
-                    # Put table data in JSON format
-                    for tuple in result_collection:
-                        results_object = {}
-                        for index, datum in enumerate(tuple):
-                            results_object[column_list[index]] = datum
-                        results_list.append(results_object)
+            # Put table data in JSON format
+            for index, tuple in enumerate(result_collection):
+                if index < int(start):
+                    continue
+                if row_count < 1:
+                    break
+                results_object = {}
+                for index, datum in enumerate(tuple):
+                    results_object[column_list[index]] = datum
+                results_list.append(results_object)
+                row_count -= 1
 
-                    response["result"] = results_list
+                response["result"] = results_list
 
             pool.close()
             await pool.wait_closed()

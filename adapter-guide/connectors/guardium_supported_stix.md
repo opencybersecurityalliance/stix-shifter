@@ -1,4 +1,4 @@
-##### Updated on 06/01/22
+##### Updated on 11/04/22
 ## IBM Guardium Data Protection
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -8,7 +8,52 @@
 | = | = |
 | IN | = |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties for Qsearch
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **x-ibm-finding**:finding_type | datacategory |
+| **x-ibm-finding**:start | startTime |
+| **x-ibm-finding**:end | endTime |
+| **x-ibm-finding**:database_name | Database |
+| **x-ibm-finding**:dst_device | Database |
+| **ipv4-addr**:value | ClientIP, Server |
+| **ipv4-addr**:src_ip | ClientIP |
+| **ipv4-addr**:dst_ip | Server |
+| **ipv6-addr**:value | ClientIP, Server |
+| **ipv6-addr**:src_ip | ClientIP |
+| **ipv6-addr**:dst_ip | Server |
+| **network-traffic**:dst_ref.value | Server |
+| **network-traffic**:src_ref.value | ClientIP |
+| **user-account**:value | DB User, OS User |
+| **user-account**:db_user | DB User |
+| **user-account**:os_user | OS User |
+| **user-account**:user_id | DB User |
+| **user-account**:login_name | OS User |
+| **x-guardium**:severity | Severity |
+| <br> | |
+### Searchable STIX objects and properties for Report
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **x-ibm-finding**:finding_type | datacategory |
+| **x-ibm-finding**:start | QUERY_FROM_DATE |
+| **x-ibm-finding**:end | QUERY_TO_DATE |
+| **x-ibm-finding**:database_name | Database |
+| **x-ibm-finding**:dst_device | Database |
+| **ipv4-addr**:value | ServerIP |
+| **ipv4-addr**:dst_ip | ServerIP |
+| **ipv6-addr**:value | ServerIP |
+| **ipv6-addr**:dst_ip | ServerIP |
+| **network-traffic**:dst_ref.value | ServerIP |
+| **user-account**:value | DBUser, OSUser |
+| **user-account**:db_user | DBUser |
+| **user-account**:os_user | OSUser |
+| **user-account**:user_id | DBUser |
+| **user-account**:login_name | OSUser |
+| **artifact**:payload_bin | Payload-dialect1 |
+| **domain-name**:value | DomainName-dialect1 |
+| **x-guardium**:severity | Severity |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | Payload |

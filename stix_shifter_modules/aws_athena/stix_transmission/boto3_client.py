@@ -40,13 +40,21 @@ class BOTO3Client:
                                         verify=self.verify
                                         ) as client:
                         role_to_assume_arn = auth.get('aws_iam_role')
+                        assume_role_external_id = auth.get('aws_assume_role_external_id')
                         prefix = 'AWS_'
                         letters = string.ascii_lowercase
                         role_session_name = prefix + ''.join(random.sample(letters, 4))
-                        response = client.assume_role(
-                            RoleArn=role_to_assume_arn,
-                            RoleSessionName=role_session_name
-                        )
+                        if assume_role_external_id:
+                            response = client.assume_role(
+                                RoleArn=role_to_assume_arn,
+                                RoleSessionName=role_session_name,
+                                ExternalId=assume_role_external_id
+                            )
+                        else:
+                            response = client.assume_role(
+                                RoleArn=role_to_assume_arn,
+                                RoleSessionName=role_session_name
+                            )
                         aws_creds = response['Credentials']
                     self.session = aioboto3.Session(
                                             aws_access_key_id=aws_creds['AccessKeyId'],

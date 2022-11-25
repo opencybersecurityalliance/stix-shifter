@@ -1,4 +1,4 @@
-##### Updated on 06/01/22
+##### Updated on 11/04/22
 ## Splunk Enterprise Security
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -17,7 +17,100 @@
 | ISSUBSET | = |
 | FOLLOWEDBY | latest=[search {expr2} | append [makeresults 1 | eval _time=0] | head 1 | return $_time] | where {expr1} |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **x-oca-event**:code | signature_id |
+| **x-oca-event**:action | signature |
+| **x-oca-event**:outcome | result |
+| **x-oca-event**:module | source |
+| **x-oca-event**:created | _time |
+| **x-oca-event**:process_ref.command_line | process |
+| **x-oca-event**:process_ref.binary_ref.name | process_exec |
+| **x-oca-event**:process_ref.parent_ref.command_line | parent_process |
+| **x-oca-event**:process_ref.creator_user_ref.user_id | process_user |
+| **x-oca-event**:process_ref.name | process_name |
+| **x-oca-event**:process_ref.pid | process_id |
+| **x-oca-event**:parent_process_ref.command_line | parent_process |
+| **x-oca-event**:parent_process_ref.binary_ref.name | parent_process_exec |
+| **x-oca-event**:parent_process_ref.pid | parent_process_id |
+| **x-oca-event**:parent_process_ref.name | parent_process_name |
+| **x-oca-event**:domain_ref.value | url, url_domain |
+| **x-oca-event**:file_ref.name | file_name |
+| **x-oca-event**:host_ref.hostname | host |
+| **x-oca-event**:host_ref.ip_refs[*].value | src_ip |
+| **x-oca-event**:registry_ref.key | ObjectName, RegistryKey |
+| **x-oca-event**:user_ref.user_id | user |
+| **x-oca-event**:url_ref.value | url |
+| **x-oca-asset**:hostname | h, o, s, t |
+| **directory**:path | f, i, l, e, _, p, a, t, h |
+| **directory**:created | f, i, l, e, _, c, r, e, a, t, e, _, t, i, m, e |
+| **directory**:modified | f, i, l, e, _, m, o, d, i, f, y, _, t, i, m, e |
+| **domain-name**:value | host, url |
+| **x-readable-payload**:value | _, r, a, w |
+| **email-addr**:value | src_user, recipient |
+| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.MD5 | f, i, l, e, _, h, a, s, h |
+| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.'SHA-1' | f, i, l, e, _, h, a, s, h |
+| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.'SHA-256' | f, i, l, e, _, h, a, s, h |
+| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.name | f, i, l, e, _, n, a, m, e |
+| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.size | f, i, l, e, _, s, i, z, e |
+| **email-message**:to_refs.[*].value | r, e, c, i, p, i, e, n, t |
+| **email-message**:cc_refs.[*].value | r, e, c, i, p, i, e, n, t |
+| **email-message**:bcc_refs.[*].value | r, e, c, i, p, i, e, n, t |
+| **email-message**:subject | s, u, b, j, e, c, t |
+| **email-message**:sender_ref.value | s, r, c, _, u, s, e, r |
+| **email-message**:from_ref.value | s, r, c, _, u, s, e, r |
+| **file**:hashes.MD5 | f, i, l, e, _, h, a, s, h |
+| **file**:hashes.'SHA-1' | f, i, l, e, _, h, a, s, h |
+| **file**:hashes.'SHA-256' | f, i, l, e, _, h, a, s, h |
+| **file**:name | f, i, l, e, _, n, a, m, e |
+| **file**:created | f, i, l, e, _, c, r, e, a, t, e, _, t, i, m, e |
+| **file**:modified | f, i, l, e, _, m, o, d, i, f, y, _, t, i, m, e |
+| **file**:parent_directory_ref.path | f, i, l, e, _, p, a, t, h |
+| **file**:size | f, i, l, e, _, s, i, z, e |
+| **ipv4-addr**:value | src_ip, dest_ip |
+| **ipv6-addr**:value | src_ipv6, dest_ipv6 |
+| **mac-addr**:value | src_mac, dest_mac |
+| **network-traffic**:src_ref.value | s, r, c |
+| **network-traffic**:src_port | s, r, c, _, p, o, r, t |
+| **network-traffic**:dst_ref.value | d, e, s, t |
+| **network-traffic**:dst_port | d, e, s, t, _, p, o, r, t |
+| **network-traffic**:protocols[*] | p, r, o, t, o, c, o, l |
+| **network-traffic**:start | e, a, r, l, i, e, s, t |
+| **network-traffic**:end | l, a, t, e, s, t |
+| **process**:name | p, r, o, c, e, s, s, _, n, a, m, e |
+| **process**:command_line | p, r, o, c, e, s, s |
+| **process**:pid | p, i, d |
+| **process**:creator_user_ref.account_login | u, s, e, r |
+| **process**:binary_ref.parent_directory_ref.path | p, r, o, c, e, s, s, _, p, a, t, h |
+| **process**:binary_ref.name | p, r, o, c, e, s, s, _, e, x, e, c |
+| **url**:value | u, r, l |
+| **user-account**:user_id | u, s, e, r |
+| **windows-registry-key**:key | o, b, j, e, c, t |
+| **windows-registry-key**:values[*] | r, e, s, u, l, t |
+| **windows-registry-key**:creator_user_ref.account_login | u, s, e, r |
+| **x509-certificate**:hashes.'SHA-256' | s, s, l, _, h, a, s, h |
+| **x509-certificate**:hashes.'SHA-1' | s, s, l, _, h, a, s, h |
+| **x509-certificate**:version | s, s, l, _, v, e, r, s, i, o, n |
+| **x509-certificate**:serial_number | s, s, l, _, s, e, r, i, a, l |
+| **x509-certificate**:signature_algorithm | s, s, l, _, s, i, g, n, a, t, u, r, e, _, a, l, g, o, r, i, t, h, m |
+| **x509-certificate**:issuer | s, s, l, _, i, s, s, u, e, r |
+| **x509-certificate**:subject | s, s, l, _, s, u, b, j, e, c, t |
+| **x509-certificate**:subject_public_key_algorithm | s, s, l, _, p, u, b, l, i, c, k, e, y, _, a, l, g, o, r, i, t, h, m |
+| **x-splunk**:log_source | source |
+| **x-splunk**:log_source_type | _sourcetype |
+| **x-splunk**:direction | Direction |
+| **x-splunk**:event_id | EventID |
+| **x-splunk**:event_name | EventName |
+| **x-splunk**:mitre_tactic_id | TacticId |
+| **x-splunk**:mitre_tactic | Tactic |
+| **x-splunk**:mitre_technique_id | TechniqueId |
+| **x-splunk**:mitre_technique | Technique |
+| **x-ibm-finding**:name | ss_name |
+| **x-ibm-finding**:src_device | DeviceType |
+| **x-ibm-finding**:severity | severity |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | _raw |

@@ -43,6 +43,7 @@ class APIClient:
         token = await self.get_token()
         headers['Content-Type'] = 'application/json'
         headers['Accept'] = 'application/json'
+        headers['user-agent'] = 'oca_stixshifter_1.0'
         headers['Authorization'] = f'Bearer {token}'
         endpoint = self.INCIDENTS_IDS_ENDPOINT
         data['filter'] = filter
@@ -56,6 +57,7 @@ class APIClient:
         headers = dict()
         token = await self.get_token()
         headers['Authorization'] = f'Bearer {token}'
+        headers['user-agent'] = 'oca_stixshifter_1.0'
         endpoint = 'detects/queries/detects/v1'  # Test if system alive
         return await self.client.call_api(endpoint, 'GET', headers=headers, timeout=self.timeout)
 
@@ -68,6 +70,7 @@ class APIClient:
         headers['Content-Type'] = 'application/json'
         headers['Accept'] = 'application/json'
         headers['Authorization'] = f'Bearer {token}'
+        headers['user-agent'] = 'oca_stixshifter_1.0'
         endpoint = self.INCIDENTS_INFO_ENDPOINT
         ids_expression = json.dumps({'ids': ids}).encode("utf-8")
         return await self.client.call_api(endpoint, 'POST', headers=headers, data=ids_expression, timeout=self.timeout)
@@ -79,11 +82,12 @@ class APIClient:
         """
         if self.token_expired():
 
-            headers = {
+            headers={
                 'accept': 'application/json',
+                'user-agent': 'oca_stixshifter_1.0',
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
-            data = (
+            data=(
                 f'client_id={self._client_id}'
                 f'&client_secret={self._client_secret}'
             )
