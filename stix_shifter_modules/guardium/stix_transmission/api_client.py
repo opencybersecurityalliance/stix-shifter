@@ -1,5 +1,4 @@
 from .guard_utils import GuardApiClient
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import ResponseWrapper
 import json
 import base64
 

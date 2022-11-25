@@ -1,5 +1,5 @@
 import base64
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 
 ENDPOINT_ALL = 'v2/siem/all'
 
@@ -13,7 +13,7 @@ class APIClient():
             if 'principal' in auth and 'secret' in auth:
                 headers['Authorization'] = b"Basic " + base64.b64encode(
                     (auth['principal'] + ':' + auth['secret']).encode('ascii'))
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     port=None,
                                     headers=headers, url_modifier_function=None, cert_verify=True, sni=None, auth=None
                                     )

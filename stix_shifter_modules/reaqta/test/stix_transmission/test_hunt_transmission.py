@@ -26,7 +26,7 @@ class TestReaqtaConnection(unittest.TestCase, object):
         check_async = entry_point.is_async()
         assert check_async is False
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping(self, mock_generate_token):
         mocked_return_value = '{"token": "abcdef", "expiresAt": 1658954054.299}'
         mock_generate_token.return_value = get_mock_response(200, mocked_return_value, 'byte')
@@ -36,7 +36,7 @@ class TestReaqtaConnection(unittest.TestCase, object):
 
         assert ping_result["success"] is True
     
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping_failure(self, mock_generate_token):
         mocked_return_value = '{"message": "Authentication failed"}'
         mock_generate_token.return_value = get_mock_response(401, mocked_return_value)

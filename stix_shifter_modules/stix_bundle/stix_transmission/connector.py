@@ -1,5 +1,5 @@
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix2matcher.matcher import Pattern
 from stix2matcher.matcher import MatchListener
 from stix2validator import validate_instance
@@ -23,7 +23,7 @@ class Connector(BaseSyncConnector):
         conf_auth = configuration.get('auth', {})
         if 'username' in conf_auth and 'password' in conf_auth:
             auth = (conf_auth['username'], conf_auth['password'])
-        self.client = RestApiClient(None,
+        self.client = RestApiClientAsync(None,
                                     auth=auth,
                                     url_modifier_function=lambda host_port, endpoint, headers: f'{endpoint}')
 

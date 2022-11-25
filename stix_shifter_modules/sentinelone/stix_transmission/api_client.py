@@ -1,4 +1,4 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 
 
 class APIClient():
@@ -16,7 +16,7 @@ class APIClient():
         headers['Authorization'] = self.api_key
         headers['Content-type'] = 'application/json'
         self.timeout = connection['options']['timeout']
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                      connection.get('port', None),
                                      headers,
                                      url_modifier_function=None

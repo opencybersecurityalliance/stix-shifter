@@ -1,6 +1,8 @@
 import asyncio
 import functools
 import importlib
+
+from stix_shifter_utils.utils.async_utils import run_in_thread
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
@@ -12,42 +14,17 @@ STATUS = 'status'
 PING = 'ping'
 IS_ASYNC = 'is_async'
 
-
-def run_in_thread(callable, *args, **kwargs):
-    loop = None
-    connector = 'unsupplied connector name'
-    if kwargs:
-        connector = kwargs.get('connector', None)
-        if connector and isinstance(connector, str):
-            kwargs.pop('connector')
-
-    try:
-        loop = asyncio.get_event_loop()
-    except:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-
-    try:
-        return loop.run_until_complete(callable(*args, **kwargs))
-    
-    except Exception as ex:
-        return_obj = dict()
-        ErrorResponder.fill_error(return_obj, error=ex, connector=connector)
-        return return_obj
-
-
 class StixTransmission:
 
     init_error = None
 
     def respond_error(func):
         @functools.wraps(func)
-        def wrapper_func(self, *args, **kwargs):
+        async def wrapper_func(self, *args, **kwargs):
             try:
                 if self.init_error:
                     raise self.init_error
-
-                return func(self, *args, **kwargs)
+                return await func(self, *args, **kwargs)
             except Exception as ex:
                 return_obj = dict()
                 ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)

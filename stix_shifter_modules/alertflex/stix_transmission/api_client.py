@@ -1,5 +1,5 @@
 import base64
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 
 
 class APIClient():
@@ -12,7 +12,7 @@ class APIClient():
             (auth['username'] + ':' + auth['password']).encode('ascii'))
         url_modifier_function = None
         self.timeout = connection['options'].get('timeout')
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port'),
                                     headers,
                                     url_modifier_function,

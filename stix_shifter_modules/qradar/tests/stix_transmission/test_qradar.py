@@ -1,6 +1,5 @@
 from stix_shifter_modules.qradar.entry_point import EntryPoint
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from tests.utils.async_utils import get_mock_response

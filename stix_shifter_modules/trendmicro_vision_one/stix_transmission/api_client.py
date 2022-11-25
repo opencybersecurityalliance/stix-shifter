@@ -1,7 +1,7 @@
 import datetime
 import json
 
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils import logger
 
 _USER_AGENT = 'TMV1StixShifter/1.0'
@@ -23,7 +23,7 @@ class APIClient:
 
         self.timeout = connection['options'].get('timeout')
 
-        self.client = RestApiClient(host_port,
+        self.client = RestApiClientAsync(host_port,
                                     None,
                                     headers,
                                     url_modifier_function,

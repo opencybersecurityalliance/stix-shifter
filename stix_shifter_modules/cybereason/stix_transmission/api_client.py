@@ -1,4 +1,4 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils import logger
 
 DEFAULT_LIMIT = 10000
@@ -15,7 +15,7 @@ class APIClient:
         headers = {'Content-Type': 'application/json'}
         url_modifier_function = None
         self.auth = configuration.get('auth')
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port', None),
                                     headers,
                                     url_modifier_function=url_modifier_function

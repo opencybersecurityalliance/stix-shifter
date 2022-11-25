@@ -1,6 +1,6 @@
 """Apiclient for MSATP"""
 import json
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from datetime import datetime, timedelta
 
 
@@ -20,7 +20,7 @@ class APIClient:
         auth = configuration.get('auth')
         # self.endpoint_start = 'incidents/'
         self.host = connection.get('host')
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port', None),
                                     headers,
                                     url_modifier_function=url_modifier_function,

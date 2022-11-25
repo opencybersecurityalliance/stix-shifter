@@ -7,7 +7,7 @@ import os
 from datetime import datetime
 from requests import Response
 from stix_shifter_utils.utils import logger
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient, ResponseWrapper, \
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync, ResponseWrapper, \
     CONNECT_TIMEOUT_DEFAULT
 import random
 from stix_shifter_utils.utils.error_response import ErrorResponder
@@ -36,7 +36,7 @@ class APIClient():
          self.server_ip = connection["host"]
 
     async def get_token(self):
-        response = await RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers,
+        response = await RestApiClientAsync.call_api(self, self.auth_token_url, 'GET', headers=self.headers,
                                           data=self.payload,
                                           urldata=None,
                                           timeout=None)
@@ -55,7 +55,7 @@ class APIClient():
             raise Exception(return_obj)
 
     async def ping_data_source(self):
-        response = await RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
+        response = await RestApiClientAsync.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
                                           urldata=None,
                                           timeout=None)
         return response.code
@@ -147,7 +147,7 @@ class APIClient():
         }
         endpoint = "SecretServer/api/v1/reports/execute"
 
-        response = await RestApiClient.call_api(self, endpoint, 'POST', headers=headers, data=payload, urldata=None,
+        response = await RestApiClientAsync.call_api(self, endpoint, 'POST', headers=headers, data=payload, urldata=None,
                                           timeout=None)
         return_obj = {}
         if response.code != 200:
@@ -179,7 +179,7 @@ class APIClient():
                 'Content-Type': 'application/json'
             }
             payload = {}
-            response = await RestApiClient.call_api(self, secret_server_user_url, 'GET', headers=headers, data=payload,
+            response = await RestApiClientAsync.call_api(self, secret_server_user_url, 'GET', headers=headers, data=payload,
                                               urldata=None,
                                               timeout=None)
 

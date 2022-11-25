@@ -1,6 +1,6 @@
 import json
 from datetime import datetime, timedelta
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
@@ -18,7 +18,7 @@ class APIClient:
         auth = configuration.get('auth')
         # self.endpoint_start = 'incidents/'
         self.host = connection.get('host')
-        self.client = RestApiClient(connection.get('host'), connection.get('port', None),
+        self.client = RestApiClientAsync(connection.get('host'), connection.get('port', None),
             headers,url_modifier_function=url_modifier_function,
             cert_verify=connection.get('selfSignedCert', False),
             sni=connection.get('sni', None)
