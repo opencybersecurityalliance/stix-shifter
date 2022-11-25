@@ -1,9 +1,10 @@
 import unittest
 import re
+import json
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.utils.error_response import ErrorCode
 
-MODULE = "azure_sentinel"
+MODULE = "azure_sentinel_log_analytics"
 translation = stix_translation.StixTranslation()
 
 
@@ -23,11 +24,11 @@ class TestStixtoQuery(unittest.TestCase, object):
         self.assertIsInstance(query, dict)
         self.assertIsInstance(query['queries'], list)
         for index, each_query in enumerate(query.get('queries'), start=0):
-            self.assertEqual(each_query, queries[index])
+              self.assertEqual(each_query, queries[index])
 
     def test_file_params_query(self):
         stix_pattern = "[file:path = '/etc/path']"
-        query = translation.translate(MODULE, 'query', '{}', stix_pattern, options={"api": "Log Analytics"})
+        query = translation.translate(MODULE, 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = ["SecurityEvent | where (FilePath == '/etc/path') and (TimeGenerated between "
@@ -53,12 +54,12 @@ class TestStixtoQuery(unittest.TestCase, object):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
-            "SecurityAlert | where (AlertName == 'Microsoft-Windows-Security-Auditing') and "
-            "(TimeGenerated between (datetime(2022-07-12T14:09:21.479Z) .. datetime(2022-07-13T14:09:21.479Z)))",
             "SecurityEvent | where (EventSourceName == 'Microsoft-Windows-Security-Auditing') and "
             "(TimeGenerated between (datetime(2022-07-12T14:09:21.480Z) .. datetime(2022-07-13T14:09:21.480Z)))",
             "SecurityIncident | where (IncidentName == 'Microsoft-Windows-Security-Auditing') and "
-            "(TimeGenerated between (datetime(2022-07-12T14:09:21.481Z) .. datetime(2022-07-13T14:09:21.481Z)))"
+            "(TimeGenerated between (datetime(2022-07-12T14:09:21.481Z) .. datetime(2022-07-13T14:09:21.481Z)))",
+            "SecurityAlert | where (AlertName == 'Microsoft-Windows-Security-Auditing') and "
+            "(TimeGenerated between (datetime(2022-07-12T14:09:21.479Z) .. datetime(2022-07-13T14:09:21.479Z)))"
         ]
 
         queries = _remove_timestamp_from_query(queries)
@@ -75,7 +76,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         self._test_query_assertions(query, queries)
 
     def test_url_params_query(self):
-        stix_pattern = "[url:name = 'https://portal.azure.com/#asset/Microsoft_Azure_Security_Insights/Incident/subscriptions/dc26ff57-0597-4cc8-8092-aa5b929f8f39/resourceGroups/newresource/providers/Microsoft.OperationalInsights/workspaces/loganaly/providers/Microsoft.SecurityInsights/Incidents/919158c6-4c3f-4273-a730-a37f75622350']"
+        stix_pattern = "[url:value = 'https://portal.azure.com/#asset/Microsoft_Azure_Security_Insights/Incident/subscriptions/dc26ff57-0597-4cc8-8092-aa5b929f8f39/resourceGroups/newresource/providers/Microsoft.OperationalInsights/workspaces/loganaly/providers/Microsoft.SecurityInsights/Incidents/919158c6-4c3f-4273-a730-a37f75622350']"
         query = translation.translate(MODULE, 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
