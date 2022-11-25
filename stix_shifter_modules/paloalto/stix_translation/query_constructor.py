@@ -249,6 +249,8 @@ class QueryStringPatternTranslator:
         """
         try:
             time_pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
+            if re.search(r"\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}Z", str(value)):  # without milli seconds
+                time_pattern = '%Y-%m-%dT%H:%M:%SZ'
             epoch = datetime(1970, 1, 1)
             converted_time = int(((datetime.strptime(value,
                                                      time_pattern) - epoch).total_seconds()) * 1000)
