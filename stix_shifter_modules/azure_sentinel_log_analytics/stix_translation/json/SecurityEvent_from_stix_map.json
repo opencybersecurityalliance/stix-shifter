@@ -1,0 +1,171 @@
+{
+    "ipv4-addr": {
+        "fields": {
+            "value": [
+                "IpAddress"
+            ]
+        }
+    },
+    "domain-name": {
+        "fields": {
+            "value": [
+                "TargetDomainName"
+            ]
+        }
+    },
+    "user-account": {
+        "fields": {
+            "account_login": [
+                "TargetUserName"
+            ]
+        }
+    },
+    "directory": {
+        "fields": {
+            "path": [
+                "HomeDirectory",
+                "HomePath"
+            ]
+        }
+    },
+    "file": {
+        "fields": {
+            "path": [
+                "FilePath"
+            ],
+            "hashes": [
+                "FileHash"
+            ]
+        }
+    },
+    "process": {
+        "fields": {
+            "name": [
+                "ProcessName",
+                "LogonProcessName"
+            ],
+            "parent_ref.name": [
+                "ParentProcessName"
+            ],
+            "command_line": [
+                "CommandLine"
+            ],
+            "pid": [
+                "ProcessId"
+            ]
+        }
+    },
+    "url": {
+        "fields": {
+            "value": [
+                "QuarantineHelpURL"
+            ]
+        }
+    },
+    "x-ibm-finding": {
+        "fields": {
+            "start": [
+                "TimeGenerated"
+            ],
+            "end": [
+                "PreviousTime"
+            ],
+            "code": [
+                "EventID"
+            ],
+            "name": [
+                "EventSourceName"
+            ],
+            "time_observed": [
+                "TimeGenerated"
+            ],
+            "src_ip_ref": [
+                "IpAddress"
+            ],
+            "dst_ip_ref": [
+                "ClientIPAddress"
+            ]
+        }
+    },
+    "x-oca-event": {
+        "fields": {
+            "created": [
+                "TimeGenerated"
+            ],
+            "code": [
+                "EventID"
+            ],
+            "provider": [
+                "Account"
+            ],
+            "url_ref": [
+                "QuarantineHelpURL"
+            ],
+            "process_ref": [
+                "ProcessName"
+            ],
+            "file_ref.hash": [
+                "FileHash"
+            ],
+            "file_ref.path": [
+                "FilePath"
+            ],
+            "file_ref.service": [
+                "ServiceFileName"
+            ],
+            "parent_process_ref": [
+                "ParentProcessName"
+            ],
+            "ip_refs.ip": [
+                "IpAddress"
+            ],
+            "ip_refs.clientIp": [
+                "ClientIPAddress"
+            ]
+        }
+    },
+    "x-msazure-sentinel-event": {
+        "fields": {
+            "title": [
+                "Title"
+            ],
+            "text": [
+                "Description",
+                "DeviceDescription"
+            ],
+            "device_name": [
+                "DeviceId"
+            ],
+            "source": [
+                "SourceSystem"
+            ],
+            "alert_type": [
+                "AlertName"
+            ],
+            "activity": [
+                "Activity"
+            ],
+            "computer": [
+                "Computer"
+            ],
+            "event_data": [
+                "EventData"
+            ],
+            "service_name": [
+                "ServiceName"
+            ],
+            "task": [
+                "Task"
+            ],
+            "user_parameter": [
+                "UserParameter"
+            ],
+            "member_name": [
+                "MemberName"
+            ],
+            "requester": [
+                "Requester"
+            ]
+        }
+    }
+}
