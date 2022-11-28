@@ -126,6 +126,8 @@ class ResultsConnector(BaseResultsConnector):
                     if value is not None and value != "NULL" and value != '' and field != 'dataset_name' \
                             and (field in to_stix_mapping[dataset_map].keys()):
                         stix_data_map = to_stix_mapping[dataset_map][field]
+                        if '\x00' in str(value):
+                            value = value.replace('\x00', '')
                         data = ResultsConnector.check_object(stix_data_map, mandatory_map, data, log,
                                                              field, value)
                     elif field == 'dataset_name':
@@ -160,6 +162,8 @@ class ResultsConnector(BaseResultsConnector):
                         if value is not None and value != "NULL" and value != '' and field != 'dataset_name' \
                                 and (field in to_stix_mapping[dataset_map].keys()):
                             stix_data_map = to_stix_mapping[dataset_map][field]
+                            if '\x00' in str(value):
+                                value = value.replace('\x00', '')
                             data = ResultsConnector.check_object(stix_data_map, mandatory_map,
                                                                  data, log_dict, field, value)
                         elif field == 'dataset_name':
