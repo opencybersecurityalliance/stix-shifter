@@ -17,7 +17,7 @@ class ResultsConnector(BaseResultsConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_results_connection(self, search_id, offset, length, metadata=None):
+    async def create_results_connection(self, search_id, offset, length, metadata=None):
         """
         Fetching the results using search id, offset and length
         :param search_id: str, search id generated in transmit query
@@ -53,7 +53,7 @@ class ResultsConnector(BaseResultsConnector):
 
             if (result_count == 0 and next_page_token == '0') or (
                     next_page_token != '0' and result_count < self.api_client.result_limit):
-                response_wrapper = self.api_client.get_search_results(search_id, next_page_token, page_size)
+                response_wrapper = await self.api_client.get_search_results(search_id, next_page_token, page_size)
                 response_text = json.loads(response_wrapper[1])
                 if response_wrapper[0].status == 200:
                     if 'detections' in response_text.keys():
@@ -76,7 +76,7 @@ class ResultsConnector(BaseResultsConnector):
                                 page_size = remaining_records
 
                             next_page_token = response_text['nextPageToken']
-                            next_response = self.api_client.get_search_results(search_id,
+                            next_response = await self.api_client.get_search_results(search_id,
                                                                                next_page_token,
                                                                                page_size)
                             response_text = json.loads(next_response[1])
@@ -145,10 +145,10 @@ class ResultsConnector(BaseResultsConnector):
                     if 'code' in response_dict:
                         if response_dict['code'] not in (1010, 1015):
                             self.logger.debug("Deleting the search id in results_connector")
-                            self.api_client.delete_search(search_id)
+                            await self.api_client.delete_search(search_id)
                     else:
                         self.logger.debug("Deleting the search id in results_connector")
-                        self.api_client.delete_search(search_id)
+                        await self.api_client.delete_search(search_id)
 
             except Exception:
                 self.logger.info("User doesn't have permission to delete the search id")

@@ -5,7 +5,6 @@ from httplib2 import ServerNotFoundError
 import json
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.error_response import ErrorResponder
-import time
 
 class InvalidResponseException(Exception):
     pass
@@ -26,7 +25,7 @@ class APIClient:
         self.connector = __name__.split('.')[1]
         self.http_client = None
 
-    def ping_box(self):
+    async def ping_box(self):
         """
         Ping the Data Source
         :return: Response object
@@ -36,7 +35,7 @@ class APIClient:
             self.create_http_client()
         return self.http_client.request(ping_endpoint, 'GET')
 
-    def create_search(self, query):
+    async def create_search(self, query):
         """
         Create the rule and run the retrohunt for the rule
         :param query: string/dict
@@ -115,7 +114,7 @@ class APIClient:
             self.create_http_client()
         return self.http_client.request(create_rule_endpoint, 'POST', body=json.dumps(query))
 
-    def get_search_status(self, search_id):
+    async def get_search_status(self, search_id):
         """
         Queries the datasource to fetch the retorohunt status
         :param search_id: str
@@ -129,7 +128,7 @@ class APIClient:
 
         return self.http_client.request(status_endpoint, 'GET')
 
-    def get_search_results(self, search_id, next_page_token, page_size):
+    async def get_search_results(self, search_id, next_page_token, page_size):
         """
         Return the search results
         :param search_id:str
@@ -150,7 +149,7 @@ class APIClient:
         list_detection_endpoint = self.host + "/" + list_detection
         return self.http_client.request(list_detection_endpoint, 'GET')
 
-    def delete_search(self, search_id):
+    async def delete_search(self, search_id):
         """
         Delete the search id.
         :param search_id:str

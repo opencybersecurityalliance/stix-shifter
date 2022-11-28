@@ -701,7 +701,7 @@ class TestRhacsConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host_ping(self, mock_ping):
         """Test Invalid host"""
         mock_ping.side_effect = ConnectionError("Invalid Host")
@@ -711,7 +711,7 @@ class TestRhacsConnection(unittest.TestCase):
         assert ping_response['success'] is False
         assert 'rhacs connector error => Invalid Host/Port' in ping_response['error']
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_url_parameter_ping(self, mock_ping):
         """Test Invalid host"""
         mock_ping.side_effect = RetryError("Invalid parameter or Url")

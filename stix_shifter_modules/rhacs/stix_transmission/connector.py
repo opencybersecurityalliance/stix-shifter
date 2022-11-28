@@ -18,7 +18,7 @@ class Connector(BaseSyncConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_results_connection(self, query, offset, length):
+    async def create_results_connection(self, query, offset, length):
         """
         Fetching the results using query, offset and length
         :param query: str, Data Source query
@@ -37,7 +37,7 @@ class Connector(BaseSyncConnector):
                 max_range = int(self.api_client.get_limit())
 
             """api call for searching alert based on query"""
-            response_wrapper = self.api_client.get_search_results(query)
+            response_wrapper = await self.api_client.get_search_results(query)
             response_code = response_wrapper.response.status_code
             response_dict = json.loads(response_wrapper.response.text)
 
@@ -53,7 +53,7 @@ class Connector(BaseSyncConnector):
                     break
                 if firstresult['id'] is not None:
                     """second level api call for getting details of particular alert id"""
-                    inner_data = self.api_client.get_inner_results(firstresult['id'])
+                    inner_data = await self.api_client.get_inner_results(firstresult['id'])
                     inner_dict = json.loads(inner_data.response.text)
                     dt = {}
                     dt_main = {}
@@ -193,7 +193,7 @@ class Connector(BaseSyncConnector):
                                       connector=self.connector)
         return return_obj
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """
         Ping the endpoint
         :return: dict
@@ -201,7 +201,7 @@ class Connector(BaseSyncConnector):
         return_obj = {}
         response_dict = {}
         try:
-            response = self.api_client.ping_data_source()
+            response = await self.api_client.ping_data_source()
             response_code = response.response.status_code
             response_dict = json.loads(response.response.text)
             if response_code == 200 and response_dict['status'] == 'ok':
@@ -224,7 +224,7 @@ class Connector(BaseSyncConnector):
                                       connector=self.connector)
         return return_obj
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         """
         Delete query is not supported in rhacs
         :return: success

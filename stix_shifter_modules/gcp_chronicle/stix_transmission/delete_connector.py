@@ -12,7 +12,7 @@ class DeleteConnector(BaseDeleteConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
 
         """
         Deletes the search id.
@@ -23,7 +23,7 @@ class DeleteConnector(BaseDeleteConnector):
         response_dict = {}
         try:
 
-            response = self.api_client.delete_search(search_id)
+            response = await self.api_client.delete_search(search_id)
             response_code = response[0].status
             response_text = json.loads(response[1])
 

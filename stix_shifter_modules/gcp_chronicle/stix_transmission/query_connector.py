@@ -14,7 +14,7 @@ class QueryConnector(BaseQueryConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
 
         """
          Function to create query connection
@@ -24,7 +24,7 @@ class QueryConnector(BaseQueryConnector):
         response_dict = {}
         return_obj = {}
         try:
-            response = self.api_client.create_search(query)
+            response = await self.api_client.create_search(query)
             if isinstance(response, dict):   # return the object, if response code is not 200 in create_rule
                 return response              # in api_client
             response_code = response[0].status
