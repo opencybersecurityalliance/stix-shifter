@@ -1986,3 +1986,38 @@ class TestQueryTranslator(unittest.TestCase):
         assert result['success'] is False
         assert ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE.value == result['code']
         assert 'Invalid email address' in result['error']
+
+    def test_timestamp_in_seconds_and_milliseconds(self):
+        stix_pattern = "[network-traffic:src_port = 23]START t'2019-10-01T08:00:10Z' STOP t'2019-11-30T11:00:10Z' AND" \
+                       "[network-traffic:protocols[*] = 'tcp'] START t'2019-10-01T08:43:10.003Z' STOP " \
+                       "t'2019-11-30T10:43:10.005Z' "
+        query = translation.translate('cybereason', 'query', '{}', stix_pattern)
+        queries = [{'queryPath': [{'requestedType': 'Connection', 'filters': [{'facetName': 'transportProtocol',
+                                                                               'filterType': 'Equals',
+                                                                               'values': ['tcp']},
+                                                                              {'facetName': 'creationTime',
+                                                                               'filterType': 'Between',
+                                                                               'values': [1569919390003,
+                                                                                          1575110590005]},
+                                                                              {'facetName': 'localPort',
+                                                                               'filterType': 'Equals',
+                                                                               'values': [23]},
+                                                                              {'facetName': 'creationTime',
+                                                                               'filterType': 'Between',
+                                                                               'values': [1569916810000,
+                                                                                          1575111610000]}],
+                                   'isResult': True}], 'queryLimits': {'groupingFeature':
+                                                                           {'elementInstanceType': 'Connection',
+                                                                            'featureName': 'elementDisplayName'}},
+                    'perFeatureLimit': 1,
+                    'totalResultLimit': 9999, 'perGroupLimit': 1, 'templateContext': 'CUSTOM',
+                    'customFields': ['elementDisplayName', 'direction', 'ownerMachine', 'ownerProcess', 'serverPort',
+                                     'serverAddress', 'portType', 'aggregatedReceivedBytesCount',
+                                     'aggregatedTransmittedBytesCount', 'remoteAddressCountryName', 'dnsQuery',
+                                     'calculatedCreationTime', 'domainName', 'endTime', 'localPort', 'portDescription',
+                                     'remotePort', 'state', 'isExternalConnection', 'isIncoming',
+                                     'remoteAddressInternalExternalLocal', 'transportProtocol', 'hasMalops',
+                                     'hasSuspicions', 'relatedToMalop', 'isWellKnownPort', 'isProcessLegit',
+                                     'isProcessMalware', 'localAddress', 'remoteAddress', 'urlDomains']}]
+
+        self._test_query_assertions(query, queries)
