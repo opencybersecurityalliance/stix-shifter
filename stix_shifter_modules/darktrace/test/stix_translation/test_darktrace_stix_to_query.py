@@ -650,3 +650,20 @@ class TestqueryTranslator(unittest.TestCase):
         }]
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
+
+    def test_qualifier_without_milliseconds(self):
+        stix_pattern = "[x-oca-asset:hostname = '169.254.169.254'] " \
+                       "START t'2022-03-01T11:50:21Z' STOP t'2022-03-31T11:55:25Z'"
+        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
+        expected_query = [{
+            "search": "(@fields.host:\"169.254.169.254\" AND (@fields.epochdate :>1646135421.0 "
+                      "AND @fields.epochdate :<1648727725.0))",
+            "fields": [],
+            "timeframe": "custom",
+            "time": {
+                "from": "2022-03-01T11:50:21.000000Z",
+                "to": "2022-03-31T11:55:25.000000Z"
+            },
+            "size": 10000
+        }]
+        self._test_query_assertions(actual_query, expected_query)
