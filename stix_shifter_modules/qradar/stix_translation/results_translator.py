@@ -30,3 +30,4 @@ class ResultsTranslator(JSONToStix):
       results = json_to_stix_translator.convert_to_stix(datasrc, self.map_data, results, self.transformers, self.options, self.callback)
     except Exception as ex:
       raise TranslationResultException("Error when converting results to STIX: {}".format(ex))
+    return results
