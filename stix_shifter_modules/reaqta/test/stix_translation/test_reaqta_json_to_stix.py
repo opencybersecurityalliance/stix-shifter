@@ -510,7 +510,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
                 "etwEventDescription":"An account was successfully logged on.","etwEventId":4624,"etwTask":12544,"version":2},
                 "eventType":39},"happenedAt":"2022-02-22T21:19:28.002Z","receivedAt":"2022-02-22T21:19:37.773Z"}
 
-        result_bundle = ENTRY_POINT.translate_results(json.dumps(DATA_SOURCE), json.dumps([data]))
+        result_bundle = run_in_thread(ENTRY_POINT.translate_results, json.dumps(DATA_SOURCE), json.dumps([data]))
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         objects = observed_data['objects']
