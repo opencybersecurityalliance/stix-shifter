@@ -9,6 +9,7 @@
 - [Limitations](#limitations)
 - [References](#references)
 
+
 ### RHACS API Endpoints
 
    |Connector Method|RHACS API Endpoint| Method
@@ -17,6 +18,10 @@
    |Alert by id Endpoint|https://<{fqdn}>v1/alerts/alertid|GET
    |Ping Endpoint|https://<{fqdn}>v1/ping|GET
    
+### Note
+- RHACS(StackRox) supports both ca and self-signed certificates. Below given transmit and execute examples are based on self-signed. In case of trusted ca issued server certificate, it is not required to pass sni and self-signed parameter as they are optional.  
+
+
 ### Format for calling stix-shifter from the command line
 ```
 python main.py `<translate or transmit>` `<translator_module>` `<query or result>` `<STIX identity object>` `<data>`
@@ -40,10 +45,10 @@ translate rhacs query '{}' "[x-rhacs-cluster:name = 'xxxx'] START t'2022-07-07T1
 #### STIX Transmit ping 
 
 ```shell
-transmit
-rhacs
-"{\"host\":\"xxxxx"}"
-"{\"auth\":{\"token\": "xxxxxx"}}"
+transmit 
+rhacs 
+"{\"host\":\"xxxxxx\", \"sni\":\"central.stackrox\",\"selfSignedCert\":\"-----BEGIN CERTIFICATE-----xxxxx-----END CERTIFICATE-----\"}"
+"{\"auth\":{\"token\": \"xxxxx\"}}" 
 ping
 ```
 
@@ -58,8 +63,8 @@ ping
 ```shell
 transmit
 rhacs
-"{\"host\":\"xxxxx"}"
-"{\"auth\":{\"token\": "xxxxxx"}}"
+"{\"host\":\"xxxxxx\", \"sni\":\"central.stackrox\",\"selfSignedCert\":\"-----BEGIN CERTIFICATE-----xxxxx-----END CERTIFICATE-----\"}"
+"{\"auth\":{\"token\": \"xxxxx\"}}"
 results
 "Cluster:"xxxx"+Violation Time:>=07/07/2022"
 0
@@ -277,8 +282,8 @@ query
 ```shell
 transmit
 rhacs
-"{\"host\":\"xxxxx"}"
-"{\"auth\":{\"token\": "xxxxxx"}}"
+"{\"host\":\"xxxxxx\", \"sni\":\"central.stackrox\",\"selfSignedCert\":\"-----BEGIN CERTIFICATE-----xxxxx-----END CERTIFICATE-----\"}"
+"{\"auth\":{\"token\": \"xxxxx\"}}"
 results
 "Cluster:"xxxx"+Violation Time:>=07/07/2022"
 0
@@ -286,8 +291,8 @@ results
 
 transmit
 rhacs
-"{\"host\":\"xxxxx"}"
-"{\"auth\":{\"token\": "xxxxxx"}}"
+"{\"host\":\"xxxxxx\", \"sni\":\"central.stackrox\",\"selfSignedCert\":\"-----BEGIN CERTIFICATE-----xxxxx-----END CERTIFICATE-----\"}"
+"{\"auth\":{\"token\": \"xxxxx\"}}"
 results
 "Lifecycle Stage:"xxxx"+Violation Time:>=07/07/2022"
 0
@@ -547,8 +552,8 @@ execute
 rhacs
 rhacs
 "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"rhacs\",\"identity_class \":\"events\"}"
-"{\"host\":\"xxxxx"}"
-"{\"auth\":{\"token\": "xxxxxx"}}"
+"{\"host\":\"xxxxxx\", \"sni\":\"central.stackrox\",\"selfSignedCert\":\"-----BEGIN CERTIFICATE-----xxxxx-----END CERTIFICATE-----\"}"
+"{\"auth\":{\"token\": \"xxxxx\"}}"
 "[x-rhacs-cluster:name = 'xxxx'] START t'2022-07-07T08:43:10.003Z' STOP t'2022-07-08T05:35:10.003Z'"
 ```
 
