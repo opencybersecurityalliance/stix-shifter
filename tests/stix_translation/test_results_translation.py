@@ -1,5 +1,3 @@
-import json
-
 from stix_shifter_modules.mysql.entry_point import EntryPoint
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 from stix_shifter_utils.utils.async_utils import run_in_thread
@@ -89,7 +87,7 @@ class TestTransform(object):
     def test_common_prop(self):
         DATA = {"entry_time": EPOCH, "entry_time": EPOCH, "eventcount": 1}
         entry_point = EntryPoint()
-        result_bundle = run_in_thread(entry_point.translate_results, json.dumps(DATA_SOURCE), json.dumps([DATA]))
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, [DATA])
 
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
@@ -114,7 +112,7 @@ class TestTransform(object):
 
     def test_STIX_2_0_cybox_observables(self):
         entry_point = EntryPoint()
-        result_bundle = run_in_thread(entry_point.translate_results, json.dumps(DATA_SOURCE), json.dumps([DATA]))
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, [DATA])
 
         assert result_bundle['type'] == 'bundle'
         assert "spec_version" in result_bundle
@@ -206,7 +204,7 @@ class TestTransform(object):
             "stix_2.1": True
         }
         entry_point = EntryPoint(options=options)
-        result_bundle = run_in_thread(entry_point.translate_results, json.dumps(DATA_SOURCE), json.dumps([DATA]))
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, [DATA])
 
         assert result_bundle['type'] == 'bundle'
         assert "spec_version" not in result_bundle

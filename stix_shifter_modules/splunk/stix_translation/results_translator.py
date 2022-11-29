@@ -9,11 +9,9 @@ class ResultsTranslator(JSONToStix):
     super().__init__(options, dialect, base_file_path, hash_type_lookup)
 
   def translate_results(self, data_source, data):
-    results = json.loads(data)
+    results = data
     for result in results:
       if result.get('_raw'):
         result['mime_type_raw'] = 'text/plain'
-    
-    data = json.dumps(results, indent=4)
 
-    return super().translate_results(data_source, data)
+    return super().translate_results(data_source, results)
