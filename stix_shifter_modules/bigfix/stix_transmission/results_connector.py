@@ -21,11 +21,11 @@ class ResultsConnector(BaseResultsConnector):
         items = ErrorResponder.get_struct_item(data_dict, ['results', '+isFailure=False'])
         return len(items) >= 0
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         response_txt = None
         return_obj = {}
         try:
-            response = self.api_client.get_search_results(search_id, offset, length)
+            response = await self.api_client.get_search_results(search_id, offset, length)
             response_txt = response.read().decode('utf-8')
             response_code = response.code
 

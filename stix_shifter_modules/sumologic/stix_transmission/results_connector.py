@@ -9,7 +9,7 @@ class ResultsConnector(BaseResultsConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         try:
             min_range = offset
             max_range = offset + length

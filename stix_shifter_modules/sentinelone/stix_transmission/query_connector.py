@@ -3,7 +3,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_query_connector \
     import BaseQueryConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
-from requests.exceptions import ConnectionError
+from aiohttp.client_exceptions import ClientConnectionError
 
 class BadRequestQueryError(Exception):
     pass
@@ -17,7 +17,7 @@ class QueryConnector(BaseQueryConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
         """
         init query
         :param query
@@ -28,7 +28,7 @@ class QueryConnector(BaseQueryConnector):
             return_obj = {}
             response_dict = {}
 
-            response = self.api_client.create_search(query)
+            response = await self.api_client.create_search(query)
             if isinstance(response, dict):
                 return response
             response_code = response.code
@@ -55,7 +55,7 @@ class QueryConnector(BaseQueryConnector):
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
 
-        except ConnectionError:
+        except ClientConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'])

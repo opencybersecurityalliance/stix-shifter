@@ -9,13 +9,13 @@ class ResultsConnector(BaseResultsConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         # try:
             min_range = int(offset)
             max_range = int(length)
             # Grab the response, extract the response code, and convert it to readable json
             # response_dict = self.api_client.get_search_results(search_id, min_range, max_range)
-            response = self.api_client.get_search_results(search_id, min_range, max_range)
+            response = await self.api_client.get_search_results(search_id, min_range, max_range)
             return_obj = dict()
             return_obj['success'] = True
             return_obj['data'] =response

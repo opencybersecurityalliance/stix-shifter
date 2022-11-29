@@ -13,12 +13,12 @@ class ResultsConnector(BaseResultsConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         offset = int(offset)
         length = int(length)
 
         try:
-            response = self.api_client.run_search(search_id, length)
+            response = await self.api_client.run_search(search_id, length)
             response_code = response['code']
             # Construct a response object
             return_obj = dict()

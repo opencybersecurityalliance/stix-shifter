@@ -3,7 +3,7 @@ import time
 from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector \
     import BasePingConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
-from requests.exceptions import ConnectionError
+from aiohttp.client_exceptions import ClientConnectionError
 from stix_shifter_utils.utils import logger
 
 
@@ -13,7 +13,7 @@ class PingConnector(BasePingConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """
         Ping the endpoint
         :return: dict
@@ -22,8 +22,8 @@ class PingConnector(BasePingConnector):
             # Construct a response object
             return_obj = {}
             response_dict = {}
-            return_obj, response_dict = self.call_ping_datasource(return_obj,response_dict)
-        except ConnectionError:
+            return_obj, response_dict = await self.call_ping_datasource(return_obj,response_dict)
+        except ClientConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'])
@@ -32,8 +32,8 @@ class PingConnector(BasePingConnector):
                 # sleep added due to limitation of 1 call a second for each user token
                 try:
                     time.sleep(1)
-                    return_obj, response_dict = self.call_ping_datasource(return_obj, response_dict)
-                except ConnectionError:
+                    return_obj, response_dict = await self.call_ping_datasource(return_obj, response_dict)
+                except ClientConnectionError:
                     response_dict['type'] = "ConnectionError"
                     response_dict['message'] = "Invalid Host"
                     ErrorResponder.fill_error(return_obj, response_dict, ['message'])
@@ -47,8 +47,8 @@ class PingConnector(BasePingConnector):
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'])
         return return_obj
 
-    def call_ping_datasource(self, return_obj, response_dict):
-        response = self.api_client.ping_datasource()
+    async def call_ping_datasource(self, return_obj, response_dict):
+        response = await self.api_client.ping_datasource()
         response_code = response.code
         response_txt = response.read().decode('utf-8')
         response_dict = json.loads(response_txt)

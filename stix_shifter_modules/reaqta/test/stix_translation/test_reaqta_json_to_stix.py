@@ -1,7 +1,9 @@
 from copy import deepcopy
 import json
 import unittest
+
 from stix_shifter_modules.reaqta.entry_point import EntryPoint
+from stix_shifter_utils.utils.async_utils import run_in_thread
 
 
 def find(element, dd, default=None):
@@ -114,7 +116,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
     @staticmethod
     def get_observed_data_objects():
         data = deepcopy(DATA)
-        result_bundle = ENTRY_POINT.translate_results(DATA_SOURCE, [data])
+        result_bundle = run_in_thread(ENTRY_POINT.translate_results, DATA_SOURCE, [data])
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
 
@@ -122,7 +124,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
     def test_common_prop(self):
         data = deepcopy(DATA)
-        result_bundle = ENTRY_POINT.translate_results(DATA_SOURCE, [data])
+        result_bundle = run_in_thread(ENTRY_POINT.translate_results, DATA_SOURCE, [data])
 
         assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
@@ -380,7 +382,8 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
     def test_stix_21_prop(self):
         data = deepcopy(DATA)
-        result_bundle = EntryPoint(options={"stix_2.1": True}).translate_results(DATA_SOURCE, [data])
+        entry_point = EntryPoint(options={"stix_2.1": True})
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, [data])
 
         assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
@@ -511,7 +514,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
                 "etwEventDescription":"An account was successfully logged on.","etwEventId":4624,"etwTask":12544,"version":2},
                 "eventType":39},"happenedAt":"2022-02-22T21:19:28.002Z","receivedAt":"2022-02-22T21:19:37.773Z"}
 
-        result_bundle = ENTRY_POINT.translate_results(DATA_SOURCE, [data])
+        result_bundle = run_in_thread(ENTRY_POINT.translate_results, DATA_SOURCE, [data])
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         objects = observed_data['objects']

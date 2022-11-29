@@ -8,7 +8,7 @@ class PingConnector(BasePingConnector):
         self.client = client
         self.connector = __name__.split('.')[1]
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """
         Ping the endpoint
         :return: dict
@@ -16,7 +16,7 @@ class PingConnector(BasePingConnector):
         return_obj = dict()
         response_dict = dict()
         try:
-            self.client.describe_log_groups(**{})
+            await self.client.makeRequest('logs', 'describe_log_groups', **{})
             return_obj['success'] = True
         except Exception as ex:
             response_dict['__type'] = ex.__class__.__name__

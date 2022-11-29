@@ -17,7 +17,7 @@ class QueryConnector(BaseQueryConnector):
         self.log_group_names = log_group_names
         self.connector = __name__.split('.')[1]
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
         """
         Function to create query connection
         :param query: str, Query
@@ -43,13 +43,13 @@ class QueryConnector(BaseQueryConnector):
                     raise InvalidParameterException("Too many log groups specified, log groups maximum limit is 20")
             # if loggroupnames is none, describe_log_groups api will be called
             else:
-                log_group_response_dict = self.client.describe_log_groups(**{})
+                log_group_response_dict = await self.client.makeRequest('logs', 'describe_log_groups', **{})
                 log_group_names = []
                 for log_group in log_group_response_dict['logGroups']:
                     log_group_names.append(log_group['logGroupName'])
                 query['logGroupNames'] = log_group_names[:LOG_GROUP_NAMES_LIMIT]
             query.pop('logType')
-            response_dict = self.client.start_query(**query)
+            response_dict = await self.client.makeRequest('logs', 'start_query', **query)
             return_obj['success'] = True
             return_obj['search_id'] = response_dict['queryId'] + ':' + str(limit)
         except Exception as ex:

@@ -1,9 +1,10 @@
-import json
 import base64
-from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
+
 from stix_shifter_modules.qradar.entry_point import EntryPoint
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
+from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
+from stix_shifter_utils.utils.async_utils import run_in_thread
 
 MODULE = 'qradar'
 RESULTS = 'results'
@@ -48,7 +49,7 @@ class TestTransform(object):
     def test_common_prop(self):
         data = [{"starttime": EPOCH_START, "endtime": EPOCH_END, "eventcount": 5}]
 
-        result_bundle = entry_point.translate_results(DATA_SOURCE, data)
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
 
         assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
@@ -102,7 +103,7 @@ class TestTransform(object):
                 "domainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac, "Image": process_image, "ParentImage": process_parent_image, 
                 "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, "LoadedImage": process_loaded_image }]
 
-        result_bundle = entry_point.translate_results(DATA_SOURCE, data)
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
 
         assert(result_bundle['type'] == 'bundle')
 
@@ -228,7 +229,7 @@ class TestTransform(object):
                 "high_level_category_name": high_level_category_name, "eventpayload": payload, "logsourcename": logsourcename, "username": username,
                 "UrlHost": domain, "ObjectName": object_name, "RegistryKey": registry_key, "RegistryValueName": registry_value_name }]
 
-        result_bundle = entry_point.translate_results(DATA_SOURCE, data)
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
 
         observed_data = result_bundle['objects'][1]
         objects = observed_data['objects']
@@ -380,7 +381,7 @@ class TestTransform(object):
                 "eventseverity": 4, "magnitude": 8, "devicetypename": "device type name", "devicetype": 15, 
                 "rulenames": ["one", "two"], "eventcount": 25, "starttime": EPOCH_START, "endtime": EPOCH_END}]
 
-        result_bundle = entry_point.translate_results(DATA_SOURCE, data)
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
 
         observed_data = result_bundle['objects'][1]
         objects = observed_data['objects']
@@ -406,7 +407,7 @@ class TestTransform(object):
         data = [{"logsourceid": 126, "qid": None,
                 "identityip": "0.0.0.0", "logsourcename": "someLogSourceName"}]
 
-        result_bundle = entry_point.translate_results(DATA_SOURCE, data)
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
 
         observed_data = result_bundle['objects'][1]
         objects = observed_data['objects']
@@ -529,7 +530,7 @@ class TestTransform(object):
         data = [{"sourceip": source_ip, "destinationip": destination_ip, "url": url, "base64_payload": payload, "username": user_id, "protocol": 'TCP',
                 "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}]
         
-        result_bundle = entry_point.translate_results(DATA_SOURCE, data)
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
         
         assert(result_bundle['type'] == 'bundle')
 

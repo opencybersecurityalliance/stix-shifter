@@ -46,7 +46,7 @@ class Connector(BaseSyncConnector):
                 return json.load(f_obj)
         raise FileNotFoundError
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         """
         Fetching the results using search_id, offset and length
         :param search_id: str, Data Source query
@@ -64,7 +64,7 @@ class Connector(BaseSyncConnector):
             if isinstance(search_id, dict):
                 search_id = json.dumps(search_id)
 
-            response_wrapper = self.api_client.get_search_results(search_id)
+            response_wrapper = await self.api_client.get_search_results(search_id)
             response_dict = json.loads(response_wrapper.read().decode('utf-8'))
 
             if response_wrapper.code == 200:
@@ -146,7 +146,7 @@ class Connector(BaseSyncConnector):
 
         return response
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """
         Ping the endpoint
         :return: dict
@@ -154,7 +154,7 @@ class Connector(BaseSyncConnector):
         return_obj = {}
         response_dict = {}
         try:
-            response = self.api_client.ping_box()
+            response = await self.api_client.ping_box()
             response_code = response.response.status_code
             response_dict = json.loads(response.response.text)
 
