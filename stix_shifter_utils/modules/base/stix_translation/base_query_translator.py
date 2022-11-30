@@ -10,9 +10,6 @@ from stix_shifter_utils.stix_translation.src.utils.unmapped_attribute_stripper i
 from stix2patterns.validator import run_validator
 from stix_shifter_utils.stix_translation.src.utils.exceptions import StixValidationException
 
-# START_STOP_PATTERN = r"\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
-
-TIMESTAMP_NO_MILLISECONDS = r"t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}Z"
 START_STOP_PATTERN = r"\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d{1,3})?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d{1,3})?Z'\s?"
 
 
@@ -90,9 +87,6 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         errors = run_validator(pattern, stix_version='2.1')
         if errors:
             raise StixValidationException("The STIX pattern has the following errors: {}".format(errors))
-
-    def _add_milliseconds(self, pattern):
-        pattern = re.sub(r":\d{2}Z", "", pattern)
 
     def parse_query(self, data):
         if self.options.get('validate_pattern'):
