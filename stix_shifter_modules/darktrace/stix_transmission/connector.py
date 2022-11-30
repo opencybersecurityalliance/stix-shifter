@@ -68,7 +68,9 @@ class Connector(BaseSyncConnector):
 
             if response_wrapper.code == 200:
                 return_obj['success'] = True
-            elif response_wrapper.code == 400:
+            # Both InvalidAuthentication and InvalidRequest returns the same error code 400.
+            # Verifying the error message to identify InvalidAuthentication error.
+            elif response_wrapper.code == 400 and 'API SIGNATURE ERROR' in response_wrapper.response.text:
                 raise InvalidAuthenticationException
             elif response_wrapper.code == 408:
                 raise TimeoutError(response_wrapper.response.text)
@@ -101,6 +103,10 @@ class Connector(BaseSyncConnector):
         except TimeoutError as ex:
             response_dict['code'] = 1004
             response_dict['message'] = str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+        except InvalidRequestException as ex:
+            response_dict['code'] = 1005
+            response_dict['message'] = 'Bad Request' if 'Bad request' in str(ex) else str(ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except Exception as ex:
             response_dict['type'] = ex.__class__.__name__
