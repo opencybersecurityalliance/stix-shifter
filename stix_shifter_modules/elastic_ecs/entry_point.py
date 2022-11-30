@@ -20,9 +20,9 @@ class EntryPoint(BaseEntryPoint):
         dialect = 'default'
         query_translator = QueryTranslator(options, dialect, filepath)
         results_translator = ResultTranslator(options, dialect)
-        self.add_dialect('default', query_translator=query_translator, results_translator=results_translator, default_include=True, default=True)
+        self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default_include=True, default=True)
 
-        dialect = 'elk'
+        dialect = 'beats'
         query_translator = QueryTranslator(options, dialect, filepath)
         results_translator = ResultTranslator(options, dialect)
-        self.add_dialect('elk', query_translator=query_translator, results_translator=results_translator, default_include=False, default=False)
+        self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default_include=False, default=False)
