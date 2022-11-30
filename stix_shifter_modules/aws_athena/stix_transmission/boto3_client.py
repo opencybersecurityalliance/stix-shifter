@@ -45,13 +45,13 @@ class BOTO3Client:
                         letters = string.ascii_lowercase
                         role_session_name = prefix + ''.join(random.sample(letters, 4))
                         if assume_role_external_id:
-                            response = client.assume_role(
+                            response = await client.assume_role(
                                 RoleArn=role_to_assume_arn,
                                 RoleSessionName=role_session_name,
                                 ExternalId=assume_role_external_id
                             )
                         else:
-                            response = client.assume_role(
+                            response = await client.assume_role(
                                 RoleArn=role_to_assume_arn,
                                 RoleSessionName=role_session_name
                             )
