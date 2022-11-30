@@ -189,7 +189,7 @@ def main():
     log = utils_logger.set_logger(__name__)
 
 
-    if hasattr(args, 'data') and args.data:
+    if args.command not in [TRANSLATE] and hasattr(args, 'data') and args.data:
         try:
             args.data = json.loads(args.data)
         except Exception as ex:
