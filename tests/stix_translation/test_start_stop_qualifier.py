@@ -19,7 +19,7 @@ class TestQualifierTimestamps(object):
             else:
                 assert False, "{} failed to translate timestamp: {}".format(module, timestamp)
 
-    def test_supported_dialects(self):
+    def test_qaulifier_timestamps(self):
         modules = modules_list()
         for module in modules:
             for key, timestamp in START_STOP_TIMESTAMPS.items():
