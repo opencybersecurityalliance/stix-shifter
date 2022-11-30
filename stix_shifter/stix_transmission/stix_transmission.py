@@ -68,7 +68,7 @@ class StixTransmission:
             return self.entry_point.is_async()
         except Exception as ex:
             return_obj = dict()
-            ErrorResponder.fill_error(return_obj, error=ex)
+            ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
             return return_obj
 
     @respond_error

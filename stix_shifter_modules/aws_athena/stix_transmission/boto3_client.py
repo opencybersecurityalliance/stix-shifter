@@ -9,14 +9,6 @@ class BOTO3Client:
         self.connection = connection
         self.configuration = configuration
         self.session = None
-
-        log_group_names = self.connection.get('log_group_names', {})
-        if type(log_group_names) == str:
-            if len(log_group_names):
-                log_group_names = json.loads(log_group_names)
-            else:
-                log_group_names = {}
-        self.log_group_names = log_group_names
         # TODO: verify
         self.verify = False
 
