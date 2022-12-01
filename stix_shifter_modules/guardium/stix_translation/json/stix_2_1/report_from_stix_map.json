@@ -28,10 +28,8 @@
    "user-account": {
     "fields": {
       "value": ["DBUser", "OSUser"],
-      "db_user": ["DBUser"],
-      "os_user": ["OSUser"],
       "user_id": ["DBUser"],
-      "login_name": ["OSUser"]
+      "display_name": ["OSUser"]
     }
   },
   "artifact": {
