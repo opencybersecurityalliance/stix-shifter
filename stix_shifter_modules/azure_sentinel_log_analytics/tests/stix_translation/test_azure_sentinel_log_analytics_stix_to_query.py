@@ -62,7 +62,7 @@ class TestStixtoQuery(unittest.TestCase, object):
             "(TimeGenerated between (datetime(2022-07-12T14:09:21.479Z) .. datetime(2022-07-13T14:09:21.479Z)))"
         ]
         queries = _remove_timestamp_from_query(queries)
-        self.assertListEqual(query['queries'], queries)
+        self.assertSetEqual(set(query['queries']), set(queries))
 
     def test_x_oca_params_query(self):
         stix_pattern = "[x-oca-event:code = '4625']"
