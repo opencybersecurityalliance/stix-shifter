@@ -32,7 +32,7 @@
       "fields": {
         "value": ["DB User", "OS User"],
         "user_id": ["DB User"],
-        "login_name": ["OS User"]
+        "display_name": ["OS User"]
       }
     },
     "x-guardium": {
