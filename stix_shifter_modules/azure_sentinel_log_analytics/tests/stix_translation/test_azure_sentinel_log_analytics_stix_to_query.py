@@ -61,9 +61,8 @@ class TestStixtoQuery(unittest.TestCase, object):
             "SecurityAlert | where (AlertName == 'Microsoft-Windows-Security-Auditing') and "
             "(TimeGenerated between (datetime(2022-07-12T14:09:21.479Z) .. datetime(2022-07-13T14:09:21.479Z)))"
         ]
-
         queries = _remove_timestamp_from_query(queries)
-        self._test_query_assertions(query, queries)
+        self.assertListEqual(query['queries'], queries)
 
     def test_x_oca_params_query(self):
         stix_pattern = "[x-oca-event:code = '4625']"
