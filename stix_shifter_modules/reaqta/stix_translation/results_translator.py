@@ -12,8 +12,7 @@ class ResultsTranslator(JSONToStix):
         self.network_protocol = self.read_json(network_protocol_path, options)
     
     def translate_results(self, data_source, data):
-        results = data
-        for result in results:
+        for result in data:
             payload = result['payload']
             if payload.get('eventType'):
                 event_name = self.event_names[str(payload.get('eventType'))]
@@ -21,7 +20,7 @@ class ResultsTranslator(JSONToStix):
             
             result['payload'] = self.update_net_traffic_flow(payload)
 
-        return super().translate_results(data_source, results)
+        return super().translate_results(data_source, data)
 
     def update_net_traffic_flow(self, payload):
         result_data = payload.get('data')
