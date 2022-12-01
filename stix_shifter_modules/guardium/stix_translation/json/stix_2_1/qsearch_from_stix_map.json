@@ -31,8 +31,6 @@
      "user-account": {
       "fields": {
         "value": ["DB User", "OS User"],
-        "db_user": ["DB User"],
-        "os_user": ["OS User"],
         "user_id": ["DB User"],
         "login_name": ["OS User"]
       }
