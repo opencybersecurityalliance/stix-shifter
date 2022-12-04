@@ -2802,13 +2802,9 @@
         "transformer": "GetHostNameFromDomain"
       },
       {
-        "key": "domain-name.value",
-        "object": "domain-name"
-      },
-      {
-        "key": "x-oca-event.domain_ref",
+        "key": "x-oca-event.host_ref",
         "object": "event",
-        "references": "domain-name"
+        "references": "host"
       }
     ]
   }
