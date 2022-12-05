@@ -79,7 +79,7 @@ class RestApiClient:
         self.url_modifier_function = url_modifier_function
         self.auth = auth
 
-        self.logger.error('Deprecated RestApiClient, consider using RestApiClientAsync')
+        self.logger.warning('Deprecated RestApiClient, consider using RestApiClientAsync')
 
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
