@@ -46,7 +46,7 @@ class Connector(BaseSyncConnector):
 
     device_info_query = '(DeviceInfo | project Timestamp, DeviceId, PublicIP, OSArchitecture, OSPlatform, OSVersion)'
 
-    EVENTS_TABLES = ['DeviceNetworkEvents', 'DeviceProcessEvents', 'DeviceFileEvents', 'DeviceRegistryEvents', 'DeviceNetworkInfo']
+    EVENTS_TABLES = ['DeviceNetworkEvents', 'DeviceProcessEvents', 'DeviceFileEvents', 'DeviceRegistryEvents', 'DeviceNetworkInfo', 'DeviceEvents']
     ALERT_FIELDS = ['AlertId', 'Severity', 'Title', 'Category', 'AttackTechniques']
     DEFENDER_HOST = 'security.microsoft.com'
 
