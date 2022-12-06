@@ -54,6 +54,8 @@ class TestRhacsConnection(unittest.TestCase):
         """format for connection"""
         return {
             "host": "testhost",
+            "sni":"testsni",
+            "selfSignedCert":"-----BEGIN CERTIFICATE-----XXXX123-----END CERTIFICATE-----",
             "port": 443,
             "options": {"result_limit": 10}
         }

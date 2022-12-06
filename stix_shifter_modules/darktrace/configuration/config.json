@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Darktrace"
+            "displayName": "Darktrace",
+            "group": "darktrace"
         },
         "host": {
             "type": "text",

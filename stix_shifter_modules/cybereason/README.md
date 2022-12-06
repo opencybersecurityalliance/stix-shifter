@@ -375,7 +375,7 @@ translate cybereason results
 
 ####STIX Translate query
 ```shell
-translate cybereason query '{}' "([x-cybereason-process:integrity != 'trusted'] AND [x-cybereason-file:product_type IN ('Adobe')] AND [process:command_line LIKE 'Adobe\\Acrobat Reader DC']) START t'2021-02-10T11:43:08.000Z' STOP t'2021-11-12T11:00:00.003Z'"
+translate cybereason query '{}' "([x-cybereason-process:integrity != 'trusted'] OR [x-cybereason-file:product_type IN ('Adobe')] AND [process:command_line LIKE 'Adobe\\Acrobat Reader DC']) START t'2021-02-10T11:43:08.000Z' STOP t'2021-11-12T11:00:00.003Z'"
 ```
 
 #### STIX Translate query - output
@@ -404,11 +404,222 @@ translate cybereason query '{}' "([x-cybereason-process:integrity != 'trusted'] 
                             ]
                         }
                     ],
-                    "connectionFeature": {
-                        "elementInstanceType": "Process",
-                        "featureName": "imageFile"
-                    }
-                },
+                    "isResult": true
+                }
+            ],
+            "queryLimits": {
+                "groupingFeature": {
+                    "elementInstanceType": "Process",
+                    "featureName": "elementDisplayName"
+                }
+            },
+            "perFeatureLimit": 1,
+            "totalResultLimit": 9999,
+            "perGroupLimit": 1,
+            "templateContext": "CUSTOM",
+            "customFields": [
+                "elementDisplayName",
+                "creationTime",
+                "endTime",
+                "commandLine",
+                "imageFile.maliciousClassificationType",
+                "productType",
+                "children",
+                "parentProcess",
+                "ownerMachine",
+                "calculatedUser",
+                "imageFile",
+                "imageFile.sha1String",
+                "imageFile.md5String",
+                "imageFile.sha256String",
+                "imageFile.companyName",
+                "imageFile.productName",
+                "applicablePid",
+                "imageFileExtensionType",
+                "integrity",
+                "tid",
+                "isAggregate",
+                "isDotNetProtected",
+                "hasMalops",
+                "hasSuspicions",
+                "relatedToMalop",
+                "multipleSizeForHashEvidence",
+                "isImageFileVerified",
+                "knownMaliciousToolSuspicion",
+                "knownMalwareSuspicion",
+                "knownUnwantedSuspicion",
+                "isMaliciousByHashEvidence",
+                "imageFileMultipleCompanyNamesEvidence",
+                "multipleHashForUnsignedPeInfoEvidence",
+                "multipleNameForHashEvidence",
+                "unknownEvidence",
+                "rareHasPeMismatchEvidence",
+                "imageFile.signedInternalOrExternal",
+                "unknownUnsignedBySigningCompany",
+                "imageFileUnsignedEvidence",
+                "imageFileUnsignedHasSignedVersionEvidence",
+                "unwantedModuleSuspicion",
+                "imageFile.signerInternalOrExternal",
+                "architecture",
+                "commandLineContainsTempEvidence",
+                "hasChildren",
+                "hasClassification",
+                "hasVisibleWindows",
+                "hasWindows",
+                "isInstaller",
+                "isIdentifiedProduct",
+                "hasModuleFromTempEvidence",
+                "nonExecutableExtensionEvidence",
+                "isNotShellRunner",
+                "runningFromTempEvidence",
+                "shellOfNonShellRunnerSuspicion",
+                "shellWithElevatedPrivilegesEvidence",
+                "systemUserEvidence",
+                "hasExternalConnection",
+                "hasExternalConnectionToWellKnownPortEvidence",
+                "hasIncomingConnection",
+                "hasInternalConnection",
+                "hasMailConnectionForNonMailProcessEvidence",
+                "hasListeningConnection",
+                "hasOutgoingConnection",
+                "hasUnresolvedDnsQueriesFromDomain",
+                "multipleUnresolvedRecordNotExistsEvidence",
+                "hasNonDefaultResolverEvidence",
+                "parentProcessNotMatchHierarchySuspicion",
+                "parentProcessNotAdminUserEvidence",
+                "parentProcessFromRemovableDeviceEvidence",
+                "autorun",
+                "childrenCreatedByThread",
+                "connections",
+                "elevatedPrivilegeChildren",
+                "hackerToolChildren",
+                "hostProcess",
+                "hostUser",
+                "hostedChildren",
+                "injectedChildren",
+                "loadedModules",
+                "logonSession",
+                "remoteSession",
+                "service",
+                "execedBy",
+                "connectionsToMaliciousDomain",
+                "connectionsToMalwareAddresses",
+                "externalConnections",
+                "absoluteHighVolumeMaliciousAddressConnections",
+                "absoluteHighVolumeExternalConnections",
+                "incomingConnections",
+                "incomingExternalConnections",
+                "incomingInternalConnections",
+                "internalConnections",
+                "listeningConnections",
+                "localConnections",
+                "mailConnections",
+                "outgoingConnections",
+                "outgoingExternalConnections",
+                "outgoingInternalConnections",
+                "suspiciousExternalConnections",
+                "suspiciousInternalConnections",
+                "wellKnownPortConnections",
+                "lowTtlDnsQueries",
+                "nonDefaultResolverQueries",
+                "resolvedDnsQueriesDomainToDomain",
+                "resolvedDnsQueriesDomainToIp",
+                "resolvedDnsQueriesIpToDomain",
+                "suspiciousDnsQueryDomainToDomain",
+                "unresolvedQueryFromSuspiciousDomain",
+                "dnsQueryFromSuspiciousDomain",
+                "dnsQueryToSuspiciousDomain",
+                "unresolvedRecordNotExist",
+                "unresolvedDnsQueriesFromDomain",
+                "unresolvedDnsQueriesFromIp",
+                "maliciousToolClassificationModules",
+                "malwareClassificationModules",
+                "modulesNotInLoaderDbList",
+                "modulesFromTemp",
+                "unsignedWithSignedVersionModules",
+                "unwantedClassificationModules",
+                "accessToMalwareAddressInfectedProcess",
+                "connectingToBadReputationAddressSuspicion",
+                "hasMaliciousConnectionEvidence",
+                "hasSuspiciousExternalConnectionSuspicion",
+                "highNumberOfExternalConnectionsSuspicion",
+                "nonDefaultResolverSuspicion",
+                "hasRareExternalConnectionEvidence",
+                "hasRareRemoteAddressEvidence",
+                "suspiciousMailConnections",
+                "accessToMalwareAddressByUnknownProcess",
+                "hasAbsoluteHighVolumeConnectionToMaliciousAddressEvidence",
+                "hasAbsoluteHighVolumeExternalOutgoingConnectionEvidence",
+                "highDataTransmittedSuspicion",
+                "highDataVolumeTransmittedToMaliciousAddressSuspicion",
+                "highDataVolumeTransmittedByUnknownProcess",
+                "absoluteHighNumberOfInternalOutgoingEmbryonicConnectionsEvidence",
+                "dgaSuspicion",
+                "hasLowTtlDnsQueryEvidence",
+                "highUnresolvedToResolvedRateEvidence",
+                "manyUnresolvedRecordNotExistsEvidence",
+                "hasChildKnownHackerToolEvidence",
+                "hackingToolOfNonToolRunnerEvidence",
+                "hackingToolOfNonToolRunnerSuspicion",
+                "hasRareChildProcessKnownHackerToolEvidence",
+                "maliciousToolModuleSuspicion",
+                "deletedParentProcessEvidence",
+                "malwareModuleSuspicion",
+                "dualExtensionNameEvidence",
+                "hiddenFileExtensionEvidence",
+                "rightToLeftFileExtensionEvidence",
+                "screenSaverWithChildrenEvidence",
+                "suspicionsScreenSaverEvidence",
+                "hasPeFloatingCodeEvidence",
+                "hasSectionMismatchEvidence",
+                "detectedInjectedEvidence",
+                "detectedInjectingEvidence",
+                "detectedInjectingToProtectedProcessEvidence",
+                "hasInjectedChildren",
+                "hostingInjectedThreadEvidence",
+                "injectedProtectedProcessEvidence",
+                "maliciousInjectingCodeSuspicion",
+                "injectionMethod",
+                "isHostingInjectedThread",
+                "maliciousInjectedCodeSuspicion",
+                "maliciousPeExecutionSuspicion",
+                "hasSuspiciousInternalConnectionEvidence",
+                "highInternalOutgoingEmbryonicConnectionRateEvidence",
+                "highNumberOfInternalConnectionsEvidence",
+                "newProcessesAboveThresholdEvidence",
+                "hasRareInternalConnectionEvidence",
+                "elevatingPrivilegesToChildEvidence",
+                "parentProcessNotSystemUserEvidence",
+                "privilegeEscalationEvidence",
+                "firstExecutionOfDownloadedProcessEvidence",
+                "hasAutorun",
+                "newProcessEvidence",
+                "markedForPrevention",
+                "ransomwareAutoRemediationSuspended",
+                "totalNumOfInstances",
+                "lastMinuteNumOfInstances",
+                "lastSeenTimeStamp",
+                "wmiQueryStrings",
+                "isExectuedByWmi",
+                "absoluteHighNumberOfInternalConnectionsEvidence",
+                "scanningProcessSuspicion",
+                "imageFile.isDownloadedFromInternet",
+                "imageFile.downloadedFromDomain",
+                "imageFile.downloadedFromIpAddress",
+                "imageFile.downloadedFromUrl",
+                "imageFile.downloadedFromUrlReferrer",
+                "imageFile.downloadedFromEmailFrom",
+                "imageFile.downloadedFromEmailMessageId",
+                "imageFile.downloadedFromEmailSubject",
+                "rpcRequests",
+                "iconBase64",
+                "executionPrevented",
+                "isWhiteListClassification",
+                "matchedWhiteListRuleIds"
+            ]
+        },
+        {
+            "queryPath": [
                 {
                     "requestedType": "File",
                     "filters": [
@@ -428,12 +639,84 @@ translate cybereason query '{}' "([x-cybereason-process:integrity != 'trusted'] 
                             ]
                         }
                     ],
-                    "connectionFeature": {
-                        "elementInstanceType": "Process",
-                        "featureName": "imageFile"
-                    },
-                    "isReversed": true
-                },
+                    "isResult": true
+                }
+            ],
+            "queryLimits": {
+                "groupingFeature": {
+                    "elementInstanceType": "File",
+                    "featureName": "elementDisplayName"
+                }
+            },
+            "perFeatureLimit": 1,
+            "totalResultLimit": 9999,
+            "perGroupLimit": 1,
+            "templateContext": "CUSTOM",
+            "customFields": [
+                "elementDisplayName",
+                "avRemediationStatus",
+                "signerInternalOrExternal",
+                "fileHash",
+                "autoruns",
+                "ownerMachine",
+                "mount",
+                "autorun",
+                "dualExtensionEvidence",
+                "hiddenFileExtensionEvidence",
+                "rightToLeftFileExtensionEvidence",
+                "hasMalops",
+                "hasSuspicions",
+                "maliciousClassificationType",
+                "hackingToolClassificationEvidence",
+                "classificationLink",
+                "isPEFile",
+                "executedByProcessEvidence",
+                "hasAutorun",
+                "isInstallerProperties",
+                "isFromRemovableDevice",
+                "productType",
+                "secondExtensionType",
+                "temporaryFolderEvidence",
+                "multipleCompanyNamesEvidence",
+                "multipleHashForUnsignedPeInfoEvidence",
+                "unsignedHasSignedVersionEvidence",
+                "classificationComment",
+                "signedInternalOrExternal",
+                "signatureVerifiedInternalOrExternal",
+                "classificationBlocking",
+                "isDownloadedFromInternet",
+                "downloadedFromDomain",
+                "downloadedFromIpAddress",
+                "downloadedFromUrl",
+                "downloadedFromUrlReferrer",
+                "downloadedFromEmailFrom",
+                "downloadedFromEmailMessageId",
+                "downloadedFromEmailSubject",
+                "legalCopyright",
+                "legalTrademarks",
+                "privateBuild",
+                "specialBuild",
+                "companyName",
+                "createdTime",
+                "extensionType",
+                "fileDescription",
+                "internalName",
+                "md5String",
+                "modifiedTime",
+                "originalFileName",
+                "correctedPath",
+                "productName",
+                "productVersion",
+                "sha1String",
+                "size",
+                "comments",
+                "fileVersion",
+                "applicationIdentifier",
+                "sha256String"
+            ]
+        },
+        {
+            "queryPath": [
                 {
                     "requestedType": "Process",
                     "filters": [
@@ -673,55 +956,6 @@ translate cybereason query '{}' "([x-cybereason-process:integrity != 'trusted'] 
                     "requestedType": "Process",
                     "filters": [
                         {
-                            "facetName": "integrity",
-                            "filterType": "NotEquals",
-                            "values": [
-                                "trusted"
-                            ]
-                        },
-                        {
-                            "facetName": "creationTime",
-                            "filterType": "Between",
-                            "values": [
-                                1612957388000,
-                                1636714800003
-                            ]
-                        }
-                    ],
-                    "connectionFeature": {
-                        "elementInstanceType": "Process",
-                        "featureName": "imageFile"
-                    }
-                },
-                {
-                    "requestedType": "File",
-                    "filters": [
-                        {
-                            "facetName": "productType",
-                            "filterType": "Equals",
-                            "values": [
-                                "Adobe"
-                            ]
-                        },
-                        {
-                            "facetName": "createdTime",
-                            "filterType": "Between",
-                            "values": [
-                                1612957388000,
-                                1636714800003
-                            ]
-                        }
-                    ],
-                    "connectionFeature": {
-                        "elementInstanceType": "Process",
-                        "featureName": "imageFile"
-                    },
-                    "isReversed": true
-                },
-                {
-                    "requestedType": "Process",
-                    "filters": [
-                        {
                             "facetName": "decodedCommandLine",
                             "filterType": "ContainsIgnoreCase",
                             "values": [
@@ -953,6 +1187,7 @@ translate cybereason query '{}' "([x-cybereason-process:integrity != 'trusted'] 
         }
     ]
 }
+
 ```
 
 
@@ -1312,9 +1547,10 @@ ping
 ```
 
 ### Limitations
-- Cybereason does not support “OR” operator between the elements and features. It supports only "AND" operator through "connectionFeature" and "Filters".
+- Cybereason does not support “OR” operator between Combined Comparison. It supports only "AND" operator.
+
 
 ### Observations
-- Cybereason doesnt support regex based search. It supports only substring based search . Hence wildcard characters cannot be used for searches using  LIKE or MATCHES operator
-
-
+- Cybereason doesnt support regex based search. It supports only substring based search . Hence wildcard characters cannot be used for searches using  LIKE or MATCHES operator.
+- AND operator between stix fields , can be performed only when there is a link (the relationship with the next field in the chain) available between two fields. If “AND” is given for fields which have no link, connector will throw error.
+  All the allowed links between different fields is given  in config_map.json file in stix_translation\json folder.

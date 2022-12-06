@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Amazon Athena"
+            "displayName": "Amazon Athena",
+            "group": "aws"
         },
         "help": {
             "type": "link",
@@ -18,6 +19,14 @@
             "optional": true
         },
         "vpcflow_table_name": {
+            "type": "text",
+            "optional": true
+        },
+        "ocsf_database_name": {
+            "type": "text",
+            "optional": true
+        },
+        "ocsf_table_name": {
             "type": "text",
             "optional": true
         },
@@ -43,6 +52,10 @@
                 "type": "password"
             },
             "aws_iam_role": {
+                "type": "password",
+                "optional": true
+            },
+            "aws_assume_role_external_id": {
                 "type": "password",
                 "optional": true
             },
