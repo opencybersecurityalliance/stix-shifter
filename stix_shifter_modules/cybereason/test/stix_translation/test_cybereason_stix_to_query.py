@@ -795,7 +795,6 @@ class TestQueryTranslator(unittest.TestCase):
                    "'process.calculatedName', 'process.calculatedUser', 'process.creationTime', 'process.endTime', "
                    "'process.imageFile.maliciousClassificationType']}"]
 
-
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -1162,41 +1161,53 @@ class TestQueryTranslator(unittest.TestCase):
                        "t'2019-10-01T00:00:00.030Z' STOP t'2021-10-07T00:00:00.030Z' "
 
         query = translation.translate('cybereason', 'query', '{}', stix_pattern)
-
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["{'queryPath': [{'requestedType': 'RegistryEvent', 'filters': [{'facetName': "
                    "'detectionTimesNumber', 'filterType': 'Equals', 'values': [1]}, {'facetName': 'firstTime', "
                    "'filterType': 'Between', 'values': [1569888000030, 1633564800030]}], 'connectionFeature': {"
                    "'elementInstanceType': 'RegistryEvent', 'featureName': 'registryEntry'}}, {'requestedType': "
                    "'Autorun', 'filters': [{'facetName': 'elementDisplayName', 'filterType': 'Equals', 'values': ["
-                   "'name']}, {'facetName': 'endTime', "
-                   "'filterType': 'Between', 'values': [1569888000030, 1633564800030]}], "
-                   "'connectionFeature': {'elementInstanceType': 'Autorun', 'featureName': "
+                   "'name']}, {'facetName': 'endTime', 'filterType': 'Between', 'values': [1569888000030, "
+                   "1633564800030]}], 'connectionFeature': {'elementInstanceType': 'Autorun', 'featureName': "
                    "'dependInFile'}}, {'requestedType': 'File', 'filters': [{'facetName': 'md5String', 'filterType': "
-                   "'Equals', 'values': ['MD5']}, {'facetName': 'createdTime', "
-                   "'filterType': 'Between', 'values': [1569888000030, 1633564800030]}], "
-                   "'connectionFeature': {'elementInstanceType': 'Driver', "
-                   "'featureName': 'file'}, 'isReversed': True}, {'requestedType': 'Driver', 'filters': [{"
-                   "'facetName': 'ownerMachine', 'filterType': 'Equals', 'values': ['username']}, {'facetName': "
-                   "'endTime', 'filterType': 'Between', 'values': [1569888000030, 1633564800030]}], "
-                   "'connectionFeature': {'elementInstanceType': 'Driver', 'featureName': 'ownerMachine'}}, "
-                   "{'requestedType': 'Machine', 'filters': [{'facetName': 'timezoneUTCOffsetMinutes', 'filterType': "
-                   "'Equals', 'values': [4]}, {'facetName': 'lastSeenTimeStamp', "
-                   "'filterType': 'Between', 'values': [1569888000030, 1633564800030]}], 'isResult': True}],"
-                   " 'queryLimits': {'groupingFeature': {"
-                   "'elementInstanceType': 'Machine', 'featureName': 'elementDisplayName'}}, 'perFeatureLimit': 1, "
+                   "'Equals', 'values': ['MD5']}, {'facetName': 'createdTime', 'filterType': 'Between', 'values': ["
+                   "1569888000030, 1633564800030]}], 'isResult': True}], 'queryLimits': {'groupingFeature': {"
+                   "'elementInstanceType': 'File', 'featureName': 'elementDisplayName'}}, 'perFeatureLimit': 1, "
                    "'totalResultLimit': 9999, 'perGroupLimit': 1, 'templateContext': 'CUSTOM', 'customFields': ["
-                   "'elementDisplayName', 'mountPoints', 'processes', 'services', 'logonSessions', "
-                   "'hasRemovableDevice', 'timezoneUTCOffsetMinutes', 'osVersionType', 'platformArchitecture', "
-                   "'mbrHashString', 'osType', 'domainFqdn', 'ownerOrganization', 'pylumId', 'adSid', 'adOU', "
-                   "'adOrganization', 'adCanonicalName', 'adCompany', 'adDNSHostName', 'adDepartment', "
-                   "'adDisplayName', 'adLocation', 'adMachineRole', 'adDescription', 'freeDiskSpace', "
-                   "'totalDiskSpace', 'freeMemory', 'totalMemory', 'cpuCount', 'isLaptop', 'deviceModel', "
-                   "'isActiveProbeConnected', 'uptime', 'isIsolated', 'lastSeenTimeStamp', "
-                   "'timeStampSinceLastConnectionTime', 'hasMalops', 'hasSuspicions', "
+                   "'elementDisplayName', 'avRemediationStatus', 'signerInternalOrExternal', 'fileHash', 'autoruns', "
+                   "'ownerMachine', 'mount', 'autorun', 'dualExtensionEvidence', 'hiddenFileExtensionEvidence', "
+                   "'rightToLeftFileExtensionEvidence', 'hasMalops', 'hasSuspicions', 'maliciousClassificationType', "
+                   "'hackingToolClassificationEvidence', 'classificationLink', 'isPEFile', "
+                   "'executedByProcessEvidence', 'hasAutorun', 'isInstallerProperties', 'isFromRemovableDevice', "
+                   "'productType', 'secondExtensionType', 'temporaryFolderEvidence', 'multipleCompanyNamesEvidence', "
+                   "'multipleHashForUnsignedPeInfoEvidence', 'unsignedHasSignedVersionEvidence', "
+                   "'classificationComment', 'signedInternalOrExternal', 'signatureVerifiedInternalOrExternal', "
+                   "'classificationBlocking', 'isDownloadedFromInternet', 'downloadedFromDomain', "
+                   "'downloadedFromIpAddress', 'downloadedFromUrl', 'downloadedFromUrlReferrer', "
+                   "'downloadedFromEmailFrom', 'downloadedFromEmailMessageId', 'downloadedFromEmailSubject', "
+                   "'legalCopyright', 'legalTrademarks', 'privateBuild', 'specialBuild', 'companyName', "
+                   "'createdTime', 'extensionType', 'fileDescription', 'internalName', 'md5String', 'modifiedTime', "
+                   "'originalFileName', 'correctedPath', 'productName', 'productVersion', 'sha1String', 'size', "
+                   "'comments', 'fileVersion', 'applicationIdentifier', 'sha256String']}",
+                   "{'queryPath': [{"
+                   "'requestedType': 'Driver', 'filters': [{'facetName': 'ownerMachine', 'filterType': 'Equals', "
+                   "'values': ['username']}, {'facetName': 'endTime', 'filterType': 'Between', 'values': ["
+                   "1569888000030, 1633564800030]}], 'connectionFeature': {'elementInstanceType': 'Driver', "
+                   "'featureName': 'ownerMachine'}}, {'requestedType': 'Machine', 'filters': [{'facetName': "
+                   "'timezoneUTCOffsetMinutes', 'filterType': 'Equals', 'values': [4]}, {'facetName': "
+                   "'lastSeenTimeStamp', 'filterType': 'Between', 'values': [1569888000030, 1633564800030]}], "
+                   "'isResult': True}], 'queryLimits': {'groupingFeature': {'elementInstanceType': 'Machine', "
+                   "'featureName': 'elementDisplayName'}}, 'perFeatureLimit': 1, 'totalResultLimit': 9999, "
+                   "'perGroupLimit': 1, 'templateContext': 'CUSTOM', 'customFields': ['elementDisplayName', "
+                   "'mountPoints', 'processes', 'services', 'logonSessions', 'hasRemovableDevice', "
+                   "'timezoneUTCOffsetMinutes', 'osVersionType', 'platformArchitecture', 'mbrHashString', 'osType', "
+                   "'domainFqdn', 'ownerOrganization', 'pylumId', 'adSid', 'adOU', 'adOrganization', "
+                   "'adCanonicalName', 'adCompany', 'adDNSHostName', 'adDepartment', 'adDisplayName', 'adLocation', "
+                   "'adMachineRole', 'adDescription', 'freeDiskSpace', 'totalDiskSpace', 'freeMemory', 'totalMemory', "
+                   "'cpuCount', 'isLaptop', 'deviceModel', 'isActiveProbeConnected', 'uptime', 'isIsolated', "
+                   "'lastSeenTimeStamp', 'timeStampSinceLastConnectionTime', 'hasMalops', 'hasSuspicions', "
                    "'isSuspiciousOrHasSuspiciousProcessOrFile', 'maliciousTools', 'maliciousProcesses', "
                    "'suspiciousProcesses']}"]
-
 
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -1523,157 +1534,145 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('cybereason', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["{'queryPath': [{'requestedType': 'File', 'filters': [{'facetName': 'size', 'filterType': "
-                   "'GreaterThan', 'values': [10]}, {'facetName': 'createdTime', "
-                   "'filterType': 'Between', 'values': [1601510400030, 1633564800030]}],"
-                   " 'connectionFeature': {'elementInstanceType': 'File', "
-                   "'featureName': 'ownerMachine'}}, {'requestedType': 'Machine', 'filters': [{'facetName': "
-                   "'osVersionType', 'filterType': 'Equals', 'values': ['Windows_Server_2016']}, {'facetName': "
-                   "'lastSeenTimeStamp', 'filterType': 'Between', 'values': [1638180024181, 1638180324181]}], "
-                   "'connectionFeature': {'elementInstanceType': 'Machine', 'featureName': 'services'}}, "
-                   "{'requestedType': 'Service', 'filters': [{'facetName': 'displayName', 'filterType': 'Equals', "
-                   "'values': ['Windows Push Notifications User Service_2d02eb']}, "
-                   "{'facetName': 'endTime', 'filterType': 'Between', 'values': [1638180024181, 1638180324181]}],"
-                   " 'isResult': True}], "
-                   "'queryLimits': {'groupingFeature': {'elementInstanceType': 'Service', 'featureName': "
-                   "'elementDisplayName'}}, 'perFeatureLimit': 1, 'totalResultLimit': 9999, 'perGroupLimit': 1, "
-                   "'templateContext': 'CUSTOM', 'customFields': ['elementDisplayName', 'binaryFile', 'ownerMachine',"
-                   " "
-                   "'process', 'serviceStartName', 'commandLineArguments', 'description', 'displayName', 'endTime', "
-                   "'isActive', 'startType', 'unitFilePath', 'serviceState', 'serviceSubState', 'isAutoRestartService',"
-                   " 'hasSuspicions', 'newServiceEvidence', 'rareServiceEvidence', 'serviceType', 'driver']}",
-                   "{'queryPath': [{'requestedType': 'File', 'filters': [{'facetName': 'size', 'filterType': "
-                   "'GreaterThan', 'values': [10]}, "
-                   "{'facetName': 'createdTime', 'filterType': 'Between', 'values': [1601510400030, 1633564800030]}],"
-                   " 'connectionFeature': {'elementInstanceType': 'File', "
-                   "'featureName': 'ownerMachine'}}, {'requestedType': 'Machine', 'filters': [{'facetName': "
-                   "'osVersionType', 'filterType': 'Equals', 'values': ['Windows_Server_2016']}, {'facetName': "
-                   "'lastSeenTimeStamp', 'filterType': 'Between', 'values': [1638180024181, 1638180324181]}], "
-                   "'connectionFeature': {'elementInstanceType': 'Machine', 'featureName': 'services'}}, "
-                   "{'requestedType': 'Service', 'filters': [{'facetName': 'oldServiceStartName', 'filterType': "
-                   "'Equals', 'values': ['Windows Push Notifications User Service_2d02eb']}, {'facetName': 'endTime', "
-                   "'filterType': 'Between', 'values': [1638180024181, 1638180324181]}], 'isResult': True}], "
-                   "'queryLimits': {'groupingFeature': {'elementInstanceType': 'Service', 'featureName': "
-                   "'elementDisplayName'}}, 'perFeatureLimit': 1, 'totalResultLimit': 9999, 'perGroupLimit': 1, "
-                   "'templateContext': 'CUSTOM', 'customFields': ['elementDisplayName', 'binaryFile', 'ownerMachine',"
-                   " "
-                   "'process', 'serviceStartName', 'commandLineArguments', 'description', 'displayName', 'endTime', "
-                   "'isActive', 'startType', 'unitFilePath', 'serviceState', 'serviceSubState', 'isAutoRestartService',"
-                   " "
-                   "'hasSuspicions', 'newServiceEvidence', 'rareServiceEvidence', 'serviceType', 'driver']}",
-                   "{'queryPath': [{'requestedType': 'File', 'filters': [{'facetName': 'size', 'filterType': "
-                   "'GreaterThan', 'values': [10]}, "
-                   "{'facetName': 'createdTime', 'filterType': 'Between', 'values': [1601510400030, 1633564800030]}],"
-                   " 'connectionFeature': {'elementInstanceType': 'File', "
-                   "'featureName': 'ownerMachine'}}, {'requestedType': 'Machine', 'filters': [{'facetName': "
-                   "'osVersionType', 'filterType': 'Equals', 'values': ['Windows_Server_2016']}, {'facetName': "
-                   "'lastSeenTimeStamp', 'filterType': 'Between', 'values': [1638180024181, 1638180324181]}], "
-                   "'connectionFeature': {'elementInstanceType': 'Machine', 'featureName': 'services'}}, "
-                   "{'requestedType': 'Service', 'filters': [{'facetName': 'elementDisplayName', 'filterType': "
-                   "'Equals', 'values': ['Windows Push Notifications User Service_2d02eb']}, {'facetName': 'endTime', "
-                   "'filterType': 'Between', 'values': [1638180024181, 1638180324181]}], 'isResult': True}], "
-                   "'queryLimits': {'groupingFeature': {'elementInstanceType': 'Service', 'featureName': "
-                   "'elementDisplayName'}}, 'perFeatureLimit': 1, 'totalResultLimit': 9999, 'perGroupLimit': 1, "
-                   "'templateContext': 'CUSTOM', 'customFields': ['elementDisplayName', 'binaryFile', 'ownerMachine',"
-                   " "
-                   "'process', 'serviceStartName', 'commandLineArguments', 'description', 'displayName', 'endTime', "
-                   "'isActive', 'startType', 'unitFilePath', 'serviceState', 'serviceSubState', 'isAutoRestartService',"
-                   " "
-                   "'hasSuspicions', 'newServiceEvidence', 'rareServiceEvidence', 'serviceType', 'driver']}",
-                   "{'queryPath': [{'requestedType': 'File', 'filters': [{'facetName': 'size', 'filterType': "
-                   "'GreaterThan', 'values': [10]}, "
-                   "{'facetName': 'createdTime', 'filterType': 'Between', 'values': [1601510400030, 1633564800030]}],"
-                   " 'connectionFeature': {'elementInstanceType': 'File', "
-                   "'featureName': 'ownerMachine'}}, {'requestedType': 'Machine', 'filters': [{'facetName': "
-                   "'osVersionType', 'filterType': 'Equals', 'values': ['Windows_Server_2016']}, {'facetName': "
-                   "'lastSeenTimeStamp', 'filterType': 'Between', 'values': [1638180024181, 1638180324181]}], "
-                   "'connectionFeature': {'elementInstanceType': 'Machine', 'featureName': 'services'}}, "
-                   "{'requestedType': 'Service', 'filters': [{'facetName': 'serviceStartName', 'filterType': 'Equals', "
-                   "'values': ['Windows Push Notifications User Service_2d02eb']}, {'facetName': 'endTime', "
-                   "'filterType': 'Between', 'values': [1638180024181, 1638180324181]}], 'isResult': True}], "
-                   "'queryLimits': {'groupingFeature': {'elementInstanceType': 'Service', 'featureName': "
-                   "'elementDisplayName'}}, 'perFeatureLimit': 1, 'totalResultLimit': 9999, 'perGroupLimit': 1, "
-                   "'templateContext': 'CUSTOM', 'customFields': ['elementDisplayName', 'binaryFile', 'ownerMachine',"
-                   " "
-                   "'process', 'serviceStartName', 'commandLineArguments', 'description', 'displayName', 'endTime', "
-                   "'isActive', 'startType', 'unitFilePath', 'serviceState', 'serviceSubState', 'isAutoRestartService',"
-                   " "
-                   "'hasSuspicions', 'newServiceEvidence', 'rareServiceEvidence', 'serviceType', 'driver']}",
-                   "{'queryPath': [{'requestedType': 'File', 'filters': [{'facetName': 'size', 'filterType': "
-                   "'GreaterThan', 'values': [10]},"
-                   " {'facetName': 'createdTime', 'filterType': 'Between', 'values': [1601510400030, 1633564800030]}],"
-                   " 'connectionFeature': {'elementInstanceType': 'File', "
-                   "'featureName': 'ownerMachine'}}, {'requestedType': 'Machine', 'filters': [{'facetName': "
-                   "'osVersionType', 'filterType': 'Equals', 'values': ['Windows_Server_2016']}, {'facetName': "
-                   "'lastSeenTimeStamp', 'filterType': 'Between', 'values': [1638180024181, 1638180324181]}], "
-                   "'connectionFeature': {'elementInstanceType': 'Machine', 'featureName': 'drivers'}}, "
-                   "{'requestedType': 'Driver', 'filters': [{'facetName': 'service', 'filterType': 'Equals', "
-                   "'values': ['Windows Push Notifications User Service_2d02eb']}, {'facetName': 'endTime', "
-                   "'filterType': 'Between', 'values': [1638180024181, 1638180324181]}], 'isResult': True}], "
-                   "'queryLimits': {'groupingFeature': {'elementInstanceType': 'Driver', 'featureName': "
-                   "'elementDisplayName'}}, 'perFeatureLimit': 1, 'totalResultLimit': 9999, 'perGroupLimit': 1, "
-                   "'templateContext': 'CUSTOM', 'customFields': ['elementDisplayName', 'creationTime', 'file', "
-                   "'ownerMachine', 'service', 'endTime', 'newDriverEvidence', 'hasSuspicions']}",
-                   "{'queryPath': [{"
-                   "'requestedType': 'File', 'filters': [{'facetName': 'size', 'filterType': 'GreaterThan', 'values': ["
-                   "10]}, {'facetName': 'createdTime', "
-                   "'filterType': 'Between', 'values': [1601510400030, 1633564800030]}], "
-                   "'connectionFeature': {'elementInstanceType': 'File', 'featureName': "
-                   "'ownerMachine'}}, {'requestedType': 'Machine', 'filters': [{'facetName': 'osVersionType', "
-                   "'filterType': 'Equals', 'values': ['Windows_Server_2016']}, {'facetName': 'lastSeenTimeStamp', "
-                   "'filterType': 'Between', 'values': [1638180024181, 1638180324181]}], 'connectionFeature': {"
-                   "'elementInstanceType': 'Machine', 'featureName': 'processes'}}, {'requestedType': 'Process', "
-                   "'filters': [{'facetName': 'service', 'filterType': 'Equals', 'values': ['Windows Push Notifications"
-                   " "
-                   "User Service_2d02eb']},"
-                   " {'facetName': 'creationTime', 'filterType': 'Between', 'values': [1638180024181, 1638180324181]}],"
-                   " 'isResult': True}], 'queryLimits': {'groupingFeature': {"
-                   "'elementInstanceType': 'Process', 'featureName': 'elementDisplayName'}}, 'perFeatureLimit': 1, "
+                   "'GreaterThan', 'values': [10]}, {'facetName': 'createdTime', 'filterType': 'Between', 'values': ["
+                   "1601510400030, 1633564800030]}], 'isResult': True}], 'queryLimits': {'groupingFeature': {"
+                   "'elementInstanceType': 'File', 'featureName': 'elementDisplayName'}}, 'perFeatureLimit': 1, "
                    "'totalResultLimit': 9999, 'perGroupLimit': 1, 'templateContext': 'CUSTOM', 'customFields': ["
-                   "'elementDisplayName', 'creationTime', 'endTime', 'commandLine', "
-                   "'imageFile.maliciousClassificationType', 'productType', 'children', 'parentProcess', "
-                   "'ownerMachine', 'calculatedUser', 'imageFile', 'imageFile.sha1String', 'imageFile.md5String', "
-                   "'imageFile.sha256String', 'imageFile.companyName', 'imageFile.productName', 'applicablePid', "
-                   "'imageFileExtensionType', 'integrity', 'tid', 'isAggregate', 'isDotNetProtected', 'hasMalops', "
-                   "'hasSuspicions', 'relatedToMalop', 'multipleSizeForHashEvidence', 'isImageFileVerified', "
-                   "'knownMaliciousToolSuspicion', 'knownMalwareSuspicion', 'knownUnwantedSuspicion', "
-                   "'isMaliciousByHashEvidence', 'imageFileMultipleCompanyNamesEvidence', "
-                   "'multipleHashForUnsignedPeInfoEvidence', 'multipleNameForHashEvidence', 'unknownEvidence', "
-                   "'rareHasPeMismatchEvidence', 'imageFile.signedInternalOrExternal', "
-                   "'unknownUnsignedBySigningCompany', 'imageFileUnsignedEvidence', "
-                   "'imageFileUnsignedHasSignedVersionEvidence', 'unwantedModuleSuspicion', "
-                   "'imageFile.signerInternalOrExternal', 'architecture', 'commandLineContainsTempEvidence', "
-                   "'hasChildren', 'hasClassification', 'hasVisibleWindows', 'hasWindows', 'isInstaller', "
-                   "'isIdentifiedProduct', 'hasModuleFromTempEvidence', 'nonExecutableExtensionEvidence', "
-                   "'isNotShellRunner', 'runningFromTempEvidence', 'shellOfNonShellRunnerSuspicion', "
-                   "'shellWithElevatedPrivilegesEvidence', 'systemUserEvidence', 'hasExternalConnection', "
-                   "'hasExternalConnectionToWellKnownPortEvidence', 'hasIncomingConnection', 'hasInternalConnection', "
-                   "'hasMailConnectionForNonMailProcessEvidence', 'hasListeningConnection', 'hasOutgoingConnection', "
-                   "'hasUnresolvedDnsQueriesFromDomain', 'multipleUnresolvedRecordNotExistsEvidence', "
-                   "'hasNonDefaultResolverEvidence', 'parentProcessNotMatchHierarchySuspicion', "
-                   "'parentProcessNotAdminUserEvidence', 'parentProcessFromRemovableDeviceEvidence', 'autorun', "
-                   "'childrenCreatedByThread', 'connections', 'elevatedPrivilegeChildren', 'hackerToolChildren', "
-                   "'hostProcess', 'hostUser', 'hostedChildren', 'injectedChildren', 'loadedModules', 'logonSession', "
-                   "'remoteSession', 'service', 'execedBy', 'connectionsToMaliciousDomain', "
-                   "'connectionsToMalwareAddresses', 'externalConnections', "
+                   "'elementDisplayName', 'avRemediationStatus', 'signerInternalOrExternal', 'fileHash', 'autoruns', "
+                   "'ownerMachine', 'mount', 'autorun', 'dualExtensionEvidence', 'hiddenFileExtensionEvidence', "
+                   "'rightToLeftFileExtensionEvidence', 'hasMalops', 'hasSuspicions', 'maliciousClassificationType', "
+                   "'hackingToolClassificationEvidence', 'classificationLink', 'isPEFile', "
+                   "'executedByProcessEvidence', 'hasAutorun', 'isInstallerProperties', 'isFromRemovableDevice', "
+                   "'productType', 'secondExtensionType', 'temporaryFolderEvidence', 'multipleCompanyNamesEvidence', "
+                   "'multipleHashForUnsignedPeInfoEvidence', 'unsignedHasSignedVersionEvidence', "
+                   "'classificationComment', 'signedInternalOrExternal', 'signatureVerifiedInternalOrExternal', "
+                   "'classificationBlocking', 'isDownloadedFromInternet', 'downloadedFromDomain', "
+                   "'downloadedFromIpAddress', 'downloadedFromUrl', 'downloadedFromUrlReferrer', "
+                   "'downloadedFromEmailFrom', 'downloadedFromEmailMessageId', 'downloadedFromEmailSubject', "
+                   "'legalCopyright', 'legalTrademarks', 'privateBuild', 'specialBuild', 'companyName', "
+                   "'createdTime', 'extensionType', 'fileDescription', 'internalName', 'md5String', 'modifiedTime', "
+                   "'originalFileName', 'correctedPath', 'productName', 'productVersion', 'sha1String', 'size', "
+                   "'comments', 'fileVersion', 'applicationIdentifier', 'sha256String']}",
+                   "{'queryPath': [{"
+                   "'requestedType': 'Machine', 'filters': [{'facetName': 'osVersionType', 'filterType': 'Equals', "
+                   "'values': ['Windows_Server_2016']}, {'facetName': 'lastSeenTimeStamp', 'filterType': 'Between', "
+                   "'values': [1669869087615, 1669869387615]}], 'connectionFeature': {'elementInstanceType': "
+                   "'Machine', 'featureName': 'services'}}, {'requestedType': 'Service', 'filters': [{'facetName': "
+                   "'displayName', 'filterType': 'Equals', 'values': ['Windows Push Notifications User "
+                   "Service_2d02eb']}, {'facetName': 'endTime', 'filterType': 'Between', 'values': [1669869087615, "
+                   "1669869387615]}], 'isResult': True}], 'queryLimits': {'groupingFeature': {'elementInstanceType': "
+                   "'Service', 'featureName': 'elementDisplayName'}}, 'perFeatureLimit': 1, 'totalResultLimit': 9999, "
+                   "'perGroupLimit': 1, 'templateContext': 'CUSTOM', 'customFields': ['elementDisplayName', "
+                   "'binaryFile', 'ownerMachine', 'process', 'serviceStartName', 'commandLineArguments', "
+                   "'description', 'displayName', 'endTime', 'isActive', 'startType', 'unitFilePath', 'serviceState', "
+                   "'serviceSubState', 'isAutoRestartService', 'hasSuspicions', 'newServiceEvidence', "
+                   "'rareServiceEvidence', 'serviceType', 'driver']}",
+                   "{'queryPath': [{'requestedType': 'Machine', "
+                   "'filters': [{'facetName': 'osVersionType', 'filterType': 'Equals', 'values': ["
+                   "'Windows_Server_2016']}, {'facetName': 'lastSeenTimeStamp', 'filterType': 'Between', 'values': ["
+                   "1669869087615, 1669869387615]}], 'connectionFeature': {'elementInstanceType': 'Machine', "
+                   "'featureName': 'services'}}, {'requestedType': 'Service', 'filters': [{'facetName': "
+                   "'oldServiceStartName', 'filterType': 'Equals', 'values': ['Windows Push Notifications User "
+                   "Service_2d02eb']}, {'facetName': 'endTime', 'filterType': 'Between', 'values': [1669869087615, "
+                   "1669869387615]}], 'isResult': True}], 'queryLimits': {'groupingFeature': {'elementInstanceType': "
+                   "'Service', 'featureName': 'elementDisplayName'}}, 'perFeatureLimit': 1, 'totalResultLimit': 9999, "
+                   "'perGroupLimit': 1, 'templateContext': 'CUSTOM', 'customFields': ['elementDisplayName', "
+                   "'binaryFile', 'ownerMachine', 'process', 'serviceStartName', 'commandLineArguments', "
+                   "'description', 'displayName', 'endTime', 'isActive', 'startType', 'unitFilePath', 'serviceState', "
+                   "'serviceSubState', 'isAutoRestartService', 'hasSuspicions', 'newServiceEvidence', "
+                   "'rareServiceEvidence', 'serviceType', 'driver']}",
+                   "{'queryPath': [{'requestedType': 'Machine', "
+                   "'filters': [{'facetName': 'osVersionType', 'filterType': 'Equals', 'values': ["
+                   "'Windows_Server_2016']}, {'facetName': 'lastSeenTimeStamp', 'filterType': 'Between', 'values': ["
+                   "1669869087615, 1669869387615]}], 'connectionFeature': {'elementInstanceType': 'Machine', "
+                   "'featureName': 'services'}}, {'requestedType': 'Service', 'filters': [{'facetName': "
+                   "'elementDisplayName', 'filterType': 'Equals', 'values': ['Windows Push Notifications User "
+                   "Service_2d02eb']}, {'facetName': 'endTime', 'filterType': 'Between', 'values': [1669869087615, "
+                   "1669869387615]}], 'isResult': True}], 'queryLimits': {'groupingFeature': {'elementInstanceType': "
+                   "'Service', 'featureName': 'elementDisplayName'}}, 'perFeatureLimit': 1, 'totalResultLimit': 9999, "
+                   "'perGroupLimit': 1, 'templateContext': 'CUSTOM', 'customFields': ['elementDisplayName', "
+                   "'binaryFile', 'ownerMachine', 'process', 'serviceStartName', 'commandLineArguments', "
+                   "'description', 'displayName', 'endTime', 'isActive', 'startType', 'unitFilePath', 'serviceState', "
+                   "'serviceSubState', 'isAutoRestartService', 'hasSuspicions', 'newServiceEvidence', "
+                   "'rareServiceEvidence', 'serviceType', 'driver']}",
+                   "{'queryPath': [{'requestedType': 'Machine', "
+                   "'filters': [{'facetName': 'osVersionType', 'filterType': 'Equals', 'values': ["
+                   "'Windows_Server_2016']}, {'facetName': 'lastSeenTimeStamp', 'filterType': 'Between', 'values': ["
+                   "1669869087615, 1669869387615]}], 'connectionFeature': {'elementInstanceType': 'Machine', "
+                   "'featureName': 'services'}}, {'requestedType': 'Service', 'filters': [{'facetName': "
+                   "'serviceStartName', 'filterType': 'Equals', 'values': ['Windows Push Notifications User "
+                   "Service_2d02eb']}, {'facetName': 'endTime', 'filterType': 'Between', 'values': [1669869087615, "
+                   "1669869387615]}], 'isResult': True}], 'queryLimits': {'groupingFeature': {'elementInstanceType': "
+                   "'Service', 'featureName': 'elementDisplayName'}}, 'perFeatureLimit': 1, 'totalResultLimit': 9999, "
+                   "'perGroupLimit': 1, 'templateContext': 'CUSTOM', 'customFields': ['elementDisplayName', "
+                   "'binaryFile', 'ownerMachine', 'process', 'serviceStartName', 'commandLineArguments', "
+                   "'description', 'displayName', 'endTime', 'isActive', 'startType', 'unitFilePath', 'serviceState', "
+                   "'serviceSubState', 'isAutoRestartService', 'hasSuspicions', 'newServiceEvidence', "
+                   "'rareServiceEvidence', 'serviceType', 'driver']}",
+                   "{'queryPath': [{'requestedType': 'Machine', "
+                   "'filters': [{'facetName': 'osVersionType', 'filterType': 'Equals', 'values': ["
+                   "'Windows_Server_2016']}, {'facetName': 'lastSeenTimeStamp', 'filterType': 'Between', 'values': ["
+                   "1669869087615, 1669869387615]}], 'connectionFeature': {'elementInstanceType': 'Machine', "
+                   "'featureName': 'drivers'}}, {'requestedType': 'Driver', 'filters': [{'facetName': 'service', "
+                   "'filterType': 'Equals', 'values': ['Windows Push Notifications User Service_2d02eb']}, "
+                   "{'facetName': 'endTime', 'filterType': 'Between', 'values': [1669869087615, 1669869387615]}], "
+                   "'isResult': True}], 'queryLimits': {'groupingFeature': {'elementInstanceType': 'Driver', "
+                   "'featureName': 'elementDisplayName'}}, 'perFeatureLimit': 1, 'totalResultLimit': 9999, "
+                   "'perGroupLimit': 1, 'templateContext': 'CUSTOM', 'customFields': ['elementDisplayName', "
+                   "'creationTime', 'file', 'ownerMachine', 'service', 'endTime', 'newDriverEvidence', "
+                   "'hasSuspicions']}",
+                   "{'queryPath': [{'requestedType': 'Machine', 'filters': [{'facetName': "
+                   "'osVersionType', 'filterType': 'Equals', 'values': ['Windows_Server_2016']}, {'facetName': "
+                   "'lastSeenTimeStamp', 'filterType': 'Between', 'values': [1669869087615, 1669869387615]}], "
+                   "'connectionFeature': {'elementInstanceType': 'Machine', 'featureName': 'processes'}}, "
+                   "{'requestedType': 'Process', 'filters': [{'facetName': 'service', 'filterType': 'Equals', "
+                   "'values': ['Windows Push Notifications User Service_2d02eb']}, {'facetName': 'creationTime', "
+                   "'filterType': 'Between', 'values': [1669869087615, 1669869387615]}], 'isResult': True}], "
+                   "'queryLimits': {'groupingFeature': {'elementInstanceType': 'Process', 'featureName': "
+                   "'elementDisplayName'}}, 'perFeatureLimit': 1, 'totalResultLimit': 9999, 'perGroupLimit': 1, "
+                   "'templateContext': 'CUSTOM', 'customFields': ['elementDisplayName', 'creationTime', 'endTime', "
+                   "'commandLine', 'imageFile.maliciousClassificationType', 'productType', 'children', "
+                   "'parentProcess', 'ownerMachine', 'calculatedUser', 'imageFile', 'imageFile.sha1String', "
+                   "'imageFile.md5String', 'imageFile.sha256String', 'imageFile.companyName', "
+                   "'imageFile.productName', 'applicablePid', 'imageFileExtensionType', 'integrity', 'tid', "
+                   "'isAggregate', 'isDotNetProtected', 'hasMalops', 'hasSuspicions', 'relatedToMalop', "
+                   "'multipleSizeForHashEvidence', 'isImageFileVerified', 'knownMaliciousToolSuspicion', "
+                   "'knownMalwareSuspicion', 'knownUnwantedSuspicion', 'isMaliciousByHashEvidence', "
+                   "'imageFileMultipleCompanyNamesEvidence', 'multipleHashForUnsignedPeInfoEvidence', "
+                   "'multipleNameForHashEvidence', 'unknownEvidence', 'rareHasPeMismatchEvidence', "
+                   "'imageFile.signedInternalOrExternal', 'unknownUnsignedBySigningCompany', "
+                   "'imageFileUnsignedEvidence', 'imageFileUnsignedHasSignedVersionEvidence', "
+                   "'unwantedModuleSuspicion', 'imageFile.signerInternalOrExternal', 'architecture', "
+                   "'commandLineContainsTempEvidence', 'hasChildren', 'hasClassification', 'hasVisibleWindows', "
+                   "'hasWindows', 'isInstaller', 'isIdentifiedProduct', 'hasModuleFromTempEvidence', "
+                   "'nonExecutableExtensionEvidence', 'isNotShellRunner', 'runningFromTempEvidence', "
+                   "'shellOfNonShellRunnerSuspicion', 'shellWithElevatedPrivilegesEvidence', 'systemUserEvidence', "
+                   "'hasExternalConnection', 'hasExternalConnectionToWellKnownPortEvidence', 'hasIncomingConnection', "
+                   "'hasInternalConnection', 'hasMailConnectionForNonMailProcessEvidence', 'hasListeningConnection', "
+                   "'hasOutgoingConnection', 'hasUnresolvedDnsQueriesFromDomain', "
+                   "'multipleUnresolvedRecordNotExistsEvidence', 'hasNonDefaultResolverEvidence', "
+                   "'parentProcessNotMatchHierarchySuspicion', 'parentProcessNotAdminUserEvidence', "
+                   "'parentProcessFromRemovableDeviceEvidence', 'autorun', 'childrenCreatedByThread', 'connections', "
+                   "'elevatedPrivilegeChildren', 'hackerToolChildren', 'hostProcess', 'hostUser', 'hostedChildren', "
+                   "'injectedChildren', 'loadedModules', 'logonSession', 'remoteSession', 'service', 'execedBy', "
+                   "'connectionsToMaliciousDomain', 'connectionsToMalwareAddresses', 'externalConnections', "
                    "'absoluteHighVolumeMaliciousAddressConnections', 'absoluteHighVolumeExternalConnections', "
                    "'incomingConnections', 'incomingExternalConnections', 'incomingInternalConnections', "
                    "'internalConnections', 'listeningConnections', 'localConnections', 'mailConnections', "
                    "'outgoingConnections', 'outgoingExternalConnections', 'outgoingInternalConnections', "
                    "'suspiciousExternalConnections', 'suspiciousInternalConnections', 'wellKnownPortConnections', "
                    "'lowTtlDnsQueries', 'nonDefaultResolverQueries', 'resolvedDnsQueriesDomainToDomain', "
-                   "'resolvedDnsQueriesDomainToIp', 'resolvedDnsQueriesIpToDomain', 'suspiciousDnsQueryDomainToDomain',"
-                   " "
-                   "'unresolvedQueryFromSuspiciousDomain', 'dnsQueryFromSuspiciousDomain', "
-                   "'dnsQueryToSuspiciousDomain', 'unresolvedRecordNotExist', 'unresolvedDnsQueriesFromDomain', "
-                   "'unresolvedDnsQueriesFromIp', 'maliciousToolClassificationModules', 'malwareClassificationModules',"
-                   " "
-                   "'modulesNotInLoaderDbList', 'modulesFromTemp', 'unsignedWithSignedVersionModules', "
-                   "'unwantedClassificationModules', 'accessToMalwareAddressInfectedProcess', "
-                   "'connectingToBadReputationAddressSuspicion', 'hasMaliciousConnectionEvidence', "
-                   "'hasSuspiciousExternalConnectionSuspicion', 'highNumberOfExternalConnectionsSuspicion', "
-                   "'nonDefaultResolverSuspicion', 'hasRareExternalConnectionEvidence', 'hasRareRemoteAddressEvidence',"
-                   " "
-                   "'suspiciousMailConnections', 'accessToMalwareAddressByUnknownProcess', "
+                   "'resolvedDnsQueriesDomainToIp', 'resolvedDnsQueriesIpToDomain', "
+                   "'suspiciousDnsQueryDomainToDomain', 'unresolvedQueryFromSuspiciousDomain', "
+                   "'dnsQueryFromSuspiciousDomain', 'dnsQueryToSuspiciousDomain', 'unresolvedRecordNotExist', "
+                   "'unresolvedDnsQueriesFromDomain', 'unresolvedDnsQueriesFromIp', "
+                   "'maliciousToolClassificationModules', 'malwareClassificationModules', 'modulesNotInLoaderDbList', "
+                   "'modulesFromTemp', 'unsignedWithSignedVersionModules', 'unwantedClassificationModules', "
+                   "'accessToMalwareAddressInfectedProcess', 'connectingToBadReputationAddressSuspicion', "
+                   "'hasMaliciousConnectionEvidence', 'hasSuspiciousExternalConnectionSuspicion', "
+                   "'highNumberOfExternalConnectionsSuspicion', 'nonDefaultResolverSuspicion', "
+                   "'hasRareExternalConnectionEvidence', 'hasRareRemoteAddressEvidence', 'suspiciousMailConnections', "
+                   "'accessToMalwareAddressByUnknownProcess', "
                    "'hasAbsoluteHighVolumeConnectionToMaliciousAddressEvidence', "
                    "'hasAbsoluteHighVolumeExternalOutgoingConnectionEvidence', 'highDataTransmittedSuspicion', "
                    "'highDataVolumeTransmittedToMaliciousAddressSuspicion', "
@@ -1704,6 +1703,7 @@ class TestQueryTranslator(unittest.TestCase):
                    "'imageFile.downloadedFromUrlReferrer', 'imageFile.downloadedFromEmailFrom', "
                    "'imageFile.downloadedFromEmailMessageId', 'imageFile.downloadedFromEmailSubject', 'rpcRequests', "
                    "'iconBase64', 'executionPrevented', 'isWhiteListClassification', 'matchedWhiteListRuleIds']}"]
+
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -1791,7 +1791,6 @@ class TestQueryTranslator(unittest.TestCase):
                    "'adMemberOf', 'adOU', 'adPrimaryGroupID', 'adSamAccountName', 'adTitle', 'hasPowerTool', "
                    "'hasMaliciousProcess', 'hasSuspicions', 'hasSuspiciousProcess', "
                    "'runningMaliciousProcessEvidence', 'hasRareProcessWithExternalConnections']}"]
-
 
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -1960,11 +1959,12 @@ class TestQueryTranslator(unittest.TestCase):
         assert 'LIKE OR MATCHES operator is not supported for Integer/Timestamp/Boolean fields' in result['error']
 
     def test_observation_with_invalid_link_between_element(self):
-        stix_pattern = "[x-cybereason-connection:port_type LIKE 'HTTP' AND x-oca-event:file_event_user LIKE 'FET_DELETE']"
+        stix_pattern = "[x-cybereason-connection:port_type LIKE 'HTTP' AND x-oca-event:file_event_user " \
+                       "LIKE 'FET_DELETE']"
         result = translation.translate('cybereason', 'query', '{}', stix_pattern)
         assert result['success'] is False
         assert result['code'] == 'invalid_parameter'
-        assert 'Link is not found between elements' in result['error']
+        assert 'Cybereason does not allow AND operation' in result['error']
 
     def test_observation_with_invalid_operator_for_string(self):
         stix_pattern = "[x-cybereason-connection:port_type > 'HTTP']"
@@ -1992,32 +1992,96 @@ class TestQueryTranslator(unittest.TestCase):
                        "[network-traffic:protocols[*] = 'tcp'] START t'2019-10-01T08:43:10.003Z' STOP " \
                        "t'2019-11-30T10:43:10.005Z' "
         query = translation.translate('cybereason', 'query', '{}', stix_pattern)
-        queries = [{'queryPath': [{'requestedType': 'Connection', 'filters': [{'facetName': 'transportProtocol',
-                                                                               'filterType': 'Equals',
-                                                                               'values': ['tcp']},
-                                                                              {'facetName': 'creationTime',
-                                                                               'filterType': 'Between',
-                                                                               'values': [1569919390003,
-                                                                                          1575110590005]},
-                                                                              {'facetName': 'localPort',
-                                                                               'filterType': 'Equals',
-                                                                               'values': [23]},
-                                                                              {'facetName': 'creationTime',
-                                                                               'filterType': 'Between',
-                                                                               'values': [1569916810000,
-                                                                                          1575111610000]}],
-                                   'isResult': True}], 'queryLimits': {'groupingFeature':
-                                                                           {'elementInstanceType': 'Connection',
-                                                                            'featureName': 'elementDisplayName'}},
-                    'perFeatureLimit': 1,
-                    'totalResultLimit': 9999, 'perGroupLimit': 1, 'templateContext': 'CUSTOM',
-                    'customFields': ['elementDisplayName', 'direction', 'ownerMachine', 'ownerProcess', 'serverPort',
-                                     'serverAddress', 'portType', 'aggregatedReceivedBytesCount',
-                                     'aggregatedTransmittedBytesCount', 'remoteAddressCountryName', 'dnsQuery',
-                                     'calculatedCreationTime', 'domainName', 'endTime', 'localPort', 'portDescription',
-                                     'remotePort', 'state', 'isExternalConnection', 'isIncoming',
-                                     'remoteAddressInternalExternalLocal', 'transportProtocol', 'hasMalops',
-                                     'hasSuspicions', 'relatedToMalop', 'isWellKnownPort', 'isProcessLegit',
-                                     'isProcessMalware', 'localAddress', 'remoteAddress', 'urlDomains']}]
+        queries = [{
+            'queryPath': [{
+                'requestedType': 'Connection',
+                'filters': [{
+                    'facetName': 'localPort',
+                    'filterType': 'Equals',
+                    'values': [23]
+                }, {
+                    'facetName': 'creationTime',
+                    'filterType': 'Between',
+                    'values': [1569916810000, 1575111610000]
+                }],
+                'isResult': True
+            }],
+            'queryLimits': {
+                'groupingFeature': {
+                    'elementInstanceType': 'Connection',
+                    'featureName': 'elementDisplayName'
+                }
+            },
+            'perFeatureLimit': 1,
+            'totalResultLimit': 9999,
+            'perGroupLimit': 1,
+            'templateContext': 'CUSTOM',
+            'customFields': ['elementDisplayName', 'direction', 'ownerMachine', 'ownerProcess', 'serverPort',
+                             'serverAddress', 'portType', 'aggregatedReceivedBytesCount',
+                             'aggregatedTransmittedBytesCount', 'remoteAddressCountryName', 'dnsQuery',
+                             'calculatedCreationTime', 'domainName', 'endTime', 'localPort', 'portDescription',
+                             'remotePort', 'state', 'isExternalConnection', 'isIncoming',
+                             'remoteAddressInternalExternalLocal', 'transportProtocol', 'hasMalops', 'hasSuspicions',
+                             'relatedToMalop', 'isWellKnownPort', 'isProcessLegit', 'isProcessMalware', 'localAddress',
+                             'remoteAddress', 'urlDomains']
+        }, {
+            'queryPath': [{
+                'requestedType': 'Connection',
+                'filters': [{
+                    'facetName': 'transportProtocol',
+                    'filterType': 'Equals',
+                    'values': ['tcp']
+                }, {
+                    'facetName': 'creationTime',
+                    'filterType': 'Between',
+                    'values': [1569919390003, 1575110590005]
+                }],
+                'isResult': True
+            }],
+            'queryLimits': {
+                'groupingFeature': {
+                    'elementInstanceType': 'Connection',
+                    'featureName': 'elementDisplayName'
+                }
+            },
+            'perFeatureLimit': 1,
+            'totalResultLimit': 9999,
+            'perGroupLimit': 1,
+            'templateContext': 'CUSTOM',
+            'customFields': ['elementDisplayName', 'direction', 'ownerMachine', 'ownerProcess', 'serverPort',
+                             'serverAddress', 'portType', 'aggregatedReceivedBytesCount',
+                             'aggregatedTransmittedBytesCount', 'remoteAddressCountryName', 'dnsQuery',
+                             'calculatedCreationTime', 'domainName', 'endTime', 'localPort', 'portDescription',
+                             'remotePort', 'state', 'isExternalConnection', 'isIncoming',
+                             'remoteAddressInternalExternalLocal', 'transportProtocol', 'hasMalops', 'hasSuspicions',
+                             'relatedToMalop', 'isWellKnownPort', 'isProcessLegit', 'isProcessMalware', 'localAddress',
+                             'remoteAddress', 'urlDomains']
+        }]
+        self._test_query_assertions(query, queries)
 
+    def test_multiple_observation_with_and_without_linked_element(self):
+        stix_pattern = "[ipv4-addr:value = '1.1.1.1' AND  x-cybereason-driver:name =  'test_driver'] " \
+                       "OR [AND x-oca-asset:os_type = 'windows' AND x-cybereason-service:description LIKE 'service'  ]"
+        query = translation.translate('cybereason', 'query', '{}', stix_pattern)
+        query['queries'] = _remove_timestamp_from_query(query['queries'])
+        queries = ["{'queryPath': [{'requestedType': 'Service', 'filters': [{'facetName': 'description', "
+                   "'filterType': 'ContainsIgnoreCase', 'values': ['service']}, {'facetName': 'endTime', "
+                   "'filterType': 'Between', 'values': [1669871110786, 1669871410786]}], 'connectionFeature': {"
+                   "'elementInstanceType': 'Service', 'featureName': 'ownerMachine'}}, {'requestedType': 'Machine', "
+                   "'filters': [{'facetName': 'osType', 'filterType': 'Equals', 'values': ['windows']}, {'facetName': "
+                   "'lastSeenTimeStamp', 'filterType': 'Between', 'values': [1669871110786, 1669871410786]}], "
+                   "'isResult': True}], 'queryLimits': {'groupingFeature': {'elementInstanceType': 'Machine', "
+                   "'featureName': 'elementDisplayName'}}, 'perFeatureLimit': 1, 'totalResultLimit': 9999, "
+                   "'perGroupLimit': 1, 'templateContext': 'CUSTOM', 'customFields': ['elementDisplayName', "
+                   "'mountPoints', 'processes', 'services', 'logonSessions', 'hasRemovableDevice', "
+                   "'timezoneUTCOffsetMinutes', 'osVersionType', 'platformArchitecture', 'mbrHashString', 'osType', "
+                   "'domainFqdn', 'ownerOrganization', 'pylumId', 'adSid', 'adOU', 'adOrganization', "
+                   "'adCanonicalName', 'adCompany', 'adDNSHostName', 'adDepartment', 'adDisplayName', 'adLocation', "
+                   "'adMachineRole', 'adDescription', 'freeDiskSpace', 'totalDiskSpace', 'freeMemory', 'totalMemory', "
+                   "'cpuCount', 'isLaptop', 'deviceModel', 'isActiveProbeConnected', 'uptime', 'isIsolated', "
+                   "'lastSeenTimeStamp', 'timeStampSinceLastConnectionTime', 'hasMalops', 'hasSuspicions', "
+                   "'isSuspiciousOrHasSuspiciousProcessOrFile', 'maliciousTools', 'maliciousProcesses', "
+                   "'suspiciousProcesses']}"]
+
+        queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
