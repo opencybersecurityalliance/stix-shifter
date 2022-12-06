@@ -194,7 +194,7 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         objects = observed_data['objects']
 
         x_msazure_sentinel_alert = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(),
-                                                                                    'x-msazure-sentinel-alert')
+                                                                                    'x-azure-security-alert')
 
         assert x_msazure_sentinel_alert is not None, 'Custom object type not found'
         assert x_msazure_sentinel_alert['status'] == 'New'
@@ -213,7 +213,7 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         assert 'objects' in observed_data
         objects = observed_data['objects']
         x_msazure_sentinel_incident = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(),
-                                                                                       'x-msazure-sentinel-incident')
+                                                                                       'x-azure-security-incident')
         assert x_msazure_sentinel_incident is not None, 'Custom object type not found'
         assert x_msazure_sentinel_incident['incident_name'] == '919158c6-4c3f-4273-a730-a37f75622350'
         assert x_msazure_sentinel_incident['severity'] == 'Medium'
@@ -233,7 +233,7 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         objects = observed_data['objects']
 
         x_msazure_sentinel_event = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(),
-                                                                                    'x-msazure-sentinel-event')
+                                                                                    'x-azure-security-event')
         assert x_msazure_sentinel_event is not None, 'Custom object type not found'
         assert x_msazure_sentinel_event['computer'] == 'GslabCP4S'
         assert x_msazure_sentinel_event['source'] == 'OpsManager'

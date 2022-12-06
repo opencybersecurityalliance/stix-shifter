@@ -117,7 +117,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         assert stix_pattern[1:-1] in result['error']
 
     def test_query_from_multiple_comparison_expressions_joined_by_AND(self):
-        stix_pattern = "[x-msazure-sentinel-alert:status = 'New' AND x-msazure-sentinel-alert:alert_severity= 'Medium']"
+        stix_pattern = "[x-azure-security-alert:status = 'New' AND x-azure-security-alert:alert_severity= 'Medium']"
         query = translation.translate(MODULE, 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
@@ -129,7 +129,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         self._test_query_assertions(query, queries)
 
     def test_query_from_multiple_comparison_expressions_joined_by_OR(self):
-        stix_pattern = "[x-msazure-sentinel-alert:status = 'New' OR x-msazure-sentinel-alert:alert_severity= 'Medium']"
+        stix_pattern = "[x-azure-security-alert:status = 'New' OR x-azure-security-alert:alert_severity= 'Medium']"
         query = translation.translate(MODULE, 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
@@ -150,7 +150,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         self._test_query_assertions(query, queries)
 
     def test_computer_query(self):
-        stix_pattern = "[x-msazure-sentinel-event:computer = 'GslabAzure']"
+        stix_pattern = "[x-azure-security-event:computer = 'GslabAzure']"
         query = translation.translate(MODULE, 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
@@ -161,7 +161,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         self._test_query_assertions(query, queries)
 
     def test_incident_name_query(self):
-        stix_pattern = "[x-msazure-sentinel-incident:incident_name = 'e1b1ea91-cd8d-4304-8689-bcb357e251f7']"
+        stix_pattern = "[x-azure-security-incident:incident_name = 'e1b1ea91-cd8d-4304-8689-bcb357e251f7']"
         query = translation.translate(MODULE, 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
