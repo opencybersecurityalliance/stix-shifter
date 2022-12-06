@@ -24,7 +24,7 @@ class ClientSecretMockResponse:
         return MockToken
 
 
-@patch('stix_shifter_modules.azure_log_analytics.stix_transmission.connector.ClientSecretCredential')
+@patch('stix_shifter_modules.azure_log_analytics.stix_transmission.api_client.ClientSecretCredential')
 @patch('stix_shifter_modules.azure_log_analytics.stix_transmission.api_client.APIClient.__init__')
 class TestAzureSentinalConnection(unittest.TestCase, object):
     def connection(self):
