@@ -1,6 +1,5 @@
 import json
 from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
-from azure.identity import ClientSecretCredential
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 import pandas as pd
@@ -11,8 +10,6 @@ import re
 
 
 class Connector(BaseSyncConnector):
-    max_limit = 1000
-    init_error = None
 
     def __init__(self, connection, configuration):
         """Initialization.
@@ -20,13 +17,6 @@ class Connector(BaseSyncConnector):
         :param configuration: dict,config dict"""
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
-        self.workspace_id = connection.get('workspaceId')
-        self.credential = ClientSecretCredential(tenant_id=configuration["auth"]["tenant"],
-                                                 client_id=configuration["auth"]["clientId"],
-                                                 client_secret=configuration["auth"]["clientSecret"])
-
-        token = self.credential.get_token("https://{host}/.default".format(host=connection["host"]))
-        configuration['auth']['access_token'] = token.token
         self.api_client = APIClient(connection, configuration)
 
     def ping_connection(self):
@@ -64,14 +54,14 @@ class Connector(BaseSyncConnector):
             stop_time = datetime.utcnow()
             start_time = stop_time - timedelta(hours=24)
 
-        response = self.api_client.run_search(self.credential, self.workspace_id, query, start_time, stop_time,
+        response = self.api_client.run_search(query, start_time, stop_time,
                                               total_record)
 
         if response["success"]:
             if response["response"].status == LogsQueryStatus.PARTIAL:
                 error = response["response"].partial_error
                 data = response["response"].partial_data
-                print(error.message)
+                self.logger.warn(error.message)
             elif response["response"].status == LogsQueryStatus.SUCCESS:
                 data = response["response"].tables
 

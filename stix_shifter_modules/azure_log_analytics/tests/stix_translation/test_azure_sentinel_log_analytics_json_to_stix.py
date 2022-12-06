@@ -1,6 +1,6 @@
 import unittest
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
-from stix_shifter_modules.azure_sentinel_log_analytics.entry_point import EntryPoint
+from stix_shifter_modules.azure_log_analytics.entry_point import EntryPoint
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 
 MODULE = "azure_sentinel"

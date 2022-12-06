@@ -1,4 +1,4 @@
-from stix_shifter_modules.azure_sentinel_log_analytics.entry_point import EntryPoint
+from stix_shifter_modules.azure_log_analytics.entry_point import EntryPoint
 import unittest
 from unittest.mock import patch
 from stix_shifter.stix_transmission import stix_transmission
@@ -24,8 +24,8 @@ class ClientSecretMockResponse:
         return MockToken
 
 
-@patch('stix_shifter_modules.azure_sentinel_log_analytics.stix_transmission.connector.ClientSecretCredential')
-@patch('stix_shifter_modules.azure_sentinel_log_analytics.stix_transmission.api_client.APIClient.__init__')
+@patch('stix_shifter_modules.azure_log_analytics.stix_transmission.connector.ClientSecretCredential')
+@patch('stix_shifter_modules.azure_log_analytics.stix_transmission.api_client.APIClient.__init__')
 class TestAzureSentinalConnection(unittest.TestCase, object):
     def connection(self):
         return {
@@ -51,20 +51,20 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
 
         assert check_async is False
 
-    @patch('stix_shifter_modules.azure_sentinel_log_analytics.stix_transmission.api_client.APIClient.ping_box')
+    @patch('stix_shifter_modules.azure_log_analytics.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = ClientSecretMockResponse
         mocked_return_value = '["mock", "placeholder"]'
 
         mock_ping_response.return_value = AzureSentinelMockResponse(200, mocked_return_value)
-        transmission = stix_transmission.StixTransmission('azure_sentinel_log_analytics', self.connection(), self.config())
+        transmission = stix_transmission.StixTransmission('azure_log_analytics', self.connection(), self.config())
         ping_response = transmission.ping()
 
         assert ping_response is not None
         assert ping_response['success']
 
-    @patch('stix_shifter_modules.azure_sentinel_log_analytics.stix_transmission.api_client.APIClient.ping_box')
+    @patch('stix_shifter_modules.azure_log_analytics.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = ClientSecretMockResponse
@@ -80,11 +80,11 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         }"""
         mock_ping_response.return_value = AzureSentinelMockResponse(400, mocked_return_value)
 
-        transmission = stix_transmission.StixTransmission('azure_sentinel_log_analytics', self.connection(), self.config())
+        transmission = stix_transmission.StixTransmission('azure_log_analytics', self.connection(), self.config())
         ping_response = transmission.ping()
         assert ping_response['success'] is False
         assert ping_response[
-                   'error'] == "azure_sentinel_log_analytics connector error => Resource not found for the segment \'alert\'."
+                   'error'] == "azure_log_analytics connector error => Resource not found for the segment \'alert\'."
         assert ping_response['code'] == "invalid_parameter"
 
     def test_query_connection(self, mock_api_client, mock_generate_token):
@@ -92,7 +92,7 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         mock_generate_token.return_value = ClientSecretMockResponse
 
         query = "SecurityEvent | where IpAddress == '80.66.76.145'"
-        transmission = stix_transmission.StixTransmission('azure_sentinel_log_analytics', self.connection(), self.config())
+        transmission = stix_transmission.StixTransmission('azure_log_analytics', self.connection(), self.config())
         query_response = transmission.query(query)
 
         assert query_response is not None
@@ -113,7 +113,7 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         assert status_response['success'] is True
 
     @patch(
-        'stix_shifter_modules.azure_sentinel_log_analytics.stix_transmission.connector.Connector.create_results_connection')
+        'stix_shifter_modules.azure_log_analytics.stix_transmission.connector.Connector.create_results_connection')
     def test_results_all_response(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = ClientSecretMockResponse
@@ -171,7 +171,7 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         assert results_response['data'] is not None
 
     @patch(
-        'stix_shifter_modules.azure_sentinel_log_analytics.stix_transmission.connector.Connector.create_results_connection')
+        'stix_shifter_modules.azure_log_analytics.stix_transmission.connector.Connector.create_results_connection')
     def test_results_all_response_empty(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = ClientSecretMockResponse
@@ -191,7 +191,7 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert len(results_response['data']) == 0
 
-    @patch('stix_shifter_modules.azure_sentinel_log_analytics.stix_transmission.api_client.APIClient.run_search')
+    @patch('stix_shifter_modules.azure_log_analytics.stix_transmission.api_client.APIClient.run_search')
     def test_results_response_exception(self, mock_results_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = ClientSecretMockResponse
@@ -209,9 +209,9 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         query = "'SecurityEvent | where IpAddress == '66.76.45'"
         offset = 0
         length = 1
-        transmission = stix_transmission.StixTransmission('azure_sentinel_log_analytics', self.connection(), self.config())
+        transmission = stix_transmission.StixTransmission('azure_log_analytics', self.connection(), self.config())
         results_response = transmission.results(query, offset, length)
 
         assert results_response['success'] is False
-        assert results_response['error'] == "azure_sentinel_log_analytics connector error => Invalid filter clause"
+        assert results_response['error'] == "azure_log_analytics connector error => Invalid filter clause"
         assert results_response['code'] == "invalid_parameter"

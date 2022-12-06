@@ -1,33 +1,63 @@
 # Azure Sentinel Connector
 
-### Data Source 
+## Data Source 
 Microsoft Azure Sentinel is a scalable, cloud-native, security information event management (SIEM) and security orchestration automated response (SOAR) solution. Azure Sentinel delivers intelligent security analytics and threat intelligence across the enterprise, providing a single solution for alert detection, threat visibility, proactive hunting, and threat response.
 
-##### Microsoft Graph API (v1.0)
-List security alerts (GET call) https://graph.microsoft.com/v1.0/security/ <br/>
-`Ref: https://docs.microsoft.com/en-us/graph/api/resources/alert?view=graph-rest-beta`
+## API and Logs
 
-Query Parameter: 
-$filter (OData V4.0 support) <br/>
+[Log Analytics REST API](https://learn.microsoft.com/en-us/rest/api/loganalytics/) has been used to search three types of Azure Sentinel logs:
 
-Note: The Microsoft Graph Security API provides a unified interface and schema to integrate with security solutions from Microsoft and ecosystem partners. The security alerts from various partners are available and the schema comprises information about the fileStates, processes, networkConnections and userStates. <br/>
-`Schema Ref: https://docs.microsoft.com/en-us/graph/api/alert-get?view=graph-rest-beta&tabs=http#example`
+1. Security Alert
+2. Security Events 
+3. Security Incidents
+
+Therefore, three dialects has been set in the from_stix mapping file.
+
+Azure SDK for Python is used in order to make API calls to Log Analytics API. Mainly two libraries are used:
+
+1. [Azure Identity library](https://learn.microsoft.com/en-us/python/api/overview/azure/identity-readme?view=azure-python)
+    - It mainly enables the Azure SDK clients to authenticate with AAD
+2. [Azure Monitor Query client library](https://learn.microsoft.com/en-us/python/api/overview/azure/monitor-query-readme?view=azure-python)
+    - It provides functions to run quries on the logs availabe in Azure Sentinel
+    - [Kusto Query Language (KQL)](https://learn.microsoft.com/en-us/azure/data-explorer/kusto/query/) has been used as a query language to run search using this client.
 
 ### Format for calling stix-shifter from the command line
 
 python main.py `<translator_module>` `<query or result>` `<STIX identity object>` `<data>`
 
-## Example I - Converting from STIX patterns to OData V4 queries (STIX attributes)
-STIX to sentinel field mapping is defined in `from_stix_map.json` <br/>
+### Example I - Converting from STIX patterns to KQL (STIX attributes)
+STIX to sentinel field mapping is defined in `<dialects>_from_stix_map.json` <br/>
 
 This example input pattern:
 
-`translate azure_sentinel query ‘{}’ "[process:name = 'svchost.exe'] START t'2019-01-01T08:43:10Z' STOP t'2019-12-31T08:43:10Z'"`
+`translate azure_log_analytics query ‘{}’ "[process:name = 'svchost.exe'] START t'2019-01-01T08:43:10Z' STOP t'2019-12-31T08:43:10Z'"`
 
-Returns the following Odata(native) query:
+Returns the following translated query:
 
-`{'queries': ["(processes/any(query1:tolower(query1/name) eq 'svchost.exe')) and (eventDateTime ge 2019-01-01T08:43:10Z and eventDateTime le 2019-12-31T08:43:10Z)"]}
-`
+```
+{
+    "queries": [
+        "SecurityEvent | where (IpAddress == '1.1.1.1') and (TimeGenerated between (datetime(2019-01-01T08:43:10Z) .. datetime(2019-12-31T08:43:10Z)))"
+    ]
+}
+```
+
+### Example II - Converting from STIX patterns to KQL Custom STIX attributes)
+
+This example input pattern:
+
+`translate azure_log_analytics query ‘{}’ "[x-ibm-finding:name = 'Microsoft-Windows-Security-Auditing'] START t'2019-01-01T08:43:10Z' STOP t'2019-12-31T08:43:10Z'"`
+
+Returns the following translated queries:
+```
+{
+    "queries": [
+        "SecurityEvent | where (EventSourceName == 'Microsoft-Windows-Security-Auditing') and (TimeGenerated between (datetime(2019-01-01T08:43:10Z) .. datetime(2019-12-31T08:43:10Z)))",
+        "SecurityIncident | where (IncidentName == 'Microsoft-Windows-Security-Auditing') and (TimeGenerated between (datetime(2019-01-01T08:43:10Z) .. datetime(2019-12-31T08:43:10Z)))",
+        "SecurityAlert | where (AlertName == 'Microsoft-Windows-Security-Auditing') and (TimeGenerated between (datetime(2019-01-01T08:43:10Z) .. datetime(2019-12-31T08:43:10Z)))"
+    ]
+}```
+
 ## Example I - Converting from Azure sentinel alerts to STIX (STIX attributes)
 
 Sentinel data to STIX mapping is defined in `to_stix_map.json`
@@ -49,7 +79,7 @@ Will return the following STIX observable:
         {
             "type": "identity",
             "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "name": "azure_sentinel",
+            "name": "azure_log_analytics",
             "identity_class": "events"
         },
         {
@@ -212,7 +242,7 @@ STIX to sentinel field mapping is defined in `from_stix_map.json` <br/>
 
 This example input pattern:
 
-`translate azure_sentinel query '{} "[x_msazure_sentinel_alert:provider = 'ASC'] START t'2019-01-01T08:43:10Z' STOP t'2019-12-31T08:43:10Z'"`
+`translate azure_log_analytics query '{} "[x_msazure_sentinel_alert:provider = 'ASC'] START t'2019-01-01T08:43:10Z' STOP t'2019-12-31T08:43:10Z'"`
 
 Returns the following Odata(native) query:
 
@@ -224,7 +254,7 @@ Sentinel data to STIX mapping is defined in `to_stix_map.json`
 
 Sample data:
 
-`translate azure_sentinel results "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"azure_sentinel\",\"identity_class\":\"events\"}" "[{\"id\": \"2518254730385772806_da637123660281149084_-953649836:4wVg68RS3EYNc3Qb7xJUNrYw9KEUBA1wZ3IVwRA0hmg=:WS44c473f9-e9bf-4c71-b40f-3cfd549c34df\", \"azureTenantId\": \"b73e5ba8-34d5-495a-9901-06bdb84cf13e\", \"azureSubscriptionId\": \"083de1fb-cd2d-4b7c-895a-2b5af1d091e8\", \"tags\": [], \"category\": \"Suspected credential theft activity\", \"comments\": [], \"createdDateTime\": \"2019-12-20T07:45:03.1726913Z\", \"description\": \"This program exhibits suspect characteristics potentially associated with credential theft.  Once obtained, these credentials are often used in lateral movement activities to infiltrate other machines and servers in the network.\", \"detectionIds\": [], \"eventDateTime\": \"2019-12-20T07:42:41.4227193Z\", \"lastModifiedDateTime\": \"2019-12-20T07:45:06.1246819Z\", \"recommendedActions_0\": \"1. Make sure the machine is completely updated and all your software has the latest patch.\", \"recommendedActions_1\": \"2. Contact your incident response team. NOTE: If you don’t have an incident response team, contact Microsoft Support for architectural remediation and forensic.\", \"recommendedActions_2\": \"3. Install and run Microsoft’s Malicious Software Removal Tool (see https://www.microsoft.com/en-us/download/malicious-software-removal-tool-details.aspx).\", \"recommendedActions_3\": \"4. Run Microsoft’s Autoruns utility and try to identify unknown applications that are configured to run at login (see https://technet.microsoft.com/en-us/sysinternals/bb963902.aspx).\", \"recommendedActions_4\": \"5. Run Process Explorer and try to identify unknown running processes (see https://technet.microsoft.com/en-us/sysinternals/bb896653.aspx).\", \"severity\": \"medium\", \"sourceMaterials_0\": \"https://portal.azure.com/#blade/Microsoft_Azure_Security/AlertBlade/alertId/2518254730385772806_da637123660281149084_-953649836:4wVg68RS3EYNc3Qb7xJUNrYw9KEUBA1wZ3IVwRA0hmg=:WS44c473f9-e9bf-4c71-b40f-3cfd549c34df/subscriptionId/083de1fb-cd2d-4b7c-895a-2b5af1d091e8/resourceGroup/eastUS/referencedFrom/alertDeepLink/location/westeurope\", \"sourceMaterials_1\": \"https://securitycenter.windows.com/alert/da637123660281149084_-953649836\", \"status\": \"newAlert\", \"title\": \"Suspected credential theft activity\", \"vendorInformation_provider\": \"ASC\", \"vendorInformation_subProvider\": \"MDATP\", \"vendorInformation_vendor\": \"Microsoft\", \"cloudAppStates\": [], \"fileStates_0_name\": \"cmd.exe\", \"fileStates_0_path\": \"C:\\Windows\\System32\\cmd.exe\", \"fileStates_0_fileHash_hashType\": \"sha256\", \"fileStates_0_fileHash_hashValue\": \"6f88fb88ffb0f1d5465c2826e5b4f523598b1b8378377c8378ffebc171bad18b\", \"fileStates_0_sha256\": \"6f88fb88ffb0f1d5465c2826e5b4f523598b1b8378377c8378ffebc171bad18b\", \"hostStates_0_netBiosName\": \"winsrv-target\", \"historyStates\": [], \"malwareStates\": [], \"networkConnections\": [], \"processes\": [], \"registryKeyStates\": [], \"triggers\": [], \"userStates_0_accountName\": \"testadmin\", \"userStates_0_domainName\": \"winsrv-target\", \"userStates_0_emailRole\": \"unknown\", \"userStates_0_userPrincipalName\": \"testadmin@winsrv-target\", \"vulnerabilityStates\": [], \"event_count\": \"1\"}, {\"id\": \"2518254730385772806_da637123660281149084_-953649836:JGqJp4SlSroeE_6c3bZL6R6oWUal2lFJRO3d6N8jgyk=:WS44c473f9-e9bf-4c71-b40f-3cfd549c34df\", \"azureTenantId\": \"b73e5ba8-34d5-495a-9901-06bdb84cf13e\", \"azureSubscriptionId\": \"083de1fb-cd2d-4b7c-895a-2b5af1d091e8\", \"tags\": [], \"category\": \"Suspected credential theft activity\", \"comments\": [], \"createdDateTime\": \"2019-12-20T07:45:03.5008384Z\", \"description\": \"This program exhibits suspect characteristics potentially associated with credential theft.  Once obtained, these credentials are often used in lateral movement activities to infiltrate other machines and servers in the network.\", \"detectionIds\": [], \"eventDateTime\": \"2019-12-20T07:42:41.4227193Z\", \"lastModifiedDateTime\": \"2019-12-20T07:45:06.0810972Z\", \"recommendedActions_0\": \"1. Make sure the machine is completely updated and all your software has the latest patch.\", \"recommendedActions_1\": \"2. Contact your incident response team. NOTE: If you don’t have an incident response team, contact Microsoft Support for architectural remediation and forensic.\", \"recommendedActions_2\": \"3. Install and run Microsoft’s Malicious Software Removal Tool (see https://www.microsoft.com/en-us/download/malicious-software-removal-tool-details.aspx).\", \"recommendedActions_3\": \"4. Run Microsoft’s Autoruns utility and try to identify unknown applications that are configured to run at login (see https://technet.microsoft.com/en-us/sysinternals/bb963902.aspx).\", \"recommendedActions_4\": \"5. Run Process Explorer and try to identify unknown running processes (see https://technet.microsoft.com/en-us/sysinternals/bb896653.aspx).\", \"severity\": \"medium\", \"sourceMaterials_0\": \"https://portal.azure.com/#blade/Microsoft_Azure_Security/AlertBlade/alertId/2518254730385772806_da637123660281149084_-953649836:JGqJp4SlSroeE_6c3bZL6R6oWUal2lFJRO3d6N8jgyk=:WS44c473f9-e9bf-4c71-b40f-3cfd549c34df/subscriptionId/083de1fb-cd2d-4b7c-895a-2b5af1d091e8/resourceGroup/eastUS/referencedFrom/alertDeepLink/location/westeurope\", \"sourceMaterials_1\": \"https://securitycenter.windows.com/alert/da637123660281149084_-953649836\", \"status\": \"newAlert\", \"title\": \"Suspected credential theft activity\", \"vendorInformation_provider\": \"ASC\", \"vendorInformation_subProvider\": \"MDATP\", \"vendorInformation_vendor\": \"Microsoft\", \"cloudAppStates\": [], \"fileStates_0_name\": \"mimikatz.exe\", \"fileStates_0_path\": \"C:\\tools\\mimikatz-master\\lib\\x64\\mimikatz.exe\", \"fileStates_0_fileHash_hashType\": \"sha256\", \"fileStates_0_fileHash_hashValue\": \"bf1a1daac21d3807924d0d3d13282bc020a6e1d9c634963667ec5e746c409bde\", \"fileStates_0_sha256\": \"bf1a1daac21d3807924d0d3d13282bc020a6e1d9c634963667ec5e746c409bde\", \"hostStates_0_netBiosName\": \"winsrv-target\", \"historyStates\": [], \"malwareStates\": [], \"networkConnections\": [], \"processes\": [], \"registryKeyStates\": [], \"triggers\": [], \"userStates_0_accountName\": \"testadmin\", \"userStates_0_domainName\": \"winsrv-target\", \"userStates_0_emailRole\": \"unknown\", \"userStates_0_userPrincipalName\": \"testadmin@winsrv-target\", \"vulnerabilityStates\": [], \"event_count\": \"1\"}]"`
+`translate azure_log_analytics results "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"azure_log_analytics\",\"identity_class\":\"events\"}" "[{\"id\": \"2518254730385772806_da637123660281149084_-953649836:4wVg68RS3EYNc3Qb7xJUNrYw9KEUBA1wZ3IVwRA0hmg=:WS44c473f9-e9bf-4c71-b40f-3cfd549c34df\", \"azureTenantId\": \"b73e5ba8-34d5-495a-9901-06bdb84cf13e\", \"azureSubscriptionId\": \"083de1fb-cd2d-4b7c-895a-2b5af1d091e8\", \"tags\": [], \"category\": \"Suspected credential theft activity\", \"comments\": [], \"createdDateTime\": \"2019-12-20T07:45:03.1726913Z\", \"description\": \"This program exhibits suspect characteristics potentially associated with credential theft.  Once obtained, these credentials are often used in lateral movement activities to infiltrate other machines and servers in the network.\", \"detectionIds\": [], \"eventDateTime\": \"2019-12-20T07:42:41.4227193Z\", \"lastModifiedDateTime\": \"2019-12-20T07:45:06.1246819Z\", \"recommendedActions_0\": \"1. Make sure the machine is completely updated and all your software has the latest patch.\", \"recommendedActions_1\": \"2. Contact your incident response team. NOTE: If you don’t have an incident response team, contact Microsoft Support for architectural remediation and forensic.\", \"recommendedActions_2\": \"3. Install and run Microsoft’s Malicious Software Removal Tool (see https://www.microsoft.com/en-us/download/malicious-software-removal-tool-details.aspx).\", \"recommendedActions_3\": \"4. Run Microsoft’s Autoruns utility and try to identify unknown applications that are configured to run at login (see https://technet.microsoft.com/en-us/sysinternals/bb963902.aspx).\", \"recommendedActions_4\": \"5. Run Process Explorer and try to identify unknown running processes (see https://technet.microsoft.com/en-us/sysinternals/bb896653.aspx).\", \"severity\": \"medium\", \"sourceMaterials_0\": \"https://portal.azure.com/#blade/Microsoft_Azure_Security/AlertBlade/alertId/2518254730385772806_da637123660281149084_-953649836:4wVg68RS3EYNc3Qb7xJUNrYw9KEUBA1wZ3IVwRA0hmg=:WS44c473f9-e9bf-4c71-b40f-3cfd549c34df/subscriptionId/083de1fb-cd2d-4b7c-895a-2b5af1d091e8/resourceGroup/eastUS/referencedFrom/alertDeepLink/location/westeurope\", \"sourceMaterials_1\": \"https://securitycenter.windows.com/alert/da637123660281149084_-953649836\", \"status\": \"newAlert\", \"title\": \"Suspected credential theft activity\", \"vendorInformation_provider\": \"ASC\", \"vendorInformation_subProvider\": \"MDATP\", \"vendorInformation_vendor\": \"Microsoft\", \"cloudAppStates\": [], \"fileStates_0_name\": \"cmd.exe\", \"fileStates_0_path\": \"C:\\Windows\\System32\\cmd.exe\", \"fileStates_0_fileHash_hashType\": \"sha256\", \"fileStates_0_fileHash_hashValue\": \"6f88fb88ffb0f1d5465c2826e5b4f523598b1b8378377c8378ffebc171bad18b\", \"fileStates_0_sha256\": \"6f88fb88ffb0f1d5465c2826e5b4f523598b1b8378377c8378ffebc171bad18b\", \"hostStates_0_netBiosName\": \"winsrv-target\", \"historyStates\": [], \"malwareStates\": [], \"networkConnections\": [], \"processes\": [], \"registryKeyStates\": [], \"triggers\": [], \"userStates_0_accountName\": \"testadmin\", \"userStates_0_domainName\": \"winsrv-target\", \"userStates_0_emailRole\": \"unknown\", \"userStates_0_userPrincipalName\": \"testadmin@winsrv-target\", \"vulnerabilityStates\": [], \"event_count\": \"1\"}, {\"id\": \"2518254730385772806_da637123660281149084_-953649836:JGqJp4SlSroeE_6c3bZL6R6oWUal2lFJRO3d6N8jgyk=:WS44c473f9-e9bf-4c71-b40f-3cfd549c34df\", \"azureTenantId\": \"b73e5ba8-34d5-495a-9901-06bdb84cf13e\", \"azureSubscriptionId\": \"083de1fb-cd2d-4b7c-895a-2b5af1d091e8\", \"tags\": [], \"category\": \"Suspected credential theft activity\", \"comments\": [], \"createdDateTime\": \"2019-12-20T07:45:03.5008384Z\", \"description\": \"This program exhibits suspect characteristics potentially associated with credential theft.  Once obtained, these credentials are often used in lateral movement activities to infiltrate other machines and servers in the network.\", \"detectionIds\": [], \"eventDateTime\": \"2019-12-20T07:42:41.4227193Z\", \"lastModifiedDateTime\": \"2019-12-20T07:45:06.0810972Z\", \"recommendedActions_0\": \"1. Make sure the machine is completely updated and all your software has the latest patch.\", \"recommendedActions_1\": \"2. Contact your incident response team. NOTE: If you don’t have an incident response team, contact Microsoft Support for architectural remediation and forensic.\", \"recommendedActions_2\": \"3. Install and run Microsoft’s Malicious Software Removal Tool (see https://www.microsoft.com/en-us/download/malicious-software-removal-tool-details.aspx).\", \"recommendedActions_3\": \"4. Run Microsoft’s Autoruns utility and try to identify unknown applications that are configured to run at login (see https://technet.microsoft.com/en-us/sysinternals/bb963902.aspx).\", \"recommendedActions_4\": \"5. Run Process Explorer and try to identify unknown running processes (see https://technet.microsoft.com/en-us/sysinternals/bb896653.aspx).\", \"severity\": \"medium\", \"sourceMaterials_0\": \"https://portal.azure.com/#blade/Microsoft_Azure_Security/AlertBlade/alertId/2518254730385772806_da637123660281149084_-953649836:JGqJp4SlSroeE_6c3bZL6R6oWUal2lFJRO3d6N8jgyk=:WS44c473f9-e9bf-4c71-b40f-3cfd549c34df/subscriptionId/083de1fb-cd2d-4b7c-895a-2b5af1d091e8/resourceGroup/eastUS/referencedFrom/alertDeepLink/location/westeurope\", \"sourceMaterials_1\": \"https://securitycenter.windows.com/alert/da637123660281149084_-953649836\", \"status\": \"newAlert\", \"title\": \"Suspected credential theft activity\", \"vendorInformation_provider\": \"ASC\", \"vendorInformation_subProvider\": \"MDATP\", \"vendorInformation_vendor\": \"Microsoft\", \"cloudAppStates\": [], \"fileStates_0_name\": \"mimikatz.exe\", \"fileStates_0_path\": \"C:\\tools\\mimikatz-master\\lib\\x64\\mimikatz.exe\", \"fileStates_0_fileHash_hashType\": \"sha256\", \"fileStates_0_fileHash_hashValue\": \"bf1a1daac21d3807924d0d3d13282bc020a6e1d9c634963667ec5e746c409bde\", \"fileStates_0_sha256\": \"bf1a1daac21d3807924d0d3d13282bc020a6e1d9c634963667ec5e746c409bde\", \"hostStates_0_netBiosName\": \"winsrv-target\", \"historyStates\": [], \"malwareStates\": [], \"networkConnections\": [], \"processes\": [], \"registryKeyStates\": [], \"triggers\": [], \"userStates_0_accountName\": \"testadmin\", \"userStates_0_domainName\": \"winsrv-target\", \"userStates_0_emailRole\": \"unknown\", \"userStates_0_userPrincipalName\": \"testadmin@winsrv-target\", \"vulnerabilityStates\": [], \"event_count\": \"1\"}]"`
 
 Will return the following STIX observable:
 
@@ -236,7 +266,7 @@ Will return the following STIX observable:
         {
             "type": "identity",
             "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "name": "azure_sentinel",
+            "name": "azure_log_analytics",
             "identity_class": "events"
         },
         {

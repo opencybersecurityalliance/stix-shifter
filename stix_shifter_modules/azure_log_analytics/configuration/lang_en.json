@@ -23,27 +23,21 @@
     "workpaceId": {
       "label": "Log Analytics Workspace ID",
       "description": "The workspace Id of the Log Analytics. Required when using Log Analytics API. Ignore if using Graph Security."
-    },
-    "options": {
-      "api": {
-        "label": "Query API",
-        "description": "Specify the Azure Sentinel query API to retrieve events and alerts.Please specify from these two supported api: Log Analytics and Graph Security"
-      }
     }
   },
   "configuration": {
     "auth": {
       "tenant": {
-        "label": "Tenant",
-        "description": "Tenant ID of Azure Active directory Application with access to the Microsoft Graph API"
+        "label": "Tenant ID",
+        "description": "Tenant ID of Azure Active directory Application with access to the Log Analytics Workspace"
       },
       "clientId": {
         "label": "Client Id",
-        "description": "Client ID of Azure Active directory Application with access to the Microsoft Graph API"
+        "description": "Client ID of Azure Active directory Application with access to the Log Analytics Workspace"
       },
       "clientSecret": {
         "label": "Client Secret",
-        "description": "Client Secret of Azure Active directory Application with access to the Microsoft Graph API"
+        "description": "Client Secret of Azure Active directory Application with access to the Log Analytics Workspace"
       }
     }
   }

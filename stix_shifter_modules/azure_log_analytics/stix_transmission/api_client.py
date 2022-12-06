@@ -1,6 +1,7 @@
 import regex
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from azure.monitor.query import LogsQueryClient
+from azure.identity import ClientSecretCredential
 import json
 
 
@@ -12,15 +13,18 @@ class APIClient:
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
         headers = dict()
-        auth = configuration.get('auth')
-        workspace_id = connection.get('workspaceId')
+        self.workspace_id = connection.get('workspaceId')
         self.host = connection.get('host')
         self.timeout = connection['options'].get('timeout')
-        self.endpoint = 'v1/workspaces/{workspace_id}/query'.format(workspace_id=workspace_id)
+        self.endpoint = 'v1/workspaces/{workspace_id}/query'.format(workspace_id=self.workspace_id)
 
-        if auth:
-            if 'access_token' in auth:
-                headers['Authorization'] = "Bearer " + auth['access_token']
+        self.credential = ClientSecretCredential(tenant_id=configuration["auth"]["tenant"],
+                                                 client_id=configuration["auth"]["clientId"],
+                                                 client_secret=configuration["auth"]["clientSecret"])
+        
+        self.access_token = self.credential.get_token("https://{host}/.default".format(host=self.host))
+
+        headers['Authorization'] = "Bearer " + self.access_token.token
 
         self.client = RestApiClient(self.host,
                                     connection.get('port', None),
@@ -33,15 +37,15 @@ class APIClient:
         """Ping the endpoint."""
         return self.client.call_api(self.endpoint, 'GET', timeout=self.timeout)
 
-    def run_search(self, credential, workspace_id, query_expression, start, stop, length):
+    def run_search(self, query_expression, start, stop, length):
         """get the response from azure_sentinel endpoints
         :param query_expression: str, search_id
         :param length: int,length value
         :return: response, json object"""
         try:
-            client = LogsQueryClient(credential)
+            client = LogsQueryClient(self.credential)
             response = client.query_workspace(
-                workspace_id=workspace_id,
+                workspace_id=self.workspace_id,
                 query=query_expression,
                 timespan=(start, stop)
             )
@@ -50,3 +54,5 @@ class APIClient:
             pattern = r'\{(?:[^{}]|(?R))*\}'
             x = regex.findall(pattern, e.message)
             return {'success': False, "error": json.loads(x[0])}
+
+    

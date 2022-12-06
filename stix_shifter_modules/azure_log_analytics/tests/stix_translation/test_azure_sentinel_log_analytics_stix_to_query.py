@@ -4,7 +4,7 @@ import json
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.utils.error_response import ErrorCode
 
-MODULE = "azure_sentinel_log_analytics"
+MODULE = "azure_log_analytics"
 translation = stix_translation.StixTranslation()
 
 
