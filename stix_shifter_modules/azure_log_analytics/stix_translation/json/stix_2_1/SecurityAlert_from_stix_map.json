@@ -31,7 +31,7 @@
             ]
         }
     },
-    "x-azure-security-alert": {
+    "x-msazure-sentinel-alert": {
         "fields": {
             "tenant_id": [
                 "TenantId"

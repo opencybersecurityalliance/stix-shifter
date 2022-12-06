@@ -42,7 +42,7 @@
             ]
         }
     },
-    "x-azure-security-incident": {
+    "x-msazure-sentinel-incident": {
         "fields": {
             "incident_name": [
                 "IncidentName"

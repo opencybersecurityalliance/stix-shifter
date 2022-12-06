@@ -124,7 +124,7 @@
             ]
         }
     },
-    "x-azure-security-event": {
+    "x-msazure-sentinel-event": {
         "fields": {
             "title": [
                 "Title"

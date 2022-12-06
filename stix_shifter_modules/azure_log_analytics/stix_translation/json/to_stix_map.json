@@ -9,7 +9,7 @@
             "object": "finding"
         },
         {
-            "key": "x-msazure-sentinel-event.alert_type",
+            "key": "x-azure-security-event.alert_type",
             "object": "msevent"
         }
     ],
@@ -19,7 +19,7 @@
             "object": "finding"
         },
         {
-            "key": "x-msazure-sentinel-incident.incident_name",
+            "key": "x-azure-security-incident.incident_name",
             "object": "incident"
         }
     ],
@@ -212,101 +212,101 @@
         "object": "user-account"
     },
     "TenantId": {
-        "key": "x-msazure-sentinel-alert.tenant_id",
+        "key": "x-azure-security-alert.tenant_id",
         "object": "alert"
     },
     "WorkspaceSubscriptionId": {
-        "key": "x-msazure-sentinel-alert.subscription_id",
+        "key": "x-azure-security-alert.subscription_id",
         "object": "alert"
     },
     "_ResourceId": {
-        "key": "x-msazure-sentinel-alert.resourceId",
+        "key": "x-azure-security-alert.resourceId",
         "object": "alert"
     },
     "AlertSeverity": {
-        "key": "x-msazure-sentinel-alert.alert_severity",
+        "key": "x-azure-security-alert.alert_severity",
         "object": "alert"
     },
     "Description": [
         {
-            "key": "x-msazure-sentinel-alert.description",
+            "key": "x-azure-security-alert.description",
             "object": "alert"
         },
         {
-            "key": "x-msazure-sentinel-event.description",
+            "key": "x-azure-security-event.description",
             "object": "msevent"
         }
     ],
     "ProductName": {
-        "key": "x-msazure-sentinel-alert.product_name",
+        "key": "x-azure-security-alert.product_name",
         "object": "alert"
     },
     "VendorName": {
-        "key": "x-msazure-sentinel-alert.vendor_name",
+        "key": "x-azure-security-alert.vendor_name",
         "object": "alert"
     },
     "SystemAlertId": {
-        "key": "x-msazure-sentinel-alert.cloudAppStates.system_alertid",
+        "key": "x-azure-security-alert.cloudAppStates.system_alertid",
         "object": "alert"
     },
     "Status": {
-        "key": "x-msazure-sentinel-alert.status",
+        "key": "x-azure-security-alert.status",
         "object": "alert"
     },
     "ExtentedProperties": {
-        "key": "x-msazure-sentinel-alert.extented_properties",
+        "key": "x-azure-security-alert.extented_properties",
         "object": "alert"
     },
     "ConfidenceLevel": {
-        "key": "x-msazure-sentinel-alert.confidence_level",
+        "key": "x-azure-security-alert.confidence_level",
         "object": "alert"
     },
     "Entities": {
-        "key": "x-msazure-sentinel-alert.entities",
+        "key": "x-azure-security-alert.entities",
         "object": "alert"
     },
     "DisplayName": {
-        "key": "x-msazure-sentinel-alert.display_name",
+        "key": "x-azure-security-alert.display_name",
         "object": "alert"
     },
     "WorkspaceResourceGroup": {
-        "key": "x-msazure-sentinel-alert.workspace_resource_group",
+        "key": "x-azure-security-alert.workspace_resource_group",
         "object": "alert"
     },
     "CompromisedEntity": {
-        "key": "x-msazure-sentinel-alert.compromised_entity",
+        "key": "x-azure-security-alert.compromised_entity",
         "object": "alert"
     },
     "eventId": {
-        "key": "x-msazure-sentinel-event.event_id",
+        "key": "x-azure-security-event.event_id",
         "object": "msevent"
     },
     "Title": {
-        "key": "x-msazure-sentinel-event.title",
+        "key": "x-azure-security-event.title",
         "object": "msevent"
     },
     "DeviceDescription": {
-        "key": "x-msazure-sentinel-event.text",
+        "key": "x-azure-security-event.text",
         "object": "msevent"
     },
     "DeviceId": {
-        "key": "x-msazure-sentinel-event.device_name",
+        "key": "x-azure-security-event.device_name",
         "object": "msevent"
     },
     "SourceSystem": {
-        "key": "x-msazure-sentinel-event.source",
+        "key": "x-azure-security-event.source",
         "object": "msevent"
     },
     "Activity": {
-        "key": "x-msazure-sentinel-event.activity",
+        "key": "x-azure-security-event.activity",
         "object": "msevent"
     },
     "Computer": {
-        "key": "x-msazure-sentinel-event.computer",
+        "key": "x-azure-security-event.computer",
         "object": "msevent"
     },
     "EventData": {
-        "key": "x-msazure-sentinel-event.event_data",
+        "key": "x-azure-security-event.event_data",
         "object": "msevent"
     },
     "LogonProcessName": {
@@ -314,55 +314,55 @@
         "object": "process"
     },
     "ServiceName": {
-        "key": "x-msazure-sentinel-event.service_name",
+        "key": "x-azure-security-event.service_name",
         "object": "msevent"
     },
     "Task": {
-        "key": "x-msazure-sentinel-event.task",
+        "key": "x-azure-security-event.task",
         "object": "msevent"
     },
     "UserParameter": {
-        "key": "x-msazure-sentinel-event.user_parameter",
+        "key": "x-azure-security-event.user_parameter",
         "object": "msevent"
     },
     "MemberName": {
-        "key": "x-msazure-sentinel-event.member_name",
+        "key": "x-azure-security-event.member_name",
         "object": "msevent"
     },
     "Requester": {
-        "key": "x-msazure-sentinel-event.requester",
+        "key": "x-azure-security-event.requester",
         "object": "msevent"
     },
     "Severity": {
-        "key": "x-msazure-sentinel-incident.severity",
+        "key": "x-azure-security-incident.severity",
         "object": "incident"
     },
     "Owner": {
-        "key": "x-msazure-sentinel-incident.owner",
+        "key": "x-azure-security-incident.owner",
         "object": "incident"
     },
     "AdditionalData": {
-        "key": "x-msazure-sentinel-incident.additional_data",
+        "key": "x-azure-security-incident.additional_data",
         "object": "incident"
     },
     "AlertIds": {
-        "key": "x-msazure-sentinel-incident.alertids",
+        "key": "x-azure-security-incident.alertids",
         "object": "incident"
     },
     "Comments": {
-        "key": "x-msazure-sentinel-incident.comments",
+        "key": "x-azure-security-incident.comments",
         "object": "incident"
     },
     "Description__incident": {
-        "key": "x-msazure-sentinel-incident.description",
+        "key": "x-azure-security-incident.description",
         "object": "incident"
     },
     "Labels": {
-        "key": "x-msazure-sentinel-incident.labels",
+        "key": "x-azure-security-incident.labels",
         "object": "incident"
     },
     "ModifiedBy": {
-        "key": "x-msazure-sentinel-incident.modified_by",
+        "key": "x-azure-security-incident.modified_by",
         "object": "incident"
     }
 }
