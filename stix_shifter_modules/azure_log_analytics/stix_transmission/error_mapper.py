@@ -30,7 +30,11 @@ ERROR_MAPPING = {
     "quotaLimitReached": ErrorCode.TRANSMISSION_SEARCH_DOES_NOT_EXISTS,
     "unauthenticated": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
     "ResourceNotFound": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
-    }
+    # Azure SDK error
+    "BadArgumentError": ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR,
+    "WorkspaceNotFoundError": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
+    "PathNotFoundError": ErrorCode.TRANSMISSION_INVALID_PARAMETER
+}
 
 
 class ErrorMapper:
@@ -44,12 +48,12 @@ class ErrorMapper:
          :param json_data: dict, error response of api_call
          :param return_obj: dict, returns error and error code"""
         error_type = ''
-        
+
         if isinstance(json_data, tuple):
             error_type = 'HTTPSConnectionError'
         else:
             try:
-                error_type = json_data['error']['code']
+                error_type = json_data['code']
             except Exception:
                 error_type = json_data['error']
 

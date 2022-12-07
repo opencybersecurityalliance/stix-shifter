@@ -1,8 +1,8 @@
-import regex
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from azure.monitor.query import LogsQueryClient
 from azure.identity import ClientSecretCredential
-import json
+from azure.core.exceptions import HttpResponseError
+import logging
 
 
 class APIClient:
@@ -17,6 +17,8 @@ class APIClient:
         self.host = connection.get('host')
         self.timeout = connection['options'].get('timeout')
         self.endpoint = 'v1/workspaces/{workspace_id}/query'.format(workspace_id=self.workspace_id)
+        logger = logging.getLogger("azure.core.pipeline.policies.http_logging_policy")
+        logger.setLevel(logging.WARNING)
 
         self.credential = ClientSecretCredential(tenant_id=configuration["auth"]["tenant"],
                                                  client_id=configuration["auth"]["clientId"],
@@ -50,9 +52,9 @@ class APIClient:
                 timespan=(start, stop)
             )
             return {'success': True, "response": response}
+        except HttpResponseError as er:
+            return {'success': False, "error": er.error}
         except Exception as e:
-            pattern = r'\{(?:[^{}]|(?R))*\}'
-            x = regex.findall(pattern, e.message)
-            return {'success': False, "error": json.loads(x[0])}
+            return {'success': False, "error": e}
 
     

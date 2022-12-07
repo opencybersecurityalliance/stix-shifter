@@ -24,9 +24,14 @@ class Connector(BaseSyncConnector):
         return_obj = dict()
         response = self.api_client.ping_box()
         response_code = response.code
-        response_dict = json.loads(response.read())
+
         if 200 <= response_code < 300:
+            response_dict = json.loads(response.read())
             return_obj['success'] = True
+        if response_code == 404:
+            response_message = json.loads(response.bytes)
+            response_dict = {"error": response_message['error']['message'], "code": response_message['error']['code']}
+            ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
         else:
             ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
         return return_obj
@@ -71,6 +76,6 @@ class Connector(BaseSyncConnector):
                 return_obj['data'] = return_obj['data'][offset:total_record]
 
         else:
-            response_dict = {"error": response["error"]}
+            response_dict = {"error": response["error"], "code": response["error"].code}
             ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
         return return_obj
