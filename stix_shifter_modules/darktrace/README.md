@@ -864,3 +864,4 @@ ping
 
 ### Observations
 -  Darktrace does not support >= and <=, so the same is achieved by < and > operators by increasing and decreasing the corresponding values.
+-  Query will return those records in the specified timeframe which satisfy the applied search filters. If there are no records in the given timeframe, search filter won't be applied and "Invalid parameter" error will be returned.

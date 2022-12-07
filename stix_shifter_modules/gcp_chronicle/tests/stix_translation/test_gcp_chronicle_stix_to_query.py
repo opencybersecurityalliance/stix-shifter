@@ -490,14 +490,6 @@ class TestQueryTranslator(unittest.TestCase):
         assert ErrorCode.TRANSLATION_NOTIMPLEMENTED_MODE.value == result['code']
         assert 'Invalid email address' in result['error']
 
-    def test_future_value_for_timestamp_field(self):
-        stix_pattern = "[file:size >10]START t'2022-04-28T00:00:00.000000Z' STOP " \
-                       "t'2022-10-27T00:00:00.000000Z' "
-        result = translation.translate('gcp_chronicle', 'query', '{}', stix_pattern)
-        assert result['success'] is False
-        assert "invalid_parameter" == result['code']
-        assert ' Start/Stop time should not be in the future UTC timestamp' in result['error']
-
     def test_invalid_value_for_timestamp_field(self):
         stix_pattern = "[file:modified >= '2022-04-0111:00:00.000Z']"
         result = translation.translate('gcp_chronicle', 'query', '{}', stix_pattern)

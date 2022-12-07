@@ -84,7 +84,7 @@ else
   IMAGE_LOCAL_URL=${IMAGE_URL}/${FILE_PREFIX}${PROJECT_NAME}:${TAG}
 fi
 echo "Building image..."
-docker build --no-cache -t ${IMAGE_LOCAL_URL} --build-arg APP=${FILENAME%.whl} --build-arg VERSION=${PROJECT_VERSION} .
+docker build --no-cache -t ${IMAGE_LOCAL_URL} --build-arg APP=${FILENAME%.whl} --build-arg VERSION=${PROJECT_VERSION} . --platform linux/amd64
 
 
 echo "Done!"
