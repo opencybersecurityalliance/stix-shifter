@@ -1,518 +1,892 @@
 {
-  "vpcflow": {
-  "sourceaddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "ipv6-addr.value",
-      "object": "src_ip"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
-    },
-    {
-      "key": "x-ibm-finding.src_ip_ref",
-      "object": "ibm_finding",
-      "references": "src_ip"
-    },
-    {
-      "key": "ipv4-addr.x_aws_interface_id",
-      "object": "src_ip",
-      "ds_key": "interfaceid",
-      "cybox": false
-    },
-    {
-      "key": "ipv6-addr.x_aws_interface_id",
-      "object": "src_ip",
-      "ds_key": "interfaceid",
-      "cybox": false
-    }
-  ],
-  "destinationaddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_ip"
-    },
-    {
-      "key": "ipv6-addr.value",
-      "object": "dst_ip"
-    },
-    {
-      "key": "x-ibm-finding.dst_ip_ref",
-      "object": "ibm_finding",
-      "references": "dst_ip"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
-    }
-  ],
-  "sourceport": [
-    {
-      "key": "network-traffic.src_port",
-      "object": "nt",
-      "transformer": "ToInteger"
-    }
-  ],
-  "destinationport": [
-    {
-      "key": "network-traffic.dst_port",
-      "object": "nt",
-      "transformer": "ToInteger"
-    }
-  ],
-  "protocol": [
-    {
-      "key": "network-traffic.protocols",
-      "object": "nt",
-      "transformer": "ToLowercaseArray"
-    }
-  ],
-  "starttime": [
-    {
-      "key": "network-traffic.start",
-      "object": "nt",
-      "transformer": "EpochSecondsToTimestamp"
-    },
-    {
-      "key": "x-ibm-finding.start",
-      "object": "ibm_finding",
-      "transformer": "EpochSecondsToTimestamp"
-    },
+  "_time": [
     {
       "key": "first_observed",
       "cybox": false,
-      "transformer": "EpochSecondsToTimestamp"
-    }
-  ],
-  "endtime": [
-    {
-      "key": "network-traffic.end",
-      "object": "nt",
-      "transformer": "EpochSecondsToTimestamp"
-    },
-    {
-    "key": "x-ibm-finding.end",
-    "object": "ibm_finding",
-    "transformer": "EpochSecondsToTimestamp"
+      "transformer": "EpochToTimestamp"
     },
     {
       "key": "last_observed",
       "cybox": false,
-      "transformer": "EpochSecondsToTimestamp"
-    }
-  ],
-  "account": [
+      "transformer": "EpochToTimestamp"
+    },
     {
-      "key": "x-aws-details.account_id",
-      "object": "accountid"
+      "key": "x-ibm-finding.time_observed",
+      "object": "ibm_finding",
+      "transformer": "EpochToTimestamp"
     }
   ],
-  "action":{
-    "key": "x-ibm-finding.finding_type",
-    "object": "ibm_finding"
-    },
-   "name": {
-    "key": "x-ibm-finding.name",
-    "object": "ibm_finding"
-   }
+  "activity": {
+    "key": "x-oca-event.action",
+    "object": "x_oca_event"
   },
-  "guardduty": {
-  "resource_instancedetails_networkinterfaces_0_privateipaddress":[
-      {
-        "key": "ipv4-addr.value",
-        "object": "nc_private_ip1"
-      },
-      {
-        "key": "network-traffic.src_ref",
-        "object": "nc_nt",
-        "references": "nc_private_ip1"
-      },
-      {
-        "key": "domain-name.resolves_to_refs",
-        "object": "private_dns_name",
-        "references": ["nc_private_ip1"]
-      },
-      {
-        "key": "x-ibm-finding.src_ip_ref",
-        "object": "ibm_finding",
-        "references": "nc_private_ip1"
-      },
-      {
-        "key": "ipv4-addr.x_aws_interface_id",
-        "object": "nc_private_ip1",
-        "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid",
-        "cybox": false
-      },
-      {
-        "key": "ipv4-addr.x_aws_ip_type",
-        "object": "nc_private_ip1",
-        "value": "private",
-        "cybox": false
-      }
-    ],
-    "resource_instancedetails_networkinterfaces_0_ipv6addresses_0": [
-      {
-        "key": "ipv6-addr.value",
-        "object": "nc_ipv6_ip"
-      },
-      {
-        "key": "ipv6-addr.x_aws_interface_id",
-        "object": "nc_ipv6_ip",
-        "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid",
-        "cybox": false
-      }
-    ],
-    "resource_instancedetails_networkinterfaces_0_publicip": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "nc_public_ip"
-        },
-        {
-          "key": "domain-name.resolves_to_refs",
-          "object": "nc_public_name",
-          "references": ["nc_public_ip"]
-        },
-        {
-          "key": "ipv4-addr.x_aws_interface_id",
-          "object": "nc_public_ip",
-          "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid",
-          "cybox": false
-        },
-        {
-          "key": "ipv4-addr.x_aws_ip_type",
-          "object": "nc_public_ip",
-          "value": "public",
-          "cybox": false
-        }
-    ],
-    "resource_instancedetails_networkinterfaces_0_privatednsname": [
-        {
-          "key": "domain-name.value",
-          "object": "private_dns_name"
-        }
-    ],
-    "resource_instancedetails_networkinterfaces_0_publicdnsname": [
-        {
-          "key": "domain-name.value",
-          "object": "nc_public_name"
-        }
-    ],
-    "resource_instancedetails_networkinterfaces_1_privateipaddress": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "nc_private_ip2"
-        },
-        {
-          "key": "domain-name.resolves_to_refs",
-          "object": "nc_private_name2",
-          "references": ["nc_private_ip2"]
-        },
-        {
-          "key": "ipv4-addr.x_aws_interface_id",
-          "object": "nc_private_ip2",
-          "ds_key": "resource_instancedetails_networkinterfaces_1_networkinterfaceid",
-          "cybox": false
-        },
-        {
-          "key": "ipv4-addr.x_aws_ip_type",
-          "object": "nc_private_ip2",
-          "value": "private",
-          "cybox": false
-        }
-    ],
-     "resource_instancedetails_networkinterfaces_1_privatednsname": [
-        {
-          "key": "domain-name.value",
-          "object": "nc_private_name2"
-        }
-     ],
-    "service_action_networkconnectionaction_remoteipdetails_ipaddressv4": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "nc_remote_ip"
-        },
-        {
-          "key": "network-traffic.dst_ref",
-          "object": "nc_nt",
-          "references": "nc_remote_ip"
-        },
-        {
-        "key": "x-ibm-finding.dst_ip_ref",
-        "object": "ibm_finding",
-        "references": "nc_remote_ip"
-        },
-        {
-        "key": "x-ibm-finding.dst_geolocation",
-        "object": "ibm_finding",
-        "ds_key": "service_action_networkconnectionaction_remoteipdetails_country_countryname",
-        "cybox": false
-        },
-        {
-          "key": "ipv4-addr.x_aws_remote_city_name",
-          "object": "nc_remote_ip",
-          "ds_key": "service_action_networkconnectionaction_remoteipdetails_city_cityname",
-          "cybox": false
-        },
-        {
-          "key": "ipv4-addr.x_aws_remote_country_name",
-          "object": "nc_remote_ip",
-          "ds_key": "service_action_networkconnectionaction_remoteipdetails_country_countryname",
-          "cybox": false
-        }
-      ],
-    "service_action_networkconnectionaction_localportdetails_port": [
-        {
-          "key": "network-traffic.src_port",
-          "object": "nc_nt",
-          "transformer": "ToInteger"
-        }
-      ],
-    "service_action_networkconnectionaction_remoteportdetails_port": [
-        {
-          "key": "network-traffic.dst_port",
-          "object": "nc_nt",
-          "transformer": "ToInteger"
-        }
-      ],
-    "service_action_networkconnectionaction_protocol": [
-        {
-          "key": "network-traffic.protocols",
-          "object": "nc_nt",
-          "transformer": "ToLowercaseArray"
-        }
-      ],
-    "resource_instancedetails_networkinterfaces_0_subnetid": {
-        "key": "x-aws-vpc.subnet_id",
-        "object": "vpc"
-      },
-    "resource_instancedetails_networkinterfaces_0_vpcid": {
-        "key": "x-aws-vpc.vpc_id",
-        "object": "vpc"
-      },
-    "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupid": {
-        "key": "x-aws-vpc.security_group_id",
-        "object": "vpc"
-      },
-    "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupname":{
-        "key": "x-aws-vpc.security_group_name",
-        "object": "vpc"
-      },
-    "resource_instancedetails_imageid":{
-        "key": "x-aws-instance.image_id",
-        "object": "instance"
-      },
-    "resource_instancedetails_instanceid": {
-        "key": "x-aws-instance.instance_id",
-        "object": "instance"
-      },
-    "resource_instancedetails_availabilityzone": {
-        "key": "x-aws-instance.availability_zone",
-        "object": "instance"
-      },
-    "portprobe_resource_instancedetails_networkinterfaces_0_privateipaddress":[
-      {
-        "key": "ipv4-addr.value",
-        "object": "pp_private_ip1"
-      },
-      {
-        "key": "domain-name.resolves_to_refs",
-        "object": "private_dns_name",
-        "references": ["pp_private_ip1"]
-      },
-      {
-        "key": "x-ibm-finding.src_ip_ref",
-        "object": "ibm_finding",
-        "references": "pp_private_ip1"
-      },
-      {
-        "key": "ipv4-addr.x_aws_interface_id",
-        "object": "pp_private_ip1",
-        "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid",
-        "cybox": false
-      },
-      {
-        "key": "ipv4-addr.x_aws_ip_type",
-        "object": "pp_private_ip1",
-        "value": "private",
-        "cybox": false
-      }
-    ],
-      "service_action_portprobeaction_portprobedetails_0_remoteipdetails_ipaddressv4": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "pp_remote_ip"
-        },
-        {
-        "key": "x-ibm-finding.dst_ip_ref",
-        "object": "ibm_finding",
-        "references": "pp_remote_ip"
-        },
-        {
-        "key": "x-ibm-finding.dst_geolocation",
-        "object": "ibm_finding",
-        "ds_key": "service_action_portprobeaction_portprobedetails_0_remoteipdetails_country_countryname",
-        "cybox": false
-        },
-        {
-          "key": "ipv4-addr.x_aws_remote_city_name",
-          "object": "pp_remote_ip",
-          "ds_key": "service_action_portprobeaction_portprobedetails_0_remoteipdetails_city_cityname",
-          "cybox": false
-        },
-        {
-          "key": "ipv4-addr.x_aws_remote_country_name",
-          "object": "pp_remote_ip",
-          "ds_key": "service_action_portprobeaction_portprobedetails_0_remoteipdetails_country_countryname",
-          "cybox": false
-        }
-      ],
-      "service_action_portprobeaction_portprobedetails_0_localportdetails_port": [
-        {
-          "key": "x-ibm-finding.probe_port",
-          "object": "ibm_finding"
-        }
-      ],
-      "service_action_awsapicallaction_remoteipdetails_ipaddressv4": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "api_remote_ip"
-        },
-        {
-        "key": "x-ibm-finding.dst_ip_ref",
-        "object": "ibm_finding",
-        "references": "api_remote_ip"
-        },
-        {
-        "key": "x-ibm-finding.dst_geolocation",
-        "object": "ibm_finding",
-        "ds_key": "service_action_awsapicallaction_remoteipdetails_country_countryname",
-        "cybox": false
-        },
-        {
-          "key": "ipv4-addr.x_aws_remote_city_name",
-          "object": "api_remote_ip",
-          "ds_key": "service_action_awsapicallaction_remoteipdetails_city_cityname",
-          "cybox": false
-        },
-        {
-          "key": "ipv4-addr.x_aws_remote_country_name",
-          "object": "api_remote_ip",
-          "ds_key": "service_action_awsapicallaction_remoteipdetails_country_countryname",
-          "cybox": false
-        }
-      ],
-      "resource_accesskeydetails_principalid": {
-          "key": "user-account.user_id",
-          "object": "api_user"
-      },
-      "resource_accesskeydetails_username": {
-        "key": "user-account.account_login",
-        "object": "api_user"
-      },
-      "resource_accesskeydetails_accesskeyid": {
-        "key": "x-aws-api.access_key_id",
-        "object": "api_details"
-      },
-      "service_action_awsapicallaction_api": {
-        "key": "x-aws-api.api",
-        "object": "api_details"
-      },
-      "service_action_awsapicallaction_servicename": {
-        "key": "x-aws-api.service_name",
-        "object": "api_details"
-      },
-    "dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress":[
-      {
-        "key": "ipv4-addr.value",
-        "object": "dns_private_ip1"
-      },
-      {
-        "key": "domain-name.resolves_to_refs",
-        "object": "private_dns_name",
-        "references": ["dns_private_ip1"]
-      },
-      {
-        "key": "x-ibm-finding.src_ip_ref",
-        "object": "ibm_finding",
-        "references": "dns_private_ip1"
-      },
-      {
-        "key": "ipv4-addr.x_aws_interface_id",
-        "object": "dns_private_ip1",
-        "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid",
-        "cybox": false
-      },
-      {
-        "key": "ipv4-addr.x_aws_ip_type",
-        "object": "dns_private_ip1",
-        "value": "private",
-        "cybox": false
-      }
-    ],
-  "service_action_dnsrequestaction_domain": [
-        {
-          "key": "domain-name.value",
-          "object": "dns_domain_name"
-        }
-      ],
-  "accountid": {
-      "key": "x-aws-details.account_id",
-      "object": "aws_details"
-    },
-  "region": {
-    "key": "x-aws-details.region",
-    "object": "aws_details"
+  "activity_id": {
+    "key": "x-oca-event.code",
+    "object": "x_oca_event",
+    "transformer": "ToInteger"
   },
-  "severity": {
-      "key": "x-ibm-finding.severity",
+  "api": {
+    "operation": {
+      "key": "x-ocsf-cloud.operation",
+      "object": "ocsf_cloud_api"
+    },
+    "request": {
+      "flags": {
+        "key": "x-ocsf-cloud.request_flags",
+        "object": "ocsf_cloud_api",
+        "transformer": "ToLowercaseArray"
+      },
+      "uid": {
+        "key": "x-ocsf-cloud.request_uid",
+        "object": "ocsf_cloud_api"
+      }
+    },
+    "response": {
+      "code": {
+        "key": "x-ocsf-cloud.response_code",
+        "object": "ocsf_cloud_api",
+        "transformer": "ToInteger"
+      },
+      "error": {
+        "key": "x-ocsf-cloud.response_error",
+        "object": "ocsf_cloud_api"
+      },
+      "error_message": {
+        "key": "x-ocsf-cloud.response_error_message",
+        "object": "ocsf_cloud_api"
+      },
+      "flags": {
+        "key": "x-ocsf-cloud.response_flags",
+        "object": "ocsf_cloud_api",
+        "transformer": "ToLowercaseArray"
+      },
+      "message": {
+        "key": "x-ocsf-cloud.response_message",
+        "object": "ocsf_cloud_api"
+      }
+    },
+    "service": {
+      "labels": {
+        "key": "x-ocsf-cloud.service_labels",
+        "object": "ocsf_cloud_api",
+        "transformer": "ToLowercaseArray"
+      },
+      "name": {
+        "key": "x-ocsf-cloud.service_name",
+        "object": "ocsf_cloud_api"
+      },
+      "uid": {
+        "key": "x-ocsf-cloud.service_uid",
+        "object": "ocsf_cloud_api"
+      },
+      "version": {
+        "key": "x-ocsf-cloud.service_uid",
+        "object": "ocsf_cloud_api"
+      }
+    },
+    "version": {
+      "key": "x-ocsf-cloud.api_version",
+      "object": "ocsf_cloud_api"
+    }
+  },
+  "category_name": {
+    "key": "x-oca-event.category",
+    "object": "x_oca_event"
+  },
+  "category_uid": {
+    "key": "x-oca-event.code",
+    "object": "x_oca_event",
+    "transformer": "ToInteger"
+  },
+  "class_name": {
+    "key": "x-oca-event.module",
+    "object": "x_oca_event"
+  },
+  "class_uid": {
+    "key": "x-oca-event.extensions.x-cloud-api.class_uid",
+    "object": "x_oca_event",
+    "transformer": "ToInteger"
+  },
+  "cloud": {
+    "account_type": {
+      "key": "x-ocsf-cloud.account_type",
+      "object": "ocsf_cloud_api"
+    },
+    "account_type_id": {
+      "key": "x-ocsf-cloud.account_type_id",
+      "object": "ocsf_cloud_api",
+      "transformer": "ToInteger"
+    },
+    "account_uid": {
+      "key": "x-ocsf-cloud.account_uid",
+      "object": "ocsf_cloud_api"
+    },
+    "org_uid": {
+      "key": "x-ocsf-cloud.org_uid",
+      "object": "ocsf_cloud_api"
+    },
+    "project_uid": {
+      "key": "x-ocsf-cloud.project_uid",
+      "object": "ocsf_cloud_api"
+    },
+    "provider": {
+      "key": "x-ocsf-cloud.provider",
+      "object": "ocsf_cloud_api"
+    },
+    "region": {
+      "key": "x-ocsf-cloud.region",
+      "object": "ocsf_cloud_api"
+    },
+    "resource_uid": {
+      "key": "x-ocsf-cloud.resource_uid",
+      "object": "ocsf_cloud_api"
+    },
+    "zone": {
+      "key": "x-ocsf-cloud.zone",
+      "object": "ocsf_cloud_api"
+    }
+  },
+  "count": [
+    {
+      "key": "number_observed",
+      "cybox": false,
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "x-ibm-finding.event_count",
+      "transformer": "ToInteger",
       "object": "ibm_finding"
+    }
+  ],
+  "duration": {
+    "key": "x-oca-event.duration",
+    "object": "x_oca_event",
+    "transformer": "ToInteger"
+  },
+  "end_time": [
+    {
+      "key": "x-ibm-finding.end",
+      "object": "ibm_finding",
+      "transformer": "EpochToTimestamp"
     },
-  "title": {
+    {
+      "key": "last_observed",
+      "cybox": false,
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "enrichments": {
+    "data": {
+      "key": "x-ocsf-enrichments.data",
+      "object": "enrichments"
+    },
+    "name": {
+      "key": "x-ocsf-enrichments.name",
+      "object": "enrichments"
+    },
+    "provider": {
+      "key": "x-ocsf-enrichments.provider",
+      "object": "enrichments"
+    },
+    "type": {
+      "key": "x-ocsf-enrichments.type",
+      "object": "enrichments"
+    },
+    "value": {
+      "key": "x-ocsf-enrichments.value",
+      "object": "enrichments"
+    }
+  },
+  "http_request": {
+    "args": {
+      "key": "x-ocsf-http-request.value",
+      "object": "http_request"
+    },
+    "http_headers": {
+      "name": {
+        "key": "x-ocsf-http-request.http_headers_name",
+        "object": "ocsf_cloud_api"
+      },
+      "value": {
+        "key": "x-ocsf-http-request.http_headers_value",
+        "object": "http_request"
+      }
+    },
+    "http_method": {
+      "key": "x-ocsf-http-request.http_method",
+      "object": "http_request"
+    },
+    "prefix": {
+      "key": "x-ocsf-http-request.prefix",
+      "object": "http_request"
+    },
+    "referrer": {
+      "key": "x-ocsf-http-request.referrer",
+      "object": "http_request"
+    },
+    "uid": {
+      "key": "x-ocsf-http-request.uid",
+      "object": "http_request"
+    },
+    "url": {
+      "key": "url.value",
+      "object": "url"
+    },
+    "user_agent": {
+      "key": "x-ocsf-http-request.user_agent",
+      "object": "http_request"
+    },
+    "version": {
+      "key": "x-ocsf-http-request.version",
+      "object": "http_request"
+    },
+    "x_forwarded_for": {
+      "key": "x-ocsf-http-request.x_forwarded_for",
+      "object": "http_request"
+    }
+  },
+  "identity": {
+    "authorizations": {
+      "decision": {
+        "key": "x-ocsf-identity.authorizations.decision",
+        "object": "x-ocsf-identity"
+      },
+      "policy": {
+        "desc": {
+          "key": "x-ocsf-identity.authorizations.policy_desc",
+          "object": "x-ocsf-identity"
+        },
+        "group": {
+          "desc": {
+            "key": "x-ocsf-identity.authorizations.policy_group_desc",
+            "object": "x-ocsf-identity"
+          },
+          "name": {
+            "key": "x-ocsf-identity.authorizations.policy_group_namee",
+            "object": "x-ocsf-identity"
+          },
+          "privileges": {
+            "key": "x-ocsf-identity.authorizations.policy_group_privileges",
+            "object": "x-ocsf-identity"
+          },
+          "type": {
+            "key": "x-ocsf-identity.authorizations.policy_group_type",
+            "object": "x-ocsf-identity"
+          },
+          "uid": {
+            "key": "x-ocsf-identity.authorizations.policy_group_uid",
+            "object": "x-ocsf-identity"
+          }
+        },
+        "name": {
+          "key": "x-ocsf-identity.authorizations.name",
+          "object": "x-ocsf-identity"
+        },
+        "uid": {
+          "key": "x-ocsf-identity.authorizations.uid",
+          "object": "x-ocsf-identity"
+        },
+        "version": {
+          "key": "x-ocsf-identity.authorizations.version",
+          "object": "x-ocsf-identity"
+        }
+      }
+    },
+    "idp": {
+      "name": {
+        "key": "x-ocsf-identity.idp.name",
+        "object": "x-ocsf-identity"
+      },
+      "uid": {
+        "key": "x-ocsf-identity.idp.uid",
+        "object": "x-ocsf-identity"
+      }
+    },
+    "invoked_by": {
+      "key": "x-ocsf-identity.invoked_by",
+      "object": "x-ocsf-identity"
+    },
+    "message": {
+      "key": "x-ocsf-identity.message",
+      "object": "x-ocsf-identity"
+    },
+    "session": {
+      "created_time": {
+        "key": "x-ocsf-identity.session.created_time",
+        "object": "x-ocsf-identity"
+      },
+      "credential_uid": {
+        "key": "x-ocsf-identity.session.credential_uid",
+        "object": "x-ocsf-identity"
+      },
+      "expiration_time": {
+        "key": "x-ocsf-identity.session.expiration_time",
+        "object": "x-ocsf-identity"
+      },
+      "issuer": {
+        "key": "x-ocsf-identity.session.issuer",
+        "object": "x-ocsf-identity"
+      },
+      "mfa": {
+        "key": "x-ocsf-identity.session.mfa",
+        "object": "x-ocsf-identity"
+      },
+      "uid": {
+        "key": "x-ocsf-identity.session.uid",
+        "object": "x-ocsf-identity"
+      }
+    },
+    "user": {
+      "account_type": {
+        "key": "user-account.account_type",
+        "object": "user"
+      },
+      "account_type_id": {
+        "key": "user-account.extensions.aws-account-ext.account_type_id",
+        "object": "user",
+        "transformer": "ToInteger"
+      },
+      "account_uid": {
+        "key": "user-account.user_id",
+        "object": "user"
+      },
+      "credential_uid": {
+        "key": "user-account.extensions.aws-account-ext.credential_uid",
+        "object": "user"
+      },
+      "domain": {
+        "key": "user-account.extensions.aws-account-ext.domain",
+        "object": "user"
+      },
+      "email_addr": {
+        "key": "email-addr.value",
+        "object": "email_addr"
+      },
+      "groups": {
+        "desc": {
+          "key": "user-account.extensions.aws-account-ext.group_desc",
+          "object": "user"
+        },
+        "name": {
+          "key": "user-account.extensions.aws-account-ext.group_name",
+          "object": "user"
+        },
+        "privileges": {
+          "key": "user-account.extensions.aws-account-ext.group_privileges",
+          "object": "user"
+        },
+        "type": {
+          "key": "user-account.extensions.aws-account-ext.group_type",
+          "object": "user"
+        },
+        "uid": {
+          "key": "user-account.extensions.aws-account-ext.group_uid",
+          "object": "user"
+        }
+      },
+      "name": {
+        "key": "user-account.display_name",
+        "object": "user"
+      },
+      "org_uid": {
+        "key": "user-account.extensions.aws-account-ext.org_uid",
+        "object": "user"
+      },
+      "session_uid": {
+        "key": "user-account.extensions.aws-account-ext.session_uid",
+        "object": "user"
+      },
+      "session_uuid": {
+        "key": "user-account.extensions.aws-account-ext.session_uuid",
+        "object": "user"
+      },
+      "type": {
+        "key": "user-account.extensions.aws-account-ext.type",
+        "object": "user"
+      },
+      "type_id": {
+        "key": "user-account.extensions.aws-account-ext.type_id",
+        "object": "user",
+        "transformer": "ToInteger"
+      },
+      "uid": {
+        "key": "user-account.extensions.aws-account-ext.uid",
+        "object": "user"
+      },
+      "uuid": {
+        "key": "user-account.extensions.aws-account-ext.uuid",
+        "object": "user"
+      }
+    }
+  },
+  "message": {
+    "key": "x-ocsf-cloud.message",
+    "object": "ocsf_cloud_api"
+  },
+  "metadata": {
+    "correlation_uid": {
+      "key": "x-ocsf-metadata.correlation_uid",
+      "object": "metadata"
+    },
+    "labels": {
+      "key": "x-ocsf-metadata.labels",
+      "object": "metadata"
+    },
+    "logged_time": {
+      "key": "x-ocsf-metadata.logged_time",
+      "object": "metadata"
+    },
+    "modified_time": {
+      "key": "x-ocsf-metadata.modified_time",
+      "object": "metadata"
+    },
+    "processed_time": {
+      "key": "x-ocsf-metadata.processed_time",
+      "object": "metadata"
+    },
+    "product": {
+      "feature": {
+        "name": {
+          "key": "software.extension.product.feature_name",
+          "object": "software"
+        },
+        "uid": {
+          "key": "software.extension.product.feature_uid",
+          "object": "software"
+        },
+        "version": {
+          "key": "software.extension.product.feature_version",
+          "object": "software"
+        }
+      },
+      "lang": {
+        "key": "software.languages",
+        "object": "software"
+      },
+      "name": {
+        "key": "software.name",
+        "object": "software"
+      },
+      "path": {
+        "key": "software.extension.product.path",
+        "object": "software"
+      },
+      "uid": {
+        "key": "software.extension.product.uid",
+        "object": "software"
+      },
+      "vendor_name": {
+        "key": "software.vendor",
+        "object": "software"
+      },
+      "version": {
+        "key": "software.version",
+        "object": "software"
+      }
+    },
+    "sequence": {
+      "key": "x-ocsf-metadata.sequence",
+      "object": "metadata",
+      "transformer": "ToInteger"
+    },
+    "uid": {
+      "key": "x-ocsf-metadata.uid",
+      "object": "metadata"
+    },
+    "version": {
+      "key": "x-ocsf-metadata.version",
+      "object": "metadata"
+    }
+  },
+  "observables": {
+    "name": {
       "key": "x-ibm-finding.name",
       "object": "ibm_finding"
     },
-  "type": {
-     "key": "x-ibm-finding.finding_type",
+    "type": {
+      "key": "x-ibm-finding.finding_type",
       "object": "ibm_finding"
-  },
-  "description": {
-     "key": "x-ibm-finding.description",
-     "object": "ibm_finding"
-  },
-  "resource_instancedetails_platform": [
-    {
-    "key": "software.name",
-    "object": "software"
     },
-    {
-      "key": "x-ibm-finding.src_os_ref",
+    "type_id": {
+      "key": "x-ibm-finding.alert_id",
       "object": "ibm_finding",
-      "references": "software"
-    }],
-  "service_eventfirstseen": [
-    {
-      "key": "first_observed",
-      "cybox": false
+      "transformer": "ToInteger"
     },
-    {
-      "key": "x-ibm-finding.start",
+    "value": {
+      "key": "x-ibm-finding.description",
       "object": "ibm_finding"
     }
-  ],
-  "service_eventlastseen": [
+  },
+  "profiles": {
+    "key": "x-ocsf-cloud.profiles",
+    "object": "ocsf_cloud_api"
+  },
+  "raw_data": {
+    "key": "x-ocsf-cloud.raw_data",
+    "object": "ocsf_cloud_api"
+  },
+  "ref_event_code": {
+    "key": "x-ocsf-cloud.ref_event_code",
+    "object": "ocsf_cloud_api"
+  },
+  "ref_event_name": {
+    "key": "x-ocsf-cloud.ref_event_name",
+    "object": "ocsf_cloud_api"
+  },
+  "ref_event_uid": {
+    "key": "x-ocsf-cloud.ref_event_uid",
+    "object": "ocsf_cloud_api"
+  },
+  "ref_time": {
+    "key": "x-ocsf-cloud.ref_time",
+    "object": "ocsf_cloud_api"
+  },
+  "resources": {
+    "account_uid": [
+      {
+        "key": "x-ocsf-resources.account_uid",
+        "object": "resources"
+      },
+      {
+        "key": "x-ocsf-resources.cloud_api_ref",
+        "object": "resources",
+        "references": "ocsf_cloud_api"
+      }
+    ],
+    "cloud_partition": {
+      "key": "x-ocsf-resources.cloud_partition",
+      "object": "resources"
+    },
+    "criticality": {
+      "key": "x-ocsf-resources.criticality",
+      "object": "resources"
+    },
+    "details": {
+      "key": "x-ocsf-resources.details",
+      "object": "resources"
+    },
+    "group_name": {
+      "key": "x-ocsf-resources.group_name",
+      "object": "resources"
+    },
+    "labels": {
+      "key": "x-ocsf-resources.labels",
+      "object": "resources"
+    },
+    "name": {
+      "key": "x-ocsf-resources.name",
+      "object": "resources"
+    },
+    "owner": {
+      "key": "x-ocsf-resources.owner",
+      "object": "resources"
+    },
+    "region": {
+      "key": "x-ocsf-resources.region",
+      "object": "resources"
+    },
+    "type": {
+      "key": "x-ocsf-resources.type",
+      "object": "resources"
+    },
+    "uid": {
+      "key": "x-ocsf-resources.uid",
+      "object": "resources"
+    }
+  },
+  "severity": {
+    "key": "x-ocsf-cloud.severity",
+    "object": "ocsf_cloud_api"
+  },
+  "severity_id": {
+    "key": "x-ibm-finding.severity",
+    "object": "ibm_finding",
+    "transformer": "ToInteger"
+  },
+  "src_endpoint": {
+    "port": {
+      "key": "network-traffic.src_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    "svc_name": {
+      "key": "x-oca-asset.extensions.x-src-endpoint.svc_name",
+      "object": "asset"
+    },
+    "ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "src_ip",
+        "transformer": "CheckIPv4"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "src_ip",
+        "transformer": "CheckIPv6"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "nt",
+        "references": "src_ip"
+      },
+      {
+        "key": "x-ibm-finding.src_ip_ref",
+        "object": "finding",
+        "references": "src_ip"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "src_ip"
+        ],
+        "group": true
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "nt"
+      }
+    ],
+    "intermediate_ips": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "src_ipv4",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "src_ipv6",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "asset",
+        "references": [
+          "src_ipv4",
+          "src_ipv6"
+        ],
+        "unwrap": true
+      }
+    ],
+    "interface_uid": {
+      "key": "x-oca-asset.extensions.x-src-endpoint.interface_uid",
+      "object": "asset"
+    },
+    "vpc_uid": {
+      "key": "x-oca-asset.extensions.x-src-endpoint.vpc_uid",
+      "object": "asset"
+    },
+    "instance_uid": {
+      "key": "x-oca-asset.extensions.x-src-endpoint.instance_uid",
+      "object": "asset"
+    },
+    "subnet_uid": {
+      "key": "x-oca-asset.extensions.x-src-endpoint.subnet_uid",
+      "object": "asset"
+    },
+    "name": {
+      "key": "x-oca-asset.name",
+      "object": "asset"
+    }
+  },
+  "dst_endpoint": {
+    "port": {
+      "key": "network-traffic.dst_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    "svc_name": {
+      "key": "x-oca-asset.extensions.x-dst-endpoint.svc_name",
+      "object": "asset"
+    },
+    "ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst_ip",
+        "transformer": "CheckIPv4"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ip",
+        "transformer": "CheckIPv6"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "nt",
+        "references": "dst_ip"
+      },
+      {
+        "key": "x-ibm-finding.dst_ip_ref",
+        "object": "finding",
+        "references": "dst_ip"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "dst_ip"
+        ],
+        "group": true
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "nt"
+      }
+    ],
+    "intermediate_ips": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst_ipv4",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ipv6",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "asset",
+        "references": [
+          "dst_ipv4",
+          "dst_ipv6"
+        ],
+        "unwrap": true
+      }
+    ],
+    "interface_uid": {
+      "key": "x-oca-asset.extensions.x-dst-endpoint.interface_uid",
+      "object": "asset"
+    },
+    "vpc_uid": {
+      "key": "x-oca-asset.extensions.x-dst-endpoint.vpc_uid",
+      "object": "asset"
+    },
+    "instance_uid": {
+      "key": "x-oca-asset.extensions.x-dst-endpoint.instance_uid",
+      "object": "asset"
+    },
+    "subnet_uid": {
+      "key": "x-oca-asset.extensions.x-dst-endpoint.subnet_uid",
+      "object": "asset"
+    },
+    "name": {
+      "key": "x-oca-asset.name",
+      "object": "asset"
+    }
+  },
+  "connection_info": {
+    "protocol_num": {
+      "key": "network-traffic.protocol",
+      "object": "nt",
+      "transformer": "ProtocolNumToName"
+    },
+    "protocol_name": {
+      "key": "network-traffic.protocol",
+      "object": "nt"
+    },
+    "tcp_flags": {
+      "key": "network-traffic.extensions.x-network-ext.tcp_flags",
+      "object": "nt"
+    },
+    "protocol_ver": {
+      "key": "network-traffic.extensions.x-network-ext.protocol_ver",
+      "object": "nt"
+    },
+    "direction": {
+      "key": "network-traffic.extensions.x-network-ext.direction",
+      "object": "nt"
+    },
+    "boundary_id": {
+      "key": "network-traffic.extensions.x-network-ext.boundary_id",
+      "object": "nt"
+    },
+    "boundary": {
+      "key": "network-traffic.extensions.x-network-ext.boundary",
+      "object": "nt"
+    },
+    "direction_id": {
+      "key": "network-traffic.extensions.x-network-ext.direction_id",
+      "object": "nt"
+    }
+  },
+  "traffic": {
+    "packets_in": {
+      "key": "network-traffic.dst_packets",
+      "object": "nt"
+    },
+    "packets_out": {
+      "key": "network-traffic.src_packets",
+      "object": "nt"
+    },
+    "packets": {
+      "key": "network-traffic.extensions.x-network-ext.packets",
+      "object": "nt"
+    },
+    "bytes_in": {
+      "key": "network-traffic.dst_byte_count",
+      "object": "nt"
+    },
+    "bytes_out": {
+      "key": "network-traffic.src_byte_count",
+      "object": "nt"
+    },
+    "bytes": {
+      "key": "network-traffic.extensions.x-network-ext.bytes",
+      "object": "nt"
+    }
+  },
+  "start_time": [
     {
-      "key": "last_observed",
-      "cybox": false
+      "key": "x-ibm-finding.start",
+      "object": "ibm_finding",
+      "transformer": "EpochToTimestamp"
     },
     {
-    "key": "x-ibm-finding.end",
-    "object": "ibm_finding"
-    }]
+      "key": "first_observed",
+      "cybox": false,
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "status": {
+    "key": "x-ocsf-cloud.status",
+    "object": "ocsf_cloud_api"
+  },
+  "status_code": {
+    "key": "x-ocsf-cloud.status_code",
+    "object": "ocsf_cloud_api"
+  },
+  "status_detail": {
+    "key": "x-ocsf-cloud.status_detail",
+    "object": "ocsf_cloud_api"
+  },
+  "status_id": {
+    "key": "x-ocsf-cloud.status_id",
+    "object": "ocsf_cloud_api",
+    "transformer": "ToInteger"
+  },
+  "time": {
+    "key": "x-oca-event.created",
+    "object": "x_oca_event"
+  },
+  "timezone_offset": {
+    "key": "x-oca-event.timezone",
+    "object": "x_oca_event",
+    "transformer": "ToInteger"
+  },
+  "type_name": {
+    "key": "x-ocsf-cloud.type_name",
+    "object": "ocsf_cloud_api"
+  },
+  "type_uid": {
+    "key": "x-ocsf-cloud.type_uid",
+    "object": "ocsf_cloud_api",
+    "transformer": "ToInteger"
   }
 }
