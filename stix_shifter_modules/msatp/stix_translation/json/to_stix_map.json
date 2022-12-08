@@ -65,6 +65,14 @@
         "object": "src_ip"
       },
       {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "src_ip"
+        ],
+        "group": true
+      },
+      {
         "key": "network-traffic.src_ref",
         "object": "nt",
         "references": "src_ip"
@@ -478,7 +486,8 @@
           "host_ip4",
           "host_ip6"
         ],
-        "unwrap": true
+        "unwrap": true,
+        "group": true
       },
       {
         "key": "x-oca-event.ip_refs",
@@ -487,7 +496,8 @@
           "host_ip4",
           "host_ip6"
         ],
-        "unwrap": true
+        "unwrap": true,
+        "group": true
       }
     ],
     "provider": {
@@ -1439,8 +1449,7 @@
         "references": [
           "finding"
         ],
-        "group": true,
-        "unwrap": true
+        "group": true
       }
     ],
     "event_link": [
@@ -2560,8 +2569,7 @@
         "references": [
           "finding"
         ],
-        "group": true,
-        "unwrap": true
+        "group": true
       }
     ],
     "MacAddressSet": [
@@ -3066,17 +3074,6 @@
         "references": "network-traffic"
       }
     ],
-    "RemotePort": [
-      {
-        "key": "network-traffic.dst_port",
-        "object": "network-traffic"
-      },
-      {
-        "key": "x-oca-event.network_ref",
-        "object": "event",
-        "references": "network-traffic"
-      }
-    ],
     "LocalIP": [
       {
         "key": "ipv4-addr.value",
@@ -3087,9 +3084,28 @@
         "object": "local_ip"
       },
       {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "local_ip"
+        ],
+        "group": true
+      },
+      {
         "key": "network-traffic.src_ref",
         "object": "network-traffic",
-        "references": "local_machine"
+        "references": "local_ip"
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "network-traffic"
+      }
+    ],
+    "RemotePort": [
+      {
+        "key": "network-traffic.dst_port",
+        "object": "network-traffic"
       },
       {
         "key": "x-oca-event.network_ref",
@@ -3432,9 +3448,7 @@
       {
         "key": "x-oca-event.finding_refs",
         "object": "event",
-        "references": [
-          "finding"
-        ],
+        "references": "finding",
         "group": true
       }
     ],
@@ -3458,7 +3472,8 @@
           "host_ip4",
           "host_ip6"
         ],
-        "unwrap": true
+        "unwrap": true,
+        "group": true
       },
       {
         "key": "x-oca-event.ip_refs",
@@ -3467,7 +3482,8 @@
           "host_ip4",
           "host_ip6"
         ],
-        "unwrap": true
+        "unwrap": true,
+        "group": true
       }
     ],
     "event_link": [
