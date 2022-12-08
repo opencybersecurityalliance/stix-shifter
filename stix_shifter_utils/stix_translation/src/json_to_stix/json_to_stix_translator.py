@@ -154,6 +154,9 @@ class DataSourceObjToStixObj:
                         # if the property has unwrap true and is not a list, convert to list
                         if unwrap is True and not isinstance(return_value, list):
                             return_value = [return_value]
+
+                    if not return_value:
+                        return None
                 else:
                     if unwrap is False and observable_key and not self._valid_stix_value(observable_key, value):
                         return None
