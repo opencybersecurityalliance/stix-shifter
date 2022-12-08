@@ -2,6 +2,7 @@ from stix_shifter_modules.azure_log_analytics.entry_point import EntryPoint
 import unittest
 from unittest.mock import patch
 from stix_shifter.stix_transmission import stix_transmission
+from azure.core.exceptions import ODataV4Format
 
 
 class AzureSentinelMockResponse:
@@ -68,23 +69,23 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
     def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client, mock_generate_token):
         mock_api_client.return_value = None
         mock_generate_token.return_value = ClientSecretMockResponse
-        mocked_return_value = """{
-          "error": {
-            "code": "BadRequest",
-            "message": "Resource not found for the segment 'alert'.",
-            "innerError": {
-              "request-id": "ba365a15-50ff-4041-bdc4-9dbacbd45239",
-              "date": "2019-11-26T11:36:27"
+        mocked_return_value = """
+        {
+            "error": {
+                "message": "The workspace could not be found",
+                "code": "WorkspaceNotFoundError",
+                "correlationId": "a1bc1a2c-f975-180b-1243-111e17a11e1c"
             }
-          }
-        }"""
-        mock_ping_response.return_value = AzureSentinelMockResponse(400, mocked_return_value)
+        }
+        """
+        
+        mock_ping_response.return_value = AzureSentinelMockResponse(404, mocked_return_value)
 
         transmission = stix_transmission.StixTransmission('azure_log_analytics', self.connection(), self.config())
         ping_response = transmission.ping()
         assert ping_response['success'] is False
         assert ping_response[
-                   'error'] == "azure_log_analytics connector error => Resource not found for the segment \'alert\'."
+                   'error'] == "azure_log_analytics connector error => The workspace could not be found"
         assert ping_response['code'] == "invalid_parameter"
 
     def test_query_connection(self, mock_api_client, mock_generate_token):
@@ -196,22 +197,25 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         mock_api_client.return_value = None
         mock_generate_token.return_value = ClientSecretMockResponse
         mocked_return_value = {
-                "code": "BadRequest",
-                "message": "Invalid filter clause",
-                "innerError": {
-                    "request-id": "e8904fd5-0f2c-496d-9ed0-4ee5c58946ff",
-                    "date": "2019-11-26T11:30:51"
-                }
+            "code": "SyntaxError",
+            "message": "A recognition error occurred in the query.",
+            "innererror": {
+                "code": "SYN0002",
+                "message": "Query could not be parsed at \": \" on line [1,170]",
+                "line": 1,
+                "pos": 170,
+                "token": ":"
             }
+        }
 
-        mock_results_response.return_value = {"success": False, "error": mocked_return_value}
 
-        query = "'SecurityEvent | where IpAddress == '66.76.45'"
+        mock_results_response.return_value = {"success": False, "error": ODataV4Format(mocked_return_value)}
+
+        query = "'SecurityEvent | where InvalidField == 'test'"
         offset = 0
         length = 1
         transmission = stix_transmission.StixTransmission('azure_log_analytics', self.connection(), self.config())
         results_response = transmission.results(query, offset, length)
 
         assert results_response['success'] is False
-        assert results_response['error'] == "azure_log_analytics connector error => Invalid filter clause"
-        assert results_response['code'] == "invalid_parameter"
+        assert results_response['code'] == "invalid_query"

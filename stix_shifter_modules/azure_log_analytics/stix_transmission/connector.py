@@ -5,6 +5,7 @@ from stix_shifter_utils.utils.error_response import ErrorResponder
 import pandas as pd
 from stix_shifter_utils.utils import logger
 from azure.monitor.query import LogsQueryStatus
+from azure.core.exceptions import ODataV4Format
 from datetime import datetime, timedelta
 import re
 
@@ -24,16 +25,19 @@ class Connector(BaseSyncConnector):
         return_obj = dict()
         response = self.api_client.ping_box()
         response_code = response.code
-
-        if 200 <= response_code < 300:
+        try:
             response_dict = json.loads(response.read())
+        except:
+            response_dict = json.loads(response.bytes)
+        
+        if 200 <= response_code < 300: 
             return_obj['success'] = True
-        if response_code == 404:
-            response_message = json.loads(response.bytes)
-            response_dict = {"error": response_message['error']['message'], "code": response_message['error']['code']}
-            ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
+        elif response_code == 404:
+            error_dict = {"error": response_dict['error']['message'], "code": response_dict['error']['code']}
+            ErrorResponder.fill_error(return_obj, error_dict, ['error', 'message'], connector=self.connector)
         else:
             ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
+
         return return_obj
 
     def delete_query_connection(self, search_id):
@@ -76,6 +80,9 @@ class Connector(BaseSyncConnector):
                 return_obj['data'] = return_obj['data'][offset:total_record]
 
         else:
-            response_dict = {"error": response["error"], "code": response["error"].code}
+            if isinstance(response["error"], ODataV4Format):
+                response_dict = {"error": response["error"], "code": response["error"].code}
+            else:
+                response_dict = {"error": response["error"]}
             ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
         return return_obj
