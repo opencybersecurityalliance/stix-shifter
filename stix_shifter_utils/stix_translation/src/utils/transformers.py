@@ -174,6 +174,20 @@ class ToDirectoryPath(ValueTransformer):
             LOGGER.error("Cannot convert input to directory path string")
 
 
+class ToMSATPDirectoryPath(ValueTransformer):
+    """A value transformer for expected directory path"""
+
+    @staticmethod
+    def transform(obj):
+        try:
+            file_path, file_name = ntpath.split(obj)
+            if '.' not in file_name:
+                file_path = obj
+            return file_path
+        except ValueError:
+            LOGGER.error("Cannot convert input to directory path string")
+
+
 class ToFileName(ValueTransformer):
     """A value transformer for expected file names"""
 
