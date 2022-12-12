@@ -1,6 +1,6 @@
 import json
 import re
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 MAX_LIMIT = 10000

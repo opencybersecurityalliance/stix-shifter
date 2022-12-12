@@ -1,4 +1,4 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseResultsConnector
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
