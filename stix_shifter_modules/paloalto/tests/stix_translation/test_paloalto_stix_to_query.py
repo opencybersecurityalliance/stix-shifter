@@ -559,3 +559,17 @@ class TestQueryTranslator(unittest.TestCase):
                                                                                   "'to': 1645636157746}}}"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
+
+    def test_qualifier_without_milliseconds(self):
+        stix_pattern = "[ipv4-addr:value = '10.0.1.4' AND network-traffic:src_port = 52221] " \
+                       "START t'2022-02-01T08:43:10Z' STOP t'2022-04-07T10:43:10Z'"
+        query = translation.translate('paloalto', 'query', '{}', stix_pattern)
+        queries = [{'xdr_data': {'query': 'dataset = xdr_data | filter (action_local_port = 52221 '
+                                          'and (action_local_ip = "10.0.1.4" or action_remote_ip = "10.0.1.4"'
+                                          ' or agent_ip_addresses = "10.0.1.4")  and '
+                                          '(to_epoch(_time,"millis") >= 1643704990000 and '
+                                          'to_epoch(_time,"millis") <= 1649328190000)) | alter dataset_name = '
+                                          '"xdr_data" | fields ' + all_fields + ' | limit 10000 ',
+                                 'timeframe': {'from': 1643704990000, 'to': 1649328190000}}}]
+
+        self._test_query_assertions(query, queries)
