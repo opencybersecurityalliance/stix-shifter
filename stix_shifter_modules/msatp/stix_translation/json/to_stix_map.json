@@ -341,8 +341,7 @@
     "InitiatingProcessFolderPath": [
       {
         "key": "directory.path",
-        "object": "nc_process_file_dir",
-        "transformer": "ToDirectoryPath"
+        "object": "nc_process_file_dir"
       },
       {
         "key": "file.parent_directory_ref",
@@ -659,8 +658,7 @@
     "FolderPath": [
       {
         "key": "directory.path",
-        "object": "event_file_dir",
-        "transformer": "ToDirectoryPath"
+        "object": "event_file_dir"
       },
       {
         "key": "file.parent_directory_ref",
@@ -679,8 +677,7 @@
       },
       {
         "key": "directory.path",
-        "object": "event_file_dir",
-        "transformer": "ToDirectoryPath"
+        "object": "event_file_dir"
       },
       {
         "key": "file.parent_directory_ref",
@@ -1013,8 +1010,7 @@
     "InitiatingProcessFolderPath": [
       {
         "key": "directory.path",
-        "object": "process_file_dir",
-        "transformer": "ToDirectoryPath"
+        "object": "process_file_dir"
       },
       {
         "key": "file.parent_directory_ref",
@@ -1349,8 +1345,7 @@
     "CreatedInitiatingProcessFolderPath": [
       {
         "key": "directory.path",
-        "object": "init_process_file_dir",
-        "transformer": "ToDirectoryPath"
+        "object": "init_process_file_dir"
       },
       {
         "key": "file.parent_directory_ref",
@@ -1631,8 +1626,7 @@
     "FolderPath": [
       {
         "key": "directory.path",
-        "object": "event_file_dir",
-        "transformer": "ToDirectoryPath"
+        "object": "event_file_dir"
       },
       {
         "key": "file.parent_directory_ref",
@@ -1852,8 +1846,7 @@
     "InitiatingProcessFolderPath": [
       {
         "key": "directory.path",
-        "object": "fc_process_file_dir",
-        "transformer": "ToDirectoryPath"
+        "object": "fc_process_file_dir"
       },
       {
         "key": "file.parent_directory_ref",
@@ -2295,8 +2288,7 @@
     "InitiatingProcessFolderPath": [
       {
         "key": "directory.path",
-        "object": "re_process_file_dir",
-        "transformer": "ToDirectoryPath"
+        "object": "re_process_file_dir"
       },
       {
         "key": "file.parent_directory_ref",
@@ -2873,8 +2865,7 @@
     "FolderPath": [
       {
         "key": "directory.path",
-        "object": "event_file_dir",
-        "transformer": "ToDirectoryPath"
+        "object": "event_file_dir"
       },
       {
         "key": "file.parent_directory_ref",
@@ -3217,14 +3208,13 @@
       {
         "key": "x-oca-event.process_ref",
         "object": "event",
-        "references": "init_process"
+        "refer¸¸ences": "init_process"
       }
     ],
     "InitiatingProcessFolderPath": [
       {
         "key": "directory.path",
-        "object": "init_process_file_dir",
-        "transformer": "ToDirectoryPath"
+        "object": "init_process_file_dir"
       },
       {
         "key": "file.parent_directory_ref",
