@@ -166,7 +166,8 @@ def __main__():
                 for stix_object_key, value in loaded_from_stix_json.items():
                     property_dictionary = value["fields"]
                     for s_property, fields_list in property_dictionary.items():
-                        
+                        if not isinstance(fields_list, list):
+                            fields_list = [fields_list]
                         orig_fields_list = []
                         if data_field_alias_mapping:
                             # TODO: Get real field name for QRadar
