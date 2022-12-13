@@ -51,6 +51,23 @@ class ToKillChainPhasesList(ValueTransformer):
         dct = {'kill_chain_name': KILL_CHAIN_NAME, 'phase_name': value}
         return [dct]
 
+
+class ToMSATPDirectoryPath(ValueTransformer):
+    """A value transformer for expected directory path. Take care of the inconsistency, sometimes shows up as a
+    folder path and somtimes as a file name """
+
+    @staticmethod
+    def transform(obj):
+        try:
+            file_path, file_name = ntpath.split(obj)
+            if '.' not in file_name:
+                file_path = obj
+            return file_path
+        except ValueError:
+            LOGGER.error("Cannot convert input to directory path string")
+
+
+
 class SeverityToNumericVal(ValueTransformer):
     """A value transformer to convert MSATP Severity value (high/medium/low) to numeric value"""
 
