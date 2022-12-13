@@ -117,9 +117,9 @@
     "network-traffic": {
         "cim_type": "network",
         "fields": {
-            "src_ref.value": ["src_ip", "src_ipv6"],
+            "src_ref.value": ["src_ip"],
             "src_port": "src_port",
-            "dst_ref.value": ["dest_ip", "dest_ipv6"],
+            "dst_ref.value": ["dest_ip"],
             "dst_port": "dest_port",
             "protocols[*]": "protocol",
             "start": "earliest",
