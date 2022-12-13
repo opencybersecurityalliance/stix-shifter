@@ -1,4 +1,4 @@
-##### Updated on 11/04/22
+##### Updated on 12/13/22
 ## Splunk Enterprise Security
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -42,61 +42,61 @@
 | **x-oca-event**:registry_ref.key | ObjectName, RegistryKey |
 | **x-oca-event**:user_ref.user_id | user |
 | **x-oca-event**:url_ref.value | url |
-| **x-oca-asset**:hostname | h, o, s, t |
-| **directory**:path | f, i, l, e, _, p, a, t, h |
-| **directory**:created | f, i, l, e, _, c, r, e, a, t, e, _, t, i, m, e |
-| **directory**:modified | f, i, l, e, _, m, o, d, i, f, y, _, t, i, m, e |
+| **x-oca-asset**:hostname | host |
+| **directory**:path | file_path |
+| **directory**:created | file_create_time |
+| **directory**:modified | file_modify_time |
 | **domain-name**:value | host, url |
-| **x-readable-payload**:value | _, r, a, w |
+| **x-readable-payload**:value | _raw |
 | **email-addr**:value | src_user, recipient |
-| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.MD5 | f, i, l, e, _, h, a, s, h |
-| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.'SHA-1' | f, i, l, e, _, h, a, s, h |
-| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.'SHA-256' | f, i, l, e, _, h, a, s, h |
-| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.name | f, i, l, e, _, n, a, m, e |
-| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.size | f, i, l, e, _, s, i, z, e |
-| **email-message**:to_refs.[*].value | r, e, c, i, p, i, e, n, t |
-| **email-message**:cc_refs.[*].value | r, e, c, i, p, i, e, n, t |
-| **email-message**:bcc_refs.[*].value | r, e, c, i, p, i, e, n, t |
-| **email-message**:subject | s, u, b, j, e, c, t |
-| **email-message**:sender_ref.value | s, r, c, _, u, s, e, r |
-| **email-message**:from_ref.value | s, r, c, _, u, s, e, r |
-| **file**:hashes.MD5 | f, i, l, e, _, h, a, s, h |
-| **file**:hashes.'SHA-1' | f, i, l, e, _, h, a, s, h |
-| **file**:hashes.'SHA-256' | f, i, l, e, _, h, a, s, h |
-| **file**:name | f, i, l, e, _, n, a, m, e |
-| **file**:created | f, i, l, e, _, c, r, e, a, t, e, _, t, i, m, e |
-| **file**:modified | f, i, l, e, _, m, o, d, i, f, y, _, t, i, m, e |
-| **file**:parent_directory_ref.path | f, i, l, e, _, p, a, t, h |
-| **file**:size | f, i, l, e, _, s, i, z, e |
+| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.MD5 | file_hash |
+| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.'SHA-1' | file_hash |
+| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.'SHA-256' | file_hash |
+| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.name | file_name |
+| **email-message**:body_multipart.[*].'mime-part-type'.body_raw_ref.size | file_size |
+| **email-message**:to_refs.[*].value | recipient |
+| **email-message**:cc_refs.[*].value | recipient |
+| **email-message**:bcc_refs.[*].value | recipient |
+| **email-message**:subject | subject |
+| **email-message**:sender_ref.value | src_user |
+| **email-message**:from_ref.value | src_user |
+| **file**:hashes.MD5 | file_hash |
+| **file**:hashes.'SHA-1' | file_hash |
+| **file**:hashes.'SHA-256' | file_hash |
+| **file**:name | file_name |
+| **file**:created | file_create_time |
+| **file**:modified | file_modify_time |
+| **file**:parent_directory_ref.path | file_path |
+| **file**:size | file_size |
 | **ipv4-addr**:value | src_ip, dest_ip |
 | **ipv6-addr**:value | src_ipv6, dest_ipv6 |
 | **mac-addr**:value | src_mac, dest_mac |
-| **network-traffic**:src_ref.value | s, r, c |
-| **network-traffic**:src_port | s, r, c, _, p, o, r, t |
-| **network-traffic**:dst_ref.value | d, e, s, t |
-| **network-traffic**:dst_port | d, e, s, t, _, p, o, r, t |
-| **network-traffic**:protocols[*] | p, r, o, t, o, c, o, l |
-| **network-traffic**:start | e, a, r, l, i, e, s, t |
-| **network-traffic**:end | l, a, t, e, s, t |
-| **process**:name | p, r, o, c, e, s, s, _, n, a, m, e |
-| **process**:command_line | p, r, o, c, e, s, s |
-| **process**:pid | p, i, d |
-| **process**:creator_user_ref.account_login | u, s, e, r |
-| **process**:binary_ref.parent_directory_ref.path | p, r, o, c, e, s, s, _, p, a, t, h |
-| **process**:binary_ref.name | p, r, o, c, e, s, s, _, e, x, e, c |
-| **url**:value | u, r, l |
-| **user-account**:user_id | u, s, e, r |
-| **windows-registry-key**:key | o, b, j, e, c, t |
-| **windows-registry-key**:values[*] | r, e, s, u, l, t |
-| **windows-registry-key**:creator_user_ref.account_login | u, s, e, r |
-| **x509-certificate**:hashes.'SHA-256' | s, s, l, _, h, a, s, h |
-| **x509-certificate**:hashes.'SHA-1' | s, s, l, _, h, a, s, h |
-| **x509-certificate**:version | s, s, l, _, v, e, r, s, i, o, n |
-| **x509-certificate**:serial_number | s, s, l, _, s, e, r, i, a, l |
-| **x509-certificate**:signature_algorithm | s, s, l, _, s, i, g, n, a, t, u, r, e, _, a, l, g, o, r, i, t, h, m |
-| **x509-certificate**:issuer | s, s, l, _, i, s, s, u, e, r |
-| **x509-certificate**:subject | s, s, l, _, s, u, b, j, e, c, t |
-| **x509-certificate**:subject_public_key_algorithm | s, s, l, _, p, u, b, l, i, c, k, e, y, _, a, l, g, o, r, i, t, h, m |
+| **network-traffic**:src_ref.value | src |
+| **network-traffic**:src_port | src_port |
+| **network-traffic**:dst_ref.value | dest |
+| **network-traffic**:dst_port | dest_port |
+| **network-traffic**:protocols[*] | protocol |
+| **network-traffic**:start | earliest |
+| **network-traffic**:end | latest |
+| **process**:name | process_name |
+| **process**:command_line | process |
+| **process**:pid | pid |
+| **process**:creator_user_ref.account_login | user |
+| **process**:binary_ref.parent_directory_ref.path | process_path |
+| **process**:binary_ref.name | process_exec |
+| **url**:value | url |
+| **user-account**:user_id | user |
+| **windows-registry-key**:key | object |
+| **windows-registry-key**:values[*] | result |
+| **windows-registry-key**:creator_user_ref.account_login | user |
+| **x509-certificate**:hashes.'SHA-256' | ssl_hash |
+| **x509-certificate**:hashes.'SHA-1' | ssl_hash |
+| **x509-certificate**:version | ssl_version |
+| **x509-certificate**:serial_number | ssl_serial |
+| **x509-certificate**:signature_algorithm | ssl_signature_algorithm |
+| **x509-certificate**:issuer | ssl_issuer |
+| **x509-certificate**:subject | ssl_subject |
+| **x509-certificate**:subject_public_key_algorithm | ssl_publickey_algorithm |
 | **x-splunk**:log_source | source |
 | **x-splunk**:log_source_type | _sourcetype |
 | **x-splunk**:direction | Direction |
