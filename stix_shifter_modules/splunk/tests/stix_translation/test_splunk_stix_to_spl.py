@@ -325,6 +325,30 @@ class TestStixToSpl(unittest.TestCase, object):
         queries = f'search ((src_ip IN ("192.168.122.83", "192.168.122.84")) OR (dest_ip IN ("192.168.122.83", "192.168.122.84"))) earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
+    def test_like(self):
+        stix_pattern = "[file:name LIKE 'x_.%']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search earliest="-5minutes" | where (like(file_name, "x_.%")) | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
+    def test_like_or_equal(self):
+        stix_pattern = "[file:name LIKE 'x_.%' OR file:name = 'y1.exe']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search earliest="-5minutes" | where ((file_name = "y1.exe") OR (like(file_name, "x_.%"))) | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
+    def test_match(self):
+        stix_pattern = r"[file:name MATCHES '^x.\\..*$']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search earliest="-5minutes" | where (match(file_name, "^x.\\..*$")) | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
+    def test_match_or_equal(self):
+        stix_pattern = r"[file:name MATCHES '^x.\\..*$' OR file:name = 'y1.exe']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search earliest="-5minutes" | where ((file_name = "y1.exe") OR (match(file_name, "^x.\\..*$"))) | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
 
 if __name__ == '__main__':
     unittest.main()
