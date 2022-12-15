@@ -26,6 +26,10 @@
       "object": "x_oca_event",
       "transformer": "ToInteger"
     },
+    "activity_name": {
+      "key": "x-oca-event.action",
+      "object": "x_oca_event"
+    },
     "api": {
       "operation": {
         "key": "x-ocsf-cloud.operation",
@@ -90,6 +94,45 @@
         "object": "ocsf_cloud_api"
       }
     },
+    "attacks": {
+      "tactics": {
+        "name": {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+          "object": "ttp-tagging"
+        },
+        "uid": {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_id",
+          "object": "ttp-tagging"
+        }
+      },
+      "technique": {
+        "name": [
+          {
+            "key": "x-ibm-ttp-tagging.name",
+            "object": "ttp-tagging"
+          },
+          {
+            "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+            "object": "ttp-tagging"
+          },
+          {
+            "key": "x-ibm-finding.ttp_tagging_refs",
+            "object": "ibm_finding",
+            "references": [
+              "ttp-tagging"
+            ]
+          }
+        ],
+        "uid": {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_id",
+          "object": "ttp-tagging"
+        }
+      },
+      "version": {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.versoin",
+        "object": "ttp-tagging"
+      }
+    },
     "category_name": {
       "key": "x-oca-event.category",
       "object": "x_oca_event"
@@ -147,6 +190,24 @@
         "object": "ocsf_cloud_api"
       }
     },
+    "compliance": {
+      "requirements": {
+        "key": "x-ocsf-compliance.requirements",
+        "object": "compliance"
+      },
+      "status": {
+        "key": "x-ocsf-compliance.status",
+        "object": "compliance"
+      },
+      "status_detail": {
+        "key": "x-ocsf-compliance.status_detail",
+        "object": "compliance"
+      }
+    },
+    "confidence": {
+      "key": "x-oca-event.confidence",
+      "object": "x-oca-event"
+    },
     "count": [
       {
         "key": "number_observed",
@@ -159,6 +220,10 @@
         "object": "ibm_finding"
       }
     ],
+    "data": {
+      "key": "x-oca-event.extensions.x-ocsf-data.data",
+      "object": "x-oca-event"
+    },
     "duration": {
       "key": "x-oca-event.duration",
       "object": "x_oca_event",
@@ -196,6 +261,80 @@
       "value": {
         "key": "x-ocsf-enrichments.value",
         "object": "enrichments"
+      }
+    },
+    "finding": {
+      "created_time": {
+        "key": "x-ibm-finding.start",
+        "object": "ibm_finding"
+      },
+      "desc": {
+        "key": "x-ibm-finding.description",
+        "object": "ibm_finding"
+      },
+      "first_seen_time": {
+        "key": "x-ibm-finding.time_observed",
+        "object": "ibm_finding"
+      },
+      "last_seen_time": {
+        "key": "x-ibm-finding.extensions.x-ocsf-findings.last_seen_time",
+        "object": "ibm_finding"
+      },
+      "modified_time": {
+        "key": "x-ibm-finding.extensions.x-ocsf-findings.modified_time",
+        "object": "ibm_finding"
+      },
+      "product_uid": {
+        "key": "x-ibm-finding.extensions.x-ocsf-findings.product_uid",
+        "object": "ibm_finding"
+      },
+      "related_events": {
+        "product_uid": {
+          "key": "x-ibm-finding.extensions.x-ocsf-findings.product_uid",
+          "object": "ibm_finding"
+        },
+        "type": {
+          "key": "x-ibm-finding.extensions.x-ocsf-findings.type",
+          "object": "ibm_finding"
+        },
+        "type_uid": {
+          "key": "x-ibm-finding.extensions.x-ocsf-findings.type_uid",
+          "object": "ibm_finding"
+        },
+        "uid": {
+          "key": "x-ibm-finding.extensions.x-ocsf-findings.uid",
+          "object": "ibm_finding"
+        }
+      },
+      "remediation": {
+        "desc": {
+          "key": "x-ibm-finding.extensions.x-ocsf-findings.remediation_desc",
+          "object": "ibm_finding"
+        },
+        "kb_articles": {
+          "key": "x-ibm-finding.extensions.x-ocsf-findings.remediation_kb_articles",
+          "object": "ibm_finding"
+        }
+      },
+      "src_url": {
+        "key": "x-ibm-finding.extensions.x-ocsf-findings.src_url",
+        "object": "ibm_finding"
+      },
+      "supporting_data": {
+        "key": "x-ibm-finding.extensions.x-ocsf-findings.upporting_data",
+        "object": "ibm_finding"
+      },
+      "title": {
+        "key": "x-ibm-finding.name",
+        "object": "ibm_finding"
+      },
+      "types": {
+        "key": "x-ibm-finding.types",
+        "object": "ibm_finding"
+      },
+      "uid": {
+        "key": "x-ibm-finding.alert_id",
+        "object": "ibm_finding"
       }
     },
     "http_request": {
@@ -420,6 +559,134 @@
         }
       }
     },
+    "malware": {
+      "classification_ids": {
+        "key": "x-ocsf-malware.classification_ids",
+        "object": "malware"
+      },
+      "classifications": {
+        "key": "x-ocsf-malware.classifications",
+        "object": "malware"
+      },
+      "cves": {
+        "created_time": {
+          "key": "x-ocsf-malware.created_time",
+          "object": "malware"
+        },
+        "cvss": {
+          "base_score": {
+            "key": "x-ocsf-malware.base_score",
+            "object": "malware"
+          },
+          "depth": {
+            "key": "x-ocsf-malware.depth",
+            "object": "malware"
+          },
+          "metrics": {
+            "name": {
+              "key": "x-ocsf-malware.name",
+              "object": "malware"
+            },
+            "value": {
+              "key": "x-ocsf-malware.value",
+              "object": "malware"
+            }
+          },
+          "overall_score": {
+            "key": "x-ocsf-malware.overall_score",
+            "object": "malware"
+          },
+          "severity": {
+            "key": "x-ocsf-malware.severity",
+            "object": "malware"
+          },
+          "vector_string": {
+            "key": "x-ocsf-malware.vector_string",
+            "object": "malware"
+          },
+          "version": {
+            "key": "x-ocsf-malware.version",
+            "object": "malware"
+          }
+        },
+        "cwe_uid": {
+          "key": "x-ocsf-malware.cwe_uid",
+          "object": "malware"
+        },
+        "cwe_url": {
+          "key": "x-ocsf-malware.cwe_url",
+          "object": "malware"
+        },
+        "modified_time": {
+          "key": "x-ocsf-malware.modified_time",
+          "object": "malware"
+        },
+        "product": {
+          "feature": {
+            "name": {
+              "key": "x-ocsf-malware.name",
+              "object": "malware"
+            },
+            "uid": {
+              "key": "x-ocsf-malware.uid",
+              "object": "malware"
+            },
+            "version": {
+              "key": "x-ocsf-malware.version",
+              "object": "malware"
+            }
+          },
+          "lang": {
+            "key": "x-ocsf-malware.lang",
+            "object": "malware"
+          },
+          "name": {
+            "key": "x-ocsf-malware.name",
+            "object": "malware"
+          },
+          "path": {
+            "key": "x-ocsf-malware.path",
+            "object": "malware"
+          },
+          "uid": {
+            "key": "x-ocsf-malware.uid",
+            "object": "malware"
+          },
+          "vendor_name": {
+            "key": "x-ocsf-malware.vendor_name",
+            "object": "malware"
+          },
+          "version": {
+            "key": "x-ocsf-malware.version",
+            "object": "malware"
+          }
+        },
+        "type": {
+          "key": "x-ocsf-malware.type",
+          "object": "malware"
+        },
+        "uid": {
+          "key": "x-ocsf-malware.uid",
+          "object": "malware"
+        }
+      },
+      "name": {
+        "key": "x-ocsf-malware.name",
+        "object": "malware"
+      },
+      "path": {
+        "key": "x-ocsf-malware.path",
+        "object": "malware"
+      },
+      "provider": {
+        "key": "x-ocsf-malware.provider",
+        "object": "malware"
+      },
+      "uid": {
+        "key": "x-ocsf-malware.uid",
+        "object": "malware"
+      }
+    },
     "message": {
       "key": "x-ocsf-cloud.message",
       "object": "ocsf_cloud_api"
@@ -500,22 +767,1268 @@
       }
     },
     "observables": {
-      "name": {
-        "key": "x-ibm-finding.name",
-        "object": "ibm_finding"
-      },
+      "name": [
+        {
+          "key": "x-ibm-observables.name",
+          "object": "observables"
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "ibm_finding",
+          "references": [
+            "observables"
+          ]
+        }
+      ],
       "type": {
-        "key": "x-ibm-finding.finding_type",
-        "object": "ibm_finding"
+        "key": "x-ibm-observables.finding_type",
+        "object": "observables"
       },
       "type_id": {
-        "key": "x-ibm-finding.alert_id",
-        "object": "ibm_finding",
+        "key": "x-ibm-observables.alert_id",
+        "object": "observables",
         "transformer": "ToInteger"
       },
       "value": {
-        "key": "x-ibm-finding.description",
-        "object": "ibm_finding"
+        "key": "x-ibm-observables.description",
+        "object": "observables"
+      }
+    },
+    "process": {
+      "cmd_line": {
+        "key": "process.command_line",
+        "object": "process"
+      },
+      "created_time": {
+        "key": "process.created",
+        "object": "process"
+      },
+      "file": {
+        "accessed_time": {
+          "key": "file.accessed",
+          "object": "file"
+        },
+        "accessor": {
+          "account_type": {
+            "key": "user-account.account_type",
+            "object": "accessor-user-account"
+          },
+          "account_type_id": {
+            "key": "user-account.extensions.x-accessor-ext.account_type_id",
+            "object": "accessor-user-account"
+          },
+          "account_uid": {
+            "key": "user-account.extensions.x-accessor-ext.account_uid",
+            "object": "accessor-user-account"
+          },
+          "credential_uid": {
+            "key": "user-account.extensions.x-accessor-ext.credential_uid",
+            "object": "accessor-user-account"
+          },
+          "domain": {
+            "key": "user-account.extensions.x-accessor-ext.domain",
+            "object": "accessor-user-account"
+          },
+          "email_addr": {
+            "key": "email-addr.value",
+            "object": "email-addr"
+          },
+          "groups": {
+            "desc": {
+              "key": "user-account.extensions.x-accessor-ext.group_desc",
+              "object": "accessor-user-account"
+            },
+            "name": {
+              "key": "user-account.extensions.x-accessor-ext.group_name",
+              "object": "accessor-user-account"
+            },
+            "privileges": {
+              "key": "user-account.extensions.x-accessor-ext.group_privileges",
+              "object": "accessor-user-account"
+            },
+            "type": {
+              "key": "user-account.extensions.x-accessor-ext.group_type",
+              "object": "accessor-user-account"
+            },
+            "uid": {
+              "key": "user-account.extensions.x-accessor-ext.group_uid",
+              "object": "accessor-user-account"
+            }
+          },
+          "name": {
+            "key": "user-account.display_name",
+            "object": "accessor-user-account"
+          },
+          "org_uid": {
+            "key": "user-account.extensions.x-accessor-ext.org_uid",
+            "object": "accessor-user-account"
+          },
+          "session_uid": {
+            "key": "user-account.extensions.x-accessor-ext.session_uid",
+            "object": "accessor-user-account"
+          },
+          "session_uuid": {
+            "key": "user-account.extensions.x-accessor-ext.session_uuid",
+            "object": "accessor-user-account"
+          },
+          "type": {
+            "key": "user-account.extensions.x-accessor-ext.type",
+            "object": "accessor-user-account"
+          },
+          "type_id": {
+            "key": "user-account.extensions.x-accessor-ext.type_id",
+            "object": "accessor-user-account"
+          },
+          "uid": {
+            "key": "user-account.user_id",
+            "object": "accessor-user-account"
+          },
+          "uuid": {
+            "key": "user-account.extensions.x-accessor-ext.uuid",
+            "object": "accessor-user-account"
+          }
+        },
+        "attributes": {
+          "key": "file.extensions.x-ocsf-file-ext.attributes",
+          "object": "file"
+        },
+        "company_name": {
+          "key": "file.extensions.x-ocsf-file-ext.company_name",
+          "object": "file"
+        },
+        "confidentiality": {
+          "key": "file.extensions.x-ocsf-file-ext.confidentiality",
+          "object": "file"
+        },
+        "confidentiality_id": {
+          "key": "file.extensions.x-ocsf-file-ext.confidentiality_id",
+          "object": "file"
+        },
+        "created_time": {
+          "key": "file.created",
+          "object": "file"
+        },
+        "creator": {
+          "account_type": {
+            "key": "user-account.account_type",
+            "object": "creator-user-account"
+          },
+          "account_type_id": {
+            "key": "user-account.extensions.x-accessor-ext.account_type_id",
+            "object": "creator-user-account"
+          },
+          "account_uid": {
+            "key": "user-account.extensions.x-accessor-ext.account_uid",
+            "object": "creator-user-account"
+          },
+          "credential_uid": {
+            "key": "user-account.extensions.x-accessor-ext.credential_uid",
+            "object": "creator-user-account"
+          },
+          "domain": {
+            "key": "user-account.extensions.x-accessor-ext.domain",
+            "object": "creator-user-account"
+          },
+          "email_addr": {
+            "key": "email-addr.value",
+            "object": "creator-email-addr"
+          },
+          "groups": {
+            "desc": {
+              "key": "user-account.extensions.x-accessor-ext.group_desc",
+              "object": "creator-user-account"
+            },
+            "name": {
+              "key": "user-account.extensions.x-accessor-ext.group_name",
+              "object": "creator-user-account"
+            },
+            "privileges": {
+              "key": "user-account.extensions.x-accessor-ext.group_privileges",
+              "object": "creator-user-account"
+            },
+            "type": {
+              "key": "user-account.extensions.x-accessor-ext.group_type",
+              "object": "creator-user-account"
+            },
+            "uid": {
+              "key": "user-account.extensions.x-accessor-ext.group_uid",
+              "object": "creator-user-account"
+            }
+          },
+          "name": {
+            "key": "user-account.display_name",
+            "object": "creator-user-account"
+          },
+          "org_uid": {
+            "key": "user-account.extensions.x-accessor-ext.org_uid",
+            "object": "creator-user-account"
+          },
+          "session_uid": {
+            "key": "user-account.extensions.x-accessor-ext.session_uid",
+            "object": "creator-user-account"
+          },
+          "session_uuid": {
+            "key": "user-account.extensions.x-accessor-ext.session_uuid",
+            "object": "creator-user-account"
+          },
+          "type": {
+            "key": "user-account.extensions.x-accessor-ext.type",
+            "object": "creator-user-account"
+          },
+          "type_id": {
+            "key": "user-account.extensions.x-accessor-ext.type_id",
+            "object": "creator-user-account"
+          },
+          "uid": {
+            "key": "user-account.user_id",
+            "object": "creator-user-account"
+          },
+          "uuid": {
+            "key": "user-account.extensions.x-accessor-ext.uuid",
+            "object": "creator-user-account"
+          }
+        },
+        "desc": {
+          "key": "file.extensions.x-ocsf-file-ext.description",
+          "object": "file"
+        },
+        "fingerprints": {
+          "algorithm": {
+            "key": "file.extensions.x-ocsf-file-ext.algorithm",
+            "object": "file"
+          },
+          "algorithm_id": {
+            "key": "file.extensions.x-ocsf-file-ext.algorithm_id",
+            "object": "file"
+          },
+          "value": {
+            "key": "file.extensions.x-ocsf-file-ext.algorithm_value",
+            "object": "file"
+          }
+        },
+        "is_system": {
+          "key": "process.extensions.x-ocsf-process-ext.is_system",
+          "object": "process"
+        },
+        "mime_type": {
+          "key": "process.mime_type",
+          "object": "process"
+        },
+        "modified_time": {
+          "key": "process.modified",
+          "object": "process"
+        },
+        "modifier": {
+          "account_type": {
+            "key": "user-account.account_type",
+            "object": "modifier-user-account"
+          },
+          "account_type_id": {
+            "key": "user-account.extensions.x-accessor-ext.account_type_id",
+            "object": "modifier-user-account"
+          },
+          "account_uid": {
+            "key": "user-account.extensions.x-accessor-ext.account_uid",
+            "object": "modifier-user-account"
+          },
+          "credential_uid": {
+            "key": "user-account.extensions.x-accessor-ext.credential_uid",
+            "object": "modifier-user-account"
+          },
+          "domain": {
+            "key": "user-account.extensions.x-accessor-ext.domain",
+            "object": "modifier-user-account"
+          },
+          "email_addr": {
+            "key": "email-addr.value",
+            "object": "modifier-email-addr"
+          },
+          "groups": {
+            "desc": {
+              "key": "user-account.extensions.x-accessor-ext.group_desc",
+              "object": "modifier-user-account"
+            },
+            "name": {
+              "key": "user-account.extensions.x-accessor-ext.group_name",
+              "object": "modifier-user-account"
+            },
+            "privileges": {
+              "key": "user-account.extensions.x-accessor-ext.group_privileges",
+              "object": "modifier-user-account"
+            },
+            "type": {
+              "key": "user-account.extensions.x-accessor-ext.group_type",
+              "object": "modifier-user-account"
+            },
+            "uid": {
+              "key": "user-account.extensions.x-accessor-ext.group_uid",
+              "object": "modifier-user-account"
+            }
+          },
+          "name": {
+            "key": "user-account.display_name",
+            "object": "modifier-user-account"
+          },
+          "org_uid": {
+            "key": "user-account.extensions.x-accessor-ext.org_uid",
+            "object": "modifier-user-account"
+          },
+          "session_uid": {
+            "key": "user-account.extensions.x-accessor-ext.session_uid",
+            "object": "modifier-user-account"
+          },
+          "session_uuid": {
+            "key": "user-account.extensions.x-accessor-ext.session_uuid",
+            "object": "modifier-user-account"
+          },
+          "type": {
+            "key": "user-account.extensions.x-accessor-ext.type",
+            "object": "modifier-user-account"
+          },
+          "type_id": {
+            "key": "user-account.extensions.x-accessor-ext.type_id",
+            "object": "modifier-user-account"
+          },
+          "uid": {
+            "key": "user-account.user_id",
+            "object": "modifier-user-account"
+          },
+          "uuid": {
+            "key": "user-account.extensions.x-accessor-ext.uuid",
+            "object": "modifier-user-account"
+          }
+        },
+        "name": [
+          {
+            "key": "file.name",
+            "object": "file"
+          },
+          {
+            "key": "process.binary_ref",
+            "object": "process",
+            "references": "file"
+          }
+        ],
+        "owner": {
+          "account_type": {
+            "key": "user-account.account_type",
+            "object": "owner-user-account"
+          },
+          "account_type_id": {
+            "key": "user-account.extensions.x-accessor-ext.account_type_id",
+            "object": "owner-user-account"
+          },
+          "account_uid": {
+            "key": "user-account.extensions.x-accessor-ext.account_uid",
+            "object": "owner-user-account"
+          },
+          "credential_uid": {
+            "key": "user-account.extensions.x-accessor-ext.credential_uid",
+            "object": "owner-user-account"
+          },
+          "domain": {
+            "key": "user-account.extensions.x-accessor-ext.domain",
+            "object": "owner-user-account"
+          },
+          "email_addr": {
+            "key": "email-addr.value",
+            "object": "owner-user-account"
+          },
+          "groups": {
+            "desc": {
+              "key": "user-account.extensions.x-accessor-ext.group_desc",
+              "object": "owner-user-account"
+            },
+            "name": {
+              "key": "user-account.extensions.x-accessor-ext.group_name",
+              "object": "owner-user-account"
+            },
+            "privileges": {
+              "key": "user-account.extensions.x-accessor-ext.group_privileges",
+              "object": "owner-user-account"
+            },
+            "type": {
+              "key": "user-account.extensions.x-accessor-ext.group_type",
+              "object": "owner-user-account"
+            },
+            "uid": {
+              "key": "user-account.extensions.x-accessor-ext.group_uid",
+              "object": "owner-user-account"
+            }
+          },
+          "name": {
+            "key": "user-account.display_name",
+            "object": "owner-user-account"
+          },
+          "org_uid": {
+            "key": "user-account.extensions.x-accessor-ext.org_uid",
+            "object": "owner-user-account"
+          },
+          "session_uid": {
+            "key": "user-account.extensions.x-accessor-ext.session_uid",
+            "object": "owner-user-account"
+          },
+          "session_uuid": {
+            "key": "user-account.extensions.x-accessor-ext.session_uuid",
+            "object": "owner-user-account"
+          },
+          "type": {
+            "key": "user-account.extensions.x-accessor-ext.type",
+            "object": "owner-user-account"
+          },
+          "type_id": {
+            "key": "user-account.extensions.x-accessor-ext.type_id",
+            "object": "owner-user-account"
+          },
+          "uid": {
+            "key": "user-account.user_id",
+            "object": "owner-user-account"
+          },
+          "uuid": {
+            "key": "user-account.extensions.x-accessor-ext.uuid",
+            "object": "owner-user-account"
+          }
+        },
+        "parent_folder": [
+          {
+            "key": "directory.path",
+            "object": "directory"
+          },
+          {
+            "key": "file.parent_directory_ref",
+            "object": "file",
+            "references": "directory"
+          }
+        ],
+        "path": {
+          "key": "file.extensions.x-ocsf-file-ext.path",
+          "object": "file"
+        },
+        "product": {
+          "feature": {
+            "name": {
+              "key": "file.extensions.x-ocsf-file-ext.feature_name",
+              "object": "file"
+            },
+            "uid": {
+              "key": "file.extensions.x-ocsf-file-ext.feature_uid",
+              "object": "file"
+            },
+            "version": {
+              "key": "file.extensions.x-ocsf-file-ext.feature_version",
+              "object": "file"
+            }
+          },
+          "lang": {
+            "key": "file.extensions.x-ocsf-file-ext.product_lang",
+            "object": "file"
+          },
+          "name": {
+            "key": "file.extensions.x-ocsf-file-ext.product_name",
+            "object": "file"
+          },
+          "path": {
+            "key": "file.extensions.x-ocsf-file-ext.installed_path",
+            "object": "file"
+          },
+          "uid": {
+            "key": "file.extensions.x-ocsf-file-ext.product_uid",
+            "object": "file"
+          },
+          "vendor_name": {
+            "key": "file.extensions.x-ocsf-file-ext.product_vendor",
+            "object": "file"
+          },
+          "version": {
+            "key": "file.extensions.x-ocsf-file-ext.product_version",
+            "object": "file"
+          }
+        },
+        "security_descriptor": {
+          "key": "file.extensions.x-ocsf-file-ext.security_descriptor",
+          "object": "file"
+        },
+        "signature": {
+          "key": "file.extensions.x-ocsf-file-ext.signature",
+          "object": "file"
+        },
+        "size": {
+          "key": "file.size",
+          "object": "file"
+        },
+        "type": {
+          "key": "file.extensions.x-ocsf-file-ext.type",
+          "object": "file"
+        },
+        "type_id": {
+          "key": "file.extensions.x-ocsf-file-ext.type_id",
+          "object": "file"
+        },
+        "uid": {
+          "key": "file.extensions.x-ocsf-file-ext.uid",
+          "object": "file"
+        },
+        "version": {
+          "key": "file.extensions.x-ocsf-file-ext.version",
+          "object": "file"
+        },
+        "xattributes": {
+          "key": "process.extensions.x-ocsf-process-ext.xattributes",
+          "object": "process"
+        }
+      },
+      "integrity": {
+        "key": "process.extensions.x-ocsf-process-ext.integrity",
+        "object": "process"
+      },
+      "integrity_id": {
+        "key": "process.extensions.x-ocsf-process-ext.integrity_id",
+        "object": "process"
+      },
+      "lineage": {
+        "key": "process.extensions.x-ocsf-process-ext.lineage",
+        "object": "process"
+      },
+      "loaded_modules": {
+        "key": "process.extensions.x-ocsf-process-ext.loaded_modules",
+        "object": "process"
+      },
+      "name": {
+        "key": "process.name",
+        "object": "process"
+      },
+      "parent-process": {
+        "cmd_line": {
+          "key": "process.command_line",
+          "object": "parent-process"
+        },
+        "created_time": {
+          "key": "process.created",
+          "object": "parent-process"
+        },
+        "file": {
+          "accessed_time": {
+            "key": "file.accessed",
+            "object": "parent-file"
+          },
+          "accessor": {
+            "account_type": {
+              "key": "user-account.account_type",
+              "object": "parent-accessor-user-account"
+            },
+            "account_type_id": {
+              "key": "user-account.extensions.x-accessor-ext.account_type_id",
+              "object": "parent-accessor-user-account"
+            },
+            "account_uid": {
+              "key": "user-account.extensions.x-accessor-ext.account_uid",
+              "object": "parent-accessor-user-account"
+            },
+            "credential_uid": {
+              "key": "user-account.extensions.x-accessor-ext.credential_uid",
+              "object": "parent-accessor-user-account"
+            },
+            "domain": {
+              "key": "user-account.extensions.x-accessor-ext.domain",
+              "object": "parent-accessor-user-account"
+            },
+            "email_addr": {
+              "key": "email-addr.value",
+              "object": "parent-email-addr"
+            },
+            "groups": {
+              "desc": {
+                "key": "user-account.extensions.x-accessor-ext.group_desc",
+                "object": "parent-accessor-user-account"
+              },
+              "name": {
+                "key": "user-account.extensions.x-accessor-ext.group_name",
+                "object": "parent-accessor-user-account"
+              },
+              "privileges": {
+                "key": "user-account.extensions.x-accessor-ext.group_privileges",
+                "object": "parent-accessor-user-account"
+              },
+              "type": {
+                "key": "user-account.extensions.x-accessor-ext.group_type",
+                "object": "parent-accessor-user-account"
+              },
+              "uid": {
+                "key": "user-account.extensions.x-accessor-ext.group_uid",
+                "object": "parent-accessor-user-account"
+              }
+            },
+            "name": {
+              "key": "user-account.display_name",
+              "object": "parent-accessor-user-account"
+            },
+            "org_uid": {
+              "key": "user-account.extensions.x-accessor-ext.org_uid",
+              "object": "parent-accessor-user-account"
+            },
+            "session_uid": {
+              "key": "user-account.extensions.x-accessor-ext.session_uid",
+              "object": "parent-accessor-user-account"
+            },
+            "session_uuid": {
+              "key": "user-account.extensions.x-accessor-ext.session_uuid",
+              "object": "parent-accessor-user-account"
+            },
+            "type": {
+              "key": "user-account.extensions.x-accessor-ext.type",
+              "object": "parent-accessor-user-account"
+            },
+            "type_id": {
+              "key": "user-account.extensions.x-accessor-ext.type_id",
+              "object": "parent-accessor-user-account"
+            },
+            "uid": {
+              "key": "user-account.user_id",
+              "object": "parent-accessor-user-account"
+            },
+            "uuid": {
+              "key": "user-account.extensions.x-accessor-ext.uuid",
+              "object": "parent-accessor-user-account"
+            }
+          },
+          "attributes": {
+            "key": "file.extensions.x-ocsf-file-ext.attributes",
+            "object": "parent-file"
+          },
+          "company_name": {
+            "key": "file.extensions.x-ocsf-file-ext.company_name",
+            "object": "parent-file"
+          },
+          "confidentiality": {
+            "key": "file.extensions.x-ocsf-file-ext.confidentiality",
+            "object": "parent-file"
+          },
+          "confidentiality_id": {
+            "key": "file.extensions.x-ocsf-file-ext.confidentiality_id",
+            "object": "parent-file"
+          },
+          "created_time": {
+            "key": "file.created",
+            "object": "parent-file"
+          },
+          "creator": {
+            "account_type": {
+              "key": "user-account.account_type",
+              "object": "parent-creator-user-account"
+            },
+            "account_type_id": {
+              "key": "user-account.extensions.x-accessor-ext.account_type_id",
+              "object": "parent-creator-user-account"
+            },
+            "account_uid": {
+              "key": "user-account.extensions.x-accessor-ext.account_uid",
+              "object": "parent-creator-user-account"
+            },
+            "credential_uid": {
+              "key": "user-account.extensions.x-accessor-ext.credential_uid",
+              "object": "parent-creator-user-account"
+            },
+            "domain": {
+              "key": "user-account.extensions.x-accessor-ext.domain",
+              "object": "parent-creator-user-account"
+            },
+            "email_addr": {
+              "key": "email-addr.value",
+              "object": "parent-creator-email-addr"
+            },
+            "groups": {
+              "desc": {
+                "key": "user-account.extensions.x-accessor-ext.group_desc",
+                "object": "parent-creator-user-account"
+              },
+              "name": {
+                "key": "user-account.extensions.x-accessor-ext.group_name",
+                "object": "parent-creator-user-account"
+              },
+              "privileges": {
+                "key": "user-account.extensions.x-accessor-ext.group_privileges",
+                "object": "parent-creator-user-account"
+              },
+              "type": {
+                "key": "user-account.extensions.x-accessor-ext.group_type",
+                "object": "parent-creator-user-account"
+              },
+              "uid": {
+                "key": "user-account.extensions.x-accessor-ext.group_uid",
+                "object": "parent-creator-user-account"
+              }
+            },
+            "name": {
+              "key": "user-account.display_name",
+              "object": "parent-creator-user-account"
+            },
+            "org_uid": {
+              "key": "user-account.extensions.x-accessor-ext.org_uid",
+              "object": "parent-creator-user-account"
+            },
+            "session_uid": {
+              "key": "user-account.extensions.x-accessor-ext.session_uid",
+              "object": "parent-creator-user-account"
+            },
+            "session_uuid": {
+              "key": "user-account.extensions.x-accessor-ext.session_uuid",
+              "object": "parent-creator-user-account"
+            },
+            "type": {
+              "key": "user-account.extensions.x-accessor-ext.type",
+              "object": "parent-creator-user-account"
+            },
+            "type_id": {
+              "key": "user-account.extensions.x-accessor-ext.type_id",
+              "object": "parent-creator-user-account"
+            },
+            "uid": {
+              "key": "user-account.user_id",
+              "object": "parent-creator-user-account"
+            },
+            "uuid": {
+              "key": "user-account.extensions.x-accessor-ext.uuid",
+              "object": "parent-creator-user-account"
+            }
+          },
+          "desc": {
+            "key": "file.extensions.x-ocsf-file-ext.description",
+            "object": "parent-file"
+          },
+          "fingerprints": {
+            "algorithm": {
+              "key": "file.extensions.x-ocsf-file-ext.algorithm",
+              "object": "parent-file"
+            },
+            "algorithm_id": {
+              "key": "file.extensions.x-ocsf-file-ext.algorithm_id",
+              "object": "parent-file"
+            },
+            "value": {
+              "key": "file.extensions.x-ocsf-file-ext.algorithm_value",
+              "object": "parent-file"
+            }
+          },
+          "is_system": {
+            "key": "process.extensions.x-ocsf-process-ext.is_system",
+            "object": "parent-process"
+          },
+          "mime_type": {
+            "key": "process.mime_type",
+            "object": "parent-process"
+          },
+          "modified_time": {
+            "key": "process.modified",
+            "object": "parent-process"
+          },
+          "modifier": {
+            "account_type": {
+              "key": "user-account.account_type",
+              "object": "parent-modifier-user-account"
+            },
+            "account_type_id": {
+              "key": "user-account.extensions.x-accessor-ext.account_type_id",
+              "object": "parent-modifier-user-account"
+            },
+            "account_uid": {
+              "key": "user-account.extensions.x-accessor-ext.account_uid",
+              "object": "parent-modifier-user-account"
+            },
+            "credential_uid": {
+              "key": "user-account.extensions.x-accessor-ext.credential_uid",
+              "object": "parent-modifier-user-account"
+            },
+            "domain": {
+              "key": "user-account.extensions.x-accessor-ext.domain",
+              "object": "parent-modifier-user-account"
+            },
+            "email_addr": {
+              "key": "email-addr.value",
+              "object": "parent-modifier-email-addr"
+            },
+            "groups": {
+              "desc": {
+                "key": "user-account.extensions.x-accessor-ext.group_desc",
+                "object": "parent-modifier-user-account"
+              },
+              "name": {
+                "key": "user-account.extensions.x-accessor-ext.group_name",
+                "object": "parent-modifier-user-account"
+              },
+              "privileges": {
+                "key": "user-account.extensions.x-accessor-ext.group_privileges",
+                "object": "parent-modifier-user-account"
+              },
+              "type": {
+                "key": "user-account.extensions.x-accessor-ext.group_type",
+                "object": "parent-modifier-user-account"
+              },
+              "uid": {
+                "key": "user-account.extensions.x-accessor-ext.group_uid",
+                "object": "parent-modifier-user-account"
+              }
+            },
+            "name": {
+              "key": "user-account.display_name",
+              "object": "parent-modifier-user-account"
+            },
+            "org_uid": {
+              "key": "user-account.extensions.x-accessor-ext.org_uid",
+              "object": "parent-modifier-user-account"
+            },
+            "session_uid": {
+              "key": "user-account.extensions.x-accessor-ext.session_uid",
+              "object": "parent-modifier-user-account"
+            },
+            "session_uuid": {
+              "key": "user-account.extensions.x-accessor-ext.session_uuid",
+              "object": "parent-modifier-user-account"
+            },
+            "type": {
+              "key": "user-account.extensions.x-accessor-ext.type",
+              "object": "parent-modifier-user-account"
+            },
+            "type_id": {
+              "key": "user-account.extensions.x-accessor-ext.type_id",
+              "object": "parent-modifier-user-account"
+            },
+            "uid": {
+              "key": "user-account.user_id",
+              "object": "parent-modifier-user-account"
+            },
+            "uuid": {
+              "key": "user-account.extensions.x-accessor-ext.uuid",
+              "object": "parent-modifier-user-account"
+            }
+          },
+          "name": {
+            "key": "x-ocsf-process.name",
+            "object": "parent-process"
+          },
+          "owner": {
+            "account_type": {
+              "key": "user-account.account_type",
+              "object": "parent-owner-user-account"
+            },
+            "account_type_id": {
+              "key": "user-account.extensions.x-accessor-ext.account_type_id",
+              "object": "parent-owner-user-account"
+            },
+            "account_uid": {
+              "key": "user-account.extensions.x-accessor-ext.account_uid",
+              "object": "parent-owner-user-account"
+            },
+            "credential_uid": {
+              "key": "user-account.extensions.x-accessor-ext.credential_uid",
+              "object": "parent-owner-user-account"
+            },
+            "domain": {
+              "key": "user-account.extensions.x-accessor-ext.domain",
+              "object": "parent-owner-user-account"
+            },
+            "email_addr": {
+              "key": "email-addr.value",
+              "object": "parent-owner-email-addr"
+            },
+            "groups": {
+              "desc": {
+                "key": "user-account.extensions.x-accessor-ext.group_desc",
+                "object": "parent-owner-user-account"
+              },
+              "name": {
+                "key": "user-account.extensions.x-accessor-ext.group_name",
+                "object": "parent-owner-user-account"
+              },
+              "privileges": {
+                "key": "user-account.extensions.x-accessor-ext.group_privileges",
+                "object": "parent-owner-user-account"
+              },
+              "type": {
+                "key": "user-account.extensions.x-accessor-ext.group_type",
+                "object": "parent-owner-user-account"
+              },
+              "uid": {
+                "key": "user-account.extensions.x-accessor-ext.group_uid",
+                "object": "parent-owner-user-account"
+              }
+            },
+            "name": {
+              "key": "user-account.display_name",
+              "object": "parent-owner-user-account"
+            },
+            "org_uid": {
+              "key": "user-account.extensions.x-accessor-ext.org_uid",
+              "object": "parent-owner-user-account"
+            },
+            "session_uid": {
+              "key": "user-account.extensions.x-accessor-ext.session_uid",
+              "object": "parent-owner-user-account"
+            },
+            "session_uuid": {
+              "key": "user-account.extensions.x-accessor-ext.session_uuid",
+              "object": "parent-owner-user-account"
+            },
+            "type": {
+              "key": "user-account.extensions.x-accessor-ext.type",
+              "object": "parent-owner-user-account"
+            },
+            "type_id": {
+              "key": "user-account.extensions.x-accessor-ext.type_id",
+              "object": "parent-owner-user-account"
+            },
+            "uid": {
+              "key": "user-account.user_id",
+              "object": "parent-owner-user-account"
+            },
+            "uuid": {
+              "key": "user-account.extensions.x-accessor-ext.uuid",
+              "object": "parent-owner-user-account"
+            }
+          },
+          "parent_folder": [
+            {
+              "key": "directory.path",
+              "object": "parent-directory"
+            },
+            {
+              "key": "file.parent_directory_ref",
+              "object": "parent-file",
+              "references": "parent-directory"
+            }
+          ],
+          "path": {
+            "key": "file.extensions.x-ocsf-file-ext.path",
+            "object": "parent-file"
+          },
+          "product": {
+            "feature": {
+              "name": {
+                "key": "file.extensions.x-ocsf-file-ext.feature_name",
+                "object": "parent-file"
+              },
+              "uid": {
+                "key": "file.extensions.x-ocsf-file-ext.feature_uid",
+                "object": "parent-file"
+              },
+              "version": {
+                "key": "file.extensions.x-ocsf-file-ext.feature_version",
+                "object": "parent-file"
+              }
+            },
+            "lang": {
+              "key": "file.extensions.x-ocsf-file-ext.product_lang",
+              "object": "parent-file"
+            },
+            "name": {
+              "key": "file.extensions.x-ocsf-file-ext.product_name",
+              "object": "parent-file"
+            },
+            "path": {
+              "key": "file.extensions.x-ocsf-file-ext.installed_path",
+              "object": "parent-file"
+            },
+            "uid": {
+              "key": "file.extensions.x-ocsf-file-ext.product_uid",
+              "object": "parent-file"
+            },
+            "vendor_name": {
+              "key": "file.extensions.x-ocsf-file-ext.product_vendor",
+              "object": "parent-file"
+            },
+            "version": {
+              "key": "file.extensions.x-ocsf-file-ext.product_version",
+              "object": "parent-file"
+            }
+          },
+          "security_descriptor": {
+            "key": "file.extensions.x-ocsf-file-ext.security_descriptor",
+            "object": "parent-file"
+          },
+          "signature": {
+            "key": "file.extensions.x-ocsf-file-ext.signature",
+            "object": "parent-file"
+          },
+          "size": {
+            "key": "file.size",
+            "object": "parent-file"
+          },
+          "type": {
+            "key": "file.extensions.x-ocsf-file-ext.type",
+            "object": "parent-file"
+          },
+          "type_id": {
+            "key": "file.extensions.x-ocsf-file-ext.type_id",
+            "object": "parent-file"
+          },
+          "uid": {
+            "key": "file.extensions.x-ocsf-file-ext.uid",
+            "object": "parent-file"
+          },
+          "version": {
+            "key": "file.extensions.x-ocsf-file-ext.version",
+            "object": "parent-file"
+          },
+          "xattributes": {
+            "key": "process.extensions.x-ocsf-process-ext.xattributes",
+            "object": "parent-process"
+          }
+        },
+        "integrity": {
+          "key": "process.extensions.x-ocsf-process-ext.integrity",
+          "object": "parent-process"
+        },
+        "integrity_id": {
+          "key": "process.extensions.x-ocsf-process-ext.integrity_id",
+          "object": "parent-process"
+        },
+        "lineage": {
+          "key": "process.extensions.x-ocsf-process-ext.lineage",
+          "object": "parent-process"
+        },
+        "loaded_modules": {
+          "key": "process.extensions.x-ocsf-process-ext.loaded_modules",
+          "object": "parent-process"
+        },
+        "name": {
+          "key": "process.name",
+          "object": "parent-process"
+        },
+        "pid": [
+          {
+            "key": "process.pid",
+            "object": "parent-process"
+          },
+          {
+            "key": "process.child_refs",
+            "object": "parent-process",
+            "references": ["process"]
+          }
+        ],
+        "sandbox": {
+          "key": "process.extensions.x-ocsf-process-ext.loaded_modules",
+          "object": "parent-process"
+        },
+        "terminated_time": {
+          "key": "process.extensions.x-ocsf-process-ext.terminated_time",
+          "object": "parent-process"
+        },
+        "tid": {
+          "key": "process.extensions.x-ocsf-process-ext.tid",
+          "object": "parent-process"
+        },
+        "uid": {
+          "key": "process.extensions.x-ocsf-process-ext.uid",
+          "object": "parent-process"
+        },
+        "user": {
+          "account_type": {
+            "key": "user-account.account_type",
+            "object": "parent-process-user-account"
+          },
+          "account_type_id": {
+            "key": "user-account.extensions.x-accessor-ext.account_type_id",
+            "object": "parent-process-user-account"
+          },
+          "account_uid": {
+            "key": "user-account.extensions.x-accessor-ext.account_uid",
+            "object": "parent-process-user-account"
+          },
+          "credential_uid": {
+            "key": "user-account.extensions.x-accessor-ext.credential_uid",
+            "object": "parent-process-user-account"
+          },
+          "domain": {
+            "key": "user-account.extensions.x-accessor-ext.domain",
+            "object": "parent-process-user-account"
+          },
+          "email_addr": {
+            "key": "email-addr.value",
+            "object": "parent-process-email-addr"
+          },
+          "groups": {
+            "desc": {
+              "key": "user-account.extensions.x-accessor-ext.group_desc",
+              "object": "parent-process-user-account"
+            },
+            "name": {
+              "key": "user-account.extensions.x-accessor-ext.group_name",
+              "object": "parent-process-user-account"
+            },
+            "privileges": {
+              "key": "user-account.extensions.x-accessor-ext.group_privileges",
+              "object": "parent-process-user-account"
+            },
+            "type": {
+              "key": "user-account.extensions.x-accessor-ext.group_type",
+              "object": "parent-process-user-account"
+            },
+            "uid": {
+              "key": "user-account.extensions.x-accessor-ext.group_uid",
+              "object": "parent-process-user-account"
+            }
+          },
+          "name": {
+            "key": "user-account.display_name",
+            "object": "parent-process-user-account"
+          },
+          "org_uid": {
+            "key": "user-account.extensions.x-accessor-ext.org_uid",
+            "object": "parent-process-user-account"
+          },
+          "session_uid": {
+            "key": "user-account.extensions.x-accessor-ext.session_uid",
+            "object": "parent-process-user-account"
+          },
+          "session_uuid": {
+            "key": "user-account.extensions.x-accessor-ext.session_uuid",
+            "object": "parent-process-user-account"
+          },
+          "type": {
+            "key": "user-account.extensions.x-accessor-ext.type",
+            "object": "parent-process-user-account"
+          },
+          "type_id": {
+            "key": "user-account.extensions.x-accessor-ext.type_id",
+            "object": "parent-process-user-account"
+          },
+          "uid": [
+            {
+              "key": "user-account.user_id",
+              "object": "parent-process-user-account"
+            },
+            {
+              "key": "user-account.creator_user_ref",
+              "object": "parent-process",
+              "references": "process-user-account"
+            }
+          ],
+          "uuid": {
+            "key": "user-account.extensions.x-accessor-ext.uuid",
+            "object": "parent-process-user-account"
+          }
+        },
+        "xattributes": {
+          "key": "process.extensions.x-ocsf-process-ext.xattributes",
+          "object": "parent-process"
+        }
+      },
+      "pid": [
+        {
+          "key": "process.pid",
+          "object": "process"
+        },
+        {
+          "key": "process.parent_ref",
+          "object": "process",
+          "references": ["parent-process"]
+        }
+      ],
+      "sandbox": {
+        "key": "process.extensions.x-ocsf-process-ext.loaded_modules",
+        "object": "process"
+      },
+      "terminated_time": {
+        "key": "process.extensions.x-ocsf-process-ext.terminated_time",
+        "object": "process"
+      },
+      "tid": {
+        "key": "process.extensions.x-ocsf-process-ext.tid",
+        "object": "process"
+      },
+      "uid": {
+        "key": "process.extensions.x-ocsf-process-ext.uid",
+        "object": "process"
+      },
+      "user": {
+        "account_type": {
+          "key": "user-account.account_type",
+          "object": "process-user-account"
+        },
+        "account_type_id": {
+          "key": "user-account.extensions.x-accessor-ext.account_type_id",
+          "object": "process-user-account"
+        },
+        "account_uid": {
+          "key": "user-account.extensions.x-accessor-ext.account_uid",
+          "object": "process-user-account"
+        },
+        "credential_uid": {
+          "key": "user-account.extensions.x-accessor-ext.credential_uid",
+          "object": "process-user-account"
+        },
+        "domain": {
+          "key": "user-account.extensions.x-accessor-ext.domain",
+          "object": "process-user-account"
+        },
+        "email_addr": {
+          "key": "email-addr.value",
+          "object": "process-email-addr"
+        },
+        "groups": {
+          "desc": {
+            "key": "user-account.extensions.x-accessor-ext.group_desc",
+            "object": "process-user-account"
+          },
+          "name": {
+            "key": "user-account.extensions.x-accessor-ext.group_name",
+            "object": "process-user-account"
+          },
+          "privileges": {
+            "key": "user-account.extensions.x-accessor-ext.group_privileges",
+            "object": "process-user-account"
+          },
+          "type": {
+            "key": "user-account.extensions.x-accessor-ext.group_type",
+            "object": "process-user-account"
+          },
+          "uid": {
+            "key": "user-account.extensions.x-accessor-ext.group_uid",
+            "object": "process-user-account"
+          }
+        },
+        "name": {
+          "key": "user-account.display_name",
+          "object": "process-user-account"
+        },
+        "org_uid": {
+          "key": "user-account.extensions.x-accessor-ext.org_uid",
+          "object": "process-user-account"
+        },
+        "session_uid": {
+          "key": "user-account.extensions.x-accessor-ext.session_uid",
+          "object": "process-user-account"
+        },
+        "session_uuid": {
+          "key": "user-account.extensions.x-accessor-ext.session_uuid",
+          "object": "process-user-account"
+        },
+        "type": {
+          "key": "user-account.extensions.x-accessor-ext.type",
+          "object": "process-user-account"
+        },
+        "type_id": {
+          "key": "user-account.extensions.x-accessor-ext.type_id",
+          "object": "process-user-account"
+        },
+        "uid": [
+          {
+            "key": "user-account.user_id",
+            "object": "process-user-account"
+          },
+          {
+            "key": "user-account.creator_user_ref",
+            "object": "process",
+            "references": "process-user-account"
+          }
+        ],
+        "uuid": {
+          "key": "user-account.extensions.x-accessor-ext.uuid",
+          "object": "process-user-account"
+        }
+      },
+      "xattributes": {
+        "key": "process.extensions.x-ocsf-process-ext.xattributes",
+        "object": "process"
       }
     },
     "profiles": {
@@ -632,7 +2145,7 @@
         },
         {
           "key": "x-ibm-finding.src_ip_ref",
-          "object": "finding",
+          "object": "ibm_finding",
           "references": "src_ip"
         },
         {
@@ -721,7 +2234,7 @@
         },
         {
           "key": "x-ibm-finding.dst_ip_ref",
-          "object": "finding",
+          "object": "ibm_finding",
           "references": "dst_ip"
         },
         {
@@ -889,6 +2402,164 @@
       "key": "x-ocsf-cloud.type_uid",
       "object": "ocsf_cloud_api",
       "transformer": "ToInteger"
+    },
+    "vulnerabilities": {
+      "cve": {
+        "created_time": {
+          "key": "x-ocsf-vulnerabilities.created_time",
+          "object": "vulnerabilities"
+        },
+        "cvss": {
+          "base_score": {
+            "key": "x-ocsf-vulnerabilities.base_score",
+            "object": "vulnerabilities"
+          },
+          "depth": {
+            "key": "x-ocsf-vulnerabilities.depth",
+            "object": "vulnerabilities"
+          },
+          "metrics": {
+            "name": {
+              "key": "x-ocsf-vulnerabilities.name",
+              "object": "vulnerabilities"
+            },
+            "value": {
+              "key": "x-ocsf-vulnerabilities.value",
+              "object": "vulnerabilities"
+            }
+          },
+          "overall_score": {
+            "key": "x-ocsf-vulnerabilities.overall_score",
+            "object": "vulnerabilities"
+          },
+          "severity": {
+            "key": "x-ocsf-vulnerabilities.severity",
+            "object": "vulnerabilities"
+          },
+          "vector_string": {
+            "key": "x-ocsf-vulnerabilities.vector_string",
+            "object": "vulnerabilities"
+          },
+          "version": {
+            "key": "x-ocsf-vulnerabilities.version",
+            "object": "vulnerabilities"
+          }
+        },
+        "cwe_uid": {
+          "key": "x-ocsf-vulnerabilities.cwe_uid",
+          "object": "vulnerabilities"
+        },
+        "cwe_url": {
+          "key": "x-ocsf-vulnerabilities.cwe_url",
+          "object": "vulnerabilities"
+        },
+        "modified_time": {
+          "key": "x-ocsf-vulnerabilities.modified_time",
+          "object": "vulnerabilities"
+        },
+        "product": {
+          "feature": {
+            "name": {
+              "key": "x-ocsf-vulnerabilities.feature_name",
+              "object": "vulnerabilities"
+            },
+            "uid": {
+              "key": "x-ocsf-vulnerabilities.feature_uid",
+              "object": "vulnerabilities"
+            },
+            "version": {
+              "key": "x-ocsf-vulnerabilities.feature_version",
+              "object": "vulnerabilities"
+            }
+          },
+          "lang": {
+            "key": "x-ocsf-vulnerabilities.lang",
+            "object": "vulnerabilities"
+          },
+          "name": {
+            "key": "x-ocsf-vulnerabilities.product_name",
+            "object": "vulnerabilities"
+          },
+          "path": {
+            "key": "x-ocsf-vulnerabilities.path",
+            "object": "vulnerabilities"
+          },
+          "uid": {
+            "key": "x-ocsf-vulnerabilities.uid",
+            "object": "vulnerabilities"
+          },
+          "vendor_name": {
+            "key": "x-ocsf-vulnerabilities.vendor_name",
+            "object": "vulnerabilities"
+          },
+          "version": {
+            "key": "x-ocsf-vulnerabilities.product_version",
+            "object": "vulnerabilities"
+          }
+        },
+        "type": {
+          "key": "x-ocsf-vulnerabilities.type",
+          "object": "vulnerabilities"
+        },
+        "uid": {
+          "key": "x-ocsf-vulnerabilities.uid",
+          "object": "vulnerabilities"
+        }
+      },
+      "desc": {
+        "key": "x-ocsf-vulnerabilities.desc",
+        "object": "vulnerabilities"
+      },
+      "kb_articles": {
+        "key": "x-ocsf-vulnerabilities.kb_articles",
+        "object": "vulnerabilities"
+      },
+      "packages": {
+        "architecture": {
+          "key": "x-ocsf-vulnerabilities.packages_architecture",
+          "object": "vulnerabilities"
+        },
+        "epoch": {
+          "key": "x-ocsf-vulnerabilities.packages_epoch",
+          "object": "vulnerabilities"
+        },
+        "license": {
+          "key": "x-ocsf-vulnerabilities.packages_license",
+          "object": "vulnerabilities"
+        },
+        "name": {
+          "key": "x-ocsf-vulnerabilities.packages_name",
+          "object": "vulnerabilities"
+        },
+        "release": {
+          "key": "x-ocsf-vulnerabilities.packages_release",
+          "object": "vulnerabilities"
+        },
+        "version": {
+          "key": "x-ocsf-vulnerabilities.packages_version",
+          "object": "vulnerabilities"
+        }
+      },
+      "references": {
+        "key": "x-ocsf-vulnerabilities.references",
+        "object": "vulnerabilities"
+      },
+      "related_vulnerabilities": {
+        "key": "x-ocsf-vulnerabilities.related_vulnerabilities",
+        "object": "vulnerabilities"
+      },
+      "severity": {
+        "key": "x-ocsf-vulnerabilities.severity",
+        "object": "vulnerabilities"
+      },
+      "title": {
+        "key": "x-ocsf-vulnerabilities.title",
+        "object": "vulnerabilities"
+      },
+      "vendor_name": {
+        "key": "x-ocsf-vulnerabilities.vendor_name",
+        "object": "vulnerabilities"
+      }
     }
   },
   "vpcflow": {
