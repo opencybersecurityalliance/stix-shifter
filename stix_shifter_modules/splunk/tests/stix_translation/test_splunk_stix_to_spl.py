@@ -223,7 +223,7 @@ class TestStixToSpl(unittest.TestCase, object):
     def test_issubset_operator(self):
         stix_pattern = "[ipv4-addr:value ISSUBSET '198.51.100.0/24']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = f'search ((src_ip = "198.51.100.0/24") OR (dest_ip = "198.51.100.0/24")) earliest="-5minutes" | head 10000 | fields {fields}'
+        queries = f'search earliest="-5minutes" | where ((cidrmatch("198.51.100.0/24", src_ip)) OR (cidrmatch("198.51.100.0/24", dest_ip))) | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
     def test_custom_time_limit_and_result_count(self):

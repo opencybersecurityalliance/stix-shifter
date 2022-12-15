@@ -200,6 +200,8 @@ class _ObservationExpressionTranslator:
                 comparison = encoders.set(field_mapping, expression.value)
             elif comparator == "encoders.matches":
                 comparison = encoders.matches(field_mapping, expression.value)
+            elif comparator == "encoders.subset":
+                comparison = encoders.subset(field_mapping, expression.value)
             else:
                 comparison = "{} {} {}".format(
                     field_mapping,

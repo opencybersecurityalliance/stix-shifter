@@ -14,3 +14,6 @@ def set(field, value):
 
 def matches(field, value):
     return "match({}, \"{}\")".format(field, value)
+
+def subset(field, value):
+    return "cidrmatch(\"{}\", {})".format(value, field)
