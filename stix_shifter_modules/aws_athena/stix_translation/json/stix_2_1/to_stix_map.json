@@ -1294,7 +1294,7 @@
         "object": "process"
       },
       "name": {
-        "key": "process.name",
+        "key": "process.extensions.x-ocsf-process-ext.name",
         "object": "process"
       },
       "parent-process": {
@@ -1797,7 +1797,7 @@
           "object": "parent-process"
         },
         "name": {
-          "key": "process.name",
+          "key": "process.extensions.x-ocsf-process-ext.name",
           "object": "parent-process"
         },
         "pid": [
