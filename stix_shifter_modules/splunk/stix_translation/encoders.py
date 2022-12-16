@@ -1,5 +1,3 @@
-import re
-
 def simple(value):
     if isinstance(value, str):
         return "\"{}\"".format(value)
@@ -7,9 +5,7 @@ def simple(value):
         return value
 
 def like(field, value):
-    encoded_value = re.escape(value).replace("\\%", ".*").replace("_", ".")
-
-    return "match({}, \"^{}$\")".format(field, encoded_value)
+    return "like({}, \"{}\")".format(field, value)
 
 def set(field, value):
     values = [str(simple(v)) for v in value.values]
@@ -17,6 +13,7 @@ def set(field, value):
     return "{} IN ({})".format(field, ', '.join(values))
 
 def matches(field, value):
-    encoded_value = value.replace("\\", "\\\\") # Splunk needs backslashes encoded in searches
+    return "match({}, \"{}\")".format(field, value)
 
-    return "match({}, \"{}\")".format(field, encoded_value)
+def subset(field, value):
+    return "cidrmatch(\"{}\", {})".format(value, field)
