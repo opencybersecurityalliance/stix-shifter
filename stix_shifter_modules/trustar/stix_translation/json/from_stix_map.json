@@ -11,6 +11,18 @@
       "title": ["title"]
     }
   },
+  "x-trustar-indicator": {
+    "fields": {
+      "firstseen": ["firstseen"],
+      "lastseen": ["lastseen"],
+      "prioritylevel": ["prioritylevel"],
+      "guid": ["guid"],
+      "name": ["name"],
+      "attributes": ["attributes"],
+      "severitylevel": ["severitylevel"]
+
+    }
+  },
   "x-trustar-bitcoin": {
     "fields": {
       "id": ["searchTerm"],
