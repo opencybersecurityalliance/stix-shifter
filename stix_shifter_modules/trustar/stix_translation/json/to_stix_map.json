@@ -35,10 +35,7 @@
     "key": "file.hashes.SHA-256",
     "object": "file"
   },
-  "SOFTWARE": [{
-      "key": "software.name",
-      "object": "file"
-    },
+  "SOFTWARE": [
     {
       "key": "software.name",
       "object": "software",
