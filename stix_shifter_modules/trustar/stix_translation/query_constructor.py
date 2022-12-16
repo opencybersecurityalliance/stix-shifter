@@ -18,6 +18,8 @@ REFERENCE_DATA_TYPES = {"SourceIpV4": ["ipv4", "ipv4_cidr"],
                         "DestinationIpV6": ["ipv6"]}
 
 logger = logging.getLogger(__name__)
+TIMESTAMP = "^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
+TIMESTAMP_MILLISECONDS = "\.\d+Z$"
 
 
 class QueryStringPatternTranslator:
@@ -215,26 +217,50 @@ class QueryStringPatternTranslator:
     def parse_expression(self, pattern: Pattern):
         self.return_obj = dict()
         return self._parse_expression(pattern)
+def _test_timestamp(timestamp) -> bool:
+    return bool(re.search(TIMESTAMP, timestamp))
 
+def _test_or_add_milliseconds(timestamp) -> str:
+    timestamp = timestamp.replace(')', '')
+    if not _test_timestamp(timestamp):
+        raise ValueError("Invalid timestamp")
+    # remove single quotes around timestamp
+    timestamp = re.sub("'", "", timestamp)
+    # check for 3-decimal milliseconds
+    if not bool(re.search(TIMESTAMP_MILLISECONDS, timestamp)):
+        timestamp = re.sub('Z$', '.000Z', timestamp)
+        # print(timestamp)
+        # print("Hi")
+        time = datetime.strptime(timestamp.replace('Z', ''), "%Y-%m-%dT%H:%M:%S.%f")
+        # print(time)
+        # print("Hi1")
+        timestamp = int((time - datetime(1970, 1, 1)).total_seconds()) * 1000
+        # print(timestamp)
+    else:
+        time = datetime.strptime(timestamp.replace('Z', ''), "%Y-%m-%dT%H:%M:%S.%f")
+        # print(time)
+        # print("Hi3")
+        timestamp = int((time - datetime(1970, 1, 1)).total_seconds()) * 1000
+        # print(timestamp)
+    return timestamp
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
 
     trustar_query_translator = QueryStringPatternTranslator(pattern, data_model_mapping)
     query = trustar_query_translator.translated
-
     start = re.search('STARTt\'(.+?)Z', query)
     stop = re.search('STOPt\'(.+?)Z', query)
+    query_new = re.sub("(?<=START)t|(?<=STOP)t", "", query)
+    query_parts = re.split("(START)|(STOP)", query_new)
+    query_parts = list(map(lambda x: x.strip(), list(filter(None, query_parts))))
+
 
     now = int(datetime.utcnow().timestamp() * 1000)
     range_t = options['time_range'] * 60000
 
     if start and stop:
-
-        sfrom = datetime.strptime(start.group(1), "%Y-%m-%dT%H:%M:%S.%f")
-        FROM = int((sfrom - datetime(1970, 1, 1)).total_seconds()) * 1000
-
-        sto = datetime.strptime(stop.group(1), "%Y-%m-%dT%H:%M:%S.%f")
-        TO = int((sto - datetime(1970, 1, 1)).total_seconds()) * 1000
+        FROM = _test_or_add_milliseconds(query_parts[2])
+        TO = _test_or_add_milliseconds(query_parts[4])
 
     else:
         FROM = now - range_t
