@@ -270,7 +270,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     trustar_query_translator.return_obj["to"] = TO
 
     ret = json.dumps(trustar_query_translator.return_obj)
-    ret = ret.replace('%', ' ')
+#     ret = ret.replace('%', ' ')
 
     ret_list = list()
     ret_list.append(ret)
