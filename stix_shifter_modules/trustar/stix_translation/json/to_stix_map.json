@@ -38,8 +38,7 @@
   "SOFTWARE": [
     {
       "key": "software.name",
-      "object": "software",
-      "references": "file"
+      "object": "software"
     }
   ],
   "firstSeen": {
