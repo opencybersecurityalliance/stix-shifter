@@ -56,8 +56,7 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _format_like(value) -> str:
-        value = "{value}".format(value=value)
-        return QueryStringPatternTranslator._escape_value(value)
+        return "'%{value}%'".format(value=value)
 
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
@@ -229,19 +228,11 @@ def _test_or_add_milliseconds(timestamp) -> str:
     # check for 3-decimal milliseconds
     if not bool(re.search(TIMESTAMP_MILLISECONDS, timestamp)):
         timestamp = re.sub('Z$', '.000Z', timestamp)
-        # print(timestamp)
-        # print("Hi")
         time = datetime.strptime(timestamp.replace('Z', ''), "%Y-%m-%dT%H:%M:%S.%f")
-        # print(time)
-        # print("Hi1")
         timestamp = int((time - datetime(1970, 1, 1)).total_seconds()) * 1000
-        # print(timestamp)
     else:
         time = datetime.strptime(timestamp.replace('Z', ''), "%Y-%m-%dT%H:%M:%S.%f")
-        # print(time)
-        # print("Hi3")
         timestamp = int((time - datetime(1970, 1, 1)).total_seconds()) * 1000
-        # print(timestamp)
     return timestamp
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
