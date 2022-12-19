@@ -27,7 +27,6 @@
   },
    "user-account": {
     "fields": {
-      "value": ["DBUser", "OSUser"],
       "user_id": ["DBUser"],
       "display_name": ["OSUser"]
     }
