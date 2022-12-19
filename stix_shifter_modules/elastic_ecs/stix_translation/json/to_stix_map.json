@@ -1555,7 +1555,7 @@
       }
     ],
     "id": {
-      "key": "x-oca-asset.device_id",
+      "key": "x-oca-asset.host_id",
       "object": "host"
     },
     "ip": [
