@@ -1068,7 +1068,7 @@
         "object": "x_user"
       },
       {
-        "key": "user-account.account_id",
+        "key": "user-account.user_id",
         "object": "user"
       },
       {
