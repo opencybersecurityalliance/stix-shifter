@@ -30,7 +30,6 @@
     },
      "user-account": {
       "fields": {
-        "value": ["DB User", "OS User"],
         "user_id": ["DB User"],
         "display_name": ["OS User"]
       }
