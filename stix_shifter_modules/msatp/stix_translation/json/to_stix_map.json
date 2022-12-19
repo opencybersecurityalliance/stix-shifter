@@ -195,7 +195,7 @@
     "InitiatingProcessFileName": [
       {
         "key": "file.name",
-כןס         "object": "nc_process_file",
+        "object": "nc_process_file",
         "transformer": "ToFileName"
       },
       {
