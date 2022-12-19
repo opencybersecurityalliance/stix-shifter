@@ -16,6 +16,7 @@ from stix_shifter_utils.utils import logger
 
 LOGGER = logger.set_logger(__name__)
 
+
 class ValueTransformer():
     """ Base class for value transformers """
 
@@ -54,6 +55,7 @@ class FormatMac(ValueTransformer):
             val = ':'.join([mac[i:i + 2] for i in range(0, len(mac), 2)]).lower()
             addresses.append(val)
         return addresses
+
 
 class FormatTCPProtocol(ValueTransformer):
     """A value transformer to convert TCP protocol to IANA format"""
@@ -208,7 +210,7 @@ class ToDomainName(ValueTransformer):
             if url is None:
                 return
             splits = url.split("://")
-            i = (0,1)[len(splits)>1]
+            i = (0, 1)[len(splits) > 1]
             domain_name = splits[i].split("?")[0].split('/')[0].split(':')[0].lower()
             return domain_name
         except ValueError:
@@ -299,10 +301,12 @@ class SetToOne(ValueTransformer):
 
 class FilterIPv4List(ValueTransformer):
     """A value transformer for filtering-out from a list all values which are not valid IPv4 values"""
+
     @staticmethod
     def transform(obj):
         if isinstance(obj, list):
-            pattern = re.compile(r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
+            pattern = re.compile(
+                r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
             result = []
             for val in obj:
                 if pattern.match(str(val)):
@@ -313,10 +317,12 @@ class FilterIPv4List(ValueTransformer):
 
 class FilterIPv6List(ValueTransformer):
     """A value transformer for filtering-out from a list all values which are not valid IPv6 values"""
+
     @staticmethod
     def transform(obj):
         if isinstance(obj, list):
-            pattern = re.compile(r'^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
+            pattern = re.compile(
+                r'^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
             result = []
             for val in obj:
                 if pattern.match(str(val)):
@@ -327,6 +333,7 @@ class FilterIPv6List(ValueTransformer):
 
 class CheckIPv6(ValueTransformer):
     """A value transformer for validating IPv6 value"""
+
     @staticmethod
     def transform(obj):
         obj_list = FilterIPv6List.transform([obj])
@@ -338,6 +345,7 @@ class CheckIPv6(ValueTransformer):
 
 class CheckIPv4(ValueTransformer):
     """A value transformer for validating IPv4 value"""
+
     @staticmethod
     def transform(obj):
         obj_list = FilterIPv4List.transform([obj])
@@ -349,9 +357,11 @@ class CheckIPv4(ValueTransformer):
 
 class ValueToList(ValueTransformer):
     """A value transformer that converts a single value into a list container the value"""
+
     @staticmethod
     def transform(obj):
         return [obj]
+
 
 class GraphIDToPID(ValueTransformer):
     """A value transformer that converts a single value into a list container the value"""
@@ -397,6 +407,7 @@ class ToKillChainPhasesList(ValueTransformer):
         dct = {'kill_chain_name': KILL_CHAIN_NAME, 'phase_name': value}
         return [dct]
 
+
 class SeverityToNumericVal(ValueTransformer):
     """A value transformer to convert MSATP Severity value (high/medium/low) to numeric value"""
 
@@ -409,8 +420,10 @@ class SeverityToNumericVal(ValueTransformer):
         else:
             return LOW_SEVERITY
 
+
 class MsatpToTimestamp(ValueTransformer):
     """A value transformer to truncate milliseconds"""
+
     @staticmethod
     def transform(msatptime):
         time_array = msatptime.split('.')
@@ -420,6 +433,7 @@ class MsatpToTimestamp(ValueTransformer):
 
 class MsatpToRegistryValue(ValueTransformer):
     """A value transformer to convert MSATP Registry value protocol to windows-registry-value-type STIX"""
+
     @staticmethod
     def transform(registryvalues):
         stix_mapping = {"RegistryValueName": "name", "RegistryValueData": "data", "RegistryValueType": "data_type"}
@@ -440,3 +454,25 @@ class MsatpToRegistryValue(ValueTransformer):
                     registryvalue_dict.update({stix_mapping[key]: value})
         converted_value.append(registryvalue_dict)
         return converted_value
+
+
+class ToFileName(ValueTransformer):
+
+    @staticmethod
+    def transform(value):
+        try:
+            _, file_name = ntpath.split(value)
+            return file_name
+        except ValueError:
+            LOGGER.error("Cannot convert input to file name string")
+
+
+class ToDirectory(ValueTransformer):
+
+    @staticmethod
+    def transform(value):
+        try:
+            file_path, _ = ntpath.split(value)
+            return file_path
+        except ValueError:
+            LOGGER.error("Cannot convert input to file path string")

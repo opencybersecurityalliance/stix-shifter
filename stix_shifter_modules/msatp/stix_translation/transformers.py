@@ -52,16 +52,38 @@ class ToKillChainPhasesList(ValueTransformer):
         return [dct]
 
 
+class ToFileName(ValueTransformer):
+
+    @staticmethod
+    def transform(value):
+        try:
+            _, file_name = ntpath.split(value)
+            return file_name
+        except ValueError:
+            LOGGER.error("Cannot convert input to file name string")
+
+
+class ToDirectory(ValueTransformer):
+
+    @staticmethod
+    def transform(value):
+        try:
+            file_path, _ = ntpath.split(value)
+            return file_path
+        except ValueError:
+            LOGGER.error("Cannot convert input to file path string")
+
+
 class ToMSATPDirectoryPath(ValueTransformer):
     """A value transformer for expected directory path. Take care of the inconsistency, sometimes shows up as a
     folder path and somtimes as a file name """
 
     @staticmethod
-    def transform(obj):
+    def transform(value):
         try:
-            file_path, file_name = ntpath.split(obj)
+            file_path, file_name = ntpath.split(value)
             if '.' not in file_name:
-                file_path = obj
+                file_path = value
             return file_path
         except ValueError:
             LOGGER.error("Cannot convert input to directory path string")

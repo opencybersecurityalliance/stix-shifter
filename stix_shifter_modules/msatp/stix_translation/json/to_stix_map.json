@@ -195,11 +195,13 @@
     "InitiatingProcessFileName": [
       {
         "key": "file.name",
-        "object": "nc_process_file"
+כןס         "object": "nc_process_file",
+        "transformer": "ToFileName"
       },
       {
         "key": "process.name",
-        "object": "nc_process"
+        "object": "nc_process",
+        "transformer": "ToFileName"
       },
       {
         "key": "process.binary_ref",
@@ -215,11 +217,23 @@
     "InitiatingProcessParentFileName": [
       {
         "key": "file.name",
-        "object": "nc_parent_process_file"
+        "object": "nc_parent_process_file",
+        "transformer": "ToFileName"
+      },
+      {
+        "key": "directory.path",
+        "object": "nc_parent_process_file_dir",
+        "transformer": "ToDirectory"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "nc_parent_process_file",
+        "references": "nc_parent_process_file_dir"
       },
       {
         "key": "process.name",
-        "object": "nc_parent_process"
+        "object": "nc_parent_process",
+        "transformer": "ToFileName"
       },
       {
         "key": "x-oca-event.process_ref",
@@ -575,7 +589,8 @@
     "FileName": [
       {
         "key": "file.name",
-        "object": "event_file"
+        "object": "event_file",
+        "transformer": "ToFileName"
       },
       {
         "key": "process.binary_ref",
@@ -862,11 +877,13 @@
     "InitiatingProcessFileName": [
       {
         "key": "file.name",
-        "object": "process_file"
+        "object": "process_file",
+        "transformer": "ToFileName"
       },
       {
         "key": "process.name",
-        "object": "process"
+        "object": "process",
+        "transformer": "ToFileName"
       },
       {
         "key": "process.binary_ref",
@@ -882,11 +899,23 @@
     "InitiatingProcessParentFileName": [
       {
         "key": "file.name",
-        "object": "parent_process_file"
+        "object": "parent_process_file",
+        "transformer": "ToFileName"
+      },
+      {
+        "key": "directory.path",
+        "object": "parent_process_file_dir",
+        "transformer": "ToDirectory"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "parent_process_file",
+        "references": "parent_process_file_dir"
       },
       {
         "key": "process.name",
-        "object": "parent_process"
+        "object": "parent_process",
+        "transformer": "ToFileName"
       },
       {
         "key": "x-oca-event.parent_process_ref",
@@ -1113,7 +1142,8 @@
     "CreatedInitiatingProcessFileName": [
       {
         "key": "file.name",
-        "object": "init_process_file"
+        "object": "init_process_file",
+        "transformer": "ToFileName"
       },
       {
         "key": "process.binary_ref",
@@ -1122,7 +1152,8 @@
       },
       {
         "key": "process.name",
-        "object": "init_process"
+        "object": "init_process",
+        "transformer": "ToFileName"
       },
       {
         "key": "process.parent_ref",
@@ -1143,11 +1174,23 @@
     "CreatedInitiatingProcessParentFileName": [
       {
         "key": "file.name",
-        "object": "init_parent_process_file"
+        "object": "init_parent_process_file",
+        "transformer": "ToFileName"
+      },
+      {
+        "key": "directory.path",
+        "object": "init_parent_process_file_dir",
+        "transformer": "ToDirectory"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "init_parent_process_file",
+        "references": "init_parent_process_file_dir"
       },
       {
         "key": "process.name",
-        "object": "init_parent_process"
+        "object": "init_parent_process",
+        "transformer": "ToFileName"
       },
       {
         "key": "process.binary_ref",
@@ -1587,7 +1630,8 @@
     "FileName": [
       {
         "key": "file.name",
-        "object": "event_file"
+        "object": "event_file",
+        "transformer": "ToFileName"
       },
       {
         "key": "x-oca-event.file_ref",
@@ -1696,11 +1740,13 @@
     "InitiatingProcessFileName": [
       {
         "key": "file.name",
-        "object": "fc_process_file"
+        "object": "fc_process_file",
+        "transformer": "ToFileName"
       },
       {
         "key": "process.name",
-        "object": "fc_process"
+        "object": "fc_process",
+        "transformer": "ToFileName"
       },
       {
         "key": "process.binary_ref",
@@ -1716,11 +1762,23 @@
     "InitiatingProcessParentFileName": [
       {
         "key": "file.name",
-        "object": "fc_parent_process_file"
+        "object": "fc_parent_process_file",
+        "transformer": "ToFileName"
+      },
+      {
+        "key": "directory.path",
+        "object": "fc_parent_process_file_dir",
+        "transformer": "ToDirectory"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "fc_parent_process_file",
+        "references": "fc_parent_process_file_dir"
       },
       {
         "key": "process.name",
-        "object": "fc_parent_process"
+        "object": "fc_parent_process",
+        "transformer": "ToFileName"
       },
       {
         "key": "x-oca-event.process_ref",
@@ -2144,11 +2202,13 @@
     "InitiatingProcessFileName": [
       {
         "key": "file.name",
-        "object": "re_process_file"
+        "object": "re_process_file",
+        "transformer": "ToFileName"
       },
       {
         "key": "process.name",
-        "object": "re_process"
+        "object": "re_process",
+        "transformer": "ToFileName"
       },
       {
         "key": "process.binary_ref",
@@ -2164,7 +2224,18 @@
     "InitiatingProcessParentFileName": [
       {
         "key": "file.name",
-        "object": "re_parent_process_file"
+        "object": "re_parent_process_file",
+        "transformer": "ToFileName"
+      },
+      {
+        "key": "directory.path",
+        "object": "re_parent_process_file_dir",
+        "transformer": "ToDirectory"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "re_parent_process_file",
+        "references": "re_parent_process_file_dir"
       },
       {
         "key": "process.name",
@@ -2763,7 +2834,8 @@
     "FileName": [
       {
         "key": "file.name",
-        "object": "file"
+        "object": "file",
+        "transformer": "ToFileName"
       },
       {
         "key": "x-oca-event.file_ref",
@@ -2862,7 +2934,8 @@
     "FileName": [
       {
         "key": "file.name",
-        "object": "event_file"
+        "object": "event_file",
+        "transformer": "ToFileName"
       },
       {
         "key": "x-oca-event.file_ref",
@@ -3175,11 +3248,13 @@
     "InitiatingProcessFileName": [
       {
         "key": "file.name",
-        "object": "init_process_file"
+        "object": "init_process_file",
+        "transformer": "ToFileName"
       },
       {
         "key": "process.name",
-        "object": "init_process"
+        "object": "init_process",
+        "transformer": "ToFileName"
       },
       {
         "key": "process.binary_ref",
@@ -3268,11 +3343,23 @@
     "InitiatingProcessParentFileName": [
       {
         "key": "file.name",
-        "object": "parent_init_process_file"
+        "object": "parent_init_process_file",
+        "transformer": "ToFileName"
+      },
+      {
+        "key": "directory.path",
+        "object": "parent_init_process_file_dir",
+        "transformer": "ToDirectory"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "parent_init_process_file",
+        "references": "parent_init_process_file_dir"
       },
       {
         "key": "process.name",
-        "object": "parent_init_process"
+        "object": "parent_init_process",
+        "transformer": "ToFileName"
       },
       {
         "key": "x-oca-event.process_ref",
@@ -3574,3 +3661,4 @@
     }
   }
 }
+
