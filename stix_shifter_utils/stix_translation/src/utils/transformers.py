@@ -16,7 +16,6 @@ from stix_shifter_utils.utils import logger
 
 LOGGER = logger.set_logger(__name__)
 
-
 class ValueTransformer():
     """ Base class for value transformers """
 
@@ -210,7 +209,7 @@ class ToDomainName(ValueTransformer):
             if url is None:
                 return
             splits = url.split("://")
-            i = (0, 1)[len(splits) > 1]
+            i = (0,1)[len(splits)>1]
             domain_name = splits[i].split("?")[0].split('/')[0].split(':')[0].lower()
             return domain_name
         except ValueError:
@@ -301,12 +300,10 @@ class SetToOne(ValueTransformer):
 
 class FilterIPv4List(ValueTransformer):
     """A value transformer for filtering-out from a list all values which are not valid IPv4 values"""
-
     @staticmethod
     def transform(obj):
         if isinstance(obj, list):
-            pattern = re.compile(
-                r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
+            pattern = re.compile(r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
             result = []
             for val in obj:
                 if pattern.match(str(val)):
@@ -317,12 +314,10 @@ class FilterIPv4List(ValueTransformer):
 
 class FilterIPv6List(ValueTransformer):
     """A value transformer for filtering-out from a list all values which are not valid IPv6 values"""
-
     @staticmethod
     def transform(obj):
         if isinstance(obj, list):
-            pattern = re.compile(
-                r'^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
+            pattern = re.compile(r'^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$')
             result = []
             for val in obj:
                 if pattern.match(str(val)):
@@ -333,7 +328,6 @@ class FilterIPv6List(ValueTransformer):
 
 class CheckIPv6(ValueTransformer):
     """A value transformer for validating IPv6 value"""
-
     @staticmethod
     def transform(obj):
         obj_list = FilterIPv6List.transform([obj])
@@ -345,7 +339,6 @@ class CheckIPv6(ValueTransformer):
 
 class CheckIPv4(ValueTransformer):
     """A value transformer for validating IPv4 value"""
-
     @staticmethod
     def transform(obj):
         obj_list = FilterIPv4List.transform([obj])
@@ -357,11 +350,9 @@ class CheckIPv4(ValueTransformer):
 
 class ValueToList(ValueTransformer):
     """A value transformer that converts a single value into a list container the value"""
-
     @staticmethod
     def transform(obj):
         return [obj]
-
 
 class GraphIDToPID(ValueTransformer):
     """A value transformer that converts a single value into a list container the value"""
