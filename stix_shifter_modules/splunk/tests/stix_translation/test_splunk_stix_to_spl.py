@@ -155,7 +155,7 @@ class TestStixToSpl(unittest.TestCase, object):
     def test_dst_ref_queries(self):
         stix_pattern = "[network-traffic:dst_ref.value = '192.168.122.83']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = f'search (dest = "192.168.122.83") earliest="-5minutes" | head 10000 | fields {fields}'
+        queries = f'search (dest_ip = "192.168.122.83") earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
     def test_port_queries(self):
@@ -223,7 +223,7 @@ class TestStixToSpl(unittest.TestCase, object):
     def test_issubset_operator(self):
         stix_pattern = "[ipv4-addr:value ISSUBSET '198.51.100.0/24']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = f'search ((src_ip = "198.51.100.0/24") OR (dest_ip = "198.51.100.0/24")) earliest="-5minutes" | head 10000 | fields {fields}'
+        queries = f'search earliest="-5minutes" | where ((cidrmatch("198.51.100.0/24", src_ip)) OR (cidrmatch("198.51.100.0/24", dest_ip))) | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
     def test_custom_time_limit_and_result_count(self):
@@ -310,19 +310,43 @@ class TestStixToSpl(unittest.TestCase, object):
     def test_proc_command_line_query(self):
         stix_pattern = "[process:command_line = 'wmic.exe process call create calc']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = f'search (process = "wmic.exe process call create calc") earliest="-5minutes" | head 10000 | fields {fields}'
+        queries = f'search ((process = "wmic.exe process call create calc") OR (parent_process = "wmic.exe process call create calc")) earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
     def test_proc_name_query(self):
         stix_pattern = "[process:name = 'wmic.exe']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = f'search (process_name = "wmic.exe") earliest="-5minutes" | head 10000 | fields {fields}'
+        queries = f'search ((process_name = "wmic.exe") OR (parent_process_name = "wmic.exe")) earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
     def test_ipv4_query_in_operator(self):
         stix_pattern = "[ipv4-addr:value IN ('192.168.122.83', '192.168.122.84')]"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
         queries = f'search ((src_ip IN ("192.168.122.83", "192.168.122.84")) OR (dest_ip IN ("192.168.122.83", "192.168.122.84"))) earliest="-5minutes" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
+    def test_like(self):
+        stix_pattern = "[file:name LIKE 'x_.%']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search earliest="-5minutes" | where (like(file_name, "x_.%")) | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
+    def test_like_or_equal(self):
+        stix_pattern = "[file:name LIKE 'x_.%' OR file:name = 'y1.exe']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search earliest="-5minutes" | where ((file_name = "y1.exe") OR (like(file_name, "x_.%"))) | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
+    def test_match(self):
+        stix_pattern = r"[file:name MATCHES '^x.\\..*$']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search earliest="-5minutes" | where (match(file_name, "^x.\\..*$")) | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
+    def test_match_or_equal(self):
+        stix_pattern = r"[file:name MATCHES '^x.\\..*$' OR file:name = 'y1.exe']"
+        query = translation.translate('splunk', 'query', '{}', stix_pattern)
+        queries = f'search earliest="-5minutes" | where ((file_name = "y1.exe") OR (match(file_name, "^x.\\..*$"))) | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
 

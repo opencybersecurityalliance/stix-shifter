@@ -1,4 +1,4 @@
-##### Updated on 10/28/22
+##### Updated on 11/04/22
 ## GCP Chronicle
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -15,7 +15,162 @@
 | <= | <= |
 | IN | = |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **ipv4-addr**:value | src.ip, target.ip, principal.ip |
+| **ipv4-addr**:resolves_to_refs[*].value | src.mac, target.mac, principal.mac |
+| **ipv6-addr**:value | src.ip, target.ip, principal.ip |
+| **ipv6-addr**:resolves_to_refs[*].value | src.mac, target.mac, principal.mac |
+| **url**:value | src.url, target.url, principal.url, network.http.referral_url, security_result.about.url |
+| **network-traffic**:src_port | src.port, principal.port |
+| **network-traffic**:dst_port | target.port |
+| **network-traffic**:protocols[*] | network.ip_protocol, network.application_protocol |
+| **network-traffic**:src_ref.value | src.ip, principal.ip |
+| **network-traffic**:dst_ref.value | target.ip |
+| **network-traffic**:src_byte_count | network.sent_bytes |
+| **network-traffic**:dst_byte_count | network.received_bytes |
+| **network-traffic**:extensions.'x-gcp-chronicle-network'.session_duration | network.session_duration.seconds |
+| **network-traffic**:extensions.'x-gcp-chronicle-network'.session_id | network.session_id |
+| **network-traffic**:extensions.'x-gcp-chronicle-network'.direction | network.direction |
+| **network-traffic**:extensions.'ftp-ext'.command | network.ftp.command |
+| **network-traffic**:extensions.'dns-ext'.query_id | network.dns.id |
+| **network-traffic**:extensions.'dns-ext'.opcode | network.dns.opcode |
+| **network-traffic**:extensions.'dns-ext'.response_code | network.dns.response_code |
+| **network-traffic**:extensions.'dns-ext'.query_class | network.dns.questions.class |
+| **network-traffic**:extensions.'dns-ext'.query_type | network.dns.questions.type |
+| **network-traffic**:extensions.'dns-ext'.questions_domain_name | network.dns.questions.name |
+| **network-traffic**:extensions.'dhcp-ext'.client_hostname | network.dhcp.client_hostname |
+| **network-traffic**:extensions.'dhcp-ext'.opcode | network.dhcp.opcode |
+| **network-traffic**:extensions.'dhcp-ext'.server_name | network.dhcp.sname |
+| **network-traffic**:extensions.'dhcp-ext'.transaction_id | network.dhcp.transaction_id |
+| **network-traffic**:extensions.'dhcp-ext'.message_type | network.dhcp.type |
+| **network-traffic**:extensions.'http-ext'.request_method | network.http.method |
+| **network-traffic**:extensions.'http-ext'.response_code | network.http.response_code |
+| **network-traffic**:extensions.'http-ext'.user_agent | network.http.user_agent |
+| **network-traffic**:extensions.'smtp-ext'.server_response[*] | network.smtp.server_response |
+| **network-traffic**:extensions.'tls-ext'.cipher | network.tls.cipher |
+| **network-traffic**:extensions.'tls-ext'.version | network.tls.version |
+| **network-traffic**:extensions.'tls-ext'.version_protocol | network.tls.version_protocol |
+| **network-traffic**:extensions.'tls-ext'.elliptical_curve | network.tls.curve |
+| **network-traffic**:extensions.'tls-ext'.next_protocol | network.tls.next_protocol |
+| **network-traffic**:extensions.'tls-ext'.server_ja3_hash | network.tls.server.ja3s |
+| **network-traffic**:extensions.'tls-ext'.client_ja3_hash | network.tls.client.ja3 |
+| **network-traffic**:extensions.'tls-ext'.server_host_name | network.tls.client.server_name |
+| **network-traffic**:extensions.'tls-ext'.server_certificate_ref.subject | network.tls.server.certificate.subject |
+| **network-traffic**:extensions.'tls-ext'.client_certificate_ref.subject | network.tls.client.certificate.subject |
+| **mac-addr**:value | src.mac, target.mac, principal.mac |
+| **autonomous-system**:number | network.asn |
+| **domain-name**:value | src.domain.name, target.domain.name, principal.domain.name, network.dns_domain |
+| **domain-name**:extensions.'x-gcp-chronicle-domain'.status | src.domain.status, target.domain.status, principal.domain.status |
+| **email-addr**:value | principal.user.email_addresses, src.user.email_addresses, target.user.email_addresses, network.email.from, network.email.to, network.email.cc, network.email.bcc, security_result.about.email |
+| **email-message**:subject | network.email.subject |
+| **email-message**:to_refs[*] | network.email.to |
+| **email-message**:from_ref | network.email.from |
+| **email-message**:cc_refs[*] | network.email.cc |
+| **email-message**:bcc_refs[*] | network.email.bcc |
+| **email-message**:extensions.'x-gcp-chronicle-email-message'.file_ref.name | about.file.full_path |
+| **user-account**:user_id | src.user.userid, target.user.userid, principal.user.userid |
+| **user-account**:display_name | src.user.user_display_name, target.user.user_display_name, principal.user.user_display_name |
+| **user-account**:extensions.'x-gcp-chronicle-user'.type | src.user.account_type, target.user.account_type, principal.user.account_type |
+| **user-account**:extensions.'windows-account-ext'.sid | src.user.windows_sid, target.user.windows_sid, principal.user.windows_sid |
+| **file**:name | src.file.full_path, target.file.full_path, src.process.file.full_path, target.process.file.full_path, principal.process.file.full_path, target.process.parent_process.file.full_path, principal.process.parent_process.file.full_path, about.file.full_path |
+| **file**:size | src.file.size, target.file.size, src.process.file.size, target.process.file.size, principal.process.file.size, about.file.size |
+| **file**:hashes.MD5 | src.file.md5, target.file.md5, src.process.file.md5, target.process.file.md5, principal.process.file.md5, about.file.md5 |
+| **file**:hashes.'SHA-1' | src.file.sha1, target.file.sha1, src.process.file.sha1, target.process.file.sha1, principal.process.file.sha1, about.file.sha1 |
+| **file**:hashes.'SHA-256' | src.file.sha256, target.file.sha256, src.process.file.sha256, target.process.file.sha256, principal.process.file.sha256, about.file.sha256 |
+| **file**:modified | src.file.last_modification_time.seconds, target.file.last_modification_time.seconds, src.process.file.last_modification_time.seconds, target.process.file.last_modification_time.seconds, principal.process.file.last_modification_time.seconds, about.file.last_modification_time.seconds |
+| **file**:parent_directory_ref.path | src.file.full_path, target.file.full_path, src.process.file.full_path, target.process.file.full_path, principal.process.file.full_path, target.process.parent_process.file.full_path, principal.process.parent_process.file.full_path, about.file.full_path |
+| **file**:extensions.'x-gcp-chronicle-file'.mime_type | src.file.mime_type, target.file.mime_type, src.process.file.mime_type, target.process.file.mime_type, principal.process.file.mime_type, about.file.mime_type |
+| **file**:extensions.'x-gcp-chronicle-file'.file_type | src.file.file_type, target.file.file_type, src.process.file.file_type, target.process.file.file_type, principal.process.file.file_type, about.file.file_type |
+| **directory**:path | src.file.full_path, target.file.full_path, about.file.full_path, src.process.file.full_path, target.process.file.full_path, principal.process.file.full_path, target.process.parent_process.file.full_path, principal.process.parent_process.file.full_path |
+| **process**:command_line | src.process.command_line, target.process.command_line, principal.process.command_line, target.process.parent_process.command_line, principal.process.parent_process.command_line |
+| **process**:name | src.process.file.full_path, target.process.file.full_path, principal.process.file.full_path, target.process.parent_process.file.full_path, principal.process.parent_process.file.full_path |
+| **process**:pid | src.process.pid, target.process.pid, principal.process.pid, target.process.parent_process.pid, principal.process.parent_process.pid |
+| **process**:parent_ref.pid | target.process.parent_process.pid, principal.process.parent_process.pid |
+| **process**:creator_user_ref.user_id | src.user.userid, target.user.userid, principal.user.userid |
+| **process**:parent_ref.name | target.process.parent_process.file.full_path, principal.process.parent_process.file.full_path |
+| **process**:binary_ref.name | src.process.file.full_path, target.process.file.full_path, principal.process.file.full_path, target.process.parent_process.file.full_path, principal.process.parent_process.file.full_path |
+| **process**:binary_ref.hashes.MD5 | src.process.file.md5, target.process.file.md5, principal.process.file.md5 |
+| **process**:binary_ref.hashes.'SHA-256' | src.process.file.sha256, target.process.file.sha256, principal.process.file.sha256 |
+| **process**:binary_ref.parent_directory_ref.path | src.process.file.full_path, target.process.file.full_path, principal.process.file.full_path |
+| **software**:name | src.asset.software.name, target.asset.software.name, principal.asset.software.name, principal.asset.platform_software.platform, target.asset.platform_software.platform, src.asset.platform_software.platform |
+| **software**:version | src.asset.software.version, target.asset.software.version, principal.asset.software.version, principal.asset.platform_software.platform_version, src.asset.platform_software.platform_version, target.asset.platform_software.platform_version |
+| **windows-registry-key**:key | src.registry.registry_key, target.registry.registry_key |
+| **windows-registry-key**:values[*] | src.registry.registry_value_data, target.registry.registry_value_data |
+| **x509-certificate**:version | network.tls.client.certificate.version, network.tls.server.certificate.version |
+| **x509-certificate**:serial_number | network.tls.client.certificate.serial, network.tls.server.certificate.serial |
+| **x509-certificate**:issuer | network.tls.client.certificate.issuer, network.tls.server.certificate.issuer |
+| **x509-certificate**:validity_not_before | network.tls.server.certificate.not_before.seconds, network.tls.client.certificate.not_before.seconds |
+| **x509-certificate**:validity_not_after | network.tls.server.certificate.not_after.seconds, network.tls.client.certificate.not_after.seconds |
+| **x509-certificate**:subject | network.tls.client.certificate.subject, network.tls.server.certificate.subject |
+| **x509-certificate**:hashes.MD5 | network.tls.client.certificate.md5, network.tls.server.certificate.md5 |
+| **x509-certificate**:hashes.'SHA-1' | network.tls.client.certificate.sha1, network.tls.server.certificate.sha1 |
+| **x509-certificate**:hashes.'SHA-256' | network.tls.client.certificate.sha256, network.tls.server.certificate.sha256 |
+| **x-ibm-finding**:name | security_result.summary |
+| **x-ibm-finding**:finding_type | security_result.category |
+| **x-ibm-finding**:rule_names[*] | security_result.rule_name |
+| **x-ibm-finding**:severity | security_result.severity |
+| **x-ibm-finding**:src_ip_ref.value | principal.ip |
+| **x-ibm-finding**:dst_ip_ref.value | target.ip |
+| **x-ibm-finding**:src_os_ref | principal.asset.platform_software.platform |
+| **x-ibm-finding**:dst_os_ref | target.asset.platform_software.platform |
+| **x-ibm-finding**:src_application_ref.name | principal.asset.software.name |
+| **x-ibm-finding**:dst_application_ref.name | target.asset.software.name |
+| **x-ibm-finding**:extensions.'x-gcp-chronicle-security-result'.url_ref.value | security_result.about.url |
+| **x-ibm-finding**:extensions.'x-gcp-chronicle-security-result'.alert_state | security_result.alert_state |
+| **x-ibm-finding**:extensions.'x-gcp-chronicle-security-result'.threat_id | security_result.threat_id |
+| **x-ibm-finding**:extensions.'x-gcp-chronicle-security-result'.threat_status | security_result.threat_status |
+| **x-ibm-finding**:extensions.'x-gcp-chronicle-security-result'.threat_name | security_result.threat_name |
+| **x-ibm-finding**:extensions.'x-gcp-chronicle-security-result'.description | security_result.description |
+| **x-ibm-finding**:extensions.'x-gcp-chronicle-security-result'.actions_taken[*] | security_result.action |
+| **x-oca-event**:action | metadata.event_type |
+| **x-oca-event**:code | metadata.product_log_id |
+| **x-oca-event**:created | metadata.event_timestamp.seconds |
+| **x-oca-event**:agent | metadata.product_name |
+| **x-oca-event**:provider | metadata.vendor_name |
+| **x-oca-event**:outcome | metadata.product_event_type |
+| **x-oca-event**:host_ref.hostname | principal.hostname |
+| **x-oca-event**:url_ref.value | principal.url |
+| **x-oca-event**:file_ref.name | principal.process.file.full_path |
+| **x-oca-event**:process_ref.name | principal.process.file.full_path |
+| **x-oca-event**:parent_process_ref.name | principal.process.parent_process.file.full_path |
+| **x-oca-event**:domain_ref.value | principal.domain.name |
+| **x-oca-event**:ip_refs[*].value | src.ip, principal.ip, target.ip |
+| **x-oca-event**:network_ref.src_port | principal.port |
+| **x-oca-event**:network_ref.dst_port | target.port |
+| **x-oca-event**:user_ref.user_id | principal.user.userid |
+| **x-oca-event**:registry_ref.key | target.registry.registry_key |
+| **x-oca-event**:cross_process_target_ref.name | target.process.file.full_path |
+| **x-oca-event**:extensions.'x-gcp-chronicle-event'.src_location | principal.location.name |
+| **x-oca-event**:extensions.'x-gcp-chronicle-event'.target_location | target.location.name |
+| **x-oca-event**:extensions.'x-gcp-chronicle-event'.target_hostname | target.hostname |
+| **x-oca-event**:extensions.'x-gcp-chronicle-event'.email_message_ref.value | network.email.from |
+| **x-oca-event**:extensions.'x-gcp-chronicle-event'.src_appservice | principal.application |
+| **x-oca-event**:extensions.'x-gcp-chronicle-event'.target_appservice | target.application |
+| **x-oca-event**:extensions.'x-gcp-chronicle-event'.src_resource_ref.name | principal.resource.name |
+| **x-oca-event**:extensions.'x-gcp-chronicle-event'.target_resource_ref.name | target.resource.name |
+| **x-oca-event**:extensions.'x-gcp-chronicle-event'.description | metadata.description |
+| **x-oca-asset**:hostname | principal.hostname |
+| **x-oca-asset**:ip_refs[*].value | principal.ip |
+| **x-oca-asset**:mac_refs[*].value | principal.mac |
+| **x-oca-asset**:extensions.'x-gcp-chronicle-asset'.cloud_environment | principal.asset.attribute.cloud.environment |
+| **x-oca-asset**:extensions.'x-gcp-chronicle-asset'.cloud_availability_zone | principal.asset.attribute.cloud.availability_zone |
+| **x-oca-asset**:extensions.'x-gcp-chronicle-asset'.city | principal.location.city |
+| **x-oca-asset**:extensions.'x-gcp-chronicle-asset'.country_or_region | principal.location.country_or_region |
+| **x-oca-asset**:extensions.'x-gcp-chronicle-asset'.asset_id | principal.asset_id |
+| **x-oca-asset**:extensions.'x-gcp-chronicle-asset'.category | principal.asset.category |
+| **x-oca-asset**:extensions.'x-gcp-chronicle-asset'.type | principal.asset.type |
+| **x-oca-asset**:extensions.'x-gcp-chronicle-asset'.hw_cpu_platform | principal.asset.hardware.cpu_platform |
+| **x-oca-asset**:extensions.'x-gcp-chronicle-asset'.hw_manufacturer | principal.asset.hardware.manufacturer |
+| **x-oca-asset**:extensions.'x-gcp-chronicle-asset'.hw_serial_number | principal.asset.hardware.serial_number |
+| **x-gcp-chronicle-resource**:name | src.resource.name, target.resource.name, principal.resource.name |
+| **x-gcp-chronicle-resource**:resource_type | src.resource.resource_type, target.resource.resource_type, principal.resource.resource_type |
+| **x-gcp-chronicle-resource**:resource_subtype | src.resource.resource_subtype, target.resource.resource_subtype, principal.resource.resource_subtype |
+| **x-gcp-chronicle-resource**:availability_zone | src.resource.attribute.cloud.availability_zone, target.resource.attribute.cloud.availability_zone, principal.resource.attribute.cloud.availability_zone |
+| **x-gcp-chronicle-resource**:environment | src.resource.attribute.cloud.environment, target.resource.attribute.cloud.environment, principal.resource.attribute.cloud.environment |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | autonomous-system | number | asn |

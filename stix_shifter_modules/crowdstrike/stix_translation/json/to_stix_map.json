@@ -157,14 +157,9 @@
       "object": "domain-name"
     },
     {
-      "key": "network-traffic.dst_ref",
-      "object": "network-traffic",
-      "references": "domain-name"
-    },
-    {
-      "key": "x-oca-event.network_ref",
+      "key": "x-oca-event.domain_ref",
       "object": "event",
-      "references": "network-traffic"
+      "references": "domain-name"
     }
   ],
   "sha256_ioc": [
