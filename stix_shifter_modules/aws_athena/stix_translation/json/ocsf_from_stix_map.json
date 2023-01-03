@@ -251,7 +251,8 @@
   "x-oca-event": {
     "fields": {
       "action": [
-        "activity"
+        "activity",
+        "activity_name"
       ],
       "category": [
         "category_name"
@@ -391,6 +392,15 @@
       "zone": [
         "cloud.zone"
       ]
+    }
+  },
+  "x-ibm-ttp-tagging": {
+    "fields": {
+      "name": ["attack.technique.name"],
+      "extensions.'mitre-attack-ext'.tactic_name": ["attack.tactics.name"],
+      "extensions.'mitre-attack-ext'.tactic_id": ["attack.tactics.uid"],
+      "extensions.'mitre-attack-ext'.technique_id": ["attack.technique.uid"],
+      "extensions.'mitre-attack-ext'.versoin": ["attack.version"]
     }
   },
   "x-ocsf-enrichments": {
