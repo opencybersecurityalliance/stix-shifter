@@ -1808,7 +1808,9 @@
           {
             "key": "process.child_refs",
             "object": "parent-process",
-            "references": ["process"]
+            "references": [
+              "process"
+            ]
           }
         ],
         "sandbox": {
@@ -1927,7 +1929,9 @@
         {
           "key": "process.parent_ref",
           "object": "process",
-          "references": ["parent-process"]
+          "references": [
+            "parent-process"
+          ]
         }
       ],
       "sandbox": {
@@ -2363,18 +2367,11 @@
         "object": "nt"
       }
     },
-    "start_time": [
-      {
-        "key": "x-ibm-finding.start",
-        "object": "ibm_finding",
-        "transformer": "EpochToTimestamp"
-      },
-      {
-        "key": "first_observed",
-        "cybox": false,
-        "transformer": "EpochToTimestamp"
-      }
-    ],
+    "start_time": {
+      "key": "first_observed",
+      "cybox": false,
+      "transformer": "EpochToTimestamp"
+    },
     "status": {
       "key": "x-ocsf-cloud.status",
       "object": "ocsf_cloud_api"

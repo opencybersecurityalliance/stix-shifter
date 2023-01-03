@@ -6,6 +6,91 @@
       ]
     }
   },
+  "file": {
+    "fields": {
+      "accessed": [
+        "file.accessed_time"
+      ],
+      "created": [
+        "file.created_time"
+      ],
+      "extensions.'x-ocsf-file-ext'.algorithm": [
+        "file.fingerprints.algorithm"
+      ],
+      "extensions.'x-ocsf-file-ext'.algorithm_id": [
+        "file.fingerprints.algorithm_id"
+      ],
+      "extensions.'x-ocsf-file-ext'.algorithm_value": [
+        "file.fingerprints.value"
+      ],
+      "extensions.'x-ocsf-file-ext'.attributes": [
+        "file.attributes"
+      ],
+      "extensions.'x-ocsf-file-ext'.company_name": [
+        "file.company_name"
+      ],
+      "extensions.'x-ocsf-file-ext'.confidentiality": [
+        "file.confidentiality"
+      ],
+      "extensions.'x-ocsf-file-ext'.confidentiality_id": [
+        "file.confidentiality_id"
+      ],
+      "extensions.'x-ocsf-file-ext'.description": [
+        "file.desc"
+      ],
+      "extensions.'x-ocsf-file-ext'.feature_name": [
+        "file.product.feature.name"
+      ],
+      "extensions.'x-ocsf-file-ext'.feature_uid": [
+        "file.product.feature.uid"
+      ],
+      "extensions.'x-ocsf-file-ext'.feature_version": [
+        "file.product.feature.version"
+      ],
+      "extensions.'x-ocsf-file-ext'.installed_path": [
+        "file.product.path"
+      ],
+      "extensions.'x-ocsf-file-ext'.product_lang": [
+        "file.product.lang"
+      ],
+      "extensions.'x-ocsf-file-ext'.product_name": [
+        "file.product.name"
+      ],
+      "extensions.'x-ocsf-file-ext'.product_uid": [
+        "file.product.uid"
+      ],
+      "extensions.'x-ocsf-file-ext'.product_vendor": [
+        "file.product.vendor_name"
+      ],
+      "extensions.'x-ocsf-file-ext'.product_version": [
+        "file.product.version"
+      ],
+      "extensions.'x-ocsf-file-ext'.security_descriptor": [
+        "file.security_descriptor"
+      ],
+      "extensions.'x-ocsf-file-ext'.signature": [
+        "file.signature"
+      ],
+      "extensions.'x-ocsf-file-ext'.type": [
+        "file.type"
+      ],
+      "extensions.'x-ocsf-file-ext'.type_id": [
+        "file.type_id"
+      ],
+      "extensions.'x-ocsf-file-ext'.uid": [
+        "file.uid"
+      ],
+      "extensions.'x-ocsf-file-ext'.version": [
+        "file.version"
+      ],
+      "name": [
+        "file.name"
+      ],
+      "size": [
+        "file.size"
+      ]
+    }
+  },
   "ipv4-addr": {
     "fields": {
       "value": [
@@ -74,6 +159,58 @@
       ],
       "src_ref.value": [
         "src_endpoint.ip"
+      ]
+    }
+  },
+  "process": {
+    "fields": {
+      "binary_ref.name": [
+        "file.name"
+      ],
+      "command_line": [
+        "process.cmd_line"
+      ],
+      "created": [
+        "process.created_time"
+      ],
+      "extensions.'x-ocsf-process-ext'.integrity": [
+        "process.integrity"
+      ],
+      "extensions.'x-ocsf-process-ext'.integrity_id": [
+        "process.integrity_id"
+      ],
+      "extensions.'x-ocsf-process-ext'.is_system": [
+        "process.is_system"
+      ],
+      "extensions.'x-ocsf-process-ext'.lineage": [
+        "process.lineage"
+      ],
+      "extensions.'x-ocsf-process-ext'.loaded_modules": [
+        "process.sandbox"
+      ],
+      "extensions.'x-ocsf-process-ext'.terminated_time": [
+        "terminated_time"
+      ],
+      "extensions.'x-ocsf-process-ext'.tid": [
+        "process.tid"
+      ],
+      "extensions.'x-ocsf-process-ext'.uid": [
+        "process.uid"
+      ],
+      "extensions.'x-ocsf-process-ext'.xattributes": [
+        "process.xattributes"
+      ],
+      "mime_type": [
+        "mime_type"
+      ],
+      "modified": [
+        "process.modified_time"
+      ],
+      "name": [
+        "process.name"
+      ],
+      "pid": [
+        "process.pid"
       ]
     }
   },
@@ -176,7 +313,8 @@
   "x-ibm-finding": {
     "fields": {
       "alert_id": [
-        "observables.type_id"
+        "observables.type_id",
+        "finding.uid"
       ],
       "description": [
         "observables.value"
@@ -194,7 +332,11 @@
         "observables.type"
       ],
       "name": [
-        "observables.name"
+        "observables.name",
+        "finding.title"
+      ],
+      "types": [
+        "finding.types"
       ],
       "severity": [
         "severity_id"
@@ -203,10 +345,10 @@
         "src_endpoint.ip"
       ],
       "start": [
-        "start_time"
+        "finding.created_time"
       ],
       "time_observed": [
-        "_time"
+        "finding.first_seen_time"
       ]
     }
   },
@@ -260,6 +402,9 @@
       "code": [
         "activity_id",
         "category_uid"
+      ],
+      "confidence": [
+        "confidence"
       ],
       "created": [
         "time"
@@ -396,11 +541,34 @@
   },
   "x-ibm-ttp-tagging": {
     "fields": {
-      "name": ["attack.technique.name"],
-      "extensions.'mitre-attack-ext'.tactic_name": ["attack.tactics.name"],
-      "extensions.'mitre-attack-ext'.tactic_id": ["attack.tactics.uid"],
-      "extensions.'mitre-attack-ext'.technique_id": ["attack.technique.uid"],
-      "extensions.'mitre-attack-ext'.versoin": ["attack.version"]
+      "name": [
+        "attack.technique.name"
+      ],
+      "extensions.'mitre-attack-ext'.tactic_name": [
+        "attack.tactics.name"
+      ],
+      "extensions.'mitre-attack-ext'.tactic_id": [
+        "attack.tactics.uid"
+      ],
+      "extensions.'mitre-attack-ext'.technique_id": [
+        "attack.technique.uid"
+      ],
+      "extensions.'mitre-attack-ext'.versoin": [
+        "attack.version"
+      ]
+    }
+  },
+  "x-ocsf-compliance": {
+    "fields": {
+      "requirements": [
+        "compliance.requirements"
+      ],
+      "status": [
+        "compliance.status"
+      ],
+      "status_detail": [
+        "compliance.status_detail"
+      ]
     }
   },
   "x-ocsf-enrichments": {
@@ -517,6 +685,70 @@
       ],
       "session.uid": [
         "identity.session.uid"
+      ]
+    }
+  },
+  "x-ocsf-malware": {
+    "fields": {
+      "base_score": [
+        "malware.cves.cvss.base_score"
+      ],
+      "classification_ids": [
+        "malware.classification_ids"
+      ],
+      "classifications": [
+        "malware.classifications"
+      ],
+      "created_time": [
+        "malware.cves.created_time"
+      ],
+      "cwe_uid": [
+        "malware.cves.cwe_uid"
+      ],
+      "cwe_url": [
+        "malware.cves.cwe_url"
+      ],
+      "depth": [
+        "malware.cves.cvss.depth"
+      ],
+      "lang": [
+        "malware.cves.product.lang"
+      ],
+      "modified_time": [
+        "malware.cves.modified_time"
+      ],
+      "name": [
+        "malware.name"
+      ],
+      "overall_score": [
+        "malware.cves.cvss.overall_score"
+      ],
+      "path": [
+        "malware.path"
+      ],
+      "provider": [
+        "malware.provider"
+      ],
+      "severity": [
+        "malware.cves.cvss.severity"
+      ],
+      "type": [
+        "malware.cves.type"
+      ],
+      "uid": [
+        "malware.uid"
+      ],
+      "value": [
+        "malware.cves.product.value"
+      ],
+      "vector_string": [
+        "malware.cves.cvss.vector_string"
+      ],
+      "vendor_name": [
+        "malware.cves.product.vendor_name"
+      ],
+      "version": [
+        "malware.cves.cvss.version"
       ]
     }
   },
