@@ -155,7 +155,7 @@ class TestStixToSpl(unittest.TestCase, object):
     def test_dst_ref_queries(self):
         stix_pattern = "[network-traffic:dst_ref.value = '192.168.122.83']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = f'search (dest = "192.168.122.83") earliest="-5minutes" | head 10000 | fields {fields}'
+        queries = f'search (dest_ip = "192.168.122.83") earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
     def test_port_queries(self):
@@ -310,13 +310,13 @@ class TestStixToSpl(unittest.TestCase, object):
     def test_proc_command_line_query(self):
         stix_pattern = "[process:command_line = 'wmic.exe process call create calc']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = f'search (process = "wmic.exe process call create calc") earliest="-5minutes" | head 10000 | fields {fields}'
+        queries = f'search ((process = "wmic.exe process call create calc") OR (parent_process = "wmic.exe process call create calc")) earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
     def test_proc_name_query(self):
         stix_pattern = "[process:name = 'wmic.exe']"
         query = translation.translate('splunk', 'query', '{}', stix_pattern)
-        queries = f'search (process_name = "wmic.exe") earliest="-5minutes" | head 10000 | fields {fields}'
+        queries = f'search ((process_name = "wmic.exe") OR (parent_process_name = "wmic.exe")) earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
     def test_ipv4_query_in_operator(self):
