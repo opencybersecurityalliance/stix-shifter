@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Trend Micro Vision One"
+            "displayName": "Trend Micro Vision One",
+            "group": "visionone"
         },
         "host": {
             "type": "text",

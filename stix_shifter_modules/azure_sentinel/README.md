@@ -1,11 +1,11 @@
-# Azure Sentinel Connector
+# Microsoft Graph Security Connector
 
 ### Data Source 
-Microsoft Azure Sentinel is a scalable, cloud-native, security information event management (SIEM) and security orchestration automated response (SOAR) solution. Azure Sentinel delivers intelligent security analytics and threat intelligence across the enterprise, providing a single solution for alert detection, threat visibility, proactive hunting, and threat response.
+Microsoft Graph Security API enables fedarated search capabilities on all onboarded security providers. This connector can be used to search security alerts on the Microsoft security products.
 
 ##### Microsoft Graph API (v1.0)
 List security alerts (GET call) https://graph.microsoft.com/v1.0/security/ <br/>
-`Ref: https://docs.microsoft.com/en-us/graph/api/resources/alert?view=graph-rest-beta`
+`Ref: https://learn.microsoft.com/en-us/graph/api/resources/alert?view=graph-rest-1.0`
 
 Query Parameter: 
 $filter (OData V4.0 support) <br/>

@@ -1,0 +1,2671 @@
+[
+    {
+        "name": "__etwAllowedToDelegateTo",
+        "paths": [
+            "payload.data.etwAllowedToDelegateTo"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwCallerProcessId",
+        "paths": [
+            "payload.data.etwCallerProcessId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwCallerProcessName",
+        "paths": [
+            "payload.data.etwCallerProcessName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwCertIssuerName",
+        "paths": [
+            "payload.data.etwCertIssuerName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwCertSerialNumber",
+        "paths": [
+            "payload.data.etwCertSerialNumber"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwCertThumbprint",
+        "paths": [
+            "payload.data.etwCertThumbprint"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwDisplayName",
+        "paths": [
+            "payload.data.etwDisplayName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwDummy",
+        "paths": [
+            "payload.data.etwDummy"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwElevatedToken",
+        "paths": [
+            "payload.data.etwElevatedToken"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwEventRecordId",
+        "paths": [
+            "payload.data.etwEventRecordId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwFailureReason",
+        "paths": [
+            "payload.data.etwFailureReason"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwHomeDirectory",
+        "paths": [
+            "payload.data.etwHomeDirectory"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "__etwHomePath",
+        "paths": [
+            "payload.data.etwHomePath"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwImpersonationLevel",
+        "paths": [
+            "payload.data.etwImpersonationLevel"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwKeyLength",
+        "paths": [
+            "payload.data.etwKeyLength"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwLogonGuid",
+        "paths": [
+            "payload.data.etwLogonGuid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwLogonHours",
+        "paths": [
+            "payload.data.etwLogonHours"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwLogonProcessName",
+        "paths": [
+            "payload.data.etwLogonProcessName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwMemberName",
+        "paths": [
+            "payload.data.etwMemberName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwMemberSid",
+        "paths": [
+            "payload.data.etwMemberSid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwNewTargetUserName",
+        "paths": [
+            "payload.data.etwNewTargetUserName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwNewUacValue",
+        "paths": [
+            "payload.data.etwNewUacValue"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwOldTargetUserName",
+        "paths": [
+            "payload.data.etwOldTargetUserName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwOldUacValue",
+        "paths": [
+            "payload.data.etwOldUacValue"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwPackageName",
+        "paths": [
+            "payload.data.etwPackageName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwPasswordLastSet",
+        "paths": [
+            "payload.data.etwPasswordLastSet"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwPreAuthType",
+        "paths": [
+            "payload.data.etwPreAuthType"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwPrimaryGroupId",
+        "paths": [
+            "payload.data.etwPrimaryGroupId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwPrivilegeList",
+        "paths": [
+            "payload.data.etwPrivilegeList"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwProcessId",
+        "paths": [
+            "payload.data.etwProcessId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwProcessName",
+        "paths": [
+            "payload.data.etwProcessName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwProfilePath",
+        "paths": [
+            "payload.data.etwProfilePath"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "__etwRestrictedAdminMode",
+        "paths": [
+            "payload.data.etwRestrictedAdminMode"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwSamAccountName",
+        "paths": [
+            "payload.data.etwSamAccountName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwScriptPath",
+        "paths": [
+            "payload.data.etwScriptPath"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "__etwServiceName",
+        "paths": [
+            "payload.data.etwServiceName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwServiceSid",
+        "paths": [
+            "payload.data.etwServiceSid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwSidHistory",
+        "paths": [
+            "payload.data.etwSidHistory"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwSidList",
+        "paths": [
+            "payload.data.etwSidList"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwStatus",
+        "paths": [
+            "payload.data.etwStatus"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwSubStatus",
+        "paths": [
+            "payload.data.etwSubStatus"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwTargetInfo",
+        "paths": [
+            "payload.data.etwTargetInfo"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwTargetLinkedLogonId",
+        "paths": [
+            "payload.data.etwTargetLinkedLogonId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwTargetLogonGuid",
+        "paths": [
+            "payload.data.etwTargetLogonGuid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwTargetOutboundDomainName",
+        "paths": [
+            "payload.data.etwTargetOutboundDomainName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwTargetOutboundUserName",
+        "paths": [
+            "payload.data.etwTargetOutboundUserName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwTargetServerName",
+        "paths": [
+            "payload.data.etwTargetServerName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwTargetSid",
+        "paths": [
+            "payload.data.etwTargetSid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwTicketEncryptionType",
+        "paths": [
+            "payload.data.etwTicketEncryptionType"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwTicketOptions",
+        "paths": [
+            "payload.data.etwTicketOptions"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwTransmittedServices",
+        "paths": [
+            "payload.data.etwTransmittedServices"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwUserAccountControl",
+        "paths": [
+            "payload.data.etwUserAccountControl"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwUserParameters",
+        "paths": [
+            "payload.data.etwUserParameters"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwUserPrincipalName",
+        "paths": [
+            "payload.data.etwUserPrincipalName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwUserWorkstations",
+        "paths": [
+            "payload.data.etwUserWorkstations"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwVirtualAccount",
+        "paths": [
+            "payload.data.etwVirtualAccount"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwWorkstation",
+        "paths": [
+            "payload.data.etwWorkstation"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "__etwWorkstationName",
+        "paths": [
+            "payload.data.etwWorkstationName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "$filename",
+        "paths": [
+            "payload.process.program.filename::TERM",
+            "payload.process.program.fsName::TERM",
+            "payload.data.filename::TERM",
+            "payload.data.fsName::TERM",
+            "payload.data.targetProcess.program.filename::TERM",
+            "payload.data.childProcess.program.filename::TERM",
+            "payload.data.targetProcess.program.fsName::TERM",
+            "payload.data.childProcess.program.fsName::TERM",
+            "payload.data.allocatorProc.program.filename::TERM",
+            "payload.data.allocatorProc.program.fsName::TERM",
+            "payload.data.accessorProcess.program.filename::TERM",
+            "payload.data.accessorProcess.program.fsName::TERM",
+            "payload.data.engineProcess.program.filename::TERM",
+            "payload.data.engineProcess.program.fsName::TERM",
+            "payload.data.serviceProcess.program.filename::TERM",
+            "payload.data.serviceProcess.program.fsName::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "$ip",
+        "paths": [
+            "payload.data.remoteAddr::TERM",
+            "payload.data.localAddr::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "$md5",
+        "paths": [
+            "payload.process.program.md5::TERM",
+            "payload.data.md5::TERM",
+            "payload.data.childProcess.program.md5::TERM",
+            "payload.data.targetProcess.program.md5::TERM",
+            "payload.data.allocatorProc.program.md5::TERM",
+            "payload.data.engineProcess.program.md5::TERM",
+            "payload.data.serviceProcess.program.md5::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "$path",
+        "paths": [
+            "payload.process.program.path::PREFIX",
+            "payload.data.childProcess.program.path::PREFIX",
+            "payload.data.targetProcess.program.path::PREFIX",
+            "payload.data.allocatorProc.program.path::PREFIX",
+            "payload.data.file::PREFIX",
+            "payload.data.path::PREFIX",
+            "payload.data.rootObject::PREFIX",
+            "payload.data.engineProcess.program.path::PREFIX",
+            "payload.data.serviceProcess.program.path::PREFIX"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "$sha1",
+        "paths": [
+            "payload.process.program.sha1::TERM",
+            "payload.data.sha1::TERM",
+            "payload.data.childProcess.program.sha1::TERM",
+            "payload.data.targetProcess.program.sha1::TERM",
+            "payload.data.allocatorProc.program.sha1::TERM",
+            "payload.data.engineProcess.program.sha1::TERM",
+            "payload.data.serviceProcess.program.sha1::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "$sha256",
+        "paths": [
+            "payload.process.program.sha256::TERM",
+            "payload.data.sha256::TERM",
+            "payload.data.childProcess.program.sha256::TERM",
+            "payload.data.targetProcess.program.sha256::TERM",
+            "payload.data.allocatorProc.program.sha256::TERM",
+            "payload.data.engineProcess.program.sha256::TERM",
+            "payload.data.serviceProcess.program.sha256::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.arch",
+        "paths": [
+            "payload.data.accessorProcess.program.arch"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.expired",
+        "paths": [
+            "payload.data.accessorProcess.program.certInfo.expired"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.fsname",
+        "paths": [
+            "payload.data.accessorProcess.program.fsName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.hasGui",
+        "paths": [
+            "payload.data.accessorProcess.noGui"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.isSigned",
+        "paths": [
+            "payload.data.accessorProcess.program.certInfo"
+        ],
+        "type": [
+            "EXISTS"
+        ]
+    },
+    {
+        "name": "accessor.issuer",
+        "paths": [
+            "payload.data.accessorProcess.program.certInfo.issuer"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "accessor.login.id",
+        "paths": [
+            "payload.data.accessorProcess.logonId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.md5",
+        "paths": [
+            "payload.data.accessorProcess.program.md5"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.originalFilename",
+        "paths": [
+            "payload.data.accessorProcess.program.filename"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.path",
+        "paths": [
+            "payload.data.accessorProcess.program.path"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "accessor.pid",
+        "paths": [
+            "payload.data.accessorProcess.pid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.ppid",
+        "paths": [
+            "payload.data.accessorProcess.ppid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.privilege",
+        "paths": [
+            "payload.data.accessorProcess.privilegeLevel"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.sha1",
+        "paths": [
+            "payload.data.accessorProcess.program.sha1"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.sha256",
+        "paths": [
+            "payload.data.accessorProcess.program.sha256"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.signer",
+        "paths": [
+            "payload.data.accessorProcess.program.certInfo.signer"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "accessor.trusted",
+        "paths": [
+            "payload.data.accessorProcess.program.certInfo.trusted"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.user",
+        "paths": [
+            "payload.data.accessorProcess.user"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.user.sid",
+        "paths": [
+            "payload.data.accessorProcess.userSID"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "accessor.user.startsWith",
+        "paths": [
+            "payload.data.accessorProcess.user"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "allocator.arch",
+        "paths": [
+            "payload.data.allocatorProc.program.arch"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.expired",
+        "paths": [
+            "payload.data.allocatorProc.program.certInfo.expired"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.fsname",
+        "paths": [
+            "payload.data.allocatorProc.program.fsName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.hasGui",
+        "paths": [
+            "payload.data.allocatorProc.noGui"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.isSigned",
+        "paths": [
+            "payload.data.allocatorProc::EXISTS",
+            "payload.data.allocatorProc.program.certInfo::EXISTS"
+        ],
+        "type": [
+            "EXISTS"
+        ]
+    },
+    {
+        "name": "allocator.issuer",
+        "paths": [
+            "payload.data.allocatorProc.program.certInfo.issuer"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "allocator.login.id",
+        "paths": [
+            "payload.data.allocatorProc.logonId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.md5",
+        "paths": [
+            "payload.data.allocatorProc.program.md5"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.originalFilename",
+        "paths": [
+            "payload.data.allocatorProc.program.filename"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.path",
+        "paths": [
+            "payload.data.allocatorProc.program.path"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "allocator.pid",
+        "paths": [
+            "payload.data.allocatorProc.pid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.ppid",
+        "paths": [
+            "payload.data.allocatorProc.ppid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.privilege",
+        "paths": [
+            "payload.data.allocatorProc.privilegeLevel"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.sha1",
+        "paths": [
+            "payload.data.allocatorProc.program.sha1"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.sha256",
+        "paths": [
+            "payload.data.allocatorProc.program.sha256"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.signer",
+        "paths": [
+            "payload.data.allocatorProc.program.certInfo.signer"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "allocator.trusted",
+        "paths": [
+            "payload.data.allocatorProc.program.certInfo.trusted"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.user",
+        "paths": [
+            "payload.data.allocatorProc.user"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.user.sid",
+        "paths": [
+            "payload.data.allocatorProc.userSID"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "allocator.user.startsWith",
+        "paths": [
+            "payload.data.allocatorProc.user"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "antimalware.appName",
+        "paths": [
+            "payload.data.appName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "antimalware.contentName",
+        "paths": [
+            "payload.data.contentName"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "antimalware.objectStatus",
+        "paths": [
+            "payload.data.avObjectStatus"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "antimalware.scanReason",
+        "paths": [
+            "payload.data.avScanReason"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "antimalware.scanResult",
+        "paths": [
+            "payload.data.scanResult"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "antimalware.threatInfo",
+        "paths": [
+            "payload.data.avThreatInfoArray"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "antimalware.threatType",
+        "paths": [
+            "payload.data.avThreatType"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "arch",
+        "paths": [
+            "payload.process.program.arch"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "cmdline",
+        "paths": [
+            "payload.data.cmdLine::PREFIX",
+            "payload.data.cmdLineArgs::PREFIX"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "consumer.cmdline",
+        "paths": [
+            "payload.data.consumerData.commandLineTemplateTokens"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "consumer.execPath",
+        "paths": [
+            "payload.data.consumerData.executablePath"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "consumer.runInteractively",
+        "paths": [
+            "payload.data.consumerData.runInteractively"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "consumer.script.engine",
+        "paths": [
+            "payload.data.consumerData.scriptingEngine"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "consumer.script.filename",
+        "paths": [
+            "payload.data.consumerData.scriptFileName"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "consumer.showWindowCmd",
+        "paths": [
+            "payload.data.consumerData.showWindowCommand"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "consumer.workingDirectory",
+        "paths": [
+            "payload.data.consumerData.workingDirectory"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "customName",
+        "paths": [
+            "payload.data.customName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "customType",
+        "paths": [
+            "payload.data.customType"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "endpointId",
+        "paths": [
+            "endpointId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.arch",
+        "paths": [
+            "payload.data.engineProcess.program.arch"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.exists",
+        "paths": [
+            "payload.data.engineProcess"
+        ],
+        "type": [
+            "EXISTS"
+        ]
+    },
+    {
+        "name": "engine.expired",
+        "paths": [
+            "payload.data.engineProcess.program.certInfo.expired"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.fsname",
+        "paths": [
+            "payload.data.engineProcess.program.fsName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.hasGui",
+        "paths": [
+            "payload.data.engineProcess.noGui"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.isSigned",
+        "paths": [
+            "payload.data.engineProcess::EXISTS",
+            "payload.data.engineProcess.program.certInfo::EXISTS"
+        ],
+        "type": [
+            "EXISTS"
+        ]
+    },
+    {
+        "name": "engine.issuer",
+        "paths": [
+            "payload.data.engineProcess.program.certInfo.issuer"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "engine.login.id",
+        "paths": [
+            "payload.data.engineProcess.logonId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.md5",
+        "paths": [
+            "payload.data.engineProcess.program.md5"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.originalFilename",
+        "paths": [
+            "payload.data.engineProcess.program.filename"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.path",
+        "paths": [
+            "payload.data.engineProcess.program.path"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "engine.pid",
+        "paths": [
+            "payload.data.engineProcess.pid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.ppid",
+        "paths": [
+            "payload.data.engineProcess.ppid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.privilege",
+        "paths": [
+            "payload.data.engineProcess.privilegeLevel"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.sha1",
+        "paths": [
+            "payload.data.engineProcess.program.sha1"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.sha256",
+        "paths": [
+            "payload.data.engineProcess.program.sha256"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.signer",
+        "paths": [
+            "payload.data.engineProcess.program.certInfo.signer"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "engine.trusted",
+        "paths": [
+            "payload.data.engineProcess.program.certInfo.trusted"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.user",
+        "paths": [
+            "payload.data.engineProcess.user"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.user.sid",
+        "paths": [
+            "payload.data.engineProcess.userSID"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "engine.user.startsWith",
+        "paths": [
+            "payload.data.engineProcess.user"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "eventdata.arch",
+        "paths": [
+            "payload.data.arch"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.cert.expired",
+        "paths": [
+            "payload.data.certInfo.expired"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.cert.isSigned",
+        "paths": [
+            "payload.data::EXISTS",
+            "payload.data.certInfo::EXISTS"
+        ],
+        "type": [
+            "EXISTS"
+        ]
+    },
+    {
+        "name": "eventdata.cert.issuer",
+        "paths": [
+            "payload.data.certInfo.issuer"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "eventdata.cert.signer",
+        "paths": [
+            "payload.data.certInfo.signer"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "eventdata.cert.trusted",
+        "paths": [
+            "payload.data.certInfo.trusted"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.dns",
+        "paths": [
+            "payload.data.queryName"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "eventdata.etwEventId",
+        "paths": [
+            "payload.data.etwEventId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.etwEventVersion",
+        "paths": [
+            "payload.data.etwEventVersion"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.etwTask",
+        "paths": [
+            "payload.data.etwTask"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.filename",
+        "paths": [
+            "payload.data.filename"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.filetype",
+        "paths": [
+            "payload.data.fileType"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.fsname",
+        "paths": [
+            "payload.data.fsName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.localIp",
+        "paths": [
+            "payload.data.localAddr"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.localPort",
+        "paths": [
+            "payload.data.localPort"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.md5",
+        "paths": [
+            "payload.data.md5"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.path",
+        "paths": [
+            "payload.data.file::PREFIX",
+            "payload.data.path::PREFIX"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "eventdata.peType",
+        "paths": [
+            "payload.data.peType"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.regionSize.gte",
+        "paths": [
+            "payload.data.regionSize"
+        ],
+        "type": [
+            "RANGE_GTE"
+        ]
+    },
+    {
+        "name": "eventdata.regionSize.lte",
+        "paths": [
+            "payload.data.regionSize"
+        ],
+        "type": [
+            "RANGE_LTE"
+        ]
+    },
+    {
+        "name": "eventdata.relevance",
+        "paths": [
+            "payload.data.relevance"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.relevance.gte",
+        "paths": [
+            "payload.data.relevance"
+        ],
+        "type": [
+            "RANGE_GTE"
+        ]
+    },
+    {
+        "name": "eventdata.relevance.lte",
+        "paths": [
+            "payload.data.relevance"
+        ],
+        "type": [
+            "RANGE_LTE"
+        ]
+    },
+    {
+        "name": "eventdata.remoteIp",
+        "paths": [
+            "payload.data.remoteAddr"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.remotePort",
+        "paths": [
+            "payload.data.remotePort"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.returnCode",
+        "paths": [
+            "payload.data.returnCode"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.sha1",
+        "paths": [
+            "payload.data.sha1"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.sha256",
+        "paths": [
+            "payload.data.sha256"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.size.gte",
+        "paths": [
+            "payload.data.size"
+        ],
+        "type": [
+            "RANGE_GTE"
+        ]
+    },
+    {
+        "name": "eventdata.size.lte",
+        "paths": [
+            "payload.data.size"
+        ],
+        "type": [
+            "RANGE_LTE"
+        ]
+    },
+    {
+        "name": "eventdata.tag",
+        "paths": [
+            "payload.data.tags"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "eventdata.targetProcessId",
+        "paths": [
+            "payload.data.targetProcessId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventdata.url",
+        "paths": [
+            "payload.data.url"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "eventdata.version",
+        "paths": [
+            "payload.data.version"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventId",
+        "paths": [
+            "eventId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "eventType",
+        "paths": [
+            "payload.eventType"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "expired",
+        "paths": [
+            "payload.process.program.certInfo.expired"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "fsname",
+        "paths": [
+            "payload.process.program.fsName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "happenedAfter",
+        "paths": [
+            "happenedAt"
+        ],
+        "type": [
+            "RANGE_GTE"
+        ]
+    },
+    {
+        "name": "happenedBefore",
+        "paths": [
+            "happenedAt"
+        ],
+        "type": [
+            "RANGE_LTE"
+        ]
+    },
+    {
+        "name": "hasAlert",
+        "paths": [
+            "payload.incidents::EXISTS",
+            "payload.triggeredIncidents::EXISTS"
+        ],
+        "type": [
+            "EXISTS"
+        ]
+    },
+    {
+        "name": "hasGui",
+        "paths": [
+            "payload.process.noGui"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "host.pid",
+        "paths": [
+            "payload.data.hostPid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "ip.dst",
+        "paths": [
+            "payload.data.remoteAddr::TERM",
+            "payload.data.outbound::TERM",
+            "payload.data.localAddr::TERM",
+            "payload.data.outbound::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "ip.src",
+        "paths": [
+            "payload.data.remoteAddr::TERM",
+            "payload.data.outbound::TERM",
+            "payload.data.localAddr::TERM",
+            "payload.data.outbound::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "isOutbound",
+        "paths": [
+            "payload.data.outbound"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "isSigned",
+        "paths": [
+            "payload.process.program.certInfo"
+        ],
+        "type": [
+            "EXISTS"
+        ]
+    },
+    {
+        "name": "issuer",
+        "paths": [
+            "payload.process.program.certInfo.issuer"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "login.authenticationPackage",
+        "paths": [
+            "payload.data.etwAuthenticationPackageName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "login.dst.domain",
+        "paths": [
+            "payload.data.etwTargetDomainName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "login.dst.sid",
+        "paths": [
+            "payload.data.etwTargetUserSid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "login.dst.username",
+        "paths": [
+            "payload.data.etwTargetUserName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "login.id",
+        "paths": [
+            "payload.process.logonId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "login.ip",
+        "paths": [
+            "payload.data.etwIpAddress"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "login.packageName",
+        "paths": [
+            "payload.data.etwLmPackageName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "login.port",
+        "paths": [
+            "payload.data.etwIpPort"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "login.processName",
+        "paths": [
+            "payload.data.etwLogonProcessName"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "login.src.domain",
+        "paths": [
+            "payload.data.etwSubjectDomainName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "login.src.sid",
+        "paths": [
+            "payload.data.etwSubjectUserSid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "login.src.username",
+        "paths": [
+            "payload.data.etwSubjectUserName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "login.subjectLogonId",
+        "paths": [
+            "payload.data.etwSubjectLogonId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "login.targetLogonId",
+        "paths": [
+            "payload.data.etwTargetLogonId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "login.type",
+        "paths": [
+            "payload.data.etwLogonType"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "md5",
+        "paths": [
+            "payload.process.program.md5"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "mitre.tactic",
+        "paths": [
+            "payload.data.tactics"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "mitre.technique",
+        "paths": [
+            "payload.data.technique"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "originalFilename",
+        "paths": [
+            "payload.process.program.filename"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "path",
+        "paths": [
+            "payload.process.program.path"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "pid",
+        "paths": [
+            "payload.process.pid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "ppid",
+        "paths": [
+            "payload.process.ppid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "privilege",
+        "paths": [
+            "payload.process.privilegeLevel"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "reg.data",
+        "paths": [
+            "payload.data.data"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "reg.name",
+        "paths": [
+            "payload.data.name"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "reg.path",
+        "paths": [
+            "payload.data.rootObject"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "service.arch",
+        "paths": [
+            "payload.data.serviceProcess.program.arch"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.displayName",
+        "paths": [
+            "payload.data.displayName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.exists",
+        "paths": [
+            "payload.data.serviceProcess"
+        ],
+        "type": [
+            "EXISTS"
+        ]
+    },
+    {
+        "name": "service.expired",
+        "paths": [
+            "payload.data.serviceProcess.program.certInfo.expired"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.fsname",
+        "paths": [
+            "payload.data.serviceProcess.program.fsName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.hasGui",
+        "paths": [
+            "payload.data.serviceProcess.noGui"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.isSigned",
+        "paths": [
+            "payload.data.serviceProcess::EXISTS",
+            "payload.data.serviceProcess.program.certInfo::EXISTS"
+        ],
+        "type": [
+            "EXISTS"
+        ]
+    },
+    {
+        "name": "service.issuer",
+        "paths": [
+            "payload.data.serviceProcess.program.certInfo.issuer"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "service.login.id",
+        "paths": [
+            "payload.data.serviceProcess.logonId"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.md5",
+        "paths": [
+            "payload.data.serviceProcess.program.md5"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.name",
+        "paths": [
+            "payload.data.serviceName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.originalFilename",
+        "paths": [
+            "payload.data.serviceProcess.program.filename"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.path",
+        "paths": [
+            "payload.data.serviceProcess.program.path"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "service.pid",
+        "paths": [
+            "payload.data.serviceProcess.pid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.ppid",
+        "paths": [
+            "payload.data.serviceProcess.ppid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.privilege",
+        "paths": [
+            "payload.data.serviceProcess.privilegeLevel"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.sha1",
+        "paths": [
+            "payload.data.serviceProcess.program.sha1"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.sha256",
+        "paths": [
+            "payload.data.serviceProcess.program.sha256"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.signer",
+        "paths": [
+            "payload.data.serviceProcess.program.certInfo.signer"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "service.startType",
+        "paths": [
+            "payload.data.startType"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.trusted",
+        "paths": [
+            "payload.data.serviceProcess.program.certInfo.trusted"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.type",
+        "paths": [
+            "payload.data.serviceType"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.user",
+        "paths": [
+            "payload.data.serviceProcess.user"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.user.sid",
+        "paths": [
+            "payload.data.serviceProcess.userSID"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "service.user.startsWith",
+        "paths": [
+            "payload.data.serviceProcess.user"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "sha1",
+        "paths": [
+            "payload.process.program.sha1"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "sha256",
+        "paths": [
+            "payload.process.program.sha256"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "signer",
+        "paths": [
+            "payload.process.program.certInfo.signer"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "target.arch",
+        "paths": [
+            "payload.data.childProcess.program.arch::TERM",
+            "payload.data.targetProcess.program.arch::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.expired",
+        "paths": [
+            "payload.data.childProcess.program.certInfo.expired::TERM",
+            "payload.data.targetProcess.program.certInfo.expired::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.fsname",
+        "paths": [
+            "payload.data.targetProcess.program.fsName::TERM",
+            "payload.data.childProcess.program.fsName::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.hasGui",
+        "paths": [
+            "payload.data.childProcess.noGui::TERM",
+            "payload.data.targetProcess.noGui::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.isSigned",
+        "paths": [
+            "payload.data.targetProcess::EXISTS",
+            "payload.data.targetProcess.program.certInfo::EXISTS",
+            "payload.data.childProcess::EXISTS",
+            "payload.data.childProcess.program.certInfo::EXISTS"
+        ],
+        "type": [
+            "EXISTS"
+        ]
+    },
+    {
+        "name": "target.issuer",
+        "paths": [
+            "payload.data.childProcess.program.certInfo.issuer::PREFIX",
+            "payload.data.targetProcess.program.certInfo.issuer::PREFIX"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "target.login.id",
+        "paths": [
+            "payload.data.childProcess.logonId::TERM",
+            "payload.data.targetProcess.logonId::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.md5",
+        "paths": [
+            "payload.data.childProcess.program.md5::TERM",
+            "payload.data.targetProcess.program.md5::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.originalFilename",
+        "paths": [
+            "payload.data.targetProcess.program.filename::TERM",
+            "payload.data.childProcess.program.filename::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.path",
+        "paths": [
+            "payload.data.childProcess.program.path::PREFIX",
+            "payload.data.targetProcess.program.path::PREFIX"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "target.pid",
+        "paths": [
+            "payload.data.childProcess.pid::TERM",
+            "payload.data.targetProcess.pid::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.ppid",
+        "paths": [
+            "payload.data.childProcess.ppid::TERM",
+            "payload.data.targetProcess.ppid::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.privilege",
+        "paths": [
+            "payload.data.childProcess.privilegeLevel::TERM",
+            "payload.data.targetProcess.privilegeLevel::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.sha1",
+        "paths": [
+            "payload.data.childProcess.program.sha1::TERM",
+            "payload.data.targetProcess.program.sha1::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.sha256",
+        "paths": [
+            "payload.data.childProcess.program.sha256::TERM",
+            "payload.data.targetProcess.program.sha256::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.signer",
+        "paths": [
+            "payload.data.childProcess.program.certInfo.signer::PREFIX",
+            "payload.data.targetProcess.program.certInfo.signer::PREFIX"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "target.trusted",
+        "paths": [
+            "payload.data.childProcess.program.certInfo.trusted::TERM",
+            "payload.data.targetProcess.program.certInfo.trusted::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.user",
+        "paths": [
+            "payload.data.childProcess.user::TERM",
+            "payload.data.targetProcess.user::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.user.sid",
+        "paths": [
+            "payload.data.childProcess.userSID::TERM",
+            "payload.data.targetProcess.userSID::TERM"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "target.user.startsWith",
+        "paths": [
+            "payload.data.childProcess.user::PREFIX",
+            "payload.data.targetProcess.user::PREFIX"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "task.actionName",
+        "paths": [
+            "payload.data.actionName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "task.name",
+        "paths": [
+            "payload.data.taskName"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "trusted",
+        "paths": [
+            "payload.process.program.certInfo.trusted"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "user",
+        "paths": [
+            "payload.process.user"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "user.sid",
+        "paths": [
+            "payload.process.userSID"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "user.startsWith",
+        "paths": [
+            "payload.process.user"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "wmi.clientMachine",
+        "paths": [
+            "payload.data.clientMachine"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "wmi.clientMachineFqn",
+        "paths": [
+            "payload.data.clientMachineFqn"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "wmi.clientPid",
+        "paths": [
+            "payload.data.clientPid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "wmi.consumerName",
+        "paths": [
+            "payload.data.consumerName"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "wmi.consumerType",
+        "paths": [
+            "payload.data.consumerType"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "wmi.eventNamespace",
+        "paths": [
+            "payload.data.eventNamespace"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "wmi.filterName",
+        "paths": [
+            "payload.data.filterName"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "wmi.isLocal",
+        "paths": [
+            "payload.data.isLocal"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "wmi.machineName",
+        "paths": [
+            "payload.data.machineName"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "wmi.namespaceName",
+        "paths": [
+            "payload.data.namespaceName"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "wmi.operation",
+        "paths": [
+            "payload.data.operation"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "wmi.operationType",
+        "paths": [
+            "payload.data.operationType"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "wmi.query",
+        "paths": [
+            "payload.data.query"
+        ],
+        "type": [
+            "PREFIX"
+        ]
+    },
+    {
+        "name": "wmi.queryLanguage",
+        "paths": [
+            "payload.data.queryLanguage"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "wmi.user",
+        "paths": [
+            "payload.data.user"
+        ],
+        "type": [
+            "TERM"
+        ]
+    },
+    {
+        "name": "wmiHost.pid",
+        "paths": [
+            "payload.data.wmiHostPid"
+        ],
+        "type": [
+            "TERM"
+        ]
+    }
+]

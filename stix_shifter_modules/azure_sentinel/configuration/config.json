@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Microsoft Azure Sentinel"
+            "displayName": "Microsoft Graph Security",
+            "group": "azure"
         },
         "host": {
             "type": "text",

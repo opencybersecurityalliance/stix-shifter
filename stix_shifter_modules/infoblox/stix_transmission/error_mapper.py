@@ -1,6 +1,5 @@
 """
 Contains ErrorMapper class, used to translate native API errors to standard ErrorCodes.
-
 See: https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-transmission-module.md#step-4-edit-the-template-error-mapper-file
 """
 

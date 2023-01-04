@@ -60,27 +60,27 @@ DATA_RELEVANCE = find('payload.data.relevance', DATA)
 DATA_VERSION = find('payload.data.version', DATA)
 
 STIX_2_1_OBJECT_REFS = [
-    "directory--9d6f3ae4-4fb1-5eaf-a295-7ae1189befeb",
-    "file--697ce471-a30e-5867-83ab-69d38fc4c07c",
-    "user-account--80bb9f7c-1010-5f6f-bc9c-d862451be62c",
-    "file--6463fa96-e6e4-50d6-b636-792bc7fe096e",
-    "network-traffic--1447b4e4-99c4-552d-b140-07fa908504af",
-    "directory--c616d2f7-3b0a-5ccb-843c-e4592f5d5c50",
-    "user-account--a50c0708-1b89-55c6-92e9-6d93a80d2708",
-    "url--91ba42cf-130a-58f8-8a18-7613abffd412",
-    "user-account--c0152e8f-c3db-55c6-8881-7e8d8373e8a0",
-    "file--0af4f45b-8970-5c87-819f-814b93e472ca",
-    "user-account--4fe2a8d1-b519-5701-b521-1145606b1903",
-    "directory--5c0ad0f9-38c5-56c0-a059-85994be2032a",
-    "file--ffc24f98-eb84-500d-a5d5-52376ce5ffa9",
-    "user-account--da9a51b3-80fa-5e94-adb9-a78bf00d9a56",
-    "directory--0c5773ea-0ddb-5b4d-bef7-2c29818f0170",
-    "file--ce0f32cf-1b48-59f9-8139-11e01d198bfc",
-    "directory--2f2498e1-8be8-53fa-93cd-6e54220b452a",
-    "file--1b887397-3edf-5eba-961c-83f62a816661",
-    "file--19a3ab44-7c99-570a-918a-61d3bb96ecad",
-    "ipv4-addr--a47ff5c6-efeb-5caa-b606-62198d19839d",
-    "ipv4-addr--adac2d17-0bea-5ec1-8d7a-653cba4476e4"
+    "directory--13adb857-abec-5c8f-847b-bb6899c74d12",
+    "file--e947ec3d-a3a8-50e9-a408-020d4b7108ec",
+    "user-account--b421bf67-9785-501a-9321-8dc35ed7a1c5",
+    "file--92de3247-223e-5d02-b662-10053cd87404",
+    "network-traffic--3805077a-e9e7-5689-b863-85be32f5c67e",
+    "directory--0a58d0c1-59e6-5afd-8252-dcd3f13e5622",
+    "user-account--8fefa3ad-08f5-5438-846a-82e6009baab7",
+    "url--ce0d2357-0220-5e47-896b-b49b1389c813",
+    "user-account--dda9b638-8cb1-5435-9bb0-d542baf6b67c",
+    "file--86e2f685-4636-530c-923b-adaa9db11df9",
+    "user-account--38a33c9a-4221-5a52-8da7-b3f6e51d4351",
+    "directory--bf80427d-5920-5f36-aee1-c10ea3d9bccb",
+    "file--0055834d-3772-5e4d-b39e-552c3e23b6ec",
+    "user-account--7341e6ed-3ed7-5d12-a4dc-570afeb994e5",
+    "directory--e56dc833-b047-51fe-b68d-c628598415c9",
+    "file--aadaf87b-d5cb-5ff5-8115-9dcefdd26ad9",
+    "directory--c17e5aa6-ccaf-533c-a119-3244ee7651d3",
+    "file--1a114064-93a9-5b53-82fb-e9a399ce7485",
+    "file--4d2b6011-b251-5e8b-a235-bad44f6161a0",
+    "ipv4-addr--806f9213-8e92-5de7-ae9b-8e5697498d78",
+    "ipv4-addr--efabfd00-4168-536e-8995-e3837bd7111f"
 ]
 
 DATA_SOURCE = {
@@ -148,7 +148,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         proc_obj = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'process')
         
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'extensions', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
+        assert(proc_obj.keys() == {'type', 'x_unique_id', 'extensions', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
         
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref in objects), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
@@ -178,11 +178,6 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(extensions is not None), "file extensions not found"
         assert(extensions.keys() == {'owner_sid'})
         assert(extensions['owner_sid'] == DATA_PROCESS_USER_SID)
-
-        extensions = find('extensions.x-process-ext', proc_obj)
-        assert(extensions is not None), "process extensions not found"
-        assert(extensions.keys() == {'process_uid'})
-        assert(extensions['process_uid'] == DATA_PROCESS_GUID)
 
     def test_cybox_observables_file(self):
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
@@ -274,7 +269,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         process_ref = event['process_ref']
         assert(process_ref in objects), f"process_ref with key {event['process_ref']} not found"
         process_obj = objects[process_ref]
-        assert(process_obj.keys() == {'type', 'extensions', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
+        assert(process_obj.keys() == {'type', 'x_unique_id', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'extensions', 'command_line'})
         assert(process_obj['type'] == 'process')
         assert(process_obj['command_line'] == DATA_PROCESS_COMMAND_LINE)
         binary_obj = objects[process_obj['binary_ref']]
@@ -290,7 +285,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         parent_process_ref = event['parent_process_ref']
         assert(parent_process_ref in objects), f"parent_process_ref with key {event['parent_process_ref']} not found"
         parent_process_obj = objects[parent_process_ref]
-        assert(parent_process_obj.keys() == {'type', 'pid','extensions'})
+        assert(parent_process_obj.keys() == {'type', 'pid','x_unique_id'})
         assert(parent_process_obj['type'] == 'process')
         assert(parent_process_obj['pid'] == DATA_PROCESS_PPID)
 
@@ -437,7 +432,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         proc_obj = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'process')
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'extensions', 'id', 'spec_version', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
+        assert(proc_obj.keys() == {'type', 'extensions', 'id', 'spec_version', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line', 'x_unique_id'})
         
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref.object_id in observed_data['object_refs']), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
@@ -462,11 +457,6 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(extensions.keys() == {'owner_sid'})
         assert(extensions['owner_sid'] == DATA_PROCESS_USER_SID)
 
-        extensions = find('extensions.x-process-ext', proc_obj)
-        assert(extensions is not None), "process extensions not found"
-        assert(extensions.keys() == {'process_uid'})
-        assert(extensions['process_uid'] == DATA_PROCESS_GUID)
-    
     def test_cybox_observables_network_traffic_inbound(self):
         DATA['payload']['data']['outbound'] = False
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
@@ -503,3 +493,31 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         obj_num = ip_refs[0]
         ip_obj = objects[obj_num]
         assert(ip_obj['value'] == DATA_REMOTE_IP) # DATA_REMOTE_IP is switched to local ip for inbound connection
+    
+    def test_windows_process_event(self):
+        data = {"eventId":"834518763272404993","endpointId":"826811596507447296","payload":{"localId":"834518722289862657",
+                "incidents":[],"triggeredIncidents":[],"data":{"etwEventRecordId":147002,"etwEventVersion":2,
+                "etwTimeCreated":"2022-02-22T21:19:28.2513970Z","etwSubjectUserSid":"S-1-5-18","etwSubjectUserName":"QA-REMOTE-ENDPO$",
+                "etwSubjectDomainName":"WORKGROUP","etwSubjectLogonId":"0x3e7","etwTargetUserSid":"S-1-5-18",
+                "etwTargetUserName":"SYSTEM","etwTargetDomainName":"NT AUTHORITY","etwTargetLogonId":"0x3e7","etwLogonType":"5",
+                "etwLogonProcessName":"Advapi  ","etwAuthenticationPackageName":"Negotiate","etwWorkstationName":"-",
+                "etwLogonGuid":"{00000000-0000-0000-0000-000000000000}","etwTransmittedServices":"-","etwLmPackageName":"-","etwKeyLength":"0",
+                "etwProcessId":"0x290","etwProcessName":"C:\\Windows\\System32\\services.exe","etwIpAddress":"-","etwIpPort":"-",
+                "etwImpersonationLevel":"%%1833","etwRestrictedAdminMode":"-","etwTargetOutboundUserName":"-","etwTargetOutboundDomainName":"-",
+                "etwVirtualAccount":"%%1843","etwTargetLinkedLogonId":"0x0","etwElevatedToken":"%%1842",
+                "etwEventDescription":"An account was successfully logged on.","etwEventId":4624,"etwTask":12544,"version":2},
+                "eventType":39},"happenedAt":"2022-02-22T21:19:28.002Z","receivedAt":"2022-02-22T21:19:37.773Z"}
+
+        result_bundle = ENTRY_POINT.translate_results(json.dumps(DATA_SOURCE), json.dumps([data]))
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        objects = observed_data['objects']
+        
+        proc_obj = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'process')
+        assert(proc_obj is not None), 'process object type not found'
+        assert(proc_obj.keys() == {'type', 'extensions', 'creator_user_ref', 'pid', 'name'})
+
+        pid = proc_obj['pid']
+        hex_pid = hex(pid)
+        original_pid = data['payload']['data']['etwProcessId']
+        assert hex_pid == original_pid

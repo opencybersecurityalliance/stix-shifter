@@ -48,6 +48,8 @@ class StixTranslation:
         """
 
         module, dialects = process_dialects(module, options)
+        error = None
+        code = None
         try:
             try:
                 connector_module = importlib.import_module("stix_shifter_modules." + module + ".entry_point")
@@ -86,6 +88,7 @@ class StixTranslation:
                     # Carbon Black combines the mapping files into one JSON using process and binary keys.
                     # The query constructor has some logic around which of the two are used.
                     queries = []
+                    result = {}
                     unmapped_stix_collection = []
                     unmapped_operator_collection = []
                     dialects_used = 0
@@ -94,6 +97,10 @@ class StixTranslation:
                         if not language or language == query_translator.get_language():
                             dialects_used += 1
                             transform_result = entry_point.transform_query(dialect, data)
+                            if 'error' in transform_result:
+                                error = transform_result['error']
+                            if 'code' in transform_result:
+                                code = transform_result['code']
                             if 'async_call' in transform_result:
                                 queries.append(transform_result)
                             else:
@@ -118,7 +125,12 @@ class StixTranslation:
                             raise DataMappingException(
                                 "{} {} to data source fields".format(OPERATOR_MAPPING_ERROR, unmapped_operator_collection)
                             )
-                    return {'queries': queries}
+                    result['queries'] = queries
+                    if error:
+                        result['error'] = error
+                    if code:
+                        result['code'] = code
+                    return result
                 else:
                     return entry_point.parse_query(data)
             elif translate_type == RESULTS:

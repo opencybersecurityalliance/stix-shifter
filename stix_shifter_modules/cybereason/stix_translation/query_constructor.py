@@ -36,6 +36,9 @@ class QueryStringPatternTranslator:
         self.options = options
         self.config_map = self.load_json(CONFIG_MAP_PATH)
         self.qualified_queries = []
+        self.stix_object_fields = []
+        self.link_not_found_messages = []
+        self.link_not_found_flag = False
         self.parse_expression(pattern)
 
     @staticmethod
@@ -78,7 +81,8 @@ class QueryStringPatternTranslator:
         """
         try:
             time_pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
-
+            if re.search(r"\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}Z", str(value)):  # without milli seconds
+                time_pattern = '%Y-%m-%dT%H:%M:%SZ'
             epoch = datetime(1970, 1, 1)
             converted_time = int(((datetime.strptime(value,
                                                      time_pattern) - epoch).total_seconds()) * 1000)
@@ -230,9 +234,9 @@ class QueryStringPatternTranslator:
                 }
             },
             "perFeatureLimit": 1,
-            "totalResultLimit": options["result_limit"] - 1,  # Cybereason returns 1 more than totalResultLimit records along with
-            "perGroupLimit": 1,                               # the options perfeaturelimit=1 and perGroupLimit=1
-            "templateContext": "CUSTOM",
+            "totalResultLimit": options["result_limit"] - 1,  # Cybereason returns 1 more than totalResultLimit records
+            "perGroupLimit": 1,                               # along with the options perfeaturelimit=1
+            "templateContext": "CUSTOM",                      # and perGroupLimit=1
             "customFields": add_custom_fields
 
         }
@@ -350,6 +354,8 @@ class QueryStringPatternTranslator:
         :return : list
         """
         merged_query = []
+        self.link_not_found_messages[-1].append([])
+
         for previous_queries in previous_all_queries:
             for current_queries in current_all_queries:
                 current_query = copy.deepcopy(current_queries)
@@ -363,8 +369,14 @@ class QueryStringPatternTranslator:
                 elif current_requested_type in self.config_map["linked_fields"][previous_requested_type].keys():
                     self._merge_linked_element(previous_query,
                                                current_query, merged_query)
+                else:
+                    link_error_msg = f"{self.stix_object_fields[-2]} and {self.stix_object_fields[-1]}"
+                    self.link_not_found_messages[-1][-1].append(link_error_msg)
+        # set the flag to true if no link is found between elements
         if not merged_query:
-            raise LinkNotFoundException('Link is not found between elements')
+            self.link_not_found_flag = True
+        else:
+            self.link_not_found_messages[-1][-1] = []
         return merged_query
 
     def _parse_mapped_fields(self, comparator, value, mapped_fields_array, qualifier):
@@ -389,13 +401,16 @@ class QueryStringPatternTranslator:
         :param expression: expression object
         :param qualifier: qualifier
         """
+        self.link_not_found_flag = False
         self.qualified_queries.append([])
+        self.link_not_found_messages.append([])
         self._parse_expression(expression.comparison_expression, qualifier)
-        if len(self.qualified_queries) > 1:
-            current_query = self.qualified_queries.pop()
-            previous_query = self.qualified_queries.pop()
-            merged_query = self._and_operator_query(previous_query, current_query)
-            self.qualified_queries.append(merged_query)
+        self.link_not_found_messages[-1] = {item for sublist in self.link_not_found_messages[-1] for item in sublist}
+        # queries should not be added when a link is not found between elements in an observation
+        if self.link_not_found_flag:
+            self.qualified_queries[-1] = []
+        elif self.qualified_queries[-1]:
+            self.link_not_found_messages[-1] = []
 
     def _parse_expression(self, expression, qualifier=None):
         """
@@ -405,6 +420,7 @@ class QueryStringPatternTranslator:
         :return :None or str
         """
         if isinstance(expression, ComparisonExpression):  # Base Case
+            self.stix_object_fields.append(expression.object_path)
             stix_object, stix_field = expression.object_path.split(':')
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
             comparator = self.comparator_lookup[str(expression.comparator)]
@@ -436,7 +452,7 @@ class QueryStringPatternTranslator:
                                f'type(expression)={type(expression)}')
 
     def parse_expression(self, pattern: Pattern):
-        if "ComparisonExpressionOperators.Or" in str(pattern) or "ObservationOperators.Or" in str(pattern):
+        if "ComparisonExpressionOperators.Or" in str(pattern):
             raise NotImplementedError("OR operator is not supported in Cybereason")
 
         self._parse_expression(pattern)
@@ -452,5 +468,12 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     """
     translated_query_strings = QueryStringPatternTranslator(pattern, data_model_mapping, options)
     queries = translated_query_strings.qualified_queries
+    link_not_found_message = translated_query_strings.link_not_found_messages
     final_queries = [item for sublist in queries for item in sublist]
+    link_not_found_messages = {item for sublist in link_not_found_message for item in sublist}
+    if not final_queries:
+        raise LinkNotFoundException(f"Cybereason does not allow AND operation "
+                                    f"between {', '.join(link_not_found_messages)}")
+    if link_not_found_messages:
+        logger.error("Cybereason does not allow AND operation between %s", ', '.join(link_not_found_messages))
     return final_queries

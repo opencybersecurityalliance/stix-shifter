@@ -24,7 +24,8 @@ The following example JSON contains the appropriate parameters that each module 
 {
     "connection": {
         "type": {
-            "default": "QRadar"
+            "default": "QRadar",
+            "group": "qradar"
         },
         "host": {
             "type": "text",

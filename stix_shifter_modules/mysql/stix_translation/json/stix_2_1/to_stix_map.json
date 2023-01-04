@@ -52,6 +52,12 @@
       "object": "useraccount"
     }
   ],
+  "displayname": [
+    {
+      "key": "user-account.display_name",
+      "object": "useraccount"
+    }
+  ],
   "filename": [
     {
       "key": "file.name",
