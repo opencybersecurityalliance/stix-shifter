@@ -91,7 +91,11 @@ response = translation.translate('<MODULE NAME>', 'query', '{}', '<STIX PATTERN>
 
 print(response)
 ```
+### Use of custom mappings
 
+You can customize your mappings after installing a stix-shifter connector library. Changing the mappings directly in mapping json files located in ***stix_shifter_modules/qradar/stix_translation/json*** doesn't work for this library. The setup script of the stix-shifter package includes the mapppings inside config.json which allows any platform to add custom mapping feature in the UI.
+
+Read the instruction described in [Use of custom mappings](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/custom_mappings.md) in order to use custom mapping after pip or source installation.
 
 ## Contributing
 
