@@ -1,6 +1,6 @@
 import json
 import re
-from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseJsonResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 MAX_LIMIT = 10000
@@ -10,7 +10,7 @@ PROTOCOLS_LIST = ["transportProtocol", "applicationProtocol"]
 FILE_HASHES = ["MD5", "SHA256", "SHA1"]
 
 
-class ResultsConnector(BaseResultsConnector):
+class ResultsConnector(BaseJsonResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.connector = __name__.split('.')[1]

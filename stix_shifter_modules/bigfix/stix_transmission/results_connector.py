@@ -1,4 +1,4 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseJsonResultsConnector
 import json
 import time
 from stix_shifter_utils.utils.error_response import ErrorResponder
@@ -10,7 +10,7 @@ class UnexpectedResponseException(Exception):
     pass
 
 
-class ResultsConnector(BaseResultsConnector):
+class ResultsConnector(BaseJsonResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)

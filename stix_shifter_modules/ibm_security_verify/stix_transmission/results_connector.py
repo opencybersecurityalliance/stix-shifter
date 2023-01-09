@@ -2,12 +2,12 @@ import json
 import traceback
 
 from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import \
-    BaseResultsConnector
+    BaseJsonResultsConnector
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
-class ResultsConnector(BaseResultsConnector):
+class ResultsConnector(BaseJsonResultsConnector):
 
     def __init__(self, api_client):
         self.api_client = api_client

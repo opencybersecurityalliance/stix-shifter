@@ -1,5 +1,5 @@
 import json
-from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseJsonResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 from flatten_json import flatten
@@ -13,7 +13,7 @@ class AccessDeniedException(Exception):
     pass
 
 
-class ResultsConnector(BaseResultsConnector):
+class ResultsConnector(BaseJsonResultsConnector):
     # https://docs.aws.amazon.com/athena/latest/APIReference/API_GetQueryResults.html#API_GetQueryResults_RequestSyntax
     # Athena MaxResults count is 1000 when calling get_query_results
     ATHENA_MAX_RESULTS_SIZE = 1000

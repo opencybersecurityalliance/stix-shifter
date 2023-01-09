@@ -1,4 +1,4 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseJsonResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 import json
@@ -18,7 +18,7 @@ class InvalidQueryException(Exception):
     pass
 
 
-class ResultsConnector(BaseResultsConnector):
+class ResultsConnector(BaseJsonResultsConnector):
 
     def __init__(self, api_client):
         self.api_client = api_client
