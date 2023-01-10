@@ -1,6 +1,5 @@
 import json
 import re
-import sys
 from os import path
 from pyparsing import nestedExpr, White
 from datetime import datetime, timedelta
@@ -387,9 +386,6 @@ class QuerySeparator:
         """
         try:
             queries = []
-            recursion_limit = sys.getrecursionlimit()
-            sys.setrecursionlimit(2000)
-
             # Based on brackets converting the translated query into nested list
             parsed_query = nestedExpr(opener="(", closer=")", ignoreExpr=White('')).parseString(query).asList()
             parsed_query = parsed_query[0]
@@ -433,7 +429,6 @@ class QuerySeparator:
             else:
                 queries.append(query)
 
-            sys.setrecursionlimit(recursion_limit)
             return queries
         except Exception as e:
             logger.info("Unable to split the query. Error occurred {}".format(str(e)))
