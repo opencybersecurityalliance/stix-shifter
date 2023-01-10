@@ -9,9 +9,9 @@
   "file": {
     "fields": {
       "accessed": [
-        "file.accessed_time"
+        "file.atime"
       ],
-      "created": [
+      "ctime": [
         "file.created_time"
       ],
       "extensions.'x-ocsf-file-ext'.algorithm": [
@@ -164,13 +164,13 @@
   },
   "process": {
     "fields": {
-      "binary_ref.name": [
+      "image_ref.name": [
         "file.name"
       ],
       "command_line": [
         "process.cmd_line"
       ],
-      "created": [
+      "created_time": [
         "process.created_time"
       ],
       "extensions.'x-ocsf-process-ext'.integrity": [
@@ -206,7 +206,7 @@
       "extensions.'x-ocsf-process-ext'.modified_time": [
         "process.modified_time"
       ],
-      "name": [
+      "x_name": [
         "process.name"
       ],
       "pid": [
