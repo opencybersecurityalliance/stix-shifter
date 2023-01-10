@@ -805,7 +805,7 @@
       },
       "file": {
         "accessed_time": {
-          "key": "file.accessed",
+          "key": "file.atime",
           "object": "file"
         },
         "accessor": {
@@ -905,7 +905,7 @@
           "object": "file"
         },
         "created_time": {
-          "key": "file.created",
+          "key": "file.ctime",
           "object": "file"
         },
         "creator": {
@@ -1015,7 +1015,7 @@
           "object": "process"
         },
         "modified_time": {
-          "key": "process.modified",
+          "key": "process.extensions.x-ocsf-process-ext.modified_time",
           "object": "process"
         },
         "modifier": {
@@ -1294,7 +1294,7 @@
         "object": "process"
       },
       "name": {
-        "key": "process.extensions.x-ocsf-process-ext.name",
+        "key": "process.x_name",
         "object": "process"
       },
       "parent-process": {
@@ -1308,7 +1308,7 @@
         },
         "file": {
           "accessed_time": {
-            "key": "file.accessed",
+            "key": "file.atime",
             "object": "parent-file"
           },
           "accessor": {
@@ -1408,7 +1408,7 @@
             "object": "parent-file"
           },
           "created_time": {
-            "key": "file.created",
+            "key": "file.ctime",
             "object": "parent-file"
           },
           "creator": {
@@ -1518,7 +1518,7 @@
             "object": "parent-process"
           },
           "modified_time": {
-            "key": "process.modified",
+            "key": "process.extensions.x-ocsf-process-ext.modified_time",
             "object": "parent-process"
           },
           "modifier": {

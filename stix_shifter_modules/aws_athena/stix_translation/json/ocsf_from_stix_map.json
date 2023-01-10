@@ -203,7 +203,7 @@
       "mime_type": [
         "mime_type"
       ],
-      "modified": [
+      "extensions.'x-ocsf-process-ext'.modified_time": [
         "process.modified_time"
       ],
       "name": [
@@ -553,7 +553,7 @@
       "extensions.'mitre-attack-ext'.technique_id": [
         "attack.technique.uid"
       ],
-      "extensions.'mitre-attack-ext'.versoin": [
+      "extensions.'mitre-attack-ext'.version": [
         "attack.version"
       ]
     }

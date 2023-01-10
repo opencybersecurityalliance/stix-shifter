@@ -1015,7 +1015,7 @@
           "object": "process"
         },
         "modified_time": {
-          "key": "process.modified",
+          "key": "process.extensions.x-ocsf-process-ext.modified_time",
           "object": "process"
         },
         "modifier": {
@@ -1518,7 +1518,7 @@
             "object": "parent-process"
           },
           "modified_time": {
-            "key": "process.modified",
+            "key": "process.extensions.x-ocsf-process-ext.modified_time",
             "object": "parent-process"
           },
           "modifier": {
