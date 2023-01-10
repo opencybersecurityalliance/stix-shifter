@@ -1,11 +1,11 @@
 import json
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     # LOOKS LIKE MAX COUNT is 500. response doesn't show why it fails
     MAX_LIMIT = 500
     

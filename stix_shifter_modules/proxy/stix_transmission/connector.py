@@ -1,10 +1,10 @@
 import copy
 import json
-from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 
 
-class Connector(BaseConnector):
+class Connector(BaseJsonSyncConnector):
     def __init__(self, connection, configuration):
         self.request_http_path = "https://{}:{}".format(connection['options']['proxy_host'], connection['options']['proxy_port'])
         self.timeout = connection['options']['timeout']

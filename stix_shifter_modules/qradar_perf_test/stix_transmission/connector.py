@@ -1,4 +1,4 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 import json
 from stix_shifter_utils.utils.error_response import ErrorResponder
@@ -8,7 +8,7 @@ class UnexpectedResponseException(Exception):
     pass
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     def __init__(self, connection, configuration):
         self.connector = __name__.split('.')[1]
         self.connection = connection

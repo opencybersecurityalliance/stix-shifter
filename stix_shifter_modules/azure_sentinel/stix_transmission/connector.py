@@ -2,13 +2,13 @@ import json
 import adal
 import re
 from flatten_json import flatten
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     init_error = None
     max_limit = 1000
 
