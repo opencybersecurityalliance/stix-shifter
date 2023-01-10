@@ -194,7 +194,7 @@
       "extensions.'x-ocsf-process-ext'.tid": [
         "process.tid"
       ],
-      "extensions.'x-ocsf-process-ext'.uid": [
+      "x_unique_id": [
         "process.uid"
       ],
       "extensions.'x-ocsf-process-ext'.xattributes": [

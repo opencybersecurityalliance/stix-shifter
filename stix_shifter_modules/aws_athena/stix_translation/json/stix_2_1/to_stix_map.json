@@ -624,41 +624,41 @@
         "product": {
           "feature": {
             "name": {
-              "key": "x-ocsf-malware.name",
-              "object": "malware"
+              "key": "software.extensions.x-ocsf-product-ext.feature_name",
+              "object": "malware-software"
             },
             "uid": {
-              "key": "x-ocsf-malware.uid",
-              "object": "malware"
+              "key": "software.extensions.x-ocsf-product-ext.feature_uid",
+              "object": "malware-software"
             },
             "version": {
-              "key": "x-ocsf-malware.version",
-              "object": "malware"
+              "key": "software.extensions.x-ocsf-product-ext.feature_version",
+              "object": "malware-software"
             }
           },
           "lang": {
-            "key": "x-ocsf-malware.lang",
-            "object": "malware"
+            "key": "software.languages",
+            "object": "malware-software"
           },
           "name": {
-            "key": "x-ocsf-malware.name",
-            "object": "malware"
+            "key": "software.name",
+            "object": "malware-software"
           },
           "path": {
-            "key": "x-ocsf-malware.path",
-            "object": "malware"
+            "key": "software.extensions.x-ocsf-product-ext.installed_path",
+            "object": "malware-software"
           },
           "uid": {
-            "key": "x-ocsf-malware.uid",
-            "object": "malware"
+            "key": "software.extensions.x-ocsf-product-ext.product_uid",
+            "object": "malware-software"
           },
           "vendor_name": {
-            "key": "x-ocsf-malware.vendor_name",
-            "object": "malware"
+            "key": "software.vendor",
+            "object": "malware-software"
           },
           "version": {
-            "key": "x-ocsf-malware.version",
-            "object": "malware"
+            "key": "software.version",
+            "object": "malware-software"
           }
         },
         "type": {
@@ -715,41 +715,41 @@
       "product": {
         "feature": {
           "name": {
-            "key": "software.extension.product.feature_name",
-            "object": "software"
+            "key": "software.extensions.x-ocsf-product-ext.feature_name",
+            "object": "metadata-software"
           },
           "uid": {
-            "key": "software.extension.product.feature_uid",
-            "object": "software"
+            "key": "software.extensions.x-ocsf-product-ext.feature_uid",
+            "object": "metadata-software"
           },
           "version": {
-            "key": "software.extension.product.feature_version",
-            "object": "software"
+            "key": "software.extensions.x-ocsf-product-ext.feature_version",
+            "object": "metadata-software"
           }
         },
         "lang": {
           "key": "software.languages",
-          "object": "software"
+          "object": "metadata-software"
         },
         "name": {
           "key": "software.name",
-          "object": "software"
+          "object": "metadata-software"
         },
         "path": {
-          "key": "software.extension.product.path",
-          "object": "software"
+          "key": "software.extensions.x-ocsf-product-ext.installed_path",
+          "object": "metadata-software"
         },
         "uid": {
-          "key": "software.extension.product.uid",
-          "object": "software"
+          "key": "software.extensions.x-ocsf-product-ext.product_uid",
+          "object": "metadata-software"
         },
         "vendor_name": {
           "key": "software.vendor",
-          "object": "software"
+          "object": "metadata-software"
         },
         "version": {
           "key": "software.version",
-          "object": "software"
+          "object": "metadata-software"
         }
       },
       "sequence": {
@@ -800,7 +800,7 @@
         "object": "process"
       },
       "created_time": {
-        "key": "process.created",
+        "key": "process.created_time",
         "object": "process"
       },
       "file": {
@@ -1104,7 +1104,7 @@
             "object": "file"
           },
           {
-            "key": "process.binary_ref",
+            "key": "process.image_ref",
             "object": "process",
             "references": "file"
           }
@@ -1207,41 +1207,41 @@
         "product": {
           "feature": {
             "name": {
-              "key": "file.extensions.x-ocsf-file-ext.feature_name",
-              "object": "file"
+              "key": "software.extensions.x-ocsf-product-ext.feature_name",
+              "object": "file1-software"
             },
             "uid": {
-              "key": "file.extensions.x-ocsf-file-ext.feature_uid",
-              "object": "file"
+              "key": "software.extensions.x-ocsf-product-ext.feature_uid",
+              "object": "file1-software"
             },
             "version": {
-              "key": "file.extensions.x-ocsf-file-ext.feature_version",
-              "object": "file"
+              "key": "software.extensions.x-ocsf-product-ext.feature_version",
+              "object": "file1-software"
             }
           },
           "lang": {
-            "key": "file.extensions.x-ocsf-file-ext.product_lang",
-            "object": "file"
+            "key": "software.languages",
+            "object": "file1-software"
           },
           "name": {
-            "key": "file.extensions.x-ocsf-file-ext.product_name",
-            "object": "file"
+            "key": "software.name",
+            "object": "file1-software"
           },
           "path": {
-            "key": "file.extensions.x-ocsf-file-ext.installed_path",
-            "object": "file"
+            "key": "software.extensions.x-ocsf-product-ext.installed_path",
+            "object": "file1-software"
           },
           "uid": {
-            "key": "file.extensions.x-ocsf-file-ext.product_uid",
-            "object": "file"
+            "key": "software.extensions.x-ocsf-product-ext.product_uid",
+            "object": "file1-software"
           },
           "vendor_name": {
-            "key": "file.extensions.x-ocsf-file-ext.product_vendor",
-            "object": "file"
+            "key": "software.vendor",
+            "object": "file1-software"
           },
           "version": {
-            "key": "file.extensions.x-ocsf-file-ext.product_version",
-            "object": "file"
+            "key": "software.version",
+            "object": "file1-software"
           }
         },
         "security_descriptor": {
@@ -1607,7 +1607,7 @@
               "object": "parent-file"
             },
             {
-              "key": "process.binary_ref",
+              "key": "process.image_ref",
               "object": "parent-process",
               "references": "parent-file"
             }
@@ -1710,41 +1710,41 @@
           "product": {
             "feature": {
               "name": {
-                "key": "file.extensions.x-ocsf-file-ext.feature_name",
-                "object": "parent-file"
+                "key": "software.extensions.x-ocsf-product-ext.feature_name",
+                "object": "file-software"
               },
               "uid": {
-                "key": "file.extensions.x-ocsf-file-ext.feature_uid",
-                "object": "parent-file"
+                "key": "software.extensions.x-ocsf-product-ext.feature_uid",
+                "object": "file-software"
               },
               "version": {
-                "key": "file.extensions.x-ocsf-file-ext.feature_version",
-                "object": "parent-file"
+                "key": "software.extensions.x-ocsf-product-ext.feature_version",
+                "object": "file-software"
               }
             },
             "lang": {
-              "key": "file.extensions.x-ocsf-file-ext.product_lang",
-              "object": "parent-file"
+              "key": "software.languages",
+              "object": "file-software"
             },
             "name": {
-              "key": "file.extensions.x-ocsf-file-ext.product_name",
-              "object": "parent-file"
+              "key": "software.name",
+              "object": "file-software"
             },
             "path": {
-              "key": "file.extensions.x-ocsf-file-ext.installed_path",
-              "object": "parent-file"
+              "key": "software.extensions.x-ocsf-product-ext.installed_path",
+              "object": "file-software"
             },
             "uid": {
-              "key": "file.extensions.x-ocsf-file-ext.product_uid",
-              "object": "parent-file"
+              "key": "software.extensions.x-ocsf-product-ext.product_uid",
+              "object": "file-software"
             },
             "vendor_name": {
-              "key": "file.extensions.x-ocsf-file-ext.product_vendor",
-              "object": "parent-file"
+              "key": "software.vendor",
+              "object": "file-software"
             },
             "version": {
-              "key": "file.extensions.x-ocsf-file-ext.product_version",
-              "object": "parent-file"
+              "key": "software.version",
+              "object": "file-software"
             }
           },
           "security_descriptor": {
@@ -1824,7 +1824,7 @@
           "object": "parent-process"
         },
         "uid": {
-          "key": "process.extensions.x-ocsf-process-ext.uid",
+          "key": "process.x_unique_id",
           "object": "parent-process"
         },
         "user": {
@@ -1939,7 +1939,7 @@
         "object": "process"
       },
       "tid": {
-        "key": "process.extensions.x-ocsf-process-ext.tid",
+        "key": "process.x_unique_id",
         "object": "process"
       },
       "uid": {
@@ -2467,41 +2467,41 @@
         "product": {
           "feature": {
             "name": {
-              "key": "x-ocsf-vulnerabilities.feature_name",
-              "object": "vulnerabilities"
+              "key": "software.extensions.x-ocsf-product-ext.feature_name",
+              "object": "vulnerabilities-software"
             },
             "uid": {
-              "key": "x-ocsf-vulnerabilities.feature_uid",
-              "object": "vulnerabilities"
+              "key": "software.extensions.x-ocsf-product-ext.feature_uid",
+              "object": "vulnerabilities-software"
             },
             "version": {
-              "key": "x-ocsf-vulnerabilities.feature_version",
-              "object": "vulnerabilities"
+              "key": "software.extensions.x-ocsf-product-ext.feature_version",
+              "object": "vulnerabilities-software"
             }
           },
           "lang": {
-            "key": "x-ocsf-vulnerabilities.lang",
-            "object": "vulnerabilities"
+            "key": "software.languages",
+            "object": "vulnerabilities-software"
           },
           "name": {
-            "key": "x-ocsf-vulnerabilities.product_name",
-            "object": "vulnerabilities"
+            "key": "software.name",
+            "object": "vulnerabilities-software"
           },
           "path": {
-            "key": "x-ocsf-vulnerabilities.path",
-            "object": "vulnerabilities"
+            "key": "software.extensions.x-ocsf-product-ext.installed_path",
+            "object": "vulnerabilities-software"
           },
           "uid": {
-            "key": "x-ocsf-vulnerabilities.uid",
-            "object": "vulnerabilities"
+            "key": "software.extensions.x-ocsf-product-ext.product_uid",
+            "object": "vulnerabilities-software"
           },
           "vendor_name": {
-            "key": "x-ocsf-vulnerabilities.vendor_name",
-            "object": "vulnerabilities"
+            "key": "software.vendor",
+            "object": "vulnerabilities-software"
           },
           "version": {
-            "key": "x-ocsf-vulnerabilities.product_version",
-            "object": "vulnerabilities"
+            "key": "software.version",
+            "object": "vulnerabilities-software"
           }
         },
         "type": {
