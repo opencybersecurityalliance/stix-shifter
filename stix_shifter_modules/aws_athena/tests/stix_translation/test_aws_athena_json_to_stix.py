@@ -492,6 +492,6 @@ class TestAwsResultsToStix(unittest.TestCase):
 
         x_ibm_finding = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
         assert x_ibm_finding is not None, 'x-ibm-finding object type not found'
-        assert x_ibm_finding.keys() == {'type', 'time_observed', 'severity'}
+        assert x_ibm_finding.keys() == {'type', 'time_observed','src_ip_ref', 'severity'}
         assert x_ibm_finding['time_observed'] == '2020-10-07T08:08:37.000Z'
         assert x_ibm_finding['severity'] == 0

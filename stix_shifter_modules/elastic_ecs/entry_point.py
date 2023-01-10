@@ -1,4 +1,7 @@
+import os
+
 from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
+from .stix_translation.query_translator import QueryTranslator
 from .stix_translation.results_translator import ResultTranslator
 
 
@@ -11,5 +14,15 @@ class EntryPoint(BaseEntryPoint):
         if connection:
             self.setup_transmission_basic(connection, configuration)
 
+        basepath = os.path.dirname(__file__)
+        filepath = os.path.abspath(os.path.join(basepath, "stix_translation"))
+
         dialect = 'default'
-        self.setup_translation_simple(dialect_default=dialect, results_translator=ResultTranslator(options, dialect))
+        query_translator = QueryTranslator(options, dialect, filepath)
+        results_translator = ResultTranslator(options, dialect)
+        self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default_include=True, default=True)
+
+        dialect = 'beats'
+        query_translator = QueryTranslator(options, dialect, filepath)
+        results_translator = ResultTranslator(options, dialect)
+        self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator, default_include=False, default=False)

@@ -23,8 +23,8 @@
 	},
         "options": {
             "index": {
-                "label": "Index Name",
-                "description": "The name of the Splunk index to be queried by this connector."
+                "label": "Index Name(s)",
+                "description": "The (comma-separated) name(s) of the Splunk index (or indices) to be queried by this connector."
             }
         }
     },
