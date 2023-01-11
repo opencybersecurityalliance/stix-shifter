@@ -1,6 +1,6 @@
 adal==1.2.7
 antlr4-python3-runtime==4.8
-boto3==1.26.41
+boto3==1.26.47
 flask==2.2.2
 pyOpenSSL==23.0.0
 flatten_json==0.1.13
