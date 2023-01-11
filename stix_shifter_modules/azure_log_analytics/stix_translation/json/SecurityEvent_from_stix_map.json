@@ -33,9 +33,9 @@
             "path": [
                 "FilePath"
             ],
-            "hashes": [
-                "FileHash"
-            ]
+            "hashes.'SHA-256'": ["FileHash"],
+            "hashes.MD5": ["FileHash"],
+            "hashes.'SHA-1'": ["FileHash"]
         }
     },
     "process": {
@@ -69,9 +69,6 @@
             ],
             "end": [
                 "PreviousTime"
-            ],
-            "code": [
-                "EventID"
             ],
             "name": [
                 "EventSourceName"

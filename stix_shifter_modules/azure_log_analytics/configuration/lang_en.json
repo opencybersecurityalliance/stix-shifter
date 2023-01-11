@@ -2,7 +2,7 @@
   "connection": {
     "host": {
       "label": "Management IP address or Hostname",
-      "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+      "description": "Specify the IP address or hostname of the data source"
     },
     "port": {
       "label": "Host Port",
@@ -22,7 +22,7 @@
     },
     "workpaceId": {
       "label": "Log Analytics Workspace ID",
-      "description": "The workspace Id of the Log Analytics. Required when using Log Analytics API. Ignore if using Graph Security."
+      "description": "ID of the Azure Log Analytics workspace"
     }
   },
   "configuration": {

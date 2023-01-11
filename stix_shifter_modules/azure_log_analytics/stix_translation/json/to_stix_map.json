@@ -49,16 +49,10 @@
         "key": "x-oca-event.provider",
         "object": "event"
     },
-    "EventID": [
-        {
-            "key": "x-ibm-finding.code",
-            "object": "finding"
-        },
-        {
-            "key": "x-oca-event.code",
-            "object": "event"
-        }
-    ],
+    "EventID": {
+        "key": "x-oca-event.code",
+        "object": "event"
+    },
     "IpAddress": [
         {
             "key": "x-ibm-finding.src_ip_ref",
@@ -290,8 +284,8 @@
         "object": "msevent"
     },
     "DeviceId": {
-        "key": "x-azure-security-event.device_name",
-        "object": "msevent"
+        "key": "x-oca-asset.device_id",
+        "object": "asset"
     },
     "SourceSystem": {
         "key": "x-azure-security-event.source",
