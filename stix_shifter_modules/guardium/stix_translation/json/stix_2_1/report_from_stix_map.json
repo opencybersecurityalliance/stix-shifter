@@ -10,14 +10,12 @@
   },
   "ipv4-addr": {
     "fields": {
-      "value": ["ServerIP"],
-      "dst_ip": ["ServerIP"]
+      "value": ["ServerIP"]
     }
   },
   "ipv6-addr": {
     "fields": {
-      "value": ["ServerIP"],
-      "dst_ip": ["ServerIP"]
+      "value": ["ServerIP"]
     }
   },
   "network-traffic": {
