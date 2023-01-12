@@ -1,4 +1,4 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 from .api_client import APIClient
@@ -25,7 +25,7 @@ class InvalidAuthenticationException(Exception):
     pass
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
 
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)

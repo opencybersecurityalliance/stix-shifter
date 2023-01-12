@@ -3,6 +3,7 @@ from .base_query_connector import BaseQueryConnector
 from .base_status_connector import BaseStatusConnector
 from .base_delete_connector import BaseDeleteConnector
 from .base_results_connector import BaseResultsConnector
+import json
 import time
 
 
@@ -102,7 +103,7 @@ class BaseConnector:
         if result.get('success'):
             data = result['data']
             data = data[:length]
-            result = await entry_point.translate_results(data_source, data)
+            result = await entry_point.translate_results(json.dumps(data_source), json.dumps(data))
             stats.append({'action': 'translation', 'time': int(time.time()*1000)})
         result['stats'] = stats
         if metadata:

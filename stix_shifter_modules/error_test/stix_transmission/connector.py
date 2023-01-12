@@ -5,7 +5,7 @@ from stix2matcher.matcher import Pattern
 from stix2matcher.matcher import MatchListener
 from stix2validator import validate_instance
 
-from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils.error_response import ErrorResponder
@@ -18,7 +18,7 @@ class UnexpectedResponseException(Exception):
     pass
 
 
-class Connector(BaseConnector):
+class Connector(BaseJsonSyncConnector):
     def __init__(self, connection, configuration):
         self.connector = __name__.split('.')[1]
         self.connection = connection

@@ -14,7 +14,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_delete_connector imp
 from stix_shifter_utils.modules.base.stix_transmission.base_query_connector import BaseQueryConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import BaseStatusConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseResultsConnector
 from stix_shifter_utils.utils.param_validator import param_validator, modernize_objects
 from stix_shifter_utils.stix_translation.src.utils.exceptions import UnsupportedDialectException
 from stix_shifter_utils.utils.error_response import ErrorResponder

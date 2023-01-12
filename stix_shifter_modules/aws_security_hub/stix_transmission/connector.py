@@ -1,10 +1,10 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 
 import aioboto3
 from json import loads
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     def __init__(self, connection, configuration):
         self.connection = connection
         self.configuration = configuration

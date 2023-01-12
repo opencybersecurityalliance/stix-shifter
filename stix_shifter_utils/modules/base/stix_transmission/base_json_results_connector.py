@@ -1,10 +1,7 @@
-from abc import ABCMeta, abstractmethod
-import json
 import time
+from .base_results_connector import BaseResultsConnector
 
-
-class BaseResultsConnector(object, metaclass=ABCMeta):
-
+class BaseJsonResultsConnector(BaseResultsConnector):
     async def create_results_stix_connection(self, entry_point, search_id, offset, length, data_source, metadata=None):
         stats = []
         if metadata:
@@ -19,7 +16,7 @@ class BaseResultsConnector(object, metaclass=ABCMeta):
         if result.get('success'):
             data = result['data']
             data = data[:int(length)]
-            result = await entry_point.translate_results(data_source, json.dumps(data))
+            result = await entry_point.translate_results(data_source, data)
             stats.append({'action': 'translation', 'time': int(time.time()*1000)})
         result['stats'] = stats
         if metadata:

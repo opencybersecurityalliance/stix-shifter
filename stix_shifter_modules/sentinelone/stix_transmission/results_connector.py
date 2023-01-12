@@ -1,6 +1,6 @@
 import json
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector\
-    import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector\
+    import BaseJsonResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 from aiohttp.client_exceptions import ClientConnectionError
@@ -12,7 +12,7 @@ class LimitOutOfRangeError(Exception):
 class QueryIdNotFoundError(Exception):
     pass
 
-class ResultsConnector(BaseResultsConnector):
+class ResultsConnector(BaseJsonResultsConnector):
     """ResultsConnector class"""
     def __init__(self, api_client):
         self.api_client = api_client
