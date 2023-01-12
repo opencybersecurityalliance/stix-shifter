@@ -1,17 +1,17 @@
-# Azure Sentinel Connector
+# Azure Log Analytics Connector
 
 ## Data Source 
-Microsoft Azure Sentinel is a scalable, cloud-native, security information event management (SIEM) and security orchestration automated response (SOAR) solution. Azure Sentinel delivers intelligent security analytics and threat intelligence across the enterprise, providing a single solution for alert detection, threat visibility, proactive hunting, and threat response.
+Microsoft Azure Log Analytics is a tool to run queries on data collected by different Azure services. A Log Analytics workspace needs to be created to collect logs from Azure services. The connector can run Kusto Query Language (KQL) queries to search logs in the workspace.
 
 ## API and Logs
 
-[Log Analytics REST API](https://learn.microsoft.com/en-us/rest/api/loganalytics/) has been used to search three types of Azure Sentinel logs:
+Currently, [Log Analytics REST API](https://learn.microsoft.com/en-us/rest/api/loganalytics/) has been used to search three types of Azure Sentinel logs:
 
 1. Security Alert
 2. Security Events 
 3. Security Incidents
 
-Therefore, three dialects has been set in the from_stix mapping file.
+Therefore, three dialects has been set in the from_stix mapping file. More data tables will be supported in future.
 
 Azure SDK for Python is used in order to make API calls to Log Analytics API. Mainly two libraries are used:
 
@@ -26,7 +26,7 @@ Azure SDK for Python is used in order to make API calls to Log Analytics API. Ma
 python main.py `<translator_module>` `<query or result>` `<STIX identity object>` `<data>`
 
 ### Example I - Converting from STIX patterns to KQL (STIX attributes)
-STIX to sentinel field mapping is defined in `<dialects>_from_stix_map.json` <br/>
+STIX to KQL field mapping is defined in `<dialects>_from_stix_map.json` <br/>
 
 This example input pattern:
 
