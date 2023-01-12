@@ -1,0 +1,44 @@
+{
+  "connection": {
+    "host": {
+      "label": "Management IP address or Hostname",
+      "description": "Specify the IP address or hostname of the data source"
+    },
+    "port": {
+      "label": "Host Port",
+      "description": "Set the port number that is associated with the Host name or IP"
+    },
+    "help": {
+      "label": "Need additional help?",
+      "description": "More details on the data source setting can be found in the specified link"
+    },
+    "selfSignedCert": {
+      "label": "Microsoft Azure Sentinel Certificate",
+      "description": "Use SSL certificate for Microsoft Azure Sentinel."
+    },
+    "sni": {
+      "label": "Server Name Indicator",
+      "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication."
+    },
+    "workpaceId": {
+      "label": "Log Analytics Workspace ID",
+      "description": "ID of the Azure Log Analytics workspace"
+    }
+  },
+  "configuration": {
+    "auth": {
+      "tenant": {
+        "label": "Tenant ID",
+        "description": "Tenant ID of Azure Active directory Application with access to the Log Analytics Workspace"
+      },
+      "clientId": {
+        "label": "Client Id",
+        "description": "Client ID of Azure Active directory Application with access to the Log Analytics Workspace"
+      },
+      "clientSecret": {
+        "label": "Client Secret",
+        "description": "Client Secret of Azure Active directory Application with access to the Log Analytics Workspace"
+      }
+    }
+  }
+}
