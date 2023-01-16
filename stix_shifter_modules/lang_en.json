@@ -51,7 +51,7 @@
             },
             "concurrent": {
                 "label": "Concurrent Search Limit",
-                "description": "The number of simultaneous connections that can be made between IBM Cloud Pak™ for Security and the data source.  Valid input range is {{min}} to {{max}}."
+                "description": "The number of simultaneous connections that can be made to the data source.  Valid input range is {{min}} to {{max}}."
             }
         }
     },

@@ -7,7 +7,7 @@
         },
         "port": {
             "label": "Host Port",
-            "description": "Set the port number that is associated with the Host name or IP"
+            "description": "Set the port number that is associated with the host name or IP address"
         },
         "help": {
             "label": "Need additional help?",
