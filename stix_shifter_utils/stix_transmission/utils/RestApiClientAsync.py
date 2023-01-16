@@ -126,10 +126,14 @@ class RestApiClientAsync:
                         respWrapper = ResponseWrapper(response)
                         await respWrapper.wait()
 
+                        if respWrapper.code == 429:
+                            raise Exception(f'Max retries exceeded. too_many_requests with max retry ({self.retry_max})')
+
                         if 'headers' in dir(response) and isinstance(response.headers, Mapping) and \
                             'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
 
                             self.logger.error("WARNING: " + response.headers['Content-Type'], file=sys.stderr)
+
                         return respWrapper
             except aiohttp.client_exceptions.ServerTimeoutError as e:
                 # TODO unhendled error error
