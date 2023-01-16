@@ -5,11 +5,11 @@ Follow the below steps, if a user or threat hunter wants to use custom mapping a
 
 1. Go to the standard python library installation location. The installation path usually looks like this ***lib/pythonX.Y/site-packages*** or go to https://docs.python.org/3/install/ for more details on the python library installation based on your system.
 
-2. Go to ***stix_shifter_modules*** folder and find the connector name that is installed.
+2. Go to the ***stix_shifter_modules*** folder and find the connector name that is installed.
 
-3. Inside the connector folder, go to ***config.json*** file. This is relative path of the file- ***<<connector>>/configuration/config.json***
+3. Inside the connector folder, go to the ***config.json*** file found under the ***stix_shifter_modules/\<CONNECTOR\>/configuration/*** directory.
 
-4. There's a "mapping" nested object inside the "options" json object which includes all the mappings including from_stix and to_stix mappings. Here's an example of the config.json file-
+4. There is a `mapping` object nested inside the `options` JSON object. This includes all the mappings from the `from_stix` and `to_stix` mapping files. Here's an example of the `config.json` file:
 
 ```
 {
@@ -89,6 +89,6 @@ Follow the below steps, if a user or threat hunter wants to use custom mapping a
 ```
 
 
-5. You can change, update or use the custom mappings fields and save the file.
+5. You can change, update or use the existing custom mappings fields and save the file.
 
-6. stix-shifter command should automatically picks up you custom mappings in your next command execution.
+6. The stix-shifter CLI commands should automatically pick up your custom mappings in the next command execution.

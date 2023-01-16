@@ -93,9 +93,9 @@ print(response)
 ```
 ### Use of custom mappings
 
-You can customize your mappings after installing a stix-shifter connector library. Changing the mappings directly in mapping json files located in ***stix_shifter_modules/qradar/stix_translation/json*** doesn't work for this library. The setup script of the stix-shifter package includes the mapppings inside config.json which allows any platform to add custom mapping feature in the UI.
+If a connector has been installed using pip, the process for editing the STIX mappings is different than if you have pulled-down the project. When working locally, you can edit the mapping files directly. See the [mapping files for the MySQL connector](stix_shifter_modules/mysql/stix_translation/json) as an example. Editing the mapping files won't work if the connector has been installed with pip; the setup script of the stix-shifter package includes the mapppings inside `config.json`. This allows stix-shifter to injest custom mappings as part of the connector's configuration.
 
-Read the instruction described in [Use of custom mappings](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/custom_mappings.md) in order to use custom mapping after pip or source installation.
+Refer to [Use of custom mappings](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/custom_mappings.md) for more details on how to edit the mappings in the configuration.
 
 ## Contributing
 
