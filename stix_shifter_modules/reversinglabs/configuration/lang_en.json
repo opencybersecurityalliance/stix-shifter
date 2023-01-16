@@ -1,13 +1,13 @@
 {
     "connection": {
         "host": {
-            "label": "Management IP address or Hostname",
+            "label": "Management IP address or hostname",
             "placeholder": "https://mundy.threatqtie.com",
             "description": "Specify the OCP Cluster hostname or the XForce API host URL"
         },
         "port": {
             "label": "Host Port",
-            "description": "Set the port number that is associated with the host name or IP address"
+            "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
             "label": "Need additional help?"

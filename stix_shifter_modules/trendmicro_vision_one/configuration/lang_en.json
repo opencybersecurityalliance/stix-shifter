@@ -1,12 +1,12 @@
 {
     "connection": {
         "host": {
-            "label": "Trend Micro Vision One IP address or Hostname",
-            "description": "Specify the Trend Micro Vision One IP address or Hostname."
+            "label": "Trend Micro Vision One IP address or hostname",
+            "description": "Specify the Trend Micro Vision One IP address or hostname."
         },
         "port": {
             "label": "Host Port",
-            "description": "Set the port number that is associated with the host name or IP address"
+            "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
             "label": "Need additional help?",
