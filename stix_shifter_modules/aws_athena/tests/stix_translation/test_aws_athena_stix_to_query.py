@@ -248,7 +248,7 @@ class TestQueryTranslator(unittest.TestCase):
             "vpcflow": "(CAST(starttime AS varchar) = '1600769351' AND start BETWEEN 1588322590 AND 1604054590)"
         },
         {
-            "ocsf": "(CAST(start_time AS varchar) = '1600769351' AND time BETWEEN 1588322590000 AND 1604054590000)"
+            "ocsf": "(CAST(finding.created_time AS varchar) = '1600769351' AND time BETWEEN 1588322590000 AND 1604054590000)"
         }
         ]
         self._test_query_assertions(query, queries)

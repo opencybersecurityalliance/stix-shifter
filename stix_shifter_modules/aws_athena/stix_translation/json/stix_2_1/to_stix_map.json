@@ -800,12 +800,12 @@
         "object": "process"
       },
       "created_time": {
-        "key": "process.created",
+        "key": "process.created_time",
         "object": "process"
       },
       "file": {
         "accessed_time": {
-          "key": "file.accessed",
+          "key": "file.atime",
           "object": "file"
         },
         "accessor": {
@@ -905,7 +905,7 @@
           "object": "file"
         },
         "created_time": {
-          "key": "file.created",
+          "key": "file.ctime",
           "object": "file"
         },
         "creator": {
@@ -1104,7 +1104,7 @@
             "object": "file"
           },
           {
-            "key": "process.binary_ref",
+            "key": "process.image_ref",
             "object": "process",
             "references": "file"
           }
@@ -1294,7 +1294,7 @@
         "object": "process"
       },
       "name": {
-        "key": "process.name",
+        "key": "process.x_name",
         "object": "process"
       },
       "parent-process": {
@@ -1308,7 +1308,7 @@
         },
         "file": {
           "accessed_time": {
-            "key": "file.accessed",
+            "key": "file.atime",
             "object": "parent-file"
           },
           "accessor": {
@@ -1408,7 +1408,7 @@
             "object": "parent-file"
           },
           "created_time": {
-            "key": "file.created",
+            "key": "file.ctime",
             "object": "parent-file"
           },
           "creator": {
@@ -1607,7 +1607,7 @@
               "object": "parent-file"
             },
             {
-              "key": "process.binary_ref",
+              "key": "process.image_ref",
               "object": "parent-process",
               "references": "parent-file"
             }
@@ -1797,7 +1797,7 @@
           "object": "parent-process"
         },
         "name": {
-          "key": "process.name",
+          "key": "process.extensions.x-ocsf-process-ext.name",
           "object": "parent-process"
         },
         "pid": [
@@ -1808,9 +1808,7 @@
           {
             "key": "process.child_refs",
             "object": "parent-process",
-            "references": [
-              "process"
-            ]
+            "references": ["process"]
           }
         ],
         "sandbox": {
@@ -1929,9 +1927,7 @@
         {
           "key": "process.parent_ref",
           "object": "process",
-          "references": [
-            "parent-process"
-          ]
+          "references": ["parent-process"]
         }
       ],
       "sandbox": {
@@ -1943,11 +1939,11 @@
         "object": "process"
       },
       "tid": {
-        "key": "process.extensions.x-ocsf-process-ext.tid",
+        "key": "process.x_unique_id",
         "object": "process"
       },
       "uid": {
-        "key": "process.x_unique_id",
+        "key": "process.extensions.x-ocsf-process-ext.uid",
         "object": "process"
       },
       "user": {
@@ -2367,11 +2363,18 @@
         "object": "nt"
       }
     },
-    "start_time": {
-      "key": "first_observed",
-      "cybox": false,
-      "transformer": "EpochToTimestamp"
-    },
+    "start_time": [
+      {
+        "key": "x-ibm-finding.start",
+        "object": "ibm_finding",
+        "transformer": "EpochToTimestamp"
+      },
+      {
+        "key": "first_observed",
+        "cybox": false,
+        "transformer": "EpochToTimestamp"
+      }
+    ],
     "status": {
       "key": "x-ocsf-cloud.status",
       "object": "ocsf_cloud_api"
