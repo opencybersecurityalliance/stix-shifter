@@ -1,20 +1,20 @@
 {
     "connection": {
         "host": {
-            "label": "ArcSight Logger IP address or Hostname",
-            "description": "Use IP address or Hostname of the ArcSight logger"
+            "label": "Management IP address or hostname",
+            "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
             "label": "Host Port",
-            "description": "Set the port number that is associated with the Host name or IP"
+            "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
             "label": "Need additional help?",
             "description": "More details on the datasource setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "ArcSight logger Connection Certificate",
-            "description": "Use self-signed SSL certificate and CA content(root and intermediate) of datasource"
+            "label": "Connection Certificate",
+            "description": "Use self-signed SSL certificate and CA content (root and intermediate) of datasource"
         },
         "sni": {
             "label": "Server Name Indicator",
@@ -24,11 +24,11 @@
     "configuration": {
         "auth": {
             "login": {
-                "label": "ArcSight Logger Username",
+                "label": "Username",
                 "description": "ArcSight Logger user's login name with access to the search API"
             },
             "password": {
-                "label": "ArcSight Logger Password",
+                "label": "Password",
                 "description": "ArcSight Logger user's password with access to the search API"
             }
         }

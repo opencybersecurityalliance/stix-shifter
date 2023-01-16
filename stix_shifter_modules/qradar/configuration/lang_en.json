@@ -1,14 +1,14 @@
 {
     "connection": {
         "host": {
-            "label": "Management IP address or Hostname",
+            "label": "Management IP address or hostname",
             "placeholder": "192.168.1.10",
-            "description": "Specify the QRadar management IP address or Hostname."
+            "description": "Management IP address or hostname"
         },
         "port": {
             "label": "Host Port",
             "placeholder": "443",
-            "description": "Specify the associated port number of the data source."
+            "description": "Specify the associated port number of the data source"
         },
         "help": {
             "label": "Need additional help?"
