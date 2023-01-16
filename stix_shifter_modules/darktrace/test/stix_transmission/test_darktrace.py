@@ -205,8 +205,8 @@ class TestDarktraceConnection(unittest.TestCase, object):
 
     @patch('stix_shifter_modules.darktrace.stix_transmission.api_client.APIClient.get_search_results')
     def test_invalid_auth(self, mock_results_response):
-        mock_response_dict = json.dumps({'error': 'Invalid Authentication'})
-        mock_results_response.return_value = get_mock_response(400, mock_response_dict, 'byte')
+        mock_response_dict = InnerResponse(400, json.dumps({"advancedsearch": "API SIGNATURE ERROR"}))
+        mock_results_response.return_value = get_mock_response(400, mock_response_dict, response=mock_response_dict)
 
         query = json.dumps({"queries": ["{\"search\": \"(@fields.query:pop.gmail.com)\", \"fields\": [], \"timeframe\":"
                                         " \"custom\", \"time\": {\"from\": \"2022-03-16T09:23:20.894000Z\", "
@@ -279,3 +279,37 @@ class TestDarktraceConnection(unittest.TestCase, object):
 
         assert results_response is not None
         assert results_response['success'] is False
+
+    @patch('stix_shifter_modules.darktrace.stix_transmission.api_client.APIClient.get_search_results')
+    def test_timeout_error(self, mock_results_response):
+        mock_results_response.side_effect = TimeoutError("Request Timeout")
+
+        query = json.dumps({"queries": ["{\"search\": \"(@fields.query:pop.gmail.com)\", \"fields\": [], \"timeframe\":"
+                                        " \"custom\", \"time\": {\"from\": \"2022-03-16T09:23:20.894000Z\", "
+                                        "\"to\": \"2022-03-16T09:28:20.894000Z\"}}"]})
+
+        transmission = stix_transmission.StixTransmission('darktrace', self.connection(), self.config())
+        results_response = transmission.results(query, 0, 1)
+
+        assert results_response is not None
+        assert results_response['success'] is False
+        assert results_response['code'] == 'service_unavailable'
+        assert 'Request Timeout' in results_response['error']
+
+    @patch('stix_shifter_modules.darktrace.stix_transmission.api_client.APIClient.get_search_results')
+    def test_invalid_request(self, mock_results_response):
+
+        inner_mock = InnerResponse(400, '<html><body><h1>400 Bad request</h1>\nYour browser sent an invalid request.')
+        mock_results_response.return_value = get_mock_response(400, inner_mock, response=inner_mock)
+
+        query = json.dumps({"queries": ["{\"search\": \"(@fields.query:pop.gmail.com)\", \"fields\": [], \"timeframe\":"
+                                        " \"custom\", \"time\": {\"from\": \"2022-03-16T09:23:20.894000Z\", "
+                                        "\"to\": \"2022-03-16T09:28:20.894000Z\"}}"]})
+
+        transmission = stix_transmission.StixTransmission('darktrace', self.connection(), self.config())
+        results_response = transmission.results(query, 0, 1)
+
+        assert results_response is not None
+        assert results_response['success'] is False
+        assert results_response['code'] == 'invalid_query'
+        assert 'Bad Request' in results_response['error']

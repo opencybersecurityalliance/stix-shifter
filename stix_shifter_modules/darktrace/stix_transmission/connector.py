@@ -65,16 +65,21 @@ class Connector(BaseJsonSyncConnector):
                 search_id = json.dumps(search_id)
 
             response_wrapper = await self.api_client.get_search_results(search_id)
-            response_dict = json.loads(response_wrapper.read().decode('utf-8'))
-
+            
             if response_wrapper.code == 200:
                 return_obj['success'] = True
-            elif response_wrapper.code == 400:
+            # Both InvalidAuthentication and InvalidRequest returns the same error code 400.
+            # Verifying the error message to identify InvalidAuthentication error.
+            elif response_wrapper.code == 400 and 'API SIGNATURE ERROR' in response_wrapper.response.text:
                 raise InvalidAuthenticationException
+            elif response_wrapper.code == 408:
+                raise TimeoutError(response_wrapper.response.text)
             elif 399 < response_wrapper.code < 500:
                 raise InvalidRequestException(response_wrapper.response.text)
             elif response_wrapper.code == 500:
                 raise InternalServerErrorException(response_wrapper.response.text)
+
+            response_dict = json.loads(response_wrapper.read().decode('utf-8'))
 
             if response_dict.get('error'):
                 raise InvalidArguments(response_dict['error'])
@@ -94,6 +99,14 @@ class Connector(BaseJsonSyncConnector):
         except ConnectionError:
             response_dict['code'] = 1003
             response_dict['message'] = "Invalid Host/Port"
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+        except TimeoutError as ex:
+            response_dict['code'] = 1004
+            response_dict['message'] = str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+        except InvalidRequestException as ex:
+            response_dict['code'] = 1005
+            response_dict['message'] = 'Bad Request' if 'Bad request' in str(ex) else str(ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except Exception as ex:
             response_dict['type'] = ex.__class__.__name__
