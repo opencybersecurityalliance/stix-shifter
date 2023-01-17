@@ -33,6 +33,7 @@ class ErrorCode(Enum):
     TRANSMISSION_SEARCH_DOES_NOT_EXISTS = 'no_results'
     TRANSMISSION_INVALID_PARAMETER = 'invalid_parameter'
     TRANSMISSION_REMOTE_SYSTEM_IS_UNAVAILABLE = 'service_unavailable'
+    TRANSMISSION_TOO_MANY_REQUESTS = 'too_many_requests'
 
 
 class ErrorResponder():
@@ -110,6 +111,8 @@ class ErrorResponder():
                     error_code = ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR
                 elif 'Forbidden' in message or 'forbidden' in message:
                     error_code = ErrorCode.TRANSMISSION_FORBIDDEN
+                elif 'too_many_requests' in message or 'Too Many Requests' in message:
+                    error_code = ErrorCode.TRANSMISSION_TOO_MANY_REQUESTS
             message = '{} connector error => {}'.format(connector, str(message))
             return_object['error'] = str(message)
         ErrorMapperBase.set_error_code(return_object, error_code.value, connector=connector)

@@ -20,6 +20,7 @@ class StatusConnector(BaseStatusConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     async def create_status_connection(self, search_id):
         """
@@ -53,21 +54,21 @@ class StatusConnector(BaseStatusConnector):
                     raise QueryIdNotFoundError
             else:
                 return_obj['success'] = False
-                #ErrorResponder.fill_error(return_obj, response, ['message'])
+                #ErrorResponder.fill_error(return_obj, response, ['message'], connector=self.connector)
                 raise InvalidResponseException
 
         except InvalidResponseException:
             response_dict['type'] = 'InvalidResponseException'
             response_dict['message'] = 'InvalidResponse'
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except QueryIdNotFoundError:
             response_dict['type'] = "QueryIdNotFoundError"
             response_dict['message'] = "Could not find query id: " + search_id
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except ClientConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except Exception as ex:
             if 'Max retries exceeded' in str(ex):
                 #sleep added due to limitation of 1 call a second for each user token
@@ -79,5 +80,5 @@ class StatusConnector(BaseStatusConnector):
                 response_dict['type'] = "unknown"
                 response_dict['message'] = ex
                 self.logger.error('error when checking status: %s', str(ex))
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
