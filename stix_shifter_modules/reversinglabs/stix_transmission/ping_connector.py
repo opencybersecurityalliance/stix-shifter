@@ -22,6 +22,7 @@ class PingConnector(BasePingConnector):
             if response['code'] == 200:
                 return_obj['success'] = True
             else:
+                response['message'] = 'Pinging failed'
                 ErrorResponder.fill_error(return_obj, response, ['message'], connector='reversinglabs')
             return return_obj
         except Exception as err:
