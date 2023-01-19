@@ -9,10 +9,10 @@ class APIClient():
         # Uncomment when implementing data source API client.
         auth = configuration.get('auth')
         headers = dict()
-        if auth:
-            if 'principal' in auth and 'secret' in auth:
-                headers['Authorization'] = b"Basic " + base64.b64encode(
-                    (auth['principal'] + ':' + auth['secret']).encode('ascii'))
+        if auth and 'principal' in auth and 'secret' in auth:
+                token_decoded = auth['principal'] + ':' + auth['secret']
+                token = base64.b64encode(token_decoded.encode('ascii'))
+                headers['Authorization'] = "Basic %s" % token
         self.client = RestApiClientAsync(connection.get('host'),
                                     port=None,
                                     headers=headers, url_modifier_function=None, cert_verify=True, sni=None, auth=None

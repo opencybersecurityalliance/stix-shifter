@@ -47,5 +47,5 @@ class PingConnector(BasePingConnector):
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
             return return_obj
         except Exception as err:
-            self.logger.error('error when pinging datasource: %s', err, exc_info=True)
+            self.logger.error('error when pinging datasource: %s', err)
             raise

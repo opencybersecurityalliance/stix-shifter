@@ -24,7 +24,7 @@ class QueryConnector(BaseQueryConnector):
             response_wrapper = await self.api_client.create_search(query)
             if isinstance(response_wrapper, dict):
                 return response_wrapper
-            response_code = response_wrapper.response.status_code
+            response_code = response_wrapper.code
             response_text = json.loads(response_wrapper.read().decode('utf-8'))
             if response_code == 200 and 'reply' in response_text.keys():
                 return_obj['success'] = True

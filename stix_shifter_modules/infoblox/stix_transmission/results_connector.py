@@ -57,5 +57,5 @@ class ResultsConnector(BaseJsonResultsConnector):
 
             return return_obj
         except Exception as err:
-            self.logger.error('error when getting search results: %s', err, exc_info=True)
+            self.logger.error('error when getting search results: %s', err)
             raise

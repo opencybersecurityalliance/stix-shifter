@@ -4,7 +4,7 @@ import json
 from stix_shifter_modules.darktrace.stix_transmission.api_client import APIClient
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter.stix_transmission.stix_transmission import run_in_thread
-from tests.utils.async_utils import get_mock_response, InnerResponse
+from tests.utils.async_utils import get_mock_response
 
 
 class TestDarktraceConnection(unittest.TestCase, object):
@@ -30,8 +30,8 @@ class TestDarktraceConnection(unittest.TestCase, object):
     def test_ping_endpoint(self, mock_ping_source):
         """ test to check ping_data_source function"""
 
-        pingmock = InnerResponse(200, """{"status":"SUCCESS"}""")
-        pingresponse = get_mock_response(200, pingmock, response=pingmock)
+        pingmock = """{"status":"SUCCESS"}"""
+        pingresponse = get_mock_response(200, pingmock, 'byte', response=pingmock)
         mock_ping_source.return_value = pingresponse
 
         transmission = stix_transmission.StixTransmission('darktrace', self.connection(), self.config())
@@ -45,7 +45,7 @@ class TestDarktraceConnection(unittest.TestCase, object):
     def test_ping_box(self, mock_ping_source):
         """ test to check ping_data_source function"""
 
-        pingmock = InnerResponse(200, """{"status":"SUCCESS"}""")
+        pingmock = """{"status":"SUCCESS"}"""
         pingresponse = get_mock_response(200, pingmock, response=pingmock)
         mock_ping_source.return_value = pingresponse
 
@@ -55,13 +55,13 @@ class TestDarktraceConnection(unittest.TestCase, object):
         ping_response = run_in_thread(apiclient.ping_box)
 
         assert ping_response is not None
-        assert ping_response.response.status_code == 200
+        assert ping_response.code== 200
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_get_search_results(self, mock_ping_source):
         """ test to check ping_data_source function"""
 
-        pingmock = InnerResponse(200, """{"status":"SUCCESS"}""")
+        pingmock = """{"status":"SUCCESS"}"""
         pingresponse = get_mock_response(200, pingmock, response=pingmock)
         mock_ping_source.return_value = pingresponse
 
@@ -71,7 +71,7 @@ class TestDarktraceConnection(unittest.TestCase, object):
         ping_response = run_in_thread(apiclient.get_search_results, 'query')
 
         assert ping_response is not None
-        assert ping_response.response.status_code == 200
+        assert ping_response.code == 200
 
     def test_http_query(self):
         """ test to check query of process element """
@@ -205,8 +205,8 @@ class TestDarktraceConnection(unittest.TestCase, object):
 
     @patch('stix_shifter_modules.darktrace.stix_transmission.api_client.APIClient.get_search_results')
     def test_invalid_auth(self, mock_results_response):
-        mock_response_dict = InnerResponse(400, json.dumps({"advancedsearch": "API SIGNATURE ERROR"}))
-        mock_results_response.return_value = get_mock_response(400, mock_response_dict, response=mock_response_dict)
+        mock_response_dict = json.dumps({"advancedsearch": "API SIGNATURE ERROR"})
+        mock_results_response.return_value = get_mock_response(400, mock_response_dict, 'byte', response=mock_response_dict)
 
         query = json.dumps({"queries": ["{\"search\": \"(@fields.query:pop.gmail.com)\", \"fields\": [], \"timeframe\":"
                                         " \"custom\", \"time\": {\"from\": \"2022-03-16T09:23:20.894000Z\", "
@@ -245,9 +245,8 @@ class TestDarktraceConnection(unittest.TestCase, object):
 
     @patch('stix_shifter_modules.darktrace.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_invalid_auth(self, mock_results_response):
-        error = json.dumps({'error': 'Invalid Authentication'})
-        pingmock = InnerResponse(400, error)
-        pingresponse = get_mock_response(400, pingmock, response=pingmock)
+        pingmock = json.dumps({'error': 'Invalid Authentication'})
+        pingresponse = get_mock_response(400, pingmock, 'byte', response=pingmock)
         mock_results_response.return_value = pingresponse
 
         transmission = stix_transmission.StixTransmission('darktrace', self.connection(), self.config())
@@ -259,9 +258,8 @@ class TestDarktraceConnection(unittest.TestCase, object):
 
     @patch('stix_shifter_modules.darktrace.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_invalid_args(self, mock_results_response):
-        error = json.dumps({'error': 'Invalid to/from fields in custom range'})
-        pingmock = InnerResponse(200, error)
-        pingresponse = get_mock_response(200, pingmock, response=pingmock)
+        pingmock = json.dumps({'error': 'Invalid to/from fields in custom range'})
+        pingresponse = get_mock_response(200, pingmock, 'byte', response=pingmock)
         mock_results_response.return_value = pingresponse
 
         transmission = stix_transmission.StixTransmission('darktrace', self.connection(), self.config())
@@ -299,8 +297,8 @@ class TestDarktraceConnection(unittest.TestCase, object):
     @patch('stix_shifter_modules.darktrace.stix_transmission.api_client.APIClient.get_search_results')
     def test_invalid_request(self, mock_results_response):
 
-        inner_mock = InnerResponse(400, '<html><body><h1>400 Bad request</h1>\nYour browser sent an invalid request.')
-        mock_results_response.return_value = get_mock_response(400, inner_mock, response=inner_mock)
+        inner_mock = '<html><body><h1>400 Bad request</h1>\nYour browser sent an invalid request.'
+        mock_results_response.return_value = get_mock_response(400, inner_mock, 'byte', response=inner_mock)
 
         query = json.dumps({"queries": ["{\"search\": \"(@fields.query:pop.gmail.com)\", \"fields\": [], \"timeframe\":"
                                         " \"custom\", \"time\": {\"from\": \"2022-03-16T09:23:20.894000Z\", "

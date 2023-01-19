@@ -30,6 +30,4 @@ class ResultsConnector(BaseJsonResultsConnector):
 
         except Exception as err:
             self.logger.error('error when getting search results: {}'.format(err))
-            import traceback
-            self.logger.error(traceback.print_stack())
             raise
