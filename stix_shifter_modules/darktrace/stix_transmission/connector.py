@@ -110,10 +110,6 @@ class Connector(BaseJsonSyncConnector):
             response_dict['message'] = 'Bad Request' if 'Bad request' in str(ex) else str(ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except Exception as ex:
-            import traceback
-
-            traceback.print_exc()
-            print('AAAAAAAAAA')
             response_dict['type'] = ex.__class__.__name__
             response_dict['message'] = ex
             self.logger.error('error when getting search results: %s', ex)
