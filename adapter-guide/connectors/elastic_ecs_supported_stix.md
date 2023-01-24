@@ -1,4 +1,4 @@
-##### Updated on 11/04/22
+##### Updated on 01/24/23
 ## Elasticsearch ECS
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -506,7 +506,7 @@
 | x-ecs-cloud | provider | provider |
 | x-ecs-cloud | region | region |
 | <br> | | |
-| x-ecs-container | id | id |
+| x-ecs-container | container_id | id |
 | x-ecs-container | image_name | name |
 | x-ecs-container | image_tag | tag |
 | x-ecs-container | labels | labels |
@@ -543,7 +543,7 @@
 | x-ecs-dll | hashes.SHA-512 | sha512 |
 | <br> | | |
 | x-ecs-error | code | code |
-| x-ecs-error | id | id |
+| x-ecs-error | error_id | id |
 | x-ecs-error | message | message |
 | x-ecs-error | stack_trace | stack_trace |
 | x-ecs-error | type | type |
@@ -574,7 +574,7 @@
 | x-ecs-file | uid | uid |
 | <br> | | |
 | x-ecs-group | domain | domain |
-| x-ecs-group | id | id |
+| x-ecs-group | group_id | id |
 | x-ecs-group | name | name |
 | <br> | | |
 | x-ecs-http | request_body_bytes | bytes |
@@ -643,7 +643,7 @@
 | x-ecs-observer | geo_region_iso_code | region_iso_code |
 | x-ecs-observer | geo_region_name | region_name |
 | <br> | | |
-| x-ecs-organization | id | id |
+| x-ecs-organization | organization_id | id |
 | x-ecs-organization | name | name |
 | <br> | | |
 | x-ecs-process | code_signature_exists | exists |
@@ -688,7 +688,7 @@
 | x-ecs-rule | author | author |
 | x-ecs-rule | category | category |
 | x-ecs-rule | description | description |
-| x-ecs-rule | id | id |
+| x-ecs-rule | rule_id | id |
 | x-ecs-rule | license | license |
 | x-ecs-rule | name | name |
 | x-ecs-rule | reference | reference |
@@ -711,7 +711,7 @@
 | x-ecs-server | geo_region_iso_code | region_iso_code |
 | x-ecs-server | geo_region_name | region_name |
 | <br> | | |
-| x-ecs-service | id | id |
+| x-ecs-service | service_id | id |
 | x-ecs-service | name | name |
 | x-ecs-service | state | state |
 | x-ecs-service | type | type |
@@ -757,14 +757,14 @@
 | x-ecs-tls | version | version |
 | x-ecs-tls | version_protocol | version_protocol |
 | <br> | | |
-| x-ecs-trace | id | id |
+| x-ecs-trace | trace_id | id |
 | <br> | | |
-| x-ecs-transaction | id | id |
+| x-ecs-transaction | transaction_id | id |
 | <br> | | |
 | x-ecs-user | domain | domain |
 | x-ecs-user | full_name | full_name |
 | x-ecs-user | hash | hash |
-| x-ecs-user | id | id |
+| x-ecs-user | user_id | id |
 | x-ecs-user | group_domain | domain |
 | x-ecs-user | group_id | id |
 | x-ecs-user | group_name | name |
@@ -778,7 +778,7 @@
 | x-ecs-vulnerability | classification | classification |
 | x-ecs-vulnerability | description | description |
 | x-ecs-vulnerability | enumeration | enumeration |
-| x-ecs-vulnerability | id | id |
+| x-ecs-vulnerability | vulnerability_id | id |
 | x-ecs-vulnerability | reference | reference |
 | x-ecs-vulnerability | report_id | report_id |
 | x-ecs-vulnerability | severity | severity |
@@ -791,7 +791,7 @@
 | x-oca-asset | architecture | architecture |
 | x-oca-asset | domain | domain |
 | x-oca-asset | hostname | hostname |
-| x-oca-asset | id | id |
+| x-oca-asset | host_id | id |
 | x-oca-asset | ip_refs | ip |
 | x-oca-asset | mac_refs | mac |
 | x-oca-asset | name | name |
@@ -823,7 +823,7 @@
 | x-oca-event | network_ref | protocol |
 | x-oca-event | original_ref | original |
 | x-oca-event | action | action |
-| x-oca-event | id | id |
+| x-oca-event | event_id | id |
 | x-oca-event | category | category |
 | x-oca-event | code | code |
 | x-oca-event | created | created |
