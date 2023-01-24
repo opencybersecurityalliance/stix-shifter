@@ -21,7 +21,7 @@ class PingConnector(BasePingConnector):
         response_wrapper = None
         try:
             response_wrapper = await self.api_client.ping_data_source()
-            response_code = response_wrapper.response.status_code
+            response_code = response_wrapper.code
             response_text = json.loads(response_wrapper.read().decode('utf-8'))
             if response_code == 200 and 'reply' in response_text.keys():
                 return_obj['success'] = True

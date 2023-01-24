@@ -152,7 +152,7 @@ class APIClient():
                     token = await self.client_aux.get_token()
                     if token:
                         response = await self.client_aux.handle_report(self.query, indx, fetch_size)
-                        status_code = response.response.status_code
+                        status_code = response.code
                     else:
                         raise ValueError(3002, "Authorization Token not received ")
 

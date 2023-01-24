@@ -46,7 +46,7 @@ class RestApiClientAsync:
     #  True -- do proper signed cert check that is in trust store,
     #  False -- skip all cert checks,
     #  or The String content of your self signed cert required for TLS communication
-    def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=False,  sni=None, auth=None):
+    def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  sni=None, auth=None):
         self.retry_max = os.getenv('STIXSHIFTER_RETRY_MAX', RETRY_MAX_DEFAULT)
         self.retry_max = int(self.retry_max)
         self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
@@ -133,8 +133,9 @@ class RestApiClientAsync:
 
                         return respWrapper
             except aiohttp.client_exceptions.ServerTimeoutError as e:
-                # TODO unhendled error error
                 raise Exception(f'server timeout_error ({self.connect_timeout} sec)')
+            except aiohttp.client_exceptions.ClientConnectorError as e:
+                raise Exception(f'client_connector_error: ({e})')
             except TimeoutError as e:
                 raise Exception(f'timeout_error ({timeout} sec)')
             except Exception as e:

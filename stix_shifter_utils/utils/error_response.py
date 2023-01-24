@@ -113,6 +113,8 @@ class ErrorResponder():
                     error_code = ErrorCode.TRANSMISSION_FORBIDDEN
                 elif 'too_many_requests' in message or 'Too Many Requests' in message:
                     error_code = ErrorCode.TRANSMISSION_TOO_MANY_REQUESTS
+                elif 'client_connector_error' in message:
+                    error_code = ErrorCode.TRANSMISSION_CONNECT
             message = '{} connector error => {}'.format(connector, str(message))
             return_object['error'] = str(message)
         ErrorMapperBase.set_error_code(return_object, error_code.value, connector=connector)

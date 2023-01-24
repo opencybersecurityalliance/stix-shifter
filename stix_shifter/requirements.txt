@@ -4,7 +4,6 @@ aioboto3==10.3.0
 aiohttp-retry==2.4.0
 aiomysql==0.0.21
 asyncio==3.4.3
-asyncinit==0.2.4
 asynctest==0.13.0
 flask==2.2.2
 pyOpenSSL==23.0.0

@@ -1,7 +1,7 @@
 import json
 from stix_shifter_modules.arcsight.entry_point import EntryPoint
 from stix_shifter.stix_transmission import stix_transmission
-from tests.utils.async_utils import AsyncMock, get_mock_response
+from tests.utils.async_utils import get_mock_response
 from unittest.mock import patch
 from unittest import TestCase
 
@@ -72,7 +72,7 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api', autospec=True)
-    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id', new_callable=AsyncMock)
+    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id')
     def test_create_query_connection(mock_session_id, mock_query_res):
         """to create the query search and get search id"""
         mock_session_id.return_value = 'Dhoup23b3wL7tBlWWIeFPg8JHEf29qD1tNRJba4Jsyg.'
@@ -89,7 +89,7 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api', autospec=True)
-    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id', new_callable=AsyncMock)
+    @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id')
     def test_create_query_error(mock_session_id, mock_query_res):
         """query search error check"""
         mock_session_id.return_value = 'Dhoup23b3wL7tBlWWIeFPg8JHEf29qD1tNRJba4Jsyg.'

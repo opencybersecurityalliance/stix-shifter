@@ -1,10 +1,12 @@
+
+from aiohttp import BasicAuth
+import json
+import re
 from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix2matcher.matcher import Pattern
 from stix2matcher.matcher import MatchListener
 from stix2validator import validate_instance
-import json
-import re
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
@@ -22,7 +24,7 @@ class Connector(BaseJsonSyncConnector):
         auth = None
         conf_auth = configuration.get('auth', {})
         if 'username' in conf_auth and 'password' in conf_auth:
-            auth = (conf_auth['username'], conf_auth['password'])
+            auth = BasicAuth(conf_auth['username'], conf_auth['password'])
         self.client = RestApiClientAsync(None,
                                     auth=auth,
                                     url_modifier_function=lambda host_port, endpoint, headers: f'{endpoint}')

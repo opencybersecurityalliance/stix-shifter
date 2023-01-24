@@ -1,12 +1,10 @@
 from stix_shifter_modules.aws_cloud_watch_logs.entry_point import EntryPoint
 from stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.status_connector import AWSCWLOGS
 from unittest.mock import patch
-import json
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
 from tests.utils.async_utils import get_aws_mock_response
 from botocore.exceptions import ClientError
-from asyncinit import asyncinit
 
 CONFIG = {
     "auth": {

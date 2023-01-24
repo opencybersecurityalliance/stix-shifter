@@ -29,7 +29,7 @@ class APIClient():
 
         endpoint = 'api/uri/statistics/uri_state/sha1/4b84b15bff6ee5796152495a230e45e3d7e947d9?format=json'
         response = await self.client.call_api(endpoint, 'GET')
-        data = response.read()
+        data = response.read().decode('utf-8')
 
         return {"message": data, "code": response.code}
 

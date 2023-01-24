@@ -72,7 +72,7 @@ class APIClient:
         try:
             quota_wrapper = await self.client.call_api(self.QUOTA_ENDPOINT, 'POST', headers=self.client.headers,
                                                  data=json.dumps(data), timeout=self.timeout)
-            quota_response_code = quota_wrapper.response.status_code
+            quota_response_code = quota_wrapper.code
             quota_response_text = json.loads(quota_wrapper.read().decode('utf-8'))
             if quota_response_code == 200:
                 if 'reply' in quota_response_text.keys():

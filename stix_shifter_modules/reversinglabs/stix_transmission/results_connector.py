@@ -32,9 +32,6 @@ class ResultsConnector(BaseJsonResultsConnector):
                 rl_data['rl'] = [{'message': 'IOC not found'}]
                 json_data = rl_data
 
-
-
-
             # # Construct a response object
             return_obj = dict()
             if response_code == 200:
@@ -49,11 +46,15 @@ class ResultsConnector(BaseJsonResultsConnector):
                 return_obj['success'] = True
                 return_obj['data'] = [json_data]
 
+                ErrorResponder.fill_error(return_obj, response, ['message'], connector='reversinglabs')
+
             # else:
             #     # ErrorResponder.fill_error(return_obj, response_dict, ['message'])
             #     ErrorResponder.fill_error(return_obj, json_data)
             #     return_obj['error'] = json_data['error']
             return return_obj
         except Exception as err:
+            response['message'] = str(err)
             self.logger.error('error when getting search results: {}'.format(err))
+            ErrorResponder.fill_error(return_obj, response, ['message'], connector='reversinglabs')
             raise

@@ -38,8 +38,8 @@ class Connector(BaseJsonSyncConnector):
 
             """api call for searching alert based on query"""
             response_wrapper = await self.api_client.get_search_results(query)
-            response_code = response_wrapper.response.status_code
-            response_dict = json.loads(response_wrapper.response.text)
+            response_code = response_wrapper.code
+            response_dict = json.loads(response_wrapper.read())
 
             if response_code == 200:
                 return_obj['success'] = True
@@ -54,7 +54,7 @@ class Connector(BaseJsonSyncConnector):
                 if firstresult['id'] is not None:
                     """second level api call for getting details of particular alert id"""
                     inner_data = await self.api_client.get_inner_results(firstresult['id'])
-                    inner_dict = json.loads(inner_data.response.text)
+                    inner_dict = json.loads(inner_data.read())
                     dt = {}
                     dt_main = {}
                     is_process_or_netflow = False
@@ -202,8 +202,8 @@ class Connector(BaseJsonSyncConnector):
         response_dict = {}
         try:
             response = await self.api_client.ping_data_source()
-            response_code = response.response.status_code
-            response_dict = json.loads(response.response.text)
+            response_code = response.code
+            response_dict = json.loads(response.read())
             if response_code == 200 and response_dict['status'] == 'ok':
                 return_obj['success'] = True
         except RetryError:

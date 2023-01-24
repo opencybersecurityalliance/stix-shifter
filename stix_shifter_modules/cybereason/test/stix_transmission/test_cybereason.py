@@ -4,7 +4,7 @@ import json
 from stix_shifter_modules.cybereason.entry_point import EntryPoint
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter.stix_transmission.stix_transmission import run_in_thread
-from tests.utils.async_utils import get_mock_response, InnerResponse
+from tests.utils.async_utils import get_mock_response
 
 
 class HistoryMockResponse:
@@ -97,8 +97,9 @@ class TestCybereasonConnection(unittest.TestCase):
     def test_ping_endpoint(self, mock_ping_source, mock_cookie,
                            mock_logout, mock_api_client):
         """ test to check ping_data_source function"""
-        pingmock = InnerResponse(200, """{"status":"SUCCESS"}""")
-        pingresponse = get_mock_response(200, pingmock, response=pingmock)
+        pingmock = """{"status":"SUCCESS"}"""
+        histobj = HistoryMockResponse()
+        pingresponse = get_mock_response(200, pingmock, 'byte', response=histobj)
         mock_ping_source.return_value = pingresponse
 
         mock_logout.return_value = """{"response_code":200}"""

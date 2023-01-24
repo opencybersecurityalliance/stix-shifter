@@ -65,21 +65,22 @@ class Connector(BaseJsonSyncConnector):
                 search_id = json.dumps(search_id)
 
             response_wrapper = await self.api_client.get_search_results(search_id)
+            response_str = str(response_wrapper.read().decode('utf-8'))
             
             if response_wrapper.code == 200:
                 return_obj['success'] = True
             # Both InvalidAuthentication and InvalidRequest returns the same error code 400.
             # Verifying the error message to identify InvalidAuthentication error.
-            elif response_wrapper.code == 400 and 'API SIGNATURE ERROR' in response_wrapper.response.text:
+            elif response_wrapper.code == 400 and 'API SIGNATURE ERROR' in response_str:
                 raise InvalidAuthenticationException
             elif response_wrapper.code == 408:
-                raise TimeoutError(response_wrapper.response.text)
+                raise TimeoutError(response_str)
             elif 399 < response_wrapper.code < 500:
-                raise InvalidRequestException(response_wrapper.response.text)
+                raise InvalidRequestException(response_str)
             elif response_wrapper.code == 500:
-                raise InternalServerErrorException(response_wrapper.response.text)
+                raise InternalServerErrorException(response_str)
 
-            response_dict = json.loads(response_wrapper.read().decode('utf-8'))
+            response_dict = json.loads(response_str)
 
             if response_dict.get('error'):
                 raise InvalidArguments(response_dict['error'])
@@ -168,8 +169,8 @@ class Connector(BaseJsonSyncConnector):
         response_dict = {}
         try:
             response = await self.api_client.ping_box()
-            response_code = response.response.status_code
-            response_dict = json.loads(response.response.text)
+            response_code = response.code
+            response_dict = json.loads(response.read().decode('utf-8'))
 
             if response_code == 200:  # and response_dict['status'] == 'SUCCESS':
                 return_obj['success'] = True
