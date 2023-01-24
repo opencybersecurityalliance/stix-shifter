@@ -1,4 +1,3 @@
-import requests_mock
 from unittest.mock import patch
 import unittest
 

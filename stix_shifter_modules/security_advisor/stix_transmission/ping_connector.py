@@ -1,5 +1,4 @@
 from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
-import requests
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from .auth import Auth
 

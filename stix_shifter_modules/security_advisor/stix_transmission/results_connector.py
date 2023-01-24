@@ -1,27 +1,28 @@
 from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseJsonResultsConnector
 from .utils.stix_pattern_processor import StixPatternProcessor
 from stix_shifter_utils.utils.error_response import ErrorResponder
-from .auth import Auth
+from .api_client import APIClient
 
 
 class ResultsConnector(BaseJsonResultsConnector):
-    def __init__(self, host, auth ):
+    def __init__(self, connection, configuration):
         self.connector = __name__.split('.')[1]
-        self.auth = auth
-        api_key = auth.get("apiKey")
-        self.auth_token = Auth(api_key)
-        self.host = self.auth_token.find_location(self.auth["accountID"], host)
+        self.host = connection.get("host")
+        self.auth = configuration.get("auth")
+        self.api_client = APIClient(connection, configuration)
+
+        self.host = self.api_client.find_location(self.auth["accountID"], self.host)
         self.StixPatternProcessor = StixPatternProcessor()
 
-    async def create_results_connection(self, searchID , offset , length):
 
+    async def create_results_connection(self, searchID , offset , length):
         params = {}
         return_obj = {}
         params["accountID"] =  self.auth.get("accountID")
         params["host"] = self.host
 
         try:
-            params["accessToken"] = self.auth_token.obtainAccessToken()
+            params["accessToken"] = self.api_client.obtainAccessToken()
             
         except Exception as e:
             ErrorResponder.fill_error(return_obj, {'code':"Authorizaion Failed"}, message= str(e), connector=self.connector)
