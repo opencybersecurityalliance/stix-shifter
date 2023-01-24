@@ -14,10 +14,10 @@ class APIClient():
 
         host_port = connection.get('host') + ':' + str(connection.get('port', ''))
 
-        self.client_auth = RestApiClientAsync(host_port,
+        self.client_auth = RestApiClientAsync(self.IAM_URL,
             None,
             headers,
-            url_modifier_function,
+            None,
             cert_verify=connection.get('selfSignedCert', True),
             sni=connection.get('sni', None)
         )
@@ -40,7 +40,7 @@ class APIClient():
             'Accept': 'application/json'
         }
         try :
-            response = requests.post(iamTokenURL, requestBody.replace(":", "%3A"), headers=header)
+            response = self.client_auth.call_api(iamTokenURL, '', data=requestBody.replace(":", "%3A"), headers=header)
         except Exception as e:
             raise Exception("Authorizaion Failed" + str(e))
         if( response.json().get("access_token") ):
