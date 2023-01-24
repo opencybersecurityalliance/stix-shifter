@@ -1,5 +1,5 @@
-##### Updated on 11/04/22
-## Microsoft Azure Sentinel
+##### Updated on 01/24/23
+## Microsoft Graph Security
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
 |--|--|
