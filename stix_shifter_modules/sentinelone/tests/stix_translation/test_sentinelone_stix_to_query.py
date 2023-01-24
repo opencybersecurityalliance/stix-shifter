@@ -441,7 +441,7 @@ class TestQueryTranslator(unittest.TestCase):
     def test_invalid_stix_pattern(self):
         """test to check invalid stix pattern"""
         stix_pattern = "[not_a_valid_pattern]"
-        result = translation.translate('cybereason', 'query', '{}', stix_pattern, {'validate_pattern': 'true'})
+        result = translation.translate('sentinelone', 'query', '{}', stix_pattern, {'validate_pattern': 'true'})
         assert result['success'] is False
         assert ErrorCode.TRANSLATION_STIX_VALIDATION.value == result['code']
         assert stix_pattern[1:-1] in result['error']
