@@ -31,6 +31,10 @@
             "mapping": {
                 "label": "Custom Mapping",
                 "description": "Custom stix mapping if default mapping needs to be replaced"
+            },
+            "concurrent": {
+                "label": "Concurrent Search Limit",
+                "description": "The number of simultaneous connections that can be made to the data source.  Valid input range is {{min}} to {{max}}."
             }
         }
     }

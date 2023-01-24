@@ -1,4 +1,4 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 from .api_client import APIClient
@@ -25,7 +25,7 @@ class InvalidAuthenticationException(Exception):
     pass
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
 
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
@@ -46,7 +46,7 @@ class Connector(BaseSyncConnector):
                 return json.load(f_obj)
         raise FileNotFoundError
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         """
         Fetching the results using search_id, offset and length
         :param search_id: str, Data Source query
@@ -64,17 +64,23 @@ class Connector(BaseSyncConnector):
             if isinstance(search_id, dict):
                 search_id = json.dumps(search_id)
 
-            response_wrapper = self.api_client.get_search_results(search_id)
-            response_dict = json.loads(response_wrapper.read().decode('utf-8'))
-
+            response_wrapper = await self.api_client.get_search_results(search_id)
+            response_str = str(response_wrapper.read().decode('utf-8'))
+            
             if response_wrapper.code == 200:
                 return_obj['success'] = True
-            elif response_wrapper.code == 400:
+            # Both InvalidAuthentication and InvalidRequest returns the same error code 400.
+            # Verifying the error message to identify InvalidAuthentication error.
+            elif response_wrapper.code == 400 and 'API SIGNATURE ERROR' in response_str:
                 raise InvalidAuthenticationException
+            elif response_wrapper.code == 408:
+                raise TimeoutError(response_str)
             elif 399 < response_wrapper.code < 500:
-                raise InvalidRequestException(response_wrapper.response.text)
+                raise InvalidRequestException(response_str)
             elif response_wrapper.code == 500:
-                raise InternalServerErrorException(response_wrapper.response.text)
+                raise InternalServerErrorException(response_str)
+
+            response_dict = json.loads(response_str)
 
             if response_dict.get('error'):
                 raise InvalidArguments(response_dict['error'])
@@ -94,6 +100,14 @@ class Connector(BaseSyncConnector):
         except ConnectionError:
             response_dict['code'] = 1003
             response_dict['message'] = "Invalid Host/Port"
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+        except TimeoutError as ex:
+            response_dict['code'] = 1004
+            response_dict['message'] = str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+        except InvalidRequestException as ex:
+            response_dict['code'] = 1005
+            response_dict['message'] = 'Bad Request' if 'Bad request' in str(ex) else str(ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except Exception as ex:
             response_dict['type'] = ex.__class__.__name__
@@ -146,7 +160,7 @@ class Connector(BaseSyncConnector):
 
         return response
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """
         Ping the endpoint
         :return: dict
@@ -154,9 +168,9 @@ class Connector(BaseSyncConnector):
         return_obj = {}
         response_dict = {}
         try:
-            response = self.api_client.ping_box()
-            response_code = response.response.status_code
-            response_dict = json.loads(response.response.text)
+            response = await self.api_client.ping_box()
+            response_code = response.code
+            response_dict = json.loads(response.read().decode('utf-8'))
 
             if response_code == 200:  # and response_dict['status'] == 'SUCCESS':
                 return_obj['success'] = True

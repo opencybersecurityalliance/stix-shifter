@@ -1,5 +1,5 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 import json
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
@@ -8,7 +8,7 @@ class UnexpectedResponseException(Exception):
     pass
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     def __init__(self, connection, configuration):
         self.connector = __name__.split('.')[1]
         self.connection = connection
@@ -19,14 +19,14 @@ class Connector(BaseSyncConnector):
         conf_auth = configuration.get('auth', {})
         if 'username' in conf_auth and 'password' in conf_auth:
             auth = (conf_auth['username'], conf_auth['password'])
-        self.client = RestApiClient(None,
+        self.client = RestApiClientAsync(None,
                                     auth=auth,
                                     url_modifier_function=lambda host_port, endpoint, headers: f'{endpoint}')
 
-    def ping_connection(self):
+    async def ping_connection(self):
         return_obj = dict()
 
-        response = self.client.call_api(self.bundle_url, 'head', timeout=self.timeout)
+        response = await self.client.call_api(self.bundle_url, 'head', timeout=self.timeout)
         response_txt = response.raise_for_status()
 
         if response.code == 200:
@@ -38,9 +38,9 @@ class Connector(BaseSyncConnector):
             ErrorResponder.fill_error(return_obj, response_txt, ['message'], connector=self.connector)
         return return_obj
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         return_obj = dict()
-        response = self.client.call_api(self.bundle_url, 'get', timeout=self.timeout)
+        response = await self.client.call_api(self.bundle_url, 'get', timeout=self.timeout)
 
         if response.code != 200:
             response_txt = response.raise_for_status()
@@ -76,7 +76,7 @@ class Connector(BaseSyncConnector):
 
             return return_obj
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         return_obj = dict()
         return_obj['success'] = True
         return return_obj

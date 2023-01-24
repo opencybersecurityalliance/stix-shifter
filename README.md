@@ -91,7 +91,11 @@ response = translation.translate('<MODULE NAME>', 'query', '{}', '<STIX PATTERN>
 
 print(response)
 ```
+### Use of custom mappings
 
+If a connector has been installed using pip, the process for editing the STIX mappings is different than if you have pulled-down the project. When working locally, you can edit the mapping files directly. See the [mapping files for the MySQL connector](stix_shifter_modules/mysql/stix_translation/json) as an example. Editing the mapping files won't work if the connector has been installed with pip; the setup script of the stix-shifter package includes the mapppings inside `config.json`. This allows stix-shifter to injest custom mappings as part of the connector's configuration.
+
+Refer to [Use of custom mappings](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/custom_mappings.md) for more details on how to edit the mappings in the configuration.
 
 ## Contributing
 

@@ -1,3 +1,4 @@
+from stix_shifter_utils.utils.async_utils import run_in_thread
 from stix_shifter_modules.crowdstrike.entry_point import EntryPoint
 import json
 import logging
@@ -127,13 +128,13 @@ class TestCrowdStrikeTransformResults(unittest.TestCase, object):
     def test_change_crowdstrike_process_api_timestamp_regex(self):
         results = process_data_1["results"].copy()
         results[0]['start'] = "2019-01-22T00:04:52.87Z"
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps(results))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, results)
 
         assert (result_bundle['type'] == 'bundle')
 
     def test_change_crowdstrike_process_api_results_to_stix(self):
         results = process_data_1["results"]
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps(results))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, results)
 
         assert (result_bundle['type'] == 'bundle')
 

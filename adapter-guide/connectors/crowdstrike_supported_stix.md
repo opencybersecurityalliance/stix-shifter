@@ -1,4 +1,4 @@
-##### Updated on 11/04/22
+##### Updated on 12/13/22
 ## CrowdStrike Falcon
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -123,8 +123,6 @@
 | <br> | | |
 | mac-addr | value | mac_address |
 | <br> | | |
-| network-traffic | dst_ref | domain_ioc |
-| <br> | | |
 | process | binary_ref | filename |
 | process | name | filename |
 | process | binary_ref | filepath |
@@ -193,7 +191,7 @@
 | x-oca-event | action | display_name |
 | x-oca-event | outcome | description |
 | x-oca-event | registry_ref | registry_key |
-| x-oca-event | network_ref | domain_ioc |
+| x-oca-event | domain_ref | domain_ioc |
 | x-oca-event | file_ref | sha256_ioc |
 | x-oca-event | file_ref | quarantined_file_sha256 |
 | x-oca-event | file_ref | md5_ioc |

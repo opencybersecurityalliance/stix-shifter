@@ -1,0 +1,47 @@
+{
+"x-ibm-finding": {
+    "fields": {
+      "finding_type": ["datacategory"],
+      "start": ["QUERY_FROM_DATE"],
+      "end": ["QUERY_TO_DATE"],
+      "database_name": ["Database"],
+      "dst_device": ["Database"]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": ["ServerIP"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["ServerIP"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "dst_ref.value": ["ServerIP"]
+    }
+  },
+   "user-account": {
+    "fields": {
+      "user_id": ["DBUser"],
+      "display_name": ["OSUser"]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": ["Payload-dialect1"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["DomainName-dialect1"]
+    }
+  },
+  "x-guardium": {
+    "fields": {
+      "severity":["Severity"]
+    }
+  }
+}

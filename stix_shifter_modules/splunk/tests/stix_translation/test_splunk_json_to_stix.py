@@ -380,8 +380,8 @@ class TestTransform(unittest.TestCase, object):
 
     def test_custom_mapping(self):
 
-        data_source = "{\"type\": \"identity\", \"id\": \"identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3\", \"name\": \"Splunk\", \"identity_class\": \"events\"}"
-        data = "[{\"tag\":\"network\", \"src_ip\": \"127.0.0.1\"}]"
+        data_source = json.loads("{\"type\": \"identity\", \"id\": \"identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3\", \"name\": \"Splunk\", \"identity_class\": \"events\"}")
+        data = json.loads("[{\"tag\":\"network\", \"src_ip\": \"127.0.0.1\"}]")
 
         options = {
             "mapping": {

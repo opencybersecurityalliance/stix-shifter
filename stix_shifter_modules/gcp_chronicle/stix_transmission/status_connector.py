@@ -43,7 +43,7 @@ class StatusConnector(BaseStatusConnector):
         }
         return switcher.get(status).value
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         """
         Fetching the progress and the status of the search id
         :param search_id: str, search id
@@ -53,7 +53,7 @@ class StatusConnector(BaseStatusConnector):
         return_obj = {}
         response_dict = {}
         try:
-            response_wrapper = self.api_client.get_search_status(search_id)
+            response_wrapper = await self.api_client.get_search_status(search_id)
             response_text = json.loads(response_wrapper[1])
 
             if response_wrapper[0].status == 200:

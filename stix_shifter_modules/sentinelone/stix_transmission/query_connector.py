@@ -3,7 +3,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_query_connector \
     import BaseQueryConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
-from requests.exceptions import ConnectionError
+from aiohttp.client_exceptions import ClientConnectionError
 
 class BadRequestQueryError(Exception):
     pass
@@ -11,13 +11,17 @@ class BadRequestQueryError(Exception):
 class LimitOutOfRangeError(Exception):
     pass
 
+class AuthenticationError(Exception):
+    pass
+
 class QueryConnector(BaseQueryConnector):
     """ Query connector base class """
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
         """
         init query
         :param query
@@ -28,7 +32,7 @@ class QueryConnector(BaseQueryConnector):
             return_obj = {}
             response_dict = {}
 
-            response = self.api_client.create_search(query)
+            response = await self.api_client.create_search(query)
             if isinstance(response, dict):
                 return response
             response_code = response.code
@@ -43,7 +47,7 @@ class QueryConnector(BaseQueryConnector):
                 return_obj['success'] = False
                 response_code = response_dict.get("errors")[0].get("code")
                 if response_code == 4010010:
-                    return_obj['error'] = "Authentication failed"
+                    raise AuthenticationError
             elif response_code == 400:
                 return_obj['success'] = False
                 response_code = response_dict.get("errors")[0].get("code")
@@ -53,24 +57,34 @@ class QueryConnector(BaseQueryConnector):
                 if response_code == 4000010:
                     raise LimitOutOfRangeError
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                          connector=self.connector)
 
+        except AuthenticationError:
+            response_dict['type'] = "AuthenticationError"
+            response_dict['message'] = "Invalid apitoken"
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         except ConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         except LimitOutOfRangeError:
             response_dict['type'] = "LimitOutOfRangeError"
             response_dict['message'] = "Limit must be greater than or equal to 1 " \
                                        "and less than or equal to 100000"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         except BadRequestQueryError:
             response_dict['type'] = "BadRequestQueryError"
             response_dict['message'] = response_dict.get("errors")[0].get("detail")
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         except Exception as ex:
             response_dict['type'] = "unknown"
             response_dict['message'] = ex
             self.logger.error('error when creating search: %s', str(ex))
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         return return_obj

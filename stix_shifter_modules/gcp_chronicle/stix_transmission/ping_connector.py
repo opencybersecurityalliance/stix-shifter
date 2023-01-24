@@ -12,7 +12,7 @@ class PingConnector(BasePingConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def ping_connection(self):
+    async def ping_connection(self):
 
         """
         Ping the endpoint
@@ -22,7 +22,7 @@ class PingConnector(BasePingConnector):
         response_dict = {}
         try:
 
-            response = self.api_client.ping_box()
+            response = await self.api_client.ping_box()
             response_code = response[0].status
             response_text = json.loads(response[1])
             if response_code == 200:

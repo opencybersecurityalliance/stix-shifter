@@ -1,16 +1,16 @@
 from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
-import json
+
 
 class PingConnector(BasePingConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def ping_connection(self):
+    async def ping_connection(self):
         try:
-            response_dict, response_code = self.api_client.ping_reversinglabs()
+            response = await self.api_client.ping_reversinglabs()
 
             # response = json.loads(response_dict.read().decode('utf-8'))
             # response_code = response_dict.code
@@ -19,10 +19,11 @@ class PingConnector(BasePingConnector):
 
             # Construct a response object
             return_obj = dict()
-            if response_code == 200:
+            if response['code'] == 200:
                 return_obj['success'] = True
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                response['message'] = 'Pinging failed'
+                ErrorResponder.fill_error(return_obj, response, ['message'], connector='reversinglabs')
             return return_obj
         except Exception as err:
             self.logger.error('error when pinging datasource {}:'.format(err))

@@ -2,7 +2,6 @@ from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JS
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
 from flatten_json import flatten
 from os import path
-import json
 import re
 
 
@@ -11,10 +10,8 @@ class JSONToStixObservablesDecorator(JSONToStix):
         super().__init__(options, dialect, path.dirname(__file__))
         
     def translate_results(self, data_source, data):
-        json_data = json.loads(data)
         # Decorate the findings with std observables at this step
-        self.decorateFindingsWithObjects(json_data, self.map_data)
-        data = json.dumps(json_data)
+        self.decorateFindingsWithObjects(data, self.map_data)
         return super().translate_results(data_source, data)
     
     # Decorate the finding with dynamically identified cyber observables
