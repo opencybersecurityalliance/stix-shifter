@@ -1,20 +1,20 @@
 {
     "connection": {
         "host": {
-            "label": "Management IP address or Hostname",
+            "label": "Management IP address or hostname",
             "placeholder": "192.168.1.10",
-            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+            "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
             "label": "Host Port",
-            "description": "Set the port number that is associated with the Host name or IP"
+            "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
             "label": "Need additional help?",
             "description": "More details on the data source setting can be found in the specified link"
         },
         "indices": {
-            "label": "Indices (Optional)",
+            "label": "Indices",
             "description": "To search specific Elasticsearch indices, specify a single index or multiple indices in a comma separated list",
             "placeholder": "index1,index2"
         },

@@ -53,7 +53,7 @@ class Connector(BaseSyncConnector):
 
             response_dict = json.loads(response_wrapper.read().decode('utf-8'))
             results = self.get_results_data(response_dict)
-            return_obj['data'] = results[offset:length]
+            return_obj['data'] = results[offset:(offset+length)]
 
             # session log out
             response_wrapper = self.api_client.session_log_out(response_wrapper)
@@ -103,7 +103,7 @@ class Connector(BaseSyncConnector):
         :param res_dict: dict, log
         :return: str, element name
         """
-        element_name = res_dict['data']['pathResultCounts'][0]['featureDescriptor']['elementInstanceType']
+        element_name = res_dict['data']['queryLimits']['groupingFeature']['elementInstanceType']
         return element_name
 
     def ping_connection(self):

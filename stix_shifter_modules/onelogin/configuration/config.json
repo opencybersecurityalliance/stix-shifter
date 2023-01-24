@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "OneLogin"
+            "displayName": "OneLogin",
+            "group": "onelogin"
         },
         "region": {
             "type": "text",

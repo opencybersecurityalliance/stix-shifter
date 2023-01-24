@@ -1,15 +1,7 @@
 {
   "username": [
     {
-      "key": "user-account.user_id",
-      "object": "useraccount"
-    },
-    {
       "key": "user-account.account_login",
-      "object": "useraccount"
-    },
-    {
-      "key": "user-account.account_type",
       "object": "useraccount"
     },
     {
@@ -18,12 +10,24 @@
       "references": "useraccount"
     }
   ],
+  "userid": [
+    {
+      "key": "user-account.user_id",
+      "object": "useraccount"
+    }
+  ],
+  "sourcetype": [
+    {
+      "key": "x-oca-event.agent",
+      "object": "ocaevent"
+    },
+    {
+      "key": "user-account.account_type",
+      "object": "useraccount"
+    }
+  ],
   "servicename": {
     "key": "x-oca-event.module",
-    "object": "ocaevent"
-  },
-  "sourcetype": {
-    "key": "x-oca-event.agent",
     "object": "ocaevent"
   },
   "ip": [
@@ -142,12 +146,6 @@
     "key": "x-oca-event.extensions.x-iam-ext.taregetid_username",
     "object": "ocaevent"
   },
-  "userid": [
-    {
-      "key": "user-account.user_id",
-      "object": "useraccount"
-    }
-  ],
   "continent_name": {
     "key": "x-oca-event.extensions.x-iam-ext.continent_name",
     "object": "ocaevent"
@@ -214,6 +212,10 @@
   },
   "lon": {
     "key": "x-oca-event.extensions.x-iam-ext.location_lon",
+    "object": "ocaevent"
+  },
+  "add": {
+    "key": "x-oca-event.extensions.x-iam-ext.add",
     "object": "ocaevent"
   }
 }

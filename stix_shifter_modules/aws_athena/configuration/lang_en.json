@@ -24,6 +24,16 @@
             "placeholder": "vpcflow_table_name",
             "description": "Specify the name of the table containing the VPC Flow Logs"
         },
+        "ocsf_database_name": {
+            "label": "OCSF Logs database name",
+            "placeholder": "ocsf_database_name",
+            "description": "Specify the name of the database containing the OCSF Logs"
+        },
+        "ocsf_table_name": {
+            "label": "OCSF Logs table name",
+            "placeholder": "ocsf_table_name",
+            "description": "Specify the name of the table containing the OCSF Logs"
+        },
         "guardduty_database_name": {
             "label": "Amazon GuardDuty database name",
             "placeholder": "guardduty_database_name",
@@ -44,6 +54,10 @@
             "aws_iam_role": {
                 "label": "AWS IAM Role",
                 "description": "AWS IAM Role is required for only AWS role-based authentication"
+            },
+            "aws_assume_role_external_id": {
+                "label": "External ID for AWS Assume Role",
+                "description": "External ID is optional for using in AWS role-based authentication"
             },
             "aws_secret_access_key": {
                 "label": "AWS Secret Access Key",

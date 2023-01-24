@@ -35,7 +35,7 @@ def __format_logs(logs):
     updated_logs = ""
     
     for lg in logs_list:
-        lg = re.sub(commit_hash_pattern, "*", lg)
+        lg = re.sub(commit_hash_pattern, "* ", lg)
         lg = re.sub(open_parenth_pattern, "[", lg)
         lg = re.sub(close_parenth_pattern, "]", lg)
         if not re.search("#\d{3,4}]$", lg):

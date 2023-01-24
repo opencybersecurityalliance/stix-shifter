@@ -47,7 +47,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_x_ibm_search(self):
-        stix_pattern = "[x-ibm-finding:name = 'abcd']"
+        stix_pattern = "[x-ibm-finding:event_name = 'abcd']"
         query = _translate_query(stix_pattern)
         where_statement = "WHERE EventSubject = 'abcd'"
         _test_query_assertions(query, selections, from_statement, where_statement)
@@ -57,5 +57,4 @@ class TestQueryTranslator(unittest.TestCase, object):
         query = _translate_query(stix_pattern)
         where_statement = "WHERE SecretName = 'xyz'"
         _test_query_assertions(query, selections, from_statement, where_statement)
-
 
