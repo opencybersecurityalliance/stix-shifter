@@ -20,7 +20,7 @@ CONNECTORS = {
     # "security_advisor": "IBM Cloud Security Advisor",
     "guardium": "IBM Guardium Data Protection",
     "aws_cloud_watch_logs": "Amazon CloudWatch Logs",
-    "azure_sentinel": "Microsoft Azure Sentinel",
+    "azure_sentinel": "Microsoft Graph Security",
     "alertflex": "Alertflex",
     "arcsight": "Micro Focus ArcSight",
     "aws_athena": "Amazon Athena",

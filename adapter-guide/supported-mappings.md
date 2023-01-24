@@ -19,7 +19,7 @@ Stix-shifter currently offers connector support for the following cybersecurity 
 - [Microsoft Defender for Endpoint](connectors/msatp_supported_stix.md)
 - [IBM Guardium Data Protection](connectors/guardium_supported_stix.md)
 - [Amazon CloudWatch Logs](connectors/aws_cloud_watch_logs_supported_stix.md)
-- [Microsoft Azure Sentinel](connectors/azure_sentinel_supported_stix.md)
+- [Microsoft Graph Security](connectors/azure_sentinel_supported_stix.md)
 - [Alertflex](connectors/alertflex_supported_stix.md)
 - [Micro Focus ArcSight](connectors/arcsight_supported_stix.md)
 - [Amazon Athena](connectors/aws_athena_supported_stix.md)
