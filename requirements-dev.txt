@@ -18,3 +18,4 @@ pytest-cov==2.5.1
 six==1.11.0
 wrapt==1.10.11
 requests_mock==1.7.0
+freezegun==1.2.2
