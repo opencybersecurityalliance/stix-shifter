@@ -39,7 +39,8 @@ CONNECTORS = {
     "darktrace": "Darktrace",
     "rhacs": "Red Hat Advanced Cluster Security for Kubernetes (StackRox)",
     "ibm_security_verify": "IBM Security Verify",
-    "gcp_chronicle": "GCP Chronicle"
+    "gcp_chronicle": "GCP Chronicle",
+    "azure_log_analytics": "Azure Log Analytics"
 }
 
 DIALECTS = {
@@ -51,7 +52,8 @@ DIALECTS = {
     "infoblox": ["dnsEventData", "dossierData", "tideDbData"],
     "paloalto": ["xdr_data"],
     "secretserver": ["event"],
-    "trendmicro_vision_one": ["endpointActivityData", "messageActivityData"]
+    "trendmicro_vision_one": ["endpointActivityData", "messageActivityData"],
+    "azure_log_analytics": ["SecurityAlert", "SecurityEvent", "SecurityIncident"]
 }
 
 DEFAULT_DIALECT = "default"
