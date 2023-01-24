@@ -11,6 +11,9 @@ class BadRequestQueryError(Exception):
 class LimitOutOfRangeError(Exception):
     pass
 
+class AuthenticationError(Exception):
+    pass
+
 class QueryConnector(BaseQueryConnector):
     """ Query connector base class """
     def __init__(self, api_client):
@@ -44,7 +47,7 @@ class QueryConnector(BaseQueryConnector):
                 return_obj['success'] = False
                 response_code = response_dict.get("errors")[0].get("code")
                 if response_code == 4010010:
-                    return_obj['error'] = "Authentication failed"
+                    raise AuthenticationError
             elif response_code == 400:
                 return_obj['success'] = False
                 response_code = response_dict.get("errors")[0].get("code")
@@ -54,24 +57,34 @@ class QueryConnector(BaseQueryConnector):
                 if response_code == 4000010:
                     raise LimitOutOfRangeError
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                          connector=self.connector)
 
-        except ClientConnectionError:
+        except AuthenticationError:
+            response_dict['type'] = "AuthenticationError"
+            response_dict['message'] = "Invalid apitoken"
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
+        except ConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         except LimitOutOfRangeError:
             response_dict['type'] = "LimitOutOfRangeError"
             response_dict['message'] = "Limit must be greater than or equal to 1 " \
                                        "and less than or equal to 100000"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         except BadRequestQueryError:
             response_dict['type'] = "BadRequestQueryError"
             response_dict['message'] = response_dict.get("errors")[0].get("detail")
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         except Exception as ex:
             response_dict['type'] = "unknown"
             response_dict['message'] = ex
             self.logger.error('error when creating search: %s', str(ex))
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         return return_obj

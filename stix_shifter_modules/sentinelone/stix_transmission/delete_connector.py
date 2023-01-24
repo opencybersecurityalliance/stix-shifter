@@ -32,5 +32,6 @@ class DeleteConnector(BaseDeleteConnector):
             response_dict['type'] = "unknown"
             response_dict['message'] = ex
             self.logger.error('error when delete request: %s', str(ex))
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         return return_obj

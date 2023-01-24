@@ -1,7 +1,7 @@
 {
     "connection": {
         "host": {
-            "label": "Management IP address or Hostname",
+            "label": "Management IP address or hostname",
             "description": "Specify the IP address or hostname of the data source"
         },
         "quota_threshold": {

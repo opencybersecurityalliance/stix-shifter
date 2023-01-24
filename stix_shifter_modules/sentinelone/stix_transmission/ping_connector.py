@@ -27,7 +27,8 @@ class PingConnector(BasePingConnector):
         except ClientConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         except Exception as ex:
             if 'Max retries exceeded' in str(ex):
                 # sleep added due to limitation of 1 call a second for each user token
@@ -37,15 +38,18 @@ class PingConnector(BasePingConnector):
                 except ClientConnectionError:
                     response_dict['type'] = "ConnectionError"
                     response_dict['message'] = "Invalid Host"
-                    ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+                    ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                              connector=self.connector)
                 except Exception as err:
                     self.logger.error('error when ping: %s', str(err))
                     response_dict['message'] = str(err)
-                    ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+                    ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                              connector=self.connector)
                 return return_obj
             else:
                 self.logger.error('error when ping: %s', str(ex))
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                          connector=self.connector)
         return return_obj
 
     async def call_ping_datasource(self, return_obj, response_dict):
