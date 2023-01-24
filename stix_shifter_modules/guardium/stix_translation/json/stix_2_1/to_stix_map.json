@@ -25,7 +25,7 @@
   ,
  "OSUser": [
     {
-      "key": "user-account.login_name",
+      "key": "user-account.display_name",
       "object":"account"
     },
     {
