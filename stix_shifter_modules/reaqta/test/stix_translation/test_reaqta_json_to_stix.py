@@ -148,18 +148,18 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         proc_obj = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'process')
         
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'x_unique_id', 'extensions', 'image_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
+        assert(proc_obj.keys() == {'type', 'x_unique_id', 'extensions', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
         
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref in objects), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
         
-        image_ref = proc_obj['image_ref']
-        assert(image_ref in objects), f"image_ref with key {proc_obj['image_ref']} not found"
+        binary_ref = proc_obj['binary_ref']
+        assert(binary_ref in objects), f"binary_ref with key {proc_obj['binary_ref']} not found"
         
-        binary = objects[image_ref]
+        binary = objects[binary_ref]
         assert(binary.keys() == {'type', 'parent_directory_ref', 'name', 'hashes', 'size', 'extensions'})
         assert(binary['name'] == DATA_PROCESS_IMAGE_FILE)
-        assert(binary['parent_directory_ref'] in objects), f"binary.parent_directory_ref with key {image_ref['parent_directory_ref']} not found"
+        assert(binary['parent_directory_ref'] in objects), f"binary.parent_directory_ref with key {binary_ref['parent_directory_ref']} not found"
         assert(objects[binary['parent_directory_ref']]['path'] == DATA_PROCESS_IMAGE_DIR)
 
         parent_ref = proc_obj['parent_ref']
@@ -269,10 +269,10 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         process_ref = event['process_ref']
         assert(process_ref in objects), f"process_ref with key {event['process_ref']} not found"
         process_obj = objects[process_ref]
-        assert(process_obj.keys() == {'type', 'x_unique_id', 'image_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'extensions', 'command_line'})
+        assert(process_obj.keys() == {'type', 'x_unique_id', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'extensions', 'command_line'})
         assert(process_obj['type'] == 'process')
         assert(process_obj['command_line'] == DATA_PROCESS_COMMAND_LINE)
-        binary_obj = objects[process_obj['image_ref']]
+        binary_obj = objects[process_obj['binary_ref']]
         assert(binary_obj is not None), "process binary ref not found"
         assert(binary_obj.keys() == {'type', 'parent_directory_ref', 'name', 'hashes', 'size', 'extensions'})
         assert(binary_obj['type'] == "file")
@@ -437,8 +437,8 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref.object_id in observed_data['object_refs']), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
         
-        image_ref = proc_obj['image_ref']
-        assert(image_ref.object_id in observed_data['object_refs']), f"image_ref with key {proc_obj['image_ref']} not found"
+        binary_ref = proc_obj['binary_ref']
+        assert(binary_ref.object_id in observed_data['object_refs']), f"binary_ref with key {proc_obj['binary_ref']} not found"
         
         parent_ref = proc_obj['parent_ref']
         assert(parent_ref.object_id in observed_data['object_refs']), f"parent_ref with key {proc_obj['parent_ref']} not found"
