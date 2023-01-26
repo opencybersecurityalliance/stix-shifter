@@ -8,6 +8,7 @@ class ResultsConnector(BaseJsonResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     async def create_results_connection(self, search_id, offset, length):
         try:
@@ -16,7 +17,7 @@ class ResultsConnector(BaseJsonResultsConnector):
             # Grab the response, extract the response code, and convert it to readable json
             response = await self.api_client.get_search_results(search_id, min_range, max_range)
             response_code = response.code
-            response_dict = json.loads(response.read())
+            response_dict = json.loads(response.read().decode('utf-8'))
 
             # # Construct a response object
             return_obj = dict()
@@ -25,7 +26,7 @@ class ResultsConnector(BaseJsonResultsConnector):
                 return_obj['success'] = True
                 return_obj['data'] = response_dict
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['messages', 0, 'text'])
+                ErrorResponder.fill_error(return_obj, response_dict, ['messages', 0, 'text'], connector=self.connector)
             return return_obj
 
         except Exception as err:
