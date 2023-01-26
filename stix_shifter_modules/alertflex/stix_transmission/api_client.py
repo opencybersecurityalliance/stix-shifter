@@ -8,15 +8,17 @@ class APIClient():
         self.endpoint_start = 'alertflex-ctrl/rest/stix-alerts'
         headers = dict()
         auth = configuration.get('auth')
-        headers['Authorization'] = b"Basic " + base64.b64encode(
-            (auth['username'] + ':' + auth['password']).encode('ascii'))
+        token_decoded = auth['username'] + ':' + auth['password']
+        token = base64.b64encode(token_decoded.encode('ascii'))
+        headers['Authorization'] = "Basic %s" % token.decode('ascii')
+
         url_modifier_function = None
         self.timeout = connection['options'].get('timeout')
         self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port'),
                                     headers,
                                     url_modifier_function,
-                                    cert_verify=connection.get('selfSignedCert', False))
+                                    cert_verify=connection.get('selfSignedCert', True))
 
     async def ping_data_source(self):
         endpoint = self.endpoint_start + '/status'

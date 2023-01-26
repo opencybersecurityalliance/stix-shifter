@@ -16,7 +16,7 @@ class DeleteConnector(BaseDeleteConnector):
             # Construct a response object
             return_obj = dict()
             if response_code == 200:
-                return_obj['success'] = response_code['success']
+                return_obj['success'] = response_dict['success']
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
             return return_obj
