@@ -14,6 +14,7 @@ class Connector(BaseSyncConnector):
         self.api_client = APIClient(connection, configuration)
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
+        self.max_result_window = 10000
 
     def _handle_errors(self, response, return_obj):
         response_code = response.code
@@ -35,8 +36,34 @@ class Connector(BaseSyncConnector):
         response_txt = None
         return_obj = dict()
         try:
+            # test the pit
+            #print(self.set_point_in_time())
             response = self.api_client.ping_box()
             return self._handle_errors(response, return_obj)
+        except Exception as e:
+            if response_txt is not None:
+                ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
+                self.logger.error('can not parse response: ' + str(response_txt))
+            else:
+                raise e
+
+    def settings_connection(self):
+        response_txt = None
+        return_obj = dict()
+        try:
+            response = self.api_client.get_max_result_window()
+            return_obj = self._handle_errors(response, return_obj)
+            if (return_obj['success']):
+                response_json = json.loads(return_obj["data"])
+                max_result_windows = set()
+                if not (response_json is None):
+                    for _, item_json in response_json.items():
+                        max_res_win = item_json['defaults']['index']['max_result_window']
+                        max_result_windows.add(max_res_win)
+                if len(max_result_windows) != 1:
+                    ErrorResponder.fill_error(max_result_windows, message='inconsistent max_result_window settings', connector=self.connector)
+                    self.logger.error('inconsistent max_result_window settings: ' + str(max_result_windows))
+                self.max_result_window = int(max_result_windows.pop())
         except Exception as e:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
@@ -49,6 +76,31 @@ class Connector(BaseSyncConnector):
         return_obj = dict()
 
         try:
+            # offset with -1 to indicate using search after API in ElasticSearch
+            if offset == -1:
+                # extract the max_result_window from elasticsearch
+                self.settings_connection()
+                return_objs = {'success': True, 'data': []}
+                while length > 0:
+                    lastsortvalue = None
+                    response = self.api_client.search_pagination(query, lastsortvalue, min(length, self.max_result_window))
+                    return_obj = self._handle_errors(response, return_obj)
+                    if (return_obj['success']):
+                        response_json = json.loads(return_obj["data"])
+                        if response_json['hits']:
+                            # and (response_json['hits']['total']['value'] >= 0 or response_json['hits']['total'] >= 0):
+                            self.logger.error("Total # of hits:" + str(response_json['hits']['total']))
+                            return_obj['data'] = [record['_source'] for record in response_json["hits"]["hits"]]
+                            return_objs['data'].extend(return_obj['data'])
+                            self.logger.error("Total # of records: " + str(len(return_obj['data'])))
+                            lastsortvalue = response_json["hits"]["hits"][-1]['sort']
+                            length -= self.max_result_window
+                        else:
+                            return return_obj #return the faulty iteration result
+                    else:
+                        break
+                return return_objs
+
             response = self.api_client.run_search(query, offset, length)
             return_obj = self._handle_errors(response, return_obj)
 
@@ -61,6 +113,19 @@ class Connector(BaseSyncConnector):
                     self.logger.error("Total # of records: " + str(len(return_obj['data'])))
 
             return return_obj
+        except Exception as e:
+            if response_txt is not None:
+                ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
+                self.logger.error('can not parse response: ' + str(response_txt))
+            else:
+                raise e
+
+    def set_point_in_time(self):
+        response_txt = None
+        return_obj = dict()
+        try:
+            response = self.api_client.set_pit()
+            return self._handle_errors(response, return_obj)
         except Exception as e:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
