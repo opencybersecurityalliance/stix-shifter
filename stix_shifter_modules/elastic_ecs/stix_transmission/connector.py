@@ -15,6 +15,8 @@ class Connector(BaseSyncConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
         self.max_result_window = 10000
+        # extract the max_result_window from elasticsearch
+        self.settings_connection()
 
     def _handle_errors(self, response, return_obj):
         response_code = response.code
@@ -71,38 +73,19 @@ class Connector(BaseSyncConnector):
             else:
                 raise e
 
-    def create_results_connection(self, query, offset, length):
+    def create_results_connection(self, query, offset, length, metadata=None):
         response_txt = None
         return_obj = dict()
 
         try:
             # offset with -1 to indicate using search after API in ElasticSearch
             if offset == -1:
-                # extract the max_result_window from elasticsearch
-                self.settings_connection()
-                return_objs = {'success': True, 'data': []}
-                while length > 0:
-                    lastsortvalue = None
-                    response = self.api_client.search_pagination(query, lastsortvalue, min(length, self.max_result_window))
-                    return_obj = self._handle_errors(response, return_obj)
-                    if (return_obj['success']):
-                        response_json = json.loads(return_obj["data"])
-                        if response_json['hits']:
-                            # and (response_json['hits']['total']['value'] >= 0 or response_json['hits']['total'] >= 0):
-                            self.logger.error("Total # of hits:" + str(response_json['hits']['total']))
-                            return_obj['data'] = [record['_source'] for record in response_json["hits"]["hits"]]
-                            return_objs['data'].extend(return_obj['data'])
-                            self.logger.error("Total # of records: " + str(len(return_obj['data'])))
-                            lastsortvalue = response_json["hits"]["hits"][-1]['sort']
-                            length -= self.max_result_window
-                        else:
-                            return return_obj #return the faulty iteration result
-                    else:
-                        break
-                return return_objs
-
-            response = self.api_client.run_search(query, offset, length)
-            return_obj = self._handle_errors(response, return_obj)
+                # pass the last searched value in metadata argument
+                response = self.api_client.search_pagination(query, metadata, min(length, self.max_result_window))
+                return_obj = self._handle_errors(response, return_obj)
+            else:
+                response = self.api_client.run_search(query, offset, length)
+                return_obj = self._handle_errors(response, return_obj)
 
             if (return_obj['success']):
                 response_json = json.loads(return_obj["data"])
@@ -111,6 +94,8 @@ class Connector(BaseSyncConnector):
                     self.logger.error("Total # of hits:" + str(response_json['hits']['total']))
                     return_obj['data'] = [record['_source'] for record in response_json["hits"]["hits"]]
                     self.logger.error("Total # of records: " + str(len(return_obj['data'])))
+                    if 'sort' in response_json["hits"]["hits"][-1]:
+                        return_obj['lastsort'] = response_json["hits"]["hits"][-1]['sort']
 
             return return_obj
         except Exception as e:
@@ -119,6 +104,8 @@ class Connector(BaseSyncConnector):
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e
+
+
 
     def set_point_in_time(self):
         response_txt = None
