@@ -5,6 +5,7 @@ import aiohttp
 from collections.abc import Mapping
 import os
 import errno
+import ssl
 import sys
 import threading
 import uuid
@@ -42,7 +43,7 @@ def exception_catcher(func, *args, **kwargs):
 
 
 class RestApiClientAsync:
-    # cert_verify can be
+    # cert_verify (assigned to self.ssl_context) can be
     #  True -- do proper signed cert check that is in trust store,
     #  False -- skip all cert checks,
     #  or The String content of your self signed cert required for TLS communication
@@ -62,16 +63,15 @@ class RestApiClientAsync:
         # sni is none unless we are using a server cert
         self.sni = None
 
-        self.server_cert_file_content_exists = False
-        self.server_cert_content = False
+        self.server_cert_file_content = None
+        self.ssl_context = False
+        
         if isinstance(cert_verify, bool):
             # verify certificate non self signed case
             if cert_verify:
-                self.server_cert_content = True
+                self.ssl_context = True
         # self signed cert provided
         elif isinstance(cert_verify, str):
-            self.server_cert_content = self.server_cert_name
-            self.server_cert_file_content_exists = True
             self.server_cert_file_content = cert_verify
             if sni is not None:
                 self.sni = sni
@@ -84,12 +84,17 @@ class RestApiClientAsync:
     async def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
         try:
             # covnert server cert to file
-            if self.server_cert_file_content_exists is True:
+            if self.server_cert_file_content:
                 with open(self.server_cert_name, 'w') as f:
                     try:
                         f.write(self.server_cert_file_content)
                     except IOError:
                         self.logger.error('Failed to setup certificate')
+
+                self.ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+                self.ssl_context.load_verify_locations(self.server_cert_name)
+                self.ssl_context.verify_mode = ssl.CERT_REQUIRED
+                self.ssl_context.check_hostname = True
 
             url = None
             actual_headers = self.headers.copy()
@@ -114,9 +119,8 @@ class RestApiClientAsync:
                         # only use the tool belt session in case of SNI for safety
                         actual_headers["Host"] = self.sni
 
-                    # TODO verify the verify_ssl
                     async with call(url, headers=actual_headers, params=urldata, data=data,
-                                            verify_ssl=self.server_cert_content,
+                                            ssl=self.ssl_context,
                                             timeout=client_timeout,
                                             auth=self.auth) as response:
 
@@ -142,7 +146,7 @@ class RestApiClientAsync:
                 self.logger.error('exception occured during requesting url: ' + str(e) + " " + str(type(e)))
                 raise e
         finally:
-            if self.server_cert_file_content_exists is True:
+            if self.server_cert_file_content:
                 try:
                     os.remove(self.server_cert_name)
                 except OSError as e:
