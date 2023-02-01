@@ -81,7 +81,7 @@ class RestApiClientAsync:
         self.auth = auth
 
     # This method is used to set up an HTTP request and send it to the server
-    async def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
+    async def call_api(self, endpoint, method, headers=None, cookies=None, data=None, urldata=None, timeout=None):
         try:
             # covnert server cert to file
             if self.server_cert_file_content:
@@ -122,9 +122,10 @@ class RestApiClientAsync:
                     async with call(url, headers=actual_headers, params=urldata, data=data,
                                             ssl=self.ssl_context,
                                             timeout=client_timeout,
+                                            cookies=cookies,
                                             auth=self.auth) as response:
 
-                        respWrapper = ResponseWrapper(response)
+                        respWrapper = ResponseWrapper(response, client)
                         await respWrapper.wait()
 
                         if respWrapper.code == 429:
@@ -166,8 +167,9 @@ class ResponseWrapper:
     _headers = None
     _code = None
 
-    def __init__(self, response):
+    def __init__(self, response, client=None):
         self.response = response
+        self.client = client
 
     async def wait(self):
         self._content = await self.response.content.read()
@@ -179,6 +181,12 @@ class ResponseWrapper:
 
     def raise_for_status(self):
         return self.response.raise_for_status()
+
+    def get_cookies(self, url):
+        cookie = None
+        if self.client:
+            cookie = self.client._client.cookie_jar.filter_cookies(url)
+        return cookie
 
     @property
     def headers(self):
