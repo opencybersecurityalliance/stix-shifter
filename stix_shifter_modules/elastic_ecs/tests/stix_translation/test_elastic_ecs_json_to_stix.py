@@ -201,6 +201,32 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert (observed_data['id'] is not None)
         assert (observed_data['type'] == "observed-data")
         assert (observed_data['created_by_ref'] == result_bundle_identity['id'])
+        assert (observed_data['created'] is not None)
+        assert (observed_data['modified'] is not None)
+        assert (observed_data['number_observed'] == 1)
+
+    def test_stix_2_1(self):
+        test_source = json.dumps(data_source)
+        test_data = json.dumps([data])
+        test_options = {
+            "stix_2.1": True
+        }
+
+        translation = stix_translation.StixTranslation()
+        result_bundle = translation.translate('elastic_ecs', 'results', test_source, test_data, test_options)
+        print(result_bundle)
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert (observed_data['id'] is not None)
+        assert (observed_data['type'] == "observed-data")
+        assert (observed_data['created_by_ref'] == data_source['id'])
+        assert (observed_data['created'] is not None)
+        assert (observed_data['modified'] is not None)
+        assert (observed_data['number_observed'] == 1)
+        assert('object_refs' in observed_data)
+        assert('objects' not in observed_data)
+        #TODO: check other objects
 
     def test_custom_mapping(self):
         data_source_string = json.dumps(data_source)
