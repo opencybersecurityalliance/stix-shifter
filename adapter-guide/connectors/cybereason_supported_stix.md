@@ -1,9 +1,9 @@
-##### Updated on 11/04/22
+##### Updated on 12/13/22
 ## Cybereason
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | AND |
+| AND | OR |
 | > | GreaterThan |
 | >= | GreaterOrEqualsTo |
 | < | LessThan |
@@ -13,6 +13,7 @@
 | LIKE | ContainsIgnoreCase |
 | IN | Equals |
 | MATCHES | ContainsIgnoreCase |
+| OR | OR |
 | <br> | |
 ### Searchable STIX objects and properties
 | STIX Object and Property | Mapped Data Source Fields |

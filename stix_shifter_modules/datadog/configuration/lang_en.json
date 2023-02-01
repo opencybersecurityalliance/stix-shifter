@@ -3,7 +3,7 @@
         "site_url": {
             "label": "Site URL",
             "placeholder": "https://app.datadoghq.com",
-            "description": "Specify the Site URL of the Datadog so that IBM Cloud Pak for Security can communicate with it"
+            "description": "Specify the Site URL of the datasource"
         },
         "selfSignedCert": {
             "label": "Datadog Certificate",

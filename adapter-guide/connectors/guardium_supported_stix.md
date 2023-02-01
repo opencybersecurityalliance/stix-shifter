@@ -1,4 +1,4 @@
-##### Updated on 11/04/22
+##### Updated on 01/24/23
 ## IBM Guardium Data Protection
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
@@ -77,7 +77,7 @@
 | network-traffic | protocols | NetworkProtocol |
 | <br> | | |
 | process | command_line | Path |
-| process | id | Pid |
+| process | pid | Pid |
 | <br> | | |
 | software | name | db_type |
 | software | name | Server Type |

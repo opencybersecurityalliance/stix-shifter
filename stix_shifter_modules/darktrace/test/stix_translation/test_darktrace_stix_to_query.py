@@ -650,3 +650,459 @@ class TestqueryTranslator(unittest.TestCase):
         }]
         expected_query = _remove_timestamp_from_query(expected_query)
         self._test_query_assertions(actual_query, expected_query)
+
+    def test_qualifier_without_milliseconds(self):
+        stix_pattern = "[x-oca-asset:hostname = '169.254.169.254'] " \
+                       "START t'2022-03-01T11:50:21Z' STOP t'2022-03-31T11:55:25Z'"
+        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
+        expected_query = [{
+            "search": "(@fields.host:\"169.254.169.254\" AND (@fields.epochdate :>1646135421.0 "
+                      "AND @fields.epochdate :<1648727725.0))",
+            "fields": [],
+            "timeframe": "custom",
+            "time": {
+                "from": "2022-03-01T11:50:21.000000Z",
+                "to": "2022-03-31T11:55:25.000000Z"
+            },
+            "size": 10000
+        }]
+        self._test_query_assertions(actual_query, expected_query)
+
+    def test_large_query(self):
+        stix_pattern = "[file:hashes.'SHA-256' NOT IN (" \
+                       "'b6c7f878b44c0a074d53e8fec9b65c7dd70844bb67524ff541f17d3d754889ec'," \
+                       "'519af7038bf8685fbfb228267b5be4c5926970c46af9dcd7d9de456143c816b1'," \
+                       "'48b48ac4edc40b006f9016ddce39dfbe2f1036338373b6f322795ba06455c668'," \
+                       "'16c48e52a529ce58bd2e8205c9196d64500b6a4304d8e70040ddb4b1b020bcd2'," \
+                       "'a4cb8126909f81262142bc478e15e43b5a3253cd3ad9d084e979f7b50d39f6ab'," \
+                       "'35e243527f5464134e99684437dffa3d88ba54462eacd9179bd11cd8032657ad'," \
+                       "'1fe7cce7969a0fcee49b03769520c5d61348a08fbf4bcd5a2611bf4afa32eca3'," \
+                       "'70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b'," \
+                       "'90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff'," \
+                       "'b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b'," \
+                       "'70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb'," \
+                       "'bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7'," \
+                       "'237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6'," \
+                       "'b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105'," \
+                       "'9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa'," \
+                       "'93d7e24385c204fd2afcab10087273d9526d935045c6139c6f709d46bbae6d3b'," \
+                       "'91954c768c896dc028ae54c11a85def47bb7b83dbfccd3a731d38f141ca9243f'," \
+                       "'36f517b8125abdd3b03c22d0ea2b6cd9ef9e9e70bc4193a3889156f472d42873'," \
+                       "'3c1a4c5fa844b69e410e80200829e51c44bc469b0071008ef899e41218a60719'," \
+                       "'3c1a4c5fa844b69e410e80200829e51c44bc469b0071008ef899e41218a60719'," \
+                       "'b6c7f878b44c0a074d53e8fec9b65c7dd70844bb67524ff541f17d3d754889ec'," \
+                       "'519af7038bf8685fbfb228267b5be4c5926970c46af9dcd7d9de456143c816b1'," \
+                       "'48b48ac4edc40b006f9016ddce39dfbe2f1036338373b6f322795ba06455c668'," \
+                       "'16c48e52a529ce58bd2e8205c9196d64500b6a4304d8e70040ddb4b1b020bcd2'," \
+                       "'a4cb8126909f81262142bc478e15e43b5a3253cd3ad9d084e979f7b50d39f6ab'," \
+                       "'35e243527f5464134e99684437dffa3d88ba54462eacd9179bd11cd8032657ad'," \
+                       "'1fe7cce7969a0fcee49b03769520c5d61348a08fbf4bcd5a2611bf4afa32eca3'," \
+                       "'70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b'," \
+                       "'90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff'," \
+                       "'b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b'," \
+                       "'35e243527f5464134e99684437dffa3d88ba54462eacd9179bd11cd8032657ad'," \
+                       "'1fe7cce7969a0fcee49b03769520c5d61348a08fbf4bcd5a2611bf4afa32eca3'," \
+                       "'70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b'," \
+                       "'90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff'," \
+                       "'b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b'," \
+                       "'519af7038bf8685fbfb228267b5be4c5926970c46af9dcd7d9de456143c816b1'," \
+                       "'48b48ac4edc40b006f9016ddce39dfbe2f1036338373b6f322795ba06455c668'," \
+                       "'16c48e52a529ce58bd2e8205c9196d64500b6a4304d8e70040ddb4b1b020bcd2'," \
+                       "'a4cb8126909f81262142bc478e15e43b5a3253cd3ad9d084e979f7b50d39f6ab'," \
+                       "'35e243527f5464134e99684437dffa3d88ba54462eacd9179bd11cd8032657ad'," \
+                       "'1fe7cce7969a0fcee49b03769520c5d61348a08fbf4bcd5a2611bf4afa32eca3')] START " \
+                       "t'2022-11-22T21:41:58.000Z' STOP t'2022-11-22T22:41:58.000Z' "
+        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
+        actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
+        expected_query = [
+            {
+                "search": "(@fields.sha256_file_hash:* AND NOT @fields.sha256_file_hash: ("
+                          "\"b6c7f878b44c0a074d53e8fec9b65c7dd70844bb67524ff541f17d3d754889ec\" OR "
+                          "\"519af7038bf8685fbfb228267b5be4c5926970c46af9dcd7d9de456143c816b1\" OR "
+                          "\"48b48ac4edc40b006f9016ddce39dfbe2f1036338373b6f322795ba06455c668\" OR "
+                          "\"16c48e52a529ce58bd2e8205c9196d64500b6a4304d8e70040ddb4b1b020bcd2\" OR "
+                          "\"a4cb8126909f81262142bc478e15e43b5a3253cd3ad9d084e979f7b50d39f6ab\" OR "
+                          "\"35e243527f5464134e99684437dffa3d88ba54462eacd9179bd11cd8032657ad\" OR "
+                          "\"1fe7cce7969a0fcee49b03769520c5d61348a08fbf4bcd5a2611bf4afa32eca3\" OR "
+                          "\"70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b\" OR "
+                          "\"90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff\" OR "
+                          "\"b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b\" OR "
+                          "\"70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb\" OR "
+                          "\"bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7\" OR "
+                          "\"237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6\" OR "
+                          "\"b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105\" OR "
+                          "\"9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa\" OR "
+                          "\"93d7e24385c204fd2afcab10087273d9526d935045c6139c6f709d46bbae6d3b\" OR "
+                          "\"91954c768c896dc028ae54c11a85def47bb7b83dbfccd3a731d38f141ca9243f\" OR "
+                          "\"36f517b8125abdd3b03c22d0ea2b6cd9ef9e9e70bc4193a3889156f472d42873\" OR "
+                          "\"3c1a4c5fa844b69e410e80200829e51c44bc469b0071008ef899e41218a60719\" OR "
+                          "\"3c1a4c5fa844b69e410e80200829e51c44bc469b0071008ef899e41218a60719\" OR "
+                          "\"b6c7f878b44c0a074d53e8fec9b65c7dd70844bb67524ff541f17d3d754889ec\" OR "
+                          "\"519af7038bf8685fbfb228267b5be4c5926970c46af9dcd7d9de456143c816b1\" OR "
+                          "\"48b48ac4edc40b006f9016ddce39dfbe2f1036338373b6f322795ba06455c668\" OR "
+                          "\"16c48e52a529ce58bd2e8205c9196d64500b6a4304d8e70040ddb4b1b020bcd2\" OR "
+                          "\"a4cb8126909f81262142bc478e15e43b5a3253cd3ad9d084e979f7b50d39f6ab\" OR "
+                          "\"35e243527f5464134e99684437dffa3d88ba54462eacd9179bd11cd8032657ad\" OR "
+                          "\"1fe7cce7969a0fcee49b03769520c5d61348a08fbf4bcd5a2611bf4afa32eca3\" OR "
+                          "\"70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b\" OR "
+                          "\"90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff\" OR "
+                          "\"b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b\" OR "
+                          "\"35e243527f5464134e99684437dffa3d88ba54462eacd9179bd11cd8032657ad\" OR "
+                          "\"1fe7cce7969a0fcee49b03769520c5d61348a08fbf4bcd5a2611bf4afa32eca3\" OR "
+                          "\"70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b\" )) AND ("
+                          "@fields.epochdate :>1669153318.0 AND @fields.epochdate :<1669156918.0)",
+                "fields": [],
+                "timeframe": "custom",
+                "time": {
+                    "from": "2022-11-22T21:41:58.000000Z",
+                    "to": "2022-11-22T22:41:58.000000Z"
+                },
+                "size": 10000
+            },
+            {
+                "search": "(@fields.sha256_file_hash:* AND NOT @fields.sha256_file_hash: ( "
+                          "\"90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff\" OR "
+                          "\"b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b\" OR "
+                          "\"519af7038bf8685fbfb228267b5be4c5926970c46af9dcd7d9de456143c816b1\" OR "
+                          "\"48b48ac4edc40b006f9016ddce39dfbe2f1036338373b6f322795ba06455c668\" OR "
+                          "\"16c48e52a529ce58bd2e8205c9196d64500b6a4304d8e70040ddb4b1b020bcd2\" OR "
+                          "\"a4cb8126909f81262142bc478e15e43b5a3253cd3ad9d084e979f7b50d39f6ab\" OR "
+                          "\"35e243527f5464134e99684437dffa3d88ba54462eacd9179bd11cd8032657ad\" OR "
+                          "\"1fe7cce7969a0fcee49b03769520c5d61348a08fbf4bcd5a2611bf4afa32eca3\")) AND ("
+                          "@fields.epochdate :>1669153318.0 AND @fields.epochdate :<1669156918.0)",
+                "fields": [],
+                "timeframe": "custom",
+                "time": {
+                    "from": "2022-11-22T21:41:58.000000Z",
+                    "to": "2022-11-22T22:41:58.000000Z"
+                },
+                "size": 10000
+            },
+            {
+                "search": "(@fields.sha256:* AND NOT @fields.sha256: ("
+                          "\"b6c7f878b44c0a074d53e8fec9b65c7dd70844bb67524ff541f17d3d754889ec\" OR "
+                          "\"519af7038bf8685fbfb228267b5be4c5926970c46af9dcd7d9de456143c816b1\" OR "
+                          "\"48b48ac4edc40b006f9016ddce39dfbe2f1036338373b6f322795ba06455c668\" OR "
+                          "\"16c48e52a529ce58bd2e8205c9196d64500b6a4304d8e70040ddb4b1b020bcd2\" OR "
+                          "\"a4cb8126909f81262142bc478e15e43b5a3253cd3ad9d084e979f7b50d39f6ab\" OR "
+                          "\"35e243527f5464134e99684437dffa3d88ba54462eacd9179bd11cd8032657ad\" OR "
+                          "\"1fe7cce7969a0fcee49b03769520c5d61348a08fbf4bcd5a2611bf4afa32eca3\" OR "
+                          "\"70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b\" OR "
+                          "\"90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff\" OR "
+                          "\"b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b\" OR "
+                          "\"70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb\" OR "
+                          "\"bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7\" OR "
+                          "\"237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6\" OR "
+                          "\"b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105\" OR "
+                          "\"9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa\" OR "
+                          "\"93d7e24385c204fd2afcab10087273d9526d935045c6139c6f709d46bbae6d3b\" OR "
+                          "\"91954c768c896dc028ae54c11a85def47bb7b83dbfccd3a731d38f141ca9243f\" OR "
+                          "\"36f517b8125abdd3b03c22d0ea2b6cd9ef9e9e70bc4193a3889156f472d42873\" OR "
+                          "\"3c1a4c5fa844b69e410e80200829e51c44bc469b0071008ef899e41218a60719\" OR "
+                          "\"3c1a4c5fa844b69e410e80200829e51c44bc469b0071008ef899e41218a60719\" OR "
+                          "\"b6c7f878b44c0a074d53e8fec9b65c7dd70844bb67524ff541f17d3d754889ec\" OR "
+                          "\"519af7038bf8685fbfb228267b5be4c5926970c46af9dcd7d9de456143c816b1\" OR "
+                          "\"48b48ac4edc40b006f9016ddce39dfbe2f1036338373b6f322795ba06455c668\" OR "
+                          "\"16c48e52a529ce58bd2e8205c9196d64500b6a4304d8e70040ddb4b1b020bcd2\" OR "
+                          "\"a4cb8126909f81262142bc478e15e43b5a3253cd3ad9d084e979f7b50d39f6ab\" OR "
+                          "\"35e243527f5464134e99684437dffa3d88ba54462eacd9179bd11cd8032657ad\" OR "
+                          "\"1fe7cce7969a0fcee49b03769520c5d61348a08fbf4bcd5a2611bf4afa32eca3\" OR "
+                          "\"70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b\" OR "
+                          "\"90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff\" OR "
+                          "\"b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b\" OR "
+                          "\"35e243527f5464134e99684437dffa3d88ba54462eacd9179bd11cd8032657ad\" OR "
+                          "\"1fe7cce7969a0fcee49b03769520c5d61348a08fbf4bcd5a2611bf4afa32eca3\" OR "
+                          "\"70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b\" )) AND ("
+                          "@fields.epochdate :>1669153318.0 AND @fields.epochdate :<1669156918.0)",
+                "fields": [],
+                "timeframe": "custom",
+                "time": {
+                    "from": "2022-11-22T21:41:58.000000Z",
+                    "to": "2022-11-22T22:41:58.000000Z"
+                },
+                "size": 10000
+            },
+            {
+                "search": "(@fields.sha256:* AND NOT @fields.sha256: ( "
+                          "\"90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff\" OR "
+                          "\"b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b\" OR "
+                          "\"519af7038bf8685fbfb228267b5be4c5926970c46af9dcd7d9de456143c816b1\" OR "
+                          "\"48b48ac4edc40b006f9016ddce39dfbe2f1036338373b6f322795ba06455c668\" OR "
+                          "\"16c48e52a529ce58bd2e8205c9196d64500b6a4304d8e70040ddb4b1b020bcd2\" OR "
+                          "\"a4cb8126909f81262142bc478e15e43b5a3253cd3ad9d084e979f7b50d39f6ab\" OR "
+                          "\"35e243527f5464134e99684437dffa3d88ba54462eacd9179bd11cd8032657ad\" OR "
+                          "\"1fe7cce7969a0fcee49b03769520c5d61348a08fbf4bcd5a2611bf4afa32eca3\")) AND ("
+                          "@fields.epochdate :>1669153318.0 AND @fields.epochdate :<1669156918.0)",
+                "fields": [],
+                "timeframe": "custom",
+                "time": {
+                    "from": "2022-11-22T21:41:58.000000Z",
+                    "to": "2022-11-22T22:41:58.000000Z"
+                },
+                "size": 10000
+            }
+        ]
+
+        expected_query = _remove_timestamp_from_query(expected_query)
+        self._test_query_assertions(actual_query, expected_query)
+
+    def test_split_query_contains_only_or(self):
+        stix_pattern = "[(network-traffic:dst_port=3389 OR network-traffic:dst_port=2001 OR " \
+                       "network-traffic:dst_port=3001 OR network-traffic:dst_port=3388 OR " \
+                       "network-traffic:dst_port=2004 OR network-traffic:dst_port=3004 OR " \
+                       "network-traffic:dst_port=3388 OR network-traffic:dst_port=2005 OR " \
+                       "network-traffic:dst_port=3009 OR network-traffic:dst_port=3389 OR " \
+                       "network-traffic:dst_port=2001 OR network-traffic:dst_port=3002 OR " \
+                       "network-traffic:dst_port=3389 OR network-traffic:dst_port=2003 OR " \
+                       "network-traffic:dst_port=3006 OR network-traffic:dst_port=3389 OR " \
+                       "network-traffic:dst_port=2000 OR network-traffic:dst_port=3004 OR " \
+                       "network-traffic:dst_port=3381 OR network-traffic:dst_port=2008 OR " \
+                       "network-traffic:dst_port=3000 OR network-traffic:dst_port=3389 OR " \
+                       "network-traffic:dst_port=2000) OR (file:hashes.'SHA-256' = " \
+                       "'70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b' OR file:hashes.'SHA-256' = " \
+                       "'90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff' OR file:hashes.'SHA-256' = " \
+                       "'b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b' OR file:hashes.'SHA-256' = " \
+                       "'70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb' OR file:hashes.'SHA-256' = " \
+                       "'bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7' OR file:hashes.'SHA-256' = " \
+                       "'237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6' OR file:hashes.'SHA-256' = " \
+                       "'b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105' OR file:hashes.'SHA-256' = " \
+                       "'9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa' OR file:hashes.'SHA-256' = " \
+                       "'70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb' OR file:hashes.'SHA-256' = " \
+                       "'bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7' OR file:hashes.'SHA-256' = " \
+                       "'237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6' OR file:hashes.'SHA-256' = " \
+                       "'b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105' OR file:hashes.'SHA-256' = " \
+                       "'9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa' OR file:hashes.'SHA-256' = " \
+                       "'237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6' OR file:hashes.'SHA-256' = " \
+                       "'b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105' OR file:hashes.'SHA-256' = " \
+                       "'9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa' OR file:hashes.'SHA-256' = " \
+                       "'70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb' OR file:hashes.'SHA-256' = " \
+                       "'bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7')] START " \
+                       "t'2022-10-01T21:41:58.000Z' STOP t'2022-12-19T22:41:58.000Z' "
+        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
+        actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
+        expected_query = [
+            {
+                "search": "(@fields.sha256_file_hash"
+                          ":\"bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7\" OR "
+                          "@fields.sha256:\"bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7\" OR "
+                          "@fields.sha256_file_hash"
+                          ":\"70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb\" OR "
+                          "@fields.sha256:\"70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb\" OR "
+                          "@fields.sha256_file_hash"
+                          ":\"9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa\" OR "
+                          "@fields.sha256:\"9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa\" OR "
+                          "@fields.sha256_file_hash"
+                          ":\"b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105\" OR "
+                          "@fields.sha256:\"b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105\" OR "
+                          "@fields.sha256_file_hash"
+                          ":\"237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6\" OR "
+                          "@fields.sha256:\"237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6\") AND ("
+                          "@fields.epochdate :>1664660518.0 AND @fields.epochdate :<1671489718.0)",
+                "fields": [],
+                "timeframe": "custom",
+                "time": {
+                    "from": "2022-10-01T21:41:58.000000Z",
+                    "to": "2022-12-19T22:41:58.000000Z"
+                },
+                "size": 10000
+            },
+            {
+                "search": "((@fields.sha256_file_hash"
+                          ":\"9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa\" OR "
+                          "@fields.sha256:\"9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105\" OR "
+                          "@fields.sha256:\"b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6\" OR "
+                          "@fields.sha256:\"237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7\" OR "
+                          "@fields.sha256:\"bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb\" OR "
+                          "@fields.sha256:\"70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa\" OR "
+                          "@fields.sha256:\"9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105\" OR "
+                          "@fields.sha256:\"b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6\" OR "
+                          "@fields.sha256:\"237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7\" OR "
+                          "@fields.sha256:\"bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb\" OR "
+                          "@fields.sha256:\"70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b\" OR "
+                          "@fields.sha256:\"b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff\" OR "
+                          "@fields.sha256:\"90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff\") OR ("
+                          "@fields.sha256_file_hash"
+                          ":\"70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b\" OR "
+                          "@fields.sha256:\"70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b"
+                          "\"))))))))))))) AND (@fields.epochdate :>1664660518.0 AND @fields.epochdate "
+                          ":<1671489718.0)",
+                "fields": [],
+                "timeframe": "custom",
+                "time": {
+                    "from": "2022-10-01T21:41:58.000000Z",
+                    "to": "2022-12-19T22:41:58.000000Z"
+                },
+                "size": 10000
+            },
+            {
+                "search": "((@fields.dest_port:2000 OR @fields.dst_p:2000) OR ((@fields.dest_port:3389 OR "
+                          "@fields.dst_p:3389) OR ((@fields.dest_port:3000 OR @fields.dst_p:3000) OR (("
+                          "@fields.dest_port:2008 OR @fields.dst_p:2008) OR ((@fields.dest_port:3381 OR "
+                          "@fields.dst_p:3381) OR ((@fields.dest_port:3004 OR @fields.dst_p:3004) OR (("
+                          "@fields.dest_port:2000 OR @fields.dst_p:2000) OR ((@fields.dest_port:3389 OR "
+                          "@fields.dst_p:3389) OR ((@fields.dest_port:3006 OR @fields.dst_p:3006) OR (("
+                          "@fields.dest_port:2003 OR @fields.dst_p:2003) OR ((@fields.dest_port:3389 OR "
+                          "@fields.dst_p:3389) OR ((@fields.dest_port:3002 OR @fields.dst_p:3002) OR (("
+                          "@fields.dest_port:2001 OR @fields.dst_p:2001) OR ((@fields.dest_port:3389 OR "
+                          "@fields.dst_p:3389) OR ((@fields.dest_port:3009 OR @fields.dst_p:3009) OR (("
+                          "@fields.dest_port:2005 OR @fields.dst_p:2005) OR ((@fields.dest_port:3388 OR "
+                          "@fields.dst_p:3388) OR ((@fields.dest_port:3004 OR @fields.dst_p:3004) OR (("
+                          "@fields.dest_port:2004 OR @fields.dst_p:2004) OR ((@fields.dest_port:3388 OR "
+                          "@fields.dst_p:3388) OR ((@fields.dest_port:3001 OR @fields.dst_p:3001) OR (("
+                          "@fields.dest_port:2001 OR @fields.dst_p:2001) OR (@fields.dest_port:3389 OR "
+                          "@fields.dst_p:3389))))))))))))))))))))))) AND (@fields.epochdate :>1664660518.0 AND "
+                          "@fields.epochdate :<1671489718.0)",
+                "fields": [],
+                "timeframe": "custom",
+                "time": {
+                    "from": "2022-10-01T21:41:58.000000Z",
+                    "to": "2022-12-19T22:41:58.000000Z"
+                },
+                "size": 10000
+            }
+        ]
+
+        expected_query = _remove_timestamp_from_query(expected_query)
+        self._test_query_assertions(actual_query, expected_query)
+
+    def test_split_query_contains_and(self):
+        stix_pattern = "[(network-traffic:dst_port=3389 OR network-traffic:dst_port=2001 OR " \
+                       "network-traffic:dst_port=3001 OR network-traffic:dst_port=3388 OR " \
+                       "network-traffic:dst_port=2004 OR network-traffic:dst_port=3004 OR " \
+                       "network-traffic:dst_port=3388 OR network-traffic:dst_port=2005 OR " \
+                       "network-traffic:dst_port=3009 OR network-traffic:dst_port=3389 OR " \
+                       "network-traffic:dst_port=2001 OR network-traffic:dst_port=3002 OR " \
+                       "network-traffic:dst_port=3389 OR network-traffic:dst_port=2003 OR " \
+                       "network-traffic:dst_port=3006 OR network-traffic:dst_port=3389 OR " \
+                       "network-traffic:dst_port=2000 OR network-traffic:dst_port=3004 OR " \
+                       "network-traffic:dst_port=3381 OR network-traffic:dst_port=2008 OR " \
+                       "network-traffic:dst_port=3000 OR network-traffic:dst_port=3389 OR " \
+                       "network-traffic:dst_port=2000) AND (file:hashes.'SHA-256' = " \
+                       "'70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b' OR file:hashes.'SHA-256' = " \
+                       "'90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff' OR file:hashes.'SHA-256' = " \
+                       "'b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b' OR file:hashes.'SHA-256' = " \
+                       "'70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb' OR file:hashes.'SHA-256' = " \
+                       "'bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7' OR file:hashes.'SHA-256' = " \
+                       "'237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6' OR file:hashes.'SHA-256' = " \
+                       "'b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105' OR file:hashes.'SHA-256' = " \
+                       "'9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa' OR file:hashes.'SHA-256' = " \
+                       "'70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb' OR file:hashes.'SHA-256' = " \
+                       "'bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7' OR file:hashes.'SHA-256' = " \
+                       "'237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6' OR file:hashes.'SHA-256' = " \
+                       "'b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105' OR file:hashes.'SHA-256' = " \
+                       "'9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa' OR file:hashes.'SHA-256' = " \
+                       "'237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6' OR file:hashes.'SHA-256' = " \
+                       "'b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105' OR file:hashes.'SHA-256' = " \
+                       "'9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa' OR file:hashes.'SHA-256' = " \
+                       "'70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb' OR file:hashes.'SHA-256' = " \
+                       "'bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7')] START " \
+                       "t'2022-10-01T21:41:58.000Z' STOP t'2022-12-19T22:41:58.000Z' "
+        actual_query = translation.translate('darktrace', 'query', '{}', stix_pattern)
+        actual_query['queries'] = _remove_timestamp_from_query(actual_query['queries'])
+        expected_query = [
+            {
+                "search": "((((@fields.sha256_file_hash"
+                          ":\"bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7\" OR "
+                          "@fields.sha256:\"bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb\" OR "
+                          "@fields.sha256:\"70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa\" OR "
+                          "@fields.sha256:\"9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105\" OR "
+                          "@fields.sha256:\"b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6\" OR "
+                          "@fields.sha256:\"237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa\" OR "
+                          "@fields.sha256:\"9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105\" OR "
+                          "@fields.sha256:\"b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6\" OR "
+                          "@fields.sha256:\"237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7\" OR "
+                          "@fields.sha256:\"bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb\" OR "
+                          "@fields.sha256:\"70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa\" OR "
+                          "@fields.sha256:\"9cd41ee1fa8156e1ff393ee969da8f14d6c5768d951bea57ac3be444df3416fa\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105\" OR "
+                          "@fields.sha256:\"b81edcbf1a0b56d0f401dcfe4a6ae4d293663b42f120e60579353b6aa86bb105\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6\" OR "
+                          "@fields.sha256:\"237364314fcd23e9fe153a7233564d337b3f8f4357ce10fed75e21d8546a33b6\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7\" OR "
+                          "@fields.sha256:\"bf09447beddf7dacb84c8d44ce2e9cd6fd89237059ce82cb4bea70439ee1acd7\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb\" OR "
+                          "@fields.sha256:\"70370930eb70c6e6c3c13879251ebff88060a1d129cd2d30c0cf940896b27bcb\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b\" OR "
+                          "@fields.sha256:\"b950de924595b49bc861cae1ddd2b05f0e2f5ba1bae6c10b2a0ff27a30557e5b\") OR (("
+                          "@fields.sha256_file_hash"
+                          ":\"90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff\" OR "
+                          "@fields.sha256:\"90470fb5d16be01e8d2bc54488cebfc9ac0ea704c20068b17c1e7199c161efff\") OR ("
+                          "@fields.sha256_file_hash"
+                          ":\"70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b\" OR "
+                          "@fields.sha256:\"70ae98e4f3aa5f4518d62a1b4eb631728bd7a167d8f3ca42f0dba0ae8e41786b"
+                          "\")))))))))))))))))) AND ((@fields.dest_port:2000 OR @fields.dst_p:2000) OR (("
+                          "@fields.dest_port:3389 OR @fields.dst_p:3389) OR ((@fields.dest_port:3000 OR "
+                          "@fields.dst_p:3000) OR ((@fields.dest_port:2008 OR @fields.dst_p:2008) OR (("
+                          "@fields.dest_port:3381 OR @fields.dst_p:3381) OR ((@fields.dest_port:3004 OR "
+                          "@fields.dst_p:3004) OR ((@fields.dest_port:2000 OR @fields.dst_p:2000) OR (("
+                          "@fields.dest_port:3389 OR @fields.dst_p:3389) OR ((@fields.dest_port:3006 OR "
+                          "@fields.dst_p:3006) OR ((@fields.dest_port:2003 OR @fields.dst_p:2003) OR (("
+                          "@fields.dest_port:3389 OR @fields.dst_p:3389) OR ((@fields.dest_port:3002 OR "
+                          "@fields.dst_p:3002) OR ((@fields.dest_port:2001 OR @fields.dst_p:2001) OR (("
+                          "@fields.dest_port:3389 OR @fields.dst_p:3389) OR ((@fields.dest_port:3009 OR "
+                          "@fields.dst_p:3009) OR ((@fields.dest_port:2005 OR @fields.dst_p:2005) OR (("
+                          "@fields.dest_port:3388 OR @fields.dst_p:3388) OR ((@fields.dest_port:3004 OR "
+                          "@fields.dst_p:3004) OR ((@fields.dest_port:2004 OR @fields.dst_p:2004) OR (("
+                          "@fields.dest_port:3388 OR @fields.dst_p:3388) OR ((@fields.dest_port:3001 OR "
+                          "@fields.dst_p:3001) OR ((@fields.dest_port:2001 OR @fields.dst_p:2001) OR ("
+                          "@fields.dest_port:3389 OR @fields.dst_p:3389)))))))))))))))))))))))) AND ("
+                          "@fields.epochdate :>1664660518.0 AND @fields.epochdate :<1671489718.0))",
+                "fields": [],
+                "timeframe": "custom",
+                "time": {
+                    "from": "2022-10-01T21:41:58.000000Z",
+                    "to": "2022-12-19T22:41:58.000000Z"
+                },
+                "size": 10000
+            }
+        ]
+
+        expected_query = _remove_timestamp_from_query(expected_query)
+        self._test_query_assertions(actual_query, expected_query)
