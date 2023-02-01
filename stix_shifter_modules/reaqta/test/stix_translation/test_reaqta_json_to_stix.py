@@ -432,13 +432,13 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         proc_obj = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'process')
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'extensions', 'id', 'spec_version', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line', 'x_unique_id'})
+        assert(proc_obj.keys() == {'type', 'extensions', 'id', 'spec_version', 'image_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line', 'x_unique_id'})
         
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref.object_id in observed_data['object_refs']), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
         
-        binary_ref = proc_obj['binary_ref']
-        assert(binary_ref.object_id in observed_data['object_refs']), f"binary_ref with key {proc_obj['binary_ref']} not found"
+        image_ref = proc_obj['image_ref']
+        assert(image_ref.object_id in observed_data['object_refs']), f"image_ref with key {proc_obj['image_ref']} not found"
         
         parent_ref = proc_obj['parent_ref']
         assert(parent_ref.object_id in observed_data['object_refs']), f"parent_ref with key {proc_obj['parent_ref']} not found"
