@@ -21,6 +21,7 @@ class APIClient:
                                     url_modifier_function=url_modifier_function
                                     )
         self.timeout = connection['options'].get('timeout')
+        self.host = 'https://'+connection.get('host')+':'+str(connection.get('port'))+'/'
 
     async def ping_box(self):
         """
@@ -50,9 +51,11 @@ class APIClient:
         :return: str, cookie id
         """
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
-        response_wrapper = await self.client.call_api(self.LOGIN_ENDPOINT, 'POST', headers=headers, data=self.auth)
-
-        return response_wrapper.response.cookies
+        url = self.host + self.LOGIN_ENDPOINT
+        response = await self.client.call_api(self.LOGIN_ENDPOINT, 'POST', headers=headers, data=self.auth)
+        cookie = response.get_cookies(url)
+        cookie = str(cookie).replace('Set-Cookie: ', '')
+        return cookie
 
     async def session_log_out(self, response_wrapper):
         """
@@ -60,6 +63,6 @@ class APIClient:
         :return: response object
         """
         headers = {}
-        cookie_dict = response_wrapper.response.cookies
+        cookie_dict = response_wrapper.response.request_info.headers.get('Cookie')
         headers["Cookie"] = cookie_dict
         return await self.client.call_api(self.LOGOFF_ENDPOINT, 'GET', headers=headers)
