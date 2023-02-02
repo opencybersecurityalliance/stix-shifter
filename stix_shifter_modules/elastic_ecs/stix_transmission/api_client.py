@@ -31,11 +31,14 @@ class APIClient():
 
         if auth:
             if 'username' in auth and 'password' in auth:
-                headers['Authorization'] = b"Basic " + base64.b64encode(
-                    (auth['username'] + ':' + auth['password']).encode('ascii'))
+                token_decoded = auth['username'] + ':' + auth['password']
+                token = base64.b64encode(token_decoded.encode('ascii'))
+                headers['Authorization'] = "Basic %s" % token.decode('ascii')
+
             elif 'api_key' in auth and 'id' in auth:
-                headers['Authorization'] = b"ApiKey " + base64.b64encode(
-                    (auth['id'] + ':' + auth['api_key']).encode('ascii'))
+                token_decoded = auth['id'] + ':' + auth['api_key']
+                token = base64.b64encode(token_decoded.encode('ascii'))
+                headers['Authorization'] = "ApiKey %s" % token.decode('ascii')
             elif 'access_token' in auth:
                 headers['Authorization'] = "Bearer " + auth['access_token']
 
