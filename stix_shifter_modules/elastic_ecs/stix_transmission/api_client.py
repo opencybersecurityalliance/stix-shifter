@@ -136,9 +136,7 @@ class APIClient():
 
         if not (lastsortvalue is None):
             extra_data = {
-                "search_after": [
-                    lastsortvalue
-                ]
+                "search_after": lastsortvalue
             }
             data.update(extra_data)
 

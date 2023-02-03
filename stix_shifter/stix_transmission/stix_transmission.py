@@ -80,6 +80,15 @@ class StixTransmission:
             ErrorResponder.fill_error(return_obj, error=ex, connector=self.connector)
             return return_obj
 
+    def get_pagesize(self):
+        try:
+            return self.entry_point.get_pagesize()
+        except Exception as ex:
+            max_result_window = None
+            ErrorResponder.fill_error(max_result_window, error=ex, connector=self.connector)
+            return max_result_window
+
+
     def delete(self, search_id):
         # Sends a request to the correct datasource, asking to terminate a specific query
         try:

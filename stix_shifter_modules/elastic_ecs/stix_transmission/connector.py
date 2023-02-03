@@ -16,7 +16,7 @@ class Connector(BaseSyncConnector):
         self.connector = __name__.split('.')[1]
         self.max_result_window = 10000
         # extract the max_result_window from elasticsearch
-        self.settings_connection()
+        self.get_pagesize()
 
     def _handle_errors(self, response, return_obj):
         response_code = response.code
@@ -49,7 +49,7 @@ class Connector(BaseSyncConnector):
             else:
                 raise e
 
-    def settings_connection(self):
+    def get_pagesize(self):
         response_txt = None
         return_obj = dict()
         try:
@@ -66,6 +66,7 @@ class Connector(BaseSyncConnector):
                     ErrorResponder.fill_error(max_result_windows, message='inconsistent max_result_window settings', connector=self.connector)
                     self.logger.error('inconsistent max_result_window settings: ' + str(max_result_windows))
                 self.max_result_window = int(max_result_windows.pop())
+                return self.max_result_window
         except Exception as e:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
@@ -78,14 +79,10 @@ class Connector(BaseSyncConnector):
         return_obj = dict()
 
         try:
-            # offset with -1 to indicate using search after API in ElasticSearch
-            if offset == -1:
-                # pass the last searched value in metadata argument
-                response = self.api_client.search_pagination(query, metadata, min(length, self.max_result_window))
-                return_obj = self._handle_errors(response, return_obj)
-            else:
-                response = self.api_client.run_search(query, offset, length)
-                return_obj = self._handle_errors(response, return_obj)
+            # using search after API in ElasticSearch
+            # pass the last searched value in metadata argument, ignore offset argument
+            response = self.api_client.search_pagination(query, metadata, min(length, self.max_result_window))
+            return_obj = self._handle_errors(response, return_obj)
 
             if (return_obj['success']):
                 response_json = json.loads(return_obj["data"])
