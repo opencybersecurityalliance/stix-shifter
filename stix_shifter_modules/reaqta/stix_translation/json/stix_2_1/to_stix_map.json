@@ -127,7 +127,7 @@
             "object": "file"
           },
           {
-            "key": "process.binary_ref",
+            "key": "process.image_ref",
             "object": "process",
             "references": "file"
           },
@@ -288,7 +288,7 @@
               "object": "accessorProcess_file"
             },
             {
-              "key": "process.binary_ref",
+              "key": "process.image_ref",
               "object": "accessorProcess_process",
               "references": "accessorProcess_file"
             },
@@ -456,7 +456,7 @@
               "object": "allocatorProc_file"
             },
             {
-              "key": "process.binary_ref",
+              "key": "process.image_ref",
               "object": "allocatorProc_process",
               "references": "allocatorProc_file"
             },
@@ -658,7 +658,7 @@
               "object": "childProcess_file"
             },
             {
-              "key": "process.binary_ref",
+              "key": "process.image_ref",
               "object": "childProcess_process",
               "references": "childProcess_file"
             },
@@ -919,7 +919,7 @@
               "object": "engineProcess_file"
             },
             {
-              "key": "process.binary_ref",
+              "key": "process.image_ref",
               "object": "engineProcess_process",
               "references": "engineProcess_file"
             },
@@ -1024,7 +1024,7 @@
           "object": "etw_file"
         },
         {
-          "key": "process.binary_ref",
+          "key": "process.image_ref",
           "object": "process_etw",
           "references": "etw_file"
         },
@@ -1143,7 +1143,7 @@
           "object": "etw_file"
         },
         {
-          "key": "process.binary_ref",
+          "key": "process.image_ref",
           "object": "process_etw",
           "references": "etw_file"
         },
@@ -1219,7 +1219,7 @@
           "object": "etw_file"
         },
         {
-          "key": "process.binary_ref",
+          "key": "process.image_ref",
           "object": "process_etw",
           "references": "etw_file"
         },
@@ -1726,7 +1726,7 @@
               "object": "serviceProcess_file"
             },
             {
-              "key": "process.binary_ref",
+              "key": "process.image_ref",
               "object": "serviceProcess_process",
               "references": "serviceProcess_file"
             },
@@ -1914,7 +1914,7 @@
               "object": "targetProcess_file"
             },
             {
-              "key": "process.binary_ref",
+              "key": "process.image_ref",
               "object": "targetProcess_process",
               "references": "targetProcess_file"
             },

@@ -82,6 +82,8 @@ class Connector(BaseJsonSyncConnector):
 
             response_dict = json.loads(response_str)
 
+            response_dict = json.loads(response_wrapper.read().decode('utf-8'))
+
             if response_dict.get('error'):
                 raise InvalidArguments(response_dict['error'])
 
