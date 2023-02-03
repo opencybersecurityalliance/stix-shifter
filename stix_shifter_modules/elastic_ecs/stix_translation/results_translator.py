@@ -1,5 +1,6 @@
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 from os import path
+import json
 
 
 class ResultTranslator(JSONToStix):
@@ -24,13 +25,7 @@ class ResultTranslator(JSONToStix):
                 event = result['event']
                 if event.get('original'):
                     result['event']['mime_type_event'] = 'text/plain'
-        
-        results = super().translate_results(data_source, data)
 
-        if len(results['objects']) - 1 == len(data):
-            for i in range(1, len(results['objects'])):
-                results['objects'][i]['number_observed'] = 1
-        else:
-            raise RuntimeError("Incorrect number of result objects after translation. Found: {}, expected: {}.".format(len(results['objects']) - 1, len(data)))
+        results = super().translate_results(data_source, data)
 
         return results

@@ -88,7 +88,6 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['connector'] is not None
         assert ping_response['code'] is not None
 
-
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.create_search')
     def test_process_query(self, mock_create_search):
@@ -135,7 +134,6 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response['connector'] is not None
         assert query_response['code'] is not None
 
-
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.create_search')
     def test_search_query_limiterror(self, mock_create_search):
@@ -160,7 +158,6 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response['connector'] is not None
         assert query_response['code'] is not None
 
-
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.create_search')
     def test_search_authentication_error(self, mock_create_search):
@@ -183,7 +180,6 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response['error'] is not None
         assert query_response['connector'] is not None
         assert query_response['code'] is not None
-
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.create_search')
@@ -533,7 +529,6 @@ class TestSentineloneConnection(unittest.TestCase):
         assert results_response['connector'] is not None
         assert results_response['code'] is not None
 
-
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_results')
     def test_result_query_id_notfound_error(self, mock_results_response):
@@ -555,7 +550,6 @@ class TestSentineloneConnection(unittest.TestCase):
         assert results_response['error'] is not None
         assert results_response['connector'] is not None
         assert results_response['code'] is not None
-
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_results')
@@ -579,7 +573,6 @@ class TestSentineloneConnection(unittest.TestCase):
         assert results_response['error'] is not None
         assert results_response['connector'] is not None
         assert results_response['code'] is not None
-
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_results')
@@ -926,7 +919,6 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response['error'] is not None
         assert query_response['connector'] is not None
         assert query_response['code'] is not None
-
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_results')
@@ -1309,7 +1301,6 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['connector'] is not None
         assert ping_response['code'] is not None
 
-
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_status')
     def test_search_status_error(self, mock_status_response):
@@ -1330,7 +1321,6 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['connector'] is not None
         assert ping_response['code'] is not None
 
-
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_status')
     def test_search_status_auth_error(self, mock_status_response):
@@ -1350,7 +1340,6 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['error'] is not None
         assert ping_response['connector'] is not None
         assert ping_response['code'] is not None
-
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.delete_search')
@@ -1403,7 +1392,6 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['error'] is not None
         assert ping_response['connector'] is not None
         assert ping_response['code'] is not None
-
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_status')

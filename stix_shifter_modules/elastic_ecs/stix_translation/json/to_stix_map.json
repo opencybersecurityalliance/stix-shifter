@@ -637,8 +637,7 @@
     },
     "category": {
       "key": "x-oca-event.category",
-      "object": "event",
-      "transformer": "ValueToList"
+      "object": "event"
     },
     "code": {
       "key": "x-oca-event.code",
