@@ -326,7 +326,7 @@ class TestPaloaltoResultsToStix(unittest.TestCase):
         custom_process_obj = TestPaloaltoResultsToStix.get_first_of_type(objects.values(), 'process')
         assert custom_process_obj is not None
         assert custom_process_obj['type'] == 'process'
-        assert custom_process_obj['extensions']['x-paloalto-process']['instance_id'] == "AdgAsdUgVlUAAAbYAAAAAA=="
+        assert custom_process_obj['x_unique_id'] == 'AdgAsdUgVlUAAAbYAAAAAA=='
         assert custom_process_obj['extensions']['x-paloalto-process']['signature_vendor'] == "Microsoft Corporation"
         assert custom_process_obj['extensions']['x-paloalto-process']['signature_status'] == "SIGNED"
         assert custom_process_obj['extensions']['x-paloalto-process']['execution_time'] == "2022-01-04T07:10:55.000Z"
