@@ -119,7 +119,7 @@ class Connector(BaseJsonSyncConnector):
                 if response.response.history[0].status == 302:  # will be returned with 302 status code.
                     raise InvalidAuthenticationException
             response_code = response.code
-            response_dict = json.loads(response.content)
+            response_dict = json.loads(response.read().decode('utf-8'))
             if response_code == 200 and response_dict['status'] == 'SUCCESS':
                 return_obj['success'] = True
         except InvalidAuthenticationException:
