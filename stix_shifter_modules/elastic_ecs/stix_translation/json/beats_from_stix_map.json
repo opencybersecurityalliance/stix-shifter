@@ -108,55 +108,38 @@
       "group_name": ["user.group.name"]
     }
   },
+  "x-oca-thread" :{
+    "process_ref": ["process.pid"],
+    "id": ["process.thread.id"],
+    "name": ["process.thread.name.keyword"]
+  },
   "process" : {
     "fields": {
       "command_line": ["process.command_line.keyword", "powershell.command.value"],
       "created": ["process.start"],
+      "cwd": ["process.working_directory.keyword"],
       "pid": ["process.pid", "process.ppid", "process.parent.pid", "process.parent.ppid"],
       "name": ["process.name.keyword", "process.parent.name.keyword"],
       "creator_user_ref.user_id": ["user.name.keyword"],
       "parent_ref.pid": ["process.ppid", "process.parent.ppid"],
       "parent_ref.name": ["process.parent.name.keyword"],
+      "parent_ref.exit_code": ["process.parent.exit_code"],
+      "parent_ref.pgid": ["process.parent.pgid"],
+      "parent_ref.title": ["process.parent.title.keyword"],
+      "parent_ref.thread.id": ["process.parent.thread.id"],
+      "parent_ref.thread.name": ["process.parent.thread.name.keyword"],
+      "parent_ref.uptime": ["process.parent.uptime"],
+      "parent_ref.cwd": ["process.parent.working_directory"],
       "binary_ref.name": ["process.executable.keyword", "process.parent.executable.keyword"],
+      "extensions": {
+        "windows-process-ext": {
+          "window_title": ["process.title"]
+        }
+      },
+      "x_exit_code": ["process.exit_code"],
       "x_ttp_tags": ["tags"],
-      "x_unique_id": ["process.entity_id.keyword", "process.parent.entity_id.keyword"]
-    }
-  },
-  "x-ecs-process": {
-    "fields": {
-      "args": ["process.args.keyword"],
-      "args_count": ["process.args_count"],
-      "executable": ["process.executable.keyword"],
-      "exit_code": ["process.exit_code"],
-      "thread.id": ["process.thread.id"],
-      "thread.name": ["process.thread.name"],
-      "title": ["process.title.keyword"],
-      "uptime": ["process.uptime"],
-      "working_directory": ["process.working_directory.keyword"],
-      "parent.args": ["process.parent.args.keyword"],
-      "parent.args_count": ["process.parent.args_count"],
-      "parent.exit_code": ["process.parent.exit_code"],
-      "parent.pgid": ["process.parent.pgid"],
-      "parent.thread.id": ["process.parent.thread.id"],
-      "parent.thread.name": ["process.parent.thread.name"],
-      "parent.title": ["process.parent.title"],
-      "parent.uptime": ["process.parent.uptime"],
-      "parent.working_directory": ["process.parent.working_directory"],
-      "pe.company": ["process.pe.company.keyword"],
-      "pe.description": ["process.pe.description.keyword"],
-      "pe.file_version": ["process.pe.file_version.keyword"],
-      "pe.original_file_name": ["process.pe.original_file_name.keyword"],
-      "pe.product": ["process.pe.product.keyword"],
-      "code_signature.exists": ["process.code_signature.exists"],
-      "code_signature.status": ["process.code_signature.status"],
-      "code_signature.subject_name": ["process.code_signature.subject_name"],
-      "code_signature.trusted": ["process.code_signature.trusted"],
-      "code_signature.valid": ["process.code_signature.valid"],
-      "parent.code_signature.exists": ["process.parent.code_signature.exists"],
-      "parent.code_signature.status": ["process.parent.code_signature.status"],
-      "parent.code_signature.subject_name": ["process.parent.code_signature.subject_name"],
-      "parent.code_signature.trusted": ["process.parent.code_signature.trusted"],
-      "parent.code_signature.valid": ["process.parent.code_signature.valid"]
+      "x_unique_id": ["process.entity_id.keyword", "process.parent.entity_id.keyword"],
+      "x_uptime": ["process.uptime"]
     }
   },
   "url": {
