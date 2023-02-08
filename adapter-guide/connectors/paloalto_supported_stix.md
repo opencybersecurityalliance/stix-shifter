@@ -42,6 +42,7 @@
 | **process**:created | action_process_file_create_time, actor_process_file_create_time, causality_actor_process_file_create_time, os_actor_process_file_create_time |
 | **process**:name | action_process_image_name, actor_process_image_name, causality_actor_process_image_name, os_actor_process_image_name |
 | **process**:pid | action_module_process_os_pid, action_process_os_pid, actor_process_os_pid, causality_actor_process_os_pid, os_actor_process_os_pid, action_process_requested_parent_pid, action_thread_parent_pid, action_thread_child_pid |
+| **process**:x_unique_id | actor_process_instance_id |
 | **process**:parent_ref.pid | action_process_requested_parent_pid, action_thread_parent_pid |
 | **process**:child_refs.pid | action_thread_child_pid |
 | **process**:creator_user_ref.user_id | action_process_username |
@@ -217,8 +218,8 @@
 | process | parent_ref | action_thread_parent_pid |
 | process | pid | action_thread_child_pid |
 | process | child_refs | action_thread_child_pid |
+| process | x_unique_id | actor_process_instance_id |
 | process | creator_user_ref | action_process_username |
-| process | extensions.x-paloalto-process.instance_id | actor_process_instance_id |
 | process | extensions.x-paloalto-process.causality_id | actor_process_causality_id |
 | process | extensions.x-paloalto-process.auth_id | actor_process_auth_id |
 | process | extensions.x-paloalto-process.container_id | actor_process_container_id |
