@@ -782,16 +782,6 @@
         "references": "process"
       }
     ],
-    "code_signature": {
-      "exists": {
-        "key": "x-ecs-process.code_signature_exists",
-        "object": "x_process"
-      },
-      "subject_name": {
-        "key": "x-ecs-process.code_signature_subject_name",
-        "object": "x_process"
-      }
-    },
     "ppid": [
       {
         "key": "process.pid",
@@ -804,36 +794,6 @@
         "references": "process_parent"
       }
     ],
-    "pe": {
-      "company": {
-        "key": "x-ecs-process.pe_company",
-        "object": "x_process"
-      },
-      "description": {
-        "key": "x-ecs-process.pe_description",
-        "object": "x_process"
-      },
-      "file_version": {
-        "key": "x-ecs-process.pe_file_version",
-        "object": "x_process"
-      },
-      "original_file_name": {
-        "key": "x-ecs-process.pe_original_file_name",
-        "object": "x_process"
-      },
-      "product": {
-        "key": "x-ecs-process.pe_product",
-        "object": "x_process"
-      }
-    },
-    "args": {
-      "key": "x-ecs-process.args",
-      "object": "x_process"
-    },
-    "args_count": {
-      "key": "x-ecs-process.args_count",
-      "object": "x_process"
-    },
     "command_line": {
       "key": "process.command_line",
       "object": "process"
@@ -870,18 +830,10 @@
       "object": "process"
     },
     "exit_code": {
-      "key": "x-ecs-process.exit_code",
-      "object": "x_process"
+      "key": "process.x_exit_code",
+      "object": "process"
     },
     "parent": {
-      "args": {
-        "key": "x-ecs-process.parent_args",
-        "object": "x_process"
-      },
-      "args_count": {
-        "key": "x-ecs-process.parent_args_count",
-        "object": "x_process"
-      },
       "command_line": {
         "key": "process.command_line",
         "object": "process_parent"
@@ -891,8 +843,8 @@
         "object": "process_parent"
       },
       "exit_code": {
-        "key": "x-ecs-process.parent_exit_code",
-        "object": "x_process"
+        "key": "process.parent_exit_code",
+        "object": "process"
       },
       "name": [
         {
@@ -911,8 +863,8 @@
         }
       ],
       "pgid": {
-        "key": "x-ecs-process.parent_pgid",
-        "object": "x_process"
+        "key": "process.parent_ref.pgid",
+        "object": "process"
       },
       "pid": [
         {
@@ -932,8 +884,8 @@
         }
       ],
       "ppid": {
-        "key": "x-ecs-process.parent_ppid",
-        "object": "x_process",
+        "key": "process.parent_ref.ppid",
+        "object": "process",
         "transformer": "ToInteger"
       },
       "start": {
@@ -942,25 +894,25 @@
       },
       "thread": {
         "id": {
-          "key": "x-ecs-process.parent_thread_id",
-          "object": "x_process"
+          "key": "process.parent_ref.thread.id",
+          "object": "process"
         },
         "name": {
-          "key": "x-ecs-process.parent_thread_name",
-          "object": "x_process"
+          "key": "process.parent_ref.thread.name",
+          "object": "process"
         }
       },
       "title": {
-        "key": "x-ecs-process.parent_title",
-        "object": "x_process"
+        "key": "process.parent_ref.title",
+        "object": "process"
       },
       "uptime": {
-        "key": "x-ecs-process.parent_uptime",
-        "object": "x_process"
+        "key": "process.parent_ref.uptime",
+        "object": "process"
       },
       "working_directory": {
-        "key": "x-ecs-process.parent_working_directory",
-        "object": "x_process"
+        "key": "process.parent_ref.cwd",
+        "object": "process"
       },
       "executable": [
         {
@@ -991,30 +943,30 @@
       ]
     },
     "pgid": {
-      "key": "x-ecs-process.exit_code",
-      "object": "x_process"
+      "key": "process.x_exit_code",
+      "object": "process"
     },
     "thread": {
       "id": {
-        "key": "x-ecs-process.thread_id",
+        "key": "x-oca-thread.id",
         "object": "x_process"
       },
       "name": {
-        "key": "x-ecs-process.thread_name",
+        "key": "x-oca-thread.name",
         "object": "x_process"
       }
     },
     "title": {
-      "key": "x-ecs-process.title",
-      "object": "x_process"
+      "key": "process.windows-process-ext.window_title",
+      "object": "process"
     },
     "uptime": {
-      "key": "x-ecs-process.uptime",
-      "object": "x_process"
+      "key": "process.x_uptime",
+      "object": "process"
     },
-    "working_directory": {
-      "key": "x-ecs-process.working_directory",
-      "object": "x_process"
+    "cwd": {
+      "key": "process.cwd",
+      "object": "process"
     }
   },
   "user": {
