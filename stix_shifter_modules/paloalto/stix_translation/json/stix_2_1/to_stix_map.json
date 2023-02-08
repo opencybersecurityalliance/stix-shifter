@@ -834,10 +834,6 @@
       "key": "file.extensions.x-paloalto-file-ext.control_verdict",
       "object": "file"
     },
-    "actor_process_instance_id": {
-      "key": "process.extensions.x-paloalto-process-ext.instance_id",
-      "object": "process_actor"
-    },
     "actor_process_causality_id": {
       "key": "process.extensions.x-paloalto-process-ext.causality_id",
       "object": "process_actor"
@@ -1059,6 +1055,17 @@
     "action_external_hostname": {
       "key": "network-traffic.extensions.x-paloalto-network-ext.external_hostname",
       "object": "nt"
-    }
+    },
+    "actor_process_instance_id": [
+      {
+        "key": "process.x_unique_id",
+        "object": "process_actor"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process_actor"
+      }
+    ]
   }
 }
