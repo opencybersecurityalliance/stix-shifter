@@ -102,7 +102,7 @@
       "extensions.'x-reaqta-etw'.etw_failure_reason": ["__etwFailureReason"],
       "extensions.'x-reaqta-etw'.etw_home_directory": ["__etwHomeDirectory"],
       "file_ref.name": ["path"],
-      "host_ref.x-oca-asset.hostname": ["wmi.clientMachine"],
+      "host_ref.hostname": ["wmi.clientMachine"],
       "ip_refs[*].value": ["login.ip"],
       "network_ref.dst_ref.value": ["ip"],
       "network_ref.src_ref.value": ["ip"],
