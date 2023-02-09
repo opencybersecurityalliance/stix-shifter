@@ -108,11 +108,6 @@
       "group_name": ["user.group.name"]
     }
   },
-  "x-oca-thread" :{
-    "process_ref": ["process.pid"],
-    "id": ["process.thread.id"],
-    "name": ["process.thread.name.keyword"]
-  },
   "process" : {
     "fields": {
       "command_line": ["process.command_line.keyword", "powershell.command.value"],
@@ -126,8 +121,7 @@
       "parent_ref.exit_code": ["process.parent.exit_code"],
       "parent_ref.pgid": ["process.parent.pgid"],
       "parent_ref.title": ["process.parent.title.keyword"],
-      "parent_ref.thread.id": ["process.parent.thread.id"],
-      "parent_ref.thread.name": ["process.parent.thread.name.keyword"],
+      "parent_ref.thread_id": ["process.parent.thread.id"],
       "parent_ref.uptime": ["process.parent.uptime"],
       "parent_ref.cwd": ["process.parent.working_directory"],
       "binary_ref.name": ["process.executable.keyword", "process.parent.executable.keyword"],
@@ -137,6 +131,7 @@
         }
       },
       "x_exit_code": ["process.exit_code"],
+      "x_thread_id": ["process.thread.id"],
       "x_ttp_tags": ["tags"],
       "x_unique_id": ["process.entity_id.keyword", "process.parent.entity_id.keyword"],
       "x_uptime": ["process.uptime"]
