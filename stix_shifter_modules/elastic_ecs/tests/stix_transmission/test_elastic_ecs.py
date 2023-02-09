@@ -103,7 +103,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert 'search_id' in query_response
         assert query_response['search_id'] == query
 
-    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination',
            autospec=True)
     def test_results_response(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
@@ -136,7 +136,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
                                 "category": "network_traffic", 
                                 "dataset": "dns"
                             }
-                            }
+                            },
+                            "sort": [1555072867]
                         }
                     ]
                 }
@@ -166,6 +167,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert results_response['success']
         assert 'data' in results_response
         assert len(results_response['data']) > 0
+        assert len(results_response['lastsort']) >= 1
+
 
     @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
@@ -197,7 +200,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert results_response['success'] is False
 
 
-    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination',
            autospec=True)
     def test_query_flow(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
@@ -230,7 +233,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
                                 "category": "network_traffic", 
                                 "dataset": "dns"
                             }
-                            }
+                            },
+                            "sort": [1555072867]
                         }
                     ]
                 }
@@ -266,3 +270,4 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert results_response is not None
         assert 'data' in results_response
         assert len(results_response['data']) > 0
+        assert len(results_response['lastsort']) >= 1
