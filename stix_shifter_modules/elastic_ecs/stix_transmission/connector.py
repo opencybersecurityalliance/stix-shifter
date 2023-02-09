@@ -16,7 +16,10 @@ class Connector(BaseSyncConnector):
         self.connector = __name__.split('.')[1]
         self.max_result_window = 10000
         # extract the max_result_window from elasticsearch
-        self.get_pagesize()
+        try:
+            self.get_pagesize()
+        except Exception as e:
+            pass
 
     def _handle_errors(self, response, return_obj):
         response_code = response.code
