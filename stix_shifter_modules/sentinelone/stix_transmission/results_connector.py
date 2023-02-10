@@ -12,11 +12,15 @@ class LimitOutOfRangeError(Exception):
 class QueryIdNotFoundError(Exception):
     pass
 
+class AuthenticationError(Exception):
+    pass
+
 class ResultsConnector(BaseResultsConnector):
     """ResultsConnector class"""
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
     def create_results_connection(self, search_id, offset, length):
         """
@@ -57,8 +61,14 @@ class ResultsConnector(BaseResultsConnector):
                 response_code = response_dict.get("errors")[0].get("code")
                 if response_code == 4040010:
                     raise QueryIdNotFoundError
+            elif response_code == 401:
+                return_obj['success'] = False
+                response_code = response_dict.get("errors")[0].get("code")
+                if response_code == 4010010:
+                    raise AuthenticationError
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                          connector=self.connector)
 
             if response_dict.get("pagination"):
                 pagination_dict = response_dict.get("pagination")
@@ -94,24 +104,34 @@ class ResultsConnector(BaseResultsConnector):
                 if response_code == 4000010:
                     raise LimitOutOfRangeError
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                          connector=self.connector)
 
+        except AuthenticationError:
+            response_dict['type'] = "AuthenticationError"
+            response_dict['message'] = "Invalid apitoken"
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         except ConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         except LimitOutOfRangeError:
             response_dict['type'] = "LimitOutOfRangeError"
             response_dict['message'] = "Limit must be greater than or equals to 1 " \
                                        "and less than equals to 1000"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         except QueryIdNotFoundError:
             response_dict['type'] = "QueryIdNotFoundError"
             response_dict['message'] = "Could not find query id: " + search_id
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         except Exception as ex:
             self.logger.error('error in query result: %s', str(ex))
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         return return_obj
 
     @staticmethod

@@ -104,6 +104,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert ping_response['error'] is not None
+        assert ping_response['connector'] is not None
+        assert ping_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')
@@ -157,6 +159,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response is not None
         assert query_response['success'] is False
         assert query_response['error'] is not None
+        assert query_response['connector'] is not None
+        assert query_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')
@@ -184,6 +188,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response is not None
         assert query_response['success'] is False
         assert query_response['error'] is not None
+        assert query_response['connector'] is not None
+        assert query_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')
@@ -210,6 +216,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response is not None
         assert query_response['success'] is False
         assert query_response['error'] is not None
+        assert query_response['connector'] is not None
+        assert query_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')
@@ -572,6 +580,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert results_response is not None
         assert results_response['success'] is False
         assert results_response['error'] is not None
+        assert results_response['connector'] is not None
+        assert results_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')
@@ -596,6 +606,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert results_response is not None
         assert results_response['success'] is False
         assert results_response['error'] is not None
+        assert results_response['connector'] is not None
+        assert results_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')
@@ -621,6 +633,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert results_response is not None
         assert results_response['success'] is False
         assert results_response['error'] is not None
+        assert results_response['connector'] is not None
+        assert results_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')
@@ -976,6 +990,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response is not None
         assert query_response['success'] is False
         assert query_response['error'] is not None
+        assert query_response['connector'] is not None
+        assert query_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')
@@ -1305,6 +1321,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert results_response is not None
         assert results_response['success'] is False
         assert results_response['error'] is not None
+        assert results_response['connector'] is not None
+        assert results_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')
@@ -1371,6 +1389,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert ping_response['error'] is not None
+        assert ping_response['connector'] is not None
+        assert ping_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')
@@ -1393,6 +1413,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert ping_response['error'] is not None
+        assert ping_response['connector'] is not None
+        assert ping_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')
@@ -1415,6 +1437,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert ping_response['error'] is not None
+        assert ping_response['connector'] is not None
+        assert ping_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')
@@ -1474,6 +1498,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert ping_response['error'] is not None
+        assert ping_response['connector'] is not None
+        assert ping_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.__init__')
@@ -1506,6 +1532,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert "Invalid Host" in ping_response['error']
+        assert ping_response['connector'] is not None
+        assert ping_response['code'] is not None
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_invalid_host_status(self, mock_ping):
@@ -1517,6 +1545,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert "Invalid Host" in ping_response['error']
+        assert ping_response['connector'] is not None
+        assert ping_response['code'] is not None
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_invalid_host_query(self, mock_create_search):
@@ -1538,6 +1568,8 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response is not None
         assert query_response['success'] is False
         assert "Invalid Host" in query_response['error']
+        assert query_response['connector'] is not None
+        assert query_response['code'] is not None
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_invalid_host_result(self, mock_result):
@@ -1557,3 +1589,5 @@ class TestSentineloneConnection(unittest.TestCase):
         assert results_response is not None
         assert results_response['success'] is False
         assert "Invalid Host" in results_response['error']
+        assert results_response['connector'] is not None
+        assert results_response['code'] is not None

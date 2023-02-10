@@ -1,0 +1,256 @@
+{
+  "DB User": [
+    {
+      "key": "user-account.user_id",
+      "object":"account" 
+    },
+    {
+      "key": "x-ibm-finding.src_database_user_ref",
+      "object": "finding",
+      "references": "account"
+    }
+   ]
+  ,
+ "db_user": [
+    {
+      "key": "user-account.user_id",
+      "object":"account" 
+    },
+    {
+      "key": "x-ibm-finding.src_database_user_ref",
+      "object": "finding",
+      "references": "account"
+    }
+   ]
+  ,
+ "OSUser": [
+    {
+      "key": "user-account.display_name",
+      "object":"account"
+    },
+    {
+      "key": "x-ibm-finding.src_os_user_ref",
+      "object": "account",
+      "references": "user_id"
+    }
+   ],
+  "LogSourceId": {
+    "key": "x-guardium.log_source_id"
+  },
+  "Magnitude": {
+    "key": "x-guardium.magnitude"
+  },
+  "SourceIpV4": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    }
+  ],
+   "client_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip" 
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "x-ibm-finding.src_ip_ref",
+      "object": "finding", 
+      "references": "src_ip" 
+    }
+  ],
+ "server": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip" 
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "finding", 
+      "references": "dst_ip" 
+    }
+  ],
+ "Server IP": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip" 
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "finding", 
+      "references": "dst_ip" 
+    }
+  ],
+  "db_type":[
+	{
+	"key":"software.name",
+	"object":"software"
+	},
+	{
+	"key":"x-ibm-finding.dst_application_ref",
+	"object":"finding",
+	"references":"software"
+	}
+  ],
+ "Server Type":[
+	{
+	"key":"software.name",
+	"object":"software"
+	},
+	{
+	"key":"x-ibm-finding.dst_application_ref",
+	"object":"finding",
+	"references":"software"
+	}
+  ],
+  "source_program":[
+	{
+	"key":"software.name",
+	"object":"source_software"
+	},
+	{
+	"key":"x-ibm-finding.src_application_ref",
+	"object":"finding",
+	"references":"source_software"
+	}
+  ],
+  "EventCount": {
+    "key": "number_observed",
+    "cybox": false,
+    "transformer": "ToInteger"
+  },
+  "timestamp": [
+    {
+      "key": "first_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+     },
+    {
+      "key": "last_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    }
+  ],
+  "Create Date": [
+    {
+      "key": "first_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    }
+  ],
+  "Timestamp": [
+    {
+      "key": "last_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    }
+  ],
+  "Last updated": [
+    {
+      "key": "last_observed",
+      "transformer": "GuardiumToTimestamp",
+      "cybox": false
+    }
+  ],
+  "Url": {
+    "key": "url.value"
+  },
+  "FileName": {
+    "key": "file.name"
+  },
+  "Payload": {
+    "key": "artifact.payload_bin"
+  },
+  "DestinationPort": {
+    "key": "network-traffic.dst_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "SourcePort": {
+    "key": "network-traffic.src_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "NetworkProtocol": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "transformer": "ToLowercaseArray"
+  },
+  "DomainName": {
+    "key": "domain-name.value"
+  },
+  "Process": {
+    "Path": [
+      {
+        "object": "proc",
+        "key": "process.command_line"
+      }
+    ],
+    "Pid": [
+      {
+        "object": "proc",
+        "key": "process.pid"
+      }
+    ]
+  },
+  "violation":{
+	"key":"x-ibm-finding.name",
+        "object":"finding"
+  },
+ "Threat Category":{
+	"key":"x-ibm-finding.name",
+        "object":"finding"
+  },
+  "details":{
+	"key":"x-ibm-finding.details",
+        "object":"finding"
+  },
+ "database":{
+	"key":"x-ibm-finding.dst_device",
+        "object":"finding"
+  },
+ "Database":{
+	"key":"x-ibm-finding.dst_device",
+        "object":"finding"
+  },
+  "severity":[
+     {
+	"key":"x-guardium.severity",
+     "transformer": "GuardiumMapSeverity"},
+     {
+    "key":"x-ibm-finding.finding_type",
+	"object":"finding",
+    "transformer": "GuardiumQS"}
+  ],
+  "Severity":[
+     {
+	"key":"x-guardium.severity"},
+     {
+    "key":"x-ibm-finding.finding_type",
+    "object":"finding",
+    "transformer": "GuardiumRep"}
+  ],
+ "guardium_appliance":{
+	"key":"x-ibm-finding.source",
+	"object":"finding"
+  },
+  "Originating Unit":{
+	"key":"x-ibm-finding.source",
+	"object":"finding"
+  }
+}

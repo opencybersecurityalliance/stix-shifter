@@ -237,7 +237,14 @@ class TestStixToSpl(unittest.TestCase, object):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
         options = {"index": "my_index"}
         query = translation.translate('splunk', 'query', '{}', stix_pattern, options)
-        queries = f'search index=my_index ((src_ip = "192.168.122.83") OR (dest_ip = "192.168.122.83")) earliest="-5minutes" | head 10000 | fields {fields}'
+        queries = f'search index="my_index" ((src_ip = "192.168.122.83") OR (dest_ip = "192.168.122.83")) earliest="-5minutes" | head 10000 | fields {fields}'
+        _test_query_assertions(query, queries)
+
+    def test_custom_indices(self):
+        stix_pattern = "[ipv4-addr:value = '192.168.122.83']"
+        options = {"index": "i1, i2"}
+        query = translation.translate('splunk', 'query', '{}', stix_pattern, options)
+        queries = f'search index="i1" OR index="i2" ((src_ip = "192.168.122.83") OR (dest_ip = "192.168.122.83")) earliest="-5minutes" | head 10000 | fields {fields}'
         _test_query_assertions(query, queries)
 
     def test_custom_mapping(self):
