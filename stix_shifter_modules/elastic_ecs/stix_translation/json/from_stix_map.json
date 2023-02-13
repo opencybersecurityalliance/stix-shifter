@@ -119,7 +119,14 @@
       "parent_ref.thread_id": ["process.parent.thread.id"],
       "parent_ref.uptime": ["process.parent.uptime"],
       "parent_ref.cwd": ["process.parent.working_directory"],
+      "parent_ref.binary_ref.path": ["process.parent.executable"],
+      "parent_ref.binary_ref.parent_directory_ref.path": ["process.parent.executable"],
       "binary_ref.name": ["process.executable", "process.parent.executable"],
+      "binary_ref.parent_directory_ref.path": ["process.executable", "process.parent.executable"],
+      "binary_ref.hashes.MD5": ["process.hash.md5"],
+      "binary_ref.hashes.'SHA-1'": ["process.hash.sha1"],
+      "binary_ref.hashes.'SHA-256'": ["process.hash.sha256"],
+      "binary_ref.hashes.'SHA-512'": ["process.hash.sha512"],
       "extensions": {
         "windows-process-ext": {
           "window_title": ["process.title"]
