@@ -1425,7 +1425,7 @@
       "object": "file"
     },
     "ctime": {
-      "key": "file.x_ctime",
+      "key": "file.created",
       "object": "file"
     },
     "device": {
@@ -1461,7 +1461,7 @@
       "object": "file"
     },
     "mtime": {
-      "key": "file.x_mtime",
+      "key": "file.modified",
       "object": "file"
     },
     "owner": {
