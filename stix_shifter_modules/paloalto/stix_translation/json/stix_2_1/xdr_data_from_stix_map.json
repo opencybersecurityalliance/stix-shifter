@@ -158,6 +158,9 @@
         "actor_process_image_path",
         "causality_actor_process_image_path",
         "os_actor_process_image_path"
+      ],
+      "x_unique_id" : [
+        "actor_process_instance_id"
       ]
     }
   },
