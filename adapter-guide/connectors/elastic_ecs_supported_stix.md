@@ -3,7 +3,7 @@
 ### Supported STIX Operators
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | OR |
+| AND | AND |
 | OR | OR |
 | > | :> |
 | >= | :>= |
