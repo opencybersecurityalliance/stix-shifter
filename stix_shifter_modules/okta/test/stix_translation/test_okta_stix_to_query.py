@@ -15,7 +15,7 @@ def _remove_timestamp_from_query(queries):
 
 class TestQueryTranslator(unittest.TestCase):
     """
-    class to perform unit test case gcp_chronicle translate query
+    class to perform unit test case okta translate query
     """
     if __name__ == "__main__":
         unittest.main()
@@ -103,21 +103,24 @@ class TestQueryTranslator(unittest.TestCase):
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_user_account_matches_operator(self):
-        stix_pattern = "[user-account:user_id MATCHES '00u7rkrly9sNvp7sa5d7']"
+    def test_okta_target_equal_operator(self):
+        stix_pattern = "[x-okta-target:target_id MATCHES'0oa4oexp00i4BMrzJ5d7']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["filter=actor.id co \"00u7rkrly9sNvp7sa5d7\" "
-                   "&since=2023-02-07T05:11:43.416Z&until=2023-02-07T05:16:43.416Z"]
+        queries = ["filter=target.id co \"0oa4oexp00i4BMrzJ5d7\" &since=2023-02-13T10:50:41.269Z"
+                   "&until=2023-02-13T10:55:41.269Z"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_user_account_not_equal_operator(self):
-        stix_pattern = "[user-account:user_id NOT = '00u7rkrly9sNvp7sa5d7']"
+    def test_okta_software_MATCHES_operator(self):
+        stix_pattern = "[software:extensions.'x-okta-software'.raw_user_agent MATCHES 'Mozilla/5.0 (Windows NT 10.0; " \
+                       "Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) " \
+                       "Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.70']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["filter=not(actor.id eq \"00u7rkrly9sNvp7sa5d7\") "
-                   "&since=2023-02-07T05:10:39.941Z&until=2023-02-07T05:15:39.941Z"]
+        queries = ["filter=client.userAgent.rawUserAgent co \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                   "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.70\" "
+                   "&since=2023-02-13T11:02:45.831Z&until=2023-02-13T11:07:45.831Z"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -131,44 +134,38 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_x_okta_client_query(self):
-        stix_pattern = "[x-okta-client:raw_user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) " \
-                       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36']"
+        stix_pattern = "[x-okta-client:geolocation_postalcode= 600001]"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["filter=client.userAgent.rawUserAgent eq \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                   "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36\" "
-                   "&since=2023-02-07T05:08:16.173Z&until=2023-02-07T05:13:16.173Z"]
+        queries = ["filter=client.geographicalContext.postalCode eq \"600001\" &since=2023-02-13T11:11:37.914Z"
+                   "&until=2023-02-13T11:16:37.914Z"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_x_okta_client_string_value_with_gt_operator(self):
-        stix_pattern = "[x-okta-client:raw_user_agent > 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) " \
-                       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36']"
+    def test_user_account_string_value_with_gt_operator(self):
+        stix_pattern = "[user-account:display_name > 'Okta System']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["filter=client.userAgent.rawUserAgent gt \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                   "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36\" "
-                   "&since=2023-02-07T05:06:48.303Z&until=2023-02-07T05:11:48.303Z"]
+        queries = ["filter=actor.displayName gt \"Okta System\" &since=2023-02-13T12:21:07.168Z"
+                   "&until=2023-02-13T12:26:07.168Z"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_autonomous_system_string_value_le_operator(self):
-        stix_pattern = "[autonomous-system:extensions.'x-okta-autonomous-system'.isp <= 'google']"
+    def test_x_okta_client_string_value_le_operator(self):
+        stix_pattern = "[x-okta-client:autonomous_system_isp <= 'google']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["filter=securityContext.isp le \"google\" &since=2023-02-07T05:05:11.105Z"
-                   "&until=2023-02-07T05:10:11.105Z"]
+        queries = ["filter=securityContext.isp le \"google\" &since=2023-02-13T12:17:01.526Z"
+                   "&until=2023-02-13T12:22:01.526Z"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_x_okta_client_string_value_with_lt_operator(self):
-        stix_pattern = "[x-okta-client:raw_user_agent < 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 " \
-                       "(KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36']"
+    def test_user_account_string_value_with_lt_operator(self):
+        stix_pattern = "[user-account:display_name < 'Okta System']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["filter=client.userAgent.rawUserAgent lt \"Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-                   "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36\" "
-                   "&since=2023-02-07T05:02:56.120Z&until=2023-02-07T05:07:56.120Z"]
+        queries = ["filter=actor.displayName lt \"Okta System\" &since=2023-02-13T12:21:07.168Z"
+                   "&until=2023-02-13T12:26:07.168Z"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -178,24 +175,6 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["filter=legacyEventType ge \"app.oauth2.authorize.code\" &since=2023-02-07T05:01:26.225Z"
                    "&until=2023-02-07T05:06:26.225Z"]
-        queries = _remove_timestamp_from_query(queries)
-        self._test_query_assertions(query, queries)
-
-    def test_x_okta_transaction_query_like_operator(self):
-        stix_pattern = "[x-okta-transaction:request_api_token_id  LIKE '00Tr22hj9U9LzFH0f5d6']"
-        query = translation.translate('okta', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["filter=transaction.detail.requestApiTokenId co \"00Tr22hj9U9LzFH0f5d6\" "
-                   "&since=2023-02-07T05:00:17.373Z&until=2023-02-07T05:05:17.373Z"]
-        queries = _remove_timestamp_from_query(queries)
-        self._test_query_assertions(query, queries)
-
-    def test_x_okta_transaction_query_not_like_operator(self):
-        stix_pattern = "[x-okta-transaction:request_api_token_id  NOT LIKE '00Tr22hj9U9LzFH0f5d6']"
-        query = translation.translate('okta', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["filter=not(transaction.detail.requestApiTokenId co \"00Tr22hj9U9LzFH0f5d6\") "
-                   "&since=2023-02-07T04:59:04.562Z&until=2023-02-07T05:04:04.562Z"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -210,120 +189,100 @@ class TestQueryTranslator(unittest.TestCase):
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_query_from_multiple_comparison_expressions_joined_by_OR(self):
-        stix_pattern = "[x-okta-transaction:request_api_token_id  LIKE '00Tr22hj9U9LzFH0f5d6' OR " \
-                       "x-okta-client:device != 'Computer']"
-        query = translation.translate('okta', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["filter=client.device ne \"Computer\" or transaction.detail.requestApiTokenId co "
-                   "\"00Tr22hj9U9LzFH0f5d6\" &since=2023-02-07T04:54:56.286Z&until=2023-02-07T04:59:56.286Z"]
-        queries = _remove_timestamp_from_query(queries)
-        self._test_query_assertions(query, queries)
-
     def test_query_from_multiple_comparison_expressions_with_precedence_bracket(self):
-        stix_pattern = "[(x-okta-transaction:request_api_token_id  LIKE '00Tr22hj9U9LzFH0f5d6' OR " \
+        stix_pattern = "[(x-okta-target:target_id LIKE '00Tr22hj9U9LzFH0f5d6' OR " \
                        "x-okta-client:device != 'Computer') AND ipv4-addr:value = '1.1.1.1']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["filter=request.ipChain.ip eq \"1.1.1.1\" and (client.device ne \"Computer\" or"
-                   " transaction.detail.requestApiTokenId co \"00Tr22hj9U9LzFH0f5d6\") "
+                   " target.id co \"00Tr22hj9U9LzFH0f5d6\") "
                    "&since=2023-02-08T05:19:59.424Z&until=2023-02-08T05:24:59.424Z"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_query_for_morethan_two_comparison_expressions_joined_by_OR(self):
-        stix_pattern = "[x-okta-client:device != 'Computer' OR x-okta-transaction:request_api_token_id  " \
-                       "MATCHES '00Tr22hj9U9LzFH0f5d6' OR x-okta-client:device = 'Computer']"
+    def test_query_from_multiple_comparison_expressions_joined_by_OR(self):
+        stix_pattern = "[x-okta-target:target_id LIKE '0oa4oexp00i4BMrzJ5d7' OR " \
+                       "x-okta-client:device != 'Computer']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["filter=client.device eq \"Computer\" or (transaction.detail.requestApiTokenId co "
-                   "\"00Tr22hj9U9LzFH0f5d6\" or client.device ne \"Computer\") &since=2023-02-07T04:53:31.254Z"
-                   "&until=2023-02-07T04:58:31.254Z"]
+        queries = ["filter=client.device ne \"Computer\" or target.id co \"0oa4oexp00i4BMrzJ5d7\" "
+                   "&since=2023-02-13T11:25:48.077Z&until=2023-02-13T11:30:48.077Z"]
+        queries = _remove_timestamp_from_query(queries)
+        self._test_query_assertions(query, queries)
+
+    def test_query_for_morethan_two_comparison_expressions_joined_by_OR(self):
+        stix_pattern = "[x-okta-client:device != 'Computer' OR x-okta-target:target_id LIKE'0oa4oexp00i4BMrzJ5d7' " \
+                       "OR x-okta-client:geolocation_country = 'India']"
+        query = translation.translate('okta', 'query', '{}', stix_pattern)
+        query['queries'] = _remove_timestamp_from_query(query['queries'])
+        queries = ["filter=client.geographicalContext.country eq \"India\" or (target.id co \"0oa4oexp00i4BMrzJ5d7\" "
+                   "or client.device "
+                   "ne \"Computer\") &since=2023-02-13T11:28:54.835Z&until=2023-02-13T11:33:54.835Z"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_multiple_observation_with_and_without_qualifier_query(self):
-        stix_pattern = "[user-account:user_id MATCHES '00u7rkrly9sNvp7sa5d7'] START t'2022-12-19T11:00:00.000Z' " \
-                       "STOP t'2023-01-31T11:00:00.003Z' AND [x-okta-transaction:request_api_token_id  LIKE " \
-                       "'00Tr22hj9U9LzFH0f5d6' OR x-okta-client:device != 'Computer']"
+        stix_pattern = "[x-okta-target:target_id MATCHES '0oa4oexp00i4BMrzJ5d7'] START t'2022-12-19T11:00:00.000Z' " \
+                       "STOP t'2023-01-31T11:00:00.003Z' AND [software:extensions.'x-okta-software'.raw_user_agent " \
+                       "LIKE 'Mozilla/5.0' OR x-okta-client:device != 'Computer']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["filter=actor.id co \"00u7rkrly9sNvp7sa5d7\" "
-                   "&since=2022-12-19T11:00:00.000Z&until=2023-01-31T11:00:00.003Z",
-                   "filter=client.device ne \"Computer\" or transaction.detail.requestApiTokenId "
-                   "co \"00Tr22hj9U9LzFH0f5d6\" &since=2023-02-06T05:45:31.478Z&until=2023-02-06T05:50:31.478Z"]
-        queries = _remove_timestamp_from_query(queries)
-        self._test_query_assertions(query, queries)
-
-    def test_combined_observation_AND(self):
-        stix_pattern = "([x-okta-transaction:request_api_token_id  LIKE '00Tr22hj9U9LzFH0f5d6' " \
-                       "AND x-okta-client:device " \
-                       "!= 'Computer']) AND ([x-oca-event:action = 'app.oauth2.authorize.code'])START " \
-                       "t'2022-12-15T11:20:35.000Z' STOP t'2023-01-31T11:00:00.003Z'"
-        query = translation.translate('okta', 'query', '{}', stix_pattern)
-        query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = [
-            "filter=client.device ne \"Computer\" and transaction.detail.requestApiTokenId co \"00Tr22hj9U9LzFH0f5d6\" "
-            "&since=2023-02-01T14:02:08.432Z&until=2023-02-01T14:07:08.432Z",
-            "filter=eventType eq \"app.oauth2.authorize.code\" &since=2022-12-15T11:20:35.000Z&until"
-            "=2023-01-31T11:00:00.003Z"]
-
+        queries = ["filter=target.id co \"0oa4oexp00i4BMrzJ5d7\" &since=2022-12-19T11:00:00.000Z"
+                   "&until=2023-01-31T11:00:00.003Z",
+                   "filter=client.device ne \"Computer\" or client.userAgent.rawUserAgent co \"Mozilla/5.0\" "
+                   "&since=2023-02-13T12:06:27.334Z&until=2023-02-13T12:11:27.334Z"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_combined_observation_OR(self):
-        stix_pattern = "[x-okta-transaction:request_api_token_id  LIKE '00Tr22hj9U9LzFH0f5d6'OR " \
+        stix_pattern = "[x-okta-target:target_id LIKE '0oa4oexp00i4BMrzJ5d7' OR " \
                        "x-okta-client:device != 'Computer']START t'2022-10-15T11:20:35.000Z' " \
                        "STOP t'2023-01-10T11:00:00.003Z' OR [x-oca-event:action = 'app.oauth2.authorize.code']" \
                        "START t'2022-12-15T11:20:35.000Z' STOP t'2023-01-31T11:00:00.003Z'"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["filter=client.device ne \"Computer\" or transaction.detail.requestApiTokenId co "
-                   "\"00Tr22hj9U9LzFH0f5d6\" &since=2022-10-15T11:20:35.000Z&until=2023-01-10T11:00:00.003Z",
-                   "filter=eventType eq \"app.oauth2.authorize.code\" &since=2022-12-15T11:20:35.000Z"
-                   "&until=2023-01-31T11:00:00.003Z"]
+        queries = ["filter=client.device ne \"Computer\" or target.id co \"0oa4oexp00i4BMrzJ5d7\" "
+                   "&since=2022-10-15T11:20:35.000Z&until=2023-01-10T11:00:00.003Z",
+                   "filter=eventType eq \"app.oauth2.authorize.code\" "
+                   "&since=2022-12-15T11:20:35.000Z&until=2023-01-31T11:00:00.003Z"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_query_for_multiple_observation(self):
-        stix_pattern = "[x-okta-transaction:request_api_token_id LIKE '00Tr22hj9U9LzFH0f5d6' OR " \
+        stix_pattern = "[x-okta-target:target_id MATCHES '0oa4oexp00i4BMrzJ5d7' OR " \
                        "x-okta-client:device != 'Computer']AND[x-oca-event:outcome NOT IN ('SUCCESS','FAILURE') " \
                        "AND x-oca-event:extensions.'x-okta-event'.legacy_event_type >= 'app.oauth2.authorize.code'] " \
                        "AND [x-oca-event:action = 'app.oauth2.authorize.code']START t'2022-12-15T11:20:35.000Z' " \
                        "STOP t'2023-01-31T11:00:00.003Z'"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["filter=(client.device ne \"Computer\" or transaction.detail.requestApiTokenId co "
-                   "\"00Tr22hj9U9LzFH0f5d6\") or (legacyEventType ge \"app.oauth2.authorize.code\" and "
-                   "not(outcome.result eq \"SUCCESS\" and outcome.result eq \"FAILURE\")) "
-                   "&since=2023-02-07T04:30:56.068Z&until=2023-02-07T04:35:56.068Z",
+        queries = ["filter=(client.device ne \"Computer\" or target.id co \"0oa4oexp00i4BMrzJ5d7\") or "
+                   "(legacyEventType ge \"app.oauth2.authorize.code\" and not(outcome.result eq \"SUCCESS\" and "
+                   "outcome.result eq \"FAILURE\")) &since=2023-02-13T11:54:29.295Z&until=2023-02-13T11:59:29.295Z",
                    "filter=eventType eq \"app.oauth2.authorize.code\" &since=2022-12-15T11:20:35.000Z"
                    "&until=2023-01-31T11:00:00.003Z"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_query_for_multiple_observation_with_brackets(self):
-        stix_pattern = "([x-okta-transaction:request_api_token_id LIKE '00Tr22hj9U9LzFH0f5d6' OR " \
-                       "x-okta-client:device " \
-                       "!= 'Computer'] AND [x-oca-event:outcome NOT IN ('SUCCESS','FAILURE') AND " \
-                       "x-oca-event:extensions.'x-okta-event'.legacy_event_type >= 'app.oauth2.authorize.code']) " \
-                       "START t'2022-10-15T11:20:35.000Z' STOP t'2023-02-03T11:00:00.003Z' OR ([x-oca-event:action = " \
-                       "'app.oauth2.authorize.code'])START t'2022-12-15T11:20:35.000Z' STOP " \
-                       "t'2023-01-31T11:00:00.003Z' "
+        stix_pattern = "([x-okta-target:target_id MATCHES '0oa4oexp00i4BMrzJ5d7' OR " \
+                       "x-okta-client:device != 'Computer'] AND [x-oca-event:outcome NOT IN ('SUCCESS','FAILURE') " \
+                       "AND x-oca-event:extensions.'x-okta-event'.legacy_event_type >= 'app.oauth2.authorize.code']) " \
+                       "START t'2022-10-15T11:20:35.000Z' STOP t'2023-02-03T11:00:00.003Z'" \
+                       "AND [x-oca-event:action = 'app.oauth2.authorize.code']START t'2022-12-15T11:20:35.000Z' " \
+                       "STOP t'2023-01-31T11:00:00.003Z'"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["filter=(client.device ne \"Computer\" or transaction.detail.requestApiTokenId co "
-                   "\"00Tr22hj9U9LzFH0f5d6\") or (legacyEventType ge \"app.oauth2.authorize.code\" and not("
-                   "outcome.result eq \"SUCCESS\" and outcome.result eq \"FAILURE\")) "
-                   "&since=2022-10-15T11:20:35.000Z&until=2023-02-03T11:00:00.003Z",
-                   "filter=eventType eq \"app.oauth2.authorize.code\" &since=2022-12-15T11:20:35.000Z&"
-                   "until=2023-01-31T11:00:00.003Z"
-                   ]
+        queries = ["filter=(client.device ne \"Computer\" or target.id co \"0oa4oexp00i4BMrzJ5d7\") "
+                   "or (legacyEventType ge \"app.oauth2.authorize.code\" and not(outcome.result eq \"SUCCESS\" "
+                   "and outcome.result eq \"FAILURE\")) &since=2022-10-15T11:20:35.000Z&until=2023-02-03T11:00:00.003Z",
+                   "filter=eventType eq \"app.oauth2.authorize.code\" &since=2022-12-15T11:20:35.000Z"
+                   "&until=2023-01-31T11:00:00.003Z"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_x_oca_event_enum_value_with_IN_operator(self):
-        stix_pattern = "[x-oca-event:outcome IN ('success','FAILURE')]"
+        stix_pattern = "[x-oca-event:outcome IN ('SUCCESS','failure')]"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["filter=outcome.result eq \"SUCCESS\" or outcome.result eq \"FAILURE\" "
@@ -332,7 +291,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_x_oca_event_enum_value_with_NOT_IN_operator(self):
-        stix_pattern = "[x-oca-event:outcome NOT IN ('SUCCESS','failure')]"
+        stix_pattern = "[x-oca-event:outcome NOT IN ('SuccESS','FAILURE')]"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["filter=not(outcome.result eq \"SUCCESS\" and outcome.result eq \"FAILURE\") "

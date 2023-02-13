@@ -33,13 +33,6 @@ class PingResponse:
         self.response = response
 
 
-class get_results:
-    """ class for results response"""
-
-    def __init__(self, response):
-        self.response = response
-
-
 class TestOktaConnection(unittest.TestCase, object):
     mocked_response = [{
         'actor': {
@@ -51,7 +44,7 @@ class TestOktaConnection(unittest.TestCase, object):
         },
         'client': {
             'userAgent': {
-                'rawUserAgent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+                'rawUserAgent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 '
                                 '(KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
                 'os': 'Windows 10',
                 'browser': 'CHROME'
@@ -153,11 +146,13 @@ class TestOktaConnection(unittest.TestCase, object):
     }]
 
     def connection(self):
+        """format for connection"""
         return {
             "host": "hostbla"
         }
 
     def configuration(self):
+        """format for configuration"""
         return {
             "auth": {
                 "api_token": "u"
@@ -165,9 +160,10 @@ class TestOktaConnection(unittest.TestCase, object):
         }
 
     def test_is_async(self):
+        """check for synchronous or asynchronous"""
         entry_point = EntryPoint(self.connection(), self.configuration())
         check_async = entry_point.is_async()
-        assert check_async == False
+        assert check_async is False
 
     @patch('stix_shifter_modules.okta.stix_transmission.api_client.APIClient.ping_data_source')
     def get_ping_results(self, mock_ping_response):
@@ -182,6 +178,7 @@ class TestOktaConnection(unittest.TestCase, object):
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_sucess_query_results(self, mock_result_response):
+        """ test success result response"""
         mocked_return_value = json.dumps(TestOktaConnection.mocked_response)
         headers = {
             'link': '<https://ourhost/api/v1/logs?since=2023-01-19T11%3A00%3A00.000Z'
@@ -197,15 +194,73 @@ class TestOktaConnection(unittest.TestCase, object):
         assert result_response is not None
         assert result_response['success'] is True
         assert 'data' in result_response
+        assert result_response['data'] == \
+               [{'actor': {'id': '00u85ek33bjW0rqu75d7', 'type': 'User',
+                           'alternateId': 'aps@google.com', 'displayName': 'aps',
+                           'detailEntry': None},
+                 'client': {'userAgent': {
+                     'rawUserAgent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) '
+                                     'Chrome/109.0.0.0 Safari/537.36',
+                     'os': 'Windows 10', 'browser': 'CHROME'
+                 },
+                     'zone': 'null',
+                     'device': 'Computer', 'id': None,
+                     'ipAddress': '1.1.1.1',
+                     'geographicalContext': {
+                         'city': None, 'state': None,
+                         'country': 'India',
+                         'postalCode': None,
+                         'geolocation': {
+                             'lat': 21.9974,
+                             'lon': 79.0011}}},
+                 'device': None, 
+                 'authenticationContext': 
+                     {'authenticationProvider': None,
+                      'credentialProvider': None,
+                      'credentialType': None,
+                      'issuer': None, 'interface': None,
+                      'authenticationStep': 0,
+                      'externalSessionId': '102SVz3tGtUS9iOMunoGfsHOw'},
+                 'displayMessage': 'Activate factor for user',
+                 'eventType': 'user.mfa.factor.activate',
+                 'outcome': {'result': 'SUCCESS',
+                             'reason': 'User set up EMAIL_FACTOR factor'},
+                 'published': '2023-01-30T14:18:01.558Z',
+                 'securityContext': {'asNumber': 396982,
+                                     'asOrg': 'avago technologies u.s. inc.',
+                                     'isp': 'google', 'domain': '.', 'isProxy': False},
+                 'severity': 'INFO', 
+                 'debugContext': {
+                       'debugData': {'requestId': 'Y9fRmYykc1ctVN0C0LEKkgAABQw',
+                                     'dtHash': '699c736419fe6b1f1f991d986b6be07d782d67352161ace7dd768c7c7a3c344a',
+                                     'requestUri': '/api/v1/users', 
+                                     'url': '/api/v1/users?activate=true'}},
+                 'legacyEventType': 'core.user.factor.activate',
+                 'transaction': 
+                     {'type': 'WEB', 
+                      'id': 'Y9fRmYykc1ctVN0C0LEKkgAABQw',
+                      'detail': {}},
+                 'uuid': 'e766d84e-a0a8-11ed-a750-9f5fc296ce63',
+                 'version': '0',
+                 'request': {'ipChain': {'ip': ['2.2.2.2']}},
+                 'target': [
+                     {'id': '00u85ek33bjW0rqu75d7',
+                      'type': 'User',
+                      'alternateId': 'aps@google.com',
+                      'displayName': 'aps',
+                      'detailEntry': None
+                      }
+                 ]}]
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_sucess_query_with_pagination_results(self, mock_result_response):
+        """ test success pagination result response """
         mocked_response_1 = [{
             "actor": {
                 "id": "00u4oexp0nQ82Fx405d7",
                 "type": "User",
-                "alternateId": "kd@google.com",
-                "displayName": "kd",
+                "alternateId": "kd@hcl.com",
+                "displayName": "kk",
                 "detailEntry": None
             },
             "client": {
@@ -218,7 +273,7 @@ class TestOktaConnection(unittest.TestCase, object):
                 "zone": "null",
                 "device": "Computer",
                 "id": None,
-                "ipAddress": "5.0.0.5",
+                "ipAddress": "1.2.2.3",
                 "geographicalContext": {
                     "city": "Ashburn",
                     "state": "Virginia",
@@ -276,7 +331,7 @@ class TestOktaConnection(unittest.TestCase, object):
             "request": {
                 "ipChain": [
                     {
-                        "ip": "5.0.0.5",
+                        "ip": "1.2.2.3",
                         "geographicalContext": {
                             "city": "Ashburn",
                             "state": "Virginia",
@@ -313,20 +368,21 @@ class TestOktaConnection(unittest.TestCase, object):
             "actor": {
                 "id": "00u4oexp0nQ82Fx405d7",
                 "type": "User",
-                "alternateId": "kd@google.com",
-                "displayName": "Kd",
+                "alternateId": "kd@hcl.com",
+                "displayName": "kk",
                 "detailEntry": None
             },
             "client": {
                 "userAgent": {
-                    "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
+                    "rawUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                                    "(KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
                     "os": "Windows 10",
                     "browser": "CHROME"
                 },
                 "zone": "null",
                 "device": "Computer",
                 "id": None,
-                "ipAddress": "5.0.0.5",
+                "ipAddress": "1.2.2.3",
                 "geographicalContext": {
                     "city": "Ashburn",
                     "state": "Virginia",
@@ -386,7 +442,7 @@ class TestOktaConnection(unittest.TestCase, object):
             "request": {
                 "ipChain": [
                     {
-                        "ip": "5.0.0.5",
+                        "ip": "11.111.111",
                         "geographicalContext": {
                             "city": "Ashburn",
                             "state": "Virginia",
@@ -406,8 +462,8 @@ class TestOktaConnection(unittest.TestCase, object):
                 {
                     "id": "00u4oexp0nQ82Fx405d7",
                     "type": "User",
-                    "alternateId": "kd@google.com",
-                    "displayName": "kd",
+                    "alternateId": "kd@hcl.com",
+                    "displayName": "kk",
                     "detailEntry": None
                 },
                 {
@@ -444,12 +500,12 @@ class TestOktaConnection(unittest.TestCase, object):
         assert result_response is not None
         assert result_response['success'] is True
         assert 'data' in result_response
-        assert result_response['data'][0]['client']['ipAddress'] == '5.0.0.5'
+        assert result_response['data'][0]['client']['ipAddress'] == '1.2.2.3'
         assert 'request' not in result_response['data'][0]
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_ping_invalid_host(self, mock_result_response):
-        """Test Invalid host"""
+        """Test Invalid host for ping"""
         mock_result_response.side_effect = ConnectionError("Connection to host timed out")
         transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
         ping_response = transmission.ping()
@@ -460,47 +516,52 @@ class TestOktaConnection(unittest.TestCase, object):
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_ping_invalid_auth(self, mock_results_response):
-        error = json.dumps({'error': 'okta connector error => Invalid token provided'})
+        """Test invalid authentication for ping"""
+        error = json.dumps({'errorSummary': 'Invalid session'})
         pingmock = InnerResponse(401, error)
         ping_response = PingResponse(pingmock)
         mock_results_response.return_value = ping_response
-
         transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
         ping_response = transmission.ping()
-
         assert ping_response is not None
         assert ping_response['success'] is False
         assert ping_response['code'] == "authentication_fail"
-
+        assert "Invalid session" in ping_response['error']
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    def test_invalid_ping(self, mock_results_response):
-        error = json.dumps({'error': 'okta connector error => Invalid session'})
-        pingmock = InnerResponse(403, error)
-        ping_response = PingResponse(pingmock)
-        mock_results_response.return_value = ping_response
-
+    def test_results_invalid_auth(self, mock_results_response):
+        """Test invalid authentication for results"""
+        error = json.dumps({'errorSummary': 'Invalid session'})
+        headers = {}
+        query = "filter=request.ipChain.ip ne \"1.1.1.1\" &since=2022-01-19T11:00:00.000Z" \
+                "&until=2023-01-31T11:00:00.003Z"
+        mock_results_response.return_value = OktaMockResponse(401, error, headers)
         transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
-        ping_response = transmission.ping()
-
-        assert ping_response is not None
-        assert ping_response['success'] is False
-        assert ping_response['code'] == "forbidden"
+        offset = 0
+        length = 1
+        result_response = transmission.results(query, offset, length)
+        assert result_response is not None
+        assert result_response['success'] is False
+        assert result_response['code'] == "authentication_fail"
+        assert result_response['error'] == 'okta connector error => Invalid session'
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
     def test_exception_for_ping_results(self, mock_ping_response):
+        """Test General Exception for ping"""
         pingmock = InnerResponse(200, """Invalid Json""")
         mock_ping_response.return_value = PingResponse(pingmock)
         transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
-        result_response = transmission.ping()
-        assert result_response is not None
-        assert result_response['success'] is False
-        assert 'error' in result_response
-        assert result_response['error'] is not None
+        ping_response = transmission.ping()
+        assert ping_response is not None
+        assert ping_response['success'] is False
+        assert 'error' in ping_response
+        assert ping_response['error'] == 'okta connector error => Expecting value: line 1 column 1 (char 0)'
 
     @patch('stix_shifter_modules.okta.stix_transmission.api_client.APIClient.get_search_results')
     def test_exception_for_search_results(self, mock_result_response):
-        mocked_return_value = None
+        """Test General Exception for results"""
+        headers = {}
+        mock_result_response.return_value = OktaMockResponse(200, """[success=true]""", headers)
         query = "filter=client.device ne \"Computer\" and transaction.detail.requestApiTokenId co" \
                 " \"00Tr22hj9U9LzFH0f5d6\" &since=2023-02-10T08:52:26.900Z&until=2023-02-10T08:57:26.900Z"
         headers = None
@@ -511,12 +572,12 @@ class TestOktaConnection(unittest.TestCase, object):
         assert result_response is not None
         assert result_response['success'] is False
         assert 'error' in result_response
-        assert result_response['error'] is not None
+        assert result_response['error'] == 'okta connector error => Expecting value: line 1 column 2 (char 1)'
 
     @patch('stix_shifter_modules.okta.stix_transmission.api_client.APIClient.get_search_results')
     def test_connection_error_results(self, mock_result_response):
-        """Test Invalid host"""
-        mock_result_response.side_effect = ConnectionError("Invalid token provided")
+        """Test Invalid host for results"""
+        mock_result_response.side_effect = ConnectionError("Connection to host timed out")
         query = "filter=client.device ne \"Computer\" and transaction.detail.requestApiTokenId co " \
                 "\"00Tr22hj9U9LzFH0f5d6\" &since=2023-02-10T08:52:26.900Z&until=2023-02-10T08:57:26.900Z"
         headers = None
@@ -526,5 +587,5 @@ class TestOktaConnection(unittest.TestCase, object):
         result_response = transmission.results(query, offset, length, headers)
         assert result_response is not None
         assert result_response['success'] is False
-        assert "okta connector error" in result_response['error']
+        assert "Invalid host" in result_response['error']
         assert result_response['code'] == "service_unavailable"
