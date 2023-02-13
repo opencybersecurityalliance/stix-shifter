@@ -981,6 +981,24 @@
     "cwd": {
       "key": "process.cwd",
       "object": "process"
+    },
+    "hash": {
+      "md5": {
+        "key": "file.hashes.MD5",
+        "object": "process_executable"
+      },
+      "sha1": {
+        "key": "file.hashes.SHA-1",
+        "object": "process_executable"
+      },
+      "sha256": {
+        "key": "file.hashes.SHA-256",
+        "object": "process_executable"
+      },
+      "sha512": {
+        "key": "file.hashes.SHA-512",
+        "object": "process_executable"
+      }
     }
   },
   "user": {
