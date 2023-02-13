@@ -242,6 +242,11 @@ class DataSourceObjToStixObj:
                             # data variable is the final value, process in bulk
                             self._handle_value(data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map, object_key_ind)
                             break
+                    # group the references of list of dictionary field
+                    if isinstance(to_stix_config_prop, dict) and to_stix_config_prop.get('groupReference'):
+                        self._handle_value(data, to_stix_config_prop, ds_sub_key,
+                                           to_stix_config_prop['groupReference'],
+                                           objects, object_tag_ref_map, object_key_ind)
 
                 elif isinstance(data, dict):
                     for k in data:
