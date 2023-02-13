@@ -42,7 +42,7 @@ class Connector(BaseJsonSyncConnector):
                 query = json.dumps(query)
             response_wrapper = await self.api_client.get_search_results(query)
             if response_wrapper.response.history:                       # If the authentication is invalid, the history
-                if response_wrapper.response.history[0].status_code == 302:  # will be returned with 302 status code.
+                if response_wrapper.response.history[0].status == 302:  # will be returned with 302 status code.
                     raise InvalidAuthenticationException
             if response_wrapper.code == 200:
                 return_obj['success'] = True
@@ -116,7 +116,7 @@ class Connector(BaseJsonSyncConnector):
         try:
             response = await self.api_client.ping_box()
             if response.response.history:                           # If the authentication is invalid, the history
-                if response.response.history[0].status_code == 302:  # will be returned with 302 status code.
+                if response.response.history[0].status == 302:  # will be returned with 302 status code.
                     raise InvalidAuthenticationException
             response_code = response.code
             response_dict = json.loads(response.read().decode('utf-8'))
