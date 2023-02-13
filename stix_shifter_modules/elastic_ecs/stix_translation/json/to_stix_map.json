@@ -1386,103 +1386,103 @@
     },
     "pe": {
       "company": {
-        "key": "x-ecs-file.pe_company",
-        "object": "x_file"
+        "key": "file.x_pe_company",
+        "object": "file"
       },
       "description": {
-        "key": "x-ecs-file.pe_description",
-        "object": "x_file"
+        "key": "file.x_pe_description",
+        "object": "file"
       },
       "file_version": {
-        "key": "x-ecs-file.pe_file_version",
-        "object": "x_file"
+        "key": "file.x_pe_file_version",
+        "object": "file"
       },
       "original_file_name": {
-        "key": "x-ecs-file.pe_original_file_name",
-        "object": "x_file"
+        "key": "file.x_pe_original_file_name",
+        "object": "file"
       },
       "product": {
-        "key": "x-ecs-file.pe_product",
-        "object": "x_file"
+        "key": "file.x_pe_product",
+        "object": "file"
       }
     },
     "code_signature": {
       "exists": {
-        "key": "x-ecs-file.code_signature_exists",
-        "object": "x_file"
+        "key": "file.x_code_signature_exists",
+        "object": "file"
       },
       "subject_name": {
-        "key": "x-ecs-file.code_signature_subject_name",
-        "object": "x_file"
+        "key": "file.x_code_signature_subject_name",
+        "object": "file"
       }
     },
     "accessed": {
-      "key": "x-ecs-file.accessed",
-      "object": "x_file"
+      "key": "file.accessed",
+      "object": "file"
     },
     "attributes": {
-      "key": "x-ecs-file.attributes",
-      "object": "x_file"
+      "key": "file.x_attributes",
+      "object": "file"
     },
     "ctime": {
-      "key": "x-ecs-file.ctime",
-      "object": "x_file"
+      "key": "file.x_ctime",
+      "object": "file"
     },
     "device": {
-      "key": "x-ecs-file.device",
-      "object": "x_file"
+      "key": "file.x_device",
+      "object": "file"
     },
     "drive_letter": {
-      "key": "x-ecs-file.drive_letter",
-      "object": "x_file"
+      "key": "file.x_drive_letter",
+      "object": "file"
     },
     "extension": {
-      "key": "x-ecs-file.extension",
-      "object": "x_file"
+      "key": "file.x_extension",
+      "object": "file"
     },
     "gid": {
-      "key": "x-ecs-file.gid",
-      "object": "x_file"
+      "key": "file.x_gid",
+      "object": "file"
     },
     "group": {
-      "key": "x-ecs-file.group",
-      "object": "x_file"
+      "key": "file.x_group",
+      "object": "file"
     },
     "inode": {
-      "key": "x-ecs-file.inode",
-      "object": "x_file"
+      "key": "file.x_inode",
+      "object": "file"
     },
     "mime_type": {
-      "key": "x-ecs-file.mime_type",
-      "object": "x_file"
+      "key": "file.mime_type",
+      "object": "file"
     },
     "mode": {
-      "key": "x-ecs-file.mode",
-      "object": "x_file"
+      "key": "file.x_mode",
+      "object": "file"
     },
     "mtime": {
-      "key": "x-ecs-file.mtime",
-      "object": "x_file"
+      "key": "file.x_mtime",
+      "object": "file"
     },
     "owner": {
-      "key": "x-ecs-file.owner",
-      "object": "x_file"
+      "key": "file.x_owner",
+      "object": "file"
     },
     "path": {
-      "key": "x-ecs-file.path",
-      "object": "x_file"
+      "key": "file.x_path",
+      "object": "file"
     },
     "target_path": {
-      "key": "x-ecs-file.target_path",
-      "object": "x_file"
+      "key": "file.x_target_path",
+      "object": "file"
     },
     "type": {
-      "key": "x-ecs-file.type",
-      "object": "x_file"
+      "key": "file.x_type",
+      "object": "file"
     },
     "uid": {
-      "key": "x-ecs-file.uid",
-      "object": "x_file"
+      "key": "file.x_uid",
+      "object": "file"
     }
   },
   "group": {
