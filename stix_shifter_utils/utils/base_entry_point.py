@@ -235,7 +235,6 @@ class BaseEntryPoint:
         self.set_results_connector(connector)
         self.set_delete_connector(connector)
         self.set_ping_connector(connector)
-        self.set_pagesize_connector(connector)
 
     def set_query_connector(self, connector):
         if not (isinstance(connector, (BaseConnector, BaseQueryConnector)) or issubclass(connector, BaseConnector)):
@@ -291,15 +290,6 @@ class BaseEntryPoint:
     @transmission
     def ping_connection(self):
         return self.__ping_connector.ping_connection()
-
-    def set_pagesize_connector(self, connector):
-        if not isinstance(connector, (BaseConnector, BasePingConnector)):
-            raise Exception('connector is not instance of BaseConnector or BasePingConnector')
-        self.__pagesize_connector = connector
-
-    @transmission
-    def get_pagesize(self):
-        return self.__pagesize_connector.get_pagesize()
 
     def set_async(self, is_async):
         self.__async = is_async

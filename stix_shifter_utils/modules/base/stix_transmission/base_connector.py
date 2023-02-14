@@ -89,21 +89,6 @@ class BaseConnector:
         """
         raise NotImplementedError()
 
-    def get_pagesize(self):
-        """
-        Creates a connection to the specified datasource to retrieve pagesize (e.g.,max_size_window)
-
-        Args:
-            None.
-
-        Returns:
-            dict: The return value.
-                keys:
-                    success (bool): True or False
-                    data (int): The pagesize result data
-        """
-        raise NotImplementedError()
-
     def create_results_stix_connection(self, entry_point, search_id, offset, length, data_source, metadata=None):
         stats = []
         if metadata:
