@@ -797,23 +797,23 @@
     "pe": {
       "company": {
         "key": "file.x_pe.company",
-        "object": "file"
+        "object": "process_executable"
       },
       "description": {
         "key": "file.x_pe.description",
-        "object": "file"
+        "object": "process_executable"
       },
       "file_version": {
         "key": "file.x_pe.file_version",
-        "object": "file"
+        "object": "process_executable"
       },
       "original_file_name": {
         "key": "file.x_pe.original_file_name",
-        "object": "file"
+        "object": "process_executable"
       },
       "product": {
         "key": "file.x_pe.product",
-        "object": "file"
+        "object": "process_executable"
       }
     },
     "command_line": {
