@@ -172,6 +172,159 @@ event_data = {
     }
   }
 
+ecs_event_data = {
+    "event" : {
+      "category" : [
+        "process"
+      ],
+      "type" : [
+        "start",
+        "process_start"
+      ],
+      "provider" : "Microsoft-Windows-Sysmon",
+      "code" : 1,
+      "action" : "Process Create (rule: ProcessCreate)",
+      "created" : "2021-10-24T23:58:21.586Z",
+      "kind" : "event",
+      "module" : "sysmon"
+    },
+    "winlog" : {
+      "task" : "Process Create (rule: ProcessCreate)",
+      "provider_name" : "Microsoft-Windows-Sysmon",
+      "event_id" : 1,
+      "channel" : "Microsoft-Windows-Sysmon/Operational",
+      "event_data" : {
+        "FileVersion" : "10.0.17763.2145 (WinBuild.160101.0800)",
+        "Company" : "Microsoft Corporation",
+        "Product" : "Microsoft® Windows® Operating System",
+        "Description" : "DSREG commandline tool",
+        "RuleName" : "-",
+        "TerminalSessionId" : "0",
+        "LogonId" : "0x3e7",
+        "LogonGuid" : "{8dfc401c-1ef5-6175-e703-000000000000}",
+        "IntegrityLevel" : "System"
+      },
+      "api" : "wineventlog",
+      "user" : {
+        "domain" : "NT AUTHORITY",
+        "name" : "SYSTEM",
+        "type" : "User",
+        "identifier" : "S-1-5-18"
+      },
+      "provider_guid" : "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+      "opcode" : "Info",
+      "computer_name" : "win-server1.example.com",
+      "process" : {
+        "pid" : 3684,
+        "thread" : {
+          "id" : 4616
+        }
+      },
+      "record_id" : 1778428,
+      "version" : 5
+    },
+    "message" : "Process Create:\nRuleName: -\nUtcTime: 2021-10-24 23:58:20.569\nProcessGuid: {8dfc401c-f31c-6175-5715-000000001b00}\nProcessId: 5244\nImage: C:\\Windows\\System32\\dsregcmd.exe\nFileVersion: 10.0.17763.2145 (WinBuild.160101.0800)\nDescription: DSREG commandline tool\nProduct: Microsoft® Windows® Operating System\nCompany: Microsoft Corporation\nOriginalFileName: dsregcmd.exe\nCommandLine: C:\\Windows\\System32\\dsregcmd.exe $(Arg0) $(Arg1) $(Arg2)\nCurrentDirectory: C:\\Windows\\system32\\\nUser: NT AUTHORITY\\SYSTEM\nLogonGuid: {8dfc401c-1ef5-6175-e703-000000000000}\nLogonId: 0x3E7\nTerminalSessionId: 0\nIntegrityLevel: System\nHashes: MD5=D6957ACEDA86DE523AF0157800AA3C73,SHA256=BA79462455B6E216D0E7CD6FE36BF0EFF8A0D9DD06358D1C97B1014016256618,IMPHASH=382C77BFA0EEE2BA2BA8671D108AD9A3\nParentProcessGuid: {8dfc401c-1ef7-6175-2900-000000001b00}\nParentProcessId: 2244\nParentImage: C:\\Windows\\System32\\svchost.exe\nParentCommandLine: C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Schedule",
+    "tags" : [
+      "beats_input_codec_plain_applied"
+    ],
+    "hash" : {
+      "imphash" : "382c77bfa0eee2ba2ba8671d108ad9a3",
+      "sha256" : "ba79462455b6e216d0e7cd6fe36bf0eff8a0d9dd06358d1c97b1014016256618",
+      "md5" : "d6957aceda86de523af0157800aa3c73"
+    },
+    "host" : {
+      "architecture" : "x86_64",
+      "hostname" : "win-server1",
+      "os" : {
+        "kernel" : "10.0.17763.2237 (WinBuild.160101.0800)",
+        "build" : "17763.2237",
+        "family" : "windows",
+        "name" : "Windows Server 2019 Standard",
+        "version" : "10.0",
+        "platform" : "windows"
+      },
+      "id" : "8dfc401c-b042-4f41-b427-91a9dc0b61ac",
+      "name" : "win-server1.example.com",
+      "mac" : [
+        "06:07:08:09:0a:0b"
+      ],
+      "ip" : [
+        "fedc::ba98:7654:3210:1234",
+        "9.10.11.12",
+        "10.11.12.13"
+      ]
+    },
+    "log" : {
+      "level" : "information"
+    },
+    "user" : {
+      "domain" : "NT AUTHORITY",
+      "name" : "SYSTEM"
+    },
+    "@timestamp" : "2021-10-24T23:58:20.569Z",
+    "ecs" : {
+      "version" : "1.7.0"
+    },
+    "agent" : {
+      "type" : "winlogbeat",
+      "ephemeral_id" : "c5c31d91-f913-4f23-9609-3f92e83e4cb7",
+      "hostname" : "win-server1",
+      "id" : "50a12d7e-a002-4a69-a5e8-f3b07afbfeb7",
+      "name" : "win-server1",
+      "version" : "7.11.2"
+    },
+    "process" : {
+      "pid" : 5244,
+      "parent" : {
+        "pid" : 2244,
+        "entity_id" : "{8dfc401c-1ef7-6175-2900-000000001b00}",
+        "executable" : "C:\\Windows\\System32\\svchost.exe",
+        "command_line" : "C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Schedule",
+        "name" : "svchost.exe",
+        "args" : [
+          "C:\\Windows\\system32\\svchost.exe",
+          "-k",
+          "netsvcs",
+          "-p",
+          "-s",
+          "Schedule"
+        ]
+      },
+      "pe" : {
+        "company" : "Microsoft Corporation",
+        "file_version" : "10.0.17763.2145 (WinBuild.160101.0800)",
+        "description" : "DSREG commandline tool",
+        "imphash" : "382c77bfa0eee2ba2ba8671d108ad9a3",
+        "original_file_name" : "dsregcmd.exe",
+        "product" : "Microsoft® Windows® Operating System"
+      },
+      "entity_id" : "{8dfc401c-f31c-6175-5715-000000001b00}",
+      "executable" : "C:\\Windows\\System32\\dsregcmd.exe",
+      "working_directory" : "C:\\Windows\\system32\\",
+      "command_line" : "C:\\Windows\\System32\\dsregcmd.exe $(Arg0) $(Arg1) $(Arg2)",
+      "args" : [
+        "C:\\Windows\\System32\\dsregcmd.exe",
+        "$(Arg0)",
+        "$(Arg1)",
+        "$(Arg2)"
+      ],
+      "hash" : {
+        "md5" : "d6957aceda86de523af0157800aa3c73",
+        "sha256" : "ba79462455b6e216d0e7cd6fe36bf0eff8a0d9dd06358d1c97b1014016256618"
+      },
+      "name" : "dsregcmd.exe"
+    },
+    "@version" : "1",
+    "related" : {
+      "hash" : [
+        "d6957aceda86de523af0157800aa3c73",
+        "ba79462455b6e216d0e7cd6fe36bf0eff8a0d9dd06358d1c97b1014016256618",
+        "382c77bfa0eee2ba2ba8671d108ad9a3"
+      ],
+      "user" : "SYSTEM"
+    }
+}
+
 class TestElasticEcsTransform(unittest.TestCase, object):
     @staticmethod
     def get_first(itr, constraint):
@@ -549,4 +702,3 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert('objects' in observed_data)
         objects = observed_data['objects']
         assert(objects == {})
-    
