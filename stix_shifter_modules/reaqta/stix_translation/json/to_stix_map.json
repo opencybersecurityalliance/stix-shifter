@@ -121,7 +121,7 @@
             "object": "certInfo"
           }
         },
-        "filename": [
+        "fsName": [
           {
             "key": "file.name",
             "object": "file"
@@ -137,9 +137,9 @@
             "references": "file"
           }
         ],
-        "fsName": {
-          "key": "file.extensions.x-reaqta-program.fsname",
-          "object": "file"
+        "filename": {
+          "key": "process.name",
+          "object": "process"
         },
         "md5": {
           "key": "file.hashes.MD5",

@@ -46,7 +46,7 @@
       "extensions.'x-reaqta-process'.logon_id": ["service.login.id"],
       "extensions.'x-reaqta-process'.no_gui": ["service.hasGui"],
       "extensions.'x-reaqta-process'.privilege_level": ["service.privilege"],
-      "name": ["__etwCallerProcessName", "login.processName", "__etwLogonProcessName", "__etwProcessName"],
+      "name": ["__etwCallerProcessName", "login.processName", "__etwLogonProcessName", "__etwProcessName", "filename"],
       "parent_ref.binary_ref.name": ["service.ppid"],
       "pid": ["engine.ppid", "service.pid", "ppid", "service.ppid", "pid", "eventdata.targetProcessId", "wmiHost.pid", "__etwProcessId", "wmi.clientPid", "engine.pid", "host.pid", "allocator.pid", "accessor.pid", "allocator.ppid", "accessor.ppid", "__etwCallerProcessId"]
     }

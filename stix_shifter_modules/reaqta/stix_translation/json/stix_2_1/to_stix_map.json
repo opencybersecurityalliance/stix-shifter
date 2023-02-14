@@ -1404,7 +1404,7 @@
         "key": "file.extensions.x-reaqta-data.file_type",
         "object": "file_data"
       },
-      "filename": [
+      "fsName": [
         {
           "key": "file.name",
           "object": "file_data"
@@ -1423,9 +1423,9 @@
         "key": "x-reaqta-event.filter_name",
         "object": "x-reaqta"
       },
-      "fsName": {
-        "key": "file.extensions.x-reaqta-data.fsname",
-        "object": "file_data"
+      "filename": {
+        "key": "process.name",
+        "object": "process"
       },
       "hostPid": [
         {
