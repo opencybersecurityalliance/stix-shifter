@@ -561,7 +561,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert(process_obj['command_line'] == "C:\\WINDOWS\\system32\\wbem\\unsecapp.exe -Embedding")
         binary_obj = objects[process_obj['binary_ref']]
         assert(binary_obj is not None), "process binary ref not found"
-        assert(binary_obj.keys() == {'type', 'name', 'parent_directory_ref'})
+        assert(binary_obj.keys() == {'type', 'name', 'parent_directory_ref', 'hashes'})
         assert(binary_obj['type'] == "file")
         assert(binary_obj['name'] == "unsecapp.exe")
         binary_parent_dir_obj = objects[binary_obj['parent_directory_ref']]
@@ -590,7 +590,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         file_ref = event_object['file_ref']
         assert(file_ref in objects), f"file_ref with key {event_object['file_ref']} not found"
         file_obj = objects[file_ref]
-        assert(file_obj.keys() == {'type', 'name', 'parent_directory_ref'})
+        assert(file_obj.keys() == {'type', 'name', 'parent_directory_ref', 'x_user_ref'})
         assert(file_obj['type'] == 'file')
         assert(file_obj['name'] == "example.png")
         parent_obj = objects[file_obj['parent_directory_ref']]
@@ -671,7 +671,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
         file_object = TestElasticEcsTransform.get_first(objects.values(), lambda o: type(o) == dict and o.get('type') == 'file' and o.get('name') == 'example.png')
         assert (file_object is not None), 'file object type not found'
-        assert (file_object.keys() == {'type', 'name', 'parent_directory_ref'})
+        assert (file_object.keys() == {'type', 'name', 'parent_directory_ref', 'x_user_ref'})
         assert (file_object['type'] == 'file')
         assert (file_object['name'] == 'example.png')
         parent_directory_ref = file_object['parent_directory_ref']
