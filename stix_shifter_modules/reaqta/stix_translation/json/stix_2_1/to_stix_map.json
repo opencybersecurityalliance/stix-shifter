@@ -121,7 +121,7 @@
             "object": "certInfo"
           }
         },
-        "filename": [
+        "fsName": [
           {
             "key": "file.name",
             "object": "file"
@@ -282,7 +282,7 @@
               "object": "certInfo"
             }
           },
-          "filename": [
+          "fsName": [
             {
               "key": "file.name",
               "object": "accessorProcess_file"
@@ -450,7 +450,7 @@
               "object": "certInfo"
             }
           },
-          "filename": [
+          "fsName": [
             {
               "key": "file.name",
               "object": "allocatorProc_file"
@@ -652,7 +652,7 @@
               "object": "certInfo"
             }
           },
-          "filename": [
+          "fsName": [
             {
               "key": "file.name",
               "object": "childProcess_file"
@@ -913,7 +913,7 @@
               "object": "certInfo"
             }
           },
-          "filename": [
+          "fsName": [
             {
               "key": "file.name",
               "object": "engineProcess_file"
@@ -1404,7 +1404,7 @@
         "key": "file.extensions.x-reaqta-data.file_type",
         "object": "file_data"
       },
-      "filename": [
+      "fsName": [
         {
           "key": "file.name",
           "object": "file_data"
@@ -1720,7 +1720,7 @@
               "object": "certInfo"
             }
           },
-          "filename": [
+          "fsName": [
             {
               "key": "file.name",
               "object": "serviceProcess_file"
@@ -1908,7 +1908,7 @@
               "object": "certInfo"
             }
           },
-          "filename": [
+          "fsName": [
             {
               "key": "file.name",
               "object": "targetProcess_file"
