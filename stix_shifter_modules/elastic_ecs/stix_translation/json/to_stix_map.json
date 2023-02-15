@@ -1017,7 +1017,7 @@
         "references": "user"
       },
       {
-        "key": "file.x_user_ref",
+        "key": "file.x_owner_ref",
         "object": "file",
         "references": "user"
       },
@@ -1065,7 +1065,7 @@
         "references": "user"
       },
       {
-        "key": "file.x_user_ref",
+        "key": "file.x_owner_ref",
         "object": "file",
         "references": "user"
       },
