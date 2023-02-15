@@ -1017,6 +1017,11 @@
         "references": "user"
       },
       {
+        "key": "file.x_user_ref",
+        "object": "file",
+        "references": "user"
+      },
+      {
         "key": "x-oca-event.user_ref",
         "object": "event",
         "references": "user"
@@ -1057,6 +1062,11 @@
       {
         "key": "process.creator_user_ref",
         "object": "process",
+        "references": "user"
+      },
+      {
+        "key": "file.x_user_ref",
+        "object": "file",
         "references": "user"
       },
       {
@@ -1404,29 +1414,29 @@
     },
     "pe": {
       "company": {
-        "key": "file.x_pe_company",
+        "key": "file.x_pe.company",
         "object": "file"
       },
       "description": {
-        "key": "file.x_pe_description",
+        "key": "file.x_pe.description",
         "object": "file"
       },
       "file_version": {
-        "key": "file.x_pe_file_version",
+        "key": "file.x_pe.file_version",
         "object": "file"
       },
       "original_file_name": {
-        "key": "file.x_pe_original_file_name",
+        "key": "file.x_pe.original_file_name",
         "object": "file"
       },
       "product": {
-        "key": "file.x_pe_product",
+        "key": "file.x_pe.product",
         "object": "file"
       }
     },
     "code_signature": {
       "exists": {
-        "key": "file.x_code_signature_exists",
+        "key": "file.x_code_signature.exists",
         "object": "file"
       },
       "subject_name": {
@@ -1447,11 +1457,11 @@
       "object": "file"
     },
     "device": {
-      "key": "file.x_device",
+      "key": "file.x_unix.device",
       "object": "file"
     },
     "drive_letter": {
-      "key": "file.x_drive_letter",
+      "key": "file.x_win_drive_letter",
       "object": "file"
     },
     "extension": {
@@ -1459,15 +1469,15 @@
       "object": "file"
     },
     "gid": {
-      "key": "file.x_gid",
+      "key": "file.x_unix.group_id",
       "object": "file"
     },
     "group": {
-      "key": "file.x_group",
+      "key": "file.x_unix.group",
       "object": "file"
     },
     "inode": {
-      "key": "file.x_inode",
+      "key": "file.x_unix.inode",
       "object": "file"
     },
     "mime_type": {
@@ -1475,7 +1485,7 @@
       "object": "file"
     },
     "mode": {
-      "key": "file.x_mode",
+      "key": "file.x_unix.mode",
       "object": "file"
     },
     "mtime": {
@@ -1499,7 +1509,7 @@
       "object": "file"
     },
     "uid": {
-      "key": "file.x_uid",
+      "key": "file.x_unix.user_id",
       "object": "file"
     }
   },
