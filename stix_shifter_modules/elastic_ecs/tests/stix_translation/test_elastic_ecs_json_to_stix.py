@@ -288,7 +288,13 @@ ecs_event_data = {
           "-p",
           "-s",
           "Schedule"
-        ]
+        ],
+        "exit_code": 0,
+        "title": "Just for testing",
+        "thread": {
+          "id": 3333
+        },
+        "uptime": 100
       },
       "pe" : {
         "company" : "Microsoft Corporation",
@@ -704,172 +710,10 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert(objects == {})
 
 
-    """ This is the translation of ecs_event_data:
-{
-  "type": "bundle",
-  "id": "bundle--93346d23-3d0c-4081-ae22-f5c1ce7a8503",
-  "objects": [
-    {
-      "type": "identity",
-      "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
-      "name": "ElasticEcs",
-      "identity_class": "events"
-    },
-    {
-      "id": "observed-data--e30db2a1-f35a-4654-a1bb-1b1f156487f8",
-      "type": "observed-data",
-      "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
-      "created": "2023-02-14T17:23:03.684Z",
-      "modified": "2023-02-14T17:23:03.684Z",
-      "objects": {
-        "0": {
-          "type": "x-oca-event",
-          "category": [
-            "process"
-          ],
-          "event_type": [
-            "start",
-            "process_start"
-          ],
-          "provider": "Microsoft-Windows-Sysmon",
-          "code": 1,
-          "action": "Process Create (rule: ProcessCreate)",
-          "created": "2021-10-24T23:58:21.586Z",
-          "kind": "event",
-          "module": "sysmon",
-          "host_ref": "2",
-          "user_ref": "9",
-          "agent": "win-server1",
-          "process_ref": "1",
-          "parent_process_ref": "12"
-        },
-        "1": {
-          "type": "process",
-          "x_ttp_tags": [
-            "beats_input_codec_plain_applied"
-          ],
-          "creator_user_ref": "9",
-          "pid": 5244,
-          "parent_ref": "12",
-          "x_unique_id": "{8dfc401c-f31c-6175-5715-000000001b00}",
-          "binary_ref": "15",
-          "command_line": "C:\\Windows\\System32\\dsregcmd.exe $(Arg0) $(Arg1) $(Arg2)",
-          "name": "dsregcmd.exe"
-        },
-        "2": {
-          "type": "x-oca-asset",
-          "architecture": "x86_64",
-          "hostname": "win-server1",
-          "os_name": "Windows Server 2019 Standard",
-          "os_version": "10.0",
-          "os_platform": "windows",
-          "host_id": "8dfc401c-b042-4f41-b427-91a9dc0b61ac",
-          "name": "win-server1.example.com",
-          "mac_refs": [
-            "3"
-          ],
-          "ip_refs": [
-            "4",
-            "5",
-            "6"
-          ]
-        },
-        "3": {
-          "type": "mac-addr",
-          "value": "06:07:08:09:0a:0b"
-        },
-        "4": {
-          "type": "ipv4-addr",
-          "value": "9.10.11.12"
-        },
-        "5": {
-          "type": "ipv4-addr",
-          "value": "10.11.12.13"
-        },
-        "6": {
-          "type": "ipv6-addr",
-          "value": "fedc::ba98:7654:3210:1234"
-        },
-        "7": {
-          "type": "x-ecs-log",
-          "level": "information"
-        },
-        "8": {
-          "type": "x-ecs-user",
-          "domain": "NT AUTHORITY"
-        },
-        "9": {
-          "type": "user-account",
-          "user_id": "SYSTEM",
-          "account_login": "SYSTEM"
-        },
-        "10": {
-          "type": "x-ecs",
-          "version": "1.7.0"
-        },
-        "11": {
-          "type": "software",
-          "vendor": "winlogbeat",
-          "name": "win-server1",
-          "version": "7.11.2"
-        },
-        "12": {
-          "type": "process",
-          "pid": 2244,
-          "x_unique_id": "{8dfc401c-1ef7-6175-2900-000000001b00}",
-          "binary_ref": "13",
-          "command_line": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Schedule",
-          "name": "svchost.exe"
-        },
-        "13": {
-          "type": "file",
-          "name": "svchost.exe",
-          "parent_directory_ref": "14"
-        },
-        "14": {
-          "type": "directory",
-          "path": "C:\\Windows\\System32"
-        },
-        "15": {
-          "type": "file",
-          "x_pe": {
-            "company": "Microsoft Corporation",
-            "file_version": "10.0.17763.2145 (WinBuild.160101.0800)",
-            "description": "DSREG commandline tool",
-            "original_file_name": "dsregcmd.exe",
-            "product": "Microsoft\u00ae Windows\u00ae Operating System"
-          },
-          "name": "dsregcmd.exe",
-          "parent_directory_ref": "16",
-          "hashes": {
-            "MD5": "d6957aceda86de523af0157800aa3c73",
-            "SHA-256": "ba79462455b6e216d0e7cd6fe36bf0eff8a0d9dd06358d1c97b1014016256618"
-          }
-        },
-        "16": {
-          "type": "directory",
-          "path": "C:\\Windows\\System32"
-        },
-        "17": {
-          "type": "x-ecs-related",
-          "hash": [
-            "d6957aceda86de523af0157800aa3c73",
-            "ba79462455b6e216d0e7cd6fe36bf0eff8a0d9dd06358d1c97b1014016256618",
-            "382c77bfa0eee2ba2ba8671d108ad9a3"
-          ],
-          "user": "SYSTEM"
-        }
-      },
-      "first_observed": "2021-10-24T23:58:20.569Z",
-      "last_observed": "2021-10-24T23:58:20.569Z",
-      "number_observed": 1
-    }
-  ],
-  "spec_version": "2.0"
-}
-    """
     def test_x_ecs_event(self):
         result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([ecs_event_data]))
+        with open('/tmp/test_ecs.json', 'w') as f:
+          f.write(json.dumps(result_bundle, indent=2))
         assert (result_bundle['type'] == 'bundle')
         translation_objects = result_bundle.get('objects')
         assert (translation_objects and len(translation_objects) == 2)
@@ -893,7 +737,11 @@ class TestElasticEcsTransform(unittest.TestCase, object):
           parent_process.get("pid") == 2244 and
           parent_process.get("x_unique_id") == "{8dfc401c-1ef7-6175-2900-000000001b00}" and
           parent_process.get("command_line") == "C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Schedule" and
-          parent_process.get("name") == "svchost.exe"
+          parent_process.get("name") == "svchost.exe" and
+          parent_process.get("x_exit_code") == 0 and
+          parent_process.get("x_window_title") == "Just for testing" and
+          parent_process.get("x_thread_id") == 3333 and
+          parent_process.get("x_uptime") == 100
         )
         executable_file = stix_objects.get(executable_file_key)
         assert (
