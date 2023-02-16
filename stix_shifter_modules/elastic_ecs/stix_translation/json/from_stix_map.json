@@ -113,11 +113,11 @@
       "creator_user_ref.user_id": ["user.name"],
       "parent_ref.pid": ["process.ppid", "process.parent.ppid"],
       "parent_ref.name": ["process.parent.name"],
-      "parent_ref.exit_code": ["process.parent.exit_code"],
+      "parent_ref.x_exit_code": ["process.parent.exit_code"],
       "parent_ref.pgid": ["process.parent.pgid"],
-      "parent_ref.title": ["process.parent.title"],
-      "parent_ref.thread_id": ["process.parent.thread.id"],
-      "parent_ref.uptime": ["process.parent.uptime"],
+      "parent_ref.x_window_title": ["process.parent.title"],
+      "parent_ref.x_thread_id": ["process.parent.thread.id"],
+      "parent_ref.x_uptime": ["process.parent.uptime"],
       "parent_ref.cwd": ["process.parent.working_directory"],
       "parent_ref.binary_ref.path": ["process.parent.executable"],
       "parent_ref.binary_ref.parent_directory_ref.path": ["process.parent.executable"],
@@ -127,11 +127,7 @@
       "binary_ref.hashes.'SHA-1'": ["process.hash.sha1"],
       "binary_ref.hashes.'SHA-256'": ["process.hash.sha256"],
       "binary_ref.hashes.'SHA-512'": ["process.hash.sha512"],
-      "extensions": {
-        "windows-process-ext": {
-          "window_title": ["process.title"]
-        }
-      },
+      "x_window_title": ["process.title"],
       "x_exit_code": ["process.exit_code"],
       "x_thread_id": ["process.thread.id"],
       "x_ttp_tags": ["tags"],

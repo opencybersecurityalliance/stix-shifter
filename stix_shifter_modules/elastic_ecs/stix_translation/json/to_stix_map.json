@@ -865,8 +865,8 @@
         "object": "process_parent"
       },
       "exit_code": {
-        "key": "process.parent_exit_code",
-        "object": "process"
+        "key": "process.x_exit_code",
+        "object": "process_parent"
       },
       "name": [
         {
@@ -916,21 +916,21 @@
       },
       "thread": {
         "id": {
-          "key": "process.parent_ref.thread_id",
-          "object": "process"
+          "key": "process.x_thread_id",
+          "object": "process_parent"
         }
       },
       "title": {
-        "key": "process.parent_ref.title",
-        "object": "process"
+        "key": "process.x_window_title",
+        "object": "process_parent"
       },
       "uptime": {
-        "key": "process.parent_ref.uptime",
-        "object": "process"
+        "key": "process.x_uptime",
+        "object": "process_parent"
       },
       "working_directory": {
-        "key": "process.parent_ref.cwd",
-        "object": "process"
+        "key": "process.cwd",
+        "object": "process_parent"
       },
       "executable": [
         {
@@ -971,14 +971,14 @@
       }
     },
     "title": {
-      "key": "process.windows-process-ext.window_title",
+      "key": "process.x_window_title",
       "object": "process"
     },
     "uptime": {
       "key": "process.x_uptime",
       "object": "process"
     },
-    "cwd": {
+    "working_directory": {
       "key": "process.cwd",
       "object": "process"
     },
