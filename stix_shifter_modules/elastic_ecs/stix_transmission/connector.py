@@ -60,15 +60,20 @@ class Connector(BaseSyncConnector):
             return_obj = self._handle_errors(response, return_obj)
             if (return_obj['success']):
                 response_json = json.loads(return_obj["data"])
-                max_result_windows = set()
+                max_result_windows = list()
                 if not (response_json is None):
-                    for _, item_json in response_json.items():
-                        max_res_win = item_json['defaults']['index']['max_result_window']
-                        max_result_windows.add(max_res_win)
-                if len(max_result_windows) != 1:
-                    ErrorResponder.fill_error(max_result_windows, message='inconsistent max_result_window settings', connector=self.connector)
-                    self.logger.error('inconsistent max_result_window settings: ' + str(max_result_windows))
-                self.max_result_window = int(max_result_windows.pop())
+                    for index, item_json in response_json.items():
+                        if 'max_result_window' in item_json['settings']['index']:
+                            max_res_win = item_json['settings']['index']['max_result_window']
+                        elif 'max_result_window' in item_json['defaults']['index']:
+                            max_res_win = item_json['defaults']['index']['max_result_window']
+                        else:
+                            ErrorResponder.fill_error(item_json,
+                                                      message='max_result_window is not set in index: ' + str(index),
+                                                      connector=self.connector)
+                            self.logger.error('max_result_window is not set in index: ' + str(index))
+                        max_result_windows.append(int(max_res_win))
+                self.max_result_window = sorted(max_result_windows)[0] #return the smallest max_return_window in indices
                 return self.max_result_window
         except Exception as e:
             if response_txt is not None:

@@ -271,3 +271,54 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert len(results_response['data']) > 0
         assert len(results_response['lastsort']) >= 1
+
+
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.get_max_result_window',
+           autospec=True)
+    def test_pagesize(self, mock_results_response, mock_api_client):
+        mock_api_client.return_value = None
+        mocked_return_value = """ {
+                "index1": {
+                  "settings": {
+                    "index": {
+                      "creation_date": "1676581113776"
+                    }
+                  },
+                  "defaults": {
+                    "index": {
+                      "max_result_window": "20000"
+                    }
+                  }
+                },
+                "index2": {
+                  "settings": {
+                    "index": {
+                      "max_result_window": "30000",
+                      "creation_date": "1676580367477"
+                    }
+                  },
+                  "defaults": {
+                    "index": {
+                    }
+                  }
+                }
+            } """
+        mock_results_response.return_value = ElasticEcsMockResponse(200, mocked_return_value)
+
+        config = {
+            "auth": {
+                "username": "bla",
+                "password": "bla"
+            }
+        }
+        connection = {
+            "host": "hostbla",
+            "port": 8080,
+            "selfSignedCert": "cert",
+            "indices": "index1,index2"
+        }
+
+        transmission = stix_transmission.StixTransmission('elastic_ecs', connection, config)
+
+        assert transmission.entry_point._BaseEntryPoint__results_connector.max_result_window == 20000
+
