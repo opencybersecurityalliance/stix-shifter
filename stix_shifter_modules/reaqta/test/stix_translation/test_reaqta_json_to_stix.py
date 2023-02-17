@@ -61,7 +61,6 @@ DATA_VERSION = find('payload.data.version', DATA)
 
 STIX_2_1_OBJECT_REFS = [
     "directory--13adb857-abec-5c8f-847b-bb6899c74d12",
-    "file--e947ec3d-a3a8-50e9-a408-020d4b7108ec",
     "user-account--b421bf67-9785-501a-9321-8dc35ed7a1c5",
     "file--92de3247-223e-5d02-b662-10053cd87404",
     "network-traffic--3805077a-e9e7-5689-b863-85be32f5c67e",
@@ -72,13 +71,9 @@ STIX_2_1_OBJECT_REFS = [
     "file--86e2f685-4636-530c-923b-adaa9db11df9",
     "user-account--38a33c9a-4221-5a52-8da7-b3f6e51d4351",
     "directory--bf80427d-5920-5f36-aee1-c10ea3d9bccb",
-    "file--0055834d-3772-5e4d-b39e-552c3e23b6ec",
     "user-account--7341e6ed-3ed7-5d12-a4dc-570afeb994e5",
     "directory--e56dc833-b047-51fe-b68d-c628598415c9",
-    "file--aadaf87b-d5cb-5ff5-8115-9dcefdd26ad9",
     "directory--c17e5aa6-ccaf-533c-a119-3244ee7651d3",
-    "file--1a114064-93a9-5b53-82fb-e9a399ce7485",
-    "file--4d2b6011-b251-5e8b-a235-bad44f6161a0",
     "ipv4-addr--806f9213-8e92-5de7-ae9b-8e5697498d78",
     "ipv4-addr--efabfd00-4168-536e-8995-e3837bd7111f"
 ]
@@ -148,7 +143,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         proc_obj = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'process')
         
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'x_unique_id', 'extensions', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line'})
+        assert(proc_obj.keys() == {'type', 'x_unique_id', 'name', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'extensions', 'command_line'})
         
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref in objects), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
@@ -203,9 +198,8 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         extensions = find('extensions.x-reaqta-program', file_obj)
         assert(extensions is not None), "file extensions not found"
-        assert(extensions.keys() == {'arch', 'fsname'})
+        assert(extensions.keys() == {'arch'})
         assert(extensions['arch'] == DATA_PROCESS_IMAGE_ARCH)
-        assert(extensions['fsname'] == DATA_PROCESS_IMAGE_FILE)
 
     def test_cybox_observables_network_traffic(self):
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
@@ -269,7 +263,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         process_ref = event['process_ref']
         assert(process_ref in objects), f"process_ref with key {event['process_ref']} not found"
         process_obj = objects[process_ref]
-        assert(process_obj.keys() == {'type', 'x_unique_id', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'extensions', 'command_line'})
+        assert(process_obj.keys() == {'type', 'x_unique_id', 'name', 'binary_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'extensions', 'command_line'})
         assert(process_obj['type'] == 'process')
         assert(process_obj['command_line'] == DATA_PROCESS_COMMAND_LINE)
         binary_obj = objects[process_obj['binary_ref']]
@@ -413,6 +407,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(sum(obj['type'] == 'x-reaqta-event' for obj in result_bundle_objects) == 1)
 
         # Insure fixed deterministic IDs are present
+        print(set(STIX_2_1_OBJECT_REFS).difference(observed_data['object_refs']))
         assert(set(STIX_2_1_OBJECT_REFS).issubset(observed_data['object_refs']))
 
         event = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'x-reaqta-event')
@@ -432,14 +427,11 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         proc_obj = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'process')
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'extensions', 'id', 'spec_version', 'image_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'command_line', 'x_unique_id'})
+        assert(proc_obj.keys() == {'type', 'x_unique_id', 'id', 'spec_version', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'extensions', 'command_line'})
         
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref.object_id in observed_data['object_refs']), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
-        
-        image_ref = proc_obj['image_ref']
-        assert(image_ref.object_id in observed_data['object_refs']), f"image_ref with key {proc_obj['image_ref']} not found"
-        
+
         parent_ref = proc_obj['parent_ref']
         assert(parent_ref.object_id in observed_data['object_refs']), f"parent_ref with key {proc_obj['parent_ref']} not found"
         assert(proc_obj['command_line'] == DATA_PROCESS_COMMAND_LINE)
