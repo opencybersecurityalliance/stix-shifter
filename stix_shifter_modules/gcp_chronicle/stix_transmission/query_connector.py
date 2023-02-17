@@ -27,8 +27,8 @@ class QueryConnector(BaseQueryConnector):
             response = await self.api_client.create_search(query)
             if isinstance(response, dict):   # return the object, if response code is not 200 in create_rule
                 return response              # in api_client
-            response_code = response[0].status
-            response_text = json.loads(response[1])
+            response_code = response.status_code
+            response_text = response.content
 
             if response_code == 200:
                 if 'retrohuntId' in response_text.keys() and 'ruleId' in response_text.keys():

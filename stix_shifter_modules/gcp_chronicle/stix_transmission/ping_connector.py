@@ -2,8 +2,8 @@ from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector impor
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 import json
-from httplib2 import ServerNotFoundError
-from google.auth.exceptions import RefreshError
+from aiogoogle.excs import HTTPError
+from aiohttp.client_exceptions import ClientConnectionError
 
 
 class PingConnector(BasePingConnector):
@@ -23,8 +23,8 @@ class PingConnector(BasePingConnector):
         try:
 
             response = await self.api_client.ping_box()
-            response_code = response[0].status
-            response_text = json.loads(response[1])
+            response_code = response.status_code
+            response_text = response.content
             if response_code == 200:
                 return_obj['success'] = True
             else:
@@ -32,15 +32,17 @@ class PingConnector(BasePingConnector):
                 response_dict['message'] = response_text
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
-        except ServerNotFoundError:
+        except ClientConnectionError:
             response_dict['code'] = 1010
             response_dict['message'] = "Invalid Host"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
-        except RefreshError:
-
-            response_dict['code'] = 1015
-            response_dict['message'] = "Invalid Client Email"
+        except HTTPError as ex:
+            if 'invalid_grant' in str(ex):
+                response_dict['code'] = 1015
+                response_dict['message'] = "Invalid Client Email"
+            else:
+                response_dict['message'] = str(ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         except ValueError as v_ex:
