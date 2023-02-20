@@ -25,6 +25,8 @@
       "dst_byte_count": ["destination.bytes", "server.bytes"],
       "src_packets": ["source.packets", "client.packets"],
       "dst_packets": ["destination.packets", "server.packets"],
+      "x_vlan.id": ["network.vlan.id"],
+      "x_vlan.name": ["network.vlan.name"],
       "x_inner_vlan.id": ["network.inner.vlan.id"],
       "x_inner_vlan.name": ["network.inner.vlan.name"],
       "x_name": ["network.name"],
