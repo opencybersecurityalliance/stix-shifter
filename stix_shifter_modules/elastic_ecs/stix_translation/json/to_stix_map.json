@@ -569,11 +569,11 @@
     ],
     "vlan": {
       "id": {
-        "key": "x-ecs-network.vlan_id",
+        "key": "network_traffic.x_vlan.id",
         "object": "network"
       },
       "name": {
-        "key": "x-ecs-network.vlan_name",
+        "key": "network_traffic.x_vlan.name",
         "object": "network"
       }
     },
