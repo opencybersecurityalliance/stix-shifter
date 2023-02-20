@@ -24,18 +24,14 @@
       "src_byte_count": ["source.bytes", "client.bytes"],
       "dst_byte_count": ["destination.bytes", "server.bytes"],
       "src_packets": ["source.packets", "client.packets"],
-      "dst_packets": ["destination.packets", "server.packets"]
-    }
-  },
-  "x-ecs-network": {
-    "fields": {
-      "inner.vlan.id": ["network.inner.vlan.id"],
-      "inner.vlan.name": ["network.inner.vlan.name"],
-      "name": ["network.name"],
-      "application": ["network.application"],
-      "direction": ["network.direction.keyword"],
-      "forwarded_ip": ["network.forwarded_ip"],
-      "community_id": ["network.community_id.keyword"]
+      "dst_packets": ["destination.packets", "server.packets"],
+      "x_inner_vlan.id": ["network.inner.vlan.id"],
+      "x_inner_vlan.name": ["network.inner.vlan.name"],
+      "x_name": ["network.name"],
+      "x_application": ["network.application"],
+      "x_direction": ["network.direction.keyword"],
+      "x_forwarded_ip": ["network.forwarded_ip"],
+      "x_community_id": ["network.community_id.keyword"]
     }
   },
   "artifact": {
