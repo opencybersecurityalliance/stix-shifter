@@ -580,33 +580,33 @@
     "inner": {
       "vlan": {
         "id": {
-          "key": "x-ecs-network.inner_vlan_id",
+          "key": "network_traffic.x_inner_vlan.id",
           "object": "network"
         },
         "name": {
-          "key": "x-ecs-network.inner_vlan_name",
+          "key": "network_traffic.x_inner_vlan.name",
           "object": "network"
         }
       }
     },
     "name": {
-      "key": "x-ecs-network.name",
+      "key": "network_traffic.x_name",
       "object": "network"
     },
     "application": {
-      "key": "x-ecs-network.application",
+      "key": "network_traffic.x_application",
       "object": "network"
     },
     "direction": {
-      "key": "x-ecs-network.direction",
+      "key": "network_traffic.x_direction",
       "object": "network"
     },
     "forwarded_ip": {
-      "key": "x-ecs-network.forwarded_ip",
+      "key": "network_traffic.x_forwarded_ip",
       "object": "network"
     },
     "community_id": {
-      "key": "x-ecs-network.community_id",
+      "key": "network_traffic.x_community_id",
       "object": "network"
     }
   },
