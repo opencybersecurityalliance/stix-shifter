@@ -17,7 +17,7 @@ class Connector(BaseSyncConnector):
         self.max_result_window = 10000
         # extract the max_result_window from elasticsearch
         try:
-            self.get_pagesize()
+            self.max_result_window = self.get_pagesize()
         except Exception as e:
             pass
 
@@ -73,8 +73,8 @@ class Connector(BaseSyncConnector):
                                                       connector=self.connector)
                             self.logger.error('max_result_window is not set in index: ' + str(index))
                         max_result_windows.append(int(max_res_win))
-                self.max_result_window = sorted(max_result_windows)[0] #return the smallest max_return_window in indices
-                return self.max_result_window
+                max_result_window = sorted(max_result_windows)[0] #return the smallest max_return_window in indices
+                return max_result_window
         except Exception as e:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
