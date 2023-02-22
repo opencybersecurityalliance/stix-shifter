@@ -298,7 +298,7 @@
               "references": "accessorProcess_file"
             }
           ],
-          "fsName": {
+          "filename": {
             "key": "file.extensions.x-reaqta-program.fsname",
             "object": "accessorProcess_file"
           },
@@ -466,7 +466,7 @@
               "references": "allocatorProc_file"
             }
           ],
-          "fsName": {
+          "filename": {
             "key": "file.extensions.x-reaqta-program.fsname",
             "object": "allocatorProc_file"
           },
@@ -668,7 +668,7 @@
               "references": "childProcess_file"
             }
           ],
-          "fsName": {
+          "filename": {
             "key": "file.extensions.x-reaqta-program.fsname",
             "object": "childProcess_file"
           },
@@ -929,7 +929,7 @@
               "references": "engineProcess_file"
             }
           ],
-          "fsName": {
+          "filename": {
             "key": "file.extensions.x-reaqta-program.fsname",
             "object": "engineProcess_file"
           },
@@ -1700,7 +1700,7 @@
               "references": "serviceProcess_file"
             }
           ],
-          "fsName": {
+          "filename": {
             "key": "file.extensions.x-reaqta-program.fsname",
             "object": "serviceProcess_file"
           },
@@ -1888,7 +1888,7 @@
               "references": "targetProcess_file"
             }
           ],
-          "fsName": {
+          "filename": {
             "key": "file.extensions.x-reaqta-program.fsname",
             "object": "targetProcess_file"
           },

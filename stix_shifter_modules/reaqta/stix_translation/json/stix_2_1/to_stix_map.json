@@ -453,7 +453,7 @@
           "fsName": [
             {
               "key": "file.name",
-              "object": "allocatorProc_file"
+              "object": "accessorProcess_file"
             },
             {
               "key": "process.image_ref",
@@ -468,7 +468,7 @@
           ],
           "fsName": {
             "key": "file.extensions.x-reaqta-program-ext.fsname",
-            "object": "allocatorProc_file"
+            "object": "accessorProcess_file"
           },
           "md5": {
             "key": "file.hashes.MD5",

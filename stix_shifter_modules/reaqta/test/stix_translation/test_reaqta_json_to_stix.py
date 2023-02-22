@@ -394,7 +394,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         # Count object types
         assert(sum(obj['type'] == 'directory' for obj in result_bundle_objects) == 5)
-        assert(sum(obj['type'] == 'file' for obj in result_bundle_objects) == 7)
+        assert(sum(obj['type'] == 'file' for obj in result_bundle_objects) == 8)
         assert(sum(obj['type'] == 'ipv4-addr' for obj in result_bundle_objects) == 2)
         assert(sum(obj['type'] == 'network-traffic' for obj in result_bundle_objects) == 1)
         assert(sum(obj['type'] == 'process' for obj in result_bundle_objects) == 12)
