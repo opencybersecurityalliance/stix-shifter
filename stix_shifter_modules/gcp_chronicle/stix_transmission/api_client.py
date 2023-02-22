@@ -2,6 +2,7 @@ from aiogoogle import Aiogoogle, auth
 from aiogoogle.models import Request
 from aiogoogle.excs import HTTPError
 from aiohttp.client_exceptions import ClientConnectionError
+from asyncio.exceptions import TimeoutError
 import json
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.error_response import ErrorResponder
@@ -21,6 +22,7 @@ class APIClient:
         self.auth['token_uri'] = self.URI
         self.host = "https://" + connection.get('host')
         self.result_limit = connection['options'].get('result_limit')
+        self.timeout = connection['options'].get('timeout')
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
         self.http_client = None
@@ -93,12 +95,13 @@ class APIClient:
             response_dict['message'] = "InvalidResponse"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
+        except TimeoutError as ex:
+            response_dict['code'] = 120
+            response_dict['message'] = 'TimeoutError ' + str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+
         except Exception as ex:
-            if "timed out" in str(ex):
-                response_dict['code'] = 120
-                response_dict['message'] = str(ex)
-            else:
-                response_dict['message'] = ex
+            response_dict['message'] = ex
             self.logger.error('error when getting search results: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
@@ -185,4 +188,4 @@ class APIClient:
         """
         async with self.http_client as client:
             req = Request(url=url, method=method, data=data)
-            return await client.as_service_account(req, full_res=True)
+            return await client.as_service_account(req, full_res=True, timeout=self.timeout)

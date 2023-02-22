@@ -4,6 +4,7 @@ from stix_shifter_utils.utils import logger
 import json
 from aiogoogle.excs import HTTPError
 from aiohttp.client_exceptions import ClientConnectionError
+from asyncio.exceptions import TimeoutError
 import copy
 import re
 
@@ -132,15 +133,16 @@ class ResultsConnector(BaseJsonResultsConnector):
                 response_dict['message'] = f'cannot parse {r_ex}'
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
+        except TimeoutError as ex:
+            response_dict['code'] = 120
+            response_dict['message'] = 'TimeoutError ' + str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            
         except Exception as exp:
-            if "timed out" in str(exp):
-                response_dict['code'] = 120
-                response_dict['message'] = str(exp)
-            else:
-                response_dict['message'] = exp
+            response_dict['message'] = exp
             self.logger.error('error when getting search results: %s', exp)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
-
+        
         finally:
             try:
                 if not return_obj.get('data') or result_count >= self.api_client.result_limit or \

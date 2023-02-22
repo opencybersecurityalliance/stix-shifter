@@ -5,6 +5,7 @@ from stix_shifter.stix_transmission import stix_transmission
 import json
 from aiogoogle.excs import HTTPError
 from aiohttp.client_exceptions import ClientConnectionError
+from asyncio.exceptions import TimeoutError
 
 
 class MockCodeResponse:
@@ -500,7 +501,7 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert "connection attempt failed" in ping_response['error']
-        assert ping_response['code'] == "unknown"
+        assert ping_response['code'] == "service_unavailable"
 
     def test_ping_value_error(self, mock_http):
         """test value error in transmit ping"""
@@ -568,7 +569,18 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         assert delete_response is not None
         assert delete_response['success'] is False
         assert "connection attempt failed" in delete_response['error']
-        assert delete_response['code'] == "unknown"
+        assert delete_response['code'] == "service_unavailable"
+
+    def test_delete_with_invalid_searchid(self, mock_http):
+        """ test timeout error in transmit delete """
+        search_id = "oh_1234:ru_1234"
+        mock_http.side_effect = HTTPError("generic::not_found: rule with ID ru_1234")
+        transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
+        delete_response = transmission.delete(search_id)
+        assert delete_response is not None
+        assert delete_response['success'] is False
+        assert "Could not find search id" in delete_response['error']
+        assert delete_response['code'] == "no_results"
 
     def test_results_with_invalid_client_email(self, mock_http):
         """ test invalid client email in transmit results"""

@@ -6,6 +6,7 @@ from stix_shifter_utils.utils import logger
 import json
 from aiogoogle.excs import HTTPError
 from aiohttp.client_exceptions import ClientConnectionError
+from asyncio.exceptions import TimeoutError
 import time
 
 
@@ -115,12 +116,13 @@ class StatusConnector(BaseStatusConnector):
                 response_dict['message'] = f'cannot parse {v_err}'
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
+        except TimeoutError as ex:
+            response_dict['code'] = 120
+            response_dict['message'] = 'TimeoutError ' + str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+
         except Exception as err:
-            if "timed out" in str(err):
-                response_dict['code'] = 120
-                response_dict['message'] = str(err)
-            else:
-                response_dict['message'] = err
+            response_dict['message'] = err
             self.logger.error('error when getting search results: %s', err)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 

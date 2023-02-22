@@ -4,6 +4,7 @@ from stix_shifter_utils.utils import logger
 import json
 from aiogoogle.excs import HTTPError
 from aiohttp.client_exceptions import ClientConnectionError
+from asyncio.exceptions import TimeoutError
 
 
 class DeleteConnector(BaseDeleteConnector):
@@ -43,6 +44,9 @@ class DeleteConnector(BaseDeleteConnector):
             if 'invalid_grant' in str(ex):
                 response_dict['code'] = 1015
                 response_dict['message'] = "Invalid Client Email"
+            elif "not_found" in str(ex):
+                response_dict['code'] = 1002
+                response_dict['message'] = "Could not find search id {}".format(search_id)
             else:
                 response_dict['message'] = str(ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
@@ -55,12 +59,13 @@ class DeleteConnector(BaseDeleteConnector):
                 response_dict['message'] = f'cannot parse {d_ex}'
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
+        except TimeoutError as ex:
+            response_dict['code'] = 120
+            response_dict['message'] = 'TimeoutError ' + str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+
         except Exception as d_err:
-            if "timed out" in str(d_err):
-                response_dict['code'] = 120
-                response_dict['message'] = str(d_err)
-            else:
-                response_dict['message'] = d_err
+            response_dict['message'] = d_err
             self.logger.error('error when getting search results: %s', d_err)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 

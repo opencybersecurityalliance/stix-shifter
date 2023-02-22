@@ -4,6 +4,7 @@ from stix_shifter_utils.utils import logger
 import json
 from aiogoogle.excs import HTTPError
 from aiohttp.client_exceptions import ClientConnectionError
+from asyncio.exceptions import TimeoutError
 
 
 class PingConnector(BasePingConnector):
@@ -53,12 +54,13 @@ class PingConnector(BasePingConnector):
                 response_dict['message'] = f'cannot parse {v_ex}'
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
+        except TimeoutError as ex:
+            response_dict['code'] = 120
+            response_dict['message'] = 'TimeoutError ' + str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+
         except Exception as ex:
-            if "timed out" in str(ex):
-                response_dict['code'] = 120
-                response_dict['message'] = str(ex)
-            else:
-                response_dict['message'] = ex
+            response_dict['message'] = ex
             self.logger.error('error when getting search results: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
