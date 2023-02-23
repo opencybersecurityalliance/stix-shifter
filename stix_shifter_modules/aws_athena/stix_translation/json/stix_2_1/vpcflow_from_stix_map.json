@@ -1,0 +1,39 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["sourceaddress", "destinationaddress"],
+      "x_aws_interface_id": ["interfaceId"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["sourceaddress", "destinationaddress"],
+      "x_aws_interface_id": ["interfaceid"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["sourceport"],
+      "dst_port": ["destinationport"],
+      "src_ref.value": ["sourceaddress"],
+      "dst_ref.value": ["destinationaddress"],
+      "protocols[*]": ["protocol"],
+      "start": ["starttime"],
+      "end": ["endtime"]
+    }
+  },
+  "x-aws-details": {
+    "fields": {
+      "account_id": ["account"]
+    }
+  },
+  "x-ibm-finding": {
+  "fields": {
+    "finding_type": ["action"],
+    "src_ip_ref.value": ["sourceaddress"],
+    "dst_ip_ref.value": ["destinationaddress"],
+    "start": ["starttime"],
+    "end": ["endtime"]
+  }
+  }
+}

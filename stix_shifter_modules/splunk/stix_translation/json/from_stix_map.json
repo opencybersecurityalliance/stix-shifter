@@ -35,7 +35,7 @@
     "directory": {
         "cim_type": "endpoint",
         "fields": {
-            "path": "file_path",
+            "path": ["file_path", "process_path", "parent_process_path"],
             "created": "file_create_time",
             "modified": "file_modify_time"
         }
@@ -43,10 +43,7 @@
     "domain-name": {
         "cim_type": "flow",
         "fields": {
-            "value": [
-                "host",
-                "url"
-            ]
+            "value": ["host", "url"]
         }
     },
     "x-readable-payload": {
@@ -58,10 +55,7 @@
     "email-addr": {
         "cim_type": "email",
         "fields": {
-            "value": [
-                "src_user",
-                "recipient"
-            ]
+            "value": ["src_user", "recipient"]
         }
     },
     "email-message": {
@@ -123,9 +117,9 @@
     "network-traffic": {
         "cim_type": "network",
         "fields": {
-            "src_ref.value": "src",
+            "src_ref.value": ["src_ip"],
             "src_port": "src_port",
-            "dst_ref.value": "dest",
+            "dst_ref.value": ["dest_ip"],
             "dst_port": "dest_port",
             "protocols[*]": "protocol",
             "start": "earliest",
@@ -135,10 +129,11 @@
     "process": {
         "cim_type": "process",
         "fields": {
-            "name": "process_name",
-            "command_line": "process",
-            "pid": "pid",
+            "name": ["process_name", "parent_process_name"],
+            "command_line": ["process", "parent_process"],
+            "pid": ["process_id", "parent_process_id"],
             "creator_user_ref.account_login": "user",
+            "creator_user_ref.user_login": "user",
             "binary_ref.parent_directory_ref.path": "process_path",
             "binary_ref.name": "process_exec"
         }
@@ -152,7 +147,8 @@
     "user-account": {
         "cim_type": "authentication",
         "fields": {
-            "user_id": "user"
+            "user_id": "user",
+            "account_login": "user"
         }
     },
     "windows-registry-key": {
