@@ -2308,20 +2308,27 @@
     },
     "connection_info": {
       "protocol_num": {
-        "key": "network-traffic.protocol",
+        "key": "network-traffic.protocols",
         "object": "nt",
-        "transformer": "ProtocolNumToName"
+        "transformer": "ProtocolNumToName",
+        "group": true
       },
       "protocol_name": {
-        "key": "network-traffic.protocol",
+        "key": "network-traffic.extensions.x-network-ext.protocol_name",
         "object": "nt"
       },
       "tcp_flags": {
-        "key": "network-traffic.extensions.x-network-ext.tcp_flags",
+        "key": "network-traffic.extensions.tcp-ext.src_flags_hex",
         "object": "nt"
       },
       "protocol_ver": {
-        "key": "network-traffic.extensions.x-network-ext.protocol_ver",
+        "key": "network-traffic.protocols",
+        "object": "nt",
+        "group": true,
+        "transformer": "ToLowercaseArray"
+      },
+      "protocol_ver_id": {
+        "key": "network-traffic.extensions.x-network-ext.protocol_ver_id",
         "object": "nt"
       },
       "direction": {
