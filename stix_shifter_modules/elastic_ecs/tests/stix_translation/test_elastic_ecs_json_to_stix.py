@@ -712,8 +712,6 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
     def test_x_ecs_event(self):
         result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([ecs_event_data]))
-        with open('/tmp/test_ecs.json', 'w') as f:
-          f.write(json.dumps(result_bundle, indent=2))
         assert (result_bundle['type'] == 'bundle')
         translation_objects = result_bundle.get('objects')
         assert (translation_objects and len(translation_objects) == 2)
