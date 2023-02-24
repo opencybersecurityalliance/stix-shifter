@@ -463,7 +463,6 @@ class TestAwsResultsToStix(unittest.TestCase):
         
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
-
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
 
@@ -483,6 +482,7 @@ class TestAwsResultsToStix(unittest.TestCase):
 
         assert 'objects' in observed_data
         objects = observed_data['objects']
+        
         user_account = TestAwsResultsToStix.get_first_of_type(objects.values(), 'user-account')
         assert user_account is not None, 'user-account object type not found'
         assert user_account.keys() == {'type', 'extensions', 'display_name', 'user_id'}
@@ -490,8 +490,19 @@ class TestAwsResultsToStix(unittest.TestCase):
         assert user_account['user_id'] == '011222333553'
         assert user_account['display_name'] == 'backup'
 
+        network_traffic = TestAwsResultsToStix.get_first_of_type(objects.values(), 'network-traffic')
+        assert network_traffic is not None, 'network-traffic object type not found'
+        assert network_traffic.keys() == {'type', 'extensions', 'protocols', 'dst_ref', 'dst_port', 'src_ref', 'src_port', 'dst_byte_count', 'dst_packets', 'src_packets'}
+        assert network_traffic['protocols'] == ['tcp', 'ipv4']
+        assert network_traffic['src_port'] == 36136
+        assert network_traffic['dst_port'] == 19984
+        assert network_traffic['src_packets'] == 535302077
+        assert network_traffic['dst_packets'] == 4208942596
+        tcp_ext = network_traffic.get('extensions')['tcp-ext']
+        assert tcp_ext['src_flags_hex'] == 85
+
         x_ibm_finding = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
         assert x_ibm_finding is not None, 'x-ibm-finding object type not found'
-        assert x_ibm_finding.keys() == {'type', 'time_observed','src_ip_ref', 'severity'}
+        assert x_ibm_finding.keys() == {'type', 'time_observed', 'dst_ip_ref', 'src_ip_ref', 'severity'}
         assert x_ibm_finding['time_observed'] == '2020-10-07T08:08:37.000Z'
         assert x_ibm_finding['severity'] == 0

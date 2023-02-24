@@ -142,11 +142,12 @@
       "extensions.'x-network-ext'.protocol_ver": [
         "connection_info.protocol_ver"
       ],
-      "extensions.'x-network-ext'.tcp_flags": [
+      "extensions.'tcp-ext'.src_flags_hex": [
         "connection_info.tcp_flags"
       ],
       "protocols[*]": [
-        "connection_info.protocol_num"
+        "connection_info.protocol_name",
+        "connection_info.protocol_ver_id"
       ],
       "src_byte_count": [
         "traffic.bytes_out"
