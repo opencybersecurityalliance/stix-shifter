@@ -1,2 +1,1 @@
-# Consider using https://pypi.org/project/aiogoogle/ for async
-google-api-python-client==2.52.0
+aiogoogle==5.1.0

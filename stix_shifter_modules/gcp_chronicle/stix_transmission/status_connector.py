@@ -4,8 +4,9 @@ from enum import Enum
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 import json
-from httplib2 import ServerNotFoundError
-from google.auth.exceptions import RefreshError
+from aiogoogle.excs import HTTPError
+from aiohttp.client_exceptions import ClientConnectionError
+from asyncio.exceptions import TimeoutError
 import time
 
 
@@ -54,9 +55,9 @@ class StatusConnector(BaseStatusConnector):
         response_dict = {}
         try:
             response_wrapper = await self.api_client.get_search_status(search_id)
-            response_text = json.loads(response_wrapper[1])
+            response_text = response_wrapper.content
 
-            if response_wrapper[0].status == 200:
+            if response_wrapper.status_code == 200:
                 if 'state' in response_text.keys():
                     if response_text['state'] in ("RUNNING", "CANCELLED"):
                         return_obj['success'] = True
@@ -79,17 +80,17 @@ class StatusConnector(BaseStatusConnector):
 
             else:
                 # sleep of 1 sec has been added to reduce the resource exhaustion in data source
-                if response_wrapper[0].status == 429:
+                if response_wrapper.status_code == 429:
                     return_obj['success'] = True
                     return_obj['status'] = "RUNNING"
                     return_obj['progress'] = StatusConnector.PROGRESS_PERCENTAGE
                     time.sleep(1)
                     return return_obj
-                response_dict['code'] = response_wrapper[0].status
+                response_dict['code'] = response_wrapper.status_code
                 response_dict['message'] = response_text['error'].get('message')
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
-        except ServerNotFoundError:
+        except ClientConnectionError:
             response_dict['code'] = 1010
             response_dict['message'] = "Invalid Host"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
@@ -99,9 +100,12 @@ class StatusConnector(BaseStatusConnector):
             response_dict['message'] = "Invalid Response"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
-        except RefreshError:
-            response_dict['code'] = 1015
-            response_dict['message'] = "Invalid Client Email"
+        except HTTPError as ex:
+            if 'invalid_grant' in str(ex):
+                response_dict['code'] = 1015
+                response_dict['message'] = "Invalid Client Email"
+            else:
+                response_dict['message'] = str(ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         except ValueError as v_err:
@@ -112,12 +116,13 @@ class StatusConnector(BaseStatusConnector):
                 response_dict['message'] = f'cannot parse {v_err}'
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
+        except TimeoutError as ex:
+            response_dict['code'] = 120
+            response_dict['message'] = 'TimeoutError ' + str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+
         except Exception as err:
-            if "timed out" in str(err):
-                response_dict['code'] = 120
-                response_dict['message'] = str(err)
-            else:
-                response_dict['message'] = err
+            response_dict['message'] = err
             self.logger.error('error when getting search results: %s', err)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
