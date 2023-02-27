@@ -1,10 +1,12 @@
-##### Updated on 01/24/23
+##### Updated on 02/27/23
 ## Microsoft Graph Security
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | and |
-| OR | or |
+| AND (Comparision) | and |
+| OR (Comparision) | or |
 | > | gt |
 | >= | ge |
 | < | lt |
