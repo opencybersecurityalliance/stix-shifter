@@ -505,7 +505,6 @@ class TestAwsResultsToStix(unittest.TestCase):
         data = json.loads(result_file)
         
         result_bundle = entry_point.translate_results(json.dumps(data_source),json.dumps([data]))
-        print(json.dumps(result_bundle, indent=4))
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -513,7 +512,6 @@ class TestAwsResultsToStix(unittest.TestCase):
         objects = observed_data['objects']
 
         file = TestAwsResultsToStix.get_first_of_type(objects.values(), 'file')    
-        print(json.dumps(file, indent=4))
         assert file['name'] == 'permit.msg'
         assert file['hashes']['SHA-256'] == '401045DC4F861002C2494449EE92A7063F34AA49E4708EA6E3231B14D5D7B579'
         assert file['hashes']['SHA-1'] == 'CD89B1537C0E6664405C383CEE9DB1F2A6D1A5AC'
@@ -526,7 +524,6 @@ class TestAwsResultsToStix(unittest.TestCase):
         result_file = open('stix_shifter_modules/aws_athena/tests/stix_translation/json/ocsf_results.json', 'r').read()
         data = json.loads(result_file)
         result_bundle = entry_point.translate_results(json.dumps(data_source),json.dumps([data]))
-        print(json.dumps(result_bundle, indent=4))
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -535,7 +532,7 @@ class TestAwsResultsToStix(unittest.TestCase):
 
         network_traffic = TestAwsResultsToStix.get_first_of_type(objects.values(), 'network-traffic')
         assert network_traffic is not None, 'network-traffic object type not found'
-        assert network_traffic.keys() == {'type', 'extensions', 'x_direction','protocols', 'dst_ref', 'dst_port', 'src_ref', 'src_port', 'dst_byte_count', 'dst_packets', 'src_packets'}
+        assert network_traffic.keys() == {'type', 'extensions','protocols', 'dst_ref', 'dst_port', 'src_ref', 'src_port', 'dst_byte_count', 'dst_packets', 'src_packets'}
         assert network_traffic['protocols'] == ['tcp', 'ipv4']
         assert network_traffic['src_port'] == 36136
         assert network_traffic['dst_port'] == 19984
@@ -543,4 +540,3 @@ class TestAwsResultsToStix(unittest.TestCase):
         assert network_traffic['dst_packets'] == 4208942596
         tcp_ext = network_traffic.get('extensions')['tcp-ext']
         assert tcp_ext['src_flags_hex'] == 85
-        assert network_traffic['x_direction'] == 'Inbound'

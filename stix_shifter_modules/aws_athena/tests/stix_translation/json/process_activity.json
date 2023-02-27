@@ -128,9 +128,9 @@
                             "value": "FAF9838AC653B1FE66CD949D9862F251532DDFEFED66B69E45D918413DD7207B"
                         },
                         {
-                            "algorithm": "Unknown",
-                            "algorithm_id": 0,
-                            "value": "43166D4D98B127D7F43159745C9391CD27EBDCA4B64049470FBB960500706F99B8BB9745D621505937C394F6C09E30235D14BB33EA52CCE68AA033383AD6BB49"
+                            "algorithm": "SHA-512",
+                            "algorithm_id": 4,
+                            "value": "7598F315CC628FB4776924563E0E829B8CCA39B7FAD98FA379FA9BA878C6034D92689E7B48D3931F30765CF0A44922E954240AFB658CF898961C102430072C67"
                         }
                     ],
                     "mime_type": "potential/herbs",
