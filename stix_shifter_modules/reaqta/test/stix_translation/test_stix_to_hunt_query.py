@@ -250,7 +250,7 @@ class TestQueryTranslator(unittest.TestCase):
         self.assertQuery(query, test_string, stix_pattern)
 
     def test_directory_file_path(self):
-        stix_pattern = "[file:parent_directory_ref.path = 'c:\\\program files\\\microsoft office\\\\root\\\office16\\\winword.exe' OR directory:path = 'c:\\\program files\\\microsoft office\\\\root\\\office16\\\winword.exe'] {}".format(TEST_START_STOP_STIX_VALUE1)
+        stix_pattern = "[file:parent_directory_ref.path = 'c:\\\\program files\\\\microsoft office\\\\root\\\\office16\\\\winword.exe' OR directory:path = 'c:\\\\program files\\\\microsoft office\\\\root\\\\office16\\\\winword.exe'] {}".format(TEST_START_STOP_STIX_VALUE1)
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 

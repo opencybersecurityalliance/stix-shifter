@@ -334,7 +334,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         # Stix pattern requires backslash to be double escaped to pass pattern validation.
         # Not sure yet how we will make this work for an AQL query.
         # See https://github.com/oasis-open/cti-stix2-json-schemas/issues/51
-        search_string = '^.*http://graphics8\\\.nytimes\\\.com/bcvideo.*$'
+        search_string = '^.*http://graphics8\\\\.nytimes\\\\.com/bcvideo.*$'
         stix_pattern = "[artifact:payload_bin MATCHES '{}']".format(search_string)
         query = _translate_query(stix_pattern)
         translated_value = '^.*http://graphics8\\.nytimes\\.com/bcvideo.*$'
