@@ -32,7 +32,7 @@ class APIClient:
         query = '{"queryPath": [{"requestedType": "Connection", "filters": [], "isResult": true}],' \
                 '"totalResultLimit": 1, "perGroupLimit": 1,"templateContext": "SPECIFIC"}'
         headers['Cookie'] = self.session_log_in()
-        return self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers=headers, data=query)
+        return self.client.call_api(self.QUERY_ENDPOINT, 'HEAD', headers=headers, data=query)
 
     def get_search_results(self, query):
         """
