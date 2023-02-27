@@ -114,7 +114,7 @@ class TestQueryTranslator(unittest.TestCase):
             "vpcflow": "(REGEXP_LIKE(CAST(sourceaddress as varchar), '\\d+') AND start BETWEEN 1601541790 AND "
                        "1604054590)"
         }, {
-            "ocsf": "(REGEXP_LIKE(CAST(src_endpoint.ip as varchar), '\d+') AND time BETWEEN 1601541790000 AND 1604054590000)"
+            "ocsf": "(REGEXP_LIKE(CAST(src_endpoint.ip as varchar), '\\d+') AND time BETWEEN 1601541790000 AND 1604054590000)"
         }]
         self._test_query_assertions(query, queries)
 

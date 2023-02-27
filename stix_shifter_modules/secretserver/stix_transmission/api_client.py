@@ -133,7 +133,7 @@ class APIClient():
                 3001, "Could not decode search id content - " + self.search_id)
         self.query = jObj.get("query", None)
         try:
-            pattern = re.compile("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z")
+            pattern = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z")
             matcher = pattern.findall(self.query)
             matches = []
             for match in matcher:
