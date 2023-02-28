@@ -1,10 +1,12 @@
-##### Updated on 01/24/23
+##### Updated on 02/27/23
 ## Amazon Athena
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | INTERSECT |
-| OR | UNION |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | > | > |
 | >= | >= |
 | < | < |
@@ -14,6 +16,8 @@
 | LIKE | LIKE |
 | IN | IN |
 | MATCHES | REGEXP_LIKE |
+| OR (Observation) | UNION |
+| AND (Observation) | INTERSECT |
 | <br> | |
 ### Searchable STIX objects and properties for Guardduty
 | STIX Object and Property | Mapped Data Source Fields |
@@ -98,8 +102,8 @@
 | **network-traffic**:extensions.'x-network-ext'.direction_id | connection_info.direction_id |
 | **network-traffic**:extensions.'x-network-ext'.packets | traffic.packets |
 | **network-traffic**:extensions.'x-network-ext'.protocol_ver | connection_info.protocol_ver |
-| **network-traffic**:extensions.'x-network-ext'.tcp_flags | connection_info.tcp_flags |
-| **network-traffic**:protocols[*] | connection_info.protocol_num |
+| **network-traffic**:extensions.'tcp-ext'.src_flags_hex | connection_info.tcp_flags |
+| **network-traffic**:protocols[*] | connection_info.protocol_num, connection_info.protocol_ver_id |
 | **network-traffic**:src_byte_count | traffic.bytes_out |
 | **network-traffic**:src_packets | traffic.packets_out |
 | **network-traffic**:src_port | src_endpoint.port |
@@ -401,10 +405,11 @@
 | network-traffic | src_ref | ip |
 | network-traffic | dst_port | port |
 | network-traffic | dst_ref | ip |
-| network-traffic | protocol | protocol_num |
-| network-traffic | protocol | protocol_name |
-| network-traffic | extensions.x-network-ext.tcp_flags | tcp_flags |
-| network-traffic | extensions.x-network-ext.protocol_ver | protocol_ver |
+| network-traffic | protocols | protocol_num |
+| network-traffic | extensions.x-network-ext.protocol_name | protocol_name |
+| network-traffic | extensions.tcp-ext.src_flags_hex | tcp_flags |
+| network-traffic | protocols | protocol_ver |
+| network-traffic | extensions.x-network-ext.protocol_ver_id | protocol_ver_id |
 | network-traffic | extensions.x-network-ext.direction | direction |
 | network-traffic | extensions.x-network-ext.boundary_id | boundary_id |
 | network-traffic | extensions.x-network-ext.boundary | boundary |
