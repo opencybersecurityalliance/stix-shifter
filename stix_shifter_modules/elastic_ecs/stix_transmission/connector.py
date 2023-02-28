@@ -89,7 +89,7 @@ class Connector(BaseSyncConnector):
         try:
             # using search after API in ElasticSearch
             # pass the last searched value in metadata argument, ignore offset argument
-            response = self.api_client.search_pagination(query, metadata, min(length, self.max_result_window))
+            response = self.api_client.search_pagination(query, metadata, min(int(length), self.max_result_window))
             return_obj = self._handle_errors(response, return_obj)
 
             if (return_obj['success']):
