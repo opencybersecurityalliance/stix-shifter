@@ -299,7 +299,7 @@
             }
           ],
           "filename": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+            "key": "file.extensions.x-reaqta-program.filename",
             "object": "accessorProcess_file"
           },
           "md5": {
@@ -467,7 +467,7 @@
             }
           ],
           "filename": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+            "key": "file.extensions.x-reaqta-program.filename",
             "object": "allocatorProc_file"
           },
           "md5": {
@@ -669,7 +669,7 @@
             }
           ],
           "filename": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+            "key": "file.extensions.x-reaqta-program.filename",
             "object": "childProcess_file"
           },
           "md5": {
@@ -930,7 +930,7 @@
             }
           ],
           "filename": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+            "key": "file.extensions.x-reaqta-program.filename",
             "object": "engineProcess_file"
           },
           "md5": {
@@ -1701,7 +1701,7 @@
             }
           ],
           "filename": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+            "key": "file.extensions.x-reaqta-program.filename",
             "object": "serviceProcess_file"
           },
           "md5": {
@@ -1889,7 +1889,7 @@
             }
           ],
           "filename": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+            "key": "file.extensions.x-reaqta-program.filename",
             "object": "targetProcess_file"
           },
           "md5": {
