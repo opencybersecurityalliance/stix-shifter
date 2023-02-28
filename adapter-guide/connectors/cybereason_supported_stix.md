@@ -1,9 +1,11 @@
-##### Updated on 12/13/22
+##### Updated on 02/27/23
 ## Cybereason
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | OR |
+| AND (Comparision) | AND |
 | > | GreaterThan |
 | >= | GreaterOrEqualsTo |
 | < | LessThan |
@@ -13,9 +15,12 @@
 | LIKE | ContainsIgnoreCase |
 | IN | Equals |
 | MATCHES | ContainsIgnoreCase |
-| OR | OR |
+| AND (Observation) | OR |
+| OR (Observation) | OR |
 | <br> | |
 ### Searchable STIX objects and properties
+*The Cybereason connector can only join specific linked fields with the AND operator as defined in its [configmap](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_modules/aws_athena/stix_translation/json/operators.json).*
+
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | Connection.localAddress, Connection.remoteAddress |

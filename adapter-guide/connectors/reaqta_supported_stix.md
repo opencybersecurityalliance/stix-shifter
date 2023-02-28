@@ -1,10 +1,12 @@
-##### Updated on 11/04/22
+##### Updated on 02/27/23
 ## IBM Security ReaQta
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | AND |
-| OR | OR |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | >= | = |
 | <= | = |
 | = | = |
@@ -12,6 +14,8 @@
 | LIKE | = |
 | IN | = |
 | MATCHES | = |
+| OR (Observation) | OR |
+| AND (Observation) | AND |
 | <br> | |
 ### Searchable STIX objects and properties
 | STIX Object and Property | Mapped Data Source Fields |
