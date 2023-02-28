@@ -1,10 +1,12 @@
-##### Updated on 01/24/23
+##### Updated on 02/27/23
 ## Elasticsearch ECS
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | OR |
-| OR | OR |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | > | :> |
 | >= | :>= |
 | < | :< |
@@ -16,6 +18,8 @@
 | MATCHES | : |
 | ISSUBSET | : |
 | ISSUPERSET | : |
+| OR (Observation) | OR |
+| AND (Observation) | OR |
 | <br> | |
 ### Searchable STIX objects and properties
 | STIX Object and Property | Mapped Data Source Fields |
