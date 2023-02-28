@@ -40,7 +40,7 @@
   },
   "process": {
     "fields": {
-      "image_ref.name": ["filename"],
+      "image_ref.name": ["fsName"],
       "creator_user_ref.user_id": [],
       "extensions.'windows-process-ext'.owner_sid": ["user.sid"],
       "extensions.'x-reaqta-process'.logon_id": ["service.login.id"],
