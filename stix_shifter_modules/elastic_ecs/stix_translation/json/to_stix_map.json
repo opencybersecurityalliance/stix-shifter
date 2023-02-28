@@ -570,44 +570,44 @@
     "vlan": {
       "id": {
         "key": "network_traffic.x_vlan.id",
-        "object": "network"
+        "object": "nt"
       },
       "name": {
         "key": "network_traffic.x_vlan.name",
-        "object": "network"
+        "object": "nt"
       }
     },
     "inner": {
       "vlan": {
         "id": {
           "key": "network_traffic.x_vlan.inner.id",
-          "object": "network"
+          "object": "nt"
         },
         "name": {
           "key": "network_traffic.x_vlan.inner.name",
-          "object": "network"
+          "object": "nt"
         }
       }
     },
     "name": {
       "key": "network_traffic.x_name",
-      "object": "network"
+      "object": "nt"
     },
     "application": {
       "key": "network_traffic.x_application",
-      "object": "network"
+      "object": "nt"
     },
     "direction": {
       "key": "network_traffic.x_direction",
-      "object": "network"
+      "object": "nt"
     },
     "forwarded_ip": {
       "key": "network_traffic.x_forwarded_ip",
-      "object": "network"
+      "object": "nt"
     },
     "community_id": {
       "key": "network_traffic.x_community_id",
-      "object": "network"
+      "object": "nt"
     }
   },
   "event": {
