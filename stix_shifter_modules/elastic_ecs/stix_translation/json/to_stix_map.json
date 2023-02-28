@@ -580,11 +580,11 @@
     "inner": {
       "vlan": {
         "id": {
-          "key": "network_traffic.x_inner_vlan.id",
+          "key": "network_traffic.x_vlan.inner.id",
           "object": "network"
         },
         "name": {
-          "key": "network_traffic.x_inner_vlan.name",
+          "key": "network_traffic.x_vlan.inner.name",
           "object": "network"
         }
       }
