@@ -59,8 +59,8 @@ DIALECTS = {
 DEFAULT_DIALECT = "default"
 
 STIX_OPERATORS = {
-    "ComparisonExpressionOperators.And": "AND",
-    "ComparisonExpressionOperators.Or": "OR",
+    "ComparisonExpressionOperators.And": "AND (Comparision)",
+    "ComparisonExpressionOperators.Or": "OR (Comparision)",
     "ComparisonComparators.GreaterThan": ">",
     "ComparisonComparators.GreaterThanOrEqual": ">=",
     "ComparisonComparators.LessThan": "<",
@@ -73,8 +73,8 @@ STIX_OPERATORS = {
     "ComparisonComparators.IsSubSet": "ISSUBSET",
     "ComparisonComparators.IsSuperSet": "ISSUPERSET",
     "ComparisonComparators.Exists": "EXISTS",
-    "ObservationOperators.Or": "OR",
-    "ObservationOperators.And": "AND",
+    "ObservationOperators.Or": "OR (Observation)",
+    "ObservationOperators.And": "AND (Observation)",
     "ObservationOperators.FollowedBy": "FOLLOWEDBY"
 }
 
@@ -119,7 +119,7 @@ def __main__():
             except(Exception):
                 print("Error for {} module".format(key))
                 continue
-        
+
         stix_attribute_collection = _parse_attributes(loaded_to_stix_json, key, {})
         
         output_string = ""
@@ -135,6 +135,7 @@ def __main__():
             loaded_operators_json = json.loads(operators_json_file.read())
             stix_operator_collection = _parse_operators(loaded_operators_json, {})
             output_string += "### Supported STIX Operators\n"
+            output_string += "*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*\n\n"
             output_string += "| STIX Operator | Data Source Operator |\n"
             output_string += "|--|--|\n"
             for stix_operator, ds_operator in stix_operator_collection.items():
@@ -163,6 +164,8 @@ def __main__():
                 loaded_from_stix_json = json.loads(from_stix_json_file.read())
                 # sorted_from_stix_objects = json.dumps(loaded_from_stix_json, sort_keys=True)
                 # sorted_attribute_objects = json.loads(sorted_attribute_objects)
+                if key == 'cybereason':
+                    output_string += "*The Cybereason connector can only join specific linked fields with the AND operator as defined in its [configmap](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_modules/aws_athena/stix_translation/json/operators.json).*\n\n"
                 output_string += "| STIX Object and Property | Mapped Data Source Fields |\n"
                 output_string += "|--|--|\n"
                 for stix_object_key, value in loaded_from_stix_json.items():
