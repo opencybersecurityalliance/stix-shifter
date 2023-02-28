@@ -569,45 +569,45 @@
     ],
     "vlan": {
       "id": {
-        "key": "x-ecs-network.vlan_id",
-        "object": "network"
+        "key": "network-traffic.x_vlan.id",
+        "object": "nt"
       },
       "name": {
-        "key": "x-ecs-network.vlan_name",
-        "object": "network"
+        "key": "network-traffic.x_vlan.name",
+        "object": "nt"
       }
     },
     "inner": {
       "vlan": {
         "id": {
-          "key": "x-ecs-network.inner_vlan_id",
-          "object": "network"
+          "key": "network-traffic.x_vlan.inner.id",
+          "object": "nt"
         },
         "name": {
-          "key": "x-ecs-network.inner_vlan_name",
-          "object": "network"
+          "key": "network-traffic.x_vlan.inner.name",
+          "object": "nt"
         }
       }
     },
     "name": {
-      "key": "x-ecs-network.name",
-      "object": "network"
+      "key": "network-traffic.x_name",
+      "object": "nt"
     },
     "application": {
-      "key": "x-ecs-network.application",
-      "object": "network"
+      "key": "network-traffic.x_application",
+      "object": "nt"
     },
     "direction": {
-      "key": "x-ecs-network.direction",
-      "object": "network"
+      "key": "network-traffic.x_direction",
+      "object": "nt"
     },
     "forwarded_ip": {
-      "key": "x-ecs-network.forwarded_ip",
-      "object": "network"
+      "key": "network-traffic.x_forwarded_ip",
+      "object": "nt"
     },
     "community_id": {
-      "key": "x-ecs-network.community_id",
-      "object": "network"
+      "key": "network-traffic.x_community_id",
+      "object": "nt"
     }
   },
   "event": {
