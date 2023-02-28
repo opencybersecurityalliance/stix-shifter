@@ -1,6 +1,8 @@
-##### Updated on 01/24/23
+##### Updated on 02/27/23
 ## Splunk Enterprise Security
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
 | > | > |
@@ -12,9 +14,11 @@
 | LIKE | encoders.like |
 | IN | encoders.set |
 | MATCHES | encoders.matches |
-| AND | {expr1} OR {expr2} |
-| OR | {expr1} OR {expr2} |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | ISSUBSET | encoders.subset |
+| AND (Observation) | {expr1} OR {expr2} |
+| OR (Observation) | {expr1} OR {expr2} |
 | FOLLOWEDBY | latest=[search {expr2} | append [makeresults 1 | eval _time=0] | head 1 | return $_time] | where {expr1} |
 | <br> | |
 ### Searchable STIX objects and properties
