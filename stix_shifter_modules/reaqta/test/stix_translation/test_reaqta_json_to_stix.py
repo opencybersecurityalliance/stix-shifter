@@ -427,7 +427,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         proc_obj = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'process')
         assert(proc_obj is not None), 'process object type not found'
-        assert(proc_obj.keys() == {'type', 'x_unique_id', 'id', 'spec_version', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'extensions', 'command_line'})
+        assert(proc_obj.keys() == {'type', 'x_unique_id', 'id', 'spec_version', 'image_ref', 'creator_user_ref', 'pid', 'created', 'parent_ref', 'extensions', 'command_line'})
         
         user_ref = proc_obj['creator_user_ref']
         assert(user_ref.object_id in observed_data['object_refs']), f"creator_user_ref with key {proc_obj['creator_user_ref']} not found"
