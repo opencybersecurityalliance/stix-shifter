@@ -77,7 +77,7 @@ class JSONToStixObservablesDecorator(JSONToStix):
 class ObjectParserMethods:
 
     def parseDirectory(self,flattened_finding, finding, type, mapping_overriden):
-        regex = "[/~!@#$%^&*()\-_+={}\[\]|\\:;\"`\'<>.\?\w]+"
+        regex = r"[/~!@#$%^&*()\-_+={}\[\]|\\:;\"`\'<>.\?\w]+"
         definition = mapping_overriden[type]
         objects = []
         for key, value in flattened_finding.items():
@@ -88,7 +88,7 @@ class ObjectParserMethods:
                 for value in objectList:
                     path = value
                     if '.' in value and '/' in value and 'providers' not in value:
-                        path = re.search("[/[\w]*/+", value).group()
+                        path = re.search(r"[/[\w]*/+", value).group()
                         dirList.append(path)
                     if '.' not in value and '/' in value and 'providers' not in value:
                         dirList.append(path)
