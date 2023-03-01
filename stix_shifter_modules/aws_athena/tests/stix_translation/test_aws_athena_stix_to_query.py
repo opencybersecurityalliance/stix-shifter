@@ -73,7 +73,8 @@ class TestQueryTranslator(unittest.TestCase):
             "vpcflow": "(CAST(protocol AS varchar) IN ('6', '9') AND start BETWEEN 1601541790 AND 1604054590)"
         },
         {
-            "ocsf": "(CAST(connection_info.protocol_num AS varchar) IN ('6', '9') AND time BETWEEN 1601541790000 AND 1604054590000)"
+            "ocsf": "((CAST(connection_info.protocol_num AS varchar) IN ('6', '9') OR "
+                    "CAST(connection_info.protocol_ver_id AS varchar) IN ('6', '9')) AND time BETWEEN 1601541790000 AND 1604054590000)"
         }
         ]
         print(json.dumps(query, indent=4))
