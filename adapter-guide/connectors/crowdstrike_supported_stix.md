@@ -1,10 +1,12 @@
-##### Updated on 12/13/22
+##### Updated on 02/27/23
 ## CrowdStrike Falcon
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | + |
-| OR | , |
+| AND (Comparision) | + |
+| OR (Comparision) | , |
 | = | : |
 | != | :! |
 | > | :> |

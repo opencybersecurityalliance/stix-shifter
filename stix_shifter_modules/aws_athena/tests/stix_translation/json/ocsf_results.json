@@ -23,9 +23,40 @@
             }
         },
         "ref_event_uid": "e12b3bc4-e1e3-11ab-22e1-de0b4d745bb1",
+        "connection_info": {
+            "boundary": "mentor lucia villa",
+            "direction": "Inbound",
+            "direction_id": 1,
+            "protocol_name": "tcp",
+            "protocol_num": 6,
+            "protocol_ver": "ipv4",
+            "protocol_ver_id": 4,
+            "tcp_flags": 85
+        },
+        "dst_endpoint": {
+            "hostname": "mirror.aero",
+            "instance_uid": "8fbaf31c-ad59-11ed-b661-0242ac110002",
+            "interface_name": "ll hourly lotus",
+            "interface_uid": "8fbaf81c-ad59-11ed-91ac-0242ac110002",
+            "ip": "63.71.92.147",
+            "port": 19984,
+            "svc_name": "norway lyrics survey",
+            "uid": "8fbafce0-ad59-11ed-bb7e-0242ac110002"
+        },
         "src_endpoint": {
-            "ip": "1.1.2.2",
-            "uid": null
+            "hostname": "investor.gov",
+            "instance_uid": "8fbb31b0-ad59-11ed-a55e-0242ac110002",
+            "interface_name": "cow ebay curtis",
+            "interface_uid": "8fbb35ca-ad59-11ed-936c-0242ac110002",
+            "ip": "116.8.200.100",
+            "port": 36136,
+            "uid": "8fbb398a-ad59-11ed-8ba9-0242ac110002"
+        },
+        "traffic": {
+            "bytes_in": 790742923,
+            "packets": 3901887417,
+            "packets_in": 4208942596,
+            "packets_out": 535302077
         },
         "resources": [
             {
