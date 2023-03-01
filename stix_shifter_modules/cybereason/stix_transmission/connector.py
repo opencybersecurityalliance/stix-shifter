@@ -116,10 +116,16 @@ class Connector(BaseSyncConnector):
         try:
             response = self.api_client.ping_box()
             response_code = response.code
-            if response_code == 302:
+            response_str = response.bytes.decode("utf-8")
+            if response_code == 302 or ('html' in response_str and 'login' in response_str):
                 raise InvalidAuthenticationException
-            if response_code == 405:
-                return_obj['success'] = True
+            if response_code == 200:
+                response_dict = json.loads(response_str)
+                if response_dict.get('online', False) and response_dict.get('readyToServe', False):
+                    return_obj['success'] = True
+                else:
+                    return_obj['success'] = False
+                    response_dict['message'] = str(response_dict)
             else:
                 response_dict['type'] = "UnexpectedResponseCode"
                 response_dict['message'] = "code: " + str(response_code)
