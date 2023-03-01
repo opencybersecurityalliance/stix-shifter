@@ -167,7 +167,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert results_response['success']
         assert 'data' in results_response
         assert len(results_response['data']) > 0
-        assert len(results_response['lastsort']) >= 1
+        assert len(results_response['metadata']) >= 1
 
 
     @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination',
@@ -270,7 +270,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert results_response is not None
         assert 'data' in results_response
         assert len(results_response['data']) > 0
-        assert len(results_response['lastsort']) >= 1
+        assert len(results_response['metadata']) >= 1
 
 
     @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.get_max_result_window',

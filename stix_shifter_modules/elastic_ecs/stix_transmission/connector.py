@@ -100,9 +100,9 @@ class Connector(BaseSyncConnector):
                     return_obj['data'] = [record['_source'] for record in response_json["hits"]["hits"]]
                     self.logger.error("Total # of records: " + str(len(return_obj['data'])))
                     if len(response_json["hits"]["hits"]) == 0:
-                        return_obj['lastsort'] = metadata
+                        return_obj['metadata'] = metadata
                     elif 'sort' in response_json["hits"]["hits"][-1]:
-                        return_obj['lastsort'] = response_json["hits"]["hits"][-1]['sort']
+                        return_obj['metadata'] = response_json["hits"]["hits"][-1]['sort']
             return return_obj
         except Exception as e:
             if response_txt is not None:
