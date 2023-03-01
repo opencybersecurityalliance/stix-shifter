@@ -1,6 +1,5 @@
 from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 from stix_shifter_utils.utils import logger
-from json import dumps as json_dumps
 
 DEFAULT_LIMIT = 10000
 DEFAULT_OFFSET = 0
@@ -30,38 +29,10 @@ class APIClient:
         """
         headers = {}
 
-        # query = '{"queryPath": [{"requestedType": "Connection", "filters": [], "isResult": true}],' \
-        #         '"totalResultLimit": 1, "perGroupLimit": 1,"templateContext": "SPECIFIC"}'
-        
-        # query = {
-        #     "queryPath": [
-        #                     {
-        #                         "requestedType": "Connection",
-        #                         "filters": [],
-        #                         "isResult": True
-        #                     }
-        #                 ],
-        #     "totalResultLimit": 1,
-        #     "perGroupLimit": 1,
-        #     "templateContext": "SPECIFIC"
-        # }
-
-        query = {
-            "queryPath": 
-                [
-                    {
-                        "requestedType": "Connection",
-                        "filters": [],
-                        "isResult": True
-                    }
-                ],
-            "totalResultLimit": 0,
-            "perGroupLimit": 0,
-            "templateContext": "SPECIFIC"
-        }
+        query = '{"queryPath": [{"requestedType": "Connection", "filters": [], "isResult": true}],' \
+                '"totalResultLimit": 1, "perGroupLimit": 1,"templateContext": "SPECIFIC"}'
         headers['Cookie'] = self.session_log_in()
-        return self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers=headers, data=json_dumps(query))
-        # return self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers=headers, data=query)
+        return self.client.call_api(self.QUERY_ENDPOINT, 'HEAD', headers=headers, data=query)
 
     def get_search_results(self, query):
         """
