@@ -181,3 +181,17 @@ class TestStixtoQuery(unittest.TestCase, object):
 
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
+
+    def test_in_operator(self):
+        stix_pattern = ("[process:name = 'rclone.exe' AND"
+                        " process:parent_ref.name IN ('pwsh.exe','powershell.exe', 'cmd.exe')]"
+                        " START t'2023-02-14T19:43:08.674Z' STOP t'2023-02-28T19:43:08.674Z'")
+        query = translation.translate(MODULE, 'query', '{}', stix_pattern)
+        query['queries'] = _remove_timestamp_from_query(query['queries'])
+
+        queries = ["SecurityEvent | where (ParentProcessName in ('pwsh.exe', 'powershell.exe', 'cmd.exe') and "
+                   "(ProcessName == 'rclone.exe' or LogonProcessName == 'rclone.exe')) and "
+                   "(TimeGenerated between (datetime(2023-02-14T19:43:08.674Z) .. datetime(2023-02-28T19:43:08.674Z)))"]
+
+        queries = _remove_timestamp_from_query(queries)
+        self._test_query_assertions(query, queries)
