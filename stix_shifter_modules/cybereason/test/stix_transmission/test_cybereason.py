@@ -81,10 +81,14 @@ class PingResponse:
 
     def __init__(self, responseobject):
         self.response = responseobject
-    
+ 
     @property
     def code(self):
         return self.response.status_code
+
+    @property
+    def bytes(self):
+        return self.response.text.encode()
 
 
 class InnerResponse:
@@ -135,7 +139,7 @@ class TestCybereasonConnection(unittest.TestCase):
     def test_ping_endpoint(self, mock_ping_source, mock_cookie,
                            mock_logout, mock_api_client):
         """ test to check ping_data_source function"""
-        pingmock = InnerResponse(405, """{"status":"SUCCESS"}""")
+        pingmock = InnerResponse(200, """{"pendingProbesPerServer":{"637b4d77e4b01c68baf5b572":0},"unassignedProbes":0,"online":true,"readyToServe":true}""")
         pingresponse = PingResponse(pingmock)
         mock_ping_source.return_value = pingresponse
 
