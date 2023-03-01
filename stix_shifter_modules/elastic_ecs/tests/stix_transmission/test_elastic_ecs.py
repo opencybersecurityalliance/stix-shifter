@@ -170,7 +170,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert len(results_response['lastsort']) >= 1
 
 
-    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.run_search',
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination',
            autospec=True)
     def test_results_response_exception(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
