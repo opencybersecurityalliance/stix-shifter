@@ -3,7 +3,7 @@ from stix_shifter_utils.utils.error_response import ErrorCode
 from stix_shifter_utils.utils import logger
 
 error_mapping = {
-
+    100: ErrorCode.TRANSMISSION_INVALID_PARAMETER,
     300: ErrorCode.TRANSMISSION_CONNECT,
     406: ErrorCode.TRANSMISSION_CONNECT,
     503: ErrorCode.TRANSMISSION_CONNECT,

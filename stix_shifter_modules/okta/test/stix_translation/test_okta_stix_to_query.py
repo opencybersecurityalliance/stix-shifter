@@ -103,8 +103,8 @@ class TestQueryTranslator(unittest.TestCase):
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_okta_target_equal_operator(self):
-        stix_pattern = "[x-okta-target:target_id MATCHES'0oa4oexp00i4BMrzJ5d7']"
+    def test_okta_target_matches_operator(self):
+        stix_pattern = "[x-okta-target:target_id MATCHES '0oa4oexp00i4BMrzJ5d7']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["filter=target.id co \"0oa4oexp00i4BMrzJ5d7\" &since=2023-02-13T10:50:41.269Z"
@@ -112,7 +112,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_okta_software_MATCHES_operator(self):
+    def test_software_MATCHES_operator(self):
         stix_pattern = "[software:extensions.'x-okta-software'.raw_user_agent MATCHES 'Mozilla/5.0 (Windows NT 10.0; " \
                        "Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) " \
                        "Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.70']"
@@ -151,8 +151,8 @@ class TestQueryTranslator(unittest.TestCase):
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_x_okta_client_string_value_le_operator(self):
-        stix_pattern = "[x-okta-client:autonomous_system_isp <= 'google']"
+    def test_autonomous_system_string_value_le_operator(self):
+        stix_pattern = "[autonomous-system:extensions.'x-okta-autonomous-system'.isp <= 'google']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["filter=securityContext.isp le \"google\" &since=2023-02-13T12:17:01.526Z"
@@ -189,7 +189,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_query_from_multiple_comparison_expressions_with_precedence_bracket(self):
+    def test_query_with_multiple_comparison_expressions_and_precedence_bracket(self):
         stix_pattern = "[(x-okta-target:target_id LIKE '00Tr22hj9U9LzFH0f5d6' OR " \
                        "x-okta-client:device != 'Computer') AND ipv4-addr:value = '1.1.1.1']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
@@ -200,7 +200,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_query_from_multiple_comparison_expressions_joined_by_OR(self):
+    def test_query_with_multiple_comparison_expressions_joined_by_OR(self):
         stix_pattern = "[x-okta-target:target_id LIKE '0oa4oexp00i4BMrzJ5d7' OR " \
                        "x-okta-client:device != 'Computer']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
@@ -317,7 +317,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_invalid_qualifier_with_greater_value(self):
+    def test_invalid_qualifier_with_future_timestamp(self):
         stix_pattern = "[domain-name:value LIKE 'amazonaws.com'] " \
                        "START t'2023-01-19T11:00:00.000Z' STOP t'2024-02-07T11:00:00.003Z'"
         result = translation.translate('okta', 'query', '{}', stix_pattern)
@@ -325,14 +325,14 @@ class TestQueryTranslator(unittest.TestCase):
         assert "invalid_parameter" == result['code']
         assert 'Start/Stop time should not be in the future UTC timestamp' in result['error']
 
-    def test_not_implemented_error(self):
+    def test_invalid_operator_for_integer_type_field(self):
         stix_pattern = "[autonomous-system:number LIKE '50']"
         result = translation.translate('okta', 'query', '{}', stix_pattern)
         assert result['success'] is False
         assert "not_implemented" == result['code']
         assert 'LIKE/MATCHES operator is not supported for int type' in result['error']
 
-    def test_string_value_for_int_type(self):
+    def test_string_value_for_int_type_field(self):
         stix_pattern = "[autonomous-system:number = 'amazonaws.com']"
         result = translation.translate('okta', 'query', '{}', stix_pattern)
         assert result['success'] is False
@@ -345,3 +345,10 @@ class TestQueryTranslator(unittest.TestCase):
         assert result['success'] is False
         assert "not_implemented" == result['code']
         assert 'LIKE/MATCHES operator is not supported for enum type input' in result['error']
+
+    def test_invalid_operator_for_request_uri(self):
+        stix_pattern = "[x-okta-debug-context:request_uri LIKE 'cort/ferg']"
+        result = translation.translate('okta', 'query', '{}', stix_pattern)
+        assert result['success'] is False
+        assert "not_implemented" == result['code']
+        assert 'LIKE/MATCHES operator is not supported' in result['error']

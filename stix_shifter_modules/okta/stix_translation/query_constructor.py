@@ -258,6 +258,7 @@ class QueryStringPatternTranslator:
             mapped_field_type = "enum"
         else:
             mapped_field_type = "string"
+
         return mapped_field_type
 
     @staticmethod
@@ -304,6 +305,10 @@ class QueryStringPatternTranslator:
         comparison_string = ""
         comparison_string_new_count = 0
         for field_name in mapped_fields_array:
+            if field_name == "debugContext.debugData.requestUri" and comparator == "co":
+                stix_object = expression.object_path.split(':')
+                raise NotImplementedError(f'LIKE/MATCHES operator is not supported for {stix_object[0]}:{stix_object[1]}')
+
             comparison_string_new = QueryStringPatternTranslator._create_parsed_query(field_name, formatted_value,
                                                                                       comparator, is_negated)
             if is_negated:
@@ -331,7 +336,6 @@ class QueryStringPatternTranslator:
         if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError(
                 f'Comparison operator {expression_operator.name} unsupported for okta connector')
-
         return self.comparator_lookup[str(expression_operator)]
 
     def _eval_comparison_value(self, expression, mapped_field_type):
