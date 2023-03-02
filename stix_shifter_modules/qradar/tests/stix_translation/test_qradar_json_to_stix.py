@@ -612,3 +612,24 @@ class TestTransform(object):
         assert(custom_objects['unmapped2'] == "value2")
         assert 'unmapped3' not in custom_objects.keys()
         assert 'unmapped4' not in custom_objects.keys()
+
+    def test_epoch_exponent_notation(self):
+
+        data = [{
+            "qidname": "Information Message",
+            "eventcount": "12912.0",
+            "starttime": "0.001531169112E12",
+            "endtime": "0.001531169254E12"
+        }]
+
+        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps(data))
+        observed_data = result_bundle['objects'][1]
+
+        assert(observed_data['first_observed'] == START_TIMESTAMP)
+        assert(observed_data['last_observed'] == END_TIMESTAMP)
+
+        objects = observed_data['objects']
+        finding = TestTransform.get_first_of_type(objects.values(), 'x-ibm-finding')
+
+        assert(finding['start'] == START_TIMESTAMP)
+        assert(finding['end'] == END_TIMESTAMP)
