@@ -771,16 +771,6 @@
         "references": "process"
       }
     ],
-    "code_signature": {
-      "exists": {
-        "key": "x-ecs-process.code_signature_exists",
-        "object": "x_process"
-      },
-      "subject_name": {
-        "key": "x-ecs-process.code_signature_subject_name",
-        "object": "x_process"
-      }
-    },
     "ppid": [
       {
         "key": "process.pid",
@@ -793,36 +783,6 @@
         "references": "process_parent"
       }
     ],
-    "pe": {
-      "company": {
-        "key": "x-ecs-process.pe_company",
-        "object": "x_process"
-      },
-      "description": {
-        "key": "x-ecs-process.pe_description",
-        "object": "x_process"
-      },
-      "file_version": {
-        "key": "x-ecs-process.pe_file_version",
-        "object": "x_process"
-      },
-      "original_file_name": {
-        "key": "x-ecs-process.pe_original_file_name",
-        "object": "x_process"
-      },
-      "product": {
-        "key": "x-ecs-process.pe_product",
-        "object": "x_process"
-      }
-    },
-    "args": {
-      "key": "x-ecs-process.args",
-      "object": "x_process"
-    },
-    "args_count": {
-      "key": "x-ecs-process.args_count",
-      "object": "x_process"
-    },
     "command_line": {
       "key": "process.command_line",
       "object": "process"
@@ -859,18 +819,10 @@
       "object": "process"
     },
     "exit_code": {
-      "key": "x-ecs-process.exit_code",
-      "object": "x_process"
+      "key": "process.x_exit_code",
+      "object": "process"
     },
     "parent": {
-      "args": {
-        "key": "x-ecs-process.parent_args",
-        "object": "x_process"
-      },
-      "args_count": {
-        "key": "x-ecs-process.parent_args_count",
-        "object": "x_process"
-      },
       "command_line": {
         "key": "process.command_line",
         "object": "process_parent"
@@ -880,12 +832,12 @@
         "object": "process_parent"
       },
       "exit_code": {
-        "key": "x-ecs-process.parent_exit_code",
-        "object": "x_process"
+        "key": "process.parent_ref.x_exit_code",
+        "object": "process"
       },
       "pgid": {
-        "key": "x-ecs-process.parent_pgid",
-        "object": "x_process"
+        "key": "process.parent_ref.x_pgid",
+        "object": "process"
       },
       "pid": [
         {
@@ -904,36 +856,27 @@
           "references": "process_parent"
         }
       ],
-      "ppid": {
-        "key": "x-ecs-process.parent_ppid",
-        "object": "x_process",
-        "transformer": "ToInteger"
-      },
       "start": {
         "key": "process.created_time",
         "object": "process_parent"
       },
       "thread": {
         "id": {
-          "key": "x-ecs-process.parent_thread_id",
-          "object": "x_process"
-        },
-        "name": {
-          "key": "x-ecs-process.parent_thread_name",
-          "object": "x_process"
+          "key": "process.parent_ref.x_thread_id",
+          "object": "process"
         }
       },
       "title": {
-        "key": "x-ecs-process.parent_title",
-        "object": "x_process"
+        "key": "process.parent_ref.x_window_title",
+        "object": "process"
       },
       "uptime": {
-        "key": "x-ecs-process.parent_uptime",
-        "object": "x_process"
+        "key": "process.parent_ref.x_uptime",
+        "object": "process"
       },
       "working_directory": {
-        "key": "x-ecs-process.parent_working_directory",
-        "object": "x_process"
+        "key": "process.parent_ref.cwd",
+        "object": "process"
       },
       "executable": [
         {
@@ -964,30 +907,26 @@
       ]
     },
     "pgid": {
-      "key": "x-ecs-process.exit_code",
+      "key": "process.x_exit_code",
       "object": "x_process"
     },
     "thread": {
       "id": {
-        "key": "x-ecs-process.thread_id",
-        "object": "x_process"
-      },
-      "name": {
-        "key": "x-ecs-process.thread_name",
-        "object": "x_process"
+        "key": "process.x_thread_id",
+        "object": "process"
       }
     },
     "title": {
-      "key": "x-ecs-process.title",
-      "object": "x_process"
+      "key": "process.x_window_title",
+      "object": "process"
     },
     "uptime": {
-      "key": "x-ecs-process.uptime",
+      "key": "process.x_uptime",
       "object": "x_process"
     },
     "working_directory": {
-      "key": "x-ecs-process.working_directory",
-      "object": "x_process"
+      "key": "process.cwd",
+      "object": "process"
     }
   },
   "user": {
@@ -1393,103 +1332,103 @@
     },
     "pe": {
       "company": {
-        "key": "x-ecs-file.pe_company",
-        "object": "x_file"
+        "key": "file.x_pe.company",
+        "object": "file"
       },
       "description": {
-        "key": "x-ecs-file.pe_description",
-        "object": "x_file"
+        "key": "file.x_pe.description",
+        "object": "file"
       },
       "file_version": {
-        "key": "x-ecs-file.pe_file_version",
-        "object": "x_file"
+        "key": "file.x_pe.file_version",
+        "object": "file"
       },
       "original_file_name": {
-        "key": "x-ecs-file.pe_original_file_name",
-        "object": "x_file"
+        "key": "file.x_pe.original_file_name",
+        "object": "file"
       },
       "product": {
-        "key": "x-ecs-file.pe_product",
-        "object": "x_file"
+        "key": "file.x_pe.product",
+        "object": "file"
       }
     },
     "code_signature": {
       "exists": {
-        "key": "x-ecs-file.code_signature_exists",
-        "object": "x_file"
+        "key": "file.x_code_signature.exists",
+        "object": "file"
       },
       "subject_name": {
-        "key": "x-ecs-file.code_signature_subject_name",
-        "object": "x_file"
+        "key": "file.x_code_signature.subject_name",
+        "object": "file"
       }
     },
     "accessed": {
-      "key": "x-ecs-file.accessed",
-      "object": "x_file"
+      "key": "file.atime",
+      "object": "file"
     },
     "attributes": {
-      "key": "x-ecs-file.attributes",
-      "object": "x_file"
+      "key": "file.x_attributes",
+      "object": "file"
     },
     "ctime": {
-      "key": "x-ecs-file.ctime",
-      "object": "x_file"
+      "key": "file.ctime",
+      "object": "file"
     },
     "device": {
-      "key": "x-ecs-file.device",
-      "object": "x_file"
+      "key": "file.x_unix.device",
+      "object": "file"
     },
     "drive_letter": {
-      "key": "x-ecs-file.drive_letter",
-      "object": "x_file"
+      "key": "file.x_win_drive_letter",
+      "object": "file"
     },
     "extension": {
-      "key": "x-ecs-file.extension",
-      "object": "x_file"
+      "key": "file.x_extension",
+      "object": "file"
     },
     "gid": {
-      "key": "x-ecs-file.gid",
-      "object": "x_file"
+      "key": "file.x_unix.gid",
+      "object": "file"
     },
     "group": {
-      "key": "x-ecs-file.group",
-      "object": "x_file"
+      "key": "file.x_unix.group",
+      "object": "file"
     },
     "inode": {
-      "key": "x-ecs-file.inode",
-      "object": "x_file"
+      "key": "file.x_unix.inode",
+      "object": "file"
     },
     "mime_type": {
-      "key": "x-ecs-file.mime_type",
-      "object": "x_file"
+      "key": "file.mime_type",
+      "object": "file"
     },
     "mode": {
-      "key": "x-ecs-file.mode",
-      "object": "x_file"
+      "key": "file.x_unix.mode",
+      "object": "file"
     },
     "mtime": {
-      "key": "x-ecs-file.mtime",
-      "object": "x_file"
+      "key": "file.mtime",
+      "object": "file"
     },
     "owner": {
-      "key": "x-ecs-file.owner",
-      "object": "x_file"
+      "key": "file.x_owner_ref.account_login",
+      "object": "file"
     },
     "path": {
-      "key": "x-ecs-file.path",
-      "object": "x_file"
+      "key": "file.x_path",
+      "object": "file"
     },
     "target_path": {
-      "key": "x-ecs-file.target_path",
-      "object": "x_file"
+      "key": "file.x_target_path",
+      "object": "file"
     },
     "type": {
-      "key": "x-ecs-file.type",
-      "object": "x_file"
+      "key": "file.x_type",
+      "object": "file"
     },
     "uid": {
-      "key": "x-ecs-file.uid",
-      "object": "x_file"
+      "key": "file.x_owner_ref.user_id",
+      "object": "file"
     }
   },
   "group": {
