@@ -462,11 +462,6 @@
   },
   "domainname": [
     {
-      "key": "domain-name.value",
-      "object": "domain2",
-      "transformer": "ToDomainName"
-    },
-    {
       "key": "x-qradar.domain_name",
       "object": "x-qradar"
     }

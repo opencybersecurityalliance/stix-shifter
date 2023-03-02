@@ -77,7 +77,8 @@ class TestTransform(object):
         base64_payload = base64.b64encode(payload.encode('ascii')).decode('ascii')
         user_id = "someuserid2018"
         url = "https://example.com"
-        domain = "test.com"
+        qrdomain = "test domain"
+        dnsdomain = "test.com"
         source_ip = "fd80:655e:171d:30d4:fd80:655e:171d:30d4"
         destination_ip = "255.255.255.1"
         file_name = "somefile.exe"
@@ -99,7 +100,7 @@ class TestTransform(object):
         
         data = [{"sourceip": source_ip, "destinationip": destination_ip, "url": url, "eventpayload": payload, "username": user_id, "protocol": 'TCP',
                 "sourceport": "3000", "destinationport": 2000, "filename": file_name, "filehash": filehash, "md5hash": md5hash, "sha1hash": sha1hash, "sha256hash": sha256hash,
-                "domainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac, "Image": process_image, "ParentImage": process_parent_image, 
+                "domainname": qrdomain, "UrlHost": dnsdomain, "sourcemac": source_mac, "destinationmac": destination_mac, "Image": process_image, "ParentImage": process_parent_image,
                 "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, "LoadedImage": process_loaded_image }]
 
         result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps(data))
@@ -115,7 +116,7 @@ class TestTransform(object):
         nt_object = TestTransform.get_first_of_type(objects.values(), 'network-traffic')
         assert(nt_object is not None), 'network-traffic object type not found'
         assert(nt_object.keys() ==
-               {'type', 'src_port', 'dst_port', 'src_ref', 'dst_ref', 'protocols'})
+               {'type', 'src_port', 'dst_port', 'src_ref', 'dst_ref', 'protocols', 'extensions'})
         assert(nt_object['src_port'] == 3000)
         assert(nt_object['dst_port'] == 2000)
         assert(nt_object['protocols'] == ['tcp'])
