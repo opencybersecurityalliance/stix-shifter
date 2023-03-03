@@ -1023,22 +1023,18 @@
       }
     ],
     "domain": {
-      "key": "x-ecs-user.domain",
-      "object": "x_user"
+      "key": "user-account.x_domain",
+      "object": "user"
     },
     "full_name": {
-      "key": "x-ecs-user.full_name",
-      "object": "x_user"
+      "key": "user-account.display_name",
+      "object": "user"
     },
     "hash": {
-      "key": "x-ecs-user.hash",
-      "object": "x_user"
+      "key": "user-account.x_hash",
+      "object": "user"
     },
     "id": [
-      {
-        "key": "x-ecs-user.user_id",
-        "object": "x_user"
-      },
       {
         "key": "user-account.user_id",
         "object": "user"
