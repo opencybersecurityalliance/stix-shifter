@@ -97,18 +97,13 @@
   "user-account":{
     "fields": {
       "user_id": ["user.name.keyword", "user.id.keyword"],
-      "account_login": ["user.name.keyword"]
-    }
-  },
-  "x-ecs-user": {
-    "fields": {
-      "domain": ["user.domain.keyword"],
-      "full_name": ["user.full_name"],
-      "hash": ["user.hash"],
-      "user_id": ["user.id.keyword"],
-      "group_domain": ["user.group.domain"],
-      "group_id": ["user.group.id"],
-      "group_name": ["user.group.name"]
+      "account_login": ["user.name.keyword"],
+      "display_name": ["user.full_name"],
+      "x_domain": ["user.domain.keyword"],
+      "x_hash": ["user.hash"],
+      "x_group.domain": ["user.group.domain"],
+      "x_group.id": ["user.group.id"],
+      "x_group.name": ["user.group.name"]
     }
   },
   "process" : {
