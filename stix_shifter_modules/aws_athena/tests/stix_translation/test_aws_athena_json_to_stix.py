@@ -1,5 +1,6 @@
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from stix_shifter_modules.aws_athena.entry_point import EntryPoint
 import unittest
 import json
@@ -490,9 +491,49 @@ class TestAwsResultsToStix(unittest.TestCase):
         assert user_account['user_id'] == '011222333553'
         assert user_account['display_name'] == 'backup'
 
+        x_ibm_finding = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
+        assert x_ibm_finding is not None, 'x-ibm-finding object type not found'
+        assert x_ibm_finding.keys() == {'type', 'time_observed', 'dst_ip_ref', 'src_ip_ref', 'severity'}
+        assert x_ibm_finding['time_observed'] == '2020-10-07T08:08:37.000Z'
+        assert x_ibm_finding['severity'] == 0
+
+    def test_ocsf_file_translation(self):
+        """
+        Test process object
+        """
+        entry_point = EntryPoint()
+        result_file = open('stix_shifter_modules/aws_athena/tests/stix_translation/json/process_activity.json', 'r').read()
+        data = json.loads(result_file)
+        
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
+        assert result_bundle['type'] == 'bundle'
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        assert 'objects' in observed_data
+        objects = observed_data['objects']
+
+        file = TestAwsResultsToStix.get_first_of_type(objects.values(), 'file')    
+        assert file['name'] == 'permit.msg'
+        assert file['hashes']['SHA-256'] == '401045DC4F861002C2494449EE92A7063F34AA49E4708EA6E3231B14D5D7B579'
+        assert file['hashes']['SHA-1'] == 'CD89B1537C0E6664405C383CEE9DB1F2A6D1A5AC'
+
+    def test_ocsf_network_translation(self):
+        """
+        Test process object
+        """
+        entry_point = EntryPoint()
+        result_file = open('stix_shifter_modules/aws_athena/tests/stix_translation/json/ocsf_results.json', 'r').read()
+        data = json.loads(result_file)
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
+        assert result_bundle['type'] == 'bundle'
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        assert 'objects' in observed_data
+        objects = observed_data['objects']
+
         network_traffic = TestAwsResultsToStix.get_first_of_type(objects.values(), 'network-traffic')
         assert network_traffic is not None, 'network-traffic object type not found'
-        assert network_traffic.keys() == {'type', 'extensions', 'protocols', 'dst_ref', 'dst_port', 'src_ref', 'src_port', 'dst_byte_count', 'dst_packets', 'src_packets'}
+        assert network_traffic.keys() == {'type', 'extensions','protocols', 'dst_ref', 'dst_port', 'src_ref', 'src_port', 'dst_byte_count', 'dst_packets', 'src_packets'}
         assert network_traffic['protocols'] == ['tcp', 'ipv4']
         assert network_traffic['src_port'] == 36136
         assert network_traffic['dst_port'] == 19984
@@ -500,9 +541,3 @@ class TestAwsResultsToStix(unittest.TestCase):
         assert network_traffic['dst_packets'] == 4208942596
         tcp_ext = network_traffic.get('extensions')['tcp-ext']
         assert tcp_ext['src_flags_hex'] == 85
-
-        x_ibm_finding = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
-        assert x_ibm_finding is not None, 'x-ibm-finding object type not found'
-        assert x_ibm_finding.keys() == {'type', 'time_observed', 'dst_ip_ref', 'src_ip_ref', 'severity'}
-        assert x_ibm_finding['time_observed'] == '2020-10-07T08:08:37.000Z'
-        assert x_ibm_finding['severity'] == 0

@@ -7,7 +7,8 @@ DEFAULT_OFFSET = 0
 
 class APIClient:
     LOGIN_ENDPOINT = 'login.html'
-    QUERY_ENDPOINT = "rest/visualsearch/query/simple"
+    QUERY_ENDPOINT = 'rest/visualsearch/query/simple'
+    STATUS_ENDPOINT = 'rest/monitor/global/reg-server/status'
     LOGOFF_ENDPOINT = 'logout'
 
     def __init__(self, connection, configuration):
@@ -30,10 +31,8 @@ class APIClient:
         """
         headers = {}
 
-        query = '{"queryPath": [{"requestedType": "Connection", "filters": [], "isResult": true}],' \
-                '"totalResultLimit": 1, "perGroupLimit": 1,"templateContext": "SPECIFIC"}'
         headers['Cookie'] = await self.session_log_in()
-        return await self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers=headers, data=query)
+        return await self.client.call_api(self.STATUS_ENDPOINT, 'GET', headers=headers)
 
     async def get_search_results(self, query):
         """
