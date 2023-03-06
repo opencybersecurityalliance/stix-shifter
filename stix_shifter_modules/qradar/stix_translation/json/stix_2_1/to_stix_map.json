@@ -160,24 +160,24 @@
   "starttime": [
     {
       "key": "first_observed",
-      "transformer": "EpochToTimestamp",
+      "transformer": "QRadarEpochToTimestamp",
       "cybox": false
     },
     {
       "key": "x-ibm-finding.start",
-      "transformer": "EpochToTimestamp",
+      "transformer": "QRadarEpochToTimestamp",
       "object": "finding"
     }
   ],
   "endtime": [
     {
       "key": "last_observed",
-      "transformer": "EpochToTimestamp",
+      "transformer": "QRadarEpochToTimestamp",
       "cybox": false
     },
     {
       "key": "x-ibm-finding.end",
-      "transformer": "EpochToTimestamp",
+      "transformer": "QRadarEpochToTimestamp",
       "object": "finding"
     }
   ],
