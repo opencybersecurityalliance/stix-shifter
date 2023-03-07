@@ -1,0 +1,23 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "Okta"
+        },
+        "host": {
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
+        },
+        "help": {
+            "type": "link",
+            "default": "data-sources.html"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "api_token": {
+                "type": "password"
+            }
+        }
+    }
+}
