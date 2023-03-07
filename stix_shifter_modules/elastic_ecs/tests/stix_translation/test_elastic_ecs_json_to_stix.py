@@ -1,5 +1,6 @@
 import unittest
-import json
+
+from stix_shifter_utils.utils.async_utils import run_in_thread
 from stix_shifter_modules.elastic_ecs.entry_point import EntryPoint
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
@@ -344,7 +345,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         return TestElasticEcsTransform.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
 
     def test_common_prop(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         assert (result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
 
@@ -365,15 +366,11 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert (observed_data['number_observed'] == 1)
 
     def test_stix_2_1(self):
-        test_source = json.dumps(data_source)
-        test_data = json.dumps([data])
         test_options = {
             "stix_2.1": True
         }
-
-        translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate('elastic_ecs', 'results', test_source, test_data, test_options)
-        print(result_bundle)
+        entry_point = EntryPoint(options=test_options)
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
 
@@ -388,14 +385,14 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         #TODO: check other objects
 
     def test_custom_mapping(self):
-        data_source_string = json.dumps(data_source)
+        data_source_string = data_source
         data = [{
             "custompayload": "SomeBase64Payload",
             "url": "www.example.com",
             "filename": "somefile.exe",
             "username": "someuserid2018"
         }]
-        data_string = json.dumps(data)
+        data_string = data
 
         options = {
             "mapping": {
@@ -451,7 +448,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
 
     def test_network_traffic_prop(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -502,7 +499,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
 
     def test_process_prop(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -534,7 +531,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert (process_parent['pid'] == 1)
 
     def test_x_ibm_event(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([event_data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [event_data])
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -631,7 +628,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
 
     def test_artifact_prop(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -649,7 +646,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert (artifact_object['mime_type'] == 'text/plain')
 
     def test_url_prop(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -666,7 +663,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert (url_object['value'] == '/blog')
 
     def test_file_prop(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -690,7 +687,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
     def test_unmapped_attribute_with_mapped_attribute(self):
         message = "\"GET /blog HTTP/1.1\" 200 2571"
         data = {"message": message, "unmapped": "nothing to see here"}
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert('objects' in observed_data)
@@ -702,7 +699,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
     def test_unmapped_attribute_alone(self):
         data = {"unmapped": "nothing to see here"}
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert('objects' in observed_data)
@@ -711,7 +708,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
 
     def test_x_ecs_event(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([ecs_event_data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [ecs_event_data])
         assert (result_bundle['type'] == 'bundle')
         translation_objects = result_bundle.get('objects')
         assert (translation_objects and len(translation_objects) == 2)

@@ -1,4 +1,4 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from .response_mapper import ResponseMapper
@@ -7,7 +7,7 @@ import secrets
 import string
 import hashlib
 import json
-from requests.exceptions import ConnectionError
+from aiohttp.client_exceptions import ClientConnectionError
 
 
 class MaxDailyQuotaException(Exception):
@@ -35,7 +35,7 @@ class APIClient:
             "x-xdr-auth-id": str(self.auth['api_key_id']),
             "Authorization": api_key_hash
         }
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port', None),
                                     headers,
                                     url_modifier_function=None,
@@ -45,7 +45,7 @@ class APIClient:
         self.quota_threshold = connection['quota_threshold']
         self.connector = __name__.split('.')[1]
 
-    def ping_data_source(self):
+    async def ping_data_source(self):
         """
         Ping the Data Source
         :return: Response object
@@ -54,10 +54,10 @@ class APIClient:
             "request_data": {}
         }
 
-        return self.client.call_api(self.QUOTA_ENDPOINT, 'POST', headers=self.client.headers,
+        return await self.client.call_api(self.QUOTA_ENDPOINT, 'POST', headers=self.client.headers,
                                     data=json.dumps(data), timeout=self.timeout)
 
-    def get_remaining_quota(self):
+    async def get_remaining_quota(self):
         """
         Pings the quota endpoint to fetch the remaining quota
         :return: Response object
@@ -70,9 +70,9 @@ class APIClient:
         quota_wrapper = None
 
         try:
-            quota_wrapper = self.client.call_api(self.QUOTA_ENDPOINT, 'POST', headers=self.client.headers,
+            quota_wrapper = await self.client.call_api(self.QUOTA_ENDPOINT, 'POST', headers=self.client.headers,
                                                  data=json.dumps(data), timeout=self.timeout)
-            quota_response_code = quota_wrapper.response.status_code
+            quota_response_code = quota_wrapper.code
             quota_response_text = json.loads(quota_wrapper.read().decode('utf-8'))
             if quota_response_code == 200:
                 if 'reply' in quota_response_text.keys():
@@ -99,7 +99,7 @@ class APIClient:
             response_dict['type'] = "MaxDailyQuotaException"
             response_dict['message'] = "query usage exceeded max daily quota"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
-        except ConnectionError:
+        except ClientConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
@@ -114,12 +114,12 @@ class APIClient:
 
         return return_obj
 
-    def create_search(self, query):
+    async def create_search(self, query):
         """
         Queries the data source
         :return: Response object
         """
-        return_obj = self.get_remaining_quota()
+        return_obj = await self.get_remaining_quota()
         if return_obj['success']:
             if not isinstance(query, dict):
                 query = json.loads(query)
@@ -130,11 +130,11 @@ class APIClient:
                     "request_data":
                         query[dataset]
                 }
-                return self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers=self.client.headers,
+                return await self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers=self.client.headers,
                                             data=json.dumps(data), timeout=self.timeout)
         return return_obj
 
-    def get_search_status(self, search_id):
+    async def get_search_status(self, search_id):
         """
         Queries the data source to fetch the status of api call
         :return: Response object
@@ -147,10 +147,10 @@ class APIClient:
                 "format": "json"
             }
         }
-        return self.client.call_api(self.RESULT_ENDPOINT, 'POST', headers=self.client.headers, data=json.dumps(data),
+        return await self.client.call_api(self.RESULT_ENDPOINT, 'POST', headers=self.client.headers, data=json.dumps(data),
                                     timeout=self.timeout)
 
-    def get_search_results(self, search_id):
+    async def get_search_results(self, search_id):
         """
         Return the search results
         :param search_id:str
@@ -164,7 +164,7 @@ class APIClient:
                 "format": "json"
             }
         }
-        return self.client.call_api(self.RESULT_ENDPOINT, 'POST', headers=self.client.headers, data=json.dumps(data),
+        return await self.client.call_api(self.RESULT_ENDPOINT, 'POST', headers=self.client.headers, data=json.dumps(data),
                                     timeout=self.timeout)
 
     @staticmethod
@@ -175,7 +175,7 @@ class APIClient:
         """
         return {"code": 200, "success": True}
 
-    def get_stream_results(self, stream_id):
+    async def get_stream_results(self, stream_id):
         """
         Return the stream results
         :param stream_id: string
@@ -187,5 +187,5 @@ class APIClient:
                  "is_gzip_compressed": False
                  }
             }
-        return self.client.call_api(self.STREAM_ENDPOINT, 'POST', headers=self.client.headers, data=json.dumps(data),
+        return await self.client.call_api(self.STREAM_ENDPOINT, 'POST', headers=self.client.headers, data=json.dumps(data),
                                     timeout=self.timeout)

@@ -1,5 +1,5 @@
 import json
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseJsonResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 from flatten_json import flatten
@@ -13,18 +13,17 @@ class AccessDeniedException(Exception):
     pass
 
 
-class ResultsConnector(BaseResultsConnector):
+class ResultsConnector(BaseJsonResultsConnector):
     # https://docs.aws.amazon.com/athena/latest/APIReference/API_GetQueryResults.html#API_GetQueryResults_RequestSyntax
     # Athena MaxResults count is 1000 when calling get_query_results
     ATHENA_MAX_RESULTS_SIZE = 1000
-
-    def __init__(self, client, s3_client):
+    
+    def __init__(self, client):
         self.client = client
-        self.s3_client = s3_client
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_results_connection(self, search_id, offset, length, metadata=None):
+    async def create_results_connection(self, search_id, offset, length, metadata=None):
         """
         Fetching the results using search id, offset and length
         :param search_id: str, search id generated in transmit query
@@ -68,9 +67,9 @@ class ResultsConnector(BaseResultsConnector):
                         page_size = length - received_result_count
 
                     if next_page_token:
-                        result = self.client.get_query_results(QueryExecutionId=search_id, NextToken=next_page_token, MaxResults=page_size)
+                        result = await self.client.makeRequest('athena', 'get_query_results', QueryExecutionId=search_id, NextToken=next_page_token, MaxResults=page_size)
                     else:
-                        result = self.client.get_query_results(QueryExecutionId=search_id, MaxResults=page_size)
+                        result = await self.client.makeRequest('athena', 'get_query_results', QueryExecutionId=search_id, MaxResults=page_size)
 
                     if 'NextToken' in result and len(result['NextToken']) > 1:
                         next_page_token = result['NextToken']
@@ -88,6 +87,7 @@ class ResultsConnector(BaseResultsConnector):
 
                     if received_result_count >= length:
                         process_on = False
+
 
                 schema_columns_list = [list(x.values()) for x in schema_columns]
                 schema_columns_list = [column_name for sublist in schema_columns_list for column_name in sublist]
@@ -114,7 +114,7 @@ class ResultsConnector(BaseResultsConnector):
                     return_obj['metadata'] = next_page_token + ':::' + json.dumps(schema_columns)
                 if next_page_token == 'COMPLETE':
                     # Delete output files(search_id.csv, search_id.csv.metadata) in s3 bucket
-                    get_query_response = self.client.get_query_execution(QueryExecutionId=search_id)
+                    get_query_response = await self.client.makeRequest('athena', 'get_query_execution', QueryExecutionId=search_id)
                     s3_output_location = get_query_response['QueryExecution']['ResultConfiguration']['OutputLocation']
                     s3_output_bucket_with_file = s3_output_location.split('//')[1]
                     s3_output_bucket = s3_output_bucket_with_file.split('/')[0]
@@ -123,7 +123,7 @@ class ResultsConnector(BaseResultsConnector):
                     delete = dict()
                     delete['Objects'] = [{'Key': s3_output_key}, {'Key': s3_output_key_metadata}]
                     # Api call to delete s3 object
-                    delete_object = self.s3_client.delete_objects(Bucket=s3_output_bucket, Delete=delete)
+                    delete_object = await self.client.makeRequest('s3', 'delete_objects', Bucket=s3_output_bucket, Delete=delete)
                     if delete_object.get('Errors'):
                         message = delete_object.get('Errors')[0].get('Message')
                         raise AccessDeniedException(message)

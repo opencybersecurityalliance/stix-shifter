@@ -1,4 +1,4 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 
 
 class APIClient:
@@ -21,7 +21,7 @@ class APIClient:
             if 'access_token' in auth:
                 headers['Authorization'] = "Bearer " + auth['access_token']
 
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port', None),
                                     headers,
                                     url_modifier_function=url_modifier_function,
@@ -29,13 +29,13 @@ class APIClient:
                                     sni=connection.get('sni', None)
                                     )
 
-    def ping_box(self):
+    async def ping_box(self):
         """Ping the endpoint."""
         params = dict()
         params['$top'] = 1
-        return self.client.call_api(self.endpoint, 'GET', urldata=params, timeout=self.timeout)
+        return await self.client.call_api(self.endpoint, 'GET', urldata=params, timeout=self.timeout)
 
-    def run_search(self, query_expression, length):
+    async def run_search(self, query_expression, length):
         """get the response from azure_sentinel endpoints
         :param query_expression: str, search_id
         :param length: int,length value
@@ -45,9 +45,9 @@ class APIClient:
         params = dict()
         params['$filter'] = query_expression
         params['$top'] = length
-        return self.client.call_api(self.endpoint, 'GET', headers, urldata=params, timeout=self.timeout)
+        return await self.client.call_api(self.endpoint, 'GET', headers, urldata=params, timeout=self.timeout)
 
-    def next_page_run_search(self, next_page_url):
+    async def next_page_run_search(self, next_page_url):
         """get the response from azure_sentinel endpoints
         :param next_page_url: str, search_id
         :return: response, json object"""
@@ -55,4 +55,4 @@ class APIClient:
         headers['Accept'] = 'application/json'
         url = next_page_url.split('?', maxsplit=1)[1]
         endpoint = self.endpoint + '?' + url
-        return self.client.call_api(endpoint, 'GET', headers, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', headers, timeout=self.timeout)

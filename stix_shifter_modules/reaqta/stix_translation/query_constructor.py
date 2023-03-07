@@ -9,7 +9,7 @@ import re
 UNIVERSAL_FIELDS = ["filename", "ip", "md5", "path", "sha1", "sha256"]
 GREATER_LESS_FIELDS = ["eventdata.regionSize", "eventdata.relevance", "eventdata.size"]
 
-TIMESTAMP_MILLISECONDS = "\.\d+Z$"
+TIMESTAMP_MILLISECONDS = r"\.\d+Z$"
 
 logger = logging.getLogger(__name__)
 

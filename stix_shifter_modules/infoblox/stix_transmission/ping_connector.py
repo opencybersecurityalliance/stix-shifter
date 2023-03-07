@@ -24,7 +24,7 @@ class PingConnector(BasePingConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """
         Creates a synchronous ping connection.
 
@@ -34,7 +34,7 @@ class PingConnector(BasePingConnector):
         :rtype: object
         """
         try:
-            response = self.api_client.ping_data_source()
+            response = await self.api_client.ping_data_source()
             response_code = response.code
             response_body = response.read().decode('utf-8')
 
@@ -47,5 +47,5 @@ class PingConnector(BasePingConnector):
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
             return return_obj
         except Exception as err:
-            self.logger.error('error when pinging datasource: %s', err, exc_info=True)
+            self.logger.error('error when pinging datasource: %s', err)
             raise

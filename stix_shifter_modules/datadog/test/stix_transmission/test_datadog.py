@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 from stix_shifter_modules.datadog.entry_point import EntryPoint
 from stix_shifter_utils.utils.error_response import ErrorCode
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 
 
 class DatadogMockEvent():
@@ -35,7 +36,7 @@ class TestDatadogConnection(unittest.TestCase, object):
         mocked_return_value = {"code": 200}
         mock_generate_token.return_value = mocked_return_value
         entry_point = EntryPoint(self.connection(), self.configuration())
-        ping_result = entry_point.ping_connection()
+        ping_result = run_in_thread(entry_point.ping_connection)
         assert ping_result["success"] is True
 
     @patch('stix_shifter_modules.datadog.stix_transmission.api_client.APIClient.ping_data_source')
@@ -44,7 +45,7 @@ class TestDatadogConnection(unittest.TestCase, object):
         mock_generate_token.return_value = mocked_return_value
 
         entry_point = EntryPoint(self.connection(), self.configuration())
-        ping_response = entry_point.ping_connection()
+        ping_response = run_in_thread(entry_point.ping_connection)
 
         assert ping_response['success'] is False
         assert ping_response['error'] == "datadog connector error => forbidden"
@@ -63,7 +64,7 @@ class TestDatadogConnection(unittest.TestCase, object):
         offset = 0
         length = 1002
         entry_point = EntryPoint(self.connection(), self.configuration())
-        results_response = entry_point.create_results_connection(query, offset, length)
+        results_response = run_in_thread(entry_point.create_results_connection, query, offset, length)
 
         assert results_response is not None
         assert results_response['success']
@@ -86,7 +87,7 @@ class TestDatadogConnection(unittest.TestCase, object):
         offset = 0
         length = 1
         entry_point = EntryPoint(self.connection(), self.configuration())
-        results_response = entry_point.create_results_connection(query, offset, length)
+        results_response = run_in_thread(entry_point.create_results_connection, query, offset, length)
 
         assert results_response is not None
         assert results_response['success'] is False
@@ -106,7 +107,7 @@ class TestDatadogConnection(unittest.TestCase, object):
         offset = 0
         length = 1002
         entry_point = EntryPoint(self.connection(), self.configuration())
-        results_response = entry_point.create_results_connection(query, offset, length)
+        results_response = run_in_thread(entry_point.create_results_connection, query, offset, length)
 
         assert results_response is not None
         assert results_response['success']
@@ -129,7 +130,7 @@ class TestDatadogConnection(unittest.TestCase, object):
         offset = 0
         length = 1
         entry_point = EntryPoint(self.connection(), self.configuration())
-        results_response = entry_point.create_results_connection(query, offset, length)
+        results_response = run_in_thread(entry_point.create_results_connection, query, offset, length)
 
         assert results_response is not None
         assert results_response['success'] is False

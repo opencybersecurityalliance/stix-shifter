@@ -24,11 +24,7 @@ else
     echo ""  
 fi
 
-if [ $SPEC == '2.0' ]; then
-    VALIDATOR_VERSION=1.1.2
-else
-    VALIDATOR_VERSION=3.0.2
-fi
+VALIDATOR_VERSION=3.1.3
 
 {
     pip3 install virtualenv
@@ -39,4 +35,4 @@ fi
     venv-run pip install stix2-validator==$VALIDATOR_VERSION
 } &> /dev/null
 
-venv-run bundle_validator.py $FILE
+venv-run bundle_validator.py $FILE $SPEC

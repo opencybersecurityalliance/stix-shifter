@@ -8,7 +8,7 @@ class DeleteConnector(BaseDeleteConnector):
         self.api_client = api_client
         self.connector = __name__.split('.')[1]
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         """
         Function to delete search id if the status in Running
         :param search_id: str, search id
@@ -23,7 +23,7 @@ class DeleteConnector(BaseDeleteConnector):
             else:
                 raise SyntaxError("Invalid search_id format : " + str(search_id))
 
-            response = self.api_client.delete_search(search_session_id, user_session_id)
+            response = await self.api_client.delete_search(search_session_id, user_session_id)
             raw_response = response.read()
             response_code = response.code
 

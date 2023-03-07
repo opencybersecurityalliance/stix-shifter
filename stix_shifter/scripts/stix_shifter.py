@@ -188,6 +188,23 @@ def main():
 
     log = utils_logger.set_logger(__name__)
 
+
+    if args.command not in [TRANSLATE] and hasattr(args, 'data') and args.data:
+        try:
+            args.data = json.loads(args.data)
+        except Exception as ex:
+            log.debug(exception_to_string(ex))
+            log.error('Cannot convert supplied data json string to json')
+            help_and_exit = True
+
+    if hasattr(args, 'data_source') and args.data_source:
+        try:
+            args.data_source = json.loads(args.data_source)
+        except Exception as ex:
+            log.debug(exception_to_string(ex))
+            log.error('Cannot convert supplied data_source json string to json')
+            help_and_exit = True
+
     if 'module' in args:
         args_module_dialects = args.module
 
@@ -302,7 +319,7 @@ def main():
         # Translate results to STIX
         translation_options = copy.deepcopy(connection_dict.get('options', {}))
         options['validate_pattern'] = True
-        result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), translation_options)
+        result = translation.translate(args.module, 'results', args.data_source, results, translation_options)
         log.info('STIX Results (written to stdout):\n')
         print(json.dumps(result, indent=4, sort_keys=False))
         exit(0)
