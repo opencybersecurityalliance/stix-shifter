@@ -992,17 +992,33 @@
           "key": "file.extensions.x-ocsf-file-ext.description",
           "object": "file"
         },
-        "fingerprints": {
-          "algorithm": {
-            "key": "file.extensions.x-ocsf-file-ext.algorithm",
+        "hashes": {
+          "Unknown": {
+            "key": "file.hashes.Unknown",
             "object": "file"
           },
-          "algorithm_id": {
-            "key": "file.extensions.x-ocsf-file-ext.algorithm_id",
+          "MD5": {
+            "key": "file.hashes.MD5",
             "object": "file"
           },
-          "value": {
-            "key": "file.extensions.x-ocsf-file-ext.algorithm_value",
+          "SHA-1": {
+            "key": "file.hashes.SHA-1",
+            "object": "file"
+          },
+          "SHA-256": {
+            "key": "file.hashes.SHA-256",
+            "object": "file"
+          },
+          "SHA-512": {
+            "key": "file.hashes.SHA-512",
+            "object": "file"
+          },
+          "CTPH": {
+            "key": "file.hashes.CTPH",
+            "object": "file"
+          },
+          "Other": {
+            "key": "file.hashes.Other",
             "object": "file"
           }
         },
@@ -1297,7 +1313,7 @@
         "key": "process.name",
         "object": "process"
       },
-      "parent-process": {
+      "parent_process": {
         "cmd_line": {
           "key": "process.command_line",
           "object": "parent-process"
@@ -1495,17 +1511,33 @@
             "key": "file.extensions.x-ocsf-file-ext.description",
             "object": "parent-file"
           },
-          "fingerprints": {
-            "algorithm": {
-              "key": "file.extensions.x-ocsf-file-ext.algorithm",
+          "hashes": {
+            "Unknown": {
+              "key": "file.hashes.Unknown",
               "object": "parent-file"
             },
-            "algorithm_id": {
-              "key": "file.extensions.x-ocsf-file-ext.algorithm_id",
+            "MD5": {
+              "key": "file.hashes.MD5",
               "object": "parent-file"
             },
-            "value": {
-              "key": "file.extensions.x-ocsf-file-ext.algorithm_value",
+            "SHA-1": {
+              "key": "file.hashes.SHA-1",
+              "object": "parent-file"
+            },
+            "SHA-256": {
+              "key": "file.hashes.SHA-256",
+              "object": "parent-file"
+            },
+            "SHA-512": {
+              "key": "file.hashes.SHA-512",
+              "object": "parent-file"
+            },
+            "CTPH": {
+              "key": "file.hashes.CTPH",
+              "object": "parent-file"
+            },
+            "Other": {
+              "key": "file.hashes.Other",
               "object": "parent-file"
             }
           },
