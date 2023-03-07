@@ -1,5 +1,5 @@
 adal==1.2.7
-aioboto3==10.4.0
+aioboto3==11.0.1
 aiohttp-retry==2.4.0
 aiomysql==0.0.21
 antlr4-python3-runtime==4.8
