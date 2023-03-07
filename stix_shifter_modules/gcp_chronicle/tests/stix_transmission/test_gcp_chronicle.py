@@ -1262,3 +1262,125 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         assert delete_response['success'] is False
         assert "Could not deserialize key data" in delete_response['error']
         assert delete_response['code'] == "authentication_fail"
+
+    def test_429_exception_in_results_during_pagination(self, mock_credentials, mock_auth):
+        """test 429 error during pagination in transmit results"""
+        search_id = "oh_1234:ru_1234"
+        mock_credentials.return_value = None
+        mock_http = mock_auth.return_value
+        output_1 = json.dumps({
+            "detections":
+                [{
+                    "type": "RULE_DETECTION",
+                    "detection": [{
+                        "ruleName": "rule_1657020065"
+                    }],
+                    "createdTime": "2022-07-07T08:01:24.869956Z",
+                    "id": "de_38c2972e-ec99-8c0c-4dbe-3b350294b2bb",
+                    "timeWindow": {
+                        "startTime": "2022-06-28T09:49:09.460001Z",
+                        "endTime": "2022-06-28T09:49:09.460001Z"
+                    },
+                    "collectionElements": [{
+                        "references": [{
+                            "event": {
+                                "metadata": {
+                                    "productLogId": "823rb4e123k4"
+                                }
+                            }
+                        }],
+                        "label": "udm"
+                    }],
+                    "detectionTime": "2022-06-28T09:49:09.460001Z"
+                }],
+            "nextPageToken": "12345"
+        }
+        )
+        output_2 = json.dumps({
+            "detections":
+                [{
+                    "type": "RULE_DETECTION",
+                    "detection": [{
+                        "ruleName": "rule_1657020065"
+                    }],
+                    "createdTime": "2022-07-07T08:01:24.869956Z",
+                    "id": "de_38c2972e-ec99-8c0c-4dbe-3b350294b2bb",
+                    "timeWindow": {
+                        "startTime": "2022-06-28T09:49:09.460001Z",
+                        "endTime": "2022-06-28T09:49:09.460001Z"
+                    },
+                    "collectionElements": [{
+                        "references": [{
+                            "event": {
+                                "metadata": {
+                                    "productLogId": "823rb4e121245"
+                                }
+                            }
+                        }],
+                        "label": "udm"
+                    }],
+                    "detectionTime": "2022-06-28T09:49:09.460001Z"
+                }],
+            "nextPageToken": "23456"
+        }
+        )
+        mock_code_response = MockCodeResponse(200)
+        mocked_result_response_1 = (mock_code_response, output_1)
+        mocked_result_response_2 = (mock_code_response, output_2)
+        mocked_delete_response = (MockCodeResponse(200), json.dumps({}))
+        mocked_result_with_429 = (MockCodeResponse(429), json.dumps({"error": {
+            "code": 429,
+            "message": "Resource has been exhausted (e.g. check quota)",
+            "status": "RESOURCE_EXHAUSTED"}}))
+        mock_http.request.side_effect = [mocked_result_response_1, mocked_result_with_429, mocked_result_response_1,
+                                         mocked_result_response_2, mocked_delete_response, ]
+        transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
+        result_response = transmission.results(search_id, 0, 2)
+        assert result_response is not None
+        assert result_response['success'] is True
+        assert result_response['metadata'] == {'result_count': 2, 'next_page_token': '23456'}
+
+    def test_429_exception_in_results(self, mock_credentials, mock_auth):
+        """test 429 error in transmit results"""
+        search_id = "oh_1234:ru_1234"
+        mock_credentials.return_value = None
+        mock_http = mock_auth.return_value
+        output_1 = json.dumps({
+            "detections":
+                [{
+                    "type": "RULE_DETECTION",
+                    "detection": [{
+                        "ruleName": "rule_1657020065"
+                    }],
+                    "createdTime": "2022-07-07T08:01:24.869956Z",
+                    "id": "de_38c2972e-ec99-8c0c-4dbe-3b350294b2bb",
+                    "timeWindow": {
+                        "startTime": "2022-06-28T09:49:09.460001Z",
+                        "endTime": "2022-06-28T09:49:09.460001Z"
+                    },
+                    "collectionElements": [{
+                        "references": [{
+                            "event": {
+                                "metadata": {
+                                    "productLogId": "823rb4e123k4"
+                                }
+                            }
+                        }],
+                        "label": "udm"
+                    }],
+                    "detectionTime": "2022-06-28T09:49:09.460001Z"
+                }]
+        }
+        )
+        mock_code_response = MockCodeResponse(200)
+        mocked_result_response_1 = (mock_code_response, output_1)
+        mocked_delete_response = (MockCodeResponse(200), json.dumps({}))
+        mocked_result_with_429 = (MockCodeResponse(429), json.dumps({"error": {
+            "code": 429,
+            "message": "Resource has been exhausted (e.g. check quota)",
+            "status": "RESOURCE_EXHAUSTED"}}))
+        mock_http.request.side_effect = [mocked_result_with_429, mocked_result_response_1, mocked_delete_response]
+        transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
+        result_response = transmission.results(search_id, 0, 1)
+        assert result_response is not None
+        assert result_response['success'] is True
