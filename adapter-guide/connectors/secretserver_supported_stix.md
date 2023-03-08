@@ -1,4 +1,4 @@
-##### Updated on 02/27/23
+##### Updated on 03/08/23
 ## IBM Security Verify Privilege Vault
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
@@ -19,7 +19,7 @@
 | OR (Observation) | OR |
 | AND (Observation) | OR |
 | <br> | |
-### Searchable STIX objects and properties for Event
+### Searchable STIX objects and properties for Event dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | IpAddress, Server |
