@@ -39,3 +39,4 @@ Stix-shifter currently offers connector support for the following cybersecurity 
 - [IBM Security Verify](connectors/ibm_security_verify_supported_stix.md)
 - [GCP Chronicle](connectors/gcp_chronicle_supported_stix.md)
 - [Azure Log Analytics](connectors/azure_log_analytics_supported_stix.md)
+- [Okta](connectors/okta_supported_stix.md)
