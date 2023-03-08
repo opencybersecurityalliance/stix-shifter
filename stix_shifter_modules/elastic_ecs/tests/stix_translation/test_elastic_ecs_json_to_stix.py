@@ -463,7 +463,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         nt_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'network-traffic')
         assert (nt_object is not None), 'network-traffic object type not found'
         assert (nt_object.keys() ==
-                {'type', 'src_port', 'src_byte_count', 'src_packets', 'dst_port', 'dst_byte_count', 'dst_packets', 'src_ref', 'dst_ref', 'protocols', 'extensions'})
+                {'type', 'src_port', 'src_byte_count', 'src_packets', 'dst_port', 'dst_byte_count', 'dst_packets', 'src_ref', 'dst_ref', 'protocols', 'extensions', 'x_community_id'})
         assert (nt_object['type'] == 'network-traffic')
         assert (nt_object['src_port'] == 49745)
         assert (nt_object['dst_port'] == 443)
