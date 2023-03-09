@@ -92,10 +92,9 @@ class APIClient():
         return self.client.call_api(endpoint, 'GET', headers, data=json.dumps(data), timeout=self.timeout)
 
     def get_max_result_window(self):
-        # GET winlogbeat-*/_settings?include_defaults=true
-        endpoint = self.setting_endpoint
-        endpoint = "{}?include_defaults=true".format(endpoint)
-        return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
+        max_result_window_url = self.setting_endpoint + "/index.max_result_window?include_defaults=true"
+        return self.client.call_api(max_result_window_url, 'GET', timeout=self.timeout)
+
 
     def set_pit(self):
         headers = dict()
