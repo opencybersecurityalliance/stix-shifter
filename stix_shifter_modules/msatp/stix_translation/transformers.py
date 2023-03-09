@@ -52,6 +52,7 @@ class FormatMacList(ValueTransformer):
     def transform(mac_lst):
         addresses = []
         for mac in mac_lst:
+            mac = mac.replace("-", "").replace(":", "")
             val = ':'.join([mac[i:i + 2] for i in range(0, len(mac), 2)]).lower()
             addresses.append(val)
         return addresses
