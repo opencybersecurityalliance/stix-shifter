@@ -57,7 +57,6 @@ class Connector(BaseSyncConnector):
             return_obj = self._handle_errors(response, return_obj)
         except Exception:
             max_result_window = default_window_size
-            pass
         else:
             if (return_obj['success']):
                 response_json = json.loads(return_obj["data"])
