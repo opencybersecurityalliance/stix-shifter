@@ -315,15 +315,7 @@ class Connector(BaseSyncConnector):
                 build_data[lookup_table]['event_count'] = '1'
                 build_data[lookup_table]['original_ref'] = json.dumps(event_data)
 
-                ## remove duplicate ips between LocalIP, PublicIP and IPAddresses:
-                if 'PublicIP' in build_data[lookup_table] and 'LocalIP' in build_data[lookup_table] and build_data[lookup_table]['PublicIP'] == build_data[lookup_table]['LocalIP']:
-                    build_data[lookup_table].pop('PublicIP')
-                if 'IPAddresses' in build_data[lookup_table] and 'LocalIP' in build_data[lookup_table]:
-                    filtered = [x for x in build_data[lookup_table]['IPAddresses'] if not x == build_data[lookup_table]['LocalIP']]
-                    if len(filtered) > 0:
-                        build_data[lookup_table]['IPAddresses'] = filtered
-                    else:
-                        build_data[lookup_table].pop('IPAddresses')
+                self.remove_duplicate_ips(build_data, lookup_table)
 
                 lst_len = len(table_event_data)
                 table_event_data.insert(lst_len, build_data)
@@ -342,6 +334,23 @@ class Connector(BaseSyncConnector):
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise ex
+
+    def remove_duplicate_ips(self, build_data, lookup_table):
+        ## remove duplicate ips between LocalIP, PublicIP and IPAddresses:
+        if 'PublicIP' in build_data[lookup_table] and 'LocalIP' in build_data[lookup_table] and \
+                build_data[lookup_table]['PublicIP'] == build_data[lookup_table]['LocalIP']:
+            build_data[lookup_table].pop('PublicIP')
+        self.remove_duplicate_ips_from(build_data, lookup_table, 'LocalIP')
+        self.remove_duplicate_ips_from(build_data, lookup_table, 'PublicIP')
+
+    def remove_duplicate_ips_from(self, build_data, lookup_table, prop_name):
+        if 'IPAddresses' in build_data[lookup_table] and prop_name in build_data[lookup_table]:
+            filtered = [x for x in build_data[lookup_table]['IPAddresses'] if
+                        not x == build_data[lookup_table][prop_name]]
+            if len(filtered) > 0:
+                build_data[lookup_table]['IPAddresses'] = filtered
+            else:
+                build_data[lookup_table].pop('IPAddresses')
 
     def generate_token(self, connection, configuration):
         """To generate the Token
