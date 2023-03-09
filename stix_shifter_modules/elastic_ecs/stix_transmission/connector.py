@@ -60,7 +60,7 @@ class Connector(BaseSyncConnector):
             return_obj = self._handle_errors(response, return_obj)
             if (return_obj['success']):
                 response_json = json.loads(return_obj["data"])
-                max_result_windows = [default_window_size] # at least one item for [0] in max_result_window calculation
+                max_result_windows = []
                 if response_json:
                     for index, item_json in response_json.items():
                         if 'index' in item_json['settings'] and 'max_result_window' in item_json['settings']['index']:
@@ -73,16 +73,21 @@ class Connector(BaseSyncConnector):
                                                       connector=self.connector)
                             self.logger.error('max_result_window is not set in index: ' + str(index))
                         max_result_windows.append(int(max_res_win))
-                max_result_window = sorted(max_result_windows)[0] #return the smallest max_return_window in indices
-                return max_result_window
+
+                # return the smallest max_return_window in indices
+                max_result_window = sorted(max_result_windows)[0] if max_result_windows else default_window_size
+
             else: # land here if API call failed, e.g., no priviledge
-                return default_window_size
+                max_result_window = default_window_size
+
         except Exception as e:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise e
+
+        return max_result_window
 
     def create_results_connection(self, query, offset, length, metadata=None):
         response_txt = None
