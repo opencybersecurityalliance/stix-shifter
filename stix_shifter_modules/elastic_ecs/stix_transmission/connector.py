@@ -16,10 +16,7 @@ class Connector(BaseSyncConnector):
         self.api_client = APIClient(connection, configuration)
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
-        try:
-            self.max_result_window = self.get_pagesize(DEFAULT_MAX_RESULTS_WINDOW_SIZE)
-        except Exception as e:
-            pass
+        self.max_result_window = self.get_pagesize(DEFAULT_MAX_RESULTS_WINDOW_SIZE)
 
     def _handle_errors(self, response, return_obj):
         response_code = response.code
@@ -53,11 +50,15 @@ class Connector(BaseSyncConnector):
                 raise e
 
     def get_pagesize(self, default_window_size):
-        response_txt = None
         return_obj = dict()
+
         try:
             response = self.api_client.get_max_result_window()
             return_obj = self._handle_errors(response, return_obj)
+        except Exception:
+            max_result_window = default_window_size
+            pass
+        else:
             if (return_obj['success']):
                 response_json = json.loads(return_obj["data"])
                 max_result_windows = []
@@ -79,13 +80,6 @@ class Connector(BaseSyncConnector):
 
             else: # land here if API call failed, e.g., no priviledge
                 max_result_window = default_window_size
-
-        except Exception as e:
-            if response_txt is not None:
-                ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
-                self.logger.error('can not parse response: ' + str(response_txt))
-            else:
-                raise e
 
         return max_result_window
 
