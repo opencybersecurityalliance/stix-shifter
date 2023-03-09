@@ -809,6 +809,11 @@
         "references": "process_executable_dir"
       },
       {
+        "key": "file.x_software_ref",
+        "object": "process_executable",
+        "references": "process_file_software"
+      },
+      {
         "key": "x-oca-event.process_ref",
         "object": "event",
         "references": "process"
@@ -1328,24 +1333,16 @@
     },
     "pe": {
       "company": {
-        "key": "file.x_pe.company",
-        "object": "file"
-      },
-      "description": {
-        "key": "file.x_pe.description",
-        "object": "file"
+        "key": "software.vendor",
+        "object": "process_file_software"
       },
       "file_version": {
-        "key": "file.x_pe.file_version",
-        "object": "file"
+        "key": "software.version",
+        "object": "process_file_software"
       },
       "original_file_name": {
-        "key": "file.x_pe.original_file_name",
-        "object": "file"
-      },
-      "product": {
-        "key": "file.x_pe.product",
-        "object": "file"
+        "key": "software.name",
+        "object": "process_file_software"
       }
     },
     "code_signature": {
