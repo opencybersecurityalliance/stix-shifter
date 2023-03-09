@@ -4,6 +4,8 @@ import json
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 
+DEFAULT_MAX_RESULTS_WINDOW_SIZE = 10000
+
 
 class UnexpectedResponseException(Exception):
     pass
@@ -14,10 +16,8 @@ class Connector(BaseSyncConnector):
         self.api_client = APIClient(connection, configuration)
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
-        self.max_result_window = 10000
-        # extract the max_result_window from elasticsearch
         try:
-            self.max_result_window = self.get_pagesize()
+            self.max_result_window = self.get_pagesize(DEFAULT_MAX_RESULTS_WINDOW_SIZE)
         except Exception as e:
             pass
 
@@ -52,7 +52,7 @@ class Connector(BaseSyncConnector):
             else:
                 raise e
 
-    def get_pagesize(self):
+    def get_pagesize(self, default_window_size):
         response_txt = None
         return_obj = dict()
         try:
@@ -60,12 +60,12 @@ class Connector(BaseSyncConnector):
             return_obj = self._handle_errors(response, return_obj)
             if (return_obj['success']):
                 response_json = json.loads(return_obj["data"])
-                max_result_windows = list()
-                if not (response_json is None):
+                max_result_windows = [default_window_size] # at least one item for [0] in max_result_window calculation
+                if response_json:
                     for index, item_json in response_json.items():
-                        if 'max_result_window' in item_json['settings']['index']:
+                        if 'index' in item_json['settings'] and 'max_result_window' in item_json['settings']['index']:
                             max_res_win = item_json['settings']['index']['max_result_window']
-                        elif 'max_result_window' in item_json['defaults']['index']:
+                        elif 'index' in item_json['defaults'] and 'max_result_window' in item_json['defaults']['index']:
                             max_res_win = item_json['defaults']['index']['max_result_window']
                         else:
                             ErrorResponder.fill_error(item_json,
@@ -75,6 +75,8 @@ class Connector(BaseSyncConnector):
                         max_result_windows.append(int(max_res_win))
                 max_result_window = sorted(max_result_windows)[0] #return the smallest max_return_window in indices
                 return max_result_window
+            else: # land here if API call failed, e.g., no priviledge
+                return default_window_size
         except Exception as e:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
