@@ -322,3 +322,26 @@ class TestElasticEcsConnection(unittest.TestCase, object):
 
         assert transmission.entry_point._BaseEntryPoint__results_connector.max_result_window == 20000
 
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.get_max_result_window')
+    def test_pagesize_exception(self, mock_result_response, mock_api_client):
+        mock_api_client.return_value = None
+        mocked_return_value = '["mock", "placeholder"]'
+        mock_result_response.return_value = ElasticEcsMockResponse(200, mocked_return_value)
+        mock_result_response.side_effect = Exception('exception')
+        config = {
+            "auth": {
+                "username": "bla",
+                "password": "bla"
+            }
+        }
+        connection = {
+            "host": "hostbla",
+            "port": 8080,
+            "selfSignedCert": "cert",
+            "indices": "index1"
+        }
+
+        transmission = stix_transmission.StixTransmission('elastic_ecs', connection, config)
+        assert transmission.entry_point._BaseEntryPoint__results_connector.max_result_window == 10000
+
+
