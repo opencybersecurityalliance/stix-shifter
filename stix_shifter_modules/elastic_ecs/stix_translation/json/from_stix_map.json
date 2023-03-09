@@ -67,7 +67,7 @@
       "x_owner_ref.user_id": ["file.uid"],
       "x_owner_ref.account_login": ["file.owner"],
       "x_win_drive_letter": ["file.drive_letter"],
-      "x_software_ref.name": ["file.pe.original_file_name", "file.pe.product", "file.pe.description"],
+      "x_software_ref.name": ["file.pe.original_file_name"],
       "x_software_ref.vendor": ["file.pe.company"],
       "x_software_ref.version": ["file.pe.file_version"],
       "x_code_signature.exists": ["file.code_signature.exists"],
@@ -143,9 +143,7 @@
   },
   "software": {
     "fields": {
-      "name": ["file.pe.original_file_name", "file.pe.product", "file.pe.description"],
-      "vendor": ["file.pe.company"],
-      "version": ["file.pe.file_version"]
+      "name": ["agent.name"]
     }
   },
   "autonomous-system": {
