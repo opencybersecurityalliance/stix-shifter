@@ -298,6 +298,18 @@
   },
   "x-oca-asset": {
     "fields": {
+      "device_id": [
+        "DeviceFileEvents.DeviceId",
+        "DeviceProcessEvents.DeviceId",
+        "DeviceNetworkEvents.DeviceId",
+        "DeviceRegistryEvents.DeviceId",
+        "DeviceEvents.DeviceId",
+        "DeviceInfo.DeviceId",
+        "DeviceAlertEvents.DeviceId",
+        "DeviceImageLoadEvents.DeviceId",
+        "DeviceLogonEvents.DeviceId",
+        "DeviceNetworkInfo.DeviceId"
+      ],
       "hostname": [
         "DeviceFileEvents.DeviceName",
         "DeviceProcessEvents.DeviceName",
