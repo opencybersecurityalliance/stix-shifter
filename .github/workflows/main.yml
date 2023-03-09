@@ -43,7 +43,6 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         version: "v0.1.15"
-        token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true # optional (default = false)
         verbose: true # optional (default = false)
   
