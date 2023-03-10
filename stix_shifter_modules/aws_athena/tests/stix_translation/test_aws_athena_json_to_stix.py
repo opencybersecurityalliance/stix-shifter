@@ -1,5 +1,6 @@
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from stix_shifter_modules.aws_athena.entry_point import EntryPoint
 import unittest
 import json
@@ -504,7 +505,7 @@ class TestAwsResultsToStix(unittest.TestCase):
         result_file = open('stix_shifter_modules/aws_athena/tests/stix_translation/json/process_activity.json', 'r').read()
         data = json.loads(result_file)
         
-        result_bundle = entry_point.translate_results(json.dumps(data_source),json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
@@ -523,7 +524,7 @@ class TestAwsResultsToStix(unittest.TestCase):
         entry_point = EntryPoint()
         result_file = open('stix_shifter_modules/aws_athena/tests/stix_translation/json/ocsf_results.json', 'r').read()
         data = json.loads(result_file)
-        result_bundle = entry_point.translate_results(json.dumps(data_source),json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]

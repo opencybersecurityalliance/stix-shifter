@@ -1,4 +1,4 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from .api_client import APIClient
 import json
 from stix_shifter_utils.utils.error_response import ErrorResponder
@@ -9,17 +9,12 @@ class UnexpectedResponseException(Exception):
     pass
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
         self.max_result_window = 10000
-        # extract the max_result_window from elasticsearch
-        try:
-            self.max_result_window = self.get_pagesize()
-        except Exception as e:
-            pass
 
     def _handle_errors(self, response, return_obj):
         response_code = response.code
@@ -37,13 +32,13 @@ class Connector(BaseSyncConnector):
             raise UnexpectedResponseException
         return return_obj
 
-    def ping_connection(self):
+    async def ping_connection(self):
         response_txt = None
         return_obj = dict()
         try:
             # test the pit
             #print(self.set_point_in_time())
-            response = self.api_client.ping_box()
+            response = await self.api_client.ping_box()
             return self._handle_errors(response, return_obj)
         except Exception as e:
             if response_txt is not None:
@@ -52,11 +47,11 @@ class Connector(BaseSyncConnector):
             else:
                 raise e
 
-    def get_pagesize(self):
+    async def get_pagesize(self):
         response_txt = None
         return_obj = dict()
         try:
-            response = self.api_client.get_max_result_window()
+            response = await self.api_client.get_max_result_window()
             return_obj = self._handle_errors(response, return_obj)
             if (return_obj['success']):
                 response_json = json.loads(return_obj["data"])
@@ -73,8 +68,8 @@ class Connector(BaseSyncConnector):
                                                       connector=self.connector)
                             self.logger.error('max_result_window is not set in index: ' + str(index))
                         max_result_windows.append(int(max_res_win))
-                max_result_window = sorted(max_result_windows)[0] #return the smallest max_return_window in indices
-                return max_result_window
+                self.max_result_window = sorted(max_result_windows)[0] #return the smallest max_return_window in indices
+                return self.max_result_window
         except Exception as e:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
@@ -82,14 +77,19 @@ class Connector(BaseSyncConnector):
             else:
                 raise e
 
-    def create_results_connection(self, query, offset, length, metadata=None):
+    async def create_results_connection(self, query, offset, length, metadata=None):
         response_txt = None
         return_obj = dict()
 
         try:
+            # extract the max_result_window from elasticsearch
+            try:
+                self.max_result_window = await self.get_pagesize()
+            except Exception as e:
+                pass
             # using search after API in ElasticSearch
             # pass the last searched value in metadata argument, ignore offset argument
-            response = self.api_client.search_pagination(query, metadata, min(int(length), self.max_result_window))
+            response = await self.api_client.search_pagination(query, metadata, min(int(length), self.max_result_window))
             return_obj = self._handle_errors(response, return_obj)
 
             if (return_obj['success']):

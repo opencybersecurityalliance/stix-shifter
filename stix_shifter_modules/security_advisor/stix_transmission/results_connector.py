@@ -1,10 +1,10 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseJsonResultsConnector
 from .utils.stix_pattern_processor import StixPatternProcessor
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from .auth import Auth
 
 
-class ResultsConnector(BaseResultsConnector):
+class ResultsConnector(BaseJsonResultsConnector):
     def __init__(self, host, auth ):
         self.connector = __name__.split('.')[1]
         self.auth = auth
@@ -13,7 +13,7 @@ class ResultsConnector(BaseResultsConnector):
         self.host = self.auth_token.find_location(self.auth["accountID"], host)
         self.StixPatternProcessor = StixPatternProcessor()
 
-    def create_results_connection(self, searchID , offset , length):
+    async def create_results_connection(self, searchID , offset , length):
 
         params = {}
         return_obj = {}

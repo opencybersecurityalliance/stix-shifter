@@ -40,8 +40,11 @@ CONNECTORS = {
     "rhacs": "Red Hat Advanced Cluster Security for Kubernetes (StackRox)",
     "ibm_security_verify": "IBM Security Verify",
     "gcp_chronicle": "GCP Chronicle",
-    "azure_log_analytics": "Azure Log Analytics"
+    "azure_log_analytics": "Azure Log Analytics",
+    "okta": "Okta"
 }
+
+DEFAULT_DIALECT = "default"
 
 DIALECTS = {
     "qradar": ["events", "flows"],
@@ -53,10 +56,9 @@ DIALECTS = {
     "paloalto": ["xdr_data"],
     "secretserver": ["event"],
     "trendmicro_vision_one": ["endpointActivityData", "messageActivityData"],
-    "azure_log_analytics": ["SecurityAlert", "SecurityEvent", "SecurityIncident"]
+    "azure_log_analytics": ["SecurityAlert", "SecurityEvent", "SecurityIncident"],
+    "elastic_ecs": [DEFAULT_DIALECT, "beats"]
 }
-
-DEFAULT_DIALECT = "default"
 
 STIX_OPERATORS = {
     "ComparisonExpressionOperators.And": "AND (Comparision)",
@@ -158,7 +160,7 @@ def __main__():
                     output_string += "### Searchable STIX objects and properties\n"
                     filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "from_stix_map.json"))    
                 else:
-                    output_string += "### Searchable STIX objects and properties for {}\n".format(dialect.capitalize())
+                    output_string += "### Searchable STIX objects and properties for {} dialect\n".format(dialect.capitalize())
                     filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "{}from_stix_map.json".format(dialect + "_")))    
                 from_stix_json_file = open(filepath)
                 loaded_from_stix_json = json.loads(from_stix_json_file.read())

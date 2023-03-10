@@ -1,4 +1,4 @@
-##### Updated on 02/27/23
+##### Updated on 03/08/23
 ## Trend Micro Vision One
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
@@ -14,7 +14,7 @@
 | OR (Observation) | OR |
 | AND (Observation) | AND |
 | <br> | |
-### Searchable STIX objects and properties for Endpointactivitydata
+### Searchable STIX objects and properties for Endpointactivitydata dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | src, dst, objectIp, objectIps |
@@ -33,7 +33,7 @@
 | **windows-registry-key**:values[*].data | objectRegistryData |
 | **domain-name**:value | hostName |
 | <br> | |
-### Searchable STIX objects and properties for Messageactivitydata
+### Searchable STIX objects and properties for Messageactivitydata dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | source_ip |
