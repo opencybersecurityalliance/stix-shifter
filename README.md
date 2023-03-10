@@ -1,3 +1,4 @@
+![Build](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/.github/workflows/main.yml)
 [![codecov](https://codecov.io/gh/opencybersecurityalliance/stix-shifter/branch/develop/graph/badge.svg?token=gQvl14peRj)](https://codecov.io/gh/opencybersecurityalliance/stix-shifter)
 
 ### Join us on Slack!
