@@ -753,3 +753,12 @@ class TestElasticEcsTransform(unittest.TestCase, object):
           exec_file_hashes.get("MD5") == "d6957aceda86de523af0157800aa3c73" and
           exec_file_hashes.get("SHA-256") == "ba79462455b6e216d0e7cd6fe36bf0eff8a0d9dd06358d1c97b1014016256618"
         )
+        exec_file_software_key = executable_file.get("x_software_ref")
+        exec_file_software = stix_objects.get(exec_file_software_key)
+        assert (
+          exec_file_software and
+          exec_file_software.get("type") == "software" and
+          exec_file_software.get("name") == "dsregcmd.exe" and 
+          exec_file_software.get("vendor") == "Microsoft Corporation" and
+          exec_file_software.get("version") == "10.0.17763.2145 (WinBuild.160101.0800)"
+        )
