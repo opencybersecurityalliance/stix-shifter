@@ -760,5 +760,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
           exec_file_software.get("type") == "software" and
           exec_file_software.get("name") == "dsregcmd.exe" and 
           exec_file_software.get("vendor") == "Microsoft Corporation" and
-          exec_file_software.get("version") == "10.0.17763.2145 (WinBuild.160101.0800)"
+          exec_file_software.get("version") == "10.0.17763.2145 (WinBuild.160101.0800)" and
+          exec_file_software.get("x_product") == "Microsoft® Windows® Operating System" and
+          exec_file_software.get("x_description") == "DSREG commandline tool" 
         )
