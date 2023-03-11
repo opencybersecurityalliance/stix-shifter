@@ -143,7 +143,11 @@
   },
   "software": {
     "fields": {
-      "name": ["agent.name.keyword"]
+      "name": ["agent.name.keyword", "process.pe.original_file_name.keyword", "file.pe.original_file_name.keyword", "dll.pe.original_file_name.keyword"],
+      "vendor": ["process.pe.company.keyword", "file.pe.company.keyword", "dll.pe.company.keyword"],
+      "version": ["process.pe.file_version.keyword", "file.pe.file_version.keyword", "dll.pe.file_version.keyword"],
+      "x_product": ["process.pe.product.keyword", "file.pe.product.keyword", "dll.pe.product.keyword"],
+      "x_description": ["process.pe.description.keyword", "file.pe.description.keyword", "dll.pe.description.keyword"]
     }
   },
   "autonomous-system": {
