@@ -143,7 +143,11 @@
   },
   "software": {
     "fields": {
-      "name": ["agent.name"]
+      "name": ["agent.name", "process.pe.original_file_name", "file.pe.original_file_name", "dll.pe.original_file_name"],
+      "vendor": ["process.pe.company", "file.pe.company", "dll.pe.company"],
+      "version": ["process.pe.file_version", "file.pe.file_version", "dll.pe.file_version"],
+      "x_product": ["process.pe.product", "file.pe.product", "dll.pe.product"],
+      "x_description": ["process.pe.description", "file.pe.description", "dll.pe.description"]
     }
   },
   "autonomous-system": {

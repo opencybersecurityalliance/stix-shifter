@@ -806,6 +806,14 @@
       "original_file_name": {
         "key": "software.name",
         "object": "process_file_software"
+      },
+      "product": {
+        "key": "software.x_product",
+        "object": "process_file_software"
+      },
+      "description": {
+        "key": "software.x_description",
+        "object": "process_file_software"
       }
     },
     "command_line": {
@@ -1416,6 +1424,14 @@
       },
       "original_file_name": {
         "key": "software.name",
+        "object": "process_file_software"
+      },
+      "product": {
+        "key": "software.x_product",
+        "object": "process_file_software"
+      },
+      "description": {
+        "key": "software.x_description",
         "object": "process_file_software"
       }
     },
