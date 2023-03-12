@@ -1,4 +1,5 @@
 import ntpath
+import re
 import urllib
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.stix_translation.src.utils.transformers import ValueTransformer
@@ -58,18 +59,38 @@ class FormatMacList(ValueTransformer):
         return addresses
 
 
-class GetHostNameFromDomain(ValueTransformer):
-    """A value transformer to convert domain name to hostname"""
+class IfValidUrl(ValueTransformer):
+    """A value transformer to extract domain name from url"""
+
     @staticmethod
-    def transform(domain_name):
-        return domain_name.split('.')[0]
+    def transform(value):
+        parsed_url = urllib.parse.urlparse(value)
+        if parsed_url.scheme != "":
+            return value
+        else:
+            return ""
 
 
 class GetDomainName(ValueTransformer):
     """A value transformer to extract domain name from url"""
 
+
+    @staticmethod
+    def is_valid_domain_name(value):
+        """test if value is a vaild domain name"""
+        try:
+            return (not re.search(r"\s", value)) and (re.compile(
+                r"^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-_]{0,61}[A-Za-z0-9])?\.)+[A-Za-z0-9][A-Za-z0-9-_]{0,61}[A-Za-z]$"
+            ).match(value.encode("idna").decode("ascii")) is not None)
+        except UnicodeError:
+            return False
+
     @staticmethod
     def transform(value):
+        #if it is already a domain name return it
+        if GetDomainName.is_valid_domain_name(value):
+            return value
+        #it might be a url, parse the domain from the url
         parsed_url = urllib.parse.urlparse(value)
         return parsed_url.netloc
 

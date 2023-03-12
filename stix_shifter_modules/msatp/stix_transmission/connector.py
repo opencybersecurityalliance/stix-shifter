@@ -31,7 +31,7 @@ class Connector(BaseSyncConnector):
     events_alerts_query = '({} | join kind=leftouter {} on ReportId, DeviceName, Timestamp)'
 
     events_query = ('find withsource = TableName in ({})  where (DeviceName =~ "{}") and '
-                    '(tostring(ReportId) == "{}") and (around(Timestamp, todatetime("{}"), 30m))') #(Timestamp == todatetime("{}"))')
+                    '(tostring(ReportId) == "{}") and (Timestamp == todatetime("{}"))')
 
     alerts_query = (
         '(DeviceAlertEvents | where Table =~ "{}" | summarize AlertId=make_list(AlertId), Severity=make_list(Severity), '
