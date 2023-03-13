@@ -116,17 +116,11 @@ class Connector(BaseJsonSyncConnector):
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         except Exception as ex:
-            if "too_many_requests with max retry" in str(ex):
-                if metadata:
-                    return_obj = await self.create_results_connection(query, offset, length, metadata)
-                else:
-                    return_obj = await self.create_results_connection(query, offset, length)
-            else:
-                if "timeout_error" in str(ex) or "client_connector_error" in str(ex):
-                    response_dict['code'] = 300
-                response_dict['message'] = str(ex)
-                self.logger.error('error while fetching results: %s', ex)
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            if "timeout_error" in str(ex):
+                response_dict['code'] = 300
+            response_dict['message'] = str(ex)
+            self.logger.error('error while fetching results: %s', ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
 
     @staticmethod
@@ -172,7 +166,7 @@ class Connector(BaseJsonSyncConnector):
                 return_obj = self.exception_response(response_code, response_dict.get('errorSummary', ''))
 
         except Exception as ex:
-            if "timeout_error" in str(ex) or "client_connector_error" in str(ex):
+            if "timeout_error" in str(ex):
                 response_dict['code'] = 300
             response_dict['message'] = str(ex)
             self.logger.error('error while pinging: %s', ex)

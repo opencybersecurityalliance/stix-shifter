@@ -642,37 +642,16 @@ class TestOktaConnection(unittest.TestCase, object):
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_with_429_request_exception(self, mock_result_response):
         """ test 429 exception in results"""
-        mocked_return_value = json.dumps(TestOktaConnection.mocked_response)
-        headers = {'Link': '<https://ourhost/api/v1/logs?since=2022-01-19T11%3A00%3A00.000Z&'
-                           'until=2023-01-31T11%3A00%3A00.003Z&filter=request.ipChain.ip+ne+%221.1.1.1%22+&'
-                           'after=1670301642453_1>; rel="next"'}
         query = "filter=request.ipChain.ip eq \"1.1.1.1\" &since=2022-01-19T11:00:00.000Z" \
                 "&until=2023-01-31T11:00:00.003Z"
-        result_response = OktaMockResponse(200, mocked_return_value, headers)
-        mock_result_response.side_effect = [Exception("too_many_requests with max retry"), result_response]
-        transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
-        offset = 0
-        length = 1
-        result_response = transmission.results(query, offset, length)
-        assert result_response is not None
-        assert result_response['success'] is True
-        assert result_response.keys() == {'data', 'success', 'metadata'}
-
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
-    def test_results_with_429_request_exception_with_timeout_error(self, mock_result_response):
-        """ test 429 exception and timeout error in results"""
-        query = "filter=request.ipChain.ip eq \"1.1.1.1\" &since=2022-01-19T11:00:00.000Z" \
-                "&until=2023-01-31T11:00:00.003Z"
-        mock_result_response.side_effect = [Exception("too_many_requests with max retry"),
-                                            Exception("too_many_requests with max retry"), Exception("timeout_error")]
+        mock_result_response.side_effect = Exception("too_many_requests with max retry")
         transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
         offset = 0
         length = 1
         result_response = transmission.results(query, offset, length)
         assert result_response is not None
         assert result_response['success'] is False
-        assert 'timeout_error' in result_response['error']
-        assert result_response['code'] == 'service_unavailable'
+        assert result_response['code'] == 'too_many_requests'
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_with_invaid_exception_during_pagination(self, mock_result_response):
