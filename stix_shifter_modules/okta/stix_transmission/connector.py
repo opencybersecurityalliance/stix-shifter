@@ -116,8 +116,10 @@ class Connector(BaseJsonSyncConnector):
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         except Exception as ex:
-            if "timeout_error" in str(ex):
-                response_dict['code'] = 300
+            if "server timeout_error" in str(ex):
+                response_dict['code'] = 503
+            elif "timeout_error" in str(ex):
+                response_dict['code'] = 408
             response_dict['message'] = str(ex)
             self.logger.error('error while fetching results: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
@@ -166,8 +168,10 @@ class Connector(BaseJsonSyncConnector):
                 return_obj = self.exception_response(response_code, response_dict.get('errorSummary', ''))
 
         except Exception as ex:
-            if "timeout_error" in str(ex):
-                response_dict['code'] = 300
+            if "server timeout_error" in str(ex):
+                response_dict['code'] = 503
+            elif "timeout_error" in str(ex):
+                response_dict['code'] = 408
             response_dict['message'] = str(ex)
             self.logger.error('error while pinging: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
@@ -181,8 +185,6 @@ class Connector(BaseJsonSyncConnector):
         :return: return_obj, dict
         """
         return_obj = {}
-        if code == 401 and 'Invalid token provided' in response_txt:
-            code = 300
         response_dict = {'code': code, 'message': str(response_txt)}
         ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
