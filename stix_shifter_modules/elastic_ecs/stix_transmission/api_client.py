@@ -96,7 +96,7 @@ class APIClient():
 
     async def get_max_result_window(self):
         max_result_window_url = self.setting_endpoint + "/index.max_result_window?include_defaults=true"
-        return self.client.call_api(max_result_window_url, 'GET', timeout=self.timeout)
+        return await self.client.call_api(max_result_window_url, 'GET', timeout=self.timeout)
 
     def set_pit(self):
         headers = dict()
