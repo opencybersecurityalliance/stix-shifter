@@ -118,16 +118,16 @@ def extract_pipe_name(x_msatp, event):
 
 def fix_device_event_refs(observed):
     objects = observed["objects"]
-    atp_refs = get_objects_by_type(objects, "x-msatp")
-    if len(atp_refs) > 0:
-        atp = objects[atp_refs[0]]
+    x_msatp_refs = get_objects_by_type(objects, "x-msatp")
+    if len(x_msatp_refs) > 0:
+        x_msatp = objects[x_msatp_refs[0]]
         events = get_objects_by_type(objects, "x-oca-event")
         if len(events) > 0:
             event = objects[events[0]]
             if event['action'] == "NamedPipeEvent":
                 ## if named pipe event add the pip_name to event:
-                extract_pipe_name(atp, event)
-            if 'Table' in atp and atp['Table'] == 'DeviceEvents':
+                extract_pipe_name(x_msatp, event)
+            if 'Table' in x_msatp and x_msatp['Table'] == 'DeviceEvents':
                 ## if event from DeviceEvent and there is only file name without process pid should be a file_ref not process_ref:
                 validate_process_ref_in_event(event, objects)
 
