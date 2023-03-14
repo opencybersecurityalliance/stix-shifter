@@ -107,24 +107,42 @@ def get_reference(objects, source, ref_prop, ref_type):
         return None
     return ref
 
+
+def extract_pipe_name(x_msatp, event):
+    if 'AdditionalFields' in x_msatp:
+        pattern = r'PipeName:\s*(.+?),'
+        match = re.search(pattern, x_msatp['AdditionalFields'])
+        if match:
+            event['pipe_name'] = match.group(1)
+
+
 def fix_device_event_refs(observed):
     objects = observed["objects"]
     atp_refs = get_objects_by_type(objects, "x-msatp")
     if len(atp_refs) > 0:
         atp = objects[atp_refs[0]]
-        if 'Table' in atp and atp['Table'] == 'DeviceEvents':
-            events = get_objects_by_type(objects, "x-oca-event")
-            if len(events) > 0:
-                event = objects[events[0]]
-                if 'process_ref' in event:
-                    proc_ref = event['process_ref']
-                    proc = get_reference(objects, event, 'process_ref', 'process')
-                    if 'pid' not in proc and 'binary_ref' in proc:
-                        ##main process has no pid - in DeviceEvents this means it is a file ref not a process ref
-                        ref = proc['binary_ref']
-                        del event['process_ref']
-                        event['file_ref'] = ref
-                        del objects[proc_ref]
+        events = get_objects_by_type(objects, "x-oca-event")
+        if len(events) > 0:
+            event = objects[events[0]]
+            if event['action'] == "NamedPipeEvent":
+                ## if named pipe event add the pip_name to event:
+                extract_pipe_name(atp, event)
+            if 'Table' in atp and atp['Table'] == 'DeviceEvents':
+                ## if event from DeviceEvent and there is only file name without process pid should be a file_ref not process_ref:
+                validate_process_ref_in_event(event, objects)
+
+
+
+def validate_process_ref_in_event(event, objects):
+    if 'process_ref' in event:
+        proc_ref = event['process_ref']
+        proc = get_reference(objects, event, 'process_ref', 'process')
+        if 'pid' not in proc and 'binary_ref' in proc:
+            ##main process has no pid - in DeviceEvents this means it is a file ref not a process ref
+            ref = proc['binary_ref']
+            del event['process_ref']
+            event['file_ref'] = ref
+            del objects[proc_ref]
 
 
 class ResultsTranslator(JSONToStix):
