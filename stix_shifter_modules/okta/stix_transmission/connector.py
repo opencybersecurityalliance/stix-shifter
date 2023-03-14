@@ -1,17 +1,16 @@
 import re
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 from .api_client import APIClient
 import json
-from requests.exceptions import ConnectionError, RequestException
 
 
 class InvalidMetadataException(Exception):
     pass
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     OKTA_MAX_PAGE_SIZE = 1000
     DOMAIN_PATTERN = re.compile(r'^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(\.)?)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$')
 
@@ -20,7 +19,7 @@ class Connector(BaseSyncConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_results_connection(self, query, offset, length, metadata=None):
+    async def create_results_connection(self, query, offset, length, metadata=None):
         """
         Fetching the results using query, offset and length
         :param query: str, Data Source query
@@ -58,7 +57,7 @@ class Connector(BaseSyncConnector):
             limit = f'&limit={page_size}'
             if (result_count == 0 and next_page_token == '0') or (next_page_token != '0' and result_count <
                                                                   self.api_client.result_limit):
-                response_wrapper = self.api_client.get_search_results(query + limit, next_page_token)
+                response_wrapper = await self.api_client.get_search_results(query + limit, next_page_token)
                 response_dict = json.loads(response_wrapper.read().decode('utf-8'))
                 if response_wrapper.code == 200:
                     return_obj['success'] = True
@@ -80,7 +79,7 @@ class Connector(BaseSyncConnector):
                         else:
                             page_size = remaining_records
                         limit = f'&limit={page_size}'
-                        next_response_wrapper = self.api_client.get_search_results(query + limit, next_page_token)
+                        next_response_wrapper = await self.api_client.get_search_results(query + limit, next_page_token)
                         next_response = json.loads(next_response_wrapper.read().decode('utf-8'))
                         if next_response_wrapper.code == 200:
                             data += next_response
@@ -116,24 +115,14 @@ class Connector(BaseSyncConnector):
             response_dict['message'] = f'Invalid metadata: {str(ex)}'
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
-        except ConnectionError:
-            response_dict['code'] = 300
-            response_dict['message'] = 'Invalid Host/Network Connection error'
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
-        except RequestException:
-            if metadata:
-                return_obj = self.create_results_connection(query, offset, length, metadata)
-            else:
-                return_obj = self.create_results_connection(query, offset, length)
         except Exception as ex:
-            if "timeout_error" in str(ex):
-                response_dict['code'] = 300
-                response_dict['message'] = str(ex)
-            else:
-                response_dict['message'] = str(ex)
+            if "server timeout_error" in str(ex):
+                response_dict['code'] = 503
+            elif "timeout_error" in str(ex):
+                response_dict['code'] = 408
+            response_dict['message'] = str(ex)
             self.logger.error('error while fetching results: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
-
         return return_obj
 
     @staticmethod
@@ -143,8 +132,11 @@ class Connector(BaseSyncConnector):
         :param response_wrapper, object
         :return: page token number, str
         """
-        header_link = response_wrapper.headers['link'].split(",")
-        next_page_link = ''.join([link for link in header_link if 'rel="next' in link])
+        next_page_link = ""
+        for link_key, link in response_wrapper.headers.items():
+            if 'rel="next"' in link and link_key == 'Link':
+                next_page_link = link
+                break
         if not next_page_link:
             return None
         # if the after parameter is present at last of link parameter, angle index would be the end index.
@@ -159,7 +151,7 @@ class Connector(BaseSyncConnector):
         next_page_token = next_page_link[(next_page_link.find('after=')):end_index]
         return next_page_token
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """
         Ping the endpoint
         :return: return_object, dict
@@ -167,23 +159,20 @@ class Connector(BaseSyncConnector):
         return_obj = {}
         response_dict = {}
         try:
-            response = self.api_client.ping_data_source()
-            response_code = response.response.status_code
-            response_dict = json.loads(response.response.text)
+            response = await self.api_client.ping_data_source()
+            response_code = response.code
+            response_dict = json.loads(response.read().decode('utf-8'))
             if response_code == 200:
                 return_obj['success'] = True
             else:
                 return_obj = self.exception_response(response_code, response_dict.get('errorSummary', ''))
-        except ConnectionError:
-            response_dict['code'] = 300
-            response_dict['message'] = 'Invalid Host/Network Connection error'
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+
         except Exception as ex:
-            if "timeout_error" in str(ex):
-                response_dict['code'] = 300
-                response_dict['message'] = str(ex)
-            else:
-                response_dict['message'] = ex
+            if "server timeout_error" in str(ex):
+                response_dict['code'] = 503
+            elif "timeout_error" in str(ex):
+                response_dict['code'] = 408
+            response_dict['message'] = str(ex)
             self.logger.error('error while pinging: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
@@ -196,8 +185,6 @@ class Connector(BaseSyncConnector):
         :return: return_obj, dict
         """
         return_obj = {}
-        if code == 401 and 'Invalid token provided' in response_txt:
-            code = 300
         response_dict = {'code': code, 'message': str(response_txt)}
         ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
