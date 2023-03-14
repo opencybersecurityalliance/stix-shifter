@@ -8,6 +8,20 @@ import copy
 from datetime import datetime, timedelta
 
 
+def merge_alert_events(data):
+    keys = ['TableName', 'AlertId', 'Timestamp', 'DeviceId', 'DeviceName', 'Severity', 'Category', 'Title', 'AttackTechniques', 'ReportId']
+    alerts = filter(lambda x: x["TableName"] == "DeviceAlertEvents", data)
+    non_alerts = filter(lambda x: x["TableName"] != "DeviceAlertEvents", data)
+    seen_alerts = set()
+    merged_alerts = []
+    for alert in alerts:
+        key = tuple(alert[k] for k in keys)
+        if key not in seen_alerts:
+            merged_alerts.append(alert)
+            seen_alerts.add(key)
+    return merged_alerts + list(non_alerts)
+
+
 class Connector(BaseSyncConnector):
     init_error = None
     logger = logger.set_logger(__name__)
@@ -196,6 +210,11 @@ class Connector(BaseSyncConnector):
             # Filter the "None" and empty values except for RegistryValueName, which support empty string
             # Customizing of Registryvalues json
             table_event_data = []
+            # for some reason sometimes msatp returns the same alert from DeviceAlertEvents multiple times.
+            # they only differ in the RemoteIp, RemoteUrl, FileName and SHA1 properties, which are redundant anyway
+            # because they appear in the event as well. They are even wrongly referenced in the alert. for example the
+            # localip appears as RemoteIp. so we merge all these alerts into one.
+            q_return_obj['data'] = merge_alert_events(q_return_obj['data'])
             for event_data in q_return_obj['data']:
                 lookup_table = event_data['TableName']
                 event_data.pop('TableName')
