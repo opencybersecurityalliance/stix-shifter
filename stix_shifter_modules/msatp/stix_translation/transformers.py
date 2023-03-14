@@ -1,3 +1,4 @@
+import json
 import ntpath
 import re
 import urllib
@@ -49,6 +50,7 @@ class MsatpToRegistryValue(ValueTransformer):
 
 class FormatMacList(ValueTransformer):
     """A value transformer to convert Mac address to STIX Mac address format"""
+
     @staticmethod
     def transform(mac_lst):
         addresses = []
@@ -74,7 +76,6 @@ class IfValidUrl(ValueTransformer):
 class GetDomainName(ValueTransformer):
     """A value transformer to extract domain name from url"""
 
-
     @staticmethod
     def is_valid_domain_name(value):
         """test if value is a vaild domain name"""
@@ -87,10 +88,10 @@ class GetDomainName(ValueTransformer):
 
     @staticmethod
     def transform(value):
-        #if it is already a domain name return it
+        # if it is already a domain name return it
         if GetDomainName.is_valid_domain_name(value):
             return value
-        #it might be a url, parse the domain from the url
+        # it might be a url, parse the domain from the url
         parsed_url = urllib.parse.urlparse(value)
         return parsed_url.netloc
 
@@ -154,9 +155,25 @@ class SeverityToNumericVal(ValueTransformer):
         else:
             return LOW_SEVERITY
 
+
 class Alert(ValueTransformer):
     """A value transformer to convert MSATP Severity value (high/medium/low) to numeric value"""
 
     @staticmethod
     def transform(val):
         return "alert"
+
+
+class JsonToString(ValueTransformer):
+    """A value transformer to convert a string representing a json object to key: value string"""
+
+    @staticmethod
+    def transform(val):
+        try:
+            data = json.loads(val)
+        except json.JSONDecodeError:
+            return val
+        pairs = []
+        for key, value in data.items():
+            pairs.append(f"{key}: {value}")
+        return ", ".join(pairs)

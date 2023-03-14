@@ -14,40 +14,40 @@ class Connector(BaseSyncConnector):
     make_alert_as_list = True
 
     events_and_device_info = ('(({}'
-                              '| join kind=leftouter {}'
-                              'on DeviceId) | where Timestamp1 < Timestamp | summarize arg_max(Timestamp1, '
-                              '*) by ReportId, DeviceName, Timestamp) '
-                              '| join kind=leftouter {} on DeviceId | where Timestamp2 < Timestamp | '
-                              'summarize arg_max(Timestamp2, *) by ReportId, DeviceName, Timestamp')
+                              '| join kind=leftouter {} on DeviceId) '
+                              '| where Timestamp1 < Timestamp | summarize arg_max(Timestamp1, *) '
+                              'by ReportId, DeviceName, Timestamp) '
+                              '| join kind=leftouter {} on DeviceId | where Timestamp2 < Timestamp '
+                              '| summarize arg_max(Timestamp2, *) by ReportId, DeviceName, Timestamp')
 
     events_alerts_and_device_info = ('((({}'
                                      '| join kind=leftouter {} on ReportId, DeviceName, Timestamp)'
-                                     '| join kind=leftouter {}'
-                                     'on DeviceId) | where Timestamp2 < Timestamp | summarize arg_max(Timestamp2, '
-                                     '*) by ReportId, DeviceName, Timestamp) '
-                                     '| join kind=leftouter {} on DeviceId | where Timestamp3 < Timestamp | '
-                                     'summarize arg_max(Timestamp3, *) by ReportId, DeviceName, Timestamp')
+                                     '| join kind=leftouter {} on DeviceId) '
+                                     '| where Timestamp2 < Timestamp | summarize arg_max(Timestamp2, *) '
+                                     'by ReportId, DeviceName, Timestamp) '
+                                     '| join kind=leftouter {} on DeviceId | where Timestamp3 < Timestamp '
+                                     '| summarize arg_max(Timestamp3, *) by ReportId, DeviceName, Timestamp')
 
     events_alerts_query = '({} | join kind=leftouter {} on ReportId, DeviceName, Timestamp)'
 
-    events_query = ('find withsource = TableName in ({})  where (DeviceName =~ "{}") and '
-                    '(tostring(ReportId) == "{}") and (Timestamp == todatetime("{}"))')
+    events_query = ('(find withsource = TableName in ({})  where (Timestamp == datetime({})) '
+                    'and (DeviceName == "{}") and (ReportId == {}))')
 
     alerts_query = (
-        '(DeviceAlertEvents | where Table =~ "{}" | summarize AlertId=make_list(AlertId), Severity=make_list(Severity), '
+        '(DeviceAlertEvents | summarize AlertId=make_list(AlertId), Severity=make_list(Severity), '
         'Title=make_list(Title), Category=make_list('
         'Category), AttackTechniques=make_list('
         'AttackTechniques) by DeviceName, ReportId, Timestamp)')
 
     network_info_query = (
-        '(DeviceNetworkInfo | project Timestamp, DeviceId, MacAddress, IPAddresses| summarize '
+        '(DeviceNetworkInfo | where NetworkAdapterStatus == "Up" | project Timestamp, DeviceId, MacAddress, IPAddresses| summarize '
         'IPAddressesSet=make_set(IPAddresses), MacAddressSet=make_set(MacAddress) by '
         'DeviceId, Timestamp)')
 
     device_info_query = '(DeviceInfo | project Timestamp, DeviceId, PublicIP, OSArchitecture, OSPlatform, OSVersion)'
 
     EVENTS_TABLES = ['DeviceNetworkEvents', 'DeviceProcessEvents', 'DeviceFileEvents', 'DeviceRegistryEvents',
-                     'DeviceNetworkInfo', 'DeviceEvents']
+                     'DeviceEvents', 'DeviceImageLoadEvents']
     ALERT_FIELDS = ['AlertId', 'Severity', 'Title', 'Category', 'AttackTechniques']
     DEFENDER_HOST = 'security.microsoft.com'
 
@@ -162,7 +162,7 @@ class Connector(BaseSyncConnector):
         return {"success": True, "search_id": search_id}
 
     def create_results_connection(self, query, offset, length):
-        """"built the response object
+        """"build the response object
         :param query: str, search_id
         :param offset: int,offset value
         :param length: int,length value"""
@@ -213,14 +213,14 @@ class Connector(BaseSyncConnector):
                         attackTechniques = json.loads(build_data[lookup_table]['AttackTechniques'])
                         build_data[lookup_table]['AttackTechniques'] = attackTechniques
 
-                elif self.alert_mode and all([table, deviceName, reportId, timestamp]):
+                elif self.alert_mode and all([deviceName, reportId, timestamp]):
                     # query events table according to alert fields
                     found_events = True
-                    events_query = Connector.events_query.format(table, deviceName, reportId, timestamp)
+                    events_query = "union {}".format(','.join([Connector.events_query.format(q, timestamp, deviceName, reportId) for q in Connector.EVENTS_TABLES]))
                     joined_query = Connector.events_and_device_info.format(events_query,
                                                                            Connector.network_info_query,
                                                                            Connector.device_info_query)
-
+                    print("joining alert with events: ", joined_query)
                     response = self.api_client.run_search(joined_query, offset, length)
                     events_return_obj = dict()
                     events_return_obj = self._handle_errors(response, events_return_obj)

@@ -255,14 +255,6 @@
       "object": "x-msatp"
     }
   },
-  "ReportId": {
-    "key": "x-msatp.ReportId",
-    "object": "x-msatp"
-  },
-  "Table": {
-    "key": "x-msatp.Table",
-    "object": "x-msatp"
-  },
   "DeviceNetworkEvents": {
     "Alerts": {
       "AlertId": [
@@ -318,7 +310,74 @@
       "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
-      }
+      },
+      "RemoteUrl": [
+        {
+          "key": "url.value",
+          "object": "url",
+          "transformer": "IfValidUrl"
+        },
+        {
+          "key": "domain-name.value",
+          "object": "domain-name",
+          "transformer": "GetDomainName"
+        },
+        {
+          "key": "x-oca-event.domain_ref",
+          "object": "event",
+          "references": "domain-name"
+        },
+        {
+          "key": "x-oca-event.url_ref",
+          "object": "event",
+          "references": "url"
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": [
+            "url",
+            "domain-name"
+          ],
+          "group": true
+        }
+      ],
+      "RemoteIP": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "nt",
+          "references": "dst_ip"
+        },
+        {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        },
+        {
+          "key": "x-oca-event.ip_refs",
+          "object": "event",
+          "references": [
+            "dst_ip"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": [
+            "dst_ip"
+          ],
+          "group": true
+        }
+      ]
     },
     "Timestamp": [
       {
@@ -783,6 +842,19 @@
       "key": "x-oca-event.provider",
       "object": "event",
       "value": "Microsoft Defender for Endpoint"
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId",
+      "object": "x-msatp"
+    },
+    "Table": {
+      "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
+    "AdditionalFields": {
+      "key": "x-msatp.AdditionalFields",
+      "object": "x-msatp",
+      "transformer": "JsonToString"
     }
   },
   "DeviceProcessEvents": {
@@ -840,7 +912,74 @@
       "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
-      }
+      },
+      "RemoteUrl": [
+        {
+          "key": "url.value",
+          "object": "url",
+          "transformer": "IfValidUrl"
+        },
+        {
+          "key": "domain-name.value",
+          "object": "domain-name",
+          "transformer": "GetDomainName"
+        },
+        {
+          "key": "x-oca-event.domain_ref",
+          "object": "event",
+          "references": "domain-name"
+        },
+        {
+          "key": "x-oca-event.url_ref",
+          "object": "event",
+          "references": "url"
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": [
+            "url",
+            "domain-name"
+          ],
+          "group": true
+        }
+      ],
+      "RemoteIP": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "nt",
+          "references": "dst_ip"
+        },
+        {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        },
+        {
+          "key": "x-oca-event.ip_refs",
+          "object": "event",
+          "references": [
+            "dst_ip"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": [
+            "dst_ip"
+          ],
+          "group": true
+        }
+      ]
     },
     "Timestamp": [
       {
@@ -1299,6 +1438,19 @@
       "key": "number_observed",
       "cybox": false,
       "transformer": "ToInteger"
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId",
+      "object": "x-msatp"
+    },
+    "Table": {
+      "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
+    "AdditionalFields": {
+      "key": "x-msatp.AdditionalFields",
+      "object": "x-msatp",
+      "transformer": "JsonToString"
     }
   },
   "DeviceFileEvents": {
@@ -1356,7 +1508,74 @@
       "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
-      }
+      },
+      "RemoteUrl": [
+        {
+          "key": "url.value",
+          "object": "url",
+          "transformer": "IfValidUrl"
+        },
+        {
+          "key": "domain-name.value",
+          "object": "domain-name",
+          "transformer": "GetDomainName"
+        },
+        {
+          "key": "x-oca-event.domain_ref",
+          "object": "event",
+          "references": "domain-name"
+        },
+        {
+          "key": "x-oca-event.url_ref",
+          "object": "event",
+          "references": "url"
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": [
+            "url",
+            "domain-name"
+          ],
+          "group": true
+        }
+      ],
+      "RemoteIP": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "nt",
+          "references": "dst_ip"
+        },
+        {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        },
+        {
+          "key": "x-oca-event.ip_refs",
+          "object": "event",
+          "references": [
+            "dst_ip"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": [
+            "dst_ip"
+          ],
+          "group": true
+        }
+      ]
     },
     "Timestamp": [
       {
@@ -1796,6 +2015,19 @@
       "key": "number_observed",
       "cybox": false,
       "transformer": "ToInteger"
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId",
+      "object": "x-msatp"
+    },
+    "Table": {
+      "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
+    "AdditionalFields": {
+      "key": "x-msatp.AdditionalFields",
+      "object": "x-msatp",
+      "transformer": "JsonToString"
     }
   },
   "DeviceImageLoadEvents": {
@@ -1853,7 +2085,74 @@
       "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
-      }
+      },
+      "RemoteUrl": [
+        {
+          "key": "url.value",
+          "object": "url",
+          "transformer": "IfValidUrl"
+        },
+        {
+          "key": "domain-name.value",
+          "object": "domain-name",
+          "transformer": "GetDomainName"
+        },
+        {
+          "key": "x-oca-event.domain_ref",
+          "object": "event",
+          "references": "domain-name"
+        },
+        {
+          "key": "x-oca-event.url_ref",
+          "object": "event",
+          "references": "url"
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": [
+            "url",
+            "domain-name"
+          ],
+          "group": true
+        }
+      ],
+      "RemoteIP": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "nt",
+          "references": "dst_ip"
+        },
+        {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        },
+        {
+          "key": "x-oca-event.ip_refs",
+          "object": "event",
+          "references": [
+            "dst_ip"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": [
+            "dst_ip"
+          ],
+          "group": true
+        }
+      ]
     },
     "Timestamp": [
       {
@@ -2243,6 +2542,19 @@
       "key": "number_observed",
       "cybox": false,
       "transformer": "ToInteger"
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId",
+      "object": "x-msatp"
+    },
+    "Table": {
+      "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
+    "AdditionalFields": {
+      "key": "x-msatp.AdditionalFields",
+      "object": "x-msatp",
+      "transformer": "JsonToString"
     }
   },
   "DeviceRegistryEvents": {
@@ -2300,7 +2612,74 @@
       "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
-      }
+      },
+      "RemoteUrl": [
+        {
+          "key": "url.value",
+          "object": "url",
+          "transformer": "IfValidUrl"
+        },
+        {
+          "key": "domain-name.value",
+          "object": "domain-name",
+          "transformer": "GetDomainName"
+        },
+        {
+          "key": "x-oca-event.domain_ref",
+          "object": "event",
+          "references": "domain-name"
+        },
+        {
+          "key": "x-oca-event.url_ref",
+          "object": "event",
+          "references": "url"
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": [
+            "url",
+            "domain-name"
+          ],
+          "group": true
+        }
+      ],
+      "RemoteIP": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "nt",
+          "references": "dst_ip"
+        },
+        {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        },
+        {
+          "key": "x-oca-event.ip_refs",
+          "object": "event",
+          "references": [
+            "dst_ip"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": [
+            "dst_ip"
+          ],
+          "group": true
+        }
+      ]
     },
     "Timestamp": [
       {
@@ -2655,6 +3034,19 @@
       "key": "number_observed",
       "cybox": false,
       "transformer": "ToInteger"
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId",
+      "object": "x-msatp"
+    },
+    "Table": {
+      "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
+    "AdditionalFields": {
+      "key": "x-msatp.AdditionalFields",
+      "object": "x-msatp",
+      "transformer": "JsonToString"
     }
   },
   "DeviceEvents": {
@@ -2712,7 +3104,74 @@
       "Title": {
         "key": "x-ibm-finding.name",
         "object": "finding"
-      }
+      },
+      "RemoteUrl": [
+        {
+          "key": "url.value",
+          "object": "url",
+          "transformer": "IfValidUrl"
+        },
+        {
+          "key": "domain-name.value",
+          "object": "domain-name",
+          "transformer": "GetDomainName"
+        },
+        {
+          "key": "x-oca-event.domain_ref",
+          "object": "event",
+          "references": "domain-name"
+        },
+        {
+          "key": "x-oca-event.url_ref",
+          "object": "event",
+          "references": "url"
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": [
+            "url",
+            "domain-name"
+          ],
+          "group": true
+        }
+      ],
+      "RemoteIP": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "nt",
+          "references": "dst_ip"
+        },
+        {
+          "key": "x-oca-event.network_ref",
+          "object": "event",
+          "references": "nt"
+        },
+        {
+          "key": "x-oca-event.ip_refs",
+          "object": "event",
+          "references": [
+            "dst_ip"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": [
+            "dst_ip"
+          ],
+          "group": true
+        }
+      ]
     },
     "Timestamp": [
       {
@@ -3302,6 +3761,19 @@
       "key": "number_observed",
       "cybox": false,
       "transformer": "ToInteger"
+    },
+    "ReportId": {
+      "key": "x-msatp.ReportId",
+      "object": "x-msatp"
+    },
+    "Table": {
+      "key": "x-msatp.Table",
+      "object": "x-msatp"
+    },
+    "AdditionalFields": {
+      "key": "x-msatp.AdditionalFields",
+      "object": "x-msatp",
+      "transformer": "JsonToString"
     }
   },
   "DeviceNetworkInfo": {
