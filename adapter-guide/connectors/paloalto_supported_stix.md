@@ -1,4 +1,4 @@
-##### Updated on 02/27/23
+##### Updated on 03/08/23
 ## PaloAlto Cortex XDR
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
@@ -19,7 +19,7 @@
 | OR (Observation) | or |
 | AND (Observation) | or |
 | <br> | |
-### Searchable STIX objects and properties for Xdr_data
+### Searchable STIX objects and properties for Xdr_data dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | action_local_ip, action_remote_ip, agent_ip_addresses |

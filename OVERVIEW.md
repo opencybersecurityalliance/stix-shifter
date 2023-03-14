@@ -161,6 +161,8 @@ List updated: October 29, 2021
 |       [Red Hat Advanced Cluster Security for Kubernetes (StackRox)](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/rhacs_supported_stix.md)                           | rhacs             | Default    | IBM Security | Yes         | Yes          | Released     |
 |      [GCP Chronicle](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/gcp_chronicle_supported_stix.md)                   | gcp_chronicle              | Default    | IBM Security | Yes         | Yes          | Released     |
 |      [Azure Log Analytics](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/azure_log_analytics_supported_stix.md)                   | azure_log_analytics              | Default    | IBM Security | Yes         | Yes          | Released     |
+|      [Okta](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/okta_supported_stix.md)                   | okta              | Default    | IBM Security | Yes         | Yes          | Released     |
+
 
 
 

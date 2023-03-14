@@ -6,10 +6,10 @@ class DeleteConnector(BaseDeleteConnector):
     def __init__(self, api_client):
         self.api_client = api_client
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         success = False
         try:
-            response = self.api_client.delete_result(search_id)
+            response = await self.api_client.delete_result(search_id)
             if response is None:
                 response_json = {}
                 response_json['message'] = "Delete failed"

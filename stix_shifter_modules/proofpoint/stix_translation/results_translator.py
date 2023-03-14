@@ -1,6 +1,5 @@
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 from os import path
-import json
 
 class ResultsTranslator(JSONToStix):
 
@@ -20,13 +19,12 @@ class ResultsTranslator(JSONToStix):
         :rtype: str
         """
         results = super().translate_results(data_source, data)
-        json_data = json.loads(data)
 
-        if len(results['objects']) - 1 == len(json_data):
+        if len(results['objects']) - 1 == len(data):
             for i in range(1, len(results['objects'])):
                 results['objects'][i]['number_observed'] = 1
         else:
             raise RuntimeError("Incorrect number of result objects after translation. Found: {}, expected: {}.".format(
-                len(results['objects']) - 1, len(json_data)))
+                len(results['objects']) - 1, len(data)))
 
         return results

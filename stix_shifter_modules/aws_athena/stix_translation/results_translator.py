@@ -10,10 +10,7 @@ class ResultsTranslator(JSONToStix):
         self.hash_names = self.read_json(hash_algorithm_map, options)
 
     def translate_results(self, data_source, data):
-        mappping = self.map_data
-        ocsf_map = mappping['ocsf']
-        results = json.loads(data)
-        for result in results:
+        for result in data:
             ocsf_payload = result['ocsf']
             process_obj = ocsf_payload.get('process')
             if process_obj:
@@ -27,7 +24,6 @@ class ResultsTranslator(JSONToStix):
                     if file_obj:
                         file_obj['hashes'] = self.update_hash_mapping(file_obj)
   
-        data = json.dumps(results)
         return super().translate_results(data_source, data)
 
     def update_hash_mapping(self, file_obj):

@@ -9,13 +9,13 @@ END_TIME = 'end_time'
 class AqlQueryTranslator(BaseQueryTranslator):
 
     def parse_query(self, data):
-        last_time_criteria = "\s?LAST\s?(\d*)\s?(MINUTES|HOURS|DAYS)"
+        last_time_criteria = r"\s?LAST\s?(\d*)\s?(MINUTES|HOURS|DAYS)"
         time_patterns = {
-            "'(\d{4}(-\d{2}){2}\s?(\d{2}:\d{2}))'": "%Y-%m-%d %H:%M",
-            "'(\d{4}(-\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y-%m-%d %H:%M:%S",
-            "'(\d{4}(/\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y/%m/%d %H:%M:%S",
-            "'(\d{4}(/\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y/%m/%d-%H:%M:%S",
-            "'(\d{4}(:\d{2}){2}-\d{2}(:\d{2}){2})'": "%Y:%m:%d-%H:%M:%S",
+            r"'(\d{4}(-\d{2}){2}\s?(\d{2}:\d{2}))'": "%Y-%m-%d %H:%M",
+            r"'(\d{4}(-\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y-%m-%d %H:%M:%S",
+            r"'(\d{4}(/\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y/%m/%d %H:%M:%S",
+            r"'(\d{4}(/\d{2}){2}\s?\d{2}(:\d{2}){2})'": "%Y/%m/%d-%H:%M:%S",
+            r"'(\d{4}(:\d{2}){2}-\d{2}(:\d{2}){2})'": "%Y:%m:%d-%H:%M:%S",
         }
 
         labels = {'START': START_TIME, 'STOP': END_TIME}

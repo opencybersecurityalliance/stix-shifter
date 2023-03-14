@@ -11,8 +11,8 @@ class PingConnector(BasePingConnector):
         self.logger = utils_logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def ping_connection(self):
-        response = self.api_client.ping_box()
+    async def ping_connection(self):
+        response = await self.api_client.ping_box()
         response_code = response.code
 
         response_text = response.read()

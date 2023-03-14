@@ -1,4 +1,4 @@
-##### Updated on 02/27/23
+##### Updated on 03/08/23
 ## Datadog
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
@@ -12,7 +12,7 @@
 | OR (Observation) | OR |
 | AND (Observation) | OR |
 | <br> | |
-### Searchable STIX objects and properties for Events
+### Searchable STIX objects and properties for Events dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **domain-name**:value | host |
@@ -33,7 +33,7 @@
 | **x-oca-event**:original_ref.payload_bin | text |
 | **x-oca-event**:domain_ref.value | host |
 | <br> | |
-### Searchable STIX objects and properties for Processes
+### Searchable STIX objects and properties for Processes dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **domain-name**:value | host |

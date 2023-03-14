@@ -1,37 +1,27 @@
 from stix_shifter_modules.elastic_ecs.entry_point import EntryPoint
+from stix_shifter_modules.elastic_ecs.stix_transmission.connector import UnexpectedResponseException
+from stix_shifter.stix_transmission import stix_transmission
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
+from stix_shifter_utils.utils.error_response import ErrorCode
+from tests.utils.async_utils import get_mock_response
+
+
 from unittest.mock import patch
 import unittest
-import json
-import os
-from stix_shifter.stix_transmission import stix_transmission
-from stix_shifter_utils.utils.error_response import ErrorCode
 
 
-class ElasticEcsMockResponse:
-    def __init__(self, response_code, object):
-        self.code = response_code
-        self.object = object
-
-    def read(self):
-        return bytearray(self.object, 'utf-8')
-
-
-@patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.__init__',  autospec=True)
 class TestElasticEcsConnection(unittest.TestCase, object):
-    def test_is_async(self, mock_api_client):
-        mock_api_client.return_value = None
+    def test_is_async(self):
         entry_point = EntryPoint()
-
         check_async = entry_point.is_async()
 
         assert check_async is False
 
     @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.ping_box')
-    def test_ping_endpoint(self, mock_ping_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_ping_endpoint(self, mock_ping_response):
         mocked_return_value = '["mock", "placeholder"]'
 
-        mock_ping_response.return_value = ElasticEcsMockResponse(200, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
 
         config = {
             "auth": {
@@ -53,11 +43,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert ping_response['success']
 
     @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.ping_box')
-    def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client):
-        mock_api_client.return_value = None
-        mocked_return_value = '["mock", "placeholder"]'
-        mock_ping_response.return_value = ElasticEcsMockResponse(200, mocked_return_value)
-        mock_ping_response.side_effect = Exception('exception')
+    def test_ping_endpoint_exception(self, mock_ping_response):
+        mock_ping_response.side_effect = UnexpectedResponseException('exception')
         config = {
             "auth": {
                 "username": "bla",
@@ -71,6 +58,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
             "indices": "index1"
         }
 
+        ping_response = None
+
         transmission = stix_transmission.StixTransmission('elastic_ecs', connection, config)
         ping_response = transmission.ping()
 
@@ -78,9 +67,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert ping_response['success'] is False
         assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
-    def test_query_response(self, mock_api_client):
-        mock_api_client.return_value = None
 
+    def test_query_response(self):
         config = {
             "auth": {
                 "username": "bla",
@@ -103,10 +91,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert 'search_id' in query_response
         assert query_response['search_id'] == query
 
-    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination',
-           autospec=True)
-    def test_results_response(self, mock_results_response, mock_api_client):
-        mock_api_client.return_value = None
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination', autospec=True)
+    def test_results_response(self, mock_results_response):
         mocked_return_value = """ {
                     "hits" : {
                         "total" : {
@@ -142,7 +128,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
                     ]
                 }
             } """
-        mock_results_response.return_value = ElasticEcsMockResponse(200, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
 
         config = {
             "auth": {
@@ -169,13 +155,10 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert len(results_response['data']) > 0
         assert len(results_response['metadata']) >= 1
 
-
-    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination',
-           autospec=True)
-    def test_results_response_exception(self, mock_results_response, mock_api_client):
-        mock_api_client.return_value = None
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination', autospec=True)
+    def test_results_response_exception(self, mock_results_response):
         mocked_return_value = """ {    } """
-        mock_results_response.return_value = ElasticEcsMockResponse(404, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(404, mocked_return_value, 'byte')
 
         config = {
             "auth": {
@@ -200,10 +183,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert results_response['success'] is False
 
 
-    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination',
-           autospec=True)
-    def test_query_flow(self, mock_results_response, mock_api_client):
-        mock_api_client.return_value = None
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination', autospec=True)
+    def test_query_flow(self, mock_results_response):
         results_mock = """ {
                     "hits" : {
                         "total" : {
@@ -240,7 +221,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
                 }
             } """
 
-        mock_results_response.return_value = ElasticEcsMockResponse(200, results_mock)
+        mock_results_response.return_value = get_mock_response(200, results_mock, 'byte')
 
         config = {
             "auth": {
@@ -273,10 +254,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert len(results_response['metadata']) >= 1
 
 
-    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.get_max_result_window',
-           autospec=True)
-    def test_pagesize(self, mock_results_response, mock_api_client):
-        mock_api_client.return_value = None
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.get_max_result_window', autospec=True)
+    def test_pagesize(self, mock_results_response):
         mocked_return_value = """ {
                 "index1": {
                   "settings": {
@@ -303,7 +282,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
                   }
                 }
             } """
-        mock_results_response.return_value = ElasticEcsMockResponse(200, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
 
         config = {
             "auth": {
@@ -319,6 +298,8 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         }
 
         transmission = stix_transmission.StixTransmission('elastic_ecs', connection, config)
+        max_result_window = run_in_thread(transmission.entry_point._BaseEntryPoint__results_connector.get_pagesize)
 
+        assert max_result_window == 20000
         assert transmission.entry_point._BaseEntryPoint__results_connector.max_result_window == 20000
 

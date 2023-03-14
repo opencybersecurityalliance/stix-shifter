@@ -1,59 +1,29 @@
 import json
 import unittest
-from sre_constants import ASSERT_NOT
-from unittest.mock import ANY, patch
+from unittest.mock import patch
 
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter_modules.ibm_security_verify.entry_point import EntryPoint
-from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import \
-    Status
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import \
-    ResponseWrapper
+from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
+from tests.utils.async_utils import get_mock_response
 
 
-class VerifyMockResponse:
-    def __init__(self, response_code, object):
-        self.code = response_code
-        self.object = object
-
-    def read(self):
-        return self.object
+class ReasonMockResponse:
+    def __init__(self):
+        self.reason = None
 
 
-class VerifyMockPingResponse:
-    def __init__(self, response_code, status_code):
-        self.code = response_code
-        self.status_code = status_code
-
-    def read(self):
-        return self.object
-
-
-@patch(
-    "stix_shifter_modules.ibm_security_verify.stix_transmission.api_client.APIClient.__init__",
-    autospec=True,
-)
 class TestVerifyConnection(unittest.TestCase, object):
-    def test_is_async(self, mock_api_client):
-        mock_api_client.return_value = None
+    
+    def test_is_async(self):
         entry_point = EntryPoint()
 
-        config = {"auth": {"sec": "bla"}}
-        connection = {
-            "host": "hostbla",
-            "port": 8080,
-        }
         check_async = entry_point.is_async()
         assert check_async is True
 
-    @patch(
-        "stix_shifter_modules.ibm_security_verify.stix_transmission.api_client.APIClient.get_search",
-        autospec=True,
-    )
-    def test_status_response(self, mock_status_response, mock_api_client):
-        mock_api_client.return_value = None
-        mocked_return_value = '{"search_id": "108cb8b0-0744-4dd9-8e35-ea8311cd6211", "status": "COMPLETED", "progress": "100"}'
-        mock_status_response.return_value = VerifyMockResponse(200, mocked_return_value)
+
+    def test_status_response(self):
 
         config = {"host": "connection.com"}
         connection = {"auth": {"clientId": "clientId", "clientSecret": "clientscred"}}
@@ -67,11 +37,11 @@ class TestVerifyConnection(unittest.TestCase, object):
         assert "status" in status_response
         assert status_response["status"] == Status.COMPLETED.value
 
+
     @patch(
         "stix_shifter_modules.ibm_security_verify.stix_transmission.api_client.APIClient.run_search"
     )
-    def test_query_response(self, mock_query_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_query_response(self, mock_query_response):
         mock_query_response.return_value = {"success": 200}
 
         config = {"host": "cloudsecurity.com"}
@@ -85,57 +55,60 @@ class TestVerifyConnection(unittest.TestCase, object):
         assert "search_id" in query_response
         assert query_response["search_id"] == query
 
+
     @patch(
         "stix_shifter_modules.ibm_security_verify.stix_transmission.api_client.APIClient.generate_token"
     )
-    def test_ping(self, mock_generate_token, mock_api_client):
+    def test_ping(self, mock_generate_token):
 
         config = {"host": "cloudsecurity.com"}
         connection = {"auth": {"clientId": "clientid", "clientSecret": "secret"}}
-        mocked_return_value = VerifyMockPingResponse(200, 200)
+        mocked_return_value = get_mock_response(200, 200)
         mock_generate_token.return_value = mocked_return_value
-        mock_api_client.return_value = None
         entry_point = EntryPoint(config, connection)
-        ping_result = entry_point.ping_connection()
+        ping_result = run_in_thread(entry_point.ping_connection)
         assert ping_result["success"] is True
 
-    @patch(
-        "stix_shifter_modules.ibm_security_verify.stix_transmission.api_client.APIClient.generate_token"
-    )
-    @patch(
-        "stix_shifter_modules.ibm_security_verify.stix_transmission.api_client.APIClient.run_search",
-        autospec=True,
-    )
-    def test_results_all_response(
-        self, mock_results_response, mock_generate_token, mock_api_client
-    ):
-        mock_api_client.return_value = None
-        mocked_return_value = {"code": 200}
-        mock_generate_token.return_value = mocked_return_value
+
+    @patch("stix_shifter_modules.ibm_security_verify.stix_transmission.api_client.APIClient.generate_token")
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
+    def test_results_all_response(self, mock_results_response, mock_generate_token):
+        mock_generate_token.return_value = get_mock_response(200, '{"code": 200}')
+        # from https://community.ibm.com/community/user/security/blogs/adam-case/2019/05/30/get-event-log-details-and-sso-activity-from-ibm-cl
+        mocked_return_value = {
+            "response":{
+                "events":{
+                    "search_after":{
+                        "total_events":54,
+                        "max_size_limit":"false",
+                        "time":"1559156150862",
+                        "id":"def9ea72-30ce-4589-800a-7306e306ea2e"
+                    },
+                    "events":[
+                        {
+                            "geoip":{
+                                "continent_name":"North America",
+                                "country_iso_code":"US",
+                                "country_name":"United States",
+                                "location":{
+                                    "lon":"-97.822",
+                                    "lat":"37.751"
+                                }
+                            }
+                        }  
+                    ]
+                }
+            }
+        }
+        mock_results_response.return_value = get_mock_response(200, json.dumps(mocked_return_value), response=ReasonMockResponse())
+
         config = {"host": "ibmcloud.com"}
         connection = {"auth": {"clientId": "clientId", "clientSecret": "secret"}}
-
-        mocked_return_value = {
-            "code": 200,
-            "success": 200,
-            "data": [
-                {
-                    "id": 123,
-                    "created_at": "2022-01-16T16:45:16.112Z",
-                    "account_id": 123,
-                    "ipaddr": "12.22.33.44",
-                }
-            ],
-        }
-
-        mock_results_response.return_value = mocked_return_value
-
         query = 'event_type="sso"&limit=10000'
-
         offset = 0
         length = 101
         entry_point = EntryPoint(config, connection)
-        results_response = entry_point.create_results_connection(query, offset, length)
+        results_response = run_in_thread(entry_point.create_results_connection, query, offset, length)
 
         assert results_response is not None
         assert results_response["success"]
