@@ -62,7 +62,7 @@ class APIClient():
 
     async def get_search(self, search_id):
         # sends a GET request to
-        # http]s://<server_ip>:<port>/services/search/jobs/<search_id>
+        # https://<server_ip>:<port>/services/search/jobs/<search_id>
         # returns information about the search job and its properties.
         await self.authenticate()
         endpoint = self.endpoint_start + 'search/jobs/' + search_id        
