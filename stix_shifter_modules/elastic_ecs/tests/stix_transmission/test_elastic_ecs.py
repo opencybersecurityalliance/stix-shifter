@@ -298,8 +298,36 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         }
 
         transmission = stix_transmission.StixTransmission('elastic_ecs', connection, config)
-        max_result_window = run_in_thread(transmission.entry_point._BaseEntryPoint__results_connector.get_pagesize)
+        search_id = '(source.port : "64966" OR client.port : "64966")'
+        offset = 0
+        length = 1
+        results_response = transmission.results(search_id, offset, length)
+        max_result_window = transmission.entry_point._BaseEntryPoint__results_connector.max_result_window
 
         assert max_result_window == 20000
-        assert transmission.entry_point._BaseEntryPoint__results_connector.max_result_window == 20000
 
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.get_max_result_window')
+    def test_pagesize_exception(self, mock_result_response):
+        mocked_return_value = '["mock", "placeholder"]'
+        mock_result_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
+        mock_result_response.side_effect = Exception('exception')
+        config = {
+            "auth": {
+                "username": "bla",
+                "password": "bla"
+            }
+        }
+        connection = {
+            "host": "hostbla",
+            "port": 8080,
+            "selfSignedCert": "cert",
+            "indices": "index1"
+        }
+
+        transmission = stix_transmission.StixTransmission('elastic_ecs', connection, config)
+        search_id = '(source.port : "64966" OR client.port : "64966")'
+        offset = 0
+        length = 1
+        results_response = transmission.results(search_id, offset, length)
+        max_result_window = transmission.entry_point._BaseEntryPoint__results_connector.max_result_window
+        assert max_result_window == 10000
