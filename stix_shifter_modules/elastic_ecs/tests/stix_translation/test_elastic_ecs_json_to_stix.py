@@ -463,7 +463,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         nt_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'network-traffic')
         assert (nt_object is not None), 'network-traffic object type not found'
         assert (nt_object.keys() ==
-                {'type', 'src_port', 'src_byte_count', 'src_packets', 'dst_port', 'dst_byte_count', 'dst_packets', 'src_ref', 'dst_ref', 'protocols', 'extensions'})
+                {'type', 'src_port', 'src_byte_count', 'src_packets', 'dst_port', 'dst_byte_count', 'dst_packets', 'src_ref', 'dst_ref', 'protocols', 'extensions', 'x_community_id'})
         assert (nt_object['type'] == 'network-traffic')
         assert (nt_object['src_port'] == 49745)
         assert (nt_object['dst_port'] == 443)
@@ -567,7 +567,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert(process_obj['command_line'] == "C:\\WINDOWS\\system32\\wbem\\unsecapp.exe -Embedding")
         binary_obj = objects[process_obj['binary_ref']]
         assert(binary_obj is not None), "process binary ref not found"
-        assert(binary_obj.keys() == {'type', 'name', 'parent_directory_ref', 'hashes'})
+        assert(binary_obj.keys() == {'type', 'name', 'parent_directory_ref', 'hashes', 'x_owner_ref'})
         assert(binary_obj['type'] == "file")
         assert(binary_obj['name'] == "unsecapp.exe")
         binary_parent_dir_obj = objects[binary_obj['parent_directory_ref']]
@@ -596,7 +596,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         file_ref = event_object['file_ref']
         assert(file_ref in objects), f"file_ref with key {event_object['file_ref']} not found"
         file_obj = objects[file_ref]
-        assert(file_obj.keys() == {'type', 'name', 'parent_directory_ref', 'x_owner_ref'})
+        assert(file_obj.keys() == {'type', 'name', 'parent_directory_ref'})
         assert(file_obj['type'] == 'file')
         assert(file_obj['name'] == "example.png")
         parent_obj = objects[file_obj['parent_directory_ref']]
@@ -677,7 +677,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
         file_object = TestElasticEcsTransform.get_first(objects.values(), lambda o: type(o) == dict and o.get('type') == 'file' and o.get('name') == 'example.png')
         assert (file_object is not None), 'file object type not found'
-        assert (file_object.keys() == {'type', 'name', 'parent_directory_ref', 'x_owner_ref'})
+        assert (file_object.keys() == {'type', 'name', 'parent_directory_ref'})
         assert (file_object['type'] == 'file')
         assert (file_object['name'] == 'example.png')
         parent_directory_ref = file_object['parent_directory_ref']
@@ -747,18 +747,20 @@ class TestElasticEcsTransform(unittest.TestCase, object):
           executable_file.get("type") == "file" and
           executable_file.get("name") == "dsregcmd.exe"
         )
-        exec_file_pe_info = executable_file.get("x_pe")
-        assert (
-          exec_file_pe_info and
-          exec_file_pe_info.get("company") == "Microsoft Corporation" and
-          exec_file_pe_info.get("file_version") == "10.0.17763.2145 (WinBuild.160101.0800)" and
-          exec_file_pe_info.get("description") == "DSREG commandline tool" and
-          exec_file_pe_info.get("original_file_name") == "dsregcmd.exe" and
-          exec_file_pe_info.get("product") == "Microsoft\u00ae Windows\u00ae Operating System"
-        )
         exec_file_hashes = executable_file.get("hashes")
         assert (
           exec_file_hashes and
           exec_file_hashes.get("MD5") == "d6957aceda86de523af0157800aa3c73" and
           exec_file_hashes.get("SHA-256") == "ba79462455b6e216d0e7cd6fe36bf0eff8a0d9dd06358d1c97b1014016256618"
+        )
+        exec_file_software_key = executable_file.get("x_software_ref")
+        exec_file_software = stix_objects.get(exec_file_software_key)
+        assert (
+          exec_file_software and
+          exec_file_software.get("type") == "software" and
+          exec_file_software.get("name") == "dsregcmd.exe" and 
+          exec_file_software.get("vendor") == "Microsoft Corporation" and
+          exec_file_software.get("version") == "10.0.17763.2145 (WinBuild.160101.0800)" and
+          exec_file_software.get("x_product") == "Microsoft® Windows® Operating System" and
+          exec_file_software.get("x_description") == "DSREG commandline tool" 
         )
