@@ -3,15 +3,8 @@ import unittest
 from unittest.mock import patch
 from stix_shifter.stix_transmission import stix_transmission
 import json
-from requests.exceptions import ConnectionError, RequestException
-
-
-class InnerResponse:
-    """ class for capturing response"""
-
-    def __init__(self, st_code, txt):
-        self.status_code = st_code
-        self.text = txt
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
+from tests.utils.async_utils import get_mock_response
 
 
 class OktaMockResponse:
@@ -24,13 +17,6 @@ class OktaMockResponse:
 
     def read(self):
         return bytearray(self.content, 'utf-8')
-
-
-class PingResponse:
-    """ class for ping response"""
-
-    def __init__(self, response):
-        self.response = response
 
 
 class TestOktaConnection(unittest.TestCase, object):
@@ -166,22 +152,20 @@ class TestOktaConnection(unittest.TestCase, object):
         assert check_async is False
 
     @patch('stix_shifter_modules.okta.stix_transmission.api_client.APIClient.ping_data_source')
-    def get_ping_results(self, mock_ping_response):
+    def test_get_ping_results(self, mock_ping_response):
         """test ping connection"""
-        inner_response = InnerResponse(200, TestOktaConnection.mocked_response)
-        pingresponse = PingResponse(inner_response)
-        mock_ping_response.return_value = pingresponse
-        transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
-        ping_response = transmission.ping()
+        mock_ping_response.return_value = get_mock_response(200, json.dumps(TestOktaConnection.mocked_response), 'byte')
+        entry_point = EntryPoint(self.connection(), self.configuration())
+        ping_response = run_in_thread(entry_point.ping_connection)
         assert ping_response is not None
         assert ping_response['success'] is True
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_success_query_results(self, mock_result_response):
         """ test success result response"""
         mocked_return_value = json.dumps(TestOktaConnection.mocked_response)
         headers = {
-            'link': '<https://ourhost/api/v1/logs?since=2023-01-19T11%3A00%3A00.000Z'
+            'Link': '<https://ourhost/api/v1/logs?since=2023-01-19T11%3A00%3A00.000Z'
                     '&until=2023-01-31T11%3A00%3A00.003Z&limit=1000&filter=request.ipChain.ip+eq+%221.1.1.1%22+>'
                     '; rel="self"'}
         query = "filter=request.ipChain.ip eq \"1.1.1.1\" &since=2023-01-19T11:00:00.000Z" \
@@ -278,7 +262,7 @@ class TestOktaConnection(unittest.TestCase, object):
             }]
         }]
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_sucess_query_with_pagination_results(self, mock_result_response):
         """ test success pagination result response """
         mocked_response_1 = [{
@@ -506,14 +490,10 @@ class TestOktaConnection(unittest.TestCase, object):
         mocked_return_value_1 = json.dumps(mocked_response_1)
         mocked_return_value_2 = json.dumps(mocked_response_2)
         headers_1 = {
-            'link': '<https://ourhost/api/v1/logs?since=2022-01-19T11%3A00%3A00.000Z&'
-                    'until=2023-01-31T11%3A00%3A00.003Z&filter=request.ipChain.ip+ne+%221.1.1.1%22+>; rel="self",'
-                    '<https://ourhost/api/v1/logs?since=2022-01-19T11%3A00%3A00.000Z&'
+            'Link': '<https://ourhost/api/v1/logs?since=2022-01-19T11%3A00%3A00.000Z&'
                     'until=2023-01-31T11%3A00%3A00.003Z&filter=request.ipChain.ip+ne+%221.1.1.1%22+&'
                     'after=1670301642462_1>; rel="next"'}
-        headers_2 = {'link': '<https://ourhost/api/v1/logs?since=2022-01-19T11%3A00%3A00.000Z&'
-                             'until=2023-01-31T11%3A00%3A00.003Z&filter=request.ipChain.ip+ne+%221.1.1.1%22+>; '
-                             'rel="self",<https://ourhost/api/v1/logs?since=2022-01-19T11%3A00%3A00.000Z&'
+        headers_2 = {'Link': '<https://ourhost/api/v1/logs?since=2022-01-19T11%3A00%3A00.000Z&'
                              'until=2023-01-31T11%3A00%3A00.003Z&filter=request.ipChain.ip+ne+%221.1.1.1%22+&'
                              'after=1670301642453_1>; rel="next"'}
         query = "filter=request.ipChain.ip ne \"1.1.1.1\" &since=2022-01-19T11:00:00.000Z" \
@@ -538,53 +518,49 @@ class TestOktaConnection(unittest.TestCase, object):
         assert 'metadata' in result_response
         assert result_response['metadata']['next_page_token'] == "after=1670301642453_1"
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping_invalid_host(self, mock_result_response):
         """Test Invalid host for ping"""
-        mock_result_response.side_effect = ConnectionError("Connection to host timed out")
+        mock_result_response.side_effect = Exception("client_connector_error")
         transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
         ping_response = transmission.ping()
         assert ping_response is not None
         assert ping_response['success'] is False
-        assert "Invalid Host/Network Connection error" in ping_response['error']
+        assert "client_connector_error" in ping_response['error']
         assert ping_response['code'] == "service_unavailable"
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_ping_invalid_auth(self, mock_results_response):
         """Test invalid authentication for ping"""
         error = json.dumps({'errorSummary': 'Invalid session'})
-        pingmock = InnerResponse(401, error)
-        ping_response = PingResponse(pingmock)
-        mock_results_response.return_value = ping_response
+        mock_results_response.return_value = get_mock_response(401, error, 'byte')
         transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
         ping_response = transmission.ping()
         assert ping_response is not None
         assert ping_response['success'] is False
-        assert ping_response['code'] == "authentication_fail"
+        assert ping_response['code'] == "invalid_parameter"
         assert "Invalid session" in ping_response['error']
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_invalid_auth(self, mock_results_response):
         """Test invalid authentication for results"""
         error = json.dumps({'errorSummary': 'Invalid session'})
-        headers = {}
         query = "filter=request.ipChain.ip ne \"1.1.1.1\" &since=2022-01-19T11:00:00.000Z" \
                 "&until=2023-01-31T11:00:00.003Z"
-        mock_results_response.return_value = OktaMockResponse(401, error, headers)
+        mock_results_response.return_value = get_mock_response(401, error, 'byte')
         transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
         offset = 0
         length = 1
         result_response = transmission.results(query, offset, length)
         assert result_response is not None
         assert result_response['success'] is False
-        assert result_response['code'] == "authentication_fail"
+        assert result_response['code'] == "invalid_parameter"
         assert 'Invalid session' in result_response['error']
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_exception_for_ping_results(self, mock_ping_response):
         """Test General Exception for ping"""
-        pingmock = InnerResponse(200, """Invalid Json""")
-        mock_ping_response.return_value = PingResponse(pingmock)
+        mock_ping_response.return_value = get_mock_response(200, """Invalid Json""", 'byte')
         transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
         ping_response = transmission.ping()
         assert ping_response is not None
@@ -595,8 +571,7 @@ class TestOktaConnection(unittest.TestCase, object):
     @patch('stix_shifter_modules.okta.stix_transmission.api_client.APIClient.get_search_results')
     def test_exception_for_search_results(self, mock_result_response):
         """Test General Exception for results"""
-        headers = {}
-        mock_result_response.return_value = OktaMockResponse(200, """[success=true]""", headers)
+        mock_result_response.return_value = get_mock_response(200, """[success=true]""", 'byte')
         query = "filter=client.device ne \"Computer\" and transaction.detail.requestApiTokenId co" \
                 " \"00Tr22hj9U9LzFH0f5d6\" &since=2023-02-10T08:52:26.900Z&until=2023-02-10T08:57:26.900Z"
         transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
@@ -611,7 +586,7 @@ class TestOktaConnection(unittest.TestCase, object):
     @patch('stix_shifter_modules.okta.stix_transmission.api_client.APIClient.get_search_results')
     def test_connection_error_results(self, mock_result_response):
         """Test Invalid host for results"""
-        mock_result_response.side_effect = ConnectionError("Connection to host timed out")
+        mock_result_response.side_effect = Exception("client_connector_error")
         query = "filter=client.device ne \"Computer\" and transaction.detail.requestApiTokenId co " \
                 "\"00Tr22hj9U9LzFH0f5d6\" &since=2023-02-10T08:52:26.900Z&until=2023-02-10T08:57:26.900Z"
         transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
@@ -620,16 +595,16 @@ class TestOktaConnection(unittest.TestCase, object):
         result_response = transmission.results(query, offset, length)
         assert result_response is not None
         assert result_response['success'] is False
-        assert "Invalid Host/Network Connection error" in result_response['error']
+        assert "client_connector_error" in result_response['error']
         assert result_response['code'] == "service_unavailable"
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_success_query_with_metadata_parameter(self, mock_result_response):
         """ test success result response with metadata parameter"""
         mocked_return_value = json.dumps(TestOktaConnection.mocked_response)
         metadata = {"result_count": 200, 'next_page_token': '123a'}
         headers = {
-            'link': '<https://ourhost/api/v1/logs?since=2023-01-19T11%3A00%3A00.000Z'
+            'Link': '<https://ourhost/api/v1/logs?since=2023-01-19T11%3A00%3A00.000Z'
                     '&until=2023-01-31T11%3A00%3A00.003Z&limit=1000&filter=request.ipChain.ip+eq+%221.1.1.1%22+>'
                     '; rel="self"'}
         query = "filter=request.ipChain.ip eq \"1.1.1.1\" &since=2023-01-19T11:00:00.000Z" \
@@ -643,13 +618,13 @@ class TestOktaConnection(unittest.TestCase, object):
         assert result_response['success'] is True
         assert 'data' in result_response
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_with_invalid_metadata_parameter(self, mock_result_response):
         """ test invalid metadata parameter"""
         mocked_return_value = json.dumps(TestOktaConnection.mocked_response)
         metadata = {'next_page_token': '123a'}
         headers = {
-            'link': '<https://ourhost/api/v1/logs?since=2023-01-19T11%3A00%3A00.000Z'
+            'Link': '<https://ourhost/api/v1/logs?since=2023-01-19T11%3A00%3A00.000Z'
                     '&until=2023-01-31T11%3A00%3A00.003Z&limit=1000&filter=request.ipChain.ip+eq+%221.1.1.1%22+>'
                     '; rel="self"'}
         query = "filter=request.ipChain.ip eq \"1.1.1.1\" &since=2023-01-19T11:00:00.000Z" \
@@ -664,34 +639,25 @@ class TestOktaConnection(unittest.TestCase, object):
         assert "Invalid metadata" in result_response['error']
         assert result_response['code'] == "invalid_parameter"
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_with_429_request_exception(self, mock_result_response):
         """ test 429 exception in results"""
-        mocked_return_value = json.dumps(TestOktaConnection.mocked_response)
-        headers = {'link': '<https://ourhost/api/v1/logs?since=2022-01-19T11%3A00%3A00.000Z&'
-                           'until=2023-01-31T11%3A00%3A00.003Z&filter=request.ipChain.ip+ne+%221.1.1.1%22+>; '
-                           'rel="self",<https://ourhost/api/v1/logs?since=2022-01-19T11%3A00%3A00.000Z&'
-                           'until=2023-01-31T11%3A00%3A00.003Z&filter=request.ipChain.ip+ne+%221.1.1.1%22+&'
-                           'after=1670301642453_1>; rel="next"'}
         query = "filter=request.ipChain.ip eq \"1.1.1.1\" &since=2022-01-19T11:00:00.000Z" \
                 "&until=2023-01-31T11:00:00.003Z"
-        result_response = OktaMockResponse(200, mocked_return_value, headers)
-        mock_result_response.side_effect = [RequestException("too many 429 error responses"), result_response]
+        mock_result_response.side_effect = Exception("too_many_requests with max retry")
         transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
         offset = 0
         length = 1
         result_response = transmission.results(query, offset, length)
         assert result_response is not None
-        assert result_response['success'] is True
-        assert result_response.keys() == {'data', 'success', 'metadata'}
+        assert result_response['success'] is False
+        assert result_response['code'] == 'too_many_requests'
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_with_invaid_exception_during_pagination(self, mock_result_response):
         """ test 401 error code during pagination"""
         mocked_return_value = json.dumps(TestOktaConnection.mocked_response)
-        headers = {'link': '<https://ourhost/api/v1/logs?since=2022-01-19T11%3A00%3A00.000Z&'
-                           'until=2023-01-31T11%3A00%3A00.003Z&filter=request.ipChain.ip+eq+%221.1.1.1%22+>; '
-                           'rel="self",<https://ourhost/api/v1/logs?since=2022-01-19T11%3A00%3A00.000Z&'
+        headers = {'Link': '<https://ourhost/api/v1/logs?since=2022-01-19T11%3A00%3A00.000Z&'
                            'until=2023-01-31T11%3A00%3A00.003Z&filter=request.ipChain.ip+eq+%221.1.1.1%22+&'
                            'after=1670301642453_1>; rel="next"'}
         query = "filter=request.ipChain.ip eq \"1.1.1.1\" &since=2022-01-19T11:00:00.000Z" \
@@ -708,10 +674,10 @@ class TestOktaConnection(unittest.TestCase, object):
         assert 'Invalid session' in result_response['error']
         assert result_response['code'] == 'forbidden'
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_time_out_exception_for_results(self, mock_result_response):
         """Test timeout exception for results"""
-        mock_result_response.side_effect = Exception("ttimeout_error")
+        mock_result_response.side_effect = Exception("timeout_error")
         query = "filter=client.device ne \"Computer\" and transaction.detail.requestApiTokenId co" \
                 " \"00Tr22hj9U9LzFH0f5d6\" &since=2023-02-10T08:52:26.900Z&until=2023-02-10T08:57:26.900Z"
         transmission = stix_transmission.StixTransmission('okta', self.connection(), self.configuration())
@@ -723,7 +689,7 @@ class TestOktaConnection(unittest.TestCase, object):
         assert 'error' in result_response
         assert 'timeout_error' in result_response['error']
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_time_out_exception_for_ping(self, mock_ping_response):
         """Test timeout exception for ping"""
         mock_ping_response.side_effect = Exception("timeout_error")
