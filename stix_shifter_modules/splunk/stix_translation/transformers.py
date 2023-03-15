@@ -56,9 +56,9 @@ class SplunkMacFormatChange(ValueTransformer):
         """correcting mac address presentation, it should be 6 octate separated
          by only colon (:) not by any other special character """
         macvalue = re.sub("[^A-Za-z0-9]", "", macvalue)
-        maclenth = len(macvalue)
-        if (maclenth<12):
-            for i in range(maclenth, 12):
+        maclength = len(macvalue)
+        if (maclength<12):
+            for i in range(maclength, 12):
                 macvalue = "0" + macvalue
 
         value = ':'.join([macvalue[i:i + 2] for i in range(0, len(macvalue), 2)])
