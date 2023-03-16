@@ -19,6 +19,7 @@ EXECUTE = 'execute'
 HOST = 'host'
 MAPPING = 'mapping'
 MODULES = 'modules'
+CONFIGS = 'configs'
 
 
 def main():
@@ -73,6 +74,9 @@ def main():
     # optional arguments
     translate_parser.add_argument('-x', '--stix-validator', action='store_true',
                                   help='Run the STIX 2 validator against the translated results')
+    # configs parser
+    parent_subparsers.add_parser(CONFIGS, help='Get configs list')
+    
     # modules parser
     parent_subparsers.add_parser(MODULES, help='Get modules list')
 
@@ -346,6 +350,12 @@ def main():
         all_modules = modules_list()
         for m in all_modules:
             result[m] = translation.translate(m, stix_translation.DIALECTS, None, None)
+    elif args.command == CONFIGS:
+        translation = stix_translation.StixTranslation()
+        result = {}
+        all_modules = modules_list()
+        for m in all_modules:
+            result[m] = translation.translate(m, stix_translation.CONFIGS, None, None)
     elif args.command == TRANSMIT:
         result = transmit(args)  # stix_transmission
 
