@@ -1,10 +1,10 @@
 {
   "eventType": {
-    "key": "x-oca-event.action",
+    "key": "x-oca-event.x_action",
     "object": "event"
   },
   "uuid": {
-    "key": "x-oca-event.extensions.x-okta-event-ext.event_unique_id",
+    "key": "x-oca-event.x_event_unique_id",
     "object": "event"
   },
   "outcome": {
@@ -13,20 +13,20 @@
       "object": "event"
     },
     "reason": {
-      "key": "x-oca-event.extensions.x-okta-event-ext.outcome_reason",
+      "key": "x-oca-event.x_outcome_reason",
       "object": "event"
     }
   },
   "legacyEventType": {
-    "key": "x-oca-event.extensions.x-okta-event-ext.legacy_event_type",
+    "key": "x-oca-event.x_legacy_event_type",
     "object": "event"
   },
   "displayMessage": {
-    "key": "x-oca-event.extensions.x-okta-event-ext.event_description",
+    "key": "x-oca-event.x_event_description",
     "object": "event"
   },
   "severity": {
-    "key": "x-oca-event.extensions.x-okta-event-ext.severity",
+    "key": "x-oca-event.x_severity",
     "object": "event"
   },
   "request": {
@@ -66,7 +66,7 @@
       "object": "as"
     },
     "isp": {
-      "key": "autonomous-system.extensions.x-okta-autonomous-system-ext.isp",
+      "key": "autonomous-system.x_isp",
       "object": "as"
     },
     "domain": [
@@ -75,7 +75,7 @@
         "object": "domain"
       },
       {
-        "key": "autonomous-system.extensions.x-okta-autonomous-system-ext.domain_ref",
+        "key": "autonomous-system.x_domain_ref",
         "object": "as",
         "references": "domain"
       }
@@ -88,7 +88,7 @@
         "object": "actor_user"
       },
       {
-        "key": "x-oca-event.extensions.x-okta-event-ext.actor_ref",
+        "key": "x-oca-event.x_actor_ref",
         "object": "event",
         "references": "actor_user"
       }
@@ -102,11 +102,11 @@
       "object": "actor_user"
     },
     "type": {
-      "key": "user-account.extensions.x-okta-actor-ext.type",
+      "key": "user-account.x_actor_type",
       "object": "actor_user"
     },
     "detailEntry": {
-      "key": "user-account.extensions.x-okta-actor-ext.detail_entry",
+      "key": "user-account.x_detail_entry",
       "object": "actor_user"
     }
   },
@@ -132,7 +132,7 @@
       "object": "target"
     },
     "groupReference": {
-      "key": "x-oca-event.extensions.x-okta-event-ext.target_refs",
+      "key": "x-oca-event.x_target_refs",
       "object": "event",
       "references": [
         "target"
@@ -147,7 +147,7 @@
         "object": "client"
       },
       {
-        "key": "x-oca-event.extensions.x-okta-event-ext.client_ref",
+        "key": "x-oca-event.x_client_ref",
         "object": "event",
         "references": "client"
       }
@@ -173,11 +173,11 @@
     ],
     "userAgent": {
       "rawUserAgent": {
-        "key": "software.extensions.x-okta-software-ext.raw_user_agent",
+        "key": "software.x_raw_user_agent",
         "object": "software"
       },
       "os": {
-        "key": "software.extensions.x-okta-software-ext.client_os",
+        "key": "software.x_client_os",
         "object": "software"
       },
       "browser": [
@@ -198,7 +198,7 @@
         "object": "client"
       },
       {
-        "key": "x-oca-event.extensions.x-okta-event-ext.client_ref",
+        "key": "x-oca-event.x_client_ref",
         "object": "event",
         "references": "client"
       }
@@ -210,7 +210,7 @@
           "object": "client"
         },
         {
-          "key": "x-oca-event.extensions.x-okta-event-ext.client_ref",
+          "key": "x-oca-event.x_client_ref",
           "object": "event",
           "references": "client"
         }
@@ -239,7 +239,7 @@
   },
   "transaction": {
     "id": {
-      "key": "x-oca-event.extensions.x-okta-event-ext.transaction_id",
+      "key": "x-oca-event.x_transaction_id",
       "object": "event"
     },
     "type": {
@@ -249,7 +249,7 @@
     },
     "detail": {
       "requestApiTokenId": {
-        "key": "x-oca-event.extensions.x-okta-event-ext.request_api_token_id",
+        "key": "x-oca-event.x_request_api_token_id",
         "object": "event"
       }
     }
@@ -260,7 +260,7 @@
       "object": "debug"
     },
     "groupReference": {
-      "key": "x-oca-event.extensions.x-okta-event-ext.debug_ref",
+      "key": "x-oca-event.x_debug_ref",
       "object": "event",
       "references": "debug",
       "group_ref": true
@@ -285,7 +285,7 @@
         "object": "auth"
       },
       {
-        "key": "x-oca-event.extensions.x-okta-event-ext.authentication_context_ref",
+        "key": "x-oca-event.x_authentication_context_ref",
         "object": "event",
         "references": "auth"
       }
