@@ -195,13 +195,16 @@ def main():
     log = utils_logger.set_logger(__name__)
 
 
-    if args.command not in [TRANSLATE] and hasattr(args, 'data') and args.data:
-        try:
-            args.data = json.loads(args.data)
-        except Exception as ex:
-            log.debug(exception_to_string(ex))
-            log.error('Cannot convert supplied data json string to json')
-            help_and_exit = True
+    if hasattr(args, 'data') and args.data:
+        if args.command in [TRANSLATE] and args.translate_type == 'query':
+            pass
+        else:
+            try:
+                args.data = json.loads(args.data)
+            except Exception as ex:
+                log.debug(exception_to_string(ex))
+                log.error('Cannot convert supplied data json string to json')
+                help_and_exit = True
 
     if hasattr(args, 'data_source') and args.data_source:
         try:
