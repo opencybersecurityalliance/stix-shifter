@@ -203,9 +203,9 @@ results
         }
     ],
    "metadata": {
-        "result_count": 1,
-        "next_page_token": "abc"
-    }
+      "result_count": 1,
+      "next_page_token": "abc"
+   }
 }
 ```
 
@@ -527,9 +527,9 @@ results
         }
     ],
    "metadata": {
-        "result_count": 1,
-        "next_page_token": "abc"
-    }
+	"result_count": 1,
+	"next_page_token": "abc"
+   }
 }
 ```
 

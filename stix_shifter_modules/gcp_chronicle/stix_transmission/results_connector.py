@@ -36,7 +36,6 @@ class ResultsConnector(BaseResultsConnector):
         result = []
         result_count = 0
         local_result_count = 0
-        status_429 = False
         try:
             if metadata:
                 if isinstance(metadata, dict) and metadata.get('result_count') and metadata.get('next_page_token'):
@@ -93,47 +92,31 @@ class ResultsConnector(BaseResultsConnector):
                                     local_result_count += len(response_text['detections'])
                                     result.append(response_text['detections'])
                             else:
-                                # recursive calls to handle 429 resource exhaustion exception during pagination
-                                if next_response[0].status == 429:
-                                    if metadata:
-                                        return_obj = self.create_results_connection(search_id, offset, length, metadata)
-                                    else:
-                                        return_obj = self.create_results_connection(search_id, offset, length)
-                                    status_429 = True
-                                else:
-                                    return_obj = self.invalid_response(return_obj, response_dict,
-                                                                       next_response[0].status, response_text)
-                                    result = []
+                                return_obj = self.invalid_response(return_obj, response_dict,
+                                                                   next_response[0].status, response_text)
+                                result = []
                                 break
-                    # Formats the Data when there is no resource exhaust exception(429)
-                    if not (status_429 and return_obj.get('data')):
-                        if result:
-                            return_obj['success'] = True
-                            final_result = ResultsConnector.get_results_data(result)
-                            if metadata:
-                                return_obj['data'] = final_result if final_result else []
-                            else:
-                                return_obj['data'] = final_result[int(offset): total_records] if final_result else []
-                            # Add the metadata to the return obj with result_count and next_page_token in dict format
-                            if response_text.get('nextPageToken') and result_count < self.api_client.result_limit:
-                                return_obj['metadata'] = {"result_count": result_count,
-                                                          "next_page_token": response_text.get('nextPageToken')}
+
+                    if result:
+                        return_obj['success'] = True
+                        final_result = ResultsConnector.get_results_data(result)
+                        if metadata:
+                            return_obj['data'] = final_result if final_result else []
                         else:
-                            if not return_obj.get('error') and return_obj.get('success') is not False:
-                                return_obj['success'] = True
-                                return_obj['data'] = []
+                            return_obj['data'] = final_result[int(offset): total_records] if final_result else []
+                        # Add the metadata to the return obj with result_count and next_page_token in dict format
+                        if response_text.get('nextPageToken') and result_count < self.api_client.result_limit:
+                            return_obj['metadata'] = {"result_count": result_count,
+                                                      "next_page_token": response_text.get('nextPageToken')}
+                    else:
+                        if not return_obj.get('error') and return_obj.get('success') is not False:
+                            return_obj['success'] = True
+                            return_obj['data'] = []
 
                 else:
-                    # recursive calls to handle 429 resource exhaustion exception outside pagination
-                    if response_wrapper[0].status == 429:
-                        if metadata:
-                            return_obj = self.create_results_connection(search_id, offset, length, metadata)
-                        else:
-                            return_obj = self.create_results_connection(search_id, offset, length)
-                        status_429 = True
-                    else:
-                        return_obj = self.invalid_response(return_obj, response_dict, response_wrapper[0].status,
-                                                           response_text)
+
+                    return_obj = self.invalid_response(return_obj, response_dict, response_wrapper[0].status,
+                                                       response_text)
             else:
                 return_obj['success'] = True
                 return_obj['data'] = []
@@ -172,16 +155,15 @@ class ResultsConnector(BaseResultsConnector):
 
         finally:
             try:
-                if not status_429:  # Avoid search id deletion during 429 exception.
-                    if not return_obj.get('data') or result_count >= self.api_client.result_limit or \
-                            response_dict.get('message') or not response_text.get('nextPageToken'):
-                        if 'code' in response_dict:
-                            if response_dict['code'] not in (1010, 1015):
-                                self.logger.debug("Deleting the search id in results_connector")
-                                self.api_client.delete_search(search_id)
-                        else:
+                if not return_obj.get('data') or result_count >= self.api_client.result_limit or \
+                        response_dict.get('message') or not response_text.get('nextPageToken'):
+                    if 'code' in response_dict:
+                        if response_dict['code'] not in (1010, 1015):
                             self.logger.debug("Deleting the search id in results_connector")
                             self.api_client.delete_search(search_id)
+                    else:
+                        self.logger.debug("Deleting the search id in results_connector")
+                        self.api_client.delete_search(search_id)
 
             except Exception:
                 self.logger.info("User doesn't have permission to delete the search id")
