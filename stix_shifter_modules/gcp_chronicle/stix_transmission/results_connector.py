@@ -1,12 +1,15 @@
 from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseJsonResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
-import json
 from aiogoogle.excs import HTTPError
 from aiohttp.client_exceptions import ClientConnectionError
 from asyncio.exceptions import TimeoutError
 import copy
 import re
+
+
+class InvalidMetadataException(Exception):
+    pass
 
 
 class ResultsConnector(BaseJsonResultsConnector):
@@ -24,7 +27,7 @@ class ResultsConnector(BaseJsonResultsConnector):
         :param search_id: str, search id generated in transmit query
         :param offset: str, offset value
         :param length: str, length value
-        :param metadata: str
+        :param metadata: dict, result_count, next_page_token
         :return: dict
         """
         return_obj = {}
@@ -33,14 +36,16 @@ class ResultsConnector(BaseJsonResultsConnector):
         result = []
         result_count = 0
         local_result_count = 0
-
         try:
             if metadata:
-                result_count, next_page_token = metadata.split(':')
-                result_count = int(result_count)
-                total_records = int(length)
-                if abs(self.api_client.result_limit - result_count) < total_records:
-                    total_records = abs(self.api_client.result_limit - result_count)
+                if isinstance(metadata, dict) and metadata.get('result_count') and metadata.get('next_page_token'):
+                    result_count, next_page_token = metadata['result_count'], metadata['next_page_token']
+                    total_records = int(length)
+                    if abs(self.api_client.result_limit - result_count) < total_records:
+                        total_records = abs(self.api_client.result_limit - result_count)
+                else:
+                    # raise exception when metadata doesnt contain result count or next page token
+                    raise InvalidMetadataException(metadata)
             else:
                 result_count, next_page_token = 0, '0'
                 total_records = int(offset) + int(length)
@@ -78,8 +83,8 @@ class ResultsConnector(BaseJsonResultsConnector):
 
                             next_page_token = response_text['nextPageToken']
                             next_response = await self.api_client.get_search_results(search_id,
-                                                                               next_page_token,
-                                                                               page_size)
+                                                                                     next_page_token,
+                                                                                     page_size)
                             response_text = next_response.content
                             if next_response.status_code == 200:
                                 if 'detections' in response_text.keys():
@@ -99,7 +104,9 @@ class ResultsConnector(BaseJsonResultsConnector):
                             return_obj['data'] = final_result if final_result else []
                         else:
                             return_obj['data'] = final_result[int(offset): total_records] if final_result else []
-                        return_obj['metadata'] = str(result_count) + ':' + response_text.get('nextPageToken', '0')
+                        if response_text.get('nextPageToken') and result_count < self.api_client.result_limit:
+                            return_obj['metadata'] = {"result_count": result_count,
+                                                      "next_page_token": response_text.get('nextPageToken')}
                     else:
                         if not return_obj.get('error') and return_obj.get('success') is not False:
                             return_obj['success'] = True
@@ -111,6 +118,11 @@ class ResultsConnector(BaseJsonResultsConnector):
             else:
                 return_obj['success'] = True
                 return_obj['data'] = []
+
+        except InvalidMetadataException as ex:
+            response_dict['code'] = 100
+            response_dict['message'] = f'Invalid metadata: {str(ex)}'
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         except ClientConnectionError:
             response_dict['code'] = 1010
@@ -137,12 +149,12 @@ class ResultsConnector(BaseJsonResultsConnector):
             response_dict['code'] = 120
             response_dict['message'] = 'TimeoutError ' + str(ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
-            
+
         except Exception as exp:
             response_dict['message'] = exp
             self.logger.error('error when getting search results: %s', exp)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
-        
+
         finally:
             try:
                 if not return_obj.get('data') or result_count >= self.api_client.result_limit or \
