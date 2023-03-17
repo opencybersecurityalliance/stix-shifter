@@ -75,10 +75,12 @@ def main():
     translate_parser.add_argument('-x', '--stix-validator', action='store_true',
                                   help='Run the STIX 2 validator against the translated results')
     # configs parser
-    parent_subparsers.add_parser(CONFIGS, help='Get configs list')
-    
+    configs_parser = parent_subparsers.add_parser(CONFIGS, help='Get configs list')
+    configs_parser.add_argument('module', nargs='?', type=str, help='Module name')
+
     # modules parser
-    parent_subparsers.add_parser(MODULES, help='Get modules list')
+    modules_parser = parent_subparsers.add_parser(MODULES, help='Get configs list')
+    modules_parser.add_argument('module', nargs='?', type=str, help='Module name')
 
     # mapping parser
     mapping_parser = parent_subparsers.add_parser(
@@ -209,7 +211,7 @@ def main():
             log.error('Cannot convert supplied data_source json string to json')
             help_and_exit = True
 
-    if 'module' in args:
+    if 'module' in args and args.module:
         args_module_dialects = args.module
 
         options = {}
@@ -349,13 +351,15 @@ def main():
         result = {}
         all_modules = modules_list()
         for m in all_modules:
-            result[m] = translation.translate(m, stix_translation.DIALECTS, None, None)
+            if not args.module or args.module == m:
+                result[m] = translation.translate(m, stix_translation.DIALECTS, None, None)
     elif args.command == CONFIGS:
         translation = stix_translation.StixTranslation()
         result = {}
         all_modules = modules_list()
         for m in all_modules:
-            result[m] = translation.translate(m, stix_translation.CONFIGS, None, None)
+            if not args.module or args.module == m:
+                result[m] = translation.translate(m, stix_translation.CONFIGS, None, None)
     elif args.command == TRANSMIT:
         result = transmit(args)  # stix_transmission
 
