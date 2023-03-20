@@ -8,6 +8,10 @@ import copy
 import re
 
 
+class InvalidMetadataException(Exception):
+    pass
+
+
 class ResultsConnector(BaseResultsConnector):
     EMAIL_PATTERN = re.compile(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
     GCP_MAX_PAGE_SIZE = 1000
@@ -23,7 +27,7 @@ class ResultsConnector(BaseResultsConnector):
         :param search_id: str, search id generated in transmit query
         :param offset: str, offset value
         :param length: str, length value
-        :param metadata: str
+        :param metadata: dict, result_count, next_page_token
         :return: dict
         """
         return_obj = {}
@@ -32,14 +36,16 @@ class ResultsConnector(BaseResultsConnector):
         result = []
         result_count = 0
         local_result_count = 0
-
         try:
             if metadata:
-                result_count, next_page_token = metadata.split(':')
-                result_count = int(result_count)
-                total_records = int(length)
-                if abs(self.api_client.result_limit - result_count) < total_records:
-                    total_records = abs(self.api_client.result_limit - result_count)
+                if isinstance(metadata, dict) and metadata.get('result_count') and metadata.get('next_page_token'):
+                    result_count, next_page_token = metadata['result_count'], metadata['next_page_token']
+                    total_records = int(length)
+                    if abs(self.api_client.result_limit - result_count) < total_records:
+                        total_records = abs(self.api_client.result_limit - result_count)
+                else:
+                    # raise exception when metadata doesnt contain result count or next page token
+                    raise InvalidMetadataException(metadata)
             else:
                 result_count, next_page_token = 0, '0'
                 total_records = int(offset) + int(length)
@@ -98,18 +104,27 @@ class ResultsConnector(BaseResultsConnector):
                             return_obj['data'] = final_result if final_result else []
                         else:
                             return_obj['data'] = final_result[int(offset): total_records] if final_result else []
-                        return_obj['metadata'] = str(result_count) + ':' + response_text.get('nextPageToken', '0')
+                        # Add the metadata to the return obj with result_count and next_page_token in dict format
+                        if response_text.get('nextPageToken') and result_count < self.api_client.result_limit:
+                            return_obj['metadata'] = {"result_count": result_count,
+                                                      "next_page_token": response_text.get('nextPageToken')}
                     else:
                         if not return_obj.get('error') and return_obj.get('success') is not False:
                             return_obj['success'] = True
                             return_obj['data'] = []
 
                 else:
+
                     return_obj = self.invalid_response(return_obj, response_dict, response_wrapper[0].status,
                                                        response_text)
             else:
                 return_obj['success'] = True
                 return_obj['data'] = []
+
+        except InvalidMetadataException as ex:
+            response_dict['code'] = 100
+            response_dict['message'] = f'Invalid metadata: {str(ex)}'
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         except ServerNotFoundError:
             response_dict['code'] = 1010
@@ -159,7 +174,6 @@ class ResultsConnector(BaseResultsConnector):
         handle error response
         :return dict
         """
-
         response_dict['code'] = status
         response_dict['message'] = response_text['error'].get('message')
         ErrorResponder.fill_error(return_obj, response_dict, ['message'],
