@@ -19,14 +19,12 @@ class ResultTranslator(JSONToStix):
         :return: STIX formatted results
         :rtype: str
         """
-        results = json.loads(data)
+        results = data
         for result in results:
             if result.get('event'):
                 event = result['event']
                 if event.get('original'):
                     result['event']['mime_type_event'] = 'text/plain'
-
-        data = json.dumps(results, indent=4)
 
         results = super().translate_results(data_source, data)
 

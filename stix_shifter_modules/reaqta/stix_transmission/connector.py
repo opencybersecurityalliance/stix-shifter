@@ -1,11 +1,11 @@
 import json
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     # LOOKS LIKE MAX COUNT is 500. response doesn't show why it fails
     MAX_LIMIT = 500
     
@@ -14,11 +14,11 @@ class Connector(BaseSyncConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
     
-    def ping_connection(self):
+    async def ping_connection(self):
         return_obj = dict()
         response_dict = dict()
         try:
-            response = self.api_client.ping_data_source()
+            response = await self.api_client.ping_data_source()
             response_code = response['code']
             
             if response_code == 200:
@@ -45,7 +45,7 @@ class Connector(BaseSyncConnector):
         
         return return_obj
     
-    def create_results_connection(self, search_id, offset, length):  
+    async def create_results_connection(self, search_id, offset, length):  
         return_obj = dict()
         length = int(length)
         offset = int(offset)
@@ -54,9 +54,9 @@ class Connector(BaseSyncConnector):
         try:
             if total_records <= self.MAX_LIMIT:
                 # Grab the response, extract the response code, and convert it to readable json
-                response = self.api_client.get_search_results(search_id, length)
+                response = await self.api_client.get_search_results(search_id, length)
             elif total_records > self.MAX_LIMIT:
-                response = self.api_client.get_search_results(search_id, self.MAX_LIMIT)
+                response = await self.api_client.get_search_results(search_id, self.MAX_LIMIT)
             
             response_code = response.code
             response_text = response.read()
@@ -74,7 +74,7 @@ class Connector(BaseSyncConnector):
                     try:
                         next_page_url = response_dict['nextPage']
                         if next_page_url:
-                            response = self.api_client.page_search(search_id, next_page_url, remainings)
+                            response = await self.api_client.page_search(search_id, next_page_url, remainings)
                             response_code = response.code
                             response_dict = json.loads(response.read())
                             if response_code == 200:

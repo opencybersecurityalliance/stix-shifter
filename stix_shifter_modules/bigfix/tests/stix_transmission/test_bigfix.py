@@ -1,18 +1,13 @@
 from stix_shifter_modules.bigfix.entry_point import EntryPoint
 from unittest.mock import patch
 import unittest
+import pytest
 from stix_shifter.stix_transmission import stix_transmission
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
+from tests.utils.async_utils import get_mock_response
+
 
 API_PATH = "stix_shifter_modules.bigfix.stix_transmission.api_client.APIClient"
-
-
-class BigFixMockJsonResponse:
-    def __init__(self, response_code, obj):
-        self.code = response_code
-        self.object = obj.encode()
-
-    def read(self):
-        return self.object
 
 
 class MockHttpResponse:
@@ -21,16 +16,6 @@ class MockHttpResponse:
 
     def decode(self, string):
         return self.string
-
-
-class BigFixMockHttpXMLResponse:
-    def __init__(self, response_code, obj):
-        self.code = response_code
-        self.object = obj
-
-    def read(self):
-        return self.object
-
 
 CONFIG = {
     "auth": {
@@ -70,7 +55,7 @@ class TestBigfixConnection(unittest.TestCase):
             "selfSignedCert": False,
         }
         mocked_return_value = MockHttpResponse('/api/clientquery')
-        mock_ping_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(200, mocked_return_value)
 
         transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         ping_response = transmission.ping()
@@ -83,7 +68,7 @@ class TestBigfixConnection(unittest.TestCase):
     @patch('{}.ping_box'.format(API_PATH))
     def test_ping_endpoint_not_working_return(mock_ping_response):
         mocked_return_value = MockHttpResponse('/missing')
-        mock_ping_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(200, mocked_return_value)
 
         transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         ping_response = transmission.ping()
@@ -95,17 +80,17 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.ping_box'.format(API_PATH))
     def test_ping_endpoint_exception(mock_ping_response):
-        mocked_return_value = MockHttpResponse('/exception')
-        mock_ping_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
-        mock_ping_response.side_effect = Exception('an error occured retriving ping information')
+        error_msg = 'an error occured retriving ping information'
+        mock_ping_response.side_effect = Exception(error_msg)
+        with pytest.raises(Exception):
+            transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+            ping_response = transmission.ping()
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
-        ping_response = transmission.ping()
-
-        assert ping_response is not None
-        assert 'success' in ping_response
-        assert ping_response['success'] is False
-        assert ping_response['error'] is not None
+            assert ping_response is not None
+            assert 'success' in ping_response
+            assert ping_response['success'] is False
+            assert ping_response['error'] is not None
+            assert ping_response['error'] == error_msg
 
     @staticmethod
     @patch('{}.ping_box'.format(API_PATH))
@@ -124,7 +109,7 @@ class TestBigfixConnection(unittest.TestCase):
         }
 
         mocked_return_value = MockHttpResponse('/exception')
-        mock_ping_response.return_value = BigFixMockHttpXMLResponse(500, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(500, mocked_return_value)
 
         transmission = stix_transmission.StixTransmission('bigfix', connection, config)
         ping_response = transmission.ping()
@@ -158,7 +143,7 @@ class TestBigfixConnection(unittest.TestCase):
                                '<ID>105</ID></ClientQuery></BESAPI>'
 
         mocked_return_value = MockHttpResponse(big_fix_return_value)
-        mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
+        mock_query_response.return_value = get_mock_response(200, mocked_return_value)
 
         query = 'bigfix query text'
         transmission = stix_transmission.StixTransmission('bigfix', connection, config)
@@ -188,7 +173,7 @@ class TestBigfixConnection(unittest.TestCase):
 
         big_fix_return_value = 'big fix did not return proper value'
         mocked_return_value = MockHttpResponse(big_fix_return_value)
-        mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
+        mock_query_response.return_value = get_mock_response(200, mocked_return_value)
 
         query = 'bigfix query text'
 
@@ -205,20 +190,20 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.create_search'.format(API_PATH))
     def test_query_response_exception(mock_query_response):
-        big_fix_return_value = 'big fix did not return proper value'
-        mocked_return_value = MockHttpResponse(big_fix_return_value)
-        mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
-        mock_query_response.side_effect = Exception('an error occured creating search')
-
+        error_msg = 'an error occured creating search'
+        mock_query_response.side_effect = Exception(error_msg)
         query = 'bigfix query text'
 
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
-        query_response = transmission.query(query)
+        with pytest.raises(Exception):
+            transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+            query_response = transmission.query(query)
 
-        assert query_response is not None
-        assert 'success' in query_response
-        assert query_response['success'] is False
-        assert 'error' in query_response
+            assert query_response is not None
+            assert 'success' in query_response
+            assert query_response['success'] is False
+            assert 'error' in query_response
+            assert query_response['error'] == error_msg
+
 
     @staticmethod
     @patch('{}.create_search'.format(API_PATH))
@@ -238,12 +223,12 @@ class TestBigfixConnection(unittest.TestCase):
 
         big_fix_return_value = 'big fix did not return proper value'
         mocked_return_value = MockHttpResponse(big_fix_return_value)
-        mock_query_response.return_value = BigFixMockHttpXMLResponse(200, mocked_return_value)
+        mock_query_response.return_value = get_mock_response(200, mocked_return_value)
         
         query = 'bigfix query text'
 
         entry_point = EntryPoint(connection, config)
-        query_response = entry_point.create_query_connection(query)
+        query_response = run_in_thread(entry_point.create_query_connection, query)
 
         assert query_response is not None
         assert 'success' in query_response
@@ -268,10 +253,10 @@ class TestBigfixConnection(unittest.TestCase):
         }
 
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
-        mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
+        mock_sync_query_results.return_value = get_mock_response(200, mocked_sync_query_return_value)
 
         mocked_search_results_status = '{"reportingAgents": "2", "totalResults": "100"}'
-        mock_status_response.return_value = BigFixMockJsonResponse(200, mocked_search_results_status)
+        mock_status_response.return_value = get_mock_response(200, mocked_search_results_status.encode())
 
         search_id = "104"
 
@@ -307,10 +292,10 @@ class TestBigfixConnection(unittest.TestCase):
         mock_time.sleep.return_value = None
 
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
-        mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
+        mock_sync_query_results.return_value = get_mock_response(200, mocked_sync_query_return_value)
 
         mocked_search_results_status = '{"reportingAgents": "0", "totalResults": "100"}'
-        mock_status_response.return_value = BigFixMockJsonResponse(200, mocked_search_results_status)
+        mock_status_response.return_value = get_mock_response(200, mocked_search_results_status.encode())
 
         search_id = "104"
 
@@ -346,10 +331,10 @@ class TestBigfixConnection(unittest.TestCase):
         mock_time.sleep.return_value = None
 
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
-        mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
+        mock_sync_query_results.return_value = get_mock_response(200, mocked_sync_query_return_value)
 
         mocked_search_results_status = '{"reportingAgents": "1", "totalResults": "100"}'
-        mock_status_response.return_value = BigFixMockJsonResponse(200, mocked_search_results_status)
+        mock_status_response.return_value = get_mock_response(200, mocked_search_results_status.encode())
 
         search_id = "104"
 
@@ -385,10 +370,10 @@ class TestBigfixConnection(unittest.TestCase):
         mock_time.sleep.return_value = None
 
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">10000</Answer>')
-        mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
+        mock_sync_query_results.return_value = get_mock_response(200, mocked_sync_query_return_value)
 
         mocked_search_results_status = '{"reportingAgents": "7500", "totalResults": "100"}'
-        mock_status_response.return_value = BigFixMockJsonResponse(200, mocked_search_results_status)
+        mock_status_response.return_value = get_mock_response(200, mocked_search_results_status.encode())
 
         search_id = "104"
 
@@ -421,10 +406,10 @@ class TestBigfixConnection(unittest.TestCase):
         }
 
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
-        mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
+        mock_sync_query_results.return_value = get_mock_response(200, mocked_sync_query_return_value)
 
         mocked_search_results_status = '{"reportingAgents": "2", "totalResults": "0"}'
-        mock_status_response.return_value = BigFixMockJsonResponse(200, mocked_search_results_status)
+        mock_status_response.return_value = get_mock_response(200, mocked_search_results_status.encode())
 
         search_id = "104"
 
@@ -460,10 +445,10 @@ class TestBigfixConnection(unittest.TestCase):
         mock_time.sleep.return_value = None
 
         mocked_sync_query_return_value = MockHttpResponse('bad answer')
-        mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
+        mock_sync_query_results.return_value = get_mock_response(200, mocked_sync_query_return_value)
 
         mocked_search_results_status = '{"reportingAgents": "2", "totalResults": "0"}'
-        mock_status_response.return_value = BigFixMockJsonResponse(200, mocked_search_results_status)
+        mock_status_response.return_value = get_mock_response(200, mocked_search_results_status.encode())
 
         search_id = "104"
 
@@ -483,10 +468,7 @@ class TestBigfixConnection(unittest.TestCase):
     @patch('{}.get_sync_query_results'.format(API_PATH))
     def test_status_response_error_exception_status(mock_sync_query_results, mock_status_response):
         mocked_sync_query_return_value = MockHttpResponse('bad answer')
-        mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
-
-        mocked_search_results_status = '{"reportingAgents": "2", "totalResults": "0"}'
-        mock_status_response.return_value = BigFixMockJsonResponse(200, mocked_search_results_status)
+        mock_sync_query_results.return_value = get_mock_response(200, mocked_sync_query_return_value)
         mock_status_response.side_effect = Exception('an error getting status')
 
         search_id = "104"
@@ -504,14 +486,9 @@ class TestBigfixConnection(unittest.TestCase):
     @patch('{}.get_search_results'.format(API_PATH))
     @patch('{}.get_sync_query_results'.format(API_PATH))
     def test_status_response_error_exception_result(mock_sync_query_results, mock_status_response):
-        mocked_sync_query_return_value = MockHttpResponse('bad answer')
-        mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
-        mock_sync_query_results.side_effect = Exception('an error occurred executing sync query')
-        mocked_search_results_status = '{"reportingAgents": "2", "totalResults": "0"}'
-        mock_status_response.return_value = BigFixMockJsonResponse(200, mocked_search_results_status)
+        mock_sync_query_results.side_effect = ConnectionError('an error occurred executing sync query')
 
         search_id = "104"
-
         transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
         status_response = transmission.status(search_id)
 
@@ -540,10 +517,10 @@ class TestBigfixConnection(unittest.TestCase):
         }
 
         mocked_sync_query_return_value = MockHttpResponse('<Answer type="integer">2</Answer>')
-        mock_sync_query_results.return_value = BigFixMockHttpXMLResponse(200, mocked_sync_query_return_value)
+        mock_sync_query_results.return_value = get_mock_response(200, mocked_sync_query_return_value)
 
         mocked_search_results_status = '{"reportingAgents": "2", "totalResults": "0"}'
-        mock_status_response.return_value = BigFixMockJsonResponse(500, mocked_search_results_status)
+        mock_status_response.return_value = get_mock_response(500, mocked_search_results_status.encode())
 
         search_id = "104"
 
@@ -561,7 +538,7 @@ class TestBigfixConnection(unittest.TestCase):
         search_id = "104"
 
         entry_point = EntryPoint(CONNECTION, CONFIG)
-        status_response = entry_point.delete_query_connection(search_id)
+        status_response = run_in_thread(entry_point.delete_query_connection, search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
@@ -607,7 +584,7 @@ class TestBigfixConnection(unittest.TestCase):
                                         }
                                     ]
                                 }"""
-        mock_results_response.return_value = BigFixMockJsonResponse(200, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value.encode())
 
         search_id = "102"
         offset = "0"
@@ -663,7 +640,7 @@ class TestBigfixConnection(unittest.TestCase):
                                         }
                                     ]
                                 }"""
-        mock_results_response.return_value = BigFixMockJsonResponse(200, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value.encode())
 
         search_id = "103"
         offset = "0"
@@ -717,7 +694,7 @@ class TestBigfixConnection(unittest.TestCase):
                                         }
                                     ]
                                 }"""
-        mock_results_response.return_value = BigFixMockJsonResponse(200, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value.encode())
 
         search_id = "104"
         offset = "0"
@@ -769,7 +746,7 @@ class TestBigfixConnection(unittest.TestCase):
                                         }
                                     ]
                                 }"""
-        mock_results_response.return_value = BigFixMockJsonResponse(200, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value.encode())
 
         search_id = "104"
         offset = "0"
@@ -786,18 +763,23 @@ class TestBigfixConnection(unittest.TestCase):
     @staticmethod
     @patch('{}.get_search_results'.format(API_PATH))
     def test_results_response_exeception(mock_results_response):
-        mock_results_response.side_effect = Exception('an error getting data')
+        error_msg = 'an error getting data'
+        mock_results_response.side_effect = Exception(error_msg)
 
         search_id = "102"
         offset = "0"
         length = "100"
-        transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
-        results_response = transmission.results(search_id, offset, length)
 
-        assert results_response is not None
-        assert 'success' in results_response
-        assert results_response['success'] is False
-        assert 'error' in results_response
+        with pytest.raises(Exception):
+            transmission = stix_transmission.StixTransmission('bigfix', CONNECTION, CONFIG)
+            results_response = transmission.results(search_id, offset, length)
+
+            assert results_response is not None
+            assert 'success' in results_response
+            assert results_response['success'] is False
+            assert 'error' in results_response
+            assert results_response['error'] == error_msg
+        
 
     @staticmethod
     @patch('{}.get_search_results'.format(API_PATH))
@@ -824,7 +806,7 @@ class TestBigfixConnection(unittest.TestCase):
                                         }
                                     ]
                                 }"""
-        mock_results_response.return_value = BigFixMockJsonResponse(500, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(500, mocked_return_value.encode())
 
         search_id = "102"
         offset = "0"
@@ -862,7 +844,7 @@ class TestBigfixConnection(unittest.TestCase):
                                         }
                                     ]
                                 }"""
-        mock_results_response.return_value = BigFixMockJsonResponse(200, mocked_return_value)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value.encode())
 
         search_id = "102"
         offset = "0"

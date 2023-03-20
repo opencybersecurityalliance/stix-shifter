@@ -1,4 +1,4 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseJsonResultsConnector
 from stix_shifter_utils.utils import logger
 import json
 import re
@@ -6,7 +6,7 @@ import math
 
 import pandas as pd
 
-class ResultsConnector(BaseResultsConnector):
+class ResultsConnector(BaseJsonResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
@@ -20,22 +20,22 @@ class ResultsConnector(BaseResultsConnector):
             return int(m.groups()[0])
         return None
 
-    def records(self, query_id, start_rec, end_rec):
-        job = self.api_client.get_job(query_id)
+    async def records(self, query_id, start_rec, end_rec):
+        job = await self.api_client.get_job(query_id)
         units = None
         try:
             units = self.get_rows_partition(job['statement'])
         except Exception as e:
             self.logger.error('Error fetching query statement {}. Will pull all record pages.'.format(e))
         if units is None:
-            r = self.api_client.get_result(query_id)
+            r = await self.api_client.get_result(query_id)
             return r.iloc[start_rec : end_rec+1]
         first_page = math.floor(start_rec / units)
         last_page = math.floor(end_rec / units)
         cut_front = start_rec - first_page * units
         cut_back = units - end_rec % units - 1
         for pn in range(first_page, last_page+1):
-                r = self.api_client.get_result(query_id, pagenumber=pn+1)
+                r = await self.api_client.get_result(query_id, pagenumber=pn+1)
                 if pn == last_page and cut_back < units:
                     r.drop(r.index[range(-cut_back,0)], inplace=True)
                 if pn == first_page:
@@ -46,12 +46,12 @@ class ResultsConnector(BaseResultsConnector):
                     result_df = pd.concat([result_df, r], ignore_index=True)
         return result_df
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         min_range = offset
         max_range = offset + length
         success = False
         try:
-            response = self.records(search_id, min_range, max_range)
+            response = await self.records(search_id, min_range, max_range)
             success = True
             response_json = response.to_dict(orient='records')
         except ValueError as e:

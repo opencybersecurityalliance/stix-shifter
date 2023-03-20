@@ -35,19 +35,19 @@ class ProxyHost():
         dsl = translation.translate(self.module, 'results', data_source, data_source_results, self.options)
         return json.dumps(dsl)
 
-    def create_query_connection(self):
+    async def create_query_connection(self):
         query = self.request_args["query"]
         transmission_module = self.connection['type'].lower()
         transmission = stix_transmission.StixTransmission(transmission_module, self.connection, self.configuration)
         return json.dumps(transmission.query(query))
 
-    def create_status_connection(self):
+    async def create_status_connection(self):
         search_id = self.request_args["search_id"]
         transmission_module = self.connection['type'].lower()
         transmission = stix_transmission.StixTransmission(transmission_module, self.connection, self.configuration)
         return json.dumps(transmission.status(search_id))
 
-    def create_results_connection(self):
+    async def create_results_connection(self):
         search_id = self.request_args["search_id"]
         offset = self.request_args["offset"]
         length = self.request_args["length"]
@@ -55,13 +55,13 @@ class ProxyHost():
         transmission = stix_transmission.StixTransmission(transmission_module, self.connection, self.configuration)
         return json.dumps(transmission.results(search_id, offset, length))
 
-    def delete_query_connection(self):
+    async def delete_query_connection(self):
         search_id = self.request_args["search_id"]
         transmission_module = self.connection['type'].lower()
         transmission = stix_transmission.StixTransmission(transmission_module, self.connection, self.configuration)
         return json.dumps(transmission.delete(search_id))
 
-    def ping_connection(self):
+    async def ping_connection(self):
         transmission_module = self.connection['type'].lower()
         transmission = stix_transmission.StixTransmission(transmission_module, self.connection, self.configuration)
         return json.dumps(transmission.ping())

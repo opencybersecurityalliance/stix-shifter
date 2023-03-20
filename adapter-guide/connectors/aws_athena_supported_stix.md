@@ -1,4 +1,4 @@
-##### Updated on 02/27/23
+##### Updated on 03/08/23
 ## Amazon Athena
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
@@ -19,7 +19,7 @@
 | OR (Observation) | UNION |
 | AND (Observation) | INTERSECT |
 | <br> | |
-### Searchable STIX objects and properties for Guardduty
+### Searchable STIX objects and properties for Guardduty dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | eth0_private_ip, eth1_private_ip, public_ip, remote_ip |
@@ -58,7 +58,7 @@
 | **x-ibm-finding**:src_os_ref.value | platform |
 | **x-ibm-finding**:dst_geolocation | country_name |
 | <br> | |
-### Searchable STIX objects and properties for Ocsf
+### Searchable STIX objects and properties for Ocsf dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **email-addr**:value | identity.user.email_addr |
@@ -304,7 +304,7 @@
 | **x-ocsf-resources**:type | resources.type |
 | **x-ocsf-resources**:uid | resources.uid |
 | <br> | |
-### Searchable STIX objects and properties for Vpcflow
+### Searchable STIX objects and properties for Vpcflow dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | sourceaddress, destinationaddress |
@@ -349,9 +349,13 @@
 | file | extensions.x-ocsf-file-ext.confidentiality_id | confidentiality_id |
 | file | created | created_time |
 | file | extensions.x-ocsf-file-ext.description | desc |
-| file | extensions.x-ocsf-file-ext.algorithm | algorithm |
-| file | extensions.x-ocsf-file-ext.algorithm_id | algorithm_id |
-| file | extensions.x-ocsf-file-ext.algorithm_value | value |
+| file | hashes.Unknown | Unknown |
+| file | hashes.MD5 | MD5 |
+| file | hashes.SHA-1 | SHA-1 |
+| file | hashes.SHA-256 | SHA-256 |
+| file | hashes.SHA-512 | SHA-512 |
+| file | hashes.CTPH | CTPH |
+| file | hashes.Other | Other |
 | file | name | name |
 | file | parent_directory_ref | parent_folder |
 | file | extensions.x-ocsf-file-ext.path | path |

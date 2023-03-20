@@ -83,7 +83,7 @@ class PatternTranslator:
         start_time = split_object[1]
         end_time = split_object[3]
         # Add subseconds to timestamp if it's missing
-        pattern = "\.\d+Z$"
+        pattern = r"\.\d+Z$"
         if not bool(re.search(pattern, start_time)):
             start_time = re.sub('Z$', '.000Z', start_time)
         if not bool(re.search(pattern, end_time)):

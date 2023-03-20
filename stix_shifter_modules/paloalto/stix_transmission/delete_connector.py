@@ -8,7 +8,7 @@ class DeleteConnector(BaseDeleteConnector):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         """
         Delete operation of a search id is not supported in Palo Alto Cortex XDR
         :param search_id:str

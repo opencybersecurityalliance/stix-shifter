@@ -20,10 +20,10 @@ class Connector(BaseSyncConnector):
         self.connector = __name__.split('.')[1]
         self.api_client = APIClient(connection, configuration)
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
-        response = self.api_client.ping_box()
+        response = await self.api_client.ping_box()
         response_code = response.code
         try:
             response_dict = json.loads(response.read())
@@ -40,12 +40,12 @@ class Connector(BaseSyncConnector):
 
         return return_obj
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         """"delete_query_connection response
         :param search_id: str, search_id"""
         return {"success": True, "search_id": search_id}
 
-    def create_results_connection(self, query, offset, length):
+    async def create_results_connection(self, query, offset, length):
         """"built the response object
         :param query: str, search_id
         :param offset: int,offset value
@@ -63,7 +63,7 @@ class Connector(BaseSyncConnector):
             stop_time = datetime.utcnow()
             start_time = stop_time - timedelta(hours=24)
 
-        response = self.api_client.run_search(query, start_time, stop_time,
+        response = await self.api_client.run_search(query, start_time, stop_time,
                                               total_record)
 
         if response["success"]:

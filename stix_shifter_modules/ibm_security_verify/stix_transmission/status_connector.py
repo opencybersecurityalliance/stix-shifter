@@ -12,5 +12,5 @@ class StatusConnector(BaseStatusConnector):
         self.api_client = api_client
         self.logger = utils_logger.set_logger(__name__)
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         return {"success": True, "status": "COMPLETED", "progress": 100}
