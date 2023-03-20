@@ -225,11 +225,12 @@ class TestTransform(unittest.TestCase, object):
         file_hash = "MD5=5A0B0E6F407C89916515328F318842A1,SHA256=8FC86B75926043F048971696BC7A407615C9A03D9B1BFACC54785C8903B82A91,IMPHASH=406DD24835F1447987FB607C78597252"
         file_name = "sample.dll"
         file_size = 25536
+        process_guid = "7a97b85f-b34c-63be-c00d-000000007d00"
 
         data = {
             "event_count": count, "_time": time, "user": user,
             "process_name": name, "process_id": pid, "process_path": filePath,
-            "process_hash": file_hash, "process_exec": file_name
+            "process_hash": file_hash, "process_exec": file_name, "process_guid": process_guid
         }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
@@ -252,8 +253,10 @@ class TestTransform(unittest.TestCase, object):
 
         proc_obj = TestTransform.get_first_of_type(objects.values(), 'process')
         assert (proc_obj is not None), 'process object type not found'
+        assert (proc_obj.keys() == {'type', 'name', 'pid', 'binary_ref', 'x_unique_id'})
         assert (proc_obj['name'] == "test_process")
         assert (proc_obj['pid'] == 0)
+        assert (proc_obj['x_unique_id'] == '7a97b85f-b34c-63be-c00d-000000007d00')
 
         user_obj = TestTransform.get_first_of_type(objects.values(), 'user-account')
 
@@ -531,6 +534,7 @@ class TestTransform(unittest.TestCase, object):
             "process_name": "powershell.exe",
             "process_exec": "powershell.exe",
             "process_id": 2,
+            "process_guid": "7a97b85f-b34c-63be-c00d-000000007d00",
             "process_path": "C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0",
             "parent_process_name": "cmd.exe",
             "parent_process_id": 1,
@@ -562,9 +566,10 @@ class TestTransform(unittest.TestCase, object):
         assert ('parent_ref' in proc_obj or 'parent_ref' in parent_proc_obj)
         if 'parent_ref' in parent_proc_obj:
             proc_obj, parent_proc_obj = parent_proc_obj, proc_obj
-        assert (proc_obj.keys() == {'type', 'name', 'pid', 'binary_ref', 'parent_ref', 'opened_connection_refs'})
+        assert (proc_obj.keys() == {'type', 'name', 'pid', 'binary_ref', 'parent_ref', 'opened_connection_refs', 'x_unique_id'})
         assert (proc_obj['name'] == "powershell.exe")
         assert (proc_obj['pid'] == 2)
+        assert (proc_obj['x_unique_id'] == '7a97b85f-b34c-63be-c00d-000000007d00')
         assert (objects[proc_obj['parent_ref']] == parent_proc_obj)
         assert (parent_proc_obj['name'] == 'cmd.exe')
         assert (parent_proc_obj['pid'] == 1)
