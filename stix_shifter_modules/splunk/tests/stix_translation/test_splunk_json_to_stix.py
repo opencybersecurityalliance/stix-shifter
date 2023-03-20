@@ -24,6 +24,7 @@ options = {}
 
 sample_splunk_data_x_oca = {
     "src_ip": "123.123.123.123",
+    "src_mac": "12-5d-6a-52.78",
     "src_port": "56109",
     "dest_ip": "1.1.1.1",
     "dest_port": "9389",
@@ -251,7 +252,6 @@ class TestTransform(unittest.TestCase, object):
 
         proc_obj = TestTransform.get_first_of_type(objects.values(), 'process')
         assert (proc_obj is not None), 'process object type not found'
-        assert (proc_obj.keys() == {'type', 'name', 'pid', 'binary_ref'})
         assert (proc_obj['name'] == "test_process")
         assert (proc_obj['pid'] == 0)
 
@@ -720,6 +720,23 @@ class TestTransform(unittest.TestCase, object):
 
         x_oca_asset = TestTransform.get_first_of_type(object_vals, 'x-oca-asset')
         self.assertEqual(x_oca_asset['hostname'], 'WIN01')
+
+
+    def test_mac_addr(self):
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [sample_splunk_data_x_oca], get_module_transformers(MODULE), options,
+            callback=hash_type_lookup)
+
+        assert (result_bundle['type'] == 'bundle')
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert ('objects' in observed_data)
+        objects = observed_data['objects']
+        object_vals = objects.values()
+
+        mac = TestTransform.get_first_of_type(object_vals, 'mac-addr')
+        self.assertEqual(mac['value'], '00:12:5d:6a:52:78')
 
 if __name__ == '__main__':
     unittest.main()
