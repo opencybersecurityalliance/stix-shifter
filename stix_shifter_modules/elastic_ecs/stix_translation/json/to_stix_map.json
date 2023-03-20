@@ -1639,17 +1639,24 @@
       }
     },
     "os": {
-      "name": {
-        "key": "x-oca-asset.os_name",
-        "object": "host"
-      },
+      "name": [
+        {
+        "key": "software.name",
+        "object": "host_software"
+        },
+        {
+          "key": "x-oca-asset.os_ref",
+          "object": "host",
+          "references": "host_software"
+        }
+      ],
       "platform": {
-        "key": "x-oca-asset.os_platform",
-        "object": "host"
+        "key": "software.vendor",
+        "object": "host_software"
       },
       "version": {
-        "key": "x-oca-asset.os_version",
-        "object": "host"
+        "key": "software.version",
+        "object": "host_software"
       }
     },
     "user": {
@@ -1897,17 +1904,24 @@
       "object": "observer"
     },
     "os": {
-      "name": {
-        "key": "x-ecs-observer.os_name",
-        "object": "observer"
-      },
+      "name": [
+        {
+        "key": "software.name",
+        "object": "observer_software"
+        },
+        {
+          "key": "x-ecs-observer.os_ref",
+          "object": "observer",
+          "references": "observer_software"
+        }
+      ],
       "platform": {
-        "key": "x-ecs-observer.os_platform",
-        "object": "observer"
+        "key": "software.vendor",
+        "object": "observer_software"
       },
       "version": {
-        "key": "x-ecs-observer.os_version",
-        "object": "observer"
+        "key": "software.version",
+        "object": "observer_software"
       }
     },
     "geo": {

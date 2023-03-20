@@ -289,9 +289,9 @@
       "name": ["host.name"],
       "type": ["host.type"],
       "uptime": ["host.uptime"],
-      "os.name": ["host.os.name"],
-      "os.platform": ["host.os.platform"],
-      "os.version": ["host.os.version"]
+      "os_ref.name": ["host.os.name"],
+      "os_ref.vendor": ["host.os.platform"],
+      "os_ref.version": ["host.os.version"]
     }
   },
   "x-ecs-http": {
@@ -342,9 +342,9 @@
       "type": ["observer.type"],
       "vendor": ["observer.vendor"],
       "version": ["observer.version"],
-      "os.name": ["observer.os.name"],
-      "os.platform": ["observer.os.platform"],
-      "os.version": ["observer.os.version"]
+      "os_ref.name": ["observer.os.name"],
+      "os_ref.vendor": ["observer.os.platform"],
+      "os_ref.version": ["observer.os.version"]
     }
   },
   "x-ecs-organization": {
