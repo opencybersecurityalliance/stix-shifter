@@ -15,7 +15,7 @@ class APIClient():
         # This version of the Splunk APIClient is designed to function with
         # Splunk Enterprise version >= 6.5.0 and <= 7.1.2
         # http://docs.splunk.com/Documentation/Splunk/7.1.2/RESTREF/RESTprolog
-
+        
         self.output_mode = 'json'
         self.endpoint_start = 'services/'
         self.authenticated = False
