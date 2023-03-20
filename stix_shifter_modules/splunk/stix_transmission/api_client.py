@@ -15,7 +15,7 @@ class APIClient():
         # This version of the Splunk APIClient is designed to function with
         # Splunk Enterprise version >= 6.5.0 and <= 7.1.2
         # http://docs.splunk.com/Documentation/Splunk/7.1.2/RESTREF/RESTprolog
-
+        
         self.output_mode = 'json'
         self.endpoint_start = 'services/'
         self.authenticated = False
@@ -30,9 +30,9 @@ class APIClient():
         self.headers = headers
         self.timeout = connection['options'].get('timeout')
 
-    def authenticate(self):
+    async def authenticate(self):
         if not self.authenticated:
-            self.set_splunk_auth_token(self.auth, self.headers)
+            await self.set_splunk_auth_token(self.auth, self.headers)
             self.authenticated = True
         
     async def set_splunk_auth_token(self, auth, headers):
@@ -45,8 +45,9 @@ class APIClient():
         except KeyError as e:
             raise Exception('Authentication error occured while getting auth token: ' + str(e))
 
+
     async def ping_box(self):
-        self.authenticate()
+        await self.authenticate()
         endpoint = self.endpoint_start + 'server/status'
         data = {'output_mode': self.output_mode}
         return await self.client.call_api(endpoint, 'GET', data=data, timeout=self.timeout)
@@ -54,7 +55,7 @@ class APIClient():
     async def create_search(self, query_expression):
         # sends a POST request to 
         # https://<server_ip>:<port>/services/search/jobs
-        self.authenticate()
+        await self.authenticate()
         endpoint = self.endpoint_start + "search/jobs"
         data = {'search': query_expression, 'output_mode': self.output_mode}
         return await self.client.call_api(endpoint, 'POST', data=data, timeout=self.timeout)
@@ -63,7 +64,7 @@ class APIClient():
         # sends a GET request to
         # https://<server_ip>:<port>/services/search/jobs/<search_id>
         # returns information about the search job and its properties.
-        self.authenticate()
+        await self.authenticate()
         endpoint = self.endpoint_start + 'search/jobs/' + search_id        
         data = {'output_mode': self.output_mode}        
         return await self.client.call_api(endpoint, 'GET', data=data, timeout=self.timeout)
@@ -72,7 +73,7 @@ class APIClient():
         # sends a GET request to
         # https://<server_ip>:<port>/services/search/jobs/<search_id>/results
         # returns results associated with the search job.
-        self.authenticate()
+        await self.authenticate()
         endpoint = self.endpoint_start + "search/jobs/" + search_id + '/results'
         data = {'output_mode': self.output_mode}
         if ((offset is not None) and (count is not None)):
@@ -85,7 +86,7 @@ class APIClient():
         # sends a DELETE request to
         # https://<server_ip>:<port>/services/search/jobs/<search_id>
         # cancels and deletes search created earlier.
-        self.authenticate()
+        await self.authenticate()
         endpoint = self.endpoint_start + 'search/jobs/' + search_id
         data = {'output_mode': self.output_mode}
         return await self.client.call_api(endpoint, 'DELETE', data=data, timeout=self.timeout)
