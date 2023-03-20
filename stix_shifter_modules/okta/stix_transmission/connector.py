@@ -115,25 +115,20 @@ class Connector(BaseSyncConnector):
             response_dict['code'] = 100
             response_dict['message'] = f'Invalid metadata: {str(ex)}'
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
-
         except ConnectionError:
-            response_dict['code'] = 300
-            response_dict['message'] = 'Invalid Host/Network Connection error'
+            response_dict['code'] = 503
+            response_dict['message'] = "Invalid Host/Network Connection error"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except RequestException:
-            if metadata:
-                return_obj = self.create_results_connection(query, offset, length, metadata)
-            else:
-                return_obj = self.create_results_connection(query, offset, length)
+            response_dict['code'] = 429
+            response_dict['message'] = "Too many requests. Max retries exceeded"
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except Exception as ex:
             if "timeout_error" in str(ex):
-                response_dict['code'] = 300
-                response_dict['message'] = str(ex)
-            else:
-                response_dict['message'] = str(ex)
+                response_dict['code'] = 408
+            response_dict['message'] = str(ex)
             self.logger.error('error while fetching results: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
-
         return return_obj
 
     @staticmethod
@@ -174,16 +169,19 @@ class Connector(BaseSyncConnector):
                 return_obj['success'] = True
             else:
                 return_obj = self.exception_response(response_code, response_dict.get('errorSummary', ''))
+
         except ConnectionError:
-            response_dict['code'] = 300
+            response_dict['code'] = 503
             response_dict['message'] = 'Invalid Host/Network Connection error'
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+        except RequestException:
+            response_dict['code'] = 429
+            response_dict['message'] = "Too many requests. Max retries exceeded"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except Exception as ex:
             if "timeout_error" in str(ex):
-                response_dict['code'] = 300
-                response_dict['message'] = str(ex)
-            else:
-                response_dict['message'] = ex
+                response_dict['code'] = 408
+            response_dict['message'] = str(ex)
             self.logger.error('error while pinging: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
@@ -196,8 +194,6 @@ class Connector(BaseSyncConnector):
         :return: return_obj, dict
         """
         return_obj = {}
-        if code == 401 and 'Invalid token provided' in response_txt:
-            code = 300
         response_dict = {'code': code, 'message': str(response_txt)}
         ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
