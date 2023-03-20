@@ -70,7 +70,7 @@ okta_sample_response = {
         "isProxy": False
     },
     "severity": "INFO",
-    "debugContext": {
+    "debugContext": [{
         "debugData": {
             "authnRequestId": "Y-Sw7-z3z4tnCOyPQ4v3lwAADhQ",
             "pushOnlyResponseType": "OV_RESPONSE_APPROVE",
@@ -83,7 +83,7 @@ okta_sample_response = {
             "pushWithNumberChallengeResponseType": "OV_WITH_CHALLENGE_RESPONSE_ERROR",
             "url": "/api/v1/authn/factors/opf7rkr4nsyDyTKnf5d7/transactions/ftqsm1uKG8ZsWaFgkE_m4cKXMXQvK0TQ68/verify?"
         }
-    },
+    }],
     "legacyEventType": "core.user.factor.attempt_fail",
     "transaction": {
         "type": "WEB",
@@ -171,12 +171,13 @@ class TestOktaResultsToStix(unittest.TestCase):
         """
         objects = TestOktaResultsToStix.get_observed_data_objects(okta_sample_response)
         autonomous_obj = TestOktaResultsToStix.get_first_of_type(objects.values(), 'autonomous-system')
-        assert (autonomous_obj.keys() == {'type', 'number', 'name', 'extensions'})
+        assert (autonomous_obj.keys() == {'type', 'number', 'name', 'x_isp', 'x_domain_ref'})
         assert (autonomous_obj is not None), 'autonomous system object type not found'
         assert autonomous_obj['type'] == 'autonomous-system'
         assert autonomous_obj['number'] == 17488
-        domain_ref = autonomous_obj['extensions']['x-okta-autonomous-system']['domain_ref']
-        assert (domain_ref in objects), f"domain_ref with key {autonomous_obj['extensions']['domain_ref']} " \
+
+        domain_ref = autonomous_obj['x_domain_ref']
+        assert (domain_ref in objects), f"domain_ref with key {autonomous_obj['x_domain_ref']} " \
                                         f"not found"
         domain_obj = objects[domain_ref]
         assert domain_obj['value'] == 'hathway'
@@ -197,10 +198,10 @@ class TestOktaResultsToStix(unittest.TestCase):
         objects = TestOktaResultsToStix.get_observed_data_objects(okta_sample_response)
 
         client_obj = TestOktaResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
-        target_refs = client_obj['extensions']['x-okta-event']['target_refs']
+        target_refs = client_obj['x_target_refs']
         assert (all(
             target in objects for target in target_refs)), \
-            f"one of the target object among {client_obj['extensions']['x-okta-event']['target_ref']} is not found"
+            f"one of the target object among {client_obj['x_target_refs']} is not found"
         target_obj = objects[target_refs[1]]
         assert (target_obj is not None), 'target object type not found'
         assert (target_obj.keys() == {'type', 'target_id', 'target_type', 'alternate_id', 'display_name',
@@ -220,8 +221,8 @@ class TestOktaResultsToStix(unittest.TestCase):
         assert (software_obj is not None), 'software object type not found'
         assert software_obj['type'] == 'software'
         assert software_obj['name'] == 'CHROME'
-        assert software_obj['extensions']['x-okta-software']['client_os'] == 'Windows 10'
-        assert software_obj['extensions']['x-okta-software']['raw_user_agent'] \
+        assert software_obj['x_client_os'] == 'Windows 10'
+        assert software_obj['x_raw_user_agent'] \
                == 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) ' \
                   'Chrome/108.0.0.0 Safari/537.36'
 
@@ -262,19 +263,22 @@ class TestOktaResultsToStix(unittest.TestCase):
         event_obj = TestOktaResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
         assert (event_obj is not None), 'event object is not found'
         assert event_obj['type'] == 'x-oca-event'
-        assert (event_obj.keys() == {'type', 'extensions', 'ip_refs', 'action', 'outcome', 'category'})
-        assert event_obj['extensions']['x-okta-event']['severity'] == 'INFO'
+        assert (event_obj.keys() == {'type', 'x_actor_ref', 'x_client_ref', 'ip_refs', 'x_authentication_context_ref',
+                                     'x_event_description', 'action', 'outcome', 'x_outcome_reason',
+                                     'x_severity', 'x_debug_ref', 'x_legacy_event_type', 'category',
+                                     'x_transaction_id', 'x_event_unique_id', 'x_target_refs'})
+        assert event_obj['x_severity'] == 'INFO'
         assert event_obj['action'] == 'user.authentication.auth_via_mfa'
         assert event_obj['outcome'] == 'FAILURE'
         assert event_obj['category'] == ['WEB']
         assert (all(ip_ref in objects for ip_ref in event_obj['ip_refs'])), "ip object is not found"
         assert (all(
-            index in objects for ref, index in event_obj['extensions'].items() if '_ref' in ref)), \
+            index in objects for ref, index in event_obj.items() if '_ref' in ref and not isinstance(index, list))), \
             "one of the references in client object is not found"
-        assert (all(target in objects for ref, value in event_obj['extensions'].items()
-                    if 'target_refs' == ref for target in value)), "target object is not found"
-        assert event_obj['extensions']['x-okta-event']['outcome_reason'] == 'INVALID_CREDENTIALS'
-        assert event_obj['extensions']['x-okta-event']['event_unique_id'] == '3e6c6109-a855-11ed-98eb-4781c6ece90f'
+        assert (all(target in objects for ref, value in event_obj.items()
+                    if 'x_target_refs' == ref for target in value)), "target object is not found"
+        assert event_obj['x_outcome_reason'] == 'INVALID_CREDENTIALS'
+        assert event_obj['x_event_unique_id'] == '3e6c6109-a855-11ed-98eb-4781c6ece90f'
 
     def test_debug_context_json_to_stix(self):
         """to test debug-context object properties"""
@@ -293,4 +297,4 @@ class TestOktaResultsToStix(unittest.TestCase):
                                            'pushWithNumberChallengeResponseType': 'OV_WITH_CHALLENGE_RESPONSE_ERROR',
                                            'url': '/api/v1/authn/factors/opf7rkr4nsyDyTKnf5d7/transactions/'
                                                   'ftqsm1uKG8ZsWaFgkE_m4cKXMXQvK0TQ68/verify?'}
-        assert 'debug_ref' not in event_obj['extensions']['x-okta-event'].keys()
+        assert 'x_debug_ref' in event_obj.keys()

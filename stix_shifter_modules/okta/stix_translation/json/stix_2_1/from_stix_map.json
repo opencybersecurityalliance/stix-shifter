@@ -14,10 +14,10 @@
       "name": [
         "securityContext.asOrg"
       ],
-      "extensions.'x-okta-autonomous-system-ext'.isp": [
+      "x_isp": [
         "securityContext.isp"
       ],
-      "extensions.'x-okta-autonomous-system-ext'.domain_ref.name": [
+      "x_domain_ref.name": [
         "securityContext.domain"
       ]
     }
@@ -40,7 +40,7 @@
       "account_login": [
         "actor.alternateId"
       ],
-      "extensions.'x-okta-actor-ext'.type": [
+      "x_actor_type": [
         "actor.type"
       ]
     }
@@ -66,10 +66,10 @@
       "name": [
         "client.userAgent.browser"
       ],
-      "extensions.'x-okta-software-ext'.raw_user_agent": [
+      "x_raw_user_agent": [
         "client.userAgent.rawUserAgent"
       ],
-      "extensions.'x-okta-software-ext'.client_os": [
+      "x_client_os": [
         "client.userAgent.os"
       ]
     }
@@ -135,7 +135,7 @@
   },
   "x-oca-event": {
     "fields": {
-      "action": [
+      "x_action": [
         "eventType"
       ],
       "category[*]": [
@@ -147,49 +147,49 @@
       "ip_refs[*].value": [
         "request.ipChain.ip"
       ],
-      "extensions.'x-okta-event-ext'.event_unique_id": [
+      "x_event_unique_id": [
         "uuid"
       ],
-      "extensions.'x-okta-event-ext'.severity": [
+      "x_severity": [
         "severity"
       ],
-      "extensions.'x-okta-event-ext'.event_description": [
+      "x_event_description": [
         "displayMessage"
       ],
-      "extensions.'x-okta-event-ext'.transaction_id": [
+      "x_transaction_id": [
         "transaction.id"
       ],
-      "extensions.'x-okta-event-ext'.request_api_token_id": [
+      "x_request_api_token_id": [
         "transaction.detail.requestApiTokenId"
       ],
-      "extensions.'x-okta-event-ext'.legacy_event_type": [
+      "x_legacy_event_type": [
         "legacyEventType"
       ],
-      "extensions.'x-okta-event-ext'.outcome_reason": [
+      "x_outcome_reason": [
         "outcome.reason"
       ],
-      "extensions.'x-okta-event-ext'.actor_ref.account_login": [
+      "x_actor_ref.account_login": [
         "actor.alternateId"
       ],
-      "extensions.'x-okta-event-ext'.actor_ref.user_id": [
+      "x_actor_ref.user_id": [
         "actor.id"
       ],
-      "extensions.'x-okta-event-ext'.client_ref.client_ip": [
+      "x_client_ref.client_ip": [
         "client.ipAddress"
       ],
-      "extensions.'x-okta-event-ext'.authentication_context_ref.session_id": [
+      "x_authentication_context_ref.session_id": [
         "authenticationContext.externalSessionId"
       ],
-      "extensions.'x-okta-event-ext'.target_refs[*].target_type": [
+      "x_target_refs[*].target_type": [
         "target.type"
       ],
-      "extensions.'x-okta-event-ext'.target_refs[*].display_name": [
+      "x_target_refs[*].display_name": [
         "target.displayName"
       ],
-      "extensions.'x-okta-event-ext'.target_refs[*].target_id": [
+      "x_target_refs[*].target_id": [
         "target.id"
       ],
-      "extensions.'x-okta-event-ext'.client_ref.id": [
+      "x_client_ref.id": [
         "client.id"
       ]
     }

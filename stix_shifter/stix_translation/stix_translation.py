@@ -15,6 +15,7 @@ RESULTS = 'results'
 QUERY = 'query'
 PARSE = 'parse'
 MAPPING = 'mapping'
+CONFIGS = 'configs'
 DIALECTS = 'dialects'
 SUPPORTED_ATTRIBUTES = "supported_attributes"
 MAPPING_ERROR = "Unable to map the following STIX objects and properties:"
@@ -42,7 +43,7 @@ class StixTranslation:
             except Exception as ex:
                 raise UnsupportedDataSourceException("{} is an unsupported data source.".format(module))
             try:
-                if not translate_type == DIALECTS:
+                if not translate_type == CONFIGS and not translate_type == DIALECTS:
                     validated_options = param_validator(module, options, 'connection.options')
                 else:
                     validated_options = {}
@@ -52,6 +53,10 @@ class StixTranslation:
                 self.logger.error(ex)
                 self.logger.debug(track)
                 raise
+
+            if translate_type == CONFIGS:
+                dialects = entry_point.get_configs_full()
+                return dialects
 
             if translate_type == DIALECTS:
                 dialects = entry_point.get_dialects_full()
