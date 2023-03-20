@@ -24,18 +24,21 @@
       "src_byte_count": ["source.bytes", "client.bytes"],
       "dst_byte_count": ["destination.bytes", "server.bytes"],
       "src_packets": ["source.packets", "client.packets"],
-      "dst_packets": ["destination.packets", "server.packets"]
+      "dst_packets": ["destination.packets", "server.packets"],
+      "x_vlan.id": ["network.vlan.id"],
+      "x_vlan.name": ["network.vlan.name"],
+      "x_vlan.inner.id": ["network.inner.vlan.id"],
+      "x_vlan.inner.name": ["network.inner.vlan.name"],
+      "x_name": ["network.name"],
+      "x_application": ["network.application"],
+      "x_direction": ["network.direction.keyword"],
+      "x_forwarded_ip": ["network.forwarded_ip"],
+      "x_community_id": ["network.community_id.keyword"]
     }
   },
   "x-ecs-network": {
     "fields": {
-      "inner.vlan.vlan_id": ["network.inner.vlan.id"],
-      "inner.vlan.name": ["network.inner.vlan.name"],
-      "name": ["network.name"],
-      "application": ["network.application"],
-      "direction": ["network.direction.keyword"],
-      "forwarded_ip": ["network.forwarded_ip"],
-      "community_id": ["network.community_id.keyword"]
+      
     }
   },
   "artifact": {
@@ -69,11 +72,9 @@
       "x_owner_ref.user_id": ["file.uid"],
       "x_owner_ref.account_login": ["file.owner"],
       "x_win_drive_letter": ["file.drive_letter"],
-      "x_pe.company": ["file.pe.company"],
-      "x_pe.description": ["file.pe.description"],
-      "x_pe.file_version": ["file.pe.file_version"],
-      "x_pe.original_file_name": ["file.pe.original_file_name"],
-      "x_pe.product": ["file.pe.product"],
+      "x_software_ref.name": ["file.pe.original_file_name"],
+      "x_software_ref.vendor": ["file.pe.company"],
+      "x_software_ref.version": ["file.pe.file_version"],
       "x_code_signature.exists": ["file.code_signature.exists"],
       "x_code_signature.status": ["file.code_signature.status"],
       "x_code_signature.subject_name": ["file.code_signature.subject_name"],
@@ -89,18 +90,13 @@
   "user-account":{
     "fields": {
       "user_id": ["user.name.keyword", "user.id.keyword"],
-      "account_login": ["user.name.keyword"]
-    }
-  },
-  "x-ecs-user": {
-    "fields": {
-      "domain": ["user.domain.keyword"],
-      "full_name": ["user.full_name"],
-      "hash": ["user.hash"],
-      "user_id": ["user.id.keyword"],
-      "group_domain": ["user.group.domain"],
-      "group_id": ["user.group.id"],
-      "group_name": ["user.group.name"]
+      "account_login": ["user.name.keyword"],
+      "display_name": ["user.full_name"],
+      "x_domain": ["user.domain.keyword"],
+      "x_hash": ["user.hash"],
+      "x_group.domain": ["user.group.domain"],
+      "x_group.id": ["user.group.id"],
+      "x_group.name": ["user.group.name"]
     }
   },
   "process" : {
@@ -149,7 +145,11 @@
   },
   "software": {
     "fields": {
-      "name": ["agent.name.keyword"]
+      "name": ["agent.name.keyword", "process.pe.original_file_name.keyword", "file.pe.original_file_name.keyword", "dll.pe.original_file_name.keyword"],
+      "vendor": ["process.pe.company.keyword", "file.pe.company.keyword", "dll.pe.company.keyword"],
+      "version": ["process.pe.file_version.keyword", "file.pe.file_version.keyword", "dll.pe.file_version.keyword"],
+      "x_product": ["process.pe.product.keyword", "file.pe.product.keyword", "dll.pe.product.keyword"],
+      "x_description": ["process.pe.description.keyword", "file.pe.description.keyword", "dll.pe.description.keyword"]
     }
   },
   "autonomous-system": {
