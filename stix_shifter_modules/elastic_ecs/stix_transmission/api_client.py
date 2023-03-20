@@ -98,7 +98,7 @@ class APIClient():
         max_result_window_url = self.setting_endpoint + "/index.max_result_window?include_defaults=true"
         return await self.client.call_api(max_result_window_url, 'GET', timeout=self.timeout)
 
-    def set_pit(self):
+    async def set_pit(self):
         headers = dict()
         headers['Content-Type'] = 'application/json'
 
@@ -106,7 +106,7 @@ class APIClient():
         # POST /my-index-000001/_pit?keep_alive=1m
         endpoint = "{}?keep_alive=1m&pretty".format(self.pit_endpoint)
 
-        return self.client.call_api(endpoint, 'POST', headers, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'POST', headers, timeout=self.timeout)
 
 
 

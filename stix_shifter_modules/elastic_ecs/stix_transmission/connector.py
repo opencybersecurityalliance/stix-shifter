@@ -113,13 +113,11 @@ class Connector(BaseJsonSyncConnector):
             else:
                 raise e
 
-
-
-    def set_point_in_time(self):
+    async def set_point_in_time(self):
         response_txt = None
         return_obj = dict()
         try:
-            response = self.api_client.set_pit()
+            response = await self.api_client.set_pit()
             return self._handle_errors(response, return_obj)
         except Exception as e:
             if response_txt is not None:
