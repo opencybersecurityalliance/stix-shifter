@@ -486,7 +486,7 @@ The status can be one of: `COMPLETED`, `ERROR`, `CANCELLED`, `TIMEOUT`, or `RUNN
 
 Uses the data source API to fetch the query results based on the search ID, offset, and length. 
 
-If the connector supports, you can specify `metadata` parameter which may contain extra information to fetch the results from the datasource. 
+If the connector supports, you can specify `metadata` parameter which may contain extra information to fetch the next batch of results from the datasource. This is a recomended parameter for the datasource that supports pagination.
 
 #### CLI Command
 
