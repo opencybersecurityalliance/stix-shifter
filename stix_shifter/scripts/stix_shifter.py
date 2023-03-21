@@ -399,17 +399,7 @@ def transmit(args):
     transmission = stix_transmission.StixTransmission(args.module, connection_dict, configuration_dict)
 
     operation_command = args.operation_command
-
-    if operation_command == stix_transmission.QUERY:
-        query = args.query_string
-        result = transmission.query(query)
-    elif operation_command == stix_transmission.STATUS:
-        search_id = args.search_id
-        result = transmission.status(search_id)
-    elif operation_command == stix_transmission.RESULTS:
-        search_id = args.search_id
-        offset = args.offset
-        length = args.length
+    if 'metadata' in args and args.metadata:
         metadata = args.metadata
         try:
             metadata = json.loads(metadata)
@@ -417,13 +407,24 @@ def transmit(args):
             log.debug(exception_to_string(ex))
             log.error('Cannot convert supplied metadata string to json')
             pass
-        result = transmission.results(search_id, offset, length, metadata)
+
+    if operation_command == stix_transmission.QUERY:
+        query = args.query_string
+        result = transmission.query(query)
+    elif operation_command == stix_transmission.STATUS:
+        search_id = args.search_id
+        result = transmission.status(search_id, metadata=None)
+    elif operation_command == stix_transmission.RESULTS:
+        search_id = args.search_id
+        offset = args.offset
+        length = args.length
+        result = transmission.results(search_id, offset, length, metadata=None)
     elif operation_command == stix_transmission.RESULTS_STIX:
         search_id = args.search_id
         offset = args.offset
         length = args.length
         data_source = args.data_source
-        result = transmission.results_stix(search_id, offset, length, data_source)
+        result = transmission.results_stix(search_id, offset, length, data_source, metadata=None)
     elif operation_command == stix_transmission.DELETE:
         search_id = args.search_id
         result = transmission.delete(search_id)
