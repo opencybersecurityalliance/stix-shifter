@@ -39,7 +39,7 @@ class QueryStringPatternTranslator:
                 comparator = '=~'
             elif comparator == '!=':
                 comparator = '!~'
-        return '"{}"'.format(value), comparator
+        return '"{}"'.format(value.replace("\\", "\\\\")), comparator
 
     @staticmethod
     def _format_set(value) -> str:
@@ -50,7 +50,7 @@ class QueryStringPatternTranslator:
         """
         final_value = []
         for val in value.values:
-            final_value.append('"{}"'.format(val))
+            final_value.append('"{}"'.format(val.replace("\\", "\\\\")))
         return '{}'.format(str(final_value).replace('[', '(').replace(']', ')').replace("'", ""))
 
     @staticmethod
@@ -61,6 +61,7 @@ class QueryStringPatternTranslator:
         :return: str
         """
         # Replacing value with % to .* and _ to . for supporting Like comparator
+        value = value.replace("\\", "\\\\")
         compile_regex = re.compile(r'.*(\%|\_).*')
         if compile_regex.match(value):
             if comparator == 'contains':
@@ -75,7 +76,7 @@ class QueryStringPatternTranslator:
         :param value: str
         :return: str
         """
-        return 'regex"({})"'.format(value)
+        return 'regex"({})"'.format(value.replace("\\", "\\\\"))
 
     @staticmethod
     def _format_datetime(value, expression) -> str:
