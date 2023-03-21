@@ -3177,11 +3177,6 @@
         "references": "process"
       }
     ],
-    "_missingChildShouldMapInitiatingPid": {
-      "key": "x-oca-event.process_ref",
-      "object": "event",
-      "references": "process"
-    },
     "InitiatingProcessCommandLine": {
       "key": "process.command_line",
       "object": "process"
@@ -3208,6 +3203,10 @@
         "references": "process_file"
       }
     ],
+    "_missingChildShouldMapInitiatingPid": {
+      "key": "x-oca-event.missingChildShouldMapInitiatingPid",
+      "object": "event"
+    },
     "InitiatingProcessParentId": {
       "key": "process.pid",
       "object": "parent_process",

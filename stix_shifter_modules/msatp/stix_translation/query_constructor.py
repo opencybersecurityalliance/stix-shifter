@@ -28,6 +28,12 @@ class QueryStringPatternTranslator:
         self.parse_expression(pattern)
 
     @staticmethod
+    def _escape_value(value):
+        if isinstance(value, str):
+            return value.replace("\\", "\\\\")
+        return value
+
+    @staticmethod
     def _format_equality(value, comparator) -> str:
         """
         Formatting value in the event of equality operation
@@ -39,7 +45,7 @@ class QueryStringPatternTranslator:
                 comparator = '=~'
             elif comparator == '!=':
                 comparator = '!~'
-        return '"{}"'.format(value.replace("\\", "\\\\")), comparator
+        return '"{}"'.format(QueryStringPatternTranslator._escape_value(value)), comparator
 
     @staticmethod
     def _format_set(value) -> str:
@@ -50,7 +56,7 @@ class QueryStringPatternTranslator:
         """
         final_value = []
         for val in value.values:
-            final_value.append('"{}"'.format(val.replace("\\", "\\\\")))
+            final_value.append('"{}"'.format(QueryStringPatternTranslator._escape_value(val)))
         return '{}'.format(str(final_value).replace('[', '(').replace(']', ')').replace("'", ""))
 
     @staticmethod
@@ -61,7 +67,7 @@ class QueryStringPatternTranslator:
         :return: str
         """
         # Replacing value with % to .* and _ to . for supporting Like comparator
-        value = value.replace("\\", "\\\\")
+        value = QueryStringPatternTranslator._escape_value(value)
         compile_regex = re.compile(r'.*(\%|\_).*')
         if compile_regex.match(value):
             if comparator == 'contains':
@@ -76,7 +82,7 @@ class QueryStringPatternTranslator:
         :param value: str
         :return: str
         """
-        return 'regex"({})"'.format(value.replace("\\", "\\\\"))
+        return 'regex"({})"'.format(QueryStringPatternTranslator._escape_value(value))
 
     @staticmethod
     def _format_datetime(value, expression) -> str:

@@ -96,6 +96,7 @@ def fix_ttp_refs(observed):
                             new_refs.append(key)
             finding["ttp_tagging_refs"].extend(new_refs)
 
+
 def get_reference(objects, source, ref_prop, ref_type):
     if ref_prop not in source:
         return None
@@ -132,17 +133,15 @@ def fix_device_event_refs(observed):
                 validate_process_ref_in_event(event, objects)
 
 
-
 def validate_process_ref_in_event(event, objects):
-    if 'process_ref' in event:
+    if 'missingChildShouldMapInitiatingPid' in event:
         proc_ref = event['process_ref']
         proc = get_reference(objects, event, 'process_ref', 'process')
-        if 'pid' not in proc and 'binary_ref' in proc:
-            ##main process has no pid - in DeviceEvents this means it is a file ref not a process ref
-            ref = proc['binary_ref']
-            del event['process_ref']
-            event['file_ref'] = ref
-            del objects[proc_ref]
+        event['process_ref'] = proc['parent_ref']
+        ref = proc['binary_ref']
+        event['file_ref'] = ref
+        del objects[proc_ref]
+        del event['missingChildShouldMapInitiatingPid']
 
 
 class ResultsTranslator(JSONToStix):
