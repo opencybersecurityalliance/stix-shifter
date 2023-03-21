@@ -16,6 +16,35 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
+## 5.1.1 (2023-03-21)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+* Added process:x_unique_id property to Splunk [#1389](https://github.com/opencybersecurityalliance/stix-shifter/pull/1389)
+* get configs [#1392](https://github.com/opencybersecurityalliance/stix-shifter/pull/1392)
+* GitHub action update [#1385](https://github.com/opencybersecurityalliance/stix-shifter/pull/1385)
+
+### Fixes:
+
+* Added metadata changes for GCP Chronicle [#1393](https://github.com/opencybersecurityalliance/stix-shifter/pull/1393)
+* Splunk: Fix MAC address to display in proper STIX format [#1386](https://github.com/opencybersecurityalliance/stix-shifter/pull/1386)
+* Updated custom properties mapping in Okta with 'x_' prefix [#1387](https://github.com/opencybersecurityalliance/stix-shifter/pull/1387)
+* Await async fixes [#1391](https://github.com/opencybersecurityalliance/stix-shifter/pull/1391)
+* fix json loads of data arg in stix-shifter CLI [#1394](https://github.com/opencybersecurityalliance/stix-shifter/pull/1394)
+
+### Dependency update:
+
+* Bump aiohttp-retry from 2.4.0 to 2.8.3 in /stix_shifter [#1374](https://github.com/opencybersecurityalliance/stix-shifter/pull/1374)
+* Consolidate `network-traffic`, `user-account`, `file` objects in the elastic_ecs connector mapping [#1378](https://github.com/opencybersecurityalliance/stix-shifter/pull/1378)
+* Fix #1375, optimize get_pagesize() function call, and add testcases  [#1384](https://github.com/opencybersecurityalliance/stix-shifter/pull/1384)
+* Async changes for Okta UDI connector [#1383](https://github.com/opencybersecurityalliance/stix-shifter/pull/1383)
+
+--------------------------------------
+
 ## 5.1.0 (2023-03-08)
 
 ### Breaking changes:
