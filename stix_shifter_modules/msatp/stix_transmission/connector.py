@@ -252,26 +252,12 @@ class Connector(BaseJsonSyncConnector):
             response_json = json.loads(q_return_obj["data"])
             q_return_obj['data'] = response_json['Results']
 
-            """ if one of the last 2 joins reset the results, search events and findings only
-                without querying the networkInfo/DeviceInfo tables """
-            if not q_return_obj['data'] and not self.alert_mode:
-                partial_return_obj = dict()
-                joined_query = partial_query
-                response = await self.api_client.run_search(joined_query, offset, length)
-                partial_return_obj = self._handle_errors(response, partial_return_obj)
-                response_json = json.loads(partial_return_obj["data"])
-                partial_return_obj['data'] = response_json['Results']
-                q_return_obj['data'] = partial_return_obj['data']
             # Customizing the output json,
             # Get 'TableName' attribute from each row of event data
             # Create a dictionary with 'TableName' as key and other attributes in an event data as value
             # Filter the "None" and empty values except for RegistryValueName, which support empty string
             # Customizing of Registryvalues json
             table_event_data = []
-            # for some reason sometimes msatp returns the same alert from DeviceAlertEvents multiple times.
-            # they only differ in the RemoteIp, RemoteUrl, FileName and SHA1 properties, which are redundant anyway
-            # because they appear in the event as well. They are even wrongly referenced in the alert. for example the
-            # localip appears as RemoteIp. so we merge all these alerts into one.
             q_return_obj['data'] = merge_alert_events(q_return_obj['data'])
             for event_data in q_return_obj['data']:
                 lookup_table = event_data['TableName']

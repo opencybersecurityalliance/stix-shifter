@@ -7,6 +7,25 @@ from stix_shifter_utils.utils.error_response import ErrorCode
 from tests.utils.async_utils import get_mock_response, get_adal_mock_response
 
 
+def mocked_1():
+    return get_mock_response(200, "{}", 'byte')
+
+
+def mocked_2():
+    mocked_return_value = """{
+                                    "Results": [{
+                                        "TableName": "DeviceFileEvents",
+                                        "Timestamp": "2019-09-13T11:34:14.0075314Z",
+                                        "DeviceName": "desktop-536bt46",
+                                        "FileName": "runcit_tlm_hw.bat",
+                                        "SHA1": "93b458752aea37a257a7dd2ed51e98ffffc35be8",
+                                        "SHA256": "",
+                                        "MD5": "26a2fe38dc6f42386659e611219c563c"
+                                    }]
+                                    }"""
+    return get_mock_response(200, mocked_return_value, 'byte')
+
+
 @patch('stix_shifter_modules.msatp.stix_transmission.connector.adal.AuthenticationContext')
 class TestMSATPConnection(unittest.TestCase):
     def config(self):
@@ -101,6 +120,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert results_response['success']
         assert 'data' in results_response
         assert results_response['data'] is not None
+
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
