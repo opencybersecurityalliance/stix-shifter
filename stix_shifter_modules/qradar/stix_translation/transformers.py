@@ -1,5 +1,6 @@
 from stix_shifter_utils.stix_translation.src.utils.transformers import ValueTransformer
 from stix_shifter_utils.utils import logger
+from datetime import datetime, timezone
 
 LOGGER = logger.set_logger(__name__)
 
@@ -34,3 +35,13 @@ class RegValueNameToStixRegistryValues(ValueTransformer):
             return [{ 'name': value }]
         except ValueError:
             LOGGER.error("Cannot convert root key to Stix formatted windows registry key")
+
+class QRadarEpochToTimestamp(ValueTransformer):
+    """A value transformer for the 13-digit timestamps, uses float(epoch) to handle exponential notation"""
+
+    @staticmethod
+    def transform(epoch):
+        try:
+            return (datetime.fromtimestamp(float(epoch) / 1000, timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z')
+        except ValueError:
+            LOGGER.error("Cannot convert epoch value {} to timestamp".format(epoch))

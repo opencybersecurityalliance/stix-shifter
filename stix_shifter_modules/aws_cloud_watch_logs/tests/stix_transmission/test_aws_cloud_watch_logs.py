@@ -1,8 +1,9 @@
 from stix_shifter_modules.aws_cloud_watch_logs.entry_point import EntryPoint
+from stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.status_connector import AWSCWLOGS
 from unittest.mock import patch
-import json
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
+from tests.utils.async_utils import get_aws_mock_response
 from botocore.exceptions import ClientError
 
 CONFIG = {
@@ -23,7 +24,6 @@ IAM_CONFIG = {
 CONNECTION = {
     "options": {"region": "xyz"}
 }
-
 
 class AWSMockJsonResponse:
     def __init__(self):
@@ -200,7 +200,6 @@ class MockStatusResponse:
         }
         return json_response
 
-
 class MockExceptionResponse:
     """
     Summary Json response handler
@@ -212,22 +211,22 @@ class MockExceptionResponse:
     @staticmethod
     def describe_log_groups():
         response = {'Error': {'Code': 'invalid_parameter', 'Message': 'Missing the parameters.'}}
-        raise ClientError(response, 'test1')
+        return ClientError(response, 'test1')
 
     @staticmethod
     def get_query_results(**kwargs):
-        response = """{
-                                     "error" : {
-                                         "code" : "mapping_error",
-                                         "message":"Data is invalid."},
-                                        "status": AWSCWLOGS.UNKNOWN
-                                     }"""
-        return json.loads(response)
+        response = {"error": {
+                "code": "mapping_error",
+                "message": "Data is invalid."
+            },
+            "status": "AWSCWLOGS.UNKNOWN"
+        }
+        return response
 
     @staticmethod
     def stop_query(**kwargs):
         response = {'Error': {'Code': 'authentication_fail', 'Message': 'Unable to access the data'}}
-        raise ClientError(response, 'test2')
+        return ClientError(response, 'test2')
 
 
 class TestAWSConnection(unittest.TestCase):
@@ -240,9 +239,7 @@ class TestAWSConnection(unittest.TestCase):
         assert check_async
 
     @staticmethod
-    @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
-        '.client')
+    @patch('stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_ping(mock_ping):
         config = {
             "auth": {
@@ -255,7 +252,7 @@ class TestAWSConnection(unittest.TestCase):
             "options": {"region": "xyz"}
         }
 
-        mock_ping.return_value = AWSMockJsonResponse()
+        mock_ping.return_value = get_aws_mock_response({})
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
         ping_response = transmission.ping()
 
@@ -264,22 +261,19 @@ class TestAWSConnection(unittest.TestCase):
         assert ping_response['success']
 
     @staticmethod
-    @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
-        '.client')
+    @patch('stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_ping_exception(mock_ping_value):
-        mock_ping_value.return_value = MockExceptionResponse()
+        mock_ping_value.side_effect = Exception('This is exception')
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', CONNECTION, CONFIG)
         ping_response = transmission.ping()
+
         assert ping_response is not None
         assert 'success' in ping_response
         assert ping_response['success'] is False
         assert 'error' in ping_response
 
     @staticmethod
-    @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
-        '.client')
+    @patch('stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_create_query_exception(mock_create_query):
         config = {
             "auth": {
@@ -295,6 +289,7 @@ class TestAWSConnection(unittest.TestCase):
         query = 'sample query'
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
         query_response = transmission.query(query)
+
         assert query_response is not None
         assert 'success' in query_response
         assert query_response['success'] is False
@@ -302,9 +297,7 @@ class TestAWSConnection(unittest.TestCase):
         assert query_response['code'] == "invalid_query"
 
     @staticmethod
-    @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
-        '.client')
+    @patch('stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_create_query_connection(mock_create_query):
         config = {
             "auth": {
@@ -317,7 +310,11 @@ class TestAWSConnection(unittest.TestCase):
             "options": {"region": "xyz"}
         }
 
-        mock_create_query.return_value = AWSMockJsonResponse()
+        mock_create_query.side_effect = [
+            get_aws_mock_response(AWSMockJsonResponse.describe_log_groups(**{})), 
+            get_aws_mock_response(AWSMockJsonResponse.start_query(**{}))
+        ]
+        
         query = "{\"logType\": \"vpcflow\", \"limit\": 2, \"logGroupName\": \"USEast1_FlowLogs\", " \
                 "\"queryString\": \"fields @timestamp, " \
                 "srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId, bytes, packets | " \
@@ -334,9 +331,7 @@ class TestAWSConnection(unittest.TestCase):
         assert query_response['search_id'] == "0c8ed381-f1c8-406d-a293-406b64607870:2"
 
     @staticmethod
-    @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
-        '.client')
+    @patch('stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_iam_create_query_connection(mock_create_query):
         iam_config = {
             "auth": {
@@ -350,7 +345,11 @@ class TestAWSConnection(unittest.TestCase):
             "options": {"region": "xyz"}
         }
         
-        mock_create_query.return_value = AWSMockJsonResponse()
+        mock_create_query.side_effect = [
+            get_aws_mock_response(AWSMockJsonResponse.describe_log_groups(**{})), 
+            get_aws_mock_response(AWSMockJsonResponse.start_query(**{}))
+        ]
+
         query = "{\"logType\": \"vpcflow\", \"limit\": 10000, \"logGroupName\": \"USEast1_FlowLogs\", " \
                 "\"queryString\": \"fields @timestamp, " \
                 "srcAddr, dstAddr, srcPort, dstPort, protocol, start, end, accountId, interfaceId, bytes, packets | " \
@@ -367,11 +366,9 @@ class TestAWSConnection(unittest.TestCase):
         assert query_response['search_id'] == "0c8ed381-f1c8-406d-a293-406b64607870:10000"
 
     @staticmethod
-    @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
-        '.client')
+    @patch('stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_create_results_exception(mock_create_results):
-        mock_create_results.return_value = MockExceptionResponse()
+        mock_create_results.return_value = MockExceptionResponse.get_query_results(**{})
         search_id = 123
         offset = 0
         length = 10
@@ -384,11 +381,9 @@ class TestAWSConnection(unittest.TestCase):
         assert 'error' in results_response
 
     @staticmethod
-    @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
-        '.client')
+    @patch('stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_create_results_indexerror(mock_create_results):
-        mock_create_results.return_value = MockExceptionResponse()
+        mock_create_results.return_value = MockExceptionResponse.get_query_results(**{})
         search_id = 123
         offset = 10
         length = 10000
@@ -401,11 +396,11 @@ class TestAWSConnection(unittest.TestCase):
         assert 'error' in results_response
 
     @staticmethod
-    @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
-        '.client')
+    @patch('stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_create_results_connection(mock_results):
-        mock_results.return_value = AWSMockJsonResponse
+        mock_results.side_effect = [
+            get_aws_mock_response(AWSMockJsonResponse.get_query_results(**{}))
+        ]
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870:100"
         offset = 0
         length = 2
@@ -419,9 +414,7 @@ class TestAWSConnection(unittest.TestCase):
         assert results_response['data'] is not None
 
     @staticmethod
-    @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
-        '.client')
+    @patch('stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_delete_query_connection(mock_delete_query):
         config = {
             "auth": {
@@ -434,7 +427,9 @@ class TestAWSConnection(unittest.TestCase):
             "options": {"region": "xyz"}
         }
 
-        mock_delete_query.return_value = AWSMockJsonResponse()
+        mock_delete_query.side_effect = [
+            get_aws_mock_response(AWSMockJsonResponse.stop_query(**{}))
+        ]
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870:100"
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
         delete_response = transmission.delete(search_id)
@@ -444,11 +439,9 @@ class TestAWSConnection(unittest.TestCase):
         assert delete_response['success'] is True
 
     @staticmethod
-    @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
-        '.client')
+    @patch('stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_delete_query_exception(mock_create_status):
-        mock_create_status.return_value = MockExceptionResponse()
+        mock_create_status.side_effect = MockExceptionResponse.stop_query(**{})
         search_id = '10.20.30.40'
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', CONNECTION, CONFIG)
         status_response = transmission.delete(search_id)
@@ -458,9 +451,7 @@ class TestAWSConnection(unittest.TestCase):
         assert 'error' in status_response
 
     @staticmethod
-    @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
-        '.client')
+    @patch('stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_create_status_connection(mock_create_status):
         config = {
             "auth": {
@@ -473,7 +464,9 @@ class TestAWSConnection(unittest.TestCase):
             "options": {"region": "xyz"}
         }
 
-        mock_create_status.return_value = AWSMockJsonResponse()
+        mock_create_status.side_effect = [
+            get_aws_mock_response(AWSMockJsonResponse.get_query_results(**{}))
+        ]
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870:100"
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
         status_response = transmission.status(search_id)
@@ -485,9 +478,7 @@ class TestAWSConnection(unittest.TestCase):
         assert status_response['status'] == 'COMPLETED'
 
     @staticmethod
-    @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
-        '.client')
+    @patch('stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_create_status_running(mock_create_status):
         config = {
             "auth": {
@@ -500,7 +491,9 @@ class TestAWSConnection(unittest.TestCase):
             "options": {"region": "xyz"}
         }
 
-        mock_create_status.return_value = MockStatusResponse()
+        mock_create_status.side_effect = [
+            get_aws_mock_response(MockStatusResponse.get_query_results(**{}))
+        ]
         search_id = "0c8ed381-f1c8-406d-a293-406b64607870:100"
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
         status_response = transmission.status(search_id)
@@ -512,9 +505,7 @@ class TestAWSConnection(unittest.TestCase):
         assert status_response['status'] == 'RUNNING'
 
     @staticmethod
-    @patch(
-        'stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.boto3'
-        '.client')
+    @patch('stix_shifter_modules.aws_cloud_watch_logs.stix_transmission.boto3_client.BOTO3Client.makeRequest')
     def test_create_status_exception(mock_create_status):
         config = {
             "auth": {
@@ -527,10 +518,18 @@ class TestAWSConnection(unittest.TestCase):
             "options": {"region": "xyz"}
         }
 
-        mock_create_status.return_value = MockExceptionResponse()
+        error_data = {"error": {
+                "code": "query_syntax_error",
+                "message": "Data is invalid."
+            },
+            "status": AWSCWLOGS.UNKNOWN
+        }
+
+        mock_create_status.side_effect = Exception(error_data)
         search_id = "xyz"
         transmission = stix_transmission.StixTransmission('aws_cloud_watch_logs', connection, config)
         status_response = transmission.status(search_id)
+
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is False

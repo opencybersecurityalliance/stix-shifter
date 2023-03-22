@@ -4,7 +4,7 @@ from enum import Enum
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 import json
-from requests.exceptions import ConnectionError
+from aiohttp.client_exceptions import ClientConnectionError
 from .response_mapper import ResponseMapper
 
 
@@ -42,7 +42,7 @@ class StatusConnector(BaseStatusConnector):
         }
         return switcher.get(status).value
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         """
         Fetching the progress and the status of the search id
         :param search_id: str, search id
@@ -52,7 +52,7 @@ class StatusConnector(BaseStatusConnector):
         response_dict = {}
         response = None
         try:
-            response = self.api_client.get_search_status(search_id)
+            response = await self.api_client.get_search_status(search_id)
             # Based on the response
             response_code = response.code
             response_read = response.read()
@@ -88,7 +88,7 @@ class StatusConnector(BaseStatusConnector):
             response_dict['message'] = 'Empty results received from Tenant'
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)
 
-        except ConnectionError:
+        except ClientConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)

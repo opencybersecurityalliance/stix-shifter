@@ -137,7 +137,7 @@ List updated: October 29, 2021
 | [IBM Cloud Security Advisor](adapter-guide/connectors/security_advisor_supported_stix.md) |   security_advisor   |  Default   |  IBM Cloud   |     Yes     |     Yes      |   Released    |
 |           [Splunk Enterprise Security](adapter-guide/connectors/splunk_supported_stix.md)           |        splunk        | Splunk CIM | IBM Security |     Yes     |     Yes      |   Released    |
 |       [Microsoft Defender for Endpoint](adapter-guide/connectors/msatp_supported_stix.md)        |        msatp         |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Microsoft Azure Sentinel](adapter-guide/connectors/azure_sentinel_supported_stix.md)       |    azure_sentinel    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
+|       [Microsoft Graph Security](adapter-guide/connectors/azure_sentinel_supported_stix.md)       |    azure_sentinel    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
 |        [IBM Guardium Data Protection](adapter-guide/connectors/guardium_supported_stix.md)       |       guardium       |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
 |    [AWS CloudWatch Logs](adapter-guide/connectors/aws_cloud_watch_logs_supported_stix.md)     | aws_cloud_watch_logs |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
 |       [Amazon Athena](adapter-guide/connectors/aws_athena_supported_stix.md)       |   aws_athena   |  SQL   | IBM Security |     Yes     |     Yes      |   Released    |
@@ -160,6 +160,10 @@ List updated: October 29, 2021
 |       [IBM Security Verify](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/ibm_security_verify_supported_stix.md)                           | ibm_security_verify             | Default    | IBM Security | Yes         | Yes          | Released     |
 |       [Red Hat Advanced Cluster Security for Kubernetes (StackRox)](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/rhacs_supported_stix.md)                           | rhacs             | Default    | IBM Security | Yes         | Yes          | Released     |
 |      [GCP Chronicle](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/gcp_chronicle_supported_stix.md)                   | gcp_chronicle              | Default    | IBM Security | Yes         | Yes          | Released     |
+|      [Azure Log Analytics](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/azure_log_analytics_supported_stix.md)                   | azure_log_analytics              | Default    | IBM Security | Yes         | Yes          | Released     |
+|      [Okta](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/okta_supported_stix.md)                   | okta              | Default    | IBM Security | Yes         | Yes          | Released     |
+
+
 
 
 ## How to use

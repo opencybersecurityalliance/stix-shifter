@@ -1,10 +1,12 @@
-##### Updated on 11/04/22
+##### Updated on 02/27/23
 ## Microsoft Defender for Endpoint
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | or |
-| OR | or |
+| AND (Comparision) | and |
+| OR (Comparision) | or |
 | = | == |
 | != | != |
 | LIKE | contains |
@@ -14,6 +16,8 @@
 | < | < |
 | <= | <= |
 | IN | in~ |
+| OR (Observation) | or |
+| AND (Observation) | or |
 | <br> | |
 ### Searchable STIX objects and properties
 | STIX Object and Property | Mapped Data Source Fields |

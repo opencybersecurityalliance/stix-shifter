@@ -19,6 +19,7 @@ EXECUTE = 'execute'
 HOST = 'host'
 MAPPING = 'mapping'
 MODULES = 'modules'
+CONFIGS = 'configs'
 
 
 def main():
@@ -73,8 +74,13 @@ def main():
     # optional arguments
     translate_parser.add_argument('-x', '--stix-validator', action='store_true',
                                   help='Run the STIX 2 validator against the translated results')
+    # configs parser
+    configs_parser = parent_subparsers.add_parser(CONFIGS, help='Get configs list')
+    configs_parser.add_argument('module', nargs='?', type=str, help='Module name')
+
     # modules parser
-    parent_subparsers.add_parser(MODULES, help='Get modules list')
+    modules_parser = parent_subparsers.add_parser(MODULES, help='Get configs list')
+    modules_parser.add_argument('module', nargs='?', type=str, help='Module name')
 
     # mapping parser
     mapping_parser = parent_subparsers.add_parser(
@@ -188,7 +194,27 @@ def main():
 
     log = utils_logger.set_logger(__name__)
 
-    if 'module' in args:
+
+    if hasattr(args, 'data') and args.data:
+        if args.command in [TRANSLATE] and args.translate_type == 'query':
+            pass
+        else:
+            try:
+                args.data = json.loads(args.data)
+            except Exception as ex:
+                log.debug(exception_to_string(ex))
+                log.error('Cannot convert supplied data json string to json')
+                help_and_exit = True
+
+    if hasattr(args, 'data_source') and args.data_source:
+        try:
+            args.data_source = json.loads(args.data_source)
+        except Exception as ex:
+            log.debug(exception_to_string(ex))
+            log.error('Cannot convert supplied data_source json string to json')
+            help_and_exit = True
+
+    if 'module' in args and args.module:
         args_module_dialects = args.module
 
         options = {}
@@ -302,7 +328,7 @@ def main():
         # Translate results to STIX
         translation_options = copy.deepcopy(connection_dict.get('options', {}))
         options['validate_pattern'] = True
-        result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), translation_options)
+        result = translation.translate(args.module, 'results', args.data_source, results, translation_options)
         log.info('STIX Results (written to stdout):\n')
         print(json.dumps(result, indent=4, sort_keys=False))
         exit(0)
@@ -328,7 +354,15 @@ def main():
         result = {}
         all_modules = modules_list()
         for m in all_modules:
-            result[m] = translation.translate(m, stix_translation.DIALECTS, None, None)
+            if not args.module or args.module == m:
+                result[m] = translation.translate(m, stix_translation.DIALECTS, None, None)
+    elif args.command == CONFIGS:
+        translation = stix_translation.StixTranslation()
+        result = {}
+        all_modules = modules_list()
+        for m in all_modules:
+            if not args.module or args.module == m:
+                result[m] = translation.translate(m, stix_translation.CONFIGS, None, None)
     elif args.command == TRANSMIT:
         result = transmit(args)  # stix_transmission
 

@@ -1,14 +1,18 @@
-##### Updated on 11/04/22
+##### Updated on 03/08/23
 ## IBM Guardium Data Protection
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | OR |
-| OR | OR |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | = | = |
+| OR (Observation) | OR |
+| AND (Observation) | OR |
 | IN | = |
 | <br> | |
-### Searchable STIX objects and properties for Qsearch
+### Searchable STIX objects and properties for Qsearch dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **x-ibm-finding**:finding_type | datacategory |
@@ -31,7 +35,7 @@
 | **user-account**:login_name | OS User |
 | **x-guardium**:severity | Severity |
 | <br> | |
-### Searchable STIX objects and properties for Report
+### Searchable STIX objects and properties for Report dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **x-ibm-finding**:finding_type | datacategory |
@@ -77,7 +81,7 @@
 | network-traffic | protocols | NetworkProtocol |
 | <br> | | |
 | process | command_line | Path |
-| process | id | Pid |
+| process | pid | Pid |
 | <br> | | |
 | software | name | db_type |
 | software | name | Server Type |

@@ -3,7 +3,7 @@
         "url": {
             "label": "Full URL of a stix-bundle file",
             "placeholder": "https://url.to.stix_bundle.json.file",
-            "description": "Specify the URL of the STIX Bundle JSON file so that IBM Cloud Pak for Security can communicate with it"
+            "description": "Specify the URL of the STIX Bundle JSON file"
         },
         "help": {
             "label": "Need additional help?",

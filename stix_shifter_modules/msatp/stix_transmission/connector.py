@@ -1,6 +1,6 @@
 import json
 import adal
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
@@ -22,7 +22,7 @@ def merge_alert_events(data):
     return merged_alerts + list(non_alerts)
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     init_error = None
     logger = logger.set_logger(__name__)
     make_alert_as_list = True
@@ -157,12 +157,12 @@ class Connector(BaseSyncConnector):
         else:
             raise Exception(return_obj)
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
         if self.init_error:
             return self.adal_response
-        response = self.api_client.ping_box()
+        response = await self.api_client.ping_box()
         response_code = response.code
         if 200 <= response_code < 300:
             return_obj['success'] = True
@@ -170,13 +170,13 @@ class Connector(BaseSyncConnector):
             ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
         return return_obj
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         """"delete_query_connection response
         :param search_id: str, search_id"""
         return {"success": True, "search_id": search_id}
 
-    def create_results_connection(self, query, offset, length):
-        """"build the response object
+    async def create_results_connection(self, query, offset, length):
+        """"built the response object
         :param query: str, search_id
         :param offset: int,offset value
         :param length: int,length value"""

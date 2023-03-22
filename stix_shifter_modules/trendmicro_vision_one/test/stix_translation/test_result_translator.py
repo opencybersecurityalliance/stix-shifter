@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import json
 import unittest
 import uuid
 from datetime import datetime
@@ -49,7 +48,7 @@ class TestResultTranslatorMixin:
         return ob_data["objects"]
 
     def translate_results(self, data):
-        result = self.results_translator.translate_results(json.dumps(self.data_source), json.dumps(data))
+        result = self.results_translator.translate_results(self.data_source, data)
         return result
 
     def _get_objects(self, data):
@@ -328,7 +327,7 @@ class TestEndpointResultTranslator(unittest.TestCase, TestResultTranslatorMixin)
         self.assertRaises(LoadJsonResultsException, self.translate_results, "test")
 
     def test_missing_id(self):
-        self.assertRaises(TranslationResultException, self.results_translator.translate_results, "{}", "{}")
+        self.assertRaises(TranslationResultException, self.results_translator.translate_results, {}, {})
 
 
 class TestMessageResultTranslator(unittest.TestCase, TestResultTranslatorMixin):

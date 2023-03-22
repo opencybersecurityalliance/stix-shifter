@@ -1,10 +1,12 @@
-##### Updated on 11/04/22
+##### Updated on 03/08/23
 ## PaloAlto Cortex XDR
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | or |
-| OR | or |
+| AND (Comparision) | and |
+| OR (Comparision) | or |
 | = | = |
 | != | != |
 | LIKE | contains |
@@ -14,8 +16,10 @@
 | < | < |
 | <= | <= |
 | IN | in |
+| OR (Observation) | or |
+| AND (Observation) | or |
 | <br> | |
-### Searchable STIX objects and properties for Xdr_data
+### Searchable STIX objects and properties for Xdr_data dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | action_local_ip, action_remote_ip, agent_ip_addresses |
@@ -50,6 +54,7 @@
 | **process**:binary_ref.hashes.MD5 | action_process_image_md5 |
 | **process**:binary_ref.hashes.'SHA-256' | action_process_image_sha256 |
 | **process**:binary_ref.parent_directory_ref.path | action_process_image_path, actor_process_image_path, causality_actor_process_image_path, os_actor_process_image_path |
+| **process**:x_unique_id | actor_process_instance_id |
 | **domain-name**:value | auth_domain, dst_host_metadata_domain, host_metadata_domain |
 | **url**:value | dst_action_url_category |
 | **windows-registry-key**:key | action_registry_key_name |
@@ -218,7 +223,6 @@
 | process | pid | action_thread_child_pid |
 | process | child_refs | action_thread_child_pid |
 | process | creator_user_ref | action_process_username |
-| process | extensions.x-paloalto-process.instance_id | actor_process_instance_id |
 | process | extensions.x-paloalto-process.causality_id | actor_process_causality_id |
 | process | extensions.x-paloalto-process.auth_id | actor_process_auth_id |
 | process | extensions.x-paloalto-process.container_id | actor_process_container_id |
@@ -234,6 +238,7 @@
 | process | extensions.x-paloalto-process.is_kernel | action_process_handle_is_kernel |
 | process | extensions.x-paloalto-process.is_root | action_process_is_container_root |
 | process | extensions.x-paloalto-process.is_native | actor_process_is_native |
+| process | x_unique_id | actor_process_instance_id |
 | <br> | | |
 | url | value | dst_action_url_category |
 | <br> | | |
@@ -298,6 +303,7 @@
 | x-oca-event | extensions.x-paloalto-event.path | event_address_mapped_image_path |
 | x-oca-event | category | event_type |
 | x-oca-event | action | event_sub_type |
+| x-oca-event | process_ref | actor_process_instance_id |
 | <br> | | |
 | x-paloalto-evtlog | data_fields | action_evtlog_data_fields |
 | x-paloalto-evtlog | description | action_evtlog_description |

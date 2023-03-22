@@ -253,7 +253,9 @@ def translate_pattern(pattern: Pattern, data_model_mapping, search_key, options)
             fields += field
 
     if index:
-        translated_query = f'index={index} {translated_query}'
+        indices = [i.strip(' ') for i in index.split(',')]
+        index_cmd = ' OR '.join([f'index="{i}"' for i in indices])
+        translated_query = f'{index_cmd} {translated_query}'
 
     if not has_earliest_latest:
         if _needs_where_command(translated_query):

@@ -1,4 +1,4 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 
 
 class APIClient():
@@ -16,20 +16,20 @@ class APIClient():
         headers['Authorization'] = self.api_key
         headers['Content-type'] = 'application/json'
         self.timeout = connection['options']['timeout']
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                      connection.get('port', None),
                                      headers,
                                      url_modifier_function=None
                                      )
 
-    def ping_datasource(self):
+    async def ping_datasource(self):
         """
         ping or check the system status
         """
         endpoint = self.PING_STATUS
-        return self.client.call_api(endpoint, 'GET', headers=self.client.headers, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', headers=self.client.headers, timeout=self.timeout)
 
-    def create_search(self, query_expression):
+    async def create_search(self, query_expression):
         """
         init query
         :param data source query
@@ -39,9 +39,9 @@ class APIClient():
         endpoint = self.QUERY_ENDPOINT
         data = query_expression
         data = data.encode('utf-8')
-        return self.client.call_api(endpoint, 'POST', headers=self.client.headers, data=data, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'POST', headers=self.client.headers, data=data, timeout=self.timeout)
 
-    def get_search_status(self, search_id):
+    async def get_search_status(self, search_id):
         """
         get query status
         :param queryId:
@@ -51,9 +51,9 @@ class APIClient():
         endpoint = self.QUERY_STATUS + "?queryId=" + search_id
         params = {}
         params['output'] = 'json'
-        return self.client.call_api(endpoint, 'GET', headers=self.client.headers, urldata=params, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', headers=self.client.headers, urldata=params, timeout=self.timeout)
 
-    def get_search_results(self, search_id, offset, length, nextcursor=None):
+    async def get_search_results(self, search_id, offset, length, nextcursor=None):
         """
         Get results from Data Source
         :param query: Data Source QueryId,nextcursor,limit
@@ -69,7 +69,7 @@ class APIClient():
 
         params = {}
         params['output'] = 'json'
-        return self.client.call_api(endpoint, 'GET', headers=self.client.headers, urldata=params, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', headers=self.client.headers, urldata=params, timeout=self.timeout)
 
     def delete_search(self, search_id):
         """

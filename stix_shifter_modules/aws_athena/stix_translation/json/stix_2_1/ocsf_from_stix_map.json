@@ -1,0 +1,821 @@
+{
+  "email-addr": {
+    "fields": {
+      "value": [
+        "identity.user.email_addr"
+      ]
+    }
+  },
+  "file": {
+    "fields": {
+      "accessed": [
+        "file.atime"
+      ],
+      "ctime": [
+        "file.created_time"
+      ],
+      "extensions.'x-ocsf-file-ext'.algorithm": [
+        "file.fingerprints.algorithm"
+      ],
+      "extensions.'x-ocsf-file-ext'.algorithm_id": [
+        "file.fingerprints.algorithm_id"
+      ],
+      "extensions.'x-ocsf-file-ext'.algorithm_value": [
+        "file.fingerprints.value"
+      ],
+      "extensions.'x-ocsf-file-ext'.attributes": [
+        "file.attributes"
+      ],
+      "extensions.'x-ocsf-file-ext'.company_name": [
+        "file.company_name"
+      ],
+      "extensions.'x-ocsf-file-ext'.confidentiality": [
+        "file.confidentiality"
+      ],
+      "extensions.'x-ocsf-file-ext'.confidentiality_id": [
+        "file.confidentiality_id"
+      ],
+      "extensions.'x-ocsf-file-ext'.description": [
+        "file.desc"
+      ],
+      "extensions.'x-ocsf-file-ext'.feature_name": [
+        "file.product.feature.name"
+      ],
+      "extensions.'x-ocsf-file-ext'.feature_uid": [
+        "file.product.feature.uid"
+      ],
+      "extensions.'x-ocsf-file-ext'.feature_version": [
+        "file.product.feature.version"
+      ],
+      "extensions.'x-ocsf-file-ext'.installed_path": [
+        "file.product.path"
+      ],
+      "extensions.'x-ocsf-file-ext'.product_lang": [
+        "file.product.lang"
+      ],
+      "extensions.'x-ocsf-file-ext'.product_name": [
+        "file.product.name"
+      ],
+      "extensions.'x-ocsf-file-ext'.product_uid": [
+        "file.product.uid"
+      ],
+      "extensions.'x-ocsf-file-ext'.product_vendor": [
+        "file.product.vendor_name"
+      ],
+      "extensions.'x-ocsf-file-ext'.product_version": [
+        "file.product.version"
+      ],
+      "extensions.'x-ocsf-file-ext'.security_descriptor": [
+        "file.security_descriptor"
+      ],
+      "extensions.'x-ocsf-file-ext'.signature": [
+        "file.signature"
+      ],
+      "extensions.'x-ocsf-file-ext'.type": [
+        "file.type"
+      ],
+      "extensions.'x-ocsf-file-ext'.type_id": [
+        "file.type_id"
+      ],
+      "extensions.'x-ocsf-file-ext'.uid": [
+        "file.uid"
+      ],
+      "extensions.'x-ocsf-file-ext'.version": [
+        "file.version"
+      ],
+      "name": [
+        "file.name"
+      ],
+      "size": [
+        "file.size"
+      ]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "dst_endpoint.ip",
+        "src_endpoint.ip"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": [
+        "dst_endpoint.ip",
+        "src_endpoint.ip"
+      ]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "dst_byte_count": [
+        "traffic.bytes_in"
+      ],
+      "dst_packets": [
+        "traffic.packets_in"
+      ],
+      "dst_port": [
+        "dst_endpoint.port"
+      ],
+      "dst_ref.value": [
+        "dst_endpoint.ip"
+      ],
+      "extensions.'x-network-ext'.boundary": [
+        "connection_info.boundary"
+      ],
+      "extensions.'x-network-ext'.boundary_id": [
+        "connection_info.boundary_id"
+      ],
+      "extensions.'x-network-ext'.bytes": [
+        "traffic.bytes"
+      ],
+      "extensions.'x-network-ext'.direction": [
+        "connection_info.direction"
+      ],
+      "extensions.'x-network-ext'.direction_id": [
+        "connection_info.direction_id"
+      ],
+      "extensions.'x-network-ext'.packets": [
+        "traffic.packets"
+      ],
+      "extensions.'x-network-ext'.protocol_ver": [
+        "connection_info.protocol_ver"
+      ],
+      "extensions.'tcp-ext'.src_flags_hex": [
+        "connection_info.tcp_flags"
+      ],
+      "protocols[*]": [
+        "connection_info.protocol_name",
+        "connection_info.protocol_ver_id"
+      ],
+      "src_byte_count": [
+        "traffic.bytes_out"
+      ],
+      "src_packets": [
+        "traffic.packets_out"
+      ],
+      "src_port": [
+        "src_endpoint.port"
+      ],
+      "src_ref.value": [
+        "src_endpoint.ip"
+      ]
+    }
+  },
+  "process": {
+    "fields": {
+      "image_ref.name": [
+        "file.name"
+      ],
+      "command_line": [
+        "process.cmd_line"
+      ],
+      "created_time": [
+        "process.created_time"
+      ],
+      "extensions.'x-ocsf-process-ext'.integrity": [
+        "process.integrity"
+      ],
+      "extensions.'x-ocsf-process-ext'.integrity_id": [
+        "process.integrity_id"
+      ],
+      "extensions.'x-ocsf-process-ext'.is_system": [
+        "process.is_system"
+      ],
+      "extensions.'x-ocsf-process-ext'.lineage": [
+        "process.lineage"
+      ],
+      "extensions.'x-ocsf-process-ext'.loaded_modules": [
+        "process.sandbox"
+      ],
+      "extensions.'x-ocsf-process-ext'.terminated_time": [
+        "terminated_time"
+      ],
+      "extensions.'x-ocsf-process-ext'.tid": [
+        "process.tid"
+      ],
+      "x_unique_id": [
+        "process.uid"
+      ],
+      "extensions.'x-ocsf-process-ext'.xattributes": [
+        "process.xattributes"
+      ],
+      "mime_type": [
+        "mime_type"
+      ],
+      "extensions.'x-ocsf-process-ext'.modified_time": [
+        "process.modified_time"
+      ],
+      "x_name": [
+        "process.name"
+      ],
+      "pid": [
+        "process.pid"
+      ]
+    }
+  },
+  "software": {
+    "fields": {
+      "extension.product.feature_name": [
+        "metadata.product.feature.name"
+      ],
+      "extension.product.feature_uid": [
+        "metadata.product.feature.uid"
+      ],
+      "extension.product.feature_version": [
+        "metadata.product.feature.version"
+      ],
+      "extension.product.path": [
+        "metadata.product.path"
+      ],
+      "extension.product.uid": [
+        "metadata.product.uid"
+      ],
+      "languages": [
+        "metadata.product.lang"
+      ],
+      "name": [
+        "metadata.product.name"
+      ],
+      "vendor": [
+        "metadata.product.vendor_name"
+      ],
+      "version": [
+        "metadata.product.version"
+      ]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": [
+        "http_request.url"
+      ]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "account_type": [
+        "identity.user.account_type"
+      ],
+      "display_name": [
+        "identity.user.name"
+      ],
+      "extensions.'aws-account-ext'.account_type_id": [
+        "identity.user.account_type_id"
+      ],
+      "extensions.'aws-account-ext'.credential_uid": [
+        "identity.user.credential_uid"
+      ],
+      "extensions.'aws-account-ext'.domain": [
+        "identity.user.domain"
+      ],
+      "extensions.'aws-account-ext'.group_desc": [
+        "identity.user.groups.desc"
+      ],
+      "extensions.'aws-account-ext'.group_name": [
+        "identity.user.groups.name"
+      ],
+      "extensions.'aws-account-ext'.group_privileges": [
+        "identity.user.groups.privileges"
+      ],
+      "extensions.'aws-account-ext'.group_type": [
+        "identity.user.groups.type"
+      ],
+      "extensions.'aws-account-ext'.group_uid": [
+        "identity.user.groups.uid"
+      ],
+      "extensions.'aws-account-ext'.org_uid": [
+        "identity.user.org_uid"
+      ],
+      "extensions.'aws-account-ext'.session_uid": [
+        "identity.user.session_uid"
+      ],
+      "extensions.'aws-account-ext'.session_uuid": [
+        "identity.user.session_uuid"
+      ],
+      "extensions.'aws-account-ext'.type": [
+        "identity.user.type"
+      ],
+      "extensions.'aws-account-ext'.type_id": [
+        "identity.user.type_id"
+      ],
+      "extensions.'aws-account-ext'.uid": [
+        "identity.user.uid"
+      ],
+      "extensions.'aws-account-ext'.uuid": [
+        "identity.user.uuid"
+      ],
+      "user_id": [
+        "identity.user.account_uid"
+      ]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "alert_id": [
+        "observables.type_id",
+        "finding.uid"
+      ],
+      "description": [
+        "observables.value"
+      ],
+      "dst_ip_ref.value": [
+        "dst_endpoint.ip"
+      ],
+      "end": [
+        "end_time"
+      ],
+      "event_count": [
+        "count"
+      ],
+      "finding_type": [
+        "observables.type"
+      ],
+      "name": [
+        "observables.name",
+        "finding.title"
+      ],
+      "types": [
+        "finding.types"
+      ],
+      "severity": [
+        "severity_id"
+      ],
+      "src_ip_ref.value": [
+        "src_endpoint.ip"
+      ],
+      "start": [
+        "finding.created_time"
+      ],
+      "time_observed": [
+        "finding.first_seen_time"
+      ]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "extensions.'x-dst-endpoint'.instance_uid": [
+        "dst_endpoint.instance_uid"
+      ],
+      "extensions.'x-dst-endpoint'.interface_uid": [
+        "dst_endpoint.interface_uid"
+      ],
+      "extensions.'x-dst-endpoint'.subnet_uid": [
+        "dst_endpoint.subnet_uid"
+      ],
+      "extensions.'x-dst-endpoint'.svc_name": [
+        "dst_endpoint.svc_name"
+      ],
+      "extensions.'x-dst-endpoint'.vpc_uid": [
+        "dst_endpoint.vpc_uid"
+      ],
+      "extensions.'x-src-endpoint'.instance_uid": [
+        "src_endpoint.instance_uid"
+      ],
+      "extensions.'x-src-endpoint'.interface_uid": [
+        "src_endpoint.interface_uid"
+      ],
+      "extensions.'x-src-endpoint'.subnet_uid": [
+        "src_endpoint.subnet_uid"
+      ],
+      "extensions.'x-src-endpoint'.svc_name": [
+        "src_endpoint.svc_name"
+      ],
+      "extensions.'x-src-endpoint'.vpc_uid": [
+        "src_endpoint.vpc_uid"
+      ],
+      "name": [
+        "dst_endpoint.name",
+        "src_endpoint.name"
+      ]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "action": [
+        "activity",
+        "activity_name"
+      ],
+      "category": [
+        "category_name"
+      ],
+      "code": [
+        "activity_id",
+        "category_uid"
+      ],
+      "confidence": [
+        "confidence"
+      ],
+      "created": [
+        "time"
+      ],
+      "duration": [
+        "duration"
+      ],
+      "extensions.'x-cloud-api'.class_uid": [
+        "class_uid"
+      ],
+      "module": [
+        "class_name"
+      ],
+      "network_ref.dst_ref.value": [
+        "dst_endpoint.ip"
+      ],
+      "network_ref.src_ref.value": [
+        "dst_endpoint.ip"
+      ],
+      "timezone": [
+        "timezone_offset"
+      ]
+    }
+  },
+  "x-ocsf-cloud": {
+    "fields": {
+      "account_type": [
+        "cloud.account_type"
+      ],
+      "account_type_id": [
+        "cloud.account_type_id"
+      ],
+      "account_uid": [
+        "cloud.account_uid"
+      ],
+      "api_version": [
+        "api.version"
+      ],
+      "message": [
+        "message"
+      ],
+      "operation": [
+        "api.operation"
+      ],
+      "org_uid": [
+        "cloud.org_uid"
+      ],
+      "profiles": [
+        "profiles"
+      ],
+      "project_uid": [
+        "cloud.project_uid"
+      ],
+      "provider": [
+        "cloud.provider"
+      ],
+      "raw_data": [
+        "raw_data"
+      ],
+      "ref_event_code": [
+        "ref_event_code"
+      ],
+      "ref_event_name": [
+        "ref_event_name"
+      ],
+      "ref_event_uid": [
+        "ref_event_uid"
+      ],
+      "ref_time": [
+        "ref_time"
+      ],
+      "region": [
+        "cloud.region"
+      ],
+      "request_flags": [
+        "api.request.flags"
+      ],
+      "request_uid": [
+        "api.request.uid"
+      ],
+      "resource_uid": [
+        "cloud.resource_uid"
+      ],
+      "response_code": [
+        "api.response.code"
+      ],
+      "response_error": [
+        "api.response.error"
+      ],
+      "response_error_message": [
+        "api.response.error_message"
+      ],
+      "response_flags": [
+        "api.response.flags"
+      ],
+      "response_message": [
+        "api.response.message"
+      ],
+      "service_labels": [
+        "api.service.labels"
+      ],
+      "service_name": [
+        "api.service.name"
+      ],
+      "service_uid": [
+        "api.service.uid",
+        "api.service.version"
+      ],
+      "severity": [
+        "severity"
+      ],
+      "status": [
+        "status"
+      ],
+      "status_code": [
+        "status_code"
+      ],
+      "status_detail": [
+        "status_detail"
+      ],
+      "status_id": [
+        "status_id"
+      ],
+      "type_name": [
+        "type_name"
+      ],
+      "type_uid": [
+        "type_uid"
+      ],
+      "zone": [
+        "cloud.zone"
+      ]
+    }
+  },
+  "x-ibm-ttp-tagging": {
+    "fields": {
+      "name": [
+        "attack.technique.name"
+      ],
+      "extensions.'mitre-attack-ext'.tactic_name": [
+        "attack.tactics.name"
+      ],
+      "extensions.'mitre-attack-ext'.tactic_id": [
+        "attack.tactics.uid"
+      ],
+      "extensions.'mitre-attack-ext'.technique_id": [
+        "attack.technique.uid"
+      ],
+      "extensions.'mitre-attack-ext'.version": [
+        "attack.version"
+      ]
+    }
+  },
+  "x-ocsf-compliance": {
+    "fields": {
+      "requirements": [
+        "compliance.requirements"
+      ],
+      "status": [
+        "compliance.status"
+      ],
+      "status_detail": [
+        "compliance.status_detail"
+      ]
+    }
+  },
+  "x-ocsf-enrichments": {
+    "fields": {
+      "data": [
+        "enrichments.data"
+      ],
+      "name": [
+        "enrichments.name"
+      ],
+      "provider": [
+        "enrichments.provider"
+      ],
+      "type": [
+        "enrichments.type"
+      ],
+      "value": [
+        "enrichments.value"
+      ]
+    }
+  },
+  "x-ocsf-http-request": {
+    "fields": {
+      "http_headers_name": [
+        "http_request.http_headers.name"
+      ],
+      "http_headers_value": [
+        "http_request.http_headers.value"
+      ],
+      "http_method": [
+        "http_request.http_method"
+      ],
+      "prefix": [
+        "http_request.prefix"
+      ],
+      "referrer": [
+        "http_request.referrer"
+      ],
+      "uid": [
+        "http_request.uid"
+      ],
+      "user_agent": [
+        "http_request.user_agent"
+      ],
+      "value": [
+        "http_request.args"
+      ],
+      "version": [
+        "http_request.version"
+      ],
+      "x_forwarded_for": [
+        "http_request.x_forwarded_for"
+      ]
+    }
+  },
+  "x-ocsf-identity": {
+    "fields": {
+      "authorizations.decision": [
+        "identity.authorizations.decision"
+      ],
+      "authorizations.name": [
+        "identity.authorizations.policy.name"
+      ],
+      "authorizations.policy_desc": [
+        "identity.authorizations.policy.desc"
+      ],
+      "authorizations.policy_group_desc": [
+        "identity.authorizations.policy.group.desc"
+      ],
+      "authorizations.policy_group_namee": [
+        "identity.authorizations.policy.group.name"
+      ],
+      "authorizations.policy_group_privileges": [
+        "identity.authorizations.policy.group.privileges"
+      ],
+      "authorizations.policy_group_type": [
+        "identity.authorizations.policy.group.type"
+      ],
+      "authorizations.policy_group_uid": [
+        "identity.authorizations.policy.group.uid"
+      ],
+      "authorizations.uid": [
+        "identity.authorizations.policy.uid"
+      ],
+      "authorizations.version": [
+        "identity.authorizations.policy.version"
+      ],
+      "idp.name": [
+        "identity.idp.name"
+      ],
+      "idp.uid": [
+        "identity.idp.uid"
+      ],
+      "invoked_by": [
+        "identity.invoked_by"
+      ],
+      "message": [
+        "identity.message"
+      ],
+      "session.created_time": [
+        "identity.session.created_time"
+      ],
+      "session.credential_uid": [
+        "identity.session.credential_uid"
+      ],
+      "session.expiration_time": [
+        "identity.session.expiration_time"
+      ],
+      "session.issuer": [
+        "identity.session.issuer"
+      ],
+      "session.mfa": [
+        "identity.session.mfa"
+      ],
+      "session.uid": [
+        "identity.session.uid"
+      ]
+    }
+  },
+  "x-ocsf-malware": {
+    "fields": {
+      "base_score": [
+        "malware.cves.cvss.base_score"
+      ],
+      "classification_ids": [
+        "malware.classification_ids"
+      ],
+      "classifications": [
+        "malware.classifications"
+      ],
+      "created_time": [
+        "malware.cves.created_time"
+      ],
+      "cwe_uid": [
+        "malware.cves.cwe_uid"
+      ],
+      "cwe_url": [
+        "malware.cves.cwe_url"
+      ],
+      "depth": [
+        "malware.cves.cvss.depth"
+      ],
+      "lang": [
+        "malware.cves.product.lang"
+      ],
+      "modified_time": [
+        "malware.cves.modified_time"
+      ],
+      "name": [
+        "malware.name"
+      ],
+      "overall_score": [
+        "malware.cves.cvss.overall_score"
+      ],
+      "path": [
+        "malware.path"
+      ],
+      "provider": [
+        "malware.provider"
+      ],
+      "severity": [
+        "malware.cves.cvss.severity"
+      ],
+      "type": [
+        "malware.cves.type"
+      ],
+      "uid": [
+        "malware.uid"
+      ],
+      "value": [
+        "malware.cves.product.value"
+      ],
+      "vector_string": [
+        "malware.cves.cvss.vector_string"
+      ],
+      "vendor_name": [
+        "malware.cves.product.vendor_name"
+      ],
+      "version": [
+        "malware.cves.cvss.version"
+      ]
+    }
+  },
+  "x-ocsf-metadata": {
+    "fields": {
+      "correlation_uid": [
+        "metadata.correlation_uid"
+      ],
+      "labels": [
+        "metadata.labels"
+      ],
+      "logged_time": [
+        "metadata.logged_time"
+      ],
+      "modified_time": [
+        "metadata.modified_time"
+      ],
+      "processed_time": [
+        "metadata.processed_time"
+      ],
+      "sequence": [
+        "metadata.sequence"
+      ],
+      "uid": [
+        "metadata.uid"
+      ],
+      "version": [
+        "metadata.version"
+      ]
+    }
+  },
+  "x-ocsf-resources": {
+    "fields": {
+      "account_uid": [
+        "resources.account_uid"
+      ],
+      "cloud_partition": [
+        "resources.cloud_partition"
+      ],
+      "criticality": [
+        "resources.criticality"
+      ],
+      "details": [
+        "resources.details"
+      ],
+      "group_name": [
+        "resources.group_name"
+      ],
+      "labels": [
+        "resources.labels"
+      ],
+      "name": [
+        "resources.name"
+      ],
+      "owner": [
+        "resources.owner"
+      ],
+      "region": [
+        "resources.region"
+      ],
+      "type": [
+        "resources.type"
+      ],
+      "uid": [
+        "resources.uid"
+      ]
+    }
+  }
+}

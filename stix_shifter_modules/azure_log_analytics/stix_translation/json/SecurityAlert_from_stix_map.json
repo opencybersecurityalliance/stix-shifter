@@ -1,0 +1,83 @@
+{
+    "x-ibm-finding": {
+        "fields": {
+            "start": [
+                "StartTime",
+                "TimeGenerated"
+            ],
+            "end": [
+                "EndTime",
+                "ProcessingEndTime"
+            ],
+            "name": [
+                "AlertName"
+            ],
+            "time_observed": [
+                "TimeGenerated",
+                "EventTime"
+            ]
+        }
+    },
+    "x-oca-event": {
+        "fields": {
+            "created": [
+                "TimeGenerated"
+            ],
+            "provider": [
+                "ProviderName"
+            ],
+            "domain_ref": [
+                "DomainName"
+            ]
+        }
+    },
+    "x-azure-security-alert": {
+        "fields": {
+            "tenant_id": [
+                "TenantId"
+            ],
+            "subscription_id": [
+                "WorkspaceSubscriptionId"
+            ],
+            "resourceId": [
+                "_ResourceId"
+            ],
+            "alert_severity": [
+                "AlertSeverity"
+            ],
+            "description": [
+                "Description"
+            ],
+            "product_name": [
+                "ProductName"
+            ],
+            "vendor_name": [
+                "VendorName"
+            ],
+            "system_alertid": [
+                "SystemAlertId"
+            ],
+            "status": [
+                "Status"
+            ],
+            "extented_properties": [
+                "ExtentedProperties"
+            ],
+            "confidence_level": [
+                "ConfidenceLevel"
+            ],
+            "entities": [
+                "Entities"
+            ],
+            "display_name": [
+                "DisplayName"
+            ],
+            "workspace_resource_group": [
+                "WorkspaceResourceGroup"
+            ],
+            "compromised_entity": [
+                "CompromisedEntity"
+            ]
+        }
+    }
+}

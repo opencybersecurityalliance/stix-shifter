@@ -1,6 +1,8 @@
-##### Updated on 12/13/22
+##### Updated on 02/27/23
 ## Splunk Enterprise Security
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
 | > | > |
@@ -12,9 +14,11 @@
 | LIKE | encoders.like |
 | IN | encoders.set |
 | MATCHES | encoders.matches |
-| AND | {expr1} OR {expr2} |
-| OR | {expr1} OR {expr2} |
-| ISSUBSET | = |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
+| ISSUBSET | encoders.subset |
+| AND (Observation) | {expr1} OR {expr2} |
+| OR (Observation) | {expr1} OR {expr2} |
 | FOLLOWEDBY | latest=[search {expr2} | append [makeresults 1 | eval _time=0] | head 1 | return $_time] | where {expr1} |
 | <br> | |
 ### Searchable STIX objects and properties
@@ -43,7 +47,7 @@
 | **x-oca-event**:user_ref.user_id | user |
 | **x-oca-event**:url_ref.value | url |
 | **x-oca-asset**:hostname | host |
-| **directory**:path | file_path |
+| **directory**:path | file_path, process_path, parent_process_path |
 | **directory**:created | file_create_time |
 | **directory**:modified | file_modify_time |
 | **domain-name**:value | host, url |
@@ -71,21 +75,23 @@
 | **ipv4-addr**:value | src_ip, dest_ip |
 | **ipv6-addr**:value | src_ipv6, dest_ipv6 |
 | **mac-addr**:value | src_mac, dest_mac |
-| **network-traffic**:src_ref.value | src |
+| **network-traffic**:src_ref.value | src_ip |
 | **network-traffic**:src_port | src_port |
-| **network-traffic**:dst_ref.value | dest |
+| **network-traffic**:dst_ref.value | dest_ip |
 | **network-traffic**:dst_port | dest_port |
 | **network-traffic**:protocols[*] | protocol |
 | **network-traffic**:start | earliest |
 | **network-traffic**:end | latest |
-| **process**:name | process_name |
-| **process**:command_line | process |
-| **process**:pid | pid |
+| **process**:name | process_name, parent_process_name |
+| **process**:command_line | process, parent_process |
+| **process**:pid | process_id, parent_process_id |
 | **process**:creator_user_ref.account_login | user |
+| **process**:creator_user_ref.user_login | user |
 | **process**:binary_ref.parent_directory_ref.path | process_path |
 | **process**:binary_ref.name | process_exec |
 | **url**:value | url |
 | **user-account**:user_id | user |
+| **user-account**:account_login | user |
 | **windows-registry-key**:key | object |
 | **windows-registry-key**:values[*] | result |
 | **windows-registry-key**:creator_user_ref.account_login | user |

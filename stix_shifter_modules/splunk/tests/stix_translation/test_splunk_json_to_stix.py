@@ -24,6 +24,7 @@ options = {}
 
 sample_splunk_data_x_oca = {
     "src_ip": "123.123.123.123",
+    "src_mac": "12-5d-6a-52.78",
     "src_port": "56109",
     "dest_ip": "1.1.1.1",
     "dest_port": "9389",
@@ -224,11 +225,12 @@ class TestTransform(unittest.TestCase, object):
         file_hash = "MD5=5A0B0E6F407C89916515328F318842A1,SHA256=8FC86B75926043F048971696BC7A407615C9A03D9B1BFACC54785C8903B82A91,IMPHASH=406DD24835F1447987FB607C78597252"
         file_name = "sample.dll"
         file_size = 25536
+        process_guid = "7a97b85f-b34c-63be-c00d-000000007d00"
 
         data = {
             "event_count": count, "_time": time, "user": user,
             "process_name": name, "process_id": pid, "process_path": filePath,
-            "process_hash": file_hash, "process_exec": file_name
+            "process_hash": file_hash, "process_exec": file_name, "process_guid": process_guid
         }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
@@ -251,9 +253,10 @@ class TestTransform(unittest.TestCase, object):
 
         proc_obj = TestTransform.get_first_of_type(objects.values(), 'process')
         assert (proc_obj is not None), 'process object type not found'
-        assert (proc_obj.keys() == {'type', 'name', 'pid', 'binary_ref'})
+        assert (proc_obj.keys() == {'type', 'name', 'pid', 'binary_ref', 'x_unique_id'})
         assert (proc_obj['name'] == "test_process")
         assert (proc_obj['pid'] == 0)
+        assert (proc_obj['x_unique_id'] == '7a97b85f-b34c-63be-c00d-000000007d00')
 
         user_obj = TestTransform.get_first_of_type(objects.values(), 'user-account')
 
@@ -380,8 +383,8 @@ class TestTransform(unittest.TestCase, object):
 
     def test_custom_mapping(self):
 
-        data_source = "{\"type\": \"identity\", \"id\": \"identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3\", \"name\": \"Splunk\", \"identity_class\": \"events\"}"
-        data = "[{\"tag\":\"network\", \"src_ip\": \"127.0.0.1\"}]"
+        data_source = json.loads("{\"type\": \"identity\", \"id\": \"identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3\", \"name\": \"Splunk\", \"identity_class\": \"events\"}")
+        data = json.loads("[{\"tag\":\"network\", \"src_ip\": \"127.0.0.1\"}]")
 
         options = {
             "mapping": {
@@ -531,6 +534,7 @@ class TestTransform(unittest.TestCase, object):
             "process_name": "powershell.exe",
             "process_exec": "powershell.exe",
             "process_id": 2,
+            "process_guid": "7a97b85f-b34c-63be-c00d-000000007d00",
             "process_path": "C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0",
             "parent_process_name": "cmd.exe",
             "parent_process_id": 1,
@@ -562,9 +566,10 @@ class TestTransform(unittest.TestCase, object):
         assert ('parent_ref' in proc_obj or 'parent_ref' in parent_proc_obj)
         if 'parent_ref' in parent_proc_obj:
             proc_obj, parent_proc_obj = parent_proc_obj, proc_obj
-        assert (proc_obj.keys() == {'type', 'name', 'pid', 'binary_ref', 'parent_ref', 'opened_connection_refs'})
+        assert (proc_obj.keys() == {'type', 'name', 'pid', 'binary_ref', 'parent_ref', 'opened_connection_refs', 'x_unique_id'})
         assert (proc_obj['name'] == "powershell.exe")
         assert (proc_obj['pid'] == 2)
+        assert (proc_obj['x_unique_id'] == '7a97b85f-b34c-63be-c00d-000000007d00')
         assert (objects[proc_obj['parent_ref']] == parent_proc_obj)
         assert (parent_proc_obj['name'] == 'cmd.exe')
         assert (parent_proc_obj['pid'] == 1)
@@ -720,6 +725,23 @@ class TestTransform(unittest.TestCase, object):
 
         x_oca_asset = TestTransform.get_first_of_type(object_vals, 'x-oca-asset')
         self.assertEqual(x_oca_asset['hostname'], 'WIN01')
+
+
+    def test_mac_addr(self):
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [sample_splunk_data_x_oca], get_module_transformers(MODULE), options,
+            callback=hash_type_lookup)
+
+        assert (result_bundle['type'] == 'bundle')
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+
+        assert ('objects' in observed_data)
+        objects = observed_data['objects']
+        object_vals = objects.values()
+
+        mac = TestTransform.get_first_of_type(object_vals, 'mac-addr')
+        self.assertEqual(mac['value'], '00:12:5d:6a:52:78')
 
 if __name__ == '__main__':
     unittest.main()
