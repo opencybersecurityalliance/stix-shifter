@@ -3,6 +3,7 @@ from unittest.mock import patch
 import unittest
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter.stix_transmission.stix_transmission import run_in_thread
+from stix_shifter_modules.msatp.stix_transmission import connector
 from stix_shifter_utils.utils.error_response import ErrorCode
 from tests.utils.async_utils import get_mock_response, get_adal_mock_response
 
@@ -23,8 +24,7 @@ class TestMSATPConnection(unittest.TestCase):
             "host": "hostbla",
             "port": 8080,
             "selfSignedCert": "cert"
-            }
-
+        }
 
     def test_is_async(self, mock_adal_auth):
         mock_adal_auth.return_value = get_adal_mock_response()
@@ -35,14 +35,13 @@ class TestMSATPConnection(unittest.TestCase):
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint(self, mock_ping_response, mock_adal_auth):
-
         mock_adal_auth.return_value = get_adal_mock_response()
         mocked_return_value = '["mock", "placeholder"]'
 
         mock_ping_response.return_value = get_mock_response(200, mocked_return_value)
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
         ping_response = transmission.ping()
-        
+
         assert ping_response is not None
         assert ping_response['success']
 
@@ -130,7 +129,6 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
     def test_results_response_exception(self, mock_results_response, mock_adal_auth):
@@ -143,7 +141,7 @@ class TestMSATPConnection(unittest.TestCase):
                 "| order by Timestamp desc | where LocalPort < 443) "
         offset = 0
         length = 1
-        
+
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
         results_response = transmission.results(query, offset, length)
 
@@ -222,3 +220,47 @@ class TestMSATPConnection(unittest.TestCase):
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
+
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.__new__', autospec=True)
+    def test_join_query_with_alerts(self, mock_api_client, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
+        query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
+        entry_point = connector.Connector(self.connection(), self.config())
+        joined_query, partial_query = entry_point.join_query_with_alerts(query)
+        assert joined_query == '(((union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))| join kind=leftouter (DeviceAlertEvents | summarize AlertId=make_list(AlertId), Severity=make_list(Severity), Title=make_list(Title), Category=make_list(Category), AttackTechniques=make_list(AttackTechniques) by DeviceName, ReportId, Timestamp) on ReportId, DeviceName, Timestamp)| join kind=leftouter (DeviceNetworkInfo | where NetworkAdapterStatus == "Up" | project Timestamp, DeviceId, MacAddress, IPAddresses| summarize IPAddressesSet=make_set(IPAddresses), MacAddressSet=make_set(MacAddress) by DeviceId, Timestamp) on DeviceId) | where Timestamp2 < Timestamp | summarize arg_max(Timestamp2, *) by ReportId, DeviceName, Timestamp) | join kind=leftouter (DeviceInfo | project Timestamp, DeviceId, PublicIP, OSArchitecture, OSPlatform, OSVersion) on DeviceId | where Timestamp3 < Timestamp | summarize arg_max(Timestamp3, *) by ReportId, DeviceName, Timestamp'
+        assert partial_query == '(union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9")) | join kind=leftouter (DeviceAlertEvents | summarize AlertId=make_list(AlertId), Severity=make_list(Severity), Title=make_list(Title), Category=make_list(Category), AttackTechniques=make_list(AttackTechniques) by DeviceName, ReportId, Timestamp) on ReportId, DeviceName, Timestamp)'
+
+        query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
+        entry_point = connector.Connector(self.connection(), self.config())
+        joined_query, partial_query = entry_point.join_query_with_alerts(query)
+        assert joined_query == query
+        assert partial_query is None
+
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.__new__', autospec=True)
+    def test_unify_alert_fields(self, mock_api_client, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
+        entry_point = connector.Connector(self.connection(), self.config())
+        data = {
+            'AlertId': ['da111111111111111111_-1111111111'],
+            'Timestamp': '2023-03-17T16:59:12.3036191Z',
+            'Severity': ['High'],
+            'Category': ['InitialAccess'],
+            'Title': ['Suspicious URL clicked'],
+            'AttackTechniques': ['["Spearphishing Link (T1566.002)"]'],
+            'ReportId': 1234,
+            'Table': 'DeviceEvents'
+        }
+
+        unified = entry_point.unify_alert_fields(data)
+        assert unified is not None
+        alerts = unified.get("Alerts")
+        assert alerts is not None
+        assert len(alerts) == 1
+        alert = alerts[0]
+        assert alert.get("AlertId") == 'da111111111111111111_-1111111111'
+        assert alert.get("Title") == 'Suspicious URL clicked'
+        ttps = alert.get("AttackTechniques")
+        assert ttps is not None
+        assert len(ttps) == 1
+        ttp = ttps[0]
+        assert ttp == 'Spearphishing Link (T1566.002)'

@@ -1,4 +1,6 @@
 import json
+import re
+
 import adal
 from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from .api_client import APIClient
@@ -9,7 +11,15 @@ from datetime import datetime, timedelta
 
 
 def merge_alert_events(data):
-    keys = ['TableName', 'AlertId', 'Timestamp', 'DeviceId', 'DeviceName', 'Severity', 'Category', 'Title', 'AttackTechniques', 'ReportId']
+    """
+    msatp has a weird behaviour for some alerts - it returns multiple items of the same alert. all properties
+    are identical except: 'FileName', 'SHA1', 'RemoteUrl','RemoteIP'
+    this causes one event to be duplicated multiple times with the same alert with hardly any difference
+    also - the presence of FileName and SHA1 creates a redundant confusing process object
+    to eliminate this - we merge all the alerts that have the same timestamp, device, report title etc
+    """
+    keys = ['TableName', 'AlertId', 'Timestamp', 'DeviceId', 'DeviceName', 'Severity', 'Category', 'Title',
+            'AttackTechniques', 'ReportId']
     alerts = filter(lambda x: x["TableName"] == "DeviceAlertEvents", data)
     non_alerts = filter(lambda x: x["TableName"] != "DeviceAlertEvents", data)
     seen_alerts = set()
@@ -20,6 +30,19 @@ def merge_alert_events(data):
             merged_alerts.append(alert)
             seen_alerts.add(key)
     return merged_alerts + list(non_alerts)
+
+
+def remove_duplicate_fields(event_data):
+    event = copy.deepcopy(event_data)
+    for k in event_data.keys():
+        if k[-1:].isdigit() and 'SHA' not in k and 'MD' not in k:
+            event.pop(k)
+    return event
+
+
+def get_table_name(q):
+    regex = r"find withsource = TableName in\s*\(([A-Za-z]+)\s*\)"
+    return re.search(regex, q).group(1)
 
 
 class Connector(BaseJsonSyncConnector):
@@ -78,22 +101,8 @@ class Connector(BaseJsonSyncConnector):
         else:
             self.init_error = True
 
-    @staticmethod
-    def remove_duplicate_fields(event_data):
-        event = copy.deepcopy(event_data)
-        for k in event_data.keys():
-            if any(char.isdigit() for char in k) and 'SHA' not in k and 'MD' not in k:
-                event.pop(k)
-        return event
-
-    @staticmethod
-    def get_table_name(q):
-        ind_s = q.find('(', 1)
-        ind_e = q.find(')')
-        return q[ind_s + 1:ind_e]
-
     def join_query_with_alerts(self, query):
-        table = Connector.get_table_name(query)
+        table = get_table_name(query)
         if 'Alert' in table:
             self.alert_mode = True
             full_query = query
@@ -199,7 +208,7 @@ class Connector(BaseJsonSyncConnector):
             if not q_return_obj['data'] and not self.alert_mode:
                 partial_return_obj = dict()
                 joined_query = partial_query
-                response = self.api_client.run_search(joined_query, offset, length)
+                response = await self.api_client.run_search(joined_query, offset, length)
                 partial_return_obj = self._handle_errors(response, partial_return_obj)
                 response_json = json.loads(partial_return_obj["data"])
                 partial_return_obj['data'] = response_json['Results']
@@ -235,12 +244,14 @@ class Connector(BaseJsonSyncConnector):
                 elif self.alert_mode and all([deviceName, reportId, timestamp]):
                     # query events table according to alert fields
                     found_events = True
-                    events_query = "union {}".format(','.join([Connector.events_query.format(q, timestamp, deviceName, reportId) for q in Connector.EVENTS_TABLES]))
+                    events_query = "union {}".format(','.join(
+                        [Connector.events_query.format(q, timestamp, deviceName, reportId) for q in
+                         Connector.EVENTS_TABLES]))
                     joined_query = Connector.events_and_device_info.format(events_query,
                                                                            Connector.network_info_query,
                                                                            Connector.device_info_query)
                     print("joining alert with events: ", joined_query)
-                    response = self.api_client.run_search(joined_query, offset, length)
+                    response = await self.api_client.run_search(joined_query, offset, length)
                     events_return_obj = dict()
                     events_return_obj = self._handle_errors(response, events_return_obj)
                     response_json = json.loads(events_return_obj["data"])
@@ -248,7 +259,7 @@ class Connector(BaseJsonSyncConnector):
                     # replace the lookup_table with 'table' alert's field, so the to_stix mapping will be
                     # according to 'table' mapping
                     if not events_return_obj['data']:
-                        response = self.api_client.run_search(events_query, offset, length)
+                        response = await self.api_client.run_search(events_query, offset, length)
                         events_return_obj = dict()
                         events_return_obj = self._handle_errors(response, events_return_obj)
                         response_json = json.loads(events_return_obj["data"])
@@ -267,8 +278,7 @@ class Connector(BaseJsonSyncConnector):
                         lookup_table = table
                         event_build_data = dict()
                         event_obj = events_return_obj['data'][0]
-                        event_obj = (Connector.remove_duplicate_fields
-                                     (event_obj))
+                        event_obj = (remove_duplicate_fields(event_obj))
                         event_obj.pop('TableName')
                         merged_alert_event = copy.deepcopy(build_data[table])
                         event_obj = {k: v for k, v in event_obj.items() if v}
@@ -298,7 +308,7 @@ class Connector(BaseJsonSyncConnector):
 
                 if 'AlertId' in build_data[lookup_table] and Connector.make_alert_as_list:
                     build_data[lookup_table] = ({k: ([v] if k in Connector.ALERT_FIELDS and
-                                                self.alert_mode else v) for k, v in
+                                                            self.alert_mode else v) for k, v in
                                                  build_data[lookup_table].items()})
                     build_data[lookup_table] = self.unify_alert_fields(build_data[lookup_table])
 
@@ -328,7 +338,8 @@ class Connector(BaseJsonSyncConnector):
                     # build_data[lookup_table] = {(prefix + k if k in process_fields else k): v
                     #                             for k, v in build_data[lookup_table].items()}
                 if lookup_table == "DeviceEvents":
-                    if 'ProcessId' not in build_data[lookup_table] or build_data[lookup_table]['ProcessId'] is None or build_data[lookup_table]['ProcessId'] == "":
+                    if 'ProcessId' not in build_data[lookup_table] or build_data[lookup_table]['ProcessId'] is None or \
+                            build_data[lookup_table]['ProcessId'] == "":
                         build_data[lookup_table]["_missingChildShouldMapInitiatingPid"] = "true"
 
                 build_data[lookup_table]['event_count'] = '1'

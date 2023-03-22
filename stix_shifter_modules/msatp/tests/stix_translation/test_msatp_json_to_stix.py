@@ -1,5 +1,8 @@
 import unittest
 import json
+
+from stix_shifter_modules.msatp.tests.test_utils import resolve_ref, all_keys_in_object, hashes_are_correct, \
+    resolve_refs
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.msatp.entry_point import EntryPoint
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
@@ -337,85 +340,6 @@ device_event_with_alert = {
 }
 
 
-def all_keys_in_object(keys_to_check, obj):
-    """checks that all the keys in keys_to_check are present in the object (in no certain order)
-
-    parameters
-    ----------
-    keys_to_check : set
-        a set of the properties that the object must have
-    obj : dict
-        the object to check against
-    """
-    return all(key in obj for key in keys_to_check)
-
-
-def resolve_refs(objects, obj, ref, ref_type, error_msg):
-    """
-    resolves an array of references, checks that each is not none and optionaly its type and returns a list of
-    the referenced objects
-
-    parameters
-    ----------
-    objects : dict
-        the objects dictionary
-    obj : dict
-        the current object
-    ref : str
-        the name of the reference property. for example: host_ref
-    ref_type : str
-        the type of the objects being referenced or None if they are not uniform
-    error_msg : str
-        the error to show if assertions fail
-    """
-    assert ref in obj
-    ref_arr = obj[ref]
-    assert type(ref_arr) is list
-    arr = []
-    for ref_idx in ref_arr:
-        assert ref_idx in objects
-        ref_obj = objects[ref_idx]
-        assert ref_obj is not None, error_msg
-        assert 'type' in ref_obj, error_msg
-        if ref_type is not None:
-            assert ref_obj['type'] == ref_type
-        arr.append(ref_obj)
-    return arr
-
-
-def resolve_ref(objects, obj, ref, ref_type, error_msg):
-    """
-    resolves an object from a reference, checks that it is not none and its type and returns the referenced object
-
-    parameters
-    ----------
-    objects : dict
-        the objects dictionary
-    obj : dict
-        the current object
-    ref : str
-        the name of the reference property. for example: host_ref
-    ref_type : str
-        the type of the object being referenced
-    error_msg : str
-        the error to show if assertions fail
-    """
-    assert ref in obj, f"property {ref} not found in object {obj.get('type')}"
-    ref_idx = obj[ref]
-    assert ref_idx in objects, f"index {ref_idx} from reference {ref} not found in objects"
-    ref_obj = objects[ref_idx]
-    assert ref_obj is not None, error_msg
-    assert 'type' in ref_obj, "referenced object is missing the type property"
-    assert ref_obj['type'] == ref_type, f"type of referenced object is not as expected. expected {ref_obj} found {ref_obj['type']}"
-    return ref_obj
-
-
-def hashes_are_correct(file_obj, hashes):
-    assert file_obj['hashes']['MD5'] == hashes["MD5"]
-    assert file_obj['hashes']['SHA-1'] == hashes["SHA1"]
-    assert file_obj['hashes']['SHA-256'] == hashes["SHA256"]
-
-
 def translate_to_objects(data):
     translation = stix_translation.StixTranslation()
     result_bundle = translation.translate(module='msatp', translate_type='results', data_source=data_source,
@@ -646,8 +570,10 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert event['action'] == "ConnectionSuccess"
         assert event.get("provider") == "Microsoft Defender for Endpoint"
         assert event.get("created") == "2023-03-17T20:19:46.6337905Z"
-        external = resolve_ref(objects, event, "external_ref", "external-reference", "missing external ref link in event")
-        assert external.get("url") == "https://security.microsoft.com/machines/deviceid/timeline?from=2023-03-17T20:19:45.000Z&to=2023-03-17T20:19:47.000Z"
+        external = resolve_ref(objects, event, "external_ref", "external-reference",
+                               "missing external ref link in event")
+        assert external.get(
+            "url") == "https://security.microsoft.com/machines/deviceid/timeline?from=2023-03-17T20:19:45.000Z&to=2023-03-17T20:19:47.000Z"
         url = resolve_ref(objects, event, 'url_ref', "url", "missing url ref in event")
         assert url.get("value") == "https://malicious.com"
         domain = resolve_ref(objects, event, 'domain_ref', 'domain-name', 'missing domain ref in event')
