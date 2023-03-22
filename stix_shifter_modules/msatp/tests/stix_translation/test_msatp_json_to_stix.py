@@ -418,8 +418,8 @@ def hashes_are_correct(file_obj, hashes):
 
 def translate_to_objects(data):
     translation = stix_translation.StixTranslation()
-    result_bundle = translation.translate(module='msatp', translate_type='results', data_source=json.dumps(data_source),
-                                          data=json.dumps([data]))
+    result_bundle = translation.translate(module='msatp', translate_type='results', data_source=data_source,
+                                          data=[data])
     result_bundle_objects = result_bundle['objects']
     result_bundle_identity = result_bundle_objects[0]
     assert result_bundle_identity['type'] == data_source['type']

@@ -189,7 +189,7 @@ class Connector(BaseJsonSyncConnector):
                 return self.adal_response
             q_return_obj = dict()
             joined_query, partial_query = self.join_query_with_alerts(query)
-            response = self.api_client.run_search(joined_query, offset, length)
+            response = await self.api_client.run_search(joined_query, offset, length)
             q_return_obj = self._handle_errors(response, q_return_obj)
             response_json = json.loads(q_return_obj["data"])
             q_return_obj['data'] = response_json['Results']
