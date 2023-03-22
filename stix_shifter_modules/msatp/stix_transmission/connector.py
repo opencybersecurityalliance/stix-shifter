@@ -45,6 +45,56 @@ def get_table_name(q):
     return re.search(regex, q).group(1)
 
 
+def organize_registry_data(device_registry_events_data):
+    registry_value_dict = {}
+    for k in ["RegistryValueData", "RegistryValueName", "RegistryValueType"]:
+        if k in device_registry_events_data:
+            registry_value_dict[k] = device_registry_events_data[k]
+            device_registry_events_data.pop(k)
+        else:
+            registry_value_dict[k] = ''
+    device_registry_events_data["RegistryValues"] = [registry_value_dict]
+
+
+def organize_ips(data):
+    ips_comp_lst = data.pop('IPAddressesSet')
+    flat_lst = [ip_obj['IPAddress'] for ips in ips_comp_lst for ip_obj in json.loads(ips) if 'IPAddress' in ip_obj]
+    data['IPAddresses'] = flat_lst
+
+
+def create_event_link(data, timestamp):
+    try:
+        if 'DeviceId' in data:
+            # parse timestamp to date object striping nanoseconds
+            timestamp_dt = datetime.strptime(timestamp[:-9], "%Y-%m-%dT%H:%M:%S")
+            timeline_start = (timestamp_dt - timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%S") + ".000Z"
+            timeline_end = (timestamp_dt + timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%S") + ".000Z"
+            event_link = 'https://%s/machines/%s/timeline?from=%s&to=%s' % (
+                'security.microsoft.com', data.get('DeviceId'), timeline_start, timeline_end)
+            data['event_link'] = event_link
+    except Exception as ex:
+        data['event_link'] = ''
+
+
+def remove_duplicate_ips(build_data, lookup_table):
+    ## remove duplicate ips between LocalIP, PublicIP and IPAddresses:
+    if 'PublicIP' in build_data[lookup_table] and 'LocalIP' in build_data[lookup_table] and \
+            build_data[lookup_table]['PublicIP'] == build_data[lookup_table]['LocalIP']:
+        build_data[lookup_table].pop('PublicIP')
+    remove_duplicate_ips_from(build_data, lookup_table, 'LocalIP')
+    remove_duplicate_ips_from(build_data, lookup_table, 'PublicIP')
+
+
+def remove_duplicate_ips_from(build_data, lookup_table, prop_name):
+    if 'IPAddresses' in build_data[lookup_table] and prop_name in build_data[lookup_table]:
+        filtered = [x for x in build_data[lookup_table]['IPAddresses'] if
+                    not x == build_data[lookup_table][prop_name]]
+        if len(filtered) > 0:
+            build_data[lookup_table]['IPAddresses'] = filtered
+        else:
+            build_data[lookup_table].pop('IPAddresses')
+
+
 class Connector(BaseJsonSyncConnector):
     init_error = None
     logger = logger.set_logger(__name__)
@@ -86,7 +136,6 @@ class Connector(BaseJsonSyncConnector):
     EVENTS_TABLES = ['DeviceNetworkEvents', 'DeviceProcessEvents', 'DeviceFileEvents', 'DeviceRegistryEvents',
                      'DeviceEvents', 'DeviceImageLoadEvents']
     ALERT_FIELDS = ['AlertId', 'Severity', 'Title', 'Category', 'AttackTechniques']
-    DEFENDER_HOST = 'security.microsoft.com'
 
     def __init__(self, connection, configuration):
         """Initialization.
@@ -228,24 +277,24 @@ class Connector(BaseJsonSyncConnector):
                 lookup_table = event_data['TableName']
                 event_data.pop('TableName')
                 build_data = dict()
-                build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
+                build_data[lookup_table] = {k: v for k, v in event_data.items() if v}
                 # values for query
-                table = build_data[lookup_table].get('Table', None)
-                deviceName = build_data[lookup_table].get('DeviceName', None)
-                reportId = build_data[lookup_table].get('ReportId', None)
-                timestamp = build_data[lookup_table].get('Timestamp', None)
+                table = build_data[lookup_table].get('Table')
+                device_name = build_data[lookup_table].get('DeviceName')
+                report_id = build_data[lookup_table].get('ReportId')
+                timestamp = build_data[lookup_table].get('Timestamp')
 
                 if self.alert_mode and table not in Connector.EVENTS_TABLES:
                     Connector.make_alert_as_list = False
                     if 'AttackTechniques' in build_data[lookup_table]:
-                        attackTechniques = json.loads(build_data[lookup_table]['AttackTechniques'])
-                        build_data[lookup_table]['AttackTechniques'] = attackTechniques
+                        attack_techniques = json.loads(build_data[lookup_table]['AttackTechniques'])
+                        build_data[lookup_table]['AttackTechniques'] = attack_techniques
 
-                elif self.alert_mode and all([deviceName, reportId, timestamp]):
+                elif self.alert_mode and all([device_name, report_id, timestamp]):
                     # query events table according to alert fields
                     found_events = True
                     events_query = "union {}".format(','.join(
-                        [Connector.events_query.format(q, timestamp, deviceName, reportId) for q in
+                        [Connector.events_query.format(q, timestamp, device_name, report_id) for q in
                          Connector.EVENTS_TABLES]))
                     joined_query = Connector.events_and_device_info.format(events_query,
                                                                            Connector.network_info_query,
@@ -268,8 +317,8 @@ class Connector(BaseJsonSyncConnector):
                         if not events_return_obj['data']:
                             Connector.make_alert_as_list, found_events = False, False
                             if 'AttackTechniques' in build_data[lookup_table]:
-                                attackTechniques = json.loads(build_data[lookup_table]['AttackTechniques'])
-                                build_data[lookup_table]['AttackTechniques'] = attackTechniques
+                                attack_techniques = json.loads(build_data[lookup_table]['AttackTechniques'])
+                                build_data[lookup_table]['AttackTechniques'] = attack_techniques
 
                     if found_events:
                         val = build_data[lookup_table]
@@ -292,19 +341,7 @@ class Connector(BaseJsonSyncConnector):
                 event_data = copy.deepcopy(build_data[lookup_table])
 
                 # link the event to ms atp console device timeline with one second before and after the event https://security.microsoft.com/machines/<MachineId>/timeline?from=<start>&to=<end>
-                try:
-                    if 'DeviceId' in build_data[lookup_table]:
-                        timestamp_dt = datetime.strptime(timestamp[:-9],
-                                                         "%Y-%m-%dT%H:%M:%S")  # parse timestamp to date opbject striping nanoseconds
-                        timeline_start = (timestamp_dt - timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%S") + ".000Z"
-                        timeline_end = (timestamp_dt + timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%S") + ".000Z"
-                        event_link = 'https://%s/machines/%s/timeline?from=%s&to=%s' % (
-                            self.DEFENDER_HOST, build_data[lookup_table].get('DeviceId'), timeline_start, timeline_end)
-                        build_data[lookup_table]['event_link'] = event_link
-                except Exception as ex:
-                    self.logger.error(
-                        "error while parsing event_link (external ref) from event. this error does not stop translation {}".format(
-                            str(ex)))
+                create_event_link(build_data[lookup_table], timestamp)
 
                 if 'AlertId' in build_data[lookup_table] and Connector.make_alert_as_list:
                     build_data[lookup_table] = ({k: ([v] if k in Connector.ALERT_FIELDS and
@@ -313,30 +350,10 @@ class Connector(BaseJsonSyncConnector):
                     build_data[lookup_table] = self.unify_alert_fields(build_data[lookup_table])
 
                 if 'IPAddressesSet' in build_data[lookup_table]:
-                    ips_comp_lst = build_data[lookup_table].pop('IPAddressesSet')
-                    flat_lst = [ip_obj['IPAddress'] for ip_lst in ips_comp_lst for ip_obj in json.loads(ip_lst) if
-                                'IPAddress' in ip_obj]
-                    build_data[lookup_table]['IPAddresses'] = flat_lst
+                    organize_ips(build_data[lookup_table])
                 if lookup_table == "DeviceRegistryEvents":
-                    registry_build_data = copy.deepcopy(build_data)
-                    registry_build_data[lookup_table]["RegistryValues"] = []
-                    registry_value_dict = {}
-                    for k, v in build_data[lookup_table].items():
-                        if k in ["RegistryValueData", "RegistryValueName", "RegistryValueType"]:
-                            registry_value_dict.update({k: v})
-                            registry_build_data[lookup_table].pop(k)
-                    registry_build_data[lookup_table]["RegistryValues"].append(registry_value_dict)
-
-                    build_data[lookup_table] = registry_build_data[lookup_table]
+                    organize_registry_data(build_data[lookup_table])
                 # handle two different type of process events: ProcessCreate, OpenProcess
-                if lookup_table == "DeviceProcessEvents":
-                    process_fields = ["ProcessId", "ProcessCommandLine", "ProcessCreationTime", "AccountSid",
-                                      "AccountName"]
-                    event_type = build_data[lookup_table]['ActionType']
-                    # prefix = 'Created' if event_type == 'ProcessCreated' else 'Opened'
-                    # # rename fields in order to map differently events of different types
-                    # build_data[lookup_table] = {(prefix + k if k in process_fields else k): v
-                    #                             for k, v in build_data[lookup_table].items()}
                 if lookup_table == "DeviceEvents":
                     if 'ProcessId' not in build_data[lookup_table] or build_data[lookup_table]['ProcessId'] is None or \
                             build_data[lookup_table]['ProcessId'] == "":
@@ -345,7 +362,7 @@ class Connector(BaseJsonSyncConnector):
                 build_data[lookup_table]['event_count'] = '1'
                 build_data[lookup_table]['original_ref'] = json.dumps(event_data)
 
-                self.remove_duplicate_ips(build_data, lookup_table)
+                remove_duplicate_ips(build_data, lookup_table)
 
                 lst_len = len(table_event_data)
                 table_event_data.insert(lst_len, build_data)
@@ -364,23 +381,6 @@ class Connector(BaseJsonSyncConnector):
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise ex
-
-    def remove_duplicate_ips(self, build_data, lookup_table):
-        ## remove duplicate ips between LocalIP, PublicIP and IPAddresses:
-        if 'PublicIP' in build_data[lookup_table] and 'LocalIP' in build_data[lookup_table] and \
-                build_data[lookup_table]['PublicIP'] == build_data[lookup_table]['LocalIP']:
-            build_data[lookup_table].pop('PublicIP')
-        self.remove_duplicate_ips_from(build_data, lookup_table, 'LocalIP')
-        self.remove_duplicate_ips_from(build_data, lookup_table, 'PublicIP')
-
-    def remove_duplicate_ips_from(self, build_data, lookup_table, prop_name):
-        if 'IPAddresses' in build_data[lookup_table] and prop_name in build_data[lookup_table]:
-            filtered = [x for x in build_data[lookup_table]['IPAddresses'] if
-                        not x == build_data[lookup_table][prop_name]]
-            if len(filtered) > 0:
-                build_data[lookup_table]['IPAddresses'] = filtered
-            else:
-                build_data[lookup_table].pop('IPAddresses')
 
     def generate_token(self, connection, configuration):
         """To generate the Token

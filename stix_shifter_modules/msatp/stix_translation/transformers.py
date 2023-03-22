@@ -62,7 +62,7 @@ class FormatMacList(ValueTransformer):
 
 
 class IfValidUrl(ValueTransformer):
-    """A value transformer to extract domain name from url"""
+    """returns a url if its valid, empty string otherwise"""
 
     @staticmethod
     def transform(value):

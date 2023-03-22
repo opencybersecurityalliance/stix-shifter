@@ -4,6 +4,7 @@ from unittest.mock import patch
 import unittest
 from tests.utils.async_utils import get_adal_mock_response
 
+
 @patch('stix_shifter_modules.msatp.stix_transmission.connector.adal.AuthenticationContext')
 class TestMSATPConnection(unittest.TestCase):
     def config(self):
@@ -108,8 +109,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert proc_event2.get("TableName") == "DeviceProcessEvents"
         assert proc_event2.get("DeviceName") == "host2.test.com"
 
-
-    def test_remove_uplicate_fields(self, mock_adal_auth):
+    def test_remove_duplicate_fields(self, mock_adal_auth):
         data = {
             'ReportId': 1234,
             'DeviceName': 'host.example.com',
@@ -131,7 +131,6 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'DeviceId2' not in cleaned
         assert 'Timestamp1' not in cleaned
         assert 'Timestamp2' not in cleaned
-
 
     def test_get_table_name(self, mock_adal_auth):
         query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
@@ -182,3 +181,97 @@ class TestMSATPConnection(unittest.TestCase):
         assert len(ttps) == 1
         ttp = ttps[0]
         assert ttp == 'Spearphishing Link (T1566.002)'
+
+    def test_organize_registry_data(self, mock_adal_auth):
+        data = {
+            "DeviceRegistryEvents": {
+                "TableName": "DeviceRegistryEvents",
+                "Timestamp": "2019-10-10T10:43:07.2363291Z",
+                "DeviceId": "db40e68dd7358aa450081343587941ce96ca4777",
+                "DeviceName": "testmachine1",
+                "ActionType": "RegistryValueSet",
+                "RegistryKey": "HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\ControlSet001\\\\Services\\\\WindowsAzureGuestAgent",
+                "RegistryValueType": "Binary",
+                "RegistryValueName": "FailureActions",
+                "RegistryValueData": ""
+            }
+        }
+
+        connector.organize_registry_data(data["DeviceRegistryEvents"])
+        assert "RegistryValues" in data["DeviceRegistryEvents"]
+        values = data["DeviceRegistryEvents"]["RegistryValues"]
+        assert len(values) == 1
+        val = values[0]
+        assert val.get("RegistryValueType") == "Binary"
+        assert val.get("RegistryValueName") == "FailureActions"
+        assert val.get("RegistryValueData") == ""
+
+    def test_organize_registry_data(self, mock_adal_auth):
+        data = {
+            "DeviceRegistryEvents": {
+                "TableName": "DeviceRegistryEvents",
+                "Timestamp": "2019-10-10T10:43:07.2363291Z",
+                "DeviceId": "db40e68dd7358aa450081343587941ce96ca4777",
+                "DeviceName": "testmachine1",
+                "ActionType": "RegistryValueSet",
+                "RegistryKey": "HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\ControlSet001\\\\Services\\\\WindowsAzureGuestAgent",
+                "RegistryValueType": "Binary",
+                "RegistryValueName": "FailureActions",
+                "RegistryValueData": ""
+            }
+        }
+
+        connector.organize_registry_data(data["DeviceRegistryEvents"])
+        assert "RegistryValues" in data["DeviceRegistryEvents"]
+        values = data["DeviceRegistryEvents"]["RegistryValues"]
+        assert len(values) == 1
+        val = values[0]
+        assert val.get("RegistryValueType") == "Binary"
+        assert val.get("RegistryValueName") == "FailureActions"
+        assert val.get("RegistryValueData") == ""
+
+    def test_organize_ips(self, mock_adal_auth):
+        data = {
+            "DeviceRegistryEvents": {
+                "IPAddressesSet": ["[{\"IPAddress\":\"9.9.9.9\",\"SubnetPrefix\":24,\"AddressType\":\"Private\"}]"]
+            }
+        }
+        connector.organize_ips(data["DeviceRegistryEvents"])
+        assert "IPAddresses" in data["DeviceRegistryEvents"]
+        values = data["DeviceRegistryEvents"]["IPAddresses"]
+        assert len(values) == 1
+        assert values[0] == "9.9.9.9"
+
+    def test_create_event_link(self, mock_adal_auth):
+        data = {
+                "DeviceId": "deviceid"
+        }
+        connector.create_event_link(data, "2019-10-10T10:43:07.2363291Z")
+        assert data.get("event_link") == "https://security.microsoft.com/machines/deviceid/timeline?from=2019-10-10T10:43:06.000Z&to=2019-10-10T10:43:08.000Z"
+
+    def test_remove_duplicate_ips(self, mock_adal_auth):
+        data = {
+            "DeviceEvents": {
+                "PublicIP": "9.9.9.9",
+                "LocalIP": "9.9.9.9",
+                "IPAddresses": ["9.9.9.9", "9.9.9.1"]
+            }
+        }
+        connector.remove_duplicate_ips(data, "DeviceEvents")
+        assert "PublicIP" not in data["DeviceEvents"]
+        assert data["DeviceEvents"].get("LocalIP") == "9.9.9.9"
+        assert len(data["DeviceEvents"]["IPAddresses"]) == 1
+        assert data["DeviceEvents"]["IPAddresses"][0] == "9.9.9.1"
+
+    def test_do_not_remove_duplicate_ips(self, mock_adal_auth):
+        data = {
+            "DeviceEvents": {
+                "PublicIP": "9.9.9.1",
+                "LocalIP": "9.9.9.2",
+                "IPAddresses": ["9.9.9.3", "9.9.9.4"]
+            }
+        }
+        connector.remove_duplicate_ips(data, "DeviceEvents")
+        assert data["DeviceEvents"].get("PublicIP") == "9.9.9.1"
+        assert data["DeviceEvents"].get("LocalIP") == "9.9.9.2"
+        assert len(data["DeviceEvents"]["IPAddresses"]) == 2
