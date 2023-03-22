@@ -569,45 +569,45 @@
     ],
     "vlan": {
       "id": {
-        "key": "x-ecs-network.vlan_id",
-        "object": "network"
+        "key": "network_traffic.x_vlan.id",
+        "object": "nt"
       },
       "name": {
-        "key": "x-ecs-network.vlan_name",
-        "object": "network"
+        "key": "network_traffic.x_vlan.name",
+        "object": "nt"
       }
     },
     "inner": {
       "vlan": {
         "id": {
-          "key": "x-ecs-network.inner_vlan_id",
-          "object": "network"
+          "key": "network_traffic.x_vlan.inner.id",
+          "object": "nt"
         },
         "name": {
-          "key": "x-ecs-network.inner_vlan_name",
-          "object": "network"
+          "key": "network_traffic.x_vlan.inner.name",
+          "object": "nt"
         }
       }
     },
     "name": {
-      "key": "x-ecs-network.name",
-      "object": "network"
+      "key": "network_traffic.x_name",
+      "object": "nt"
     },
     "application": {
-      "key": "x-ecs-network.application",
-      "object": "network"
+      "key": "network_traffic.x_application",
+      "object": "nt"
     },
     "direction": {
-      "key": "x-ecs-network.direction",
-      "object": "network"
+      "key": "network_traffic.x_direction",
+      "object": "nt"
     },
     "forwarded_ip": {
-      "key": "x-ecs-network.forwarded_ip",
-      "object": "network"
+      "key": "network_traffic.x_forwarded_ip",
+      "object": "nt"
     },
     "community_id": {
-      "key": "x-ecs-network.community_id",
-      "object": "network"
+      "key": "network_traffic.x_community_id",
+      "object": "nt"
     }
   },
   "event": {
@@ -796,24 +796,24 @@
     ],
     "pe": {
       "company": {
-        "key": "file.x_pe.company",
-        "object": "process_executable"
-      },
-      "description": {
-        "key": "file.x_pe.description",
-        "object": "process_executable"
+        "key": "software.vendor",
+        "object": "process_file_software"
       },
       "file_version": {
-        "key": "file.x_pe.file_version",
-        "object": "process_executable"
+        "key": "software.version",
+        "object": "process_file_software"
       },
       "original_file_name": {
-        "key": "file.x_pe.original_file_name",
-        "object": "process_executable"
+        "key": "software.name",
+        "object": "process_file_software"
       },
       "product": {
-        "key": "file.x_pe.product",
-        "object": "process_executable"
+        "key": "software.x_product",
+        "object": "process_file_software"
+      },
+      "description": {
+        "key": "software.x_description",
+        "object": "process_file_software"
       }
     },
     "command_line": {
@@ -840,6 +840,11 @@
         "key": "file.parent_directory_ref",
         "object": "process_executable",
         "references": "process_executable_dir"
+      },
+      {
+        "key": "file.x_software_ref",
+        "object": "process_executable",
+        "references": "process_file_software"
       },
       {
         "key": "x-oca-event.process_ref",
@@ -1018,7 +1023,7 @@
       },
       {
         "key": "file.x_owner_ref",
-        "object": "file",
+        "object": "process_executable",
         "references": "user"
       },
       {
@@ -1039,22 +1044,18 @@
       }
     ],
     "domain": {
-      "key": "x-ecs-user.domain",
-      "object": "x_user"
+      "key": "user-account.x_domain",
+      "object": "user"
     },
     "full_name": {
-      "key": "x-ecs-user.full_name",
-      "object": "x_user"
+      "key": "user-account.display_name",
+      "object": "user"
     },
     "hash": {
-      "key": "x-ecs-user.hash",
-      "object": "x_user"
+      "key": "user-account.x_hash",
+      "object": "user"
     },
     "id": [
-      {
-        "key": "x-ecs-user.user_id",
-        "object": "x_user"
-      },
       {
         "key": "user-account.user_id",
         "object": "user"
@@ -1077,16 +1078,16 @@
     ],
     "group": {
       "domain": {
-        "key": "x-ecs-user.group_domain",
-        "object": "x_user"
+        "key": "user-account.x_group.domain",
+        "object": "user"
       },
       "id": {
-        "key": "x-ecs-user.group_id",
-        "object": "x_user"
+        "key": "user-account.x_group.id",
+        "object": "user"
       },
       "name": {
-        "key": "x-ecs-user.group_name",
-        "object": "x_user"
+        "key": "user-account.x_group.name",
+        "object": "user"
       }
     }
   },
@@ -1414,24 +1415,24 @@
     },
     "pe": {
       "company": {
-        "key": "file.x_pe.company",
-        "object": "file"
-      },
-      "description": {
-        "key": "file.x_pe.description",
-        "object": "file"
+        "key": "software.vendor",
+        "object": "process_file_software"
       },
       "file_version": {
-        "key": "file.x_pe.file_version",
-        "object": "file"
+        "key": "software.version",
+        "object": "process_file_software"
       },
       "original_file_name": {
-        "key": "file.x_pe.original_file_name",
-        "object": "file"
+        "key": "software.name",
+        "object": "process_file_software"
       },
       "product": {
-        "key": "file.x_pe.product",
-        "object": "file"
+        "key": "software.x_product",
+        "object": "process_file_software"
+      },
+      "description": {
+        "key": "software.x_description",
+        "object": "process_file_software"
       }
     },
     "code_signature": {

@@ -183,49 +183,37 @@ results
                 "0": {
                     "type": "user-account",
                     "user_id": "00u7rkrly9sNvp7sa5d7",
-                    "extensions": {
-                        "x-okta-actor": {
-                            "type": "User"
-                        }
-                    },
+                    "x_actor_type": "User",
                     "account_login": "user@login.com",
                     "display_name": "User1"
                 },
                 "1": {
                     "type": "x-oca-event",
-                    "extensions": {
-                        "x-okta-event": {
-                            "actor_ref": "0",
-                            "client_ref": "3",
-                            "authentication_context_ref": "5",
-                            "event_description": "User report suspicious activity",
-                            "severity": "WARN",
-                            "debug_ref": "7",
-                            "legacy_event_type": "core.user.account.report_suspicious_activity_by_enduser",
-                            "transaction_id": "Y6wTfThOwKPnxngKYrJ0pgAAB3g",
-                            "event_unique_id": "4fa2f7e4-8696-11ed-8688-39c4b4d86042",
-                            "target_refs": [
-                                "8"
-                            ]
-                        }
-                    },
+                    "x_actor_ref": "0",
+                    "x_client_ref": "3",
                     "ip_refs": [
                         "4"
                     ],
+                    "x_authentication_context_ref": "5",
+                    "x_event_description": "User report suspicious activity",
                     "action": "user.account.report_suspicious_activity_by_enduser",
                     "outcome": "SUCCESS",
+                    "x_severity": "WARN",
+                    "x_debug_ref": "7",
+                    "x_legacy_event_type": "core.user.account.report_suspicious_activity_by_enduser",
                     "category": [
                         "WEB"
+                    ],
+                    "x_transaction_id": "Y6wTfThOwKPnxngKYrJ0pgAAB3g",
+                    "x_event_unique_id": "4fa2f7e4-8696-11ed-8688-39c4b4d86042",
+                    "x_target_refs": [
+                        "8"
                     ]
                 },
                 "2": {
                     "type": "software",
-                    "extensions": {
-                        "x-okta-software": {
-                            "raw_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-                            "client_os": "Windows 10"
-                        }
-                    },
+                    "x_raw_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+                    "x_client_os": "Windows 10",
                     "name": "CHROME"
                 },
                 "3": {
@@ -256,11 +244,7 @@ results
                     "type": "autonomous-system",
                     "number": 17488,
                     "name": "hathway cable and datacom limited",
-                    "extensions": {
-                        "x-okta-autonomous-system": {
-                            "isp": "hathway ip over cable internet"
-                        }
-                    }
+                    "x_isp": "hathway ip over cable internet"
                 },
                 "7": {
                     "type": "x-okta-debug-context",
@@ -304,7 +288,7 @@ results
 #### Multiple Observation
 
 ```shell
-translate okta query '{}' "([ipv4-addr:value NOT = '5.0.1.5' AND user-account:display_name MATCHES 'abc'] AND [x-okta-authentication-context:credential_type = 'IWA'])START t'2022-12-10T16:43:26.000Z' STOP t'2023-01-15T16:43:26.003Z' OR [x-oca-event:extensions.'x-okta-event'.legacy_event_type = 'app.ldap.login.disabled_account' AND x-oca-event:outcome = 'FAILURE']START t'2023-01-01T16:43:26.000Z' STOP t'2023-02-10T16:43:26.003Z' AND [ x-oca-event:extensions.'x-okta-event'.outcome_reason = 'NETWORK_ZONE_BLACKLIST']"
+translate okta query '{}' "([ipv4-addr:value NOT = '5.0.1.5' AND user-account:display_name MATCHES 'abc'] AND [x-okta-authentication-context:credential_type = 'IWA'])START t'2022-12-10T16:43:26.000Z' STOP t'2023-01-15T16:43:26.003Z' OR [x-oca-event:x_legacy_event_type = 'app.ldap.login.disabled_account' AND x-oca-event:outcome = 'FAILURE']START t'2023-01-01T16:43:26.000Z' STOP t'2023-02-10T16:43:26.003Z' AND [ x-oca-event:x_outcome_reason = 'NETWORK_ZONE_BLACKLIST']"
 ```
 
 #### STIX Multiple observation - output
@@ -353,51 +337,39 @@ okta
                 "0": {
                     "type": "user-account",
                     "user_id": "00u7rkrly9sNvp7sa5d7",
-                    "extensions": {
-                        "x-okta-actor": {
-                            "type": "User"
-                        }
-                    },
+                    "x_actor_type": "User",
                     "account_login": "zbc@login.com",
                     "display_name": "zbc"
                 },
                 "1": {
                     "type": "x-oca-event",
-                    "extensions": {
-                        "x-okta-event": {
-                            "actor_ref": "0",
-                            "client_ref": "3",
-                            "authentication_context_ref": "5",
-                            "event_description": "Evaluation of sign-on policy",
-                            "outcome_reason": "Sign-on policy evaluation resulted in CHALLENGE",
-                            "severity": "INFO",
-                            "debug_ref": "8",
-                            "transaction_id": "Y7Jo7I8JgCIFXoYvGC9mYgAABc0",
-                            "event_unique_id": "c2f00eb4-8a5c-11ed-b791-497a3600da6e",
-                            "target_refs": [
-                                "9",
-                                "10",
-                                "11"
-                            ]
-                        }
-                    },
+                    "x_actor_ref": "0",
+                    "x_client_ref": "3",
                     "ip_refs": [
                         "4"
                     ],
+                    "x_authentication_context_ref": "5",
+                    "x_event_description": "Evaluation of sign-on policy",
                     "action": "policy.evaluate_sign_on",
                     "outcome": "CHALLENGE",
+                    "x_outcome_reason": "Sign-on policy evaluation resulted in CHALLENGE",
+                    "x_severity": "INFO",
+                    "x_debug_ref": "8",
                     "category": [
                         "WEB"
+                    ],
+                    "x_transaction_id": "Y7Jo7I8JgCIFXoYvGC9mYgAABc0",
+                    "x_event_unique_id": "c2f00eb4-8a5c-11ed-b791-497a3600da6e",
+                    "x_target_refs": [
+                        "9",
+                        "10",
+                        "11"
                     ]
                 },
                 "2": {
                     "type": "software",
-                    "extensions": {
-                        "x-okta-software": {
-                            "raw_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-                            "client_os": "Windows 10"
-                        }
-                    },
+                    "x_raw_user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+                    "x_client_os": "Windows 10",
                     "name": "CHROME"
                 },
                 "3": {
@@ -428,12 +400,8 @@ okta
                     "type": "autonomous-system",
                     "number": 14618,
                     "name": "amazon technologies inc.",
-                    "extensions": {
-                        "x-okta-autonomous-system": {
-                            "isp": "amazon.com  inc.",
-                            "domain_ref": "7"
-                        }
-                    }
+                    "x_isp": "amazon.com  inc.",
+                    "x_domain_ref": "7"
                 },
                 "7": {
                     "type": "domain-name",

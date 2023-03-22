@@ -113,7 +113,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_software_MATCHES_operator(self):
-        stix_pattern = "[software:extensions.'x-okta-software'.raw_user_agent MATCHES 'Mozilla/5.0 (Windows NT 10.0; " \
+        stix_pattern = "[software:x_raw_user_agent MATCHES 'Mozilla/5.0 (Windows NT 10.0; " \
                        "Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) " \
                        "Chrome/109.0.0.0 Safari/537.36 Edg/109.0.1518.70']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
@@ -152,7 +152,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_autonomous_system_string_value_le_operator(self):
-        stix_pattern = "[autonomous-system:extensions.'x-okta-autonomous-system'.isp <= 'google']"
+        stix_pattern = "[autonomous-system:x_isp <= 'google']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["filter=securityContext.isp le \"google\" &since=2023-02-13T12:17:01.526Z"
@@ -170,7 +170,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_x_oca_event_string_value_with_ge_operator(self):
-        stix_pattern = "[x-oca-event:extensions.'x-okta-event'.legacy_event_type >= 'app.oauth2.authorize.code']"
+        stix_pattern = "[x-oca-event:x_legacy_event_type >= 'app.oauth2.authorize.code']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["filter=legacyEventType ge \"app.oauth2.authorize.code\" &since=2023-02-07T05:01:26.225Z"
@@ -223,7 +223,7 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_multiple_observation_with_and_without_qualifier_query(self):
         stix_pattern = "[x-okta-target:target_id MATCHES '0oa4oexp00i4BMrzJ5d7'] START t'2022-12-19T11:00:00.000Z' " \
-                       "STOP t'2023-01-31T11:00:00.003Z' AND [software:extensions.'x-okta-software'.raw_user_agent " \
+                       "STOP t'2023-01-31T11:00:00.003Z' AND [software:x_raw_user_agent " \
                        "LIKE 'Mozilla/5.0' OR x-okta-client:device != 'Computer']"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
@@ -251,7 +251,7 @@ class TestQueryTranslator(unittest.TestCase):
     def test_query_for_multiple_observation(self):
         stix_pattern = "[x-okta-target:target_id MATCHES '0oa4oexp00i4BMrzJ5d7' OR " \
                        "x-okta-client:device != 'Computer']AND[x-oca-event:outcome NOT IN ('SUCCESS','FAILURE') " \
-                       "AND x-oca-event:extensions.'x-okta-event'.legacy_event_type >= 'app.oauth2.authorize.code'] " \
+                       "AND x-oca-event:x_legacy_event_type >= 'app.oauth2.authorize.code'] " \
                        "AND [x-oca-event:action = 'app.oauth2.authorize.code']START t'2022-12-15T11:20:35.000Z' " \
                        "STOP t'2023-01-31T11:00:00.003Z'"
         query = translation.translate('okta', 'query', '{}', stix_pattern)
@@ -267,7 +267,7 @@ class TestQueryTranslator(unittest.TestCase):
     def test_query_for_multiple_observation_with_brackets(self):
         stix_pattern = "([x-okta-target:target_id MATCHES '0oa4oexp00i4BMrzJ5d7' OR " \
                        "x-okta-client:device != 'Computer'] AND [x-oca-event:outcome NOT IN ('SUCCESS','FAILURE') " \
-                       "AND x-oca-event:extensions.'x-okta-event'.legacy_event_type >= 'app.oauth2.authorize.code']) " \
+                       "AND x-oca-event:x_legacy_event_type >= 'app.oauth2.authorize.code']) " \
                        "START t'2022-10-15T11:20:35.000Z' STOP t'2023-02-03T11:00:00.003Z'" \
                        "AND [x-oca-event:action = 'app.oauth2.authorize.code']START t'2022-12-15T11:20:35.000Z' " \
                        "STOP t'2023-01-31T11:00:00.003Z'"

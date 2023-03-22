@@ -1,0 +1,41 @@
+name: Code Coverage Analysis
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+      - unlocked
+
+jobs:
+  codecov:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: |
+          python generate_requirements.py
+          pip install --upgrade pip setuptools wheel
+          pip install -r requirements-dev.txt
+      - name: Run test and generate coverage report
+        run: |
+          pip install pytest-cov
+          pip install codecov
+          pytest --cov=./ --cov-report=xml
+      - name: Upload coverage information to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          version: "v0.2.6"
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true # optional (default = false)

@@ -59,10 +59,10 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         mocked_create_rule = MockCodeResponse(200, {"ruleId": "ru_1234"})
 
         mock_query_output_response = {"retrohuntId": "oh_1234", "ruleId": "ru_1234", "versionId": "ru_1234",
-                                                 "eventStartTime": "2022-06-28T00:00:00.030Z",
-                                                 "eventEndTime": "2022-06-29T00:00:00.030Z",
-                                                 "retrohuntStartTime": "2022-07-07T06:43:40.983372Z",
-                                                 "state": "RUNNING"}
+                                      "eventStartTime": "2022-06-28T00:00:00.030Z",
+                                      "eventEndTime": "2022-06-29T00:00:00.030Z",
+                                      "retrohuntStartTime": "2022-07-07T06:43:40.983372Z",
+                                      "state": "RUNNING"}
 
         mocked_create_search = MockCodeResponse(200, mock_query_output_response)
 
@@ -77,11 +77,11 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         """test status response """
         search_id = "oh_1234:ru_1234"
         mock_status_output = {"retrohuntId": "oh_1234", "ruleId": "ru_1234", "versionId": "ru_1234",
-                                         "eventStartTime": "2022-06-28T00:00:00.030Z",
-                                         "eventEndTime": "2022-06-29T00:00:00.030Z",
-                                         "retrohuntStartTime": "2022-07-07T06:43:40.983372Z",
-                                         "retrohuntEndTime": "2022-07-07T06:43:58.750611Z", "state": "DONE",
-                                         "progressPercentage": 100}
+                              "eventStartTime": "2022-06-28T00:00:00.030Z",
+                              "eventEndTime": "2022-06-29T00:00:00.030Z",
+                              "retrohuntStartTime": "2022-07-07T06:43:40.983372Z",
+                              "retrohuntEndTime": "2022-07-07T06:43:58.750611Z", "state": "DONE",
+                              "progressPercentage": 100}
         mock_http.return_value = MockCodeResponse(200, mock_status_output)
         transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
         status_response = transmission.status(search_id)
@@ -90,7 +90,7 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         assert status_response['progress'] == 100
         assert status_response['status'] == "COMPLETED"
 
-    def test_result_response(self, mock_http):
+    def test_result_with_metadata_in_response(self, mock_http):
         """test result response connection"""
         search_id = "oh_1234:ru_1234"
         output = {
@@ -171,12 +171,20 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
                         "label": "udm"
                     }],
                     "detectionTime": "2022-06-28T09:49:09.460001Z"
-                }]}
+                }],
+            "nextPageToken": "12345"
+        }
         mocked_result_response = MockCodeResponse(200, output)
         mocked_delete_response = MockCodeResponse(200)
         mock_http.side_effect = [mocked_result_response, mocked_delete_response]
-        transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
-        result_response = transmission.results(search_id, 0, 2)
+        connection_with_result_limit = {
+            "host": "hostbla",
+            "selfSignedCert": "hostbla",
+            "options": {"result_limit": 3}
+        }
+        transmission = stix_transmission.StixTransmission('gcp_chronicle', connection_with_result_limit,
+                                                          self.configuration())
+        result_response = transmission.results(search_id, 0, 1)
         assert result_response is not None
         assert result_response['success'] is True
         assert result_response["data"][0]["event"]["metadata"]["productLogId"] == "823rb4e123k4"
@@ -184,6 +192,7 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         assert result_response["data"][0]["event"]["network"]["email"]["isMultipart"] is False
         assert result_response["data"][0]["event"]["network"]["ipProtocol"] == "UDP"
         assert result_response["data"][0]["event"]["securityResult"][0]["severity"] == 48
+        assert result_response["metadata"] == {'result_count': 1, 'next_page_token': '12345'}
 
     def test_delete_response(self, mock_http):
         """test delete response connection"""
@@ -446,7 +455,7 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
             "startTime": "2022-06-28T00:00:00.030Z",
             "endTime": "2022-06-29T00:00:00.030Z"
         }
-        mock_create_rule_response = MockCodeResponse(200,{"ruleId": "ru_1234"})
+        mock_create_rule_response = MockCodeResponse(200, {"ruleId": "ru_1234"})
         mock_http.side_effect = [mock_create_rule_response, ClientConnectionError("Invalid Host")]
         transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
         query_response = transmission.query(query)
@@ -527,10 +536,10 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         """test 404 error with invalid rule id in transmit delete"""
         search_id = "oh_1234:ru_1234"
         mock_http.return_value = MockCodeResponse(404,
-                                          {"error": {
-                                              "code": 404,
-                                              "message": "rule with ID ru_1234 could not be found",
-                                              "status": "NOT_FOUND"}})
+                                                  {"error": {
+                                                      "code": 404,
+                                                      "message": "rule with ID ru_1234 could not be found",
+                                                      "status": "NOT_FOUND"}})
         transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
         delete_response = transmission.delete(search_id)
         assert delete_response is not None
@@ -608,9 +617,9 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         """test 404 error with invalid rule id in transmit results"""
         search_id = "oh_1234:ru_1234"
         mock_http.return_value = MockCodeResponse(404, {"error": {
-                                              "code": 404,
-                                              "message": "rule with ID ru_1234 could not be found",
-                                              "status": "NOT_FOUND"}})
+            "code": 404,
+            "message": "rule with ID ru_1234 could not be found",
+            "status": "NOT_FOUND"}})
         transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
         result_response = transmission.results(search_id, 0, 2)
         assert result_response is not None
@@ -651,9 +660,9 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         mocked_result_response_1 = MockCodeResponse(200, output_1)
         mocked_delete_response = MockCodeResponse(200)
         mocked_result_with_invalid_rule_id = MockCodeResponse(404, {"error": {
-                                                "code": 404,
-                                                "message": "rule with ID ru_1234 could not be found",
-                                                "status": "NOT_FOUND"}})
+            "code": 404,
+            "message": "rule with ID ru_1234 could not be found",
+            "status": "NOT_FOUND"}})
         mock_http.side_effect = [mocked_result_response_1, mocked_result_with_invalid_rule_id, mocked_delete_response]
         transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
         result_response = transmission.results(search_id, 0, 2)
@@ -665,11 +674,11 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         """test running status for transmit status"""
         search_id = "oh_1234:ru_1234"
         mock_status_output = {"retrohuntId": "oh_1234", "ruleId": "ru_1234", "versionId": "ru_1234",
-                                         "eventStartTime": "2022-06-28T00:00:00.030Z",
-                                         "eventEndTime": "2022-06-29T00:00:00.030Z",
-                                         "retrohuntStartTime": "2022-07-07T06:43:40.983372Z",
-                                         "retrohuntEndTime": "2022-07-07T06:43:58.750611Z", "state": "RUNNING",
-                                         "progressPercentage": 42.86}
+                              "eventStartTime": "2022-06-28T00:00:00.030Z",
+                              "eventEndTime": "2022-06-29T00:00:00.030Z",
+                              "retrohuntStartTime": "2022-07-07T06:43:40.983372Z",
+                              "retrohuntEndTime": "2022-07-07T06:43:58.750611Z", "state": "RUNNING",
+                              "progressPercentage": 42.86}
         mock_http.return_value = MockCodeResponse(200, mock_status_output)
         transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
         status_response = transmission.status(search_id)
@@ -682,11 +691,11 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         """test status response with cancelled state"""
         search_id = "oh_1234:ru_1234"
         mock_status_output = {"retrohuntId": "oh_1234", "ruleId": "ru_1234", "versionId": "ru_1234",
-                                         "eventStartTime": "2022-06-28T00:00:00.030Z",
-                                         "eventEndTime": "2022-06-29T00:00:00.030Z",
-                                         "retrohuntStartTime": "2022-07-07T06:43:40.983372Z",
-                                         "retrohuntEndTime": "2022-07-07T06:43:58.750611Z", "state": "CANCELLED",
-                                         "progressPercentage": 77.45}
+                              "eventStartTime": "2022-06-28T00:00:00.030Z",
+                              "eventEndTime": "2022-06-29T00:00:00.030Z",
+                              "retrohuntStartTime": "2022-07-07T06:43:40.983372Z",
+                              "retrohuntEndTime": "2022-07-07T06:43:58.750611Z", "state": "CANCELLED",
+                              "progressPercentage": 77.45}
         mock_http.return_value = MockCodeResponse(200, mock_status_output)
         transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
         status_response = transmission.status(search_id)
@@ -721,10 +730,10 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         """test error when status response having response code 200 without state as key"""
         search_id = "oh_1234:ru_1234"
         mock_status_output = {"retrohuntId": "oh_1234", "ruleId": "ru_1234", "versionId": "ru_1234",
-                                         "eventStartTime": "2022-06-28T00:00:00.030Z",
-                                         "eventEndTime": "2022-06-29T00:00:00.030Z",
-                                         "retrohuntStartTime": "2022-07-07T06:43:40.983372Z",
-                                         "retrohuntEndTime": "2022-07-07T06:43:58.750611Z"}
+                              "eventStartTime": "2022-06-28T00:00:00.030Z",
+                              "eventEndTime": "2022-06-29T00:00:00.030Z",
+                              "retrohuntStartTime": "2022-07-07T06:43:40.983372Z",
+                              "retrohuntEndTime": "2022-07-07T06:43:58.750611Z"}
         mock_http.return_value = MockCodeResponse(200, mock_status_output)
         transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
         status_response = transmission.status(search_id)
@@ -1040,7 +1049,7 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
                                         "to": [
                                             "xyziscgalaxy.com"
                                         ],
-                                        "cc":[
+                                        "cc": [
                                             "abc@user.com",
                                             "service:test@galaxy.com",
                                             "ccuser.com"
@@ -1092,7 +1101,7 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
                         "that should generate detections\" events: ($udm.network.http.user_agent = /(?s)glbc\\/v0.0.0 "
                         "\\(linux\\/amd64\\) kubernetes\\/\\$Format\\/leader-election/ nocase) condition: $udm}",
             "startTime": "2022-06-28T00:00:00.030Z",
-            "endTime": "2022-06-29T00:00:00.030Z" }
+            "endTime": "2022-06-29T00:00:00.030Z"}
         mock_http.side_effect = ValueError("Could not deserialize key data")
         transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
         query_response = transmission.query(query)
@@ -1151,3 +1160,110 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         assert delete_response['success'] is False
         assert "Could not deserialize key data" in delete_response['error']
         assert delete_response['code'] == "authentication_fail"
+
+    def test_429_exception_in_results(self, mock_http):
+        """test  resource exhausted error in results"""
+        search_id = "oh_1234:ru_1234"
+        mock_http.return_value = MockCodeResponse(429, {"error": {"code": 429, "message": "RESOURCE_EXHAUSTED"}})
+        transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(), self.configuration())
+        result_response = transmission.results(search_id, 0, 1)
+        assert result_response is not None
+        assert result_response['success'] is False
+        assert "RESOURCE_EXHAUSTED" in result_response['error']
+        assert result_response['code'] == "service_unavailable"
+
+    def test_invalid_metadata(self, mock_http):
+        """test invalid metadata"""
+        search_id = "oh_1234:ru_1234"
+        metadata = "1:123"
+        output = json.dumps({
+            "detections":
+                [{
+                    "type": "RULE_DETECTION",
+                    "detection": [{
+                        "ruleName": "rule_1657020065",
+                        "urlBackToProduct": "url",
+                        "ruleId": "ru_1234",
+                        "ruleVersion": "ru_1234",
+                        "alertState": "NOT_ALERTING",
+                        "ruleType": "SINGLE_EVENT",
+                        "ruleLabels": [{
+                            "key": "author",
+                            "value": "ibm cp4s user"
+                        }, {
+                            "key": "description",
+                            "value": "Create event rule that should generate detections"
+                        }]
+                    }],
+                    "createdTime": "2022-07-07T08:01:24.869956Z",
+                    "id": "de_38c2972e-ec99-8c0c-4dbe-3b350294b2bb",
+                    "timeWindow": {
+                        "startTime": "2022-06-28T09:49:09.460001Z",
+                        "endTime": "2022-06-28T09:49:09.460001Z"
+                    },
+                    "collectionElements": [{
+                        "references": [{
+                            "event": {
+                                "metadata": {
+                                    "productLogId": "823rb4e123k4"
+                                },
+                                "securityResult": [
+                                    {
+                                        "severity": "LOW"
+                                    }
+                                ],
+                                "network": {
+                                    "email": {
+                                        "from": "010001818b271091-e32fa873-1a72-4d6f-8eab-29c09637402f-000000"
+                                                "@amazonses.com",
+                                        "mailId": "010001818b271091-e32fa873-1a72-4d6f-8eab-29c09637402f-000000@email"
+                                                  ".amazonses.com",
+                                        "subject": [
+                                            "https://testurl.com test"
+                                        ],
+                                        "to": [
+                                            "ravithummala@iscgalaxy.com"
+                                        ]
+                                    },
+                                    "dns": {
+                                        "authoritative": True,
+                                        "questions": [{
+                                            "name": "www.a2k2.in",
+                                            "type": 1
+                                        }],
+                                        "responseCode": 3
+                                    },
+                                    "ipProtocol": "UDP"
+                                },
+                                "target": {
+                                    "hostname": "v20.events.data.microsoft.com",
+                                    "ip": [
+                                        "13.89.178.26"
+                                    ],
+                                    "url": "v20.events.data.microsoft.com",
+                                    "registry": {
+                                        "registryKey": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Advanced "
+                                                       "Threat Protection",
+                                        "registryValueData": "132996043194369129",
+                                        "registryValueName": "CrashHeartbeat"
+                                    }
+                                }
+
+                            }
+                        }],
+                        "label": "udm"
+                    }],
+                    "detectionTime": "2022-06-28T09:49:09.460001Z"
+                }],
+            "nextPageToken": "12345"
+        })
+        mocked_result_response = MockCodeResponse(200, output)
+        mocked_delete_response = MockCodeResponse(200)
+        mock_http.side_effect = [mocked_result_response, mocked_delete_response]
+        transmission = stix_transmission.StixTransmission('gcp_chronicle', self.connection(),
+                                                          self.configuration())
+        result_response = transmission.results(search_id, 0, 1, metadata)
+        assert result_response is not None
+        assert result_response['success'] is False
+        assert 'Invalid metadata' in result_response['error']
+        assert result_response['code'] == 'invalid_parameter'
