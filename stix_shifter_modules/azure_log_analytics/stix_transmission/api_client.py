@@ -39,10 +39,9 @@ class APIClient:
         """Ping the endpoint."""
         return self.client.call_api(self.endpoint, 'GET', timeout=self.timeout)
 
-    def run_search(self, query_expression, start, stop, length):
+    def run_search(self, query_expression, start, stop):
         """get the response from azure_sentinel endpoints
         :param query_expression: str, search_id
-        :param length: int,length value
         :return: response, json object"""
         try:
             client = LogsQueryClient(self.credential)
