@@ -179,6 +179,8 @@ class QueryStringPatternTranslator:
                                          ComparisonComparators.Equal, ComparisonComparators.NotEqual]:
                 if is_int_field or is_date_field:
                     mapped_field = 'tostring({mapped_field})'.format(mapped_field=mapped_field)
+                elif expression.object_path == "domain-name:value":
+                    comparator = 'contains'
             elif expression.comparator in [ComparisonComparators.GreaterThan, ComparisonComparators.GreaterThanOrEqual,
                                            ComparisonComparators.LessThan,
                                            ComparisonComparators.LessThanOrEqual]:
