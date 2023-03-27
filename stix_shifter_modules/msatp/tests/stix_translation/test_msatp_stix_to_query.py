@@ -478,3 +478,30 @@ class TestQueryTranslator(unittest.TestCase):
              'Advanced Threat Protection")')
         ]
         self._test_query_assertions(query, queries)
+
+
+    def test_config_no_info(self):
+        stix_pattern = "[process:name = 'consent.exe']"
+        query = translation.translate('msatp', 'query', '{}', stix_pattern)
+        query['queries'] = _remove_timestamp_from_query(query['queries'])
+
+        queries = [
+            ('union (find withsource = TableName in (DeviceProcessEvents)  where Timestamp '
+             '>= <<timestamp>> and Timestamp < <<timestamp>>  | order by Timestamp desc | '
+             'where (FileName =~ "consent.exe") or (InitiatingProcessFileName =~ '
+             '"consent.exe")),(find withsource = TableName in (DeviceEvents)  where '
+             'Timestamp >= <<timestamp>> and Timestamp < <<timestamp>>  | order by '
+             'Timestamp desc | where (FileName =~ "consent.exe") or '
+             '(InitiatingProcessFileName =~ "consent.exe")),(find withsource = TableName '
+             'in (DeviceFileEvents)  where Timestamp >= <<timestamp>> and Timestamp < '
+             '<<timestamp>>  | order by Timestamp desc | where InitiatingProcessFileName '
+             '=~ "consent.exe"),(find withsource = TableName in (DeviceNetworkEvents)  '
+             'where Timestamp >= <<timestamp>> and Timestamp < <<timestamp>>  | order by '
+             'Timestamp desc | where InitiatingProcessFileName =~ "consent.exe"),(find '
+             'withsource = TableName in (DeviceRegistryEvents)  where Timestamp >= '
+             '<<timestamp>> and Timestamp < <<timestamp>>  | order by Timestamp desc | '
+             'where InitiatingProcessFileName =~ "consent.exe"),(find withsource = '
+             'TableName in (DeviceImageLoadEvents)  where Timestamp >= <<timestamp>> and '
+             'Timestamp < <<timestamp>>  | order by Timestamp desc | where '
+             'InitiatingProcessFileName =~ "consent.exe")')]
+        self._test_query_assertions(query, queries)

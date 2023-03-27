@@ -195,6 +195,106 @@ class TestMSATPConnection(unittest.TestCase):
             '| summarize arg_max(DNI_TS, *) by ReportId, DeviceName, Timestamp '
         )
 
+    def test_join_query_no_info(self, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
+        query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
+        config = json.loads(json.dumps(self.config()))
+        config['includeHostOs'] = False
+        config['includeNetworkInfo'] = False
+        entry_point = connector.Connector(self.connection(), config)
+        joined_query = entry_point.join_query_with_other_tables(query)
+        assert joined_query == (
+            "(union (find withsource = TableName in (DeviceNetworkEvents)  "
+            "where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  "
+            "| order by Timestamp desc "
+            "| where (LocalIP =~ \"9.9.9.9\") or (RemoteIP =~ \"9.9.9.9\")),"
+            "(find withsource = TableName in (DeviceEvents)  "
+            "where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  "
+            "| order by Timestamp desc | where (RemoteIP =~ \"9.9.9.9\") or (LocalIP =~ \"9.9.9.9\"))) "
+            "| join kind=leftouter (DeviceAlertEvents | summarize AlertId=make_list(AlertId), "
+            "Severity=make_list(Severity), Title=make_list(Title), Category=make_list(Category), "
+            "AttackTechniques=make_list(AttackTechniques) by DeviceName, ReportId, Timestamp) "
+            "on ReportId, DeviceName, Timestamp "
+        )
+
+        query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
+        entry_point = connector.Connector(self.connection(), config)
+        joined_query = entry_point.join_query_with_other_tables(query)
+        assert joined_query == (
+            '((find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z)'
+            ' and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc '
+            '| where AlertId =~ "123123"))'
+        )
+
+    def test_join_query_no_alerts(self, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
+        query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
+        config = json.loads(json.dumps(self.config()))
+        config['includeAlerts'] = False
+        entry_point = connector.Connector(self.connection(), config)
+        joined_query = entry_point.join_query_with_other_tables(query)
+        assert joined_query == (
+            "(union (find withsource = TableName in (DeviceNetworkEvents)  "
+            "where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  "
+            "| order by Timestamp desc "
+            "| where (LocalIP =~ \"9.9.9.9\") or (RemoteIP =~ \"9.9.9.9\")),"
+            "(find withsource = TableName in (DeviceEvents)  "
+            "where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  "
+            "| order by Timestamp desc | where (RemoteIP =~ \"9.9.9.9\") or (LocalIP =~ \"9.9.9.9\"))) "
+            "| join kind=leftouter (DeviceInfo | project DI_TS = Timestamp, DeviceId, PublicIP, OSArchitecture, "
+            "OSPlatform, OSVersion) on DeviceId | where DI_TS < Timestamp "
+            "| summarize arg_max(DI_TS, *) by ReportId, DeviceName, Timestamp  "
+            "| join kind=leftouter (DeviceNetworkInfo | where NetworkAdapterStatus == \"Up\" "
+            "| project DNI_TS = Timestamp, DeviceId, MacAddress, IPAddresses "
+            "| summarize IPAddressesSet=make_set(IPAddresses), MacAddressSet=make_set(MacAddress) by DeviceId, DNI_TS) "
+            "on DeviceId | where DNI_TS < Timestamp | summarize arg_max(DNI_TS, *) by ReportId, DeviceName, Timestamp "
+        )
+
+        query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
+        entry_point = connector.Connector(self.connection(), config)
+        joined_query = entry_point.join_query_with_other_tables(query)
+        assert joined_query == (
+            '((find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z)'
+            ' and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc '
+            '| where AlertId =~ "123123")) '
+            '| join kind=leftouter (DeviceInfo | project DI_TS = Timestamp, DeviceId, PublicIP, OSArchitecture, '
+            'OSPlatform, OSVersion) on DeviceId | where DI_TS < Timestamp | summarize arg_max(DI_TS, *) by ReportId, '
+            'DeviceName, Timestamp  '
+            '| join kind=leftouter (DeviceNetworkInfo | where NetworkAdapterStatus == "Up" | project DNI_TS = Timestamp,'
+            ' DeviceId, MacAddress, IPAddresses | summarize IPAddressesSet=make_set(IPAddresses), '
+            'MacAddressSet=make_set(MacAddress) by DeviceId, DNI_TS) on DeviceId | where DNI_TS < Timestamp '
+            '| summarize arg_max(DNI_TS, *) by ReportId, DeviceName, Timestamp '
+        )
+
+    def test_join_query_only_events(self, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
+        query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
+        config = json.loads(json.dumps(self.config()))
+        config['includeAlerts'] = False
+        config['includeHostOs'] = False
+        config['includeNetworkInfo'] = False
+        entry_point = connector.Connector(self.connection(), config)
+        joined_query = entry_point.join_query_with_other_tables(query)
+        assert joined_query == (
+            "(union (find withsource = TableName in (DeviceNetworkEvents)  "
+            "where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  "
+            "| order by Timestamp desc "
+            "| where (LocalIP =~ \"9.9.9.9\") or (RemoteIP =~ \"9.9.9.9\")),"
+            "(find withsource = TableName in (DeviceEvents)  "
+            "where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  "
+            "| order by Timestamp desc | where (RemoteIP =~ \"9.9.9.9\") or (LocalIP =~ \"9.9.9.9\")))"
+        )
+
+        query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
+        entry_point = connector.Connector(self.connection(), config)
+        joined_query = entry_point.join_query_with_other_tables(query)
+        assert joined_query == (
+            '((find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z)'
+            ' and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc '
+            '| where AlertId =~ "123123"))'
+        )
+
+
     def test_unify_alert_fields(self, mock_adal_auth):
         mock_adal_auth.return_value = get_adal_mock_response()
         data = {
@@ -247,29 +347,6 @@ class TestMSATPConnection(unittest.TestCase):
         assert val.get("RegistryValueName") == "FailureActions"
         assert val.get("RegistryValueData") == ""
 
-    def test_organize_registry_data(self, mock_adal_auth):
-        data = {
-            "DeviceRegistryEvents": {
-                "TableName": "DeviceRegistryEvents",
-                "Timestamp": "2019-10-10T10:43:07.2363291Z",
-                "DeviceId": "db40e68dd7358aa450081343587941ce96ca4777",
-                "DeviceName": "testmachine1",
-                "ActionType": "RegistryValueSet",
-                "RegistryKey": "HKEY_LOCAL_MACHINE\\\\SYSTEM\\\\ControlSet001\\\\Services\\\\WindowsAzureGuestAgent",
-                "RegistryValueType": "Binary",
-                "RegistryValueName": "FailureActions",
-                "RegistryValueData": ""
-            }
-        }
-
-        connector.organize_registry_data(data["DeviceRegistryEvents"])
-        assert "RegistryValues" in data["DeviceRegistryEvents"]
-        values = data["DeviceRegistryEvents"]["RegistryValues"]
-        assert len(values) == 1
-        val = values[0]
-        assert val.get("RegistryValueType") == "Binary"
-        assert val.get("RegistryValueName") == "FailureActions"
-        assert val.get("RegistryValueData") == ""
 
     def test_organize_ips(self, mock_adal_auth):
         data = {
