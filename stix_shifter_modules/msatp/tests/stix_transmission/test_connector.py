@@ -153,7 +153,7 @@ class TestMSATPConnection(unittest.TestCase):
         table = connector.get_table_name(query)
         assert table == "DeviceProcessEvents"
 
-    def test_join_alerts_with_eventss(self, mock_adal_auth):
+    def test_join_alerts_with_events(self, mock_adal_auth):
         mock_adal_auth.return_value = get_adal_mock_response()
 
         entry_point = connector.Connector(self.connection(), self.config())

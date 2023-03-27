@@ -248,17 +248,8 @@ class Connector(BaseJsonSyncConnector):
         try:
             if self.init_error:
                 return self.adal_response
-            temp_return_obj = dict()
             joined_query = self.join_query_with_other_tables(query)
-            response = await self.api_client.run_search(joined_query, offset, length)
-            temp_return_obj = self._handle_errors(response, temp_return_obj)
-            response_data = json.loads(temp_return_obj["data"]).get("Results")
-
-            # Customizing the output json,
-            # Get 'TableName' attribute from each row of event data
-            # Create a dictionary with 'TableName' as key and other attributes in an event data as value
-            # Filter the "None" and empty values except for RegistryValueName, which support empty string
-            # Customizing of Registryvalues json
+            response_data = await self.api_client_run_search(joined_query, length, offset)
             response_data = merge_alerts(response_data)
             for event_data in response_data:
                 table = event_data.get('TableName')
@@ -270,10 +261,7 @@ class Connector(BaseJsonSyncConnector):
                     # query events table according to alert fields
                     joined_query = self.join_alert_with_events(timestamp, device_name, report_id)
                     print("joining alert with events: ", joined_query)
-                    response = await self.api_client.run_search(joined_query, offset, length)
-                    events_return_obj = dict()
-                    events_return_obj = self._handle_errors(response, events_return_obj)
-                    events_data = json.loads(events_return_obj["data"]).get("Results")
+                    events_data = await self.api_client_run_search(joined_query, length, offset)
                     if len(events_data) == 0:
                         # if only alert - assign the alert title to x-oca-event
                         event_data['ActionType'] = event_data.get("Title")
@@ -286,8 +274,7 @@ class Connector(BaseJsonSyncConnector):
                         alert_data = copy.deepcopy(event_data)
                         if 'AttackTechniques' in alert_data:
                             if alert_data['AttackTechniques'] == '':
-                                alert_data['AttackTechniques'] = []
-                            alert_data['AttackTechniques'] = json.dumps(alert_data['AttackTechniques'])
+                                alert_data['AttackTechniques'] = '[]'
                         alert_data = {k: ([v] if k in self.ALERT_FIELDS else v) for (k, v) in alert_data.items()}
                         for event_data in events_data:
                             table = event_data.get("TableName")
@@ -329,6 +316,13 @@ class Connector(BaseJsonSyncConnector):
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise ex
+
+    async def api_client_run_search(self, joined_query, length, offset):
+        temp_return_obj = dict()
+        response = await self.api_client.run_search(joined_query, offset, length)
+        temp_return_obj = self._handle_errors(response, temp_return_obj)
+        response_data = json.loads(temp_return_obj["data"]).get("Results")
+        return response_data
 
     def generate_token(self, connection, configuration):
         """To generate the Token
