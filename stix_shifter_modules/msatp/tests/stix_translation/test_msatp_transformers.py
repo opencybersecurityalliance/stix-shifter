@@ -5,7 +5,7 @@ from stix_shifter_modules.msatp.stix_translation.transformers import MsatpToTime
     Alert, JsonToString
 
 
-class TestTransformers(unittest.TestCase):
+class TestMsatpTransformers(unittest.TestCase):
 
     def test_transform_msatp_to_timestamp(self):
         val = MsatpToTimestamp.transform('2023-03-12T21:56:34.0646516Z')
