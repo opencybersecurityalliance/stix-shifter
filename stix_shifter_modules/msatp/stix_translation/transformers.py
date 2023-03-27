@@ -96,15 +96,6 @@ class GetDomainName(ValueTransformer):
         return parsed_url.netloc
 
 
-class ToKillChainPhasesList(ValueTransformer):
-    """A value transformer to convert category name to a list of kill-chain-phase objects"""
-
-    @staticmethod
-    def transform(value):
-        dct = {'kill_chain_name': KILL_CHAIN_NAME, 'phase_name': value}
-        return [dct]
-
-
 class ToFileName(ValueTransformer):
 
     @staticmethod

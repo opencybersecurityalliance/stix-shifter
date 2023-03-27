@@ -178,14 +178,14 @@ class Connector(BaseJsonSyncConnector):
         events_query = "union {}".format(','.join(
             [Connector.EVENTS_QUERY.format(q, timestamp, device_name, report_id) for q in
              Connector.EVENTS_TABLES]))
-        return self.join_query_with_other_tables(events_query)
+        return self.join_query_with_other_tables(events_query, include_alerts=False)
 
-    def join_query_with_other_tables(self, query):
+    def join_query_with_other_tables(self, query, include_alerts=True):
         table = get_table_name(query)
         query = f"({query})"
         if 'Alert' in table:
             self.alert_mode = True
-        if self.should_include_alerts and not self.alert_mode:
+        if self.should_include_alerts and not self.alert_mode and include_alerts:
             query = Connector.ALERTS_QUERY.format(query)
         if self.should_include_host_os:
             query = Connector.DEVICE_INFO_QUERY.format(query)

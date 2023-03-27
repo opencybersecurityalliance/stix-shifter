@@ -277,55 +277,55 @@ device_file_event = {
 
 device_event_with_alert = {
     'DeviceEvents':
-    {
-        'ReportId': 1234,
-        'DeviceName': 'host.test.com',
-        'Timestamp': '2023-03-27T08:32:10.8787764Z',
-        'TableName': 'DeviceEvents',
-        'DeviceId': 'deviceid',
-        'RemoteUrl': 'https://malicious.com',
-        'RemoteIP': '9.9.9.9',
-        'RemotePort': 443,
-        'LocalIP': '9.9.9.1',
-        'LocalPort': 58993,
-        'ActionType': 'OtherAlertRelatedActivity',
-        'FileName': 'rundll32.exe',
-        'FolderPath': 'C:\\Windows\\System32\\rundll32.exe',
-        'SHA1': 'dd399ae46303343f9f0da189aee11c67bd868222',
-        'SHA256': 'b53f3c0cd32d7f20849850768da6431e5f876b7bfa61db0aa0700b02873393fa',
-        'MD5': 'ef3179d498793bf4234f708d3be28633',
-        'AccountDomain': 'ASD',
-        'AccountName': 'username',
-        'InitiatingProcessAccountDomain': 'ASD',
-        'InitiatingProcessAccountName': 'username',
-        'InitiatingProcessAccountSid': 'S-1-5-21-1111111111-111111111-1111111111-1111111',
-        'InitiatingProcessSHA1': '75cf2cc2e76eb99c4de584a3f2917c5cce3bc1bd',
-        'InitiatingProcessSHA256': '0f4e87fab2e5455b89c7263456c461cef80c4ef4b05c893a455d70e2ccd4c387',
-        'InitiatingProcessMD5': '1cc2723f23e452686f2426024bf666e5',
-        'InitiatingProcessFileName': 'WcInstaller.exe',
-        'InitiatingProcessId': 18808,
-        'InitiatingProcessCommandLine': '"WcInstaller.exe" --silent',
-        'InitiatingProcessCreationTime': '2023-03-27T08:31:19.2589344Z',
-        'InitiatingProcessFolderPath': 'C:\\Users\\username\\AppData\\Local\\Temp\\WcInstaller.exe',
-        'InitiatingProcessParentId': 18428,
-        'InitiatingProcessParentFileName': 'setup_win64.exe',
-        'InitiatingProcessParentCreationTime': '2023-03-27T08:31:08.2841083Z',
-        'AdditionalFields': '{"Description":"File WcInstaller.exe observed on machine host.test.com"}',
-        'PublicIP': '9.9.9.1',
-        'OSArchitecture': '64-bit',
-        'OSPlatform': 'Windows10',
-        'OSVersion': '10.0',
-        'MacAddressSet': ['11-22-33-44-55-66'],
-        'rn': 1,
-        'category': '1',
-        'provider': '1',
-        'event_link': 'https://security.microsoft.com/machines/deviceid/timeline?from=2023-03-27T08:32:09.000Z&to=2023-03-27T08:32:11.000Z',
-        'Alerts': '[{"AlertId": "1234567890-1234-1234-1234-123456789012_1", "Severity": "Medium", "Title": "A suspicious file was observed", "Category": "Malware", "AttackTechniques": ["Obfuscated Files or Information (T1027)", "Malicious File (T1204.002)"]}]',
-        'IPAddresses': ['9.9.9.1'],
-        'missingChildShouldMapInitiatingPid': 18808,
-        'event_count': '1',
-        'original_ref': 'base64'
-    }
+        {
+            'ReportId': 1234,
+            'DeviceName': 'host.test.com',
+            'Timestamp': '2023-03-27T08:32:10.8787764Z',
+            'TableName': 'DeviceEvents',
+            'DeviceId': 'deviceid',
+            'RemoteUrl': 'https://malicious.com',
+            'RemoteIP': '9.9.9.9',
+            'RemotePort': 443,
+            'LocalIP': '9.9.9.1',
+            'LocalPort': 58993,
+            'ActionType': 'OtherAlertRelatedActivity',
+            'FileName': 'rundll32.exe',
+            'FolderPath': 'C:\\Windows\\System32\\rundll32.exe',
+            'SHA1': 'dd399ae46303343f9f0da189aee11c67bd868222',
+            'SHA256': 'b53f3c0cd32d7f20849850768da6431e5f876b7bfa61db0aa0700b02873393fa',
+            'MD5': 'ef3179d498793bf4234f708d3be28633',
+            'AccountDomain': 'ASD',
+            'AccountName': 'username',
+            'InitiatingProcessAccountDomain': 'ASD',
+            'InitiatingProcessAccountName': 'username',
+            'InitiatingProcessAccountSid': 'S-1-5-21-1111111111-111111111-1111111111-1111111',
+            'InitiatingProcessSHA1': '75cf2cc2e76eb99c4de584a3f2917c5cce3bc1bd',
+            'InitiatingProcessSHA256': '0f4e87fab2e5455b89c7263456c461cef80c4ef4b05c893a455d70e2ccd4c387',
+            'InitiatingProcessMD5': '1cc2723f23e452686f2426024bf666e5',
+            'InitiatingProcessFileName': 'WcInstaller.exe',
+            'InitiatingProcessId': 18808,
+            'InitiatingProcessCommandLine': '"WcInstaller.exe" --silent',
+            'InitiatingProcessCreationTime': '2023-03-27T08:31:19.2589344Z',
+            'InitiatingProcessFolderPath': 'C:\\Users\\username\\AppData\\Local\\Temp\\WcInstaller.exe',
+            'InitiatingProcessParentId': 18428,
+            'InitiatingProcessParentFileName': 'setup_win64.exe',
+            'InitiatingProcessParentCreationTime': '2023-03-27T08:31:08.2841083Z',
+            'AdditionalFields': '{"Description":"File WcInstaller.exe observed on machine host.test.com"}',
+            'PublicIP': '9.9.9.1',
+            'OSArchitecture': '64-bit',
+            'OSPlatform': 'Windows10',
+            'OSVersion': '10.0',
+            'MacAddressSet': ['11-22-33-44-55-66'],
+            'rn': 1,
+            'category': '1',
+            'provider': '1',
+            'event_link': 'https://security.microsoft.com/machines/deviceid/timeline?from=2023-03-27T08:32:09.000Z&to=2023-03-27T08:32:11.000Z',
+            'Alerts': '[{"AlertId": "1234567890-1234-1234-1234-123456789012_1", "Severity": "Medium", "Title": "A suspicious file was observed", "Category": "Malware", "AttackTechniques": ["Obfuscated Files or Information (T1027)", "Malicious File (T1204.002)"]}]',
+            'IPAddresses': ['9.9.9.1'],
+            'missingChildShouldMapInitiatingPid': 18808,
+            'event_count': '1',
+            'original_ref': 'base64'
+        }
 }
 
 
@@ -603,3 +603,62 @@ class TestMsatpResultsToStix(unittest.TestCase):
         assert len(mac_refs) == 1
         mac = mac_refs[0]
         assert mac.get("value") == "11:22:33:44:55:66"
+
+    def test_get_next_index_remove_ref(self):
+        objects = {
+            '0': {
+                'type': 'x-oca-event',
+                'ip_ref': '1',
+                'ip_refs': ['2', '3']
+            },
+            '2': {
+                'type': 'ipv4-addr',
+                'value': '9.9.9.9'
+            }
+        }
+        from stix_shifter_modules.msatp.stix_translation import results_translator
+        index = results_translator.get_next_index(objects)
+        assert index == "1"
+        assert 'ip_ref' not in objects['0']
+
+    def test_get_next_index_remove_refs(self):
+        objects = {
+            '0': {
+                'type': 'x-oca-event',
+                'ip_ref': '1',
+                'ip_refs': ['2', '3']
+            },
+            '1': {
+                'type': 'ipv4-addr',
+                'value': '9.9.9.9'
+            }
+        }
+        from stix_shifter_modules.msatp.stix_translation import results_translator
+        index = results_translator.get_next_index(objects)
+        assert index == "2"
+        assert 'ip_ref' in objects['0']
+        assert 'ip_refs' in objects['0']
+        assert len(objects['0']['ip_refs']) == 1
+        assert objects['0']['ip_refs'][0] == '3'
+
+    def test_get_next_index_pops_refs(self):
+        objects = {
+            '0': {
+                'type': 'x-oca-event',
+                'ip_refs': ['1']
+            }
+        }
+        from stix_shifter_modules.msatp.stix_translation import results_translator
+        index = results_translator.get_next_index(objects)
+        assert index == "1"
+        assert 'ip_refs' not in objects['0']
+
+    def test_extract_pipe_name(self):
+        xmsatp = {
+            'AdditionalFields': r'DesiredAccess: 1180063, FileOperation: File opened, NamedPipeEnd: Client, PipeName: \\Device\\NamedPipe\\PrinterProviderProbePipe01, RemoteClientsAccess: AcceptRemote, SessionId: 1, ThreadId: 11660'
+        }
+        from stix_shifter_modules.msatp.stix_translation import results_translator
+        event = {}
+        results_translator.extract_pipe_name(xmsatp, event)
+        assert 'pipe_name' in event
+        assert event['pipe_name'] == r'\\Device\\NamedPipe\\PrinterProviderProbePipe01'

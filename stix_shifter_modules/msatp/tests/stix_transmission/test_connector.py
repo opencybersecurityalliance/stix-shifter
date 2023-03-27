@@ -153,6 +153,34 @@ class TestMSATPConnection(unittest.TestCase):
         table = connector.get_table_name(query)
         assert table == "DeviceProcessEvents"
 
+    def test_join_alerts_with_eventss(self, mock_adal_auth):
+        mock_adal_auth.return_value = get_adal_mock_response()
+
+        entry_point = connector.Connector(self.connection(), self.config())
+        joined_query = entry_point.join_alert_with_events('<<timestamp>>', 'devicename', 1234)
+        assert joined_query == ('(union (find withsource = TableName in (DeviceNetworkEvents)  where '
+                                '(Timestamp == datetime(<<timestamp>>)) and (DeviceName == "devicename") and '
+                                '(ReportId == 1234)),(find withsource = TableName in (DeviceProcessEvents)  '
+                                'where (Timestamp == datetime(<<timestamp>>)) and (DeviceName == '
+                                '"devicename") and (ReportId == 1234)),(find withsource = TableName in '
+                                '(DeviceFileEvents)  where (Timestamp == datetime(<<timestamp>>)) and '
+                                '(DeviceName == "devicename") and (ReportId == 1234)),(find withsource = '
+                                'TableName in (DeviceRegistryEvents)  where (Timestamp == '
+                                'datetime(<<timestamp>>)) and (DeviceName == "devicename") and (ReportId == '
+                                '1234)),(find withsource = TableName in (DeviceEvents)  where (Timestamp == '
+                                'datetime(<<timestamp>>)) and (DeviceName == "devicename") and (ReportId == '
+                                '1234)),(find withsource = TableName in (DeviceImageLoadEvents)  where '
+                                '(Timestamp == datetime(<<timestamp>>)) and (DeviceName == "devicename") and '
+                                '(ReportId == 1234))) | join kind=leftouter '
+                                '(DeviceInfo | project DI_TS = Timestamp, DeviceId, PublicIP, OSArchitecture, '
+                                'OSPlatform, OSVersion) on DeviceId | where DI_TS < Timestamp | summarize '
+                                'arg_max(DI_TS, *) by ReportId, DeviceName, Timestamp  | join kind=leftouter '
+                                '(DeviceNetworkInfo | where NetworkAdapterStatus == "Up" | project DNI_TS = '
+                                'Timestamp, DeviceId, MacAddress, IPAddresses | summarize '
+                                'IPAddressesSet=make_set(IPAddresses), MacAddressSet=make_set(MacAddress) by '
+                                'DeviceId, DNI_TS) on DeviceId | where DNI_TS < Timestamp | summarize '
+                                'arg_max(DNI_TS, *) by ReportId, DeviceName, Timestamp ')
+
     def test_join_query_with_alerts(self, mock_adal_auth):
         mock_adal_auth.return_value = get_adal_mock_response()
         query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
@@ -294,7 +322,6 @@ class TestMSATPConnection(unittest.TestCase):
             '| where AlertId =~ "123123"))'
         )
 
-
     def test_unify_alert_fields(self, mock_adal_auth):
         mock_adal_auth.return_value = get_adal_mock_response()
         data = {
@@ -346,7 +373,6 @@ class TestMSATPConnection(unittest.TestCase):
         assert val.get("RegistryValueType") == "Binary"
         assert val.get("RegistryValueName") == "FailureActions"
         assert val.get("RegistryValueData") == ""
-
 
     def test_organize_ips(self, mock_adal_auth):
         data = {

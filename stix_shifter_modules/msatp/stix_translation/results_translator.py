@@ -46,16 +46,19 @@ def get_next_index(objects):
         i += 1
     next_ref = str(i)
     for ref, sco in objects.items():
+        remove = []
         for key, value in sco.items():
             if key.endswith("_ref"):
                 if value == next_ref:
-                    sco.pop(key)
+                    remove.append(key)
             elif key.endswith("_refs"):
                 for r in value:
                     if r == next_ref:
                         sco[key] = [item for item in value if item != next_ref]
                         if len(sco[key]) == 0:
-                            sco.pop(key)
+                            remove.append(key)
+        for i in remove:
+            sco.pop(i)
     return next_ref
 
 
