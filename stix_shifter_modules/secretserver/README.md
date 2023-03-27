@@ -14,9 +14,9 @@ Create custom report on IBM Privilege Vault/ Secret Server/ Delinea by using fol
        Chart Type:	None
        Page Size:	15
        Report SQL:	SELECT a.EventDetails AS [EventDetails],a.EventNote,a.EventTime,a.ItemId,a.UserId,u.UserName as Name, u.EmailAddress as  
-                      Unique_Identtification,a.EventSubject, s.secretname As [SecretName], a.ipaddress AS [IpAddress] FROM tbEventAudit a WITH (NOLOCK)    
-                      INNER JOIN tbuser u WITH (NOLOCK) ON u.userid = a.userid INNER JOIN tbsecret s WITH (NOLOCK) ON s.secretid = a.ItemId  WHERE 
-                      a.EventTime >= #StartDate AND a.EventTime <= #EndDate ORDER BY a.EventTime DESC
+                    Unique_Identtification,a.EventSubject, s.secretname As [SecretName], a.ipaddress AS [IpAddress] FROM tbEventAudit a WITH (NOLOCK)    
+                    INNER JOIN tbuser u WITH (NOLOCK) ON u.userid = a.userid INNER JOIN tbsecret s WITH (NOLOCK) ON s.secretid = a.ItemId  WHERE 
+                    a.EventTime >= #StartDate AND a.EventTime <= #EndDate ORDER BY a.EventTime DESC
 
 4.	New custom report will get listed in General section of Reports tab.
  
