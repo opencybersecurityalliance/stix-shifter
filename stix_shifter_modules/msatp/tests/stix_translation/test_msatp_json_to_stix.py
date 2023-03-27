@@ -277,66 +277,55 @@ device_file_event = {
 
 device_event_with_alert = {
     'DeviceEvents':
-        {
-            'Timestamp': '2023-03-17T20:19:46.6337905Z',
-            'DeviceId': 'deviceid',
-            'DeviceName': 'host.example.com',
-            'FileName': 'msedge.exe',
-            'SHA1': 'c737742b81292c764ac2a7e419a37ed7fdf4a1ed',
-            'ReportId': 1234,
-            'Table': 'DeviceEvents',
-            'rn': 1,
-            'ActionType': 'ConnectionSuccess',
-            'RemoteIP': '9.9.9.9',
-            'RemotePort': 443,
-            'RemoteUrl': 'https://malicious.com',
-            'LocalIP': '9.9.9.1',
-            'LocalPort': 58993,
-            'Protocol': 'TcpV4',
-            'InitiatingProcessSHA1': 'c737742b81292c764ac2a7e419a37ed7fdf4a1ed',
-            'InitiatingProcessSHA256': '470ea019c1ea8882b258dea27e77261dd297eb225fd08edbe591c82796189d75',
-            'InitiatingProcessMD5': 'e180c9a532c45eba99eefd01601f5c41',
-            'InitiatingProcessFileName': 'msedge.exe',
-            'InitiatingProcessFileSize': 4243360,
-            'InitiatingProcessVersionInfoCompanyName': 'Microsoft Corporation',
-            'InitiatingProcessVersionInfoProductName': 'Microsoft Edge',
-            'InitiatingProcessVersionInfoProductVersion': '110.0.1587.50',
-            'InitiatingProcessVersionInfoInternalFileName': 'msedge_exe',
-            'InitiatingProcessVersionInfoOriginalFileName': 'msedge.exe',
-            'InitiatingProcessVersionInfoFileDescription': 'Microsoft Edge',
-            'InitiatingProcessId': 3052,
-            'InitiatingProcessCommandLine': '"msedge.exe" --type=utility',
-            'InitiatingProcessCreationTime': '2023-03-13T14:22:44.8605361Z',
-            'InitiatingProcessFolderPath': 'c:\\program files (x86)\\microsoft\\edge\\application\\msedge.exe',
-            'InitiatingProcessParentFileName': 'msedge.exe',
-            'InitiatingProcessParentId': 9952,
-            'InitiatingProcessParentCreationTime': '2023-03-13T14:22:44.5087752Z',
-            'InitiatingProcessAccountDomain': 'asd',
-            'InitiatingProcessAccountName': 'username',
-            'InitiatingProcessAccountSid': 'S-1-5-21-1111111111-111111111-1111111111-1111111',
-            'InitiatingProcessAccountUpn': 'username@test.com',
-            'InitiatingProcessAccountObjectId': '11111111-1111-1111-1111-111111111111',
-            'InitiatingProcessIntegrityLevel': 'Medium',
-            'InitiatingProcessTokenElevation': 'TokenElevationTypeDefault',
-            'AdditionalFields': '{}',
-            'MacAddressSet': ['11-22-33-44-55-66'],
-            'OSArchitecture': '64-bit',
-            'OSPlatform': 'Windows10',
-            'OSVersion': '10.0',
-            'category': '',
-            'provider': '',
-            'event_link': 'https://security.microsoft.com/machines/deviceid/timeline?from=2023-03-17T20:19:45.000Z&to=2023-03-17T20:19:47.000Z',
-            'Alerts': [
-                {
-                    'AlertId': '1234567890-1234-1234-1234-123456789012_1',
-                    'Severity': 'High',
-                    'Title': 'Connection to adversary-in-the-middle (AiTM) phishing site',
-                    'Category': 'CredentialAccess'
-                }],
-            '_missingChildShouldMapInitiatingPid': 'true',
-            'event_count': '1',
-            'original_ref': 'base64'
-        }
+    {
+        'ReportId': 1234,
+        'DeviceName': 'host.test.com',
+        'Timestamp': '2023-03-27T08:32:10.8787764Z',
+        'TableName': 'DeviceEvents',
+        'DeviceId': 'deviceid',
+        'RemoteUrl': 'https://malicious.com',
+        'RemoteIP': '9.9.9.9',
+        'RemotePort': 443,
+        'LocalIP': '9.9.9.1',
+        'LocalPort': 58993,
+        'ActionType': 'OtherAlertRelatedActivity',
+        'FileName': 'rundll32.exe',
+        'FolderPath': 'C:\\Windows\\System32\\rundll32.exe',
+        'SHA1': 'dd399ae46303343f9f0da189aee11c67bd868222',
+        'SHA256': 'b53f3c0cd32d7f20849850768da6431e5f876b7bfa61db0aa0700b02873393fa',
+        'MD5': 'ef3179d498793bf4234f708d3be28633',
+        'AccountDomain': 'ASD',
+        'AccountName': 'username',
+        'InitiatingProcessAccountDomain': 'ASD',
+        'InitiatingProcessAccountName': 'username',
+        'InitiatingProcessAccountSid': 'S-1-5-21-1111111111-111111111-1111111111-1111111',
+        'InitiatingProcessSHA1': '75cf2cc2e76eb99c4de584a3f2917c5cce3bc1bd',
+        'InitiatingProcessSHA256': '0f4e87fab2e5455b89c7263456c461cef80c4ef4b05c893a455d70e2ccd4c387',
+        'InitiatingProcessMD5': '1cc2723f23e452686f2426024bf666e5',
+        'InitiatingProcessFileName': 'WcInstaller.exe',
+        'InitiatingProcessId': 18808,
+        'InitiatingProcessCommandLine': '"WcInstaller.exe" --silent',
+        'InitiatingProcessCreationTime': '2023-03-27T08:31:19.2589344Z',
+        'InitiatingProcessFolderPath': 'C:\\Users\\username\\AppData\\Local\\Temp\\WcInstaller.exe',
+        'InitiatingProcessParentId': 18428,
+        'InitiatingProcessParentFileName': 'setup_win64.exe',
+        'InitiatingProcessParentCreationTime': '2023-03-27T08:31:08.2841083Z',
+        'AdditionalFields': '{"Description":"File WcInstaller.exe observed on machine host.test.com"}',
+        'PublicIP': '9.9.9.1',
+        'OSArchitecture': '64-bit',
+        'OSPlatform': 'Windows10',
+        'OSVersion': '10.0',
+        'MacAddressSet': ['11-22-33-44-55-66'],
+        'rn': 1,
+        'category': '1',
+        'provider': '1',
+        'event_link': 'https://security.microsoft.com/machines/deviceid/timeline?from=2023-03-27T08:32:09.000Z&to=2023-03-27T08:32:11.000Z',
+        'Alerts': '[{"AlertId": "1234567890-1234-1234-1234-123456789012_1", "Severity": "Medium", "Title": "A suspicious file was observed", "Category": "Malware", "AttackTechniques": ["Obfuscated Files or Information (T1027)", "Malicious File (T1204.002)"]}]',
+        'IPAddresses': ['9.9.9.1'],
+        'missingChildShouldMapInitiatingPid': 18808,
+        'event_count': '1',
+        'original_ref': 'base64'
+    }
 }
 
 
@@ -511,27 +500,29 @@ class TestMsatpResultsToStix(unittest.TestCase):
         findings = resolve_refs(objects, event, "finding_refs", "x-ibm-finding", "finding refs missing in event")
         assert len(findings) == 1
         finding = findings[0]
-        assert finding.get("name") == "Connection to adversary-in-the-middle (AiTM) phishing site"
-        assert finding.get("severity") == 99
+        assert finding.get("name") == "A suspicious file was observed"
+        assert finding.get("severity") == 66
         assert finding.get("alert_id") == "1234567890-1234-1234-1234-123456789012_1"
         ttps = resolve_refs(objects, finding, "ttp_tagging_refs", "x-ibm-ttp-tagging",
                             "ttp tagging refs missing from finding")
-        assert len(ttps) == 1
+        assert len(ttps) == 3
         ttp = ttps[0]
         assert "kill_chain_phases" in ttp
         phases = ttp["kill_chain_phases"]
         assert len(phases) == 1
-        assert phases[0].get("phase_name") == "Credential Access"
-        assert phases[0].get("kill_chain_name") == "mitre-attack"
+        assert phases[0].get("phase_name") == "Malware"
+        assert phases[0].get("kill_chain_name") == "microsoft"
 
     def test_alert_non_mitre_tactic(self):
         data = json.loads(json.dumps(device_event_with_alert))
-        data['DeviceEvents']['Alerts'][0]['Category'] = "Malware"
+        # alerts = json.loads(data['DeviceEvents']['Alerts'])
+        # alerts[0]['Category'] = "Malware"
+        # data['DeviceEvents']['Alerts'] = json.dumps(alerts)
         objects = translate_to_objects(data)
         finding = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
         ttps = resolve_refs(objects, finding, "ttp_tagging_refs", "x-ibm-ttp-tagging",
                             "ttp tagging refs missing from finding")
-        assert len(ttps) == 1
+        assert len(ttps) == 3
         ttp = ttps[0]
         assert "kill_chain_phases" in ttp
         phases = ttp["kill_chain_phases"]
@@ -541,7 +532,10 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
     def test_alert_mitre_technique(self):
         data = json.loads(json.dumps(device_event_with_alert))
-        data['DeviceEvents']['Alerts'][0]['AttackTechniques'] = ['Spearphishing Link (T1566.002)']
+        alerts = json.loads(data['DeviceEvents']['Alerts'])
+        alerts[0]['AttackTechniques'] = ['Spearphishing Link (T1566.002)']
+        alerts[0]['Category'] = 'CredentialAccess'
+        data['DeviceEvents']['Alerts'] = json.dumps(alerts)
         objects = translate_to_objects(data)
         finding = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
         ttps = resolve_refs(objects, finding, "ttp_tagging_refs", "x-ibm-ttp-tagging",
@@ -567,20 +561,20 @@ class TestMsatpResultsToStix(unittest.TestCase):
 
         event = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
         assert event is not None, 'event object type not found'
-        assert event['action'] == "ConnectionSuccess"
+        assert event['action'] == "OtherAlertRelatedActivity"
         assert event.get("provider") == "Microsoft Defender for Endpoint"
-        assert event.get("created") == "2023-03-17T20:19:46.6337905Z"
+        assert event.get("created") == "2023-03-27T08:32:10.8787764Z"
         external = resolve_ref(objects, event, "external_ref", "external-reference",
                                "missing external ref link in event")
         assert external.get(
-            "url") == "https://security.microsoft.com/machines/deviceid/timeline?from=2023-03-17T20:19:45.000Z&to=2023-03-17T20:19:47.000Z"
+            "url") == "https://security.microsoft.com/machines/deviceid/timeline?from=2023-03-27T08:32:09.000Z&to=2023-03-27T08:32:11.000Z"
         url = resolve_ref(objects, event, 'url_ref', "url", "missing url ref in event")
         assert url.get("value") == "https://malicious.com"
         domain = resolve_ref(objects, event, 'domain_ref', 'domain-name', 'missing domain ref in event')
         assert domain.get("value") == "malicious.com"
         resolve_ref(objects, event, "host_ref", "x-oca-asset", "missing host ref in event")
         process = resolve_ref(objects, event, "process_ref", "process", "missing process ref in event")
-        assert process.get("pid") == 3052
+        assert process.get("pid") == 18808
         network = resolve_ref(objects, event, "network_ref", "network-traffic", "missing network ref in event")
         assert network.get("src_port") == 58993
         assert network.get("dst_port") == 443

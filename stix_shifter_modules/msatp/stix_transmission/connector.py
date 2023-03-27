@@ -10,7 +10,7 @@ import copy
 from datetime import datetime, timedelta
 
 
-def merge_alert_events(data):
+def merge_alerts(data):
     """
     msatp has a weird behaviour for some alerts - it returns multiple items of the same alert. all properties
     are identical except: 'FileName', 'SHA1', 'RemoteUrl','RemoteIP'
@@ -32,12 +32,19 @@ def merge_alert_events(data):
     return merged_alerts + list(non_alerts)
 
 
-def remove_duplicate_fields(event_data):
-    event = copy.deepcopy(event_data)
-    for k in event_data.keys():
-        if k[-1:].isdigit() and 'SHA' not in k and 'MD' not in k:
-            event.pop(k)
-    return event
+def remove_duplicate_and_empty_fields(event_data):
+    unique_values = set()
+    # remove timestamps from joins of device network info and device info
+    event_data.pop("DNI_TS", None)
+    event_data.pop("DI_TS", None)
+    copied = copy.deepcopy(event_data)
+    # remove None's empty strings and duplicates from joins such as DeviceId2, DeviceId3 etc
+    for key, value in copied.items():
+        if key in unique_values or value is None or value == '' \
+                or (key[-1:].isdigit() and 'SHA' not in key and 'MD' not in key):
+            event_data.pop(key)
+        else:
+            unique_values.add(key)
 
 
 def get_table_name(q):
@@ -76,23 +83,49 @@ def create_event_link(data, timestamp):
         data['event_link'] = ''
 
 
-def remove_duplicate_ips(build_data, lookup_table):
+def remove_duplicate_ips(event_data):
     ## remove duplicate ips between LocalIP, PublicIP and IPAddresses:
-    if 'PublicIP' in build_data[lookup_table] and 'LocalIP' in build_data[lookup_table] and \
-            build_data[lookup_table]['PublicIP'] == build_data[lookup_table]['LocalIP']:
-        build_data[lookup_table].pop('PublicIP')
-    remove_duplicate_ips_from(build_data, lookup_table, 'LocalIP')
-    remove_duplicate_ips_from(build_data, lookup_table, 'PublicIP')
+    if 'PublicIP' in event_data and 'LocalIP' in event_data and \
+            event_data['PublicIP'] == event_data['LocalIP']:
+        event_data.pop('PublicIP')
+    remove_duplicate_ips_from(event_data, 'LocalIP')
+    remove_duplicate_ips_from(event_data, 'PublicIP')
 
 
-def remove_duplicate_ips_from(build_data, lookup_table, prop_name):
-    if 'IPAddresses' in build_data[lookup_table] and prop_name in build_data[lookup_table]:
-        filtered = [x for x in build_data[lookup_table]['IPAddresses'] if
-                    not x == build_data[lookup_table][prop_name]]
+def remove_duplicate_ips_from(event_data, prop_name):
+    if 'IPAddresses' in event_data and prop_name in event_data:
+        filtered = [x for x in event_data['IPAddresses'] if
+                    not x == event_data[prop_name]]
         if len(filtered) > 0:
-            build_data[lookup_table]['IPAddresses'] = filtered
+            event_data['IPAddresses'] = filtered
         else:
-            build_data[lookup_table].pop('IPAddresses')
+            event_data.pop('IPAddresses')
+
+
+def unify_alert_fields(event_data):
+    techniques_lists = []
+    # attack techinques is a string due to the make_list function in the kql
+    # need to convert it back to dict
+    if 'AttackTechniques' in event_data:
+        for techniques_lst in event_data['AttackTechniques']:
+            try:
+                attack_techniques = json.loads(techniques_lst)
+            except json.decoder.JSONDecodeError:
+                attack_techniques = ''
+            finally:
+                techniques_lists.append(attack_techniques)
+        event_data['AttackTechniques'] = techniques_lists
+
+    alerts = []
+    alerts_count = len(event_data['AlertId'])
+    for i in range(alerts_count):
+        alert_dct = {k: (event_data[k][i] if len(event_data[k]) > i else '')
+                     for k in Connector.ALERT_FIELDS if k in event_data}
+        if alert_dct['AlertId'] not in [alert['AlertId'] for alert in alerts]:
+            alerts.append(alert_dct)
+    event_data['Alerts'] = json.dumps(alerts)
+    for f in Connector.ALERT_FIELDS:
+        event_data.pop(f, None)
 
 
 class Connector(BaseJsonSyncConnector):
@@ -100,38 +133,26 @@ class Connector(BaseJsonSyncConnector):
     logger = logger.set_logger(__name__)
     make_alert_as_list = True
 
-    events_and_device_info = ('(({}'
-                              '| join kind=leftouter {} on DeviceId) '
-                              '| where Timestamp1 < Timestamp | summarize arg_max(Timestamp1, *) '
-                              'by ReportId, DeviceName, Timestamp) '
-                              '| join kind=leftouter {} on DeviceId | where Timestamp2 < Timestamp '
-                              '| summarize arg_max(Timestamp2, *) by ReportId, DeviceName, Timestamp')
+    ALERTS_QUERY = ('{} | join kind=leftouter '
+                    '(DeviceAlertEvents | summarize AlertId=make_list(AlertId), Severity=make_list(Severity), '
+                    'Title=make_list(Title), Category=make_list(Category), '
+                    'AttackTechniques=make_list(AttackTechniques) by DeviceName, ReportId, Timestamp)'
+                    ' on ReportId, DeviceName, Timestamp ')
+    DEVICE_INFO_QUERY = ('{} | join kind=leftouter '
+                         '(DeviceInfo | project DI_TS = Timestamp, DeviceId, PublicIP, OSArchitecture, OSPlatform, OSVersion) '
+                         'on DeviceId | where DI_TS < Timestamp '
+                         '| summarize arg_max(DI_TS, *) by ReportId, DeviceName, Timestamp ')
+    DEVICE_NETWORK_QUERY = ('{} | join kind=leftouter '
+                            '(DeviceNetworkInfo | where NetworkAdapterStatus == "Up" '
+                            '| project DNI_TS = Timestamp, DeviceId, MacAddress, IPAddresses '
+                            '| summarize IPAddressesSet=make_set(IPAddresses), MacAddressSet=make_set(MacAddress) '
+                            'by DeviceId, DNI_TS) on DeviceId '
+                            '| where DNI_TS < Timestamp | summarize arg_max(DNI_TS, *) '
+                            'by ReportId, DeviceName, Timestamp '
+                            )
 
-    events_alerts_and_device_info = ('((({}'
-                                     '| join kind=leftouter {} on ReportId, DeviceName, Timestamp)'
-                                     '| join kind=leftouter {} on DeviceId) '
-                                     '| where Timestamp2 < Timestamp | summarize arg_max(Timestamp2, *) '
-                                     'by ReportId, DeviceName, Timestamp) '
-                                     '| join kind=leftouter {} on DeviceId | where Timestamp3 < Timestamp '
-                                     '| summarize arg_max(Timestamp3, *) by ReportId, DeviceName, Timestamp')
-
-    events_alerts_query = '({} | join kind=leftouter {} on ReportId, DeviceName, Timestamp)'
-
-    events_query = ('(find withsource = TableName in ({})  where (Timestamp == datetime({})) '
+    EVENTS_QUERY = ('(find withsource = TableName in ({})  where (Timestamp == datetime({})) '
                     'and (DeviceName == "{}") and (ReportId == {}))')
-
-    alerts_query = (
-        '(DeviceAlertEvents | summarize AlertId=make_list(AlertId), Severity=make_list(Severity), '
-        'Title=make_list(Title), Category=make_list('
-        'Category), AttackTechniques=make_list('
-        'AttackTechniques) by DeviceName, ReportId, Timestamp)')
-
-    network_info_query = (
-        '(DeviceNetworkInfo | where NetworkAdapterStatus == "Up" | project Timestamp, DeviceId, MacAddress, IPAddresses| summarize '
-        'IPAddressesSet=make_set(IPAddresses), MacAddressSet=make_set(MacAddress) by '
-        'DeviceId, Timestamp)')
-
-    device_info_query = '(DeviceInfo | project Timestamp, DeviceId, PublicIP, OSArchitecture, OSPlatform, OSVersion)'
 
     EVENTS_TABLES = ['DeviceNetworkEvents', 'DeviceProcessEvents', 'DeviceFileEvents', 'DeviceRegistryEvents',
                      'DeviceEvents', 'DeviceImageLoadEvents']
@@ -143,6 +164,9 @@ class Connector(BaseJsonSyncConnector):
         :param configuration: dict,config dict"""
         self.connector = __name__.split('.')[1]
         self.alert_mode = False
+        self.should_include_alerts = True if configuration.get("includeAlerts") == "true" else False
+        self.should_include_network_info = True if configuration.get("includeNetworkInfo") == "true" else False
+        self.should_include_host_os = True if configuration.get("includeHostOs") == "true" else False
         self.adal_response = Connector.generate_token(self, connection, configuration)
         if self.adal_response['success']:
             configuration['auth']['access_token'] = self.adal_response['access_token']
@@ -150,48 +174,24 @@ class Connector(BaseJsonSyncConnector):
         else:
             self.init_error = True
 
-    def join_query_with_alerts(self, query):
+    def join_alert_with_events(self, timestamp, device_name, report_id):
+        events_query = "union {}".format(','.join(
+            [Connector.EVENTS_QUERY.format(q, timestamp, device_name, report_id) for q in
+             Connector.EVENTS_TABLES]))
+        return self.join_query_with_other_tables(events_query)
+
+    def join_query_with_other_tables(self, query):
         table = get_table_name(query)
+        query = f"({query})"
         if 'Alert' in table:
             self.alert_mode = True
-            full_query = query
-            partial_query = None
-
-        else:
-            alerts_query = Connector.alerts_query.format(table)
-            full_query = Connector.events_alerts_and_device_info.format(query,
-                                                                        alerts_query,
-                                                                        Connector.network_info_query,
-                                                                        Connector.device_info_query)
-            partial_query = Connector.events_alerts_query.format(query,
-                                                                 alerts_query)
-        return full_query, partial_query
-
-    def unify_alert_fields(self, event_data):
-        techniques_lists = []
-        if 'AttackTechniques' in event_data:
-            for techniques_lst in event_data['AttackTechniques']:
-                try:
-                    attackTechniques = json.loads(techniques_lst)
-                except json.decoder.JSONDecodeError:
-                    attackTechniques = ''
-                finally:
-                    techniques_lists.append(attackTechniques)
-            event_data['AttackTechniques'] = techniques_lists
-
-        alerts = []
-        alerts_count = len(event_data['AlertId']) if not self.alert_mode else 1
-        for i in range(alerts_count):
-            alert_dct = {k: (event_data[k][i] if len(event_data[k]) > i else '')
-                         for k in Connector.ALERT_FIELDS if k in event_data}
-            if alert_dct['AlertId'] not in [alert['AlertId'] for alert in alerts]:
-                alerts.append(alert_dct)
-        event_data['Alerts'] = alerts
-
-        for f in Connector.ALERT_FIELDS:
-            event_data.pop(f, None)
-
-        return event_data
+        if self.should_include_alerts and not self.alert_mode:
+            query = Connector.ALERTS_QUERY.format(query)
+        if self.should_include_host_os:
+            query = Connector.DEVICE_INFO_QUERY.format(query)
+        if self.should_include_network_info:
+            query = Connector.DEVICE_NETWORK_QUERY.format(query)
+        return query
 
     def _handle_errors(self, response, return_obj):
         """Handling API error response
@@ -240,125 +240,87 @@ class Connector(BaseJsonSyncConnector):
         :param length: int,length value"""
 
         response_txt = None
-        return_obj = dict()
+        return_obj = {
+            'success': True,
+            'data': []
+        }
 
         try:
             if self.init_error:
                 return self.adal_response
-            q_return_obj = dict()
-            joined_query, partial_query = self.join_query_with_alerts(query)
+            temp_return_obj = dict()
+            joined_query = self.join_query_with_other_tables(query)
             response = await self.api_client.run_search(joined_query, offset, length)
-            q_return_obj = self._handle_errors(response, q_return_obj)
-            response_json = json.loads(q_return_obj["data"])
-            q_return_obj['data'] = response_json['Results']
+            temp_return_obj = self._handle_errors(response, temp_return_obj)
+            response_data = json.loads(temp_return_obj["data"]).get("Results")
 
             # Customizing the output json,
             # Get 'TableName' attribute from each row of event data
             # Create a dictionary with 'TableName' as key and other attributes in an event data as value
             # Filter the "None" and empty values except for RegistryValueName, which support empty string
             # Customizing of Registryvalues json
-            table_event_data = []
-            q_return_obj['data'] = merge_alert_events(q_return_obj['data'])
-            for event_data in q_return_obj['data']:
-                lookup_table = event_data['TableName']
-                event_data.pop('TableName')
-                build_data = dict()
-                build_data[lookup_table] = {k: v for k, v in event_data.items() if v}
+            response_data = merge_alerts(response_data)
+            for event_data in response_data:
+                table = event_data.get('TableName')
                 # values for query
-                table = build_data[lookup_table].get('Table')
-                device_name = build_data[lookup_table].get('DeviceName')
-                report_id = build_data[lookup_table].get('ReportId')
-                timestamp = build_data[lookup_table].get('Timestamp')
-
-                if self.alert_mode and table not in Connector.EVENTS_TABLES:
-                    Connector.make_alert_as_list = False
-                    if 'AttackTechniques' in build_data[lookup_table]:
-                        attack_techniques = json.loads(build_data[lookup_table]['AttackTechniques'])
-                        build_data[lookup_table]['AttackTechniques'] = attack_techniques
-
-                elif self.alert_mode and all([device_name, report_id, timestamp]):
+                device_name = event_data.get('DeviceName')
+                report_id = event_data.get('ReportId')
+                timestamp = event_data.get('Timestamp')
+                if self.alert_mode and all([device_name, report_id, timestamp]):
                     # query events table according to alert fields
-                    found_events = True
-                    events_query = "union {}".format(','.join(
-                        [Connector.events_query.format(q, timestamp, device_name, report_id) for q in
-                         Connector.EVENTS_TABLES]))
-                    joined_query = Connector.events_and_device_info.format(events_query,
-                                                                           Connector.network_info_query,
-                                                                           Connector.device_info_query)
+                    joined_query = self.join_alert_with_events(timestamp, device_name, report_id)
                     print("joining alert with events: ", joined_query)
                     response = await self.api_client.run_search(joined_query, offset, length)
                     events_return_obj = dict()
                     events_return_obj = self._handle_errors(response, events_return_obj)
-                    response_json = json.loads(events_return_obj["data"])
-                    events_return_obj['data'] = response_json['Results']
-                    # replace the lookup_table with 'table' alert's field, so the to_stix mapping will be
-                    # according to 'table' mapping
-                    if not events_return_obj['data']:
-                        response = await self.api_client.run_search(events_query, offset, length)
-                        events_return_obj = dict()
-                        events_return_obj = self._handle_errors(response, events_return_obj)
-                        response_json = json.loads(events_return_obj["data"])
-                        events_return_obj['data'] = response_json['Results']
-
-                        if not events_return_obj['data']:
-                            Connector.make_alert_as_list, found_events = False, False
-                            if 'AttackTechniques' in build_data[lookup_table]:
-                                attack_techniques = json.loads(build_data[lookup_table]['AttackTechniques'])
-                                build_data[lookup_table]['AttackTechniques'] = attack_techniques
-
-                    if found_events:
-                        val = build_data[lookup_table]
-                        build_data.pop(lookup_table)
-                        build_data[table] = val
-                        lookup_table = table
-                        event_build_data = dict()
-                        event_obj = events_return_obj['data'][0]
-                        event_obj = (remove_duplicate_fields(event_obj))
-                        event_obj.pop('TableName')
-                        merged_alert_event = copy.deepcopy(build_data[table])
-                        event_obj = {k: v for k, v in event_obj.items() if v}
-                        merged_alert_event.update(event_obj)
-                        merged_alert_event = {k: v for k, v in merged_alert_event.items() if v and v != ['']}
-                        event_build_data[table] = merged_alert_event
-                        build_data = event_build_data
-
-                build_data[lookup_table]['category'] = ''
-                build_data[lookup_table]['provider'] = ''
-                event_data = copy.deepcopy(build_data[lookup_table])
-
+                    events_data = json.loads(events_return_obj["data"]).get("Results")
+                    if len(events_data) == 0:
+                        # if only alert - assign the alert title to x-oca-event
+                        event_data['ActionType'] = event_data.get("Title")
+                        return_obj['data'].append({
+                            table: event_data
+                        })
+                    else:
+                        # correlated events where found to the alert
+                        self.alert_mode = False
+                        alert_data = copy.deepcopy(event_data)
+                        if 'AttackTechniques' in alert_data:
+                            if alert_data['AttackTechniques'] == '':
+                                alert_data['AttackTechniques'] = []
+                            alert_data['AttackTechniques'] = json.dumps(alert_data['AttackTechniques'])
+                        alert_data = {k: ([v] if k in self.ALERT_FIELDS else v) for (k, v) in alert_data.items()}
+                        for event_data in events_data:
+                            table = event_data.get("TableName")
+                            event_data = {**alert_data, **event_data}
+                            return_obj['data'].append({
+                                table: event_data
+                            })
+                else:
+                    return_obj['data'].append({
+                        table: event_data
+                    })
+            for event in return_obj['data']:
+                table = next(iter(event))
+                event_data = event[table]
+                timestamp = event_data.get('Timestamp')
+                event_data['category'] = '1'
+                event_data['provider'] = '1'
                 # link the event to ms atp console device timeline with one second before and after the event https://security.microsoft.com/machines/<MachineId>/timeline?from=<start>&to=<end>
-                create_event_link(build_data[lookup_table], timestamp)
-
-                if 'AlertId' in build_data[lookup_table] and Connector.make_alert_as_list:
-                    build_data[lookup_table] = ({k: ([v] if k in Connector.ALERT_FIELDS and
-                                                            self.alert_mode else v) for k, v in
-                                                 build_data[lookup_table].items()})
-                    build_data[lookup_table] = self.unify_alert_fields(build_data[lookup_table])
-
-                if 'IPAddressesSet' in build_data[lookup_table]:
-                    organize_ips(build_data[lookup_table])
-                if lookup_table == "DeviceRegistryEvents":
-                    organize_registry_data(build_data[lookup_table])
-                # handle two different type of process events: ProcessCreate, OpenProcess
-                if lookup_table == "DeviceEvents":
-                    if 'ProcessId' not in build_data[lookup_table] or build_data[lookup_table]['ProcessId'] is None or \
-                            build_data[lookup_table]['ProcessId'] == "":
-                        build_data[lookup_table]["_missingChildShouldMapInitiatingPid"] = "true"
-
-                build_data[lookup_table]['event_count'] = '1'
-                build_data[lookup_table]['original_ref'] = json.dumps(event_data)
-
-                remove_duplicate_ips(build_data, lookup_table)
-
-                lst_len = len(table_event_data)
-                table_event_data.insert(lst_len, build_data)
-
-            if 'data' in return_obj.keys():
-                return_obj['data'].extend(table_event_data)
-            else:
-                return_obj['data'] = table_event_data
-
-            return_obj['success'] = True
+                create_event_link(event_data, timestamp)
+                if event_data.get('AlertId') is not None and not self.alert_mode:
+                    unify_alert_fields(event_data)
+                if 'IPAddressesSet' in event_data:
+                    organize_ips(event_data)
+                if table == "DeviceRegistryEvents":
+                    organize_registry_data(event_data)
+                if table == "DeviceEvents":
+                    if 'ProcessId' not in event_data or event_data['ProcessId'] is None or \
+                            event_data['ProcessId'] == "":
+                        event_data["missingChildShouldMapInitiatingPid"] = event_data.get("InitiatingProcessId")
+                event_data['event_count'] = '1'
+                remove_duplicate_ips(event_data)
+                remove_duplicate_and_empty_fields(event_data)
+                event_data['original_ref'] = json.dumps(event_data)
             return return_obj
 
         except Exception as ex:

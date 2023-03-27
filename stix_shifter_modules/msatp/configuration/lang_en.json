@@ -37,6 +37,18 @@
                 "label": "Client Secret",
                 "description": "Client Secret of Azure Active directory Application with access to the Microsoft Graph API"
             }
+        },
+        "includeAlerts": {
+            "label": "Join events with Alerts? ('true' for yes, anything else for no)",
+            "description": "With this feature enabled every event will be searched for correlated alerts and the alert data will be included in the results. Keep in mind that this feature will add API CPU consumption."
+        },
+        "includeHostOs": {
+            "label": "Join events with Host OS info? ('true' for yes, anything else for no)",
+            "description": "With this feature enabled every event will include also the device OS details. Keep in mind that this feature will add API CPU consumption."
+        },
+        "includeNetworkInfo": {
+            "label": "Join events with Device Network info? ('true' for yes, anything else for no)",
+            "description": "With this feature enabled every event will include also the active network adapters IP and MAC addresses of the device at the time of the event. Keep in mind that this feature will add API CPU consumption."
         }
     }
 }

@@ -39,6 +39,18 @@
             "clientSecret": {
                 "type": "password"
             }
+        },
+        "includeAlerts":{
+            "type": "text",
+            "default": "true"
+        },
+        "includeHostOs": {
+            "type": "text",
+            "default": "true"
+        },
+        "includeNetworkInfo": {
+            "type": "text",
+            "default": "true"
         }
     }
 }

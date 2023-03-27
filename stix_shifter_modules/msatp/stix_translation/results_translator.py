@@ -1,5 +1,7 @@
+import json
 import re
 
+from stix_shifter_modules.msatp.stix_translation.transformers import SeverityToNumericVal
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 
 TACTICS = [
@@ -29,72 +31,107 @@ def get_objects_by_type(objects, type_name):
     return [key for (key, obj) in objects.items() if obj["type"] == type_name]
 
 
+def get_first_object_by_type(objects, type_name):
+    """receives a stix objects dictionary and returns the first index and value of the object of the given type"""
+    for k, v in objects.items():
+        if v.get("type") == type_name:
+            return k, v
+    return None, None
+
+
 def get_next_index(objects):
     """returns the next available index in the objects dictionary"""
-    return str(len(objects.keys()))
+    i = 0
+    while str(i) in objects:
+        i += 1
+    next_ref = str(i)
+    for ref, sco in objects.items():
+        for key, value in sco.items():
+            if key.endswith("_ref"):
+                if value == next_ref:
+                    sco.pop(key)
+            elif key.endswith("_refs"):
+                for r in value:
+                    if r == next_ref:
+                        sco[key] = [item for item in value if item != next_ref]
+                        if len(sco[key]) == 0:
+                            sco.pop(key)
+    return next_ref
 
 
-def parse_technique(str):
-    match = re.match(r'^(.+) \((T.+)\)$', str)
+def parse_technique(technique):
+    match = re.match(r'^(.+) \((T.+)\)$', technique)
     return {
         "technique_name": match.group(1),
         "technique_id": match.group(2)
     }
 
 
-def fix_finding_refs(observed):
-    objects = observed["objects"]
-    events = get_objects_by_type(objects, "x-oca-event")
-    for event_ref in events:
-        event = objects[event_ref]
-        if "finding_refs" in event:
-            event["finding_refs"] = list(set(event["finding_refs"]))
+def create_ttp_from_category(category):
+    phase_name = parse_camel_case(category)
+    kill_chain = "microsoft"
+    if phase_name in TACTICS:
+        kill_chain = "mitre-attack"
+    return {
+        'type': 'x-ibm-ttp-tagging',
+        'kill_chain_phases': [
+            {
+                "phase_name": phase_name,
+                "kill_chain_name": kill_chain
+            }
+        ]
+    }
 
 
-def fix_ttp_refs(observed):
+def create_ttps_from_technique(technique):
+    t = parse_technique(technique)
+    return {
+        'type': 'x-ibm-ttp-tagging',
+        'extensions': {
+            'mitre-attack-ext': t
+        }
+    }
+
+
+def fix_alerts(observed):
     objects = observed["objects"]
-    findings = get_objects_by_type(objects, "x-ibm-finding")
-    for finding_ref in findings:
-        finding = objects[finding_ref]
-        if "ttp_tagging_refs" in finding:
-            new_refs = []
-            for ttp_ref in finding["ttp_tagging_refs"]:
-                ttp = objects[ttp_ref]
-                if ttp["type"] == "x-ibm-ttp-tagging":
-                    if (
-                            "kill_chain_phases" in ttp
-                            and type(ttp["kill_chain_phases"]) == dict
-                    ):
-                        phase_name = parse_camel_case(ttp["kill_chain_phases"]["phase_name"])
-                        kill_chain = "microsoft"
-                        if phase_name in TACTICS:
-                            kill_chain = "mitre-attack"
-                        ttp["kill_chain_phases"] = [
-                            {
-                                "phase_name": phase_name,
-                                "kill_chain_name": kill_chain
-                            }
-                        ]
-                    if (
-                            "extensions" in ttp
-                            and "mitre-attack-ext" in ttp["extensions"]
-                            and "technique_name" in ttp["extensions"]["mitre-attack-ext"]
-                            and type(ttp["extensions"]["mitre-attack-ext"]["technique_name"]) == list
-                    ):
-                        first = ttp["extensions"]["mitre-attack-ext"]["technique_name"][0]
-                        others = ttp["extensions"]["mitre-attack-ext"]["technique_name"][1:]
-                        ttp["extensions"]["mitre-attack-ext"] = parse_technique(first)
-                        for other in others:
-                            t = parse_technique(other)
-                            key = get_next_index(objects)
-                            objects[key] = {
-                                'type': 'x-ibm-ttp-tagging',
-                                'extensions': {
-                                    'mitre-attack-ext': t
-                                }
-                            }
-                            new_refs.append(key)
-            finding["ttp_tagging_refs"].extend(new_refs)
+    json_alert_ref, json_alert = get_first_object_by_type(objects, "x-json-alert")
+    if json_alert_ref is not None:
+        objects.pop(json_alert_ref)
+        event_ref, event = get_first_object_by_type(objects, "x-oca-event")
+        alerts = json.loads(json_alert.get('data'))
+        ttps = {}
+        for alert in alerts:
+            finding = {
+                'type': 'x-ibm-finding',
+                'name': alert.get("Title"),
+                'alert_id': alert.get("AlertId"),
+                'severity': SeverityToNumericVal.transform(alert.get("Severity")),
+                'ttp_tagging_refs': []
+            }
+            finding_ref = get_next_index(objects)
+            objects[finding_ref] = finding
+            if 'finding_refs' not in event:
+                event['finding_refs'] = []
+            event['finding_refs'].append(finding_ref)
+            if 'Category' in alert:
+                cat = alert['Category']
+                if cat not in ttps:
+                    cat_ttp = create_ttp_from_category(cat)
+                    cat_ref = get_next_index(objects)
+                    objects[cat_ref] = cat_ttp
+                    ttps[cat] = cat_ref
+                finding['ttp_tagging_refs'].append(ttps[cat])
+            if 'AttackTechniques' in alert:
+                for technique in alert['AttackTechniques']:
+                    if technique not in ttps:
+                        ttp = create_ttps_from_technique(technique)
+                        ttp_ref = get_next_index(objects)
+                        objects[ttp_ref] = ttp
+                        ttps[technique] = ttp_ref
+                    finding['ttp_tagging_refs'].append(ttps[technique])
+            if len(finding['ttp_tagging_refs']) == 0:
+                finding.pop('ttp_tagging_refs')
 
 
 def get_reference(objects, source, ref_prop, ref_type):
@@ -135,12 +172,20 @@ def fix_device_event_refs(observed):
 
 def validate_process_ref_in_event(event, objects):
     if 'missingChildShouldMapInitiatingPid' in event:
-        proc_ref = event['process_ref']
-        proc = get_reference(objects, event, 'process_ref', 'process')
-        event['process_ref'] = proc['parent_ref']
-        ref = proc['binary_ref']
-        event['file_ref'] = ref
-        del objects[proc_ref]
+        pid = event['missingChildShouldMapInitiatingPid']
+        if 'process_ref' in event:
+            proc_ref = event['process_ref']
+            proc = get_reference(objects, event, 'process_ref', 'process')
+            event['process_ref'] = proc['parent_ref']
+            ref = proc['binary_ref']
+            event['file_ref'] = ref
+            del objects[proc_ref]
+        if pid is not None and pid != "":
+            init_proc = [key for key, value in objects.items()
+                         if value.get("type") == "process"
+                         and value.get("pid") == event['missingChildShouldMapInitiatingPid']]
+            if len(init_proc) == 1:
+                event['process_ref'] = init_proc[0]
         del event['missingChildShouldMapInitiatingPid']
 
 
@@ -149,8 +194,8 @@ class ResultsTranslator(JSONToStix):
     def translate_results(self, data_source, data):
         result = super().translate_results(data_source, data)
         for observed in result["objects"]:
-            if observed["type"] == "observed-data":
-                fix_ttp_refs(observed)
-                fix_finding_refs(observed)
+            if observed["type"] == "observed-data" and "objects" in observed:
+                fix_alerts(observed)
                 fix_device_event_refs(observed)
+                observed['objects'] = {k: observed['objects'][k] for k in sorted(observed['objects'], key=lambda x: int(x))}
         return result

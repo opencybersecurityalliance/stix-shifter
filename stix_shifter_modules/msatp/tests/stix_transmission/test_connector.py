@@ -1,3 +1,5 @@
+import json
+
 from stix_shifter_modules.msatp.stix_transmission import connector
 from stix_shifter_modules.msatp.tests.test_utils import all_keys_in_object
 from unittest.mock import patch
@@ -13,7 +15,10 @@ class TestMSATPConnection(unittest.TestCase):
                 "tenant": "bla",
                 "clientId": "bla",
                 "clientSecret": "bla"
-            }
+            },
+            "includeAlerts": "true",
+            "includeHostOs": "true",
+            "includeNetworkInfo": "true"
         }
 
     def connection(self):
@@ -95,7 +100,7 @@ class TestMSATPConnection(unittest.TestCase):
                 'DeviceName': 'host2.test.com',
             }
         ]
-        merged = connector.merge_alert_events(data)
+        merged = connector.merge_alerts(data)
         assert len(merged) == 3
         alert = merged[0]
         assert alert.get("TableName") == "DeviceAlertEvents"
@@ -123,14 +128,22 @@ class TestMSATPConnection(unittest.TestCase):
             'InitiatingProcessMD5': '58f918b86a4798177032abcb12c9c605',
             'DeviceId1': '1234567890abcdef1234567890abcdef12345678',
             'DeviceId2': '1234567890abcdef1234567890abcdef12345678',
+            'DNI_TS': '2023-03-17T16:59:12.3036191Z',
+            'DI_TS': '2023-03-17T16:59:12.3036191Z',
+            'SHA1': None,
+            'MD5': ''
         }
-        cleaned = connector.remove_duplicate_fields(data)
+        connector.remove_duplicate_and_empty_fields(data)
         assert all_keys_in_object({'ReportId', 'DeviceName', 'DeviceId', 'Timestamp', 'TableName',
-                                   'InitiatingProcessSHA1', 'InitiatingProcessSHA256', 'InitiatingProcessMD5'}, cleaned)
-        assert 'DeviceId1' not in cleaned
-        assert 'DeviceId2' not in cleaned
-        assert 'Timestamp1' not in cleaned
-        assert 'Timestamp2' not in cleaned
+                                   'InitiatingProcessSHA1', 'InitiatingProcessSHA256', 'InitiatingProcessMD5'}, data)
+        assert 'DeviceId1' not in data
+        assert 'DeviceId2' not in data
+        assert 'Timestamp1' not in data
+        assert 'Timestamp2' not in data
+        assert 'DNI_TS' not in data
+        assert 'DI_TS' not in data
+        assert 'SHA1' not in data
+        assert 'MD5' not in data
 
     def test_get_table_name(self, mock_adal_auth):
         query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
@@ -144,19 +157,46 @@ class TestMSATPConnection(unittest.TestCase):
         mock_adal_auth.return_value = get_adal_mock_response()
         query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
         entry_point = connector.Connector(self.connection(), self.config())
-        joined_query, partial_query = entry_point.join_query_with_alerts(query)
-        assert joined_query == '(((union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))| join kind=leftouter (DeviceAlertEvents | summarize AlertId=make_list(AlertId), Severity=make_list(Severity), Title=make_list(Title), Category=make_list(Category), AttackTechniques=make_list(AttackTechniques) by DeviceName, ReportId, Timestamp) on ReportId, DeviceName, Timestamp)| join kind=leftouter (DeviceNetworkInfo | where NetworkAdapterStatus == "Up" | project Timestamp, DeviceId, MacAddress, IPAddresses| summarize IPAddressesSet=make_set(IPAddresses), MacAddressSet=make_set(MacAddress) by DeviceId, Timestamp) on DeviceId) | where Timestamp2 < Timestamp | summarize arg_max(Timestamp2, *) by ReportId, DeviceName, Timestamp) | join kind=leftouter (DeviceInfo | project Timestamp, DeviceId, PublicIP, OSArchitecture, OSPlatform, OSVersion) on DeviceId | where Timestamp3 < Timestamp | summarize arg_max(Timestamp3, *) by ReportId, DeviceName, Timestamp'
-        assert partial_query == '(union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9")) | join kind=leftouter (DeviceAlertEvents | summarize AlertId=make_list(AlertId), Severity=make_list(Severity), Title=make_list(Title), Category=make_list(Category), AttackTechniques=make_list(AttackTechniques) by DeviceName, ReportId, Timestamp) on ReportId, DeviceName, Timestamp)'
+        joined_query = entry_point.join_query_with_other_tables(query)
+        assert joined_query == (
+            "(union (find withsource = TableName in (DeviceNetworkEvents)  "
+            "where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  "
+            "| order by Timestamp desc "
+            "| where (LocalIP =~ \"9.9.9.9\") or (RemoteIP =~ \"9.9.9.9\")),"
+            "(find withsource = TableName in (DeviceEvents)  "
+            "where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  "
+            "| order by Timestamp desc | where (RemoteIP =~ \"9.9.9.9\") or (LocalIP =~ \"9.9.9.9\"))) "
+            "| join kind=leftouter (DeviceAlertEvents | summarize AlertId=make_list(AlertId), "
+            "Severity=make_list(Severity), Title=make_list(Title), Category=make_list(Category), "
+            "AttackTechniques=make_list(AttackTechniques) by DeviceName, ReportId, Timestamp) "
+            "on ReportId, DeviceName, Timestamp  "
+            "| join kind=leftouter (DeviceInfo | project DI_TS = Timestamp, DeviceId, PublicIP, OSArchitecture, "
+            "OSPlatform, OSVersion) on DeviceId | where DI_TS < Timestamp "
+            "| summarize arg_max(DI_TS, *) by ReportId, DeviceName, Timestamp  "
+            "| join kind=leftouter (DeviceNetworkInfo | where NetworkAdapterStatus == \"Up\" "
+            "| project DNI_TS = Timestamp, DeviceId, MacAddress, IPAddresses "
+            "| summarize IPAddressesSet=make_set(IPAddresses), MacAddressSet=make_set(MacAddress) by DeviceId, DNI_TS) "
+            "on DeviceId | where DNI_TS < Timestamp | summarize arg_max(DNI_TS, *) by ReportId, DeviceName, Timestamp "
+        )
 
         query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
         entry_point = connector.Connector(self.connection(), self.config())
-        joined_query, partial_query = entry_point.join_query_with_alerts(query)
-        assert joined_query == query
-        assert partial_query is None
+        joined_query = entry_point.join_query_with_other_tables(query)
+        assert joined_query == (
+            '((find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z)'
+            ' and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc '
+            '| where AlertId =~ "123123")) '
+            '| join kind=leftouter (DeviceInfo | project DI_TS = Timestamp, DeviceId, PublicIP, OSArchitecture, '
+            'OSPlatform, OSVersion) on DeviceId | where DI_TS < Timestamp | summarize arg_max(DI_TS, *) by ReportId, '
+            'DeviceName, Timestamp  '
+            '| join kind=leftouter (DeviceNetworkInfo | where NetworkAdapterStatus == "Up" | project DNI_TS = Timestamp,'
+            ' DeviceId, MacAddress, IPAddresses | summarize IPAddressesSet=make_set(IPAddresses), '
+            'MacAddressSet=make_set(MacAddress) by DeviceId, DNI_TS) on DeviceId | where DNI_TS < Timestamp '
+            '| summarize arg_max(DNI_TS, *) by ReportId, DeviceName, Timestamp '
+        )
 
     def test_unify_alert_fields(self, mock_adal_auth):
         mock_adal_auth.return_value = get_adal_mock_response()
-        entry_point = connector.Connector(self.connection(), self.config())
         data = {
             'AlertId': ['da111111111111111111_-1111111111'],
             'Timestamp': '2023-03-17T16:59:12.3036191Z',
@@ -168,10 +208,11 @@ class TestMSATPConnection(unittest.TestCase):
             'Table': 'DeviceEvents'
         }
 
-        unified = entry_point.unify_alert_fields(data)
-        assert unified is not None
-        alerts = unified.get("Alerts")
+        connector.unify_alert_fields(data)
+        alerts = data.get("Alerts")
         assert alerts is not None
+        assert type(alerts) is str
+        alerts = json.loads(alerts)
         assert len(alerts) == 1
         alert = alerts[0]
         assert alert.get("AlertId") == 'da111111111111111111_-1111111111'
@@ -244,34 +285,31 @@ class TestMSATPConnection(unittest.TestCase):
 
     def test_create_event_link(self, mock_adal_auth):
         data = {
-                "DeviceId": "deviceid"
+            "DeviceId": "deviceid"
         }
         connector.create_event_link(data, "2019-10-10T10:43:07.2363291Z")
-        assert data.get("event_link") == "https://security.microsoft.com/machines/deviceid/timeline?from=2019-10-10T10:43:06.000Z&to=2019-10-10T10:43:08.000Z"
+        assert data.get(
+            "event_link") == "https://security.microsoft.com/machines/deviceid/timeline?from=2019-10-10T10:43:06.000Z&to=2019-10-10T10:43:08.000Z"
 
     def test_remove_duplicate_ips(self, mock_adal_auth):
         data = {
-            "DeviceEvents": {
-                "PublicIP": "9.9.9.9",
-                "LocalIP": "9.9.9.9",
-                "IPAddresses": ["9.9.9.9", "9.9.9.1"]
-            }
+            "PublicIP": "9.9.9.9",
+            "LocalIP": "9.9.9.9",
+            "IPAddresses": ["9.9.9.9", "9.9.9.1"]
         }
-        connector.remove_duplicate_ips(data, "DeviceEvents")
-        assert "PublicIP" not in data["DeviceEvents"]
-        assert data["DeviceEvents"].get("LocalIP") == "9.9.9.9"
-        assert len(data["DeviceEvents"]["IPAddresses"]) == 1
-        assert data["DeviceEvents"]["IPAddresses"][0] == "9.9.9.1"
+        connector.remove_duplicate_ips(data)
+        assert "PublicIP" not in data
+        assert data.get("LocalIP") == "9.9.9.9"
+        assert len(data["IPAddresses"]) == 1
+        assert data["IPAddresses"][0] == "9.9.9.1"
 
     def test_do_not_remove_duplicate_ips(self, mock_adal_auth):
         data = {
-            "DeviceEvents": {
-                "PublicIP": "9.9.9.1",
-                "LocalIP": "9.9.9.2",
-                "IPAddresses": ["9.9.9.3", "9.9.9.4"]
-            }
+            "PublicIP": "9.9.9.1",
+            "LocalIP": "9.9.9.2",
+            "IPAddresses": ["9.9.9.3", "9.9.9.4"]
         }
-        connector.remove_duplicate_ips(data, "DeviceEvents")
-        assert data["DeviceEvents"].get("PublicIP") == "9.9.9.1"
-        assert data["DeviceEvents"].get("LocalIP") == "9.9.9.2"
-        assert len(data["DeviceEvents"]["IPAddresses"]) == 2
+        connector.remove_duplicate_ips(data)
+        assert data.get("PublicIP") == "9.9.9.1"
+        assert data.get("LocalIP") == "9.9.9.2"
+        assert len(data["IPAddresses"]) == 2
