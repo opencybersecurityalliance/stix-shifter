@@ -1,10 +1,12 @@
-##### Updated on 06/01/22
+##### Updated on 02/27/23
 ## Microsoft Defender for Endpoint
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | or |
-| OR | or |
+| AND (Comparision) | and |
+| OR (Comparision) | or |
 | = | == |
 | != | != |
 | LIKE | contains |
@@ -14,8 +16,81 @@
 | < | < |
 | <= | <= |
 | IN | in~ |
+| OR (Observation) | or |
+| AND (Observation) | or |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **ipv4-addr**:value | DeviceNetworkEvents.LocalIP, DeviceNetworkEvents.RemoteIP |
+| **ipv6-addr**:value | DeviceNetworkEvents.LocalIP, DeviceNetworkEvents.RemoteIP |
+| **network-traffic**:src_port | DeviceNetworkEvents.LocalPort |
+| **network-traffic**:dst_port | DeviceNetworkEvents.RemotePort |
+| **network-traffic**:protocols[*] | DeviceNetworkEvents.Protocol |
+| **network-traffic**:src_ref.value | DeviceNetworkEvents.LocalIP, DeviceNetworkInfo.MacAddress |
+| **network-traffic**:dst_ref.value | DeviceNetworkEvents.RemoteIP |
+| **url**:value | DeviceNetworkEvents.RemoteUrl |
+| **domain-name**:value | DeviceFileEvents.DeviceName, DeviceProcessEvents.DeviceName, DeviceNetworkEvents.DeviceName, DeviceRegistryEvents.DeviceName, DeviceEvents.DeviceName, DeviceInfo.DeviceName, DeviceAlertEvents.DeviceName, DeviceImageLoadEvents.DeviceName, DeviceLogonEvents.DeviceName, DeviceNetworkInfo.DeviceName |
+| **file**:name | DeviceFileEvents.FileName, DeviceFileEvents.InitiatingProcessFileName, DeviceFileEvents.InitiatingProcessParentFileName, DeviceProcessEvents.FileName, DeviceProcessEvents.InitiatingProcessFileName, DeviceProcessEvents.InitiatingProcessParentFileName, DeviceNetworkEvents.InitiatingProcessFileName, DeviceNetworkEvents.InitiatingProcessParentFileName, DeviceRegistryEvents.InitiatingProcessFileName, DeviceRegistryEvents.InitiatingProcessParentFileName |
+| **file**:hashes.'SHA-1' | DeviceFileEvents.SHA1, DeviceFileEvents.InitiatingProcessSHA1, DeviceProcessEvents.SHA1, DeviceProcessEvents.InitiatingProcessSHA1, DeviceNetworkEvents.InitiatingProcessSHA1, DeviceRegistryEvents.InitiatingProcessSHA1 |
+| **file**:hashes.'SHA-256' | DeviceFileEvents.SHA256, DeviceFileEvents.InitiatingProcessSHA256, DeviceProcessEvents.SHA256, DeviceProcessEvents.InitiatingProcessSHA256, DeviceNetworkEvents.InitiatingProcessSHA256, DeviceRegistryEvents.InitiatingProcessSHA256 |
+| **file**:hashes.MD5 | DeviceFileEvents.MD5, DeviceFileEvents.InitiatingProcessMD5, DeviceProcessEvents.MD5, DeviceProcessEvents.InitiatingProcessMD5, DeviceNetworkEvents.InitiatingProcessMD5, DeviceRegistryEvents.InitiatingProcessMD5 |
+| **file**:parent_directory_ref.path | DeviceFileEvents.FolderPath, DeviceFileEvents.InitiatingProcessFolderPath, DeviceProcessEvents.FolderPath, DeviceProcessEvents.InitiatingProcessFolderPath, DeviceNetworkEvents.InitiatingProcessFolderPath, DeviceRegistryEvents.InitiatingProcessFolderPath |
+| **process**:name | DeviceProcessEvents.FileName, DeviceProcessEvents.InitiatingProcessFileName, DeviceProcessEvents.InitiatingProcessParentFileName, DeviceNetworkEvents.InitiatingProcessFileName, DeviceNetworkEvents.InitiatingProcessParentFileName, DeviceRegistryEvents.InitiatingProcessFileName, DeviceRegistryEvents.InitiatingProcessParentFileName |
+| **process**:parent_ref.name | DeviceProcessEvents.InitiatingProcessFileName, DeviceProcessEvents.InitiatingProcessFileName, DeviceNetworkEvents.InitiatingProcessFileName, DeviceRegistryEvents.InitiatingProcessFileName, DeviceProcessEvents.InitiatingProcessParentFileName, DeviceProcessEvents.InitiatingProcessParentFileName, DeviceNetworkEvents.InitiatingProcessParentFileName, DeviceRegistryEvents.InitiatingProcessParentFileName |
+| **process**:command_line | DeviceProcessEvents.ProcessCommandLine, DeviceProcessEvents.InitiatingProcessCommandLine, DeviceNetworkEvents.InitiatingProcessCommandLine, DeviceRegistryEvents.InitiatingProcessCommandLine |
+| **process**:pid | DeviceProcessEvents.ProcessId, DeviceProcessEvents.InitiatingProcessId, DeviceProcessEvents.InitiatingProcessParentId, DeviceNetworkEvents.InitiatingProcessId, DeviceNetworkEvents.InitiatingProcessParentId, DeviceRegistryEvents.InitiatingProcessId, DeviceRegistryEvents.InitiatingProcessParentId, DeviceFileEvents.InitiatingProcessId, DeviceFileEvents.InitiatingProcessParentId |
+| **process**:parent_ref.pid | DeviceProcessEvents.InitiatingProcessId, DeviceNetworkEvents.InitiatingProcessId, DeviceRegistryEvents.InitiatingProcessId, DeviceFileEvents.InitiatingProcessId, DeviceProcessEvents.InitiatingProcessParentId, DeviceNetworkEvents.InitiatingProcessParentId, DeviceRegistryEvents.InitiatingProcessParentId, DeviceFileEvents.InitiatingProcessParentId |
+| **process**:child_refs.pid | DeviceProcessEvents.ProcessId, DeviceProcessEvents.InitiatingProcessId, DeviceNetworkEvents.InitiatingProcessId, DeviceRegistryEvents.InitiatingProcessId, DeviceFileEvents.InitiatingProcessId |
+| **process**:creator_user_ref.user_id | DeviceProcessEvents.AccountSid, DeviceProcessEvents.InitiatingProcessAccountSid |
+| **process**:child_refs.creator_user_ref.account_login | DeviceProcessEvents.AccountName |
+| **process**:creator_user_ref.account_login | DeviceProcessEvents.InitiatingProcessAccountName |
+| **process**:binary_ref.hashes.'SHA-1' | DeviceFileEvents.SHA1, DeviceFileEvents.InitiatingProcessSHA1, DeviceProcessEvents.SHA1, DeviceProcessEvents.InitiatingProcessSHA1, DeviceNetworkEvents.InitiatingProcessSHA1, DeviceRegistryEvents.InitiatingProcessSHA1 |
+| **process**:binary_ref.hashes.'SHA-256' | DeviceFileEvents.SHA256, DeviceFileEvents.InitiatingProcessSHA256, DeviceProcessEvents.SHA256, DeviceProcessEvents.InitiatingProcessSHA256, DeviceNetworkEvents.InitiatingProcessSHA256, DeviceRegistryEvents.InitiatingProcessSHA256 |
+| **process**:child_refs.binary_ref.hashes.MD5 | DeviceProcessEvents.MD5 |
+| **process**:child_refs.binary_ref.hashes.'SHA-256' | DeviceProcessEvents.SHA256 |
+| **process**:child_refs.binary_ref.hashes.'SHA-1' | DeviceProcessEvents.SHA1 |
+| **process**:binary_ref.hashes.MD5 | DeviceFileEvents.MD5, DeviceFileEvents.InitiatingProcessMD5, DeviceProcessEvents.MD5, DeviceProcessEvents.InitiatingProcessMD5, DeviceNetworkEvents.InitiatingProcessMD5, DeviceRegistryEvents.InitiatingProcessMD5 |
+| **process**:created | DeviceProcessEvents.ProcessCreationTime, DeviceProcessEvents.InitiatingProcessParentCreationTime, DeviceNetworkEvents.InitiatingProcessCreationTime, DeviceNetworkEvents.InitiatingProcessParentCreationTime, DeviceRegistryEvents.InitiatingProcessCreationTime, DeviceRegistryEvents.InitiatingProcessParentCreationTime, DeviceFileEvents.InitiatingProcessCreationTime, DeviceFileEvents.InitiatingProcessParentCreationTime |
+| **process**:parent_ref.created | DeviceProcessEvents.InitiatingProcessParentCreationTime, DeviceNetworkEvents.InitiatingProcessParentCreationTime, DeviceRegistryEvents.InitiatingProcessParentCreationTime, DeviceFileEvents.InitiatingProcessParentCreationTime |
+| **process**:binary_ref.parent_directory_ref.path | DeviceProcessEvents.InitiatingProcessFolderPath, DeviceNetworkEvents.InitiatingProcessFolderPath, DeviceRegistryEvents.InitiatingProcessFolderPath, DeviceFileEvents.InitiatingProcessFolderPath |
+| **process**:child_refs.binary_ref.parent_directory_ref.path | DeviceProcessEvents.FolderPath |
+| **user-account**:user_id | DeviceProcessEvents.AccountSid, DeviceNetworkEvents.InitiatingProcessAccountSid, DeviceRegistryEvents.InitiatingProcessAccountSid |
+| **user-account**:account_login | DeviceProcessEvents.AccountName, DeviceNetworkEvents.InitiatingProcessAccountName, DeviceRegistryEvents.InitiatingProcessAccountName |
+| **windows-registry-key**:key | DeviceRegistryEvents.RegistryKey |
+| **windows-registry-key**:values[*] | DeviceRegistryEvents.RegistryValueName |
+| **mac-addr**:value | DeviceNetworkInfo.MacAddress |
+| **x-msatp**:computer_name | DeviceProcessEvents.DeviceName, DeviceNetworkEvents.DeviceName, DeviceRegistryEvents.DeviceName, DeviceFileEvents.DeviceName |
+| **x-msatp**:machine_id | DeviceProcessEvents.DeviceId, DeviceNetworkEvents.DeviceId, DeviceRegistryEvents.DeviceId, DeviceFileEvents.DeviceId |
+| **directory**:path | DeviceFileEvents.FolderPath, DeviceFileEvents.InitiatingProcessFolderPath, DeviceProcessEvents.FolderPath, DeviceProcessEvents.InitiatingProcessFolderPath, DeviceNetworkEvents.InitiatingProcessFolderPath, DeviceRegistryEvents.InitiatingProcessFolderPath |
+| **x-oca-asset**:domain | DeviceFileEvents.DeviceName, DeviceProcessEvents.DeviceName, DeviceNetworkEvents.DeviceName, DeviceRegistryEvents.DeviceName, DeviceEvents.DeviceName, DeviceInfo.DeviceName, DeviceAlertEvents.DeviceName, DeviceImageLoadEvents.DeviceName, DeviceLogonEvents.DeviceName, DeviceNetworkInfo.DeviceName |
+| **x-oca-asset**:hostname | DeviceFileEvents.DeviceName, DeviceProcessEvents.DeviceName, DeviceNetworkEvents.DeviceName, DeviceRegistryEvents.DeviceName, DeviceEvents.DeviceName, DeviceInfo.DeviceName, DeviceAlertEvents.DeviceName, DeviceImageLoadEvents.DeviceName, DeviceLogonEvents.DeviceName, DeviceNetworkInfo.DeviceName |
+| **x-oca-asset**:name | DeviceFileEvents.DeviceName, DeviceProcessEvents.DeviceName, DeviceNetworkEvents.DeviceName, DeviceRegistryEvents.DeviceName, DeviceEvents.DeviceName, DeviceInfo.DeviceName, DeviceAlertEvents.DeviceName, DeviceImageLoadEvents.DeviceName, DeviceLogonEvents.DeviceName, DeviceNetworkInfo.DeviceName |
+| **x-oca-asset**:ip | DeviceNetworkEvents.LocalIP |
+| **x-oca-asset**:os.name | DeviceInfo.OSPlatform |
+| **x-oca-asset**:os.platform | DeviceInfo.OSPlatform |
+| **x-oca-event**:process_ref.pid | DeviceProcessEvents.InitiatingProcessId, DeviceNetworkEvents.InitiatingProcessId, DeviceRegistryEvents.InitiatingProcessId, DeviceFileEvents.InitiatingProcessId |
+| **x-oca-event**:process_ref.child_refs.pid | DeviceProcessEvents.ProcessId |
+| **x-oca-event**:process_ref.name | DeviceProcessEvents.InitiatingProcessFileName, DeviceNetworkEvents.InitiatingProcessFileName, DeviceRegistryEvents.InitiatingProcessFileName, DeviceFileEvents.InitiatingProcessFileName |
+| **x-oca-event**:process_ref.child_refs.name | DeviceProcessEvents.FileName |
+| **x-oca-event**:process_ref.binary_ref.name | DeviceProcessEvents.InitiatingProcessFileName, DeviceNetworkEvents.InitiatingProcessFileName, DeviceRegistryEvents.InitiatingProcessFileName, DeviceFileEvents.InitiatingProcessFileName |
+| **x-oca-event**:process_ref.creator_user_ref.account_login | DeviceProcessEvents.AccountName |
+| **x-oca-event**:process_ref.parent_ref.name | DeviceProcessEvents.InitiatingProcessParentFileName, DeviceNetworkEvents.InitiatingProcessParentFileName, DeviceRegistryEvents.InitiatingProcessParentFileName, DeviceFileEvents.InitiatingProcessParentFileName |
+| **x-oca-event**:process_ref.parent_ref.pid | DeviceProcessEvents.InitiatingProcessParentId, DeviceNetworkEvents.InitiatingProcessParentId, DeviceRegistryEvents.InitiatingProcessParentId, DeviceFileEvents.InitiatingProcessParentId |
+| **x-oca-event**:process_ref.command_line | DeviceProcessEvents.InitiatingProcessCommandLine, DeviceNetworkEvents.InitiatingProcessCommandLine, DeviceRegistryEvents.InitiatingProcessCommandLine, DeviceFileEvents.InitiatingProcessCommandLine |
+| **x-oca-event**:process_ref.binary_ref.hashes.'SHA-256' | DeviceProcessEvents.InitiatingProcessSHA256, DeviceNetworkEvents.InitiatingProcessSHA256, DeviceRegistryEvents.InitiatingProcessSHA256, DeviceFileEvents.InitiatingProcessSHA256 |
+| **x-oca-event**:process_ref.process_ref.creator_user_ref.account_login | DeviceProcessEvents.AccountName |
+| **x-oca-event**:parent_process_ref.name | DeviceProcessEvents.InitiatingProcessParentFileName, DeviceNetworkEvents.InitiatingProcessParentFileName, DeviceRegistryEvents.InitiatingProcessParentFileName, DeviceFileEvents.InitiatingProcessParentFileName |
+| **x-oca-event**:parent_process_ref.pid | DeviceProcessEvents.InitiatingProcessParentId, DeviceNetworkEvents.InitiatingProcessParentId, DeviceRegistryEvents.InitiatingProcessParentId, DeviceFileEvents.InitiatingProcessParentId |
+| **x-oca-event**:process_ref.binary_ref.hashes.MD5 | DeviceProcessEvents.InitiatingProcessMD5, DeviceNetworkEvents.InitiatingProcessMD5, DeviceRegistryEvents.InitiatingProcessMD5, DeviceFileEvents.InitiatingProcessMD5 |
+| **x-oca-event**:process_ref.creator_user_ref.user_id | DeviceProcessEvents.InitiatingProcessAccountSid, DeviceNetworkEvents.InitiatingProcessAccountSid, DeviceRegistryEvents.InitiatingProcessAccountSid, DeviceFileEvents.InitiatingProcessAccountSid |
+| **x-oca-event**:domain_ref.value | DeviceProcessEvents.DeviceName, DeviceNetworkEvents.DeviceName, DeviceRegistryEvents.DeviceName, DeviceFileEvents.DeviceName |
+| **x-oca-event**:file_ref.name | DeviceProcessEvents.InitiatingProcessFileName, DeviceNetworkEvents.InitiatingProcessFileName, DeviceRegistryEvents.InitiatingProcessFileName |
+| **x-oca-event**:registry_ref.key | DeviceRegistryEvents.RegistryKey |
+| **x-oca-event**:host_ref.hostname | DeviceFileEvents.DeviceName, DeviceProcessEvents.DeviceName, DeviceNetworkEvents.DeviceName, DeviceRegistryEvents.DeviceName, DeviceEvents.DeviceName, DeviceInfo.DeviceName, DeviceAlertEvents.DeviceName, DeviceImageLoadEvents.DeviceName, DeviceLogonEvents.DeviceName, DeviceNetworkInfo.DeviceName |
+| **x-oca-event**:host_ref.name | DeviceFileEvents.DeviceName, DeviceProcessEvents.DeviceName, DeviceNetworkEvents.DeviceName, DeviceRegistryEvents.DeviceName, DeviceEvents.DeviceName, DeviceInfo.DeviceName, DeviceAlertEvents.DeviceName, DeviceImageLoadEvents.DeviceName, DeviceLogonEvents.DeviceName, DeviceNetworkInfo.DeviceName |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | InitiatingProcessFolderPath |

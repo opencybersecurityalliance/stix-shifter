@@ -204,7 +204,7 @@
     "Pid": [
       {
         "object": "proc",
-        "key": "process.id"
+        "key": "process.pid"
       }
     ]
   },

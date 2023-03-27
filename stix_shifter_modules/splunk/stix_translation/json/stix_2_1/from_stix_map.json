@@ -1,8 +1,41 @@
 {
+    "x-oca-event": {
+      "cim_type": "alert",
+      "fields": {
+        "code": ["signature_id"],
+        "action": ["signature"],
+        "outcome": ["result"],
+        "module": ["source"],
+        "created": ["_time"],
+        "process_ref.command_line": ["process"],
+        "process_ref.image_ref.name": ["process_exec"],
+        "process_ref.parent_ref.command_line": ["parent_process"],
+        "process_ref.creator_user_ref.user_id": ["process_user"],
+        "process_ref.name": ["process_name"],
+        "process_ref.pid": ["process_id"],
+        "parent_process_ref.command_line": ["parent_process"],
+        "parent_process_ref.image_ref.name": ["parent_process_exec"],
+        "parent_process_ref.pid": ["parent_process_id"],
+        "parent_process_ref.name": ["parent_process_name"],
+        "domain_ref.value": ["url", "url_domain"],
+        "file_ref.name": ["file_name"],
+        "host_ref.hostname": ["host"],
+        "host_ref.ip_refs[*].value": ["src_ip"],
+        "registry_ref.key": ["ObjectName", "RegistryKey"],
+        "user_ref.user_id": ["user"],
+        "url_ref.value": ["url"]
+      }
+    },
+    "x-oca-asset": {
+      "cim_type": "host",
+      "fields": {
+        "hostname": "host"
+      }
+    },
     "directory": {
         "cim_type": "endpoint",
         "fields": {
-            "path": "file_path",
+            "path": ["file_path", "process_path", "parent_process_path"],
             "ctime": "file_create_time",
             "mtime": "file_modify_time"
         }
@@ -10,10 +43,7 @@
     "domain-name": {
         "cim_type": "flow",
         "fields": {
-            "value": [
-                "host",
-                "url"
-            ]
+            "value": ["host", "url"]
         }
     },
     "x-readable-payload": {
@@ -25,10 +55,7 @@
     "email-addr": {
         "cim_type": "email",
         "fields": {
-            "value": [
-                "src_user",
-                "recipient"
-            ]
+            "value": ["src_user", "recipient"]
         }
     },
     "email-message": {
@@ -53,7 +80,7 @@
             "hashes.MD5": "file_hash",
             "hashes.'SHA-1'": "file_hash",
             "hashes.'SHA-256'": "file_hash",
-            "name": ["file_name", "process"],
+            "name": "file_name",
             "ctime": "file_create_time",
             "mtime": "file_modify_time",
             "parent_directory_ref.path": "file_path",
@@ -90,9 +117,9 @@
     "network-traffic": {
         "cim_type": "network",
         "fields": {
-            "src_ref.value": "src",
+            "src_ref.value": ["src_ip"],
             "src_port": "src_port",
-            "dst_ref.value": "src",
+            "dst_ref.value": ["dest_ip"],
             "dst_port": "dest_port",
             "protocols[*]": "protocol",
             "start": "earliest",
@@ -102,10 +129,14 @@
     "process": {
         "cim_type": "process",
         "fields": {
-            "pid": "pid",
+            "x_name": ["process_name", "parent_process_name"],
+            "command_line": ["process", "parent_process"],
+            "pid": ["process_id", "parent_process_id"],
             "creator_user_ref.account_login": "user",
-            "image_ref.parent_directory_ref.path": "file_path",
-            "image_ref.name": ["file_name", "process"]
+            "creator_user_ref.user_login": "user",
+            "image_ref.parent_directory_ref.path": "process_path",
+            "image_ref.name": "process_exec",
+            "x_unique_id": "process_guid"
         }
     },
     "url": {
@@ -117,7 +148,8 @@
     "user-account": {
         "cim_type": "authentication",
         "fields": {
-            "user_id": "user"
+            "user_id": "user",
+            "account_login": "user"
         }
     },
     "windows-registry-key": {

@@ -1,4 +1,4 @@
-# Secret Server
+# IBM Security Verify Privilege Vault
 
 REST Web Service APIs: https://www.ibm.com/support/pages/node/1136272
 
@@ -18,11 +18,11 @@ will return
     ]
 }
 ```
-## Converting from Secret Server events STIX
+## Converting from IBM Security Verify Privilege Vault events STIX
 
-Secret Server data to STIX mapping is defined in `to_stix_map.json`
+IBM Security Verify Privilege Vault data to STIX mapping is defined in `to_stix_map.json`
 
-This example Secret Server data:
+This example IBM Security Verify Privilege Vault data:
 
 python3 main.py transmit secretserver '{"host":"<hostname>"}' '{"auth":{"username":"<username>","password":"<password>"}}' results "eyJxdWVyeSI6ICJTRUxFQ1QgKiBGUk9NIFNlY3JldEV2ZW50RGV0YWlsIFdIRVJFIEV2ZW50U3ViamVjdCBMSUtFICclJSUnIFNUQVJUIHQnMjAxOS0wMS0yOFQxMjoyNDowMS4wMDlaJyBTVE9QIHQnMjAyMS0wNy0xNFQxMjo1NDowMS4wMDlaJyIsICJ0YXJnZXQiIDogImh0dHA6Ly85LjQ2Ljg2LjEyMC9TZWNyZXRTZXJ2ZXIvb2F1dGgyL3Rva2VuIn0=" 1 2
 

@@ -1,10 +1,12 @@
-##### Updated on 07/27/22
-## ReaQta
+##### Updated on 03/08/23
+## IBM Security ReaQta
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | AND |
-| OR | OR |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | >= | = |
 | <= | = |
 | = | = |
@@ -12,8 +14,190 @@
 | LIKE | = |
 | IN | = |
 | MATCHES | = |
+| OR (Observation) | OR |
+| AND (Observation) | AND |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **directory**:path | __etwHomePath, accessor.path, consumer.workingDirectory, path |
+| **file**:extensions.'x-reaqta-data'.arch | eventdata.arch |
+| **file**:extensions.'x-reaqta-data'.file_type | eventdata.filetype |
+| **file**:extensions.'x-reaqta-data'.fsname | fsName |
+| **file**:extensions.'x-reaqta-program'.arch | service.arch |
+| **file**:extensions.'x-reaqta-program'.fsname | fsName |
+| **file**:hashes.MD5 | md5 |
+| **file**:hashes.'SHA-1' | sha1 |
+| **file**:hashes.'SHA-256' | sha256 |
+| **file**:name | consumer.script.filename, fsName |
+| **file**:parent_directory_ref.path | path |
+| **file**:size | eventdata.size |
+| **ipv4-addr**:value | ip, login.ip |
+| **ipv6-addr**:value | ip |
+| **network-traffic**:dst_port | eventdata.remotePort |
+| **network-traffic**:dst_ref.value | ip |
+| **network-traffic**:extensions.'x-reaqta-network'.outbound | isOutbound |
+| **network-traffic**:src_port | eventdata.localPort |
+| **network-traffic**:src_ref.value | ip |
+| **process**:binary_ref.name | fsName |
+| **process**:creator_user_ref.user_id |  |
+| **process**:extensions.'windows-process-ext'.owner_sid | user.sid |
+| **process**:extensions.'x-reaqta-process'.logon_id | service.login.id |
+| **process**:extensions.'x-reaqta-process'.no_gui | service.hasGui |
+| **process**:extensions.'x-reaqta-process'.privilege_level | service.privilege |
+| **process**:name | __etwCallerProcessName, __etwLogonProcessName, __etwProcessName, login.processName, filename |
+| **process**:parent_ref.binary_ref.name | service.ppid |
+| **process**:pid | __etwCallerProcessId, __etwProcessId, accessor.pid, accessor.ppid, allocator.pid, allocator.ppid, engine.pid, engine.ppid, eventdata.targetProcessId, host.pid, pid, ppid, service.pid, service.ppid, wmi.clientPid, wmiHost.pid |
+| **url**:value | eventdata.url |
+| **user-account**:user_id | __etwNewTargetUserName, __etwOldTargetUserName, __etwTargetOutboundUserName, accessor.user, allocator.user, engine.user, login.dst.username, login.src.username, service.user, user, wmi.user |
+| **windows-process-ext**:owner_sid | accessor.user.sid, allocator.user.sid, engine.user.sid, login.src.sid, service.user.sid, user.sid |
+| **x-ibm-finding**:dst_ip_ref.value | ip |
+| **x-ibm-finding**:extensions.'x-reaqta-avdetection'.av_scan_reason | antimalware.scanReason |
+| **x-ibm-finding**:extensions.'x-reaqta-avdetection'.av_threat_info_array | antimalware.threatInfo |
+| **x-ibm-finding**:finding_type | antimalware.threatType |
+| **x-ibm-finding**:name | antimalware.objectStatus |
+| **x-ibm-finding**:src_ip_ref.value | ip |
+| **x-oca-asset**:extensions.'x-reaqta-consumer'.command_line_template_tokens | consumer.cmdline |
+| **x-oca-asset**:extensions.'x-reaqta-consumer'.consumer_name | wmi.consumerName |
+| **x-oca-asset**:extensions.'x-reaqta-consumer'.consumer_type | wmi.consumerType |
+| **x-oca-asset**:extensions.'x-reaqta-consumer'.event_namespace | wmi.eventNamespace |
+| **x-oca-asset**:extensions.'x-reaqta-consumer'.executablePath | consumer.execPath |
+| **x-oca-asset**:extensions.'x-reaqta-consumer'.runInteractively | consumer.runInteractively |
+| **x-oca-asset**:extensions.'x-reaqta-consumer'.scriptingEngine | consumer.script.engine |
+| **x-oca-asset**:extensions.'x-reaqta-consumer'.showWindowCommand | consumer.showWindowCmd |
+| **x-oca-asset**:extensions.'x-wmi-event'.client_machine_fqn | wmi.clientMachineFqn |
+| **x-oca-asset**:host_id | __etwWorkstation, endpointId |
+| **x-oca-asset**:hostname | __etwWorkstationName, wmi.clientMachine, wmi.machineName |
+| **x-oca-asset**:ip_refs[*].value | ip |
+| **x-oca-event**:agent | antimalware.appName |
+| **x-oca-event**:category | eventType |
+| **x-oca-event**:code | eventId, eventdata.etwEventId |
+| **x-oca-event**:extensions.'x-reaqta-amsi'.content_name | antimalware.contentName |
+| **x-oca-event**:extensions.'x-reaqta-amsi'.scan_result | antimalware.scanResult |
+| **x-oca-event**:extensions.'x-reaqta-etw'.etw_event_record_id | eventdata.etwEventVersion |
+| **x-oca-event**:extensions.'x-reaqta-etw'.etw_failure_reason | __etwFailureReason |
+| **x-oca-event**:extensions.'x-reaqta-etw'.etw_home_directory | __etwHomeDirectory |
+| **x-oca-event**:file_ref.name | path |
+| **x-oca-event**:host_ref.x-oca-asset.hostname | wmi.clientMachine |
+| **x-oca-event**:ip_refs[*].value | login.ip |
+| **x-oca-event**:network_ref.dst_ref.value | ip |
+| **x-oca-event**:network_ref.src_ref.value | ip |
+| **x-oca-event**:parent_process_ref.pid | service.ppid |
+| **x-oca-event**:process_ref.pid | wmi.clientPid |
+| **x-oca-event**:user_ref.user_id |  |
+| **x-reaqta-amsi**:content_name | antimalware.contentName |
+| **x-reaqta-amsi**:scan_result | antimalware.scanResult |
+| **x-reaqta-avdetection**:av_scan_reason | antimalware.scanReason |
+| **x-reaqta-avdetection**:av_threat_info_array | antimalware.threatInfo |
+| **x-reaqta-cert**:expired | accessor.expired, allocator.expired, engine.expired, eventdata.cert.expired, expired, service.expired |
+| **x-reaqta-cert**:signer | accessor.signer, allocator.signer, engine.signer, eventdata.cert.signer, service.signer, signer |
+| **x-reaqta-cert**:trusted | accessor.trusted, allocator.trusted, engine.trusted, eventdata.cert.trusted, service.trusted, trusted |
+| **x-reaqta-consumer**:command_line_template_tokens | consumer.cmdline |
+| **x-reaqta-consumer**:consumer_name | wmi.consumerName |
+| **x-reaqta-consumer**:consumer_type | wmi.consumerType |
+| **x-reaqta-consumer**:event_namespace | wmi.eventNamespace |
+| **x-reaqta-consumer**:executablePath | consumer.execPath |
+| **x-reaqta-consumer**:runInteractively | consumer.runInteractively |
+| **x-reaqta-consumer**:scriptingEngine | consumer.script.engine |
+| **x-reaqta-consumer**:showWindowCommand | consumer.showWindowCmd |
+| **x-reaqta-data**:arch | eventdata.arch |
+| **x-reaqta-data**:file_type | eventdata.filetype |
+| **x-reaqta-data**:fsname | filename |
+| **x-reaqta-etw**:etwRestrictedAdminMode | __etwRestrictedAdminMode |
+| **x-reaqta-etw**:etwSamAccountName | __etwSamAccountName |
+| **x-reaqta-etw**:etwScriptPath | __etwScriptPath |
+| **x-reaqta-etw**:etwServiceName | __etwServiceName |
+| **x-reaqta-etw**:etwServiceSid | __etwServiceSid |
+| **x-reaqta-etw**:etwSidHistory | __etwSidHistory |
+| **x-reaqta-etw**:etwSidList | __etwSidList |
+| **x-reaqta-etw**:etwStatus | __etwStatus |
+| **x-reaqta-etw**:etwSubStatus | __etwSubStatus, login.src.domain |
+| **x-reaqta-etw**:etwSubjectLogonId | login.subjectLogonId |
+| **x-reaqta-etw**:etwTargetDomainName | login.dst.domain |
+| **x-reaqta-etw**:etwTargetInfo | __etwTargetInfo |
+| **x-reaqta-etw**:etwTargetLinkedLogonId | __etwTargetLinkedLogonId |
+| **x-reaqta-etw**:etwTargetLogonGuid | __etwTargetLogonGuid |
+| **x-reaqta-etw**:etwTargetLogonId | login.targetLogonId |
+| **x-reaqta-etw**:etwTargetOutboundDomainName | __etwTargetOutboundDomainName, __etwTargetServerName |
+| **x-reaqta-etw**:etwTargetSid | __etwTargetSid |
+| **x-reaqta-etw**:etwTargetUserSid | login.dst.sid |
+| **x-reaqta-etw**:etwTask | eventdata.etwTask |
+| **x-reaqta-etw**:etwTicketEncryptionType | __etwTicketEncryptionType |
+| **x-reaqta-etw**:etwTicketOptions | __etwTicketOptions |
+| **x-reaqta-etw**:etwTransmittedServices | __etwTransmittedServices |
+| **x-reaqta-etw**:etwUserAccountControl | __etwUserAccountControl |
+| **x-reaqta-etw**:etwUserParameters | __etwUserParameters |
+| **x-reaqta-etw**:etwUserPrincipalName | __etwUserPrincipalName |
+| **x-reaqta-etw**:etwUserWorkstations | __etwUserWorkstations |
+| **x-reaqta-etw**:etwVirtualAccount | __etwVirtualAccount |
+| **x-reaqta-etw**:etw_allowed_to_delegateto | __etwAllowedToDelegateTo |
+| **x-reaqta-etw**:etw_authentication_packagename | login.authenticationPackage |
+| **x-reaqta-etw**:etw_cert_thumbprint | __etwCertThumbprint |
+| **x-reaqta-etw**:etw_display_name | __etwDisplayName |
+| **x-reaqta-etw**:etw_dummy | __etwDummy |
+| **x-reaqta-etw**:etw_elevated_token | __etwElevatedToken |
+| **x-reaqta-etw**:etw_event_record_id | __etwEventRecordId, eventdata.etwEventVersion |
+| **x-reaqta-etw**:etw_failure_reason | __etwFailureReason |
+| **x-reaqta-etw**:etw_home_directory | __etwHomeDirectory |
+| **x-reaqta-etw**:etw_impersonation_level | __etwImpersonationLevel |
+| **x-reaqta-etw**:etw_ip_port | login.port |
+| **x-reaqta-etw**:etw_key_length | __etwKeyLength |
+| **x-reaqta-etw**:etw_lm_package_name | login.packageName |
+| **x-reaqta-etw**:etw_logon_guid | __etwLogonGuid |
+| **x-reaqta-etw**:etw_logon_hours | __etwLogonHours |
+| **x-reaqta-etw**:etw_logon_type | login.type |
+| **x-reaqta-etw**:etw_member_name | __etwMemberName |
+| **x-reaqta-etw**:etw_member_sid | __etwMemberSid |
+| **x-reaqta-etw**:etw_new_uac_value | __etwNewUacValue |
+| **x-reaqta-etw**:etw_old_uac_value | __etwOldUacValue |
+| **x-reaqta-etw**:etw_package_name | __etwPackageName |
+| **x-reaqta-etw**:etw_password_last_set | __etwPasswordLastSet |
+| **x-reaqta-etw**:etw_pre_auth_type | __etwPreAuthType |
+| **x-reaqta-etw**:etw_primary_groupId | __etwPrimaryGroupId |
+| **x-reaqta-etw**:etw_privilege_list | __etwPrivilegeList |
+| **x-reaqta-etw**:etw_profile_path | __etwProfilePath |
+| **x-reaqta-event**:action_name | task.actionName |
+| **x-reaqta-event**:custom_name | customName |
+| **x-reaqta-event**:custom_type | customType |
+| **x-reaqta-event**:data | reg.data |
+| **x-reaqta-event**:display_name | service.displayName |
+| **x-reaqta-event**:filter_name | wmi.filterName |
+| **x-reaqta-event**:is_local | wmi.isLocal |
+| **x-reaqta-event**:name | reg.name |
+| **x-reaqta-event**:namespace_name | wmi.namespaceName |
+| **x-reaqta-event**:operation | wmi.operation |
+| **x-reaqta-event**:operation_type | wmi.operationType |
+| **x-reaqta-event**:pe_type | eventdata.peType |
+| **x-reaqta-event**:query | wmi.query |
+| **x-reaqta-event**:queryLanguage | wmi.queryLanguage |
+| **x-reaqta-event**:queryName | eventdata.dns |
+| **x-reaqta-event**:region_size | eventdata.regionSize |
+| **x-reaqta-event**:relevance | eventdata.relevance |
+| **x-reaqta-event**:return_code | eventdata.returnCode |
+| **x-reaqta-event**:root_object | path |
+| **x-reaqta-event**:service_name | service.name |
+| **x-reaqta-event**:service_type | service.type |
+| **x-reaqta-event**:start_type | service.startType |
+| **x-reaqta-event**:tactics | mitre.tactic |
+| **x-reaqta-event**:tags | eventdata.tag |
+| **x-reaqta-event**:task_name | task.name |
+| **x-reaqta-event**:technique | mitre.technique |
+| **x-reaqta-event**:version | eventdata.version |
+| **x-reaqta-network**:outbound | isOutbound |
+| **x-reaqta-process**:logon_id | accessor.login.id, allocator.login.id, engine.login.id, login.id, service.login.id |
+| **x-reaqta-process**:no_gui | accessor.hasGui, allocator.hasGui, engine.hasGui, hasGui, service.hasGui |
+| **x-reaqta-process**:privilege_level | accessor.privilege, allocator.privilege, engine.privilege, privilege, service.privilege |
+| **x-reaqta-program**:arch | accessor.arch, allocator.arch, arch, engine.arch, service.arch |
+| **x-reaqta-program**:fsname | filename |
+| **x-wmi-event**:client_machine_fqn | wmi.clientMachineFqn |
+| **x509-certificate**:extensions.'x-reaqta-cert'.expired | service.expired |
+| **x509-certificate**:extensions.'x-reaqta-cert'.signer | signer |
+| **x509-certificate**:extensions.'x-reaqta-cert'.trusted | trusted |
+| **x509-certificate**:extensions.'x-reaqta-etw'.etw_cert_thumbprint | __etwCertThumbprint |
+| **x509-certificate**:issuer | __etwCertIssuerName, accessor.issuer, allocator.issuer, engine.issuer, eventdata.cert.issuer, issuer, service.issuer |
+| **x509-certificate**:serial_number | __etwCertSerialNumber |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | path |
@@ -21,21 +205,21 @@
 | directory | path | etwHomePath |
 | <br> | | |
 | file | extensions.x-reaqta-program.arch | arch |
-| file | name | filename |
-| file | extensions.x-reaqta-program.fsname | fsName |
+| file | name | fsName |
 | file | hashes.MD5 | md5 |
 | file | parent_directory_ref | path |
 | file | hashes.SHA-1 | sha1 |
 | file | hashes.SHA-256 | sha256 |
 | file | size | size |
+| file | extensions.x-reaqta-program.filename | filename |
 | file | extensions.x-reaqta-data.arch | arch |
 | file | name | scriptFileName |
 | file | parent_directory_ref | workingDirectory |
 | file | parent_directory_ref | etwHomePath |
 | file | name | file |
 | file | extensions.x-reaqta-data.file_type | fileType |
-| file | created | creationTime |
 | file | extensions.x-reaqta-data.fsname | fsName |
+| file | created | creationTime |
 | <br> | | |
 | ipv4-addr | value | etwIpAddress |
 | ipv4-addr | value | localAddrV4 |
@@ -62,7 +246,8 @@
 | process | pid | ppid |
 | process | parent_ref | ppid |
 | process | extensions.x-reaqta-process.privilege_level | privilegeLevel |
-| process | binary_ref | filename |
+| process | binary_ref | fsName |
+| process | name | filename |
 | process | created | pstartTime |
 | process | created | startTime |
 | process | creator_user_ref | user |
@@ -125,7 +310,7 @@
 | x-oca-event | category | eventType |
 | x-oca-event | process_ref | pid |
 | x-oca-event | parent_process_ref | ppid |
-| x-oca-event | file_ref | filename |
+| x-oca-event | file_ref | fsName |
 | x-oca-event | file_ref | path |
 | x-oca-event | user_ref | user |
 | x-oca-event | agent | appName |
@@ -136,7 +321,7 @@
 | x-oca-event | process_ref | etwCallerProcessId |
 | x-oca-event | code | etwEventId |
 | x-oca-event | extensions.x-reaqta-etw.etw_event_record_id | etwEventRecordId |
-| x-oca-event | extensions.x-reaqta-etw.etw_event_record_id | etwEventVersion |
+| x-oca-event | extensions.x-reaqta-etw.etw_event_version | etwEventVersion |
 | x-oca-event | extensions.x-reaqta-etw.etw_failure_reason | etwFailureReason |
 | x-oca-event | extensions.x-reaqta-etw.etw_home_directory | etwHomeDirectory |
 | x-oca-event | file_ref | etwHomePath |

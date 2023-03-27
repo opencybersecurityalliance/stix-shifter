@@ -1,10 +1,10 @@
 import json
-import logging
 import unittest
 from unicodedata import category
 
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_modules.ibm_security_verify.entry_point import EntryPoint
+from stix_shifter_utils.utils.async_utils import run_in_thread
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import (
     get_module_transformers,
 )
@@ -103,9 +103,7 @@ class TestTransformQuery(unittest.TestCase, object):
         domain_ref = "3"
         module = "saml_runtime"
         extensions_user_id = "652001LT0R"
-        result_bundle = entry_point.translate_results(
-            json.dumps(DATA_SOURCE), json.dumps(data)
-        )
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
         observed_data = result_bundle["objects"][1]
         objects = observed_data["objects"]
 

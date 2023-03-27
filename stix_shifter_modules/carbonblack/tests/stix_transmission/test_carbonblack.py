@@ -1,10 +1,9 @@
-import json
 import unittest
-from unittest.mock import ANY
 from unittest.mock import patch
 from stix_shifter_modules.carbonblack.entry_point import EntryPoint
-from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import ResponseWrapper
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
+from tests.utils.async_utils import get_mock_response
+
 
 
 config = {
@@ -17,20 +16,13 @@ connection = {
     "port": 8080
 }
 
-
-class RequestMockResponse:
-    def __init__(self, status_code, content):
-        self.status_code = status_code
-        self.content = content
-
-
-@patch('requests.sessions.Session.get', autospec=True)
 class TestCarbonBlackConnection(unittest.TestCase, object):
 
     @staticmethod
     def _create_query_list(query_string):
         return [query_string]
 
+    @patch('stix_shifter_modules.carbonblack.stix_transmission.api_client.APIClient.ping_box', autospec=True)
     def test_ping_endpoint(self, mock_requests_response):
         ping_response = """ [
   {
@@ -73,20 +65,18 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
   }
 ] """
 
-        mock_requests_response.return_value = RequestMockResponse(200, ping_response.encode())
+        mock_requests_response.return_value = get_mock_response(200, ping_response.encode())
 
         entry_point = EntryPoint(connection, config)
-        ping_response = entry_point.ping_connection()
+        ping_response = run_in_thread(entry_point.ping_connection)
 
         assert ping_response is not None
         assert ping_response['success']
 
-    def test_status_endpoint(self, mock_api_client):
-        mock_api_client.return_value = None
-
+    def test_status_endpoint(self):
         entry_point = EntryPoint(connection, config)
         search_id = self._create_query_list("process_name:notepad.exe")
-        results_response = entry_point.create_status_connection(search_id)
+        results_response = run_in_thread(entry_point.create_status_connection, search_id)
 
         assert 'success' in results_response
         assert results_response['success'] == True
@@ -95,18 +85,18 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'progress' in results_response
         assert results_response['progress'] == 100
 
-    def test_create_query_connection(self, mock_api_client):
-        mock_api_client.return_value = None
-
+    def test_create_query_connection(self):
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:notepad.exe")
-        results_response = entry_point.create_query_connection(query_expression)
+        results_response = run_in_thread(entry_point.create_query_connection, query_expression)
 
         assert 'success' in results_response
         assert results_response['success'] == True
         assert 'search_id' in results_response
         assert results_response['search_id'] == query_expression
 
+    
+    @patch('stix_shifter_modules.carbonblack.stix_transmission.api_client.APIClient.run_processes_search')
     def test_no_results_response(self, mock_requests_response):
         mocked_return_value = """
 {"terms": ["process_name:notepad.exe"],
@@ -124,11 +114,11 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 }
 """
 
-        mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
+        mock_requests_response.return_value = get_mock_response(200, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:notepad.exe")[0]
-        results_response = entry_point.create_results_connection(query_expression, 0, 10)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -136,6 +126,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'data' in results_response
         assert len(results_response['data']) == 0
 
+    @patch('stix_shifter_modules.carbonblack.stix_transmission.api_client.APIClient.run_processes_search')
     def test_one_results_response(self, mock_requests_response):
         mocked_return_value = """
 {
@@ -202,11 +193,11 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 }
 """
 
-        mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
+        mock_requests_response.return_value = get_mock_response(200, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe start:[2019-01-22 TO *]")[0]
-        results_response = entry_point.create_results_connection(query_expression, 0, 10)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -216,6 +207,7 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'process_name' in results_response['data'][0]
         assert results_response['data'][0]['process_name'] == 'cmd.exe'
 
+    @patch('stix_shifter_modules.carbonblack.stix_transmission.api_client.APIClient.run_processes_search')
     def test_bad_token_response(self, mock_requests_response):
         mocked_return_value = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <title>401 Unauthorized</title>
@@ -223,11 +215,11 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
 <p>The server could not verify that you are authorized to access the URL requested.  You either supplied the wrong credentials (e.g. a bad password), or your browser doesn't understand how to supply the credentials required.</p>
 """
 
-        mock_requests_response.return_value = RequestMockResponse(401, mocked_return_value.encode())
+        mock_requests_response.return_value = get_mock_response(401, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]
-        results_response = entry_point.create_results_connection(query_expression, 0, 10)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -237,14 +229,15 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'code' in results_response
         assert  results_response['code'] == 'authentication_fail'
 
+    @patch('stix_shifter_modules.carbonblack.stix_transmission.api_client.APIClient.run_processes_search')
     def test_binary_bad_parameter_search_response(self, mock_requests_response):
         mocked_return_value = "Unhandled exception. Check logs for details."
 
-        mock_requests_response.return_value = RequestMockResponse(500, mocked_return_value.encode())
+        mock_requests_response.return_value = get_mock_response(500, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]
-        results_response = entry_point.create_results_connection(query_expression, 0, 10)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -254,14 +247,15 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'code' in results_response
         assert  results_response['code'] == 'unknown'  # we may be able to return a better error code
 
-    def test_query_syntax_error_response(self, mock_requests_response):
+    @patch('stix_shifter_modules.carbonblack.stix_transmission.api_client.APIClient.run_processes_search')
+    def test_query_syntax_error_response(self, mock_run_processes_search):
         mocked_return_value = '{"reason": "query_syntax_error"}'
 
-        mock_requests_response.return_value = RequestMockResponse(400, mocked_return_value.encode())
+        mock_run_processes_search.return_value = get_mock_response(400, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("(process_name:cmd.exe")[0]
-        results_response = entry_point.create_results_connection(query_expression, 0, 10)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 0, 10)
 
         assert results_response is not None
         assert 'success' in results_response
@@ -271,16 +265,16 @@ class TestCarbonBlackConnection(unittest.TestCase, object):
         assert 'code' in results_response
         assert  results_response['code'] == 'invalid_query'
 
+    @patch('stix_shifter_modules.carbonblack.stix_transmission.api_client.APIClient.run_processes_search')
     def test_transmit_limit_and_sort(self, mock_requests_response):
         mocked_return_value = '{"reason": "query_syntax_error"}'
-
-        mock_requests_response.return_value = RequestMockResponse(200, mocked_return_value.encode())
+        mock_requests_response.return_value = get_mock_response(200, mocked_return_value.encode())
 
         entry_point = EntryPoint(connection, config)
         query_expression = self._create_query_list("process_name:cmd.exe")[0]
-        results_response = entry_point.create_results_connection(query_expression, 100, 2)
+        results_response = run_in_thread(entry_point.create_results_connection, query_expression, 100, 2)
 
         assert results_response is not None
         assert 'success' in results_response
         assert results_response['success'] == True
-        mock_requests_response.assert_called_with(ANY, 'https://hostbla:8080/api/v1/process', params=[('q', 'process_name:cmd.exe'), ('start', 100), ('rows', 2), ('sort', 'start asc')], data=None, headers={'X-Auth-Token': 'bla'}, timeout=(2, 30), verify=True, auth=None)
+        mock_requests_response.assert_called_with(query_expression, start=100, rows=2)

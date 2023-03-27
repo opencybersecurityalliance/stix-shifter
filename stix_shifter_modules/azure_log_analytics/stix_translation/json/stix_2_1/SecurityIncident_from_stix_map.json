@@ -1,0 +1,79 @@
+{
+    "url": {
+        "fields": {
+            "value": [
+                "IncidentUrl"
+            ]
+        }
+    },
+    "x-ibm-finding": {
+        "fields": {
+            "start": [
+                "FirstActivityTime",
+                "FirstModifiedTime",
+                "TimeGenerated"
+            ],
+            "end": [
+                "ClosedTime",
+                "LastActivityTime",
+                "LastModifiedTime"
+            ],
+            "name": [
+                "IncidentName"
+            ],
+            "time_observed": [
+                "TimeGenerated"
+            ]
+        }
+    },
+    "x-oca-event": {
+        "fields": {
+            "created": [
+                "CreatedTime"
+            ],
+            "provider": [
+                "ProviderName"
+            ],
+            "url_ref": [
+                "IncidentUrl"
+            ],
+            "domain_ref": [
+                "DomainName"
+            ]
+        }
+    },
+    "x-msazure-sentinel-incident": {
+        "fields": {
+            "incident_name": [
+                "IncidentName"
+            ],
+            "severity": [
+                "Severity"
+            ],
+            "owner": [
+                "Owner"
+            ],
+            "additional_data": [
+                "AdditionalData"
+            ],
+            "alertids": [
+                "AlertIds"
+            ],
+            "comments": [
+                "Comments"
+            ],
+            "description": [
+                "Description"
+            ],
+            "labels": [
+                "Labels"
+            ],
+            "modified_by": [
+                "ModifiedBy"
+            ],
+            "classification": [
+                "Classification"
+            ]
+        }
+    }
+}

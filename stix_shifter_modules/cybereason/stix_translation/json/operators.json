@@ -9,5 +9,6 @@
     "ComparisonComparators.Like": "ContainsIgnoreCase",
     "ComparisonComparators.In": "Equals",
     "ComparisonComparators.Matches": "ContainsIgnoreCase",
-    "ObservationOperators.And": "AND"
+    "ObservationOperators.And": "OR",
+    "ObservationOperators.Or": "OR"
 }

@@ -59,9 +59,11 @@ coverage.xml
 
 # virtualenv
 .venv
-venv/
+venv*/
 ENV/
 virtualenv*/
+labenv/
+labenv*/
 
 # mkdocs documentation
 /site

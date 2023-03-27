@@ -8,13 +8,13 @@
     "fields": {
       "extensions.'x-reaqta-data'.arch": ["eventdata.arch"],
       "extensions.'x-reaqta-data'.file_type": ["eventdata.filetype"],
-      "extensions.'x-reaqta-data'.fsname": ["filename"],
+      "extensions.'x-reaqta-data'.fsname": ["fsName"],
       "extensions.'x-reaqta-program'.arch": ["service.arch"],
-      "extensions.'x-reaqta-program'.fsname": ["filename"],
+      "extensions.'x-reaqta-program'.fsname": ["fsName"],
       "hashes.MD5": ["md5"],
       "hashes.'SHA-1'": ["sha1"],
       "hashes.'SHA-256'": ["sha256"],
-      "name": ["consumer.script.filename", "filename"],
+      "name": ["consumer.script.filename", "fsName"],
       "parent_directory_ref.path": ["path"],
       "size": ["eventdata.size"]
     }
@@ -40,13 +40,13 @@
   },
   "process": {
     "fields": {
-      "binary_ref.name": ["filename"],
+      "binary_ref.name": ["fsName"],
       "creator_user_ref.user_id": [],
       "extensions.'windows-process-ext'.owner_sid": ["user.sid"],
       "extensions.'x-reaqta-process'.logon_id": ["service.login.id"],
       "extensions.'x-reaqta-process'.no_gui": ["service.hasGui"],
       "extensions.'x-reaqta-process'.privilege_level": ["service.privilege"],
-      "name": ["__etwCallerProcessName", "__etwLogonProcessName", "__etwProcessName", "login.processName"],
+      "name": ["__etwCallerProcessName", "__etwLogonProcessName", "__etwProcessName", "login.processName", "filename"],
       "parent_ref.binary_ref.name": ["service.ppid"],
       "pid": ["__etwCallerProcessId", "__etwProcessId", "accessor.pid", "accessor.ppid", "allocator.pid", "allocator.ppid", "engine.pid", "engine.ppid", "eventdata.targetProcessId", "host.pid", "pid", "ppid", "service.pid", "service.ppid", "wmi.clientPid", "wmiHost.pid"]
     }

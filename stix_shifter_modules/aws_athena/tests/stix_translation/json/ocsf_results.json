@@ -1,0 +1,151 @@
+{
+    "ocsf": {
+        "cloud": {
+            "service": {
+                "version": "1.05"
+            },
+            "region": "us-east-1",
+            "provider": "AWS"
+        },
+        "_time": 1602058117000,
+        "api": {
+            "response": {
+                "error": null,
+                "message": null
+            },
+            "operation": "GetBucketLocation",
+            "request": {
+                "uid": "ABCDEFGHIJKL0F123"
+            },
+            "version": null,
+            "service": {
+                "name": "s3.amazonaws.com"
+            }
+        },
+        "ref_event_uid": "e12b3bc4-e1e3-11ab-22e1-de0b4d745bb1",
+        "connection_info": {
+            "boundary": "mentor lucia villa",
+            "direction": "Inbound",
+            "direction_id": 1,
+            "protocol_name": "tcp",
+            "protocol_num": 6,
+            "protocol_ver": "ipv4",
+            "protocol_ver_id": 4,
+            "tcp_flags": 85
+        },
+        "dst_endpoint": {
+            "hostname": "mirror.aero",
+            "instance_uid": "8fbaf31c-ad59-11ed-b661-0242ac110002",
+            "interface_name": "ll hourly lotus",
+            "interface_uid": "8fbaf81c-ad59-11ed-91ac-0242ac110002",
+            "ip": "63.71.92.147",
+            "port": 19984,
+            "svc_name": "norway lyrics survey",
+            "uid": "8fbafce0-ad59-11ed-bb7e-0242ac110002"
+        },
+        "src_endpoint": {
+            "hostname": "investor.gov",
+            "instance_uid": "8fbb31b0-ad59-11ed-a55e-0242ac110002",
+            "interface_name": "cow ebay curtis",
+            "interface_uid": "8fbb35ca-ad59-11ed-936c-0242ac110002",
+            "ip": "116.8.200.100",
+            "port": 36136,
+            "uid": "8fbb398a-ad59-11ed-8ba9-0242ac110002"
+        },
+        "traffic": {
+            "bytes_in": 790742923,
+            "packets": 3901887417,
+            "packets_in": 4208942596,
+            "packets_out": 535302077
+        },
+        "resources": [
+            {
+                "uid": "arn:aws:s3:::flaws-logs",
+                "account_uid": "011222333553",
+                "type": "AWS::S3::Bucket"
+            },
+            {
+                "uid": "arn:aws:s3:::vpcs-logs",
+                "account_uid": "11112222",
+                "type": "AWS::S3::Bucket1"
+            }
+        ],
+        "identity": {
+            "user": {
+                "type": "IAMUser",
+                "name": "backup",
+                "uid": "ABCDFEFO36HFBHKZEAO1A1",
+                "uuid": "arn:aws:iam::011222333553:user\/backup",
+                "account_uid": "011222333553",
+                "credential_uid": "ABCDE01U43UX3RBRDAB0Z"
+            },
+            "session": {
+                "creation_time": null,
+                "mfa": null,
+                "issuer": "arn:aws:iam::011222333553:user\/backup"
+            },
+            "invoked_by": null,
+            "idp": {
+                "name": null
+            }
+        },
+        "http_request": {
+            "user_agent": "[ABC Suite\/5.10.0 Python\/3.7.3 Linux\/4.4.0-039049-Microsoft ABC Suite\/5.10.0 (https:\/\/github.com\/abcgroup\/ABCSuite)]"
+        },
+        "class_name": "Cloud API",
+        "class_uid": 5001,
+        "category_name": "Cloud Activity",
+        "category_uid": 5,
+        "severity_id": 0,
+        "severity": "Unknown",
+        "metadata": {
+            "version": "0.17.1"
+        },
+        "activity": "Operational",
+        "activity_id": 3,
+        "type_uid": 500103,
+        "type_name": "Cloud API: Operational",
+        "unmapped": [
+            [
+                "userIdentity_sessionContext_sessionIssuer_type",
+                "IAMUser"
+            ],
+            [
+                "userIdentity_sessionContext_sessionIssuer_accountId",
+                "011222333553"
+            ],
+            [
+                "requestParameters",
+                "{\"bucketName\":\"flaws-logs\",\"location\":\"\",\"Host\":\"s3.amazonaws.com\"}"
+            ],
+            [
+                "recipientAccountId",
+                "011222333553"
+            ],
+            [
+                "readOnly",
+                "true"
+            ],
+            [
+                "userIdentity_sessionContext_sessionIssuer_principalId",
+                "ABCDEFGHIJKL0F123"
+            ],
+            [
+                "eventType",
+                "AwsApiCall"
+            ],
+            [
+                "userIdentity_sessionContext_sessionIssuer_arn",
+                "arn:aws:iam::011222333553:user\/backup"
+            ],
+            [
+                "userIdentity_sessionContext_sessionIssuer_userName",
+                "backup"
+            ],
+            [
+                "additionalEventData",
+                "{\"SignatureVersion\":\"SigV4\",\"CipherSuite\":\"ABCDEF-RSA-AES123-GCC-SHA256\",\"AuthenticationMethod\":\"AuthHeader\",\"x-amz-id-2\":\"oHj417WtbXQU2F5jIuUTHkf3CjXCvWw2v1qCxRr8lVa1FQrFucEe+1wlRv5rLtFsQ2++yj9LyyN=\"}"
+            ]
+        ]
+    }
+}

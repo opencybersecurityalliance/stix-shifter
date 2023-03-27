@@ -14,11 +14,11 @@ class EntryPoint(BaseEntryPoint):
 
         if connection and configuration:
             boto3_client = BOTO3Client(connection, configuration)
-            ping_connector = PingConnector(boto3_client.athena_client)
-            query_connector = QueryConnector(boto3_client.athena_client, connection)
-            status_connector = StatusConnector(boto3_client.athena_client)
-            results_connector = ResultsConnector(boto3_client.athena_client, boto3_client.s3_client)
-            delete_connector = DeleteConnector(boto3_client.athena_client)
+            ping_connector = PingConnector(boto3_client)
+            query_connector = QueryConnector(boto3_client, connection)
+            status_connector = StatusConnector(boto3_client)
+            results_connector = ResultsConnector(boto3_client)
+            delete_connector = DeleteConnector(boto3_client)
 
             self.set_ping_connector(ping_connector)
             self.set_query_connector(query_connector)

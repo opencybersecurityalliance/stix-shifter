@@ -1,12 +1,12 @@
 import datetime
 import json
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     max_limit = 50
 
     def __init__(self, connection, configuration):
@@ -14,7 +14,7 @@ class Connector(BaseSyncConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def ping_connection(self):
+    async def ping_connection(self):
         try:
             response = self.api_client.generate_token()
             # Construct a response object
@@ -28,7 +28,7 @@ class Connector(BaseSyncConnector):
             self.logger.error('error when pinging datasource {}:'.format(err))
             raise
 
-    def create_results_connection(self, query_expr, offset, length):
+    async def create_results_connection(self, query_expr, offset, length):
         length = int(length)
         offset = int(offset)
 

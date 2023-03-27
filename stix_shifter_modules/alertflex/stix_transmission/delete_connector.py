@@ -7,18 +7,19 @@ class DeleteConnector(BaseDeleteConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         try:
-            response_dict = self.api_client.delete_search(search_id)
+            response_dict = await self.api_client.delete_search(search_id)
             response_code = response_dict["code"]
 
             # Construct a response object
             return_obj = dict()
             if response_code == 200:
-                return_obj['success'] = response_code['success']
+                return_obj['success'] = response_dict['success']
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
             return return_obj
         except Exception as err:
             self.logger.error('error when deleting search {}:'.format(err))

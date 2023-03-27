@@ -1,9 +1,6 @@
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
 from . import sdo_translator
-from os import path
-import json
 from ipaddress import ip_network, IPv4Network
-from stix_shifter_utils.utils import logger
 import uuid
 
 class ResultsTranslator(BaseResultTranslator):
@@ -288,9 +285,8 @@ class ResultsTranslator(BaseResultTranslator):
     :rtype: str
     """
 
-    json_data = json.loads(data)
+    json_data = data
     json_data = json_data[0]
-    data_source = json.loads(data_source)
     ANALYZER_NAME = 'ReversingLabs_1_0'
     data_source['id'] = ANALYZER_NAME
 

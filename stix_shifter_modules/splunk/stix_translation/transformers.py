@@ -1,5 +1,5 @@
 from stix_shifter_utils.stix_translation.src.utils.transformers import ValueTransformer
-
+import re
 
 class SplunkToTimestamp(ValueTransformer):
     """A value transformer for converting Splunk timestamp to regular timestamp"""
@@ -46,3 +46,20 @@ class SplunkHash(ValueTransformer):
                 return obj
             hashes = dict(map(lambda x: get_pair_of_hash(x), hashes))
             return hashes
+
+
+class SplunkMacFormatChange(ValueTransformer):
+    """    A value transformer for converting MAC value into stix format(using : separator)  """
+
+    @staticmethod
+    def transform(macvalue):
+        """correcting mac address presentation, it should be 6 octate separated
+         by only colon (:) not by any other special character """
+        macvalue = re.sub("[^A-Fa-f0-9]", "", macvalue)
+        maclength = len(macvalue)
+        if (maclength<12):
+            for i in range(maclength, 12):
+                macvalue = "0" + macvalue
+
+        value = ':'.join([macvalue[i:i + 2] for i in range(0, len(macvalue), 2)])
+        return value.lower()

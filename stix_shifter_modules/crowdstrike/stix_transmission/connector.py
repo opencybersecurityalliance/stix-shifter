@@ -1,11 +1,11 @@
 import json
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     init_error = None
     logger = logger.set_logger(__name__)
     PROVIDER = 'CrowdStrike'
@@ -46,11 +46,11 @@ class Connector(BaseSyncConnector):
         else:
             raise Exception(return_obj)
 
-    def ping_connection(self):
+    async def ping_connection(self):
         response_txt = None
         return_obj = {}
         try:
-            response = self.api_client.ping_box()
+            response = await self.api_client.ping_box()
             response_code = response.code
             response_txt = response.read().decode('utf-8')
             if 199 < response_code < 300:
@@ -70,22 +70,22 @@ class Connector(BaseSyncConnector):
         
         return return_obj
             
-    def send_info_request_and_handle_errors(self, ids_lst):
+    async def send_info_request_and_handle_errors(self, ids_lst):
         return_obj = dict()
-        response = self.api_client.get_detections_info(ids_lst)
+        response = await self.api_client.get_detections_info(ids_lst)
         return_obj = self._handle_errors(response, return_obj)
         response_json = json.loads(return_obj["data"])
         return_obj['data'] = response_json['resources']
 
         return return_obj
 
-    def handle_detection_info_request(self, ids):
+    async def handle_detection_info_request(self, ids):
         ids = [ids[x:x + self.IDS_LIMIT] for x in range(0, len(ids), self.IDS_LIMIT)]
         ids_lst = ids.pop(0)
-        return_obj = self.send_info_request_and_handle_errors(ids_lst)
+        return_obj = await self.send_info_request_and_handle_errors(ids_lst)
 
         for ids_lst in ids:
-            curr_obj = self.send_info_request_and_handle_errors(ids_lst)
+            curr_obj = await self.send_info_request_and_handle_errors(ids_lst)
             return_obj['data'].extend(curr_obj['data'])
 
         return return_obj
@@ -136,7 +136,7 @@ class Connector(BaseSyncConnector):
 
         return ioc_data
 
-    def create_results_connection(self, query, offset, length):
+    async def create_results_connection(self, query, offset, length):
         """"built the response object
         :param query: str, search_id
         :param offset: int,offset value
@@ -151,13 +151,13 @@ class Connector(BaseSyncConnector):
             if self.init_error:
                 raise self.init_error
 
-            response = self.api_client.get_detections_IDs(query, result_limit)
+            response = await self.api_client.get_detections_IDs(query, result_limit)
             self._handle_errors(response, ids_obj)
             response_json = json.loads(ids_obj["data"])
             ids_obj['ids'] = response_json.get('resources')
 
             if ids_obj['ids']:  # There are not detections that match the filter arg
-                return_obj = self.handle_detection_info_request(ids_obj['ids'])
+                return_obj = await self.handle_detection_info_request(ids_obj['ids'])
 
                 for event_data in return_obj['data']:
                     device_data = event_data['device']

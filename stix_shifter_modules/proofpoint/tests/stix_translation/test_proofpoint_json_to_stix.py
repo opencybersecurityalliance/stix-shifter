@@ -1,7 +1,8 @@
 import unittest
+
 from stix_shifter_modules.proofpoint.entry_point import EntryPoint
-import json
 from stix_shifter.stix_translation import stix_translation
+from stix_shifter_utils.utils.async_utils import run_in_thread
 
 translation = stix_translation.StixTranslation()
 
@@ -127,7 +128,7 @@ class TestProofpointResultsToStix(unittest.TestCase):
 
 
     def test_common_mapping(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps(event_data))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, event_data)
         assert (result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
 
@@ -151,7 +152,7 @@ class TestProofpointResultsToStix(unittest.TestCase):
         assert (observed_data['last_observed'] is not None)
 
     def test_custom_mapping(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([event_data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [event_data])
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert ('objects' in observed_data)

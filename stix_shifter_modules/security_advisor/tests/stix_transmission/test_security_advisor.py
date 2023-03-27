@@ -1,9 +1,10 @@
 import requests_mock
-from stix_shifter_modules.security_advisor.stix_transmission import auth
-from stix_shifter_modules.security_advisor.entry_point import EntryPoint
 from unittest.mock import patch
 import unittest
+
 from stix_shifter.stix_transmission import stix_transmission
+from stix_shifter_modules.security_advisor.entry_point import EntryPoint
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 
 
 class SecurityAdvisorMockJsonResponse:
@@ -188,7 +189,7 @@ class TestSecurityAdvisorConnection(unittest.TestCase):
         search_id = "[url:value = 'test@gmail.com']"
 
         entry_point = EntryPoint(CONNECTION, CONFIG)
-        status_response = entry_point.delete_query_connection(search_id)
+        status_response = run_in_thread(entry_point.delete_query_connection, search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True

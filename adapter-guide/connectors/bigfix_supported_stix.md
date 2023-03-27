@@ -1,10 +1,12 @@
-##### Updated on 06/01/22
+##### Updated on 02/27/23
 ## HCL BigFix
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | OR |
-| OR | OR |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | = | = |
 | != | != |
 | LIKE | contains |
@@ -14,8 +16,37 @@
 | < | is less than |
 | <= | is less than or equal to |
 | IN | = |
+| OR (Observation) | OR |
+| AND (Observation) | OR |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **file**:name | file.name |
+| **file**:hashes.'SHA-256' | file.sha256 |
+| **file**:hashes.'SHA-1' | file.sha1 |
+| **file**:hashes.MD5 | file.md5 |
+| **file**:parent_directory_ref.path | file.folder |
+| **file**:size | file.size |
+| **process**:name | process.name |
+| **process**:pid | process.pid, process.process id |
+| **process**:parent_ref.pid | process.ppid |
+| **process**:binary_ref.name | file.name |
+| **process**:binary_ref.hashes.'SHA-256' | file.sha256 |
+| **process**:binary_ref.hashes.'SHA-1' | file.sha1 |
+| **process**:binary_ref.hashes.MD5 | file.md5 |
+| **process**:binary_ref.parent_directory_ref.path | file.pathname |
+| **process**:binary_ref.size | file.size |
+| **process**:creator_user_ref.user_id | process.user, process.name of user |
+| **ipv4-addr**:value | socket.local address, socket.remote address |
+| **ipv6-addr**:value | socket.local address, socket.remote address |
+| **network-traffic**:src_port | socket.local port |
+| **network-traffic**:dst_port | socket.remote port |
+| **network-traffic**:src_ref.value | socket.local address |
+| **network-traffic**:dst_ref.value | socket.remote address |
+| **mac-addr**:value | adapter.mac address |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | file_path |

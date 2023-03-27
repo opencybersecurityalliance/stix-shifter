@@ -7,36 +7,38 @@ import os
 from datetime import datetime
 from requests import Response
 from stix_shifter_utils.utils import logger
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient, ResponseWrapper, \
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync, ResponseWrapper, \
     CONNECT_TIMEOUT_DEFAULT
 import random
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
 class APIClient():
-    
-    def __init__(self, connection, configuration):
-         self.url = "https://"+connection["host"]
-         self.auth_token_url = "/SecretServer/oauth2/token"
-         self.secret_detail = "/SecretServer/api/v1/secrets"
-         self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
-         self.connect_timeout = int(self.connect_timeout)
-         self.server_cert_content = False
-         self.auth = None
-         self.sni = None
-         self.retry_max = 1
-         self.logger = logger.set_logger(__name__)
-         self.server_cert_file_content_exists = False
-         self.url_modifier_function = None
-         self.headers = {
-             'Content-Type': 'application/x-www-form-urlencoded'
-         }
-         self.payload = 'username=%s&password=%s&grant_type=password' % (
-             configuration["auth"]["username"], configuration["auth"]["password"])
-         self.server_ip = connection["host"]
 
-    def get_token(self):
-        response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers,
+    def __init__(self, connection, configuration):
+        self.url = "https://" + connection["host"]
+        self.auth_token_url = "/SecretServer/oauth2/token"
+        self.secret_detail = "/SecretServer/api/v1/secrets"
+        self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
+        self.connect_timeout = int(self.connect_timeout)
+        self.server_cert_content = False
+        self.auth = None
+        self.sni = None
+        self.retry_max = 1
+        self.logger = logger.set_logger(__name__)
+        self.server_cert_file_content_exists = False
+        self.url_modifier_function = None
+        self.headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        self.payload = 'username=%s&password=%s&grant_type=password' % (
+            configuration["auth"]["username"], configuration["auth"]["password"])
+        self.server_ip = connection["host"]
+
+        self.secret_server_userdetail_url = "SecretServer/api/v1/users/"
+
+    async def get_token(self):
+        response = await RestApiClientAsync.call_api(self, self.auth_token_url, 'GET', headers=self.headers,
                                           data=self.payload,
                                           urldata=None,
                                           timeout=None)
@@ -54,15 +56,16 @@ class APIClient():
             ErrorResponder.fill_error(return_obj, message=response_txt)
             raise Exception(return_obj)
 
-    def ping_data_source(self):
-        response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
+    async def ping_data_source(self):
+        response = await RestApiClientAsync.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
                                           urldata=None,
                                           timeout=None)
         return response.code
 
-    def create_search(self, query_expression):
+    async def create_search(self, query_expression):
         respObj = Response()
-        if (self.get_token()):
+        token = await self.get_token()
+        if (token):
             self.query = query_expression
             response = self.build_searchId()
             if (response != None):
@@ -70,8 +73,8 @@ class APIClient():
                 respObj.error_type = ""
                 respObj.status_code = 200
                 content = '{"search_id": "' + \
-                              str(response) + \
-                              '", "data": {"message":  "Search id generated."}}'
+                          str(response) + \
+                          '", "data": {"message":  "Search id generated."}}'
                 respObj._content = bytes(content, 'utf-8')
             else:
                 respObj.code = "404"
@@ -99,10 +102,11 @@ class APIClient():
             self.search_id = s_id
         return s_id
 
-    def get_search_results(self, search_id, index_from, fetch_size):
+    async def get_search_results(self, search_id, index_from, fetch_size):
         # Sends a GET request from secret server
         # This function calls secret server to get data
-        if (self.get_token()):
+        token = await self.get_token()
+        if (token):
 
             self.search_id = search_id
             timestamp = self.decode_searchId()
@@ -111,10 +115,14 @@ class APIClient():
                 self.endDate = timestamp[1]
             else:
                 self.startDate = date.today()
-                self.endDate = self.startDate - timedelta(days = 1)
-            response = self.get_response()
-            return response
-  
+
+                self.endDate = self.startDate - timedelta(days=1)
+            resp = await self.get_response()
+            page_size = 100
+            resp = resp[(index_from * page_size):(fetch_size * page_size)]
+            return resp
+
+
     def decode_searchId(self):
         # These value (date, self.query) must be present.
         try:
@@ -125,7 +133,7 @@ class APIClient():
                 3001, "Could not decode search id content - " + self.search_id)
         self.query = jObj.get("query", None)
         try:
-            pattern = re.compile("\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z")
+            pattern = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z")
             matcher = pattern.findall(self.query)
             matches = []
             for match in matcher:
@@ -136,7 +144,7 @@ class APIClient():
                 " Could not extract date- " + self.search_id)
         return matches
 
-    def get_events(self):
+    async def get_events(self):
         payload = "{\"name\": \"Secret Server Events Logs\", \"parameters\": [{\"name\": \"startDate\", \"value\": '%s'} , {\"name\":\"endDate\",\"value\": '%s'}]}" % (
             self.startDate, self.endDate)
         headers = {
@@ -145,7 +153,7 @@ class APIClient():
         }
         endpoint = "SecretServer/api/v1/reports/execute"
 
-        response = RestApiClient.call_api(self, endpoint, 'POST', headers=headers, data=payload, urldata=None,
+        response = await RestApiClientAsync.call_api(self, endpoint, 'POST', headers=headers, data=payload, urldata=None,
                                           timeout=None)
         return_obj = {}
         if response.code != 200:
@@ -160,10 +168,23 @@ class APIClient():
         for obj in eventData['rows']:
             obj = dict(zip(col, obj))
             collection.append(obj)
+        for item in collection:
+            if "[Check Out]" in item["EventSubject"]:
+                item["EventSubject"] = "Check Out"
+            elif "[Check In]" in item["EventSubject"]:
+                item["EventSubject"] = "Check In"
+        # {key: ("Check Out" if  "[Check Out]" in val["EventSubject"] else "chec in")   for col in collection for(key,val) in col.items()}
+
+        # {item["EventSubject"]: ("[Check Out]" if "[Check Out]" in item["EventSubject"]
+        #                         "[Check In]"  if "[Check In]" in item["EventSubject"])
+        # for item in collection
+        # "[Check Out]" in [val = item["EventSubject"]] for item in collection]:
+        #     print('true')
+
         return collection
 
-    def get_Secret(self):
-        eventDetail = self.get_events()
+    async def get_Secret(self):
+        eventDetail = await self.get_events()
         secretIdList = []
         secretCollection = []
         for obj in eventDetail:
@@ -177,7 +198,7 @@ class APIClient():
                 'Content-Type': 'application/json'
             }
             payload = {}
-            response = RestApiClient.call_api(self, secret_server_user_url, 'GET', headers=headers, data=payload,
+            response = await RestApiClientAsync.call_api(self, secret_server_user_url, 'GET', headers=headers, data=payload,
                                               urldata=None,
                                               timeout=None)
 
@@ -186,9 +207,9 @@ class APIClient():
         collection = json.loads(json_data)
         return collection
 
-    def get_response(self):
-        eventDetail = self.get_events()
-        secretDetail = self.get_Secret()
+    async def get_response(self):
+        eventDetail = await self.get_events()
+        secretDetail = await self.get_Secret()
         updateSecret = []
         secretCollection = {}
         updateCollection = []
@@ -197,16 +218,19 @@ class APIClient():
             updateSecret.append(next)
         for item in eventDetail:
             for getId in updateSecret:
-                if (item['ItemId'] == getId['id']):
-                    data = getId['items']
-                    for secret in data:
-                        if (secret['fieldName'] == 'Server'):
-                            secretCollection[str(secret['fieldName'])] = str(secret['itemValue'])
-                            item.update(secretCollection)
+                if type(getId) is dict:
+                    if 'id' in getId:
+                        if (item['ItemId'] == getId['id']):
+                            data = getId['items']
+                            for secret in data:
+                                if (secret['fieldName'] == 'Server') or (secret['fieldName'] == 'Username'):
+                                    secretCollection[str(secret['fieldName'])] = str(secret['itemValue'])
+                                    item.update(secretCollection)
                             updateCollection.append(item)
+
         return updateCollection
 
-    def delete_search(self, search_id):
+    async def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
         # Delete the search
         return {"code": 200, "success": True}

@@ -9,8 +9,9 @@ class DeleteConnector(BaseDeleteConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         """
         Delete query response
         :param queryId:
@@ -31,5 +32,6 @@ class DeleteConnector(BaseDeleteConnector):
             response_dict['type'] = "unknown"
             response_dict['message'] = ex
             self.logger.error('error when delete request: %s', str(ex))
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
+                                      connector=self.connector)
         return return_obj

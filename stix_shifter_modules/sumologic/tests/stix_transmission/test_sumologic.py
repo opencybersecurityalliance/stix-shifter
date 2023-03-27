@@ -4,6 +4,7 @@ from unittest.mock import patch
 from stix_shifter_modules.sumologic.entry_point import EntryPoint
 from stix_shifter_utils.utils.error_response import ErrorCode
 from stix_shifter.stix_transmission import stix_transmission
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 
 
 class SumoLogicMockResponse:
@@ -12,7 +13,6 @@ class SumoLogicMockResponse:
         self.object = object
 
 
-@patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.__init__')
 class TestSumoLogicConnection(unittest.TestCase, object):
 
     def connection(self):
@@ -28,29 +28,26 @@ class TestSumoLogicConnection(unittest.TestCase, object):
             }
         }
 
-    def test_is_async(self, mock_api_client):
-        mock_api_client.return_value = None
+    def test_is_async(self):
         entry_point = EntryPoint(self.connection(), self.configuration())
         check_async = entry_point.is_async()
         assert check_async is True
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.ping_data_source')
-    def test_ping(self, mock_generate_token, mock_api_client):
+    def test_ping(self, mock_generate_token):
         mocked_return_value = SumoLogicMockResponse(200, True)
         mock_generate_token.return_value = mocked_return_value
-        mock_api_client.return_value = None
         entry_point = EntryPoint(self.connection(), self.configuration())
-        ping_result = entry_point.ping_connection()
+        ping_result = run_in_thread(entry_point.ping_connection)
         assert ping_result["success"] is True
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.ping_data_source')
-    def test_ping_endpoint_exception(self, mock_generate_token, mock_api_client):
-        mock_api_client.return_value = None
+    def test_ping_endpoint_exception(self, mock_generate_token):
         mocked_return_value = SumoLogicMockResponse(401, 'Authentication Failure')
         mock_generate_token.return_value = mocked_return_value
 
         entry_point = EntryPoint(self.connection(), self.configuration())
-        ping_response = entry_point.ping_connection()
+        ping_response = run_in_thread(entry_point.ping_connection)
 
         assert ping_response['success'] is False
         assert ping_response['connector'] == 'sumologic'
@@ -58,8 +55,7 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         assert ping_response['code'] == ErrorCode.TRANSMISSION_AUTH_CREDENTIALS.value
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.create_search')
-    def test_query_response(self, mock_query_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_query_response(self, mock_query_response):
         mocked_return_value = '257EAE83E02E9698'
         mock_query_response.return_value = SumoLogicMockResponse(200, mocked_return_value)
 
@@ -75,8 +71,7 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         assert query_response['search_id'] == "257EAE83E02E9698"
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.create_search')
-    def test_query_response_exception(self, mock_query_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_query_response_exception(self, mock_query_response):
         mocked_return_value = '257EAE83E02E9698'
         mock_query_response.return_value = SumoLogicMockResponse(200, mocked_return_value)
         mock_query_response.side_effect = Exception('exception')
@@ -91,13 +86,12 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         assert query_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.get_search_status', autospec=True)
-    def test_status_response(self, mock_status_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_status_response(self, mock_status_response):
         mocked_return_value = "DONE GATHERING RESULTS"
         mock_status_response.return_value = SumoLogicMockResponse(200, mocked_return_value)
         search_id = "27F369FB69B2458D"
         entry_point = EntryPoint(self.connection(), self.configuration())
-        status_response = entry_point.create_status_connection(search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -108,14 +102,13 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         assert status_response['success'] is True
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.get_search_status', autospec=True)
-    def test_status_response_error(self, mock_status_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_status_response_error(self, mock_status_response):
         mocked_return_value = "ERROR"
 
         mock_status_response.return_value = SumoLogicMockResponse(200, mocked_return_value)
         search_id = "27F369FB69B2458D"
         entry_point = EntryPoint(self.connection(), self.configuration())
-        status_response = entry_point.create_status_connection(search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -126,13 +119,12 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         assert status_response['success'] is True
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.get_search_status', autospec=True)
-    def test_status_response_running(self, mock_status_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_status_response_running(self, mock_status_response):
         mocked_return_value = "GATHERING RESULTS"
         mock_status_response.return_value = SumoLogicMockResponse(200, mocked_return_value)
         search_id = "27F369FB69B2458D"
         entry_point = EntryPoint(self.connection(), self.configuration())
-        status_response = entry_point.create_status_connection(search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -143,15 +135,14 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         assert status_response['success'] is True
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.get_search_status', autospec=True)
-    def test_status_response_running_cancelled(self, mock_status_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_status_response_running_cancelled(self, mock_status_response):
         mocked_return_value = "CANCELLED"
 
         mock_status_response.return_value = SumoLogicMockResponse(200, mocked_return_value)
 
         search_id = "27F369FB69B2458D"
         entry_point = EntryPoint(self.connection(), self.configuration())
-        status_response = entry_point.create_status_connection(search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -162,8 +153,7 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         assert status_response['success'] is True
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.get_search_status', autospec=True)
-    def test_status_response_exception(self, mock_status_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_status_response_exception(self, mock_status_response):
         mocked_return_value = "DONE GATHERING RESULTS"
         mock_status_response.return_value = SumoLogicMockResponse(200, mocked_return_value)
         mock_status_response.side_effect = Exception('exception')
@@ -176,8 +166,7 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         assert ErrorCode.TRANSMISSION_UNKNOWN.value == status_response['code']
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.get_search_results', autospec=True)
-    def test_results_response(self, mock_results_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_results_response(self, mock_results_response):
 
         dir_path = os.path.dirname(os.path.realpath(__file__))
         file_path = os.path.join(dir_path, 'api_response', 'result_by_sid.json')
@@ -198,8 +187,7 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         assert len(results_response['data']) > 0
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.get_search_results',  autospec=True)
-    def test_results_response_empty_list(self, mock_results_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_results_response_empty_list(self, mock_results_response):
         mocked_return_value = list()
 
         mock_results_response.return_value = SumoLogicMockResponse(200, mocked_return_value)
@@ -208,7 +196,7 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         offset = 0
         length = 1
         entry_point = EntryPoint(self.connection(), self.configuration())
-        results_response = entry_point.create_results_connection(search_id, offset, length)
+        results_response = run_in_thread(entry_point.create_results_connection, search_id, offset, length)
 
         assert 'success' in results_response
         assert results_response['success'] is True
@@ -216,8 +204,7 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         assert len(results_response['data']) == 0
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.get_search_results', autospec=True)
-    def test_results_response_exception(self, mock_results_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_results_response_exception(self, mock_results_response):
 
         dir_path = os.path.dirname(os.path.realpath(__file__))
         file_path = os.path.join(dir_path, 'api_response', 'result_by_sid.json')
@@ -237,8 +224,7 @@ class TestSumoLogicConnection(unittest.TestCase, object):
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.create_search', autospec=True)
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.get_search_status', autospec=True)
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.get_search_results', autospec=True)
-    def test_query_flow(self, mock_results_response, mock_status_response, mock_query_response, mock_api_client):
-        mock_api_client.return_value = None
+    def test_query_flow(self, mock_results_response, mock_status_response, mock_query_response):
 
         query_mock = "27F369FB69B2458D"
         mock_query_response.return_value = SumoLogicMockResponse(200, query_mock)
@@ -254,7 +240,7 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         query = "{\"query\": \"(_sourcehost = \\\"sumologic.domain_name.com\\\")\"," \
                 "\n\"fromTime\": \"20211007T111938\",\n\"toTime\": \"20211007T113438\"}"
         entry_point = EntryPoint(self.connection(), self.configuration())
-        query_response = entry_point.create_query_connection(query)
+        query_response = run_in_thread(entry_point.create_query_connection, query)
 
         assert query_response is not None
         assert query_response['success'] is True
@@ -262,7 +248,7 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         assert query_response['search_id'] == "27F369FB69B2458D"
 
         search_id = "27F369FB69B2458D"
-        status_response = entry_point.create_status_connection(search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
 
         assert status_response is not None
         assert 'status' in status_response
@@ -275,7 +261,7 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         search_id = "27F369FB69B2458D"
         offset = 0
         length = 1
-        results_response = entry_point.create_results_connection(search_id, offset, length)
+        results_response = run_in_thread(entry_point.create_results_connection, search_id, offset, length)
 
         assert 'success' in results_response
         assert results_response['success'] is True
@@ -283,8 +269,7 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         assert len(results_response['data']) > 0
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.delete_search', autospec=True)
-    def test_delete_search(self, mock_results_delete, mock_api_client):
-        mock_api_client.return_value = None
+    def test_delete_search(self, mock_results_delete):
 
         mocked_return_value = {'id': '27F369FB69B2458D'}
         mock_results_delete.return_value = SumoLogicMockResponse(200, mocked_return_value)
@@ -297,8 +282,7 @@ class TestSumoLogicConnection(unittest.TestCase, object):
         assert results_response['success'] is True
 
     @patch('stix_shifter_modules.sumologic.stix_transmission.api_client.APIClient.delete_search', autospec=True)
-    def test_delete_search_exception(self, mock_results_delete, mock_api_client):
-        mock_api_client.return_value = None
+    def test_delete_search_exception(self, mock_results_delete):
         mocked_return_value = {
             "success": False,
             "error": "404 Client Error: {\n  \"status\" : 404,\n  \"id\" : \"ACFCS-COOIW-7O80O\",\n  \"code\" : \"searchjob.jobid.invalid\",\n  \"message\" : \"Job ID is invalid.\"\n} for url: https://api.in.sumologic.com/api/v1/search/jobs/7BF2DA687DE824DB",

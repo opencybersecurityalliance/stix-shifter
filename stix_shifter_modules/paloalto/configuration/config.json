@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Palo Alto Cortex XDR"
+            "displayName": "Palo Alto Cortex XDR",
+            "group": "paloalto"
         },
         "host": {
             "type": "text"

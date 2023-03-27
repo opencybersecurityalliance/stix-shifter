@@ -63,7 +63,7 @@ class QueryStringPatternTranslator:
         qualifier_split = qualifier.split("'")
         start = transformer.transform(qualifier_split[1])
         stop = transformer.transform(qualifier_split[3])
-        qualified_query = "%s AND (entry_time >= %s OR entry_time <= %s)" % (expression, start, stop)
+        qualified_query = "%s AND (entry_time >= %s AND entry_time <= %s)" % (expression, start, stop)
         return qualified_query
 
     @classmethod
