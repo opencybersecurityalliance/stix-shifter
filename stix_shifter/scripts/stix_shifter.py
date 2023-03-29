@@ -111,21 +111,30 @@ def main():
     # operation subparser
     operation_subparser = transmit_parser.add_subparsers(title="operation", dest="operation_command")
     operation_subparser.add_parser(stix_transmission.PING, help="Pings the data source")
+    
     query_operation_parser = operation_subparser.add_parser(stix_transmission.QUERY, help="Executes a query on the data source")
     query_operation_parser.add_argument('query_string', help='native datasource query string')
+    
     results_operation_parser = operation_subparser.add_parser(stix_transmission.RESULTS, help="Fetches the results of the data source query")
     results_operation_parser.add_argument('search_id', help='uuid of executed query')
     results_operation_parser.add_argument('offset', help='offset of results')
     results_operation_parser.add_argument('length', help='length of results')
+    results_operation_parser.add_argument('metadata', nargs='?', help='metadata to fetch results')
+    
     resultsstix_operation_parser = operation_subparser.add_parser(stix_transmission.RESULTS_STIX, help="Fetches the results of the data source query, response is translated in STIX")
     resultsstix_operation_parser.add_argument('search_id', help='uuid of executed query')
     resultsstix_operation_parser.add_argument('offset', help='offset of results')
     resultsstix_operation_parser.add_argument('length', help='length of results')
     resultsstix_operation_parser.add_argument('data_source', help='STIX identity object representing a datasource')
+    resultsstix_operation_parser.add_argument('metadata', nargs='?', help='metadata to fetch results')
+
     status_operation_parser = operation_subparser.add_parser(stix_transmission.STATUS, help="Gets the current status of the query")
     status_operation_parser.add_argument('search_id', help='uuid of executed query')
+    status_operation_parser.add_argument('metadata', nargs='?', help='metadata to fetch results')
+
     delete_operation_parser = operation_subparser.add_parser(stix_transmission.DELETE, help="Delete a running query on the data source")
     delete_operation_parser.add_argument('search_id', help='id of query to remove')
+    
     operation_subparser.add_parser(stix_transmission.IS_ASYNC, help='Checks if the query operation is asynchronous')
 
     execute_parser = parent_subparsers.add_parser(EXECUTE, help='Translate and fully execute a query')
@@ -384,29 +393,38 @@ def transmit(args):
         is_async
     >
     """
+    log = utils_logger.set_logger(__name__)
     connection_dict = json.loads(args.connection)
     configuration_dict = json.loads(args.configuration)
     transmission = stix_transmission.StixTransmission(args.module, connection_dict, configuration_dict)
 
     operation_command = args.operation_command
+    if 'metadata' in args and args.metadata:
+        metadata = args.metadata
+        try:
+            metadata = json.loads(metadata)
+        except Exception as ex:
+            log.debug(exception_to_string(ex))
+            log.error('Cannot convert supplied metadata string to json')
+            pass
 
     if operation_command == stix_transmission.QUERY:
         query = args.query_string
         result = transmission.query(query)
     elif operation_command == stix_transmission.STATUS:
         search_id = args.search_id
-        result = transmission.status(search_id)
+        result = transmission.status(search_id, metadata=None)
     elif operation_command == stix_transmission.RESULTS:
         search_id = args.search_id
         offset = args.offset
         length = args.length
-        result = transmission.results(search_id, offset, length)
+        result = transmission.results(search_id, offset, length, metadata=None)
     elif operation_command == stix_transmission.RESULTS_STIX:
         search_id = args.search_id
         offset = args.offset
         length = args.length
         data_source = args.data_source
-        result = transmission.results_stix(search_id, offset, length, data_source)
+        result = transmission.results_stix(search_id, offset, length, data_source, metadata=None)
     elif operation_command == stix_transmission.DELETE:
         search_id = args.search_id
         result = transmission.delete(search_id)
