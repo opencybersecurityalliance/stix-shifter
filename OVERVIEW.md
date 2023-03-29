@@ -509,7 +509,7 @@ The `OFFSET` and `LENGTH` control what pages/rows of data are returned in the qu
     "data": [
         {
             "event": {
-                "metadata": {
+                "securityEvent": {
                     "eventTimestamp": "2022-06-13T14:36:54.216539700Z",
                     "eventType": "FILE_CREATION",
                     "vendorName": "Microsoft",
