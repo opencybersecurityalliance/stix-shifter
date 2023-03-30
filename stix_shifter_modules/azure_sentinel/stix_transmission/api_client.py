@@ -4,7 +4,7 @@ from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestAp
 class APIClient:
     """API Client to handle all calls."""
     
-    def __init__(self, connection, configuration):
+    def __init__(self, base_uri, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
@@ -14,14 +14,13 @@ class APIClient:
         default_api_version = 'v1.0'
         auth = configuration.get('auth')
         self.endpoint = '{api_version}/security/alerts'.format(api_version=default_api_version)
-        self.host = connection.get('host')
         self.timeout = connection['options'].get('timeout')
 
         if auth:
             if 'access_token' in auth:
                 headers['Authorization'] = "Bearer " + auth['access_token']
 
-        self.client = RestApiClientAsync(connection.get('host'),
+        self.client = RestApiClientAsync(base_uri,
                                     connection.get('port', None),
                                     headers,
                                     url_modifier_function=url_modifier_function,
