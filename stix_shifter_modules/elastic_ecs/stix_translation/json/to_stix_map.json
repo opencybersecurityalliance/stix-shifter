@@ -105,14 +105,28 @@
         }
       ]
     },
-    "registered_domain": {
-      "key": "x-ecs-source.registered_domain",
-      "object": "source"
-    },
-    "top_level_domain": {
-      "key": "x-ecs-source.top_level_domain",
-      "object": "source"
-    },
+    "registered_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "source_host_registered_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_registered_domain",
+        "references": ["src_ip", "source_nat"]
+      }
+    ],
+    "top_level_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "source_host_top_level_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_top_level_domain",
+        "references": ["src_ip", "source_nat"]
+      }
+    ],
     "geo": {
       "city_name": {
         "key": "x-ecs-source.geo_city_name",
@@ -249,14 +263,28 @@
         }
       ]
     },
-    "registered_domain": {
-      "key": "x-ecs-client.registered_domain",
-      "object": "client"
-    },
-    "top_level_domain": {
-      "key": "x-ecs-client.top_level_domain",
-      "object": "client"
-    },
+    "registered_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "client_host_registered_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_registered_domain",
+        "references": ["src_ip", "client_nat"]
+      }
+    ],
+    "top_level_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "client_host_top_level_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_top_level_domain",
+        "references": ["src_ip", "client_nat"]
+      }
+    ],
     "geo": {
       "city_name": {
         "key": "x-ecs-client.geo_city_name",
@@ -392,14 +420,28 @@
         }
       ]
     },
-    "registered_domain": {
-      "key": "x-ecs-destination.registered_domain",
-      "object": "destination"
-    },
-    "top_level_domain": {
-      "key": "x-ecs-destination.top_level_domain",
-      "object": "destination"
-    },
+    "registered_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "destination_host_registered_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "destination_host_registered_domain",
+        "references": ["dst_ip", "destination_nat"]
+      }
+    ],
+    "top_level_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "destination_host_top_level_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "destination_host_top_level_domain",
+        "references": ["dst_ip", "destination_nat"]
+      }
+    ],
     "geo": {
       "city_name": {
         "key": "x-ecs-destination.geo_city_name",
@@ -535,14 +577,28 @@
         }
       ]
     },
-    "registered_domain": {
-      "key": "x-ecs-server.registered_domain",
-      "object": "server"
-    },
-    "top_level_domain": {
-      "key": "x-ecs-server.top_level_domain",
-      "object": "server"
-    },
+    "registered_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "server_host_registered_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "server_host_registered_domain",
+        "references": ["dst_ip", "server_nat"]
+      }
+    ],
+    "top_level_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "server_host_top_level_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "server_host_top_level_domain",
+        "references": ["dst_ip", "server_nat"]
+      }
+    ],
     "geo": {
       "city_name": {
         "key": "x-ecs-server.geo_city_name",
