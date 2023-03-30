@@ -62,6 +62,21 @@ Results from the data source need to be returned as an array of JSON objects bef
 
 For asynchronous sources, the search id that gets passed into the status, delete, and results methods is the ID returned by the data source when making the query API call. This is used to keep track of the original query, allowing the status and results to be fetched. However, in the case a synchronous data source, the search id is the entire query string; this is what gets passed into the results and delete methods.
 
+### Returning metadata in the return object
+
+Additional values can be returned as a metadata paremeter in the status and results return object. The data type of the `metadata` parameter can be anything based on the requirements of the connector. The recomended types are python dictionary and string. Ideal use case for this paramater is pagination query. For example, if the connector needs to store the next page token or url and the previous results count to fetch next batch of results from the datasource then the metadata can look like this:
+
+```
+{
+    "result_count": 1,
+    "next_page_token": "CgwImdHioAYQqKmUuQMSDAiHl52VBhD8g4"
+}
+```
+Here's an example of the return object of the results with metadata parameter:
+
+`{'success': True, 'data': [<QUERY RESULTS>], 'metadata': <metadata values>}`
+
+
 [Back to top](#create-a-transmission-module)
 
 ## Step 4. Edit the error mapper file
@@ -143,7 +158,11 @@ The connection and configuration objects are explained in the transmission secti
       ```
 
    2. You can set the offset and length command line arguments to 1.
-   3. Visually confirm that query results are returned as JSON objects. These results can be compared to what is returned when running the query string used in test C directly on the data source API, either through a UI or the CLI.
+   3. Optionally, you can set the metadata parameter if the connector supports it. Ideally used for pagination query.
+      ```
+         python main.py transmit abc '{"host":"www.example.com", "port":1234}' '{"auth": {"username": "some_user_name", "password": "some_password"}}' results "<Query UUID from query test>" <Offset Integer> <Length Integer> '<metadata>'
+      ```
+   4. Visually confirm that query results are returned as JSON objects. These results can be compared to what is returned when running the query string used in test C directly on the data source API, either through a UI or the CLI.
 
 ### Test the transmission **delete** method.
 
