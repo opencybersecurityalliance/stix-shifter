@@ -76,10 +76,17 @@
       "key": "x-ecs-source.address",
       "object": "source"
     },
-    "domain": {
-      "key": "x-ecs-source.domain",
-      "object": "source"
-    },
+    "domain": [
+      {
+        "key": "domain-name.value",
+        "object": "source_host_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_domain",
+        "references": ["src_ip"]
+      }
+    ],
     "nat": {
       "ip": {
         "key": "x-ecs-source.nat_ip",
@@ -201,10 +208,17 @@
       "key": "x-ecs-client.address",
       "object": "client"
     },
-    "domain": {
-      "key": "x-ecs-client.domain",
-      "object": "client"
-    },
+    "domain": [
+      {
+        "key": "domain-name.value",
+        "object": "client_host_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_domain",
+        "references": ["src_ip"]
+      }
+    ],
     "nat": {
       "ip": {
         "key": "x-ecs-client.nat_ip",
@@ -449,10 +463,17 @@
       "key": "x-ecs-server.address",
       "object": "server"
     },
-    "domain": {
-      "key": "x-ecs-server.domain",
-      "object": "server"
-    },
+    "domain": [
+      {
+        "key": "domain-name.value",
+        "object": "server_host_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "server_host_domain",
+        "references": ["dst_ip"]
+      }
+    ],
     "nat": {
       "ip": {
         "key": "x-ecs-server.nat_ip",
@@ -1451,10 +1472,17 @@
       "key": "x-oca-asset.architecture",
       "object": "host"
     },
-    "domain": {
-      "key": "x-oca-asset.domain",
-      "object": "host"
-    },
+    "domain": [
+      {
+        "key": "domain-name.value",
+        "object": "host_domain"
+      },
+      {
+        "key": "x-oca-asset.domain_ref",
+        "object": "host",
+        "references": "host_domain"
+      }
+    ],
     "hostname": [
       {
         "key": "x-oca-asset.hostname",

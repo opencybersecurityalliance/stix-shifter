@@ -1,12 +1,14 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value": ["source.ip.keyword", "destination.ip.keyword", "client.ip", "server.ip", "host.ip.keyword", "dns.resolved_ip"]
+      "value": ["source.ip.keyword", "destination.ip.keyword", "client.ip", "server.ip", "host.ip.keyword", "dns.resolved_ip", "source.nat.ip", "destination.nat.ip", "client.nat.ip", "server.nat.ip"],
+      "x_port": ["server.port", "client.port", "source.port", "destination.port", "source.nat.port", "destination.nat.port", "client.nat.port", "server.nat.port"]
     }
   },
   "ipv6-addr": {
     "fields": {
-      "value": ["source.ip.keyword", "destination.ip.keyword", "client.ip", "server.ip", "host.ip.keyword", "dns.resolved_ip"]
+      "value": ["source.ip.keyword", "destination.ip.keyword", "client.ip", "server.ip", "host.ip.keyword", "dns.resolved_ip", "source.nat.ip", "destination.nat.ip", "client.nat.ip", "server.nat.ip"],
+      "x_port": ["server.port", "client.port", "source.port", "destination.port", "source.nat.port", "destination.nat.port", "client.nat.port", "server.nat.port"]
     }
   },
   "mac-addr": {
@@ -135,7 +137,7 @@
   },
   "domain-name": {
     "fields": {
-      "value": ["url.domain", "dns.question.name", "dns.question.registered_domain", "host.hostname.keyword"]
+      "value": ["url.domain", "dns.question.name", "dns.question.registered_domain", "host.hostname", "source.domain", "destination.domain","server.domain","client.domain", "source.registered_domain", "destination.registered_domain","server.registered_domain","client.registered_domain", "source.top_level_domain", "destination.top_level_domain", "server.top_level_domain", "client.top_level_domain"]
     }
   },
   "windows-registry-key": {
@@ -299,6 +301,18 @@
       "os_ref.version": ["host.os.version.keyword"]
     }
   },
+  "x-ecs-geo": {
+    "fields":{
+      "city_name": ["server.geo.city_name", "client.geo.city_name", "source.geo.city_name", "destination.geo.city_name"],
+      "continent_name": ["server.geo.continent_name", "client.geo.continent_name", "source.geo.continent_name", "destination.geo.continent_name"],
+      "country_iso_code": ["server.geo.country_iso_code", "client.geo.country_iso_code", "source.geo.country_iso_code", "destination.geo.country_iso_code"],
+      "country_name": ["server.geo.country_name", "client.geo.country_name", "source.geo.country_name", "destination.geo.country_name"],
+      "location": ["server.geo.location", "client.geo.location", "source.geo.location", "destination.geo.location"],
+      "name": ["server.geo.name", "client.geo.name", "source.geo.name", "destination.geo.name"],
+      "region_iso_code": ["server.geo.region_iso_code", "client.geo.region_iso_code", "source.geo.region_iso_code", "destination.geo.region_iso_code"],
+      "region_name": ["server.geo.region_name", "client.geo.region_name", "source.geo.region_name", "destination.geo.region_name"]  
+    }
+  },  
   "x-ecs-http": {
     "fields": {
       "request_body_bytes": ["http.request.body.bytes"],
@@ -441,78 +455,6 @@
       "score_environmental": ["vulnerability.score.environmental"],
       "score_temporal": ["vulnerability.score.temporal"],
       "score_version": ["vulnerability.score.version"]
-    }
-  },
-  "x-ecs-source": {
-    "fields": {
-      "address": ["source.address"],
-      "domain": ["source.domain.keyword"],
-      "nat.ip": ["source.nat.ip"],
-      "nat.port": ["source.nat.port"],
-      "registered_domain": ["source.registered_domain"],
-      "top_level_domain": ["source.top_level_domain"],
-      "geo.city_name": ["source.geo.city_name"],
-      "geo.continent_name": ["source.geo.continent_name"],
-      "geo.country_iso_code": ["source.geo.country_iso_code"],
-      "geo.country_name": ["source.geo.country_name"],
-      "geo.location": ["source.geo.location"],
-      "geo.name": ["source.geo.name"],
-      "geo.region_iso_code": ["source.geo.region_iso_code"],
-      "geo.region_name": ["source.geo.region_name"]
-    }
-  },
-  "x-ecs-destination": {
-    "fields": {
-      "address": ["destination.address"],
-      "domain": ["destination.domain.keyword"],
-      "nat.ip": ["destination.nat.ip"],
-      "nat.port": ["destination.nat.port"],
-      "registered_domain": ["destination.registered_domain"],
-      "top_level_domain": ["destination.top_level_domain"],
-      "geo.city_name": ["destination.geo.city_name"],
-      "geo.continent_name": ["destination.geo.continent_name"],
-      "geo.country_iso_code": ["destination.geo.country_iso_code"],
-      "geo.country_name": ["destination.geo.country_name"],
-      "geo.location": ["destination.geo.location"],
-      "geo.name": ["destination.geo.name"],
-      "geo.region_iso_code": ["destination.geo.region_iso_code"],
-      "geo.region_name": ["destination.geo.region_name"]
-    }
-  },
-  "x-ecs-client": {
-    "fields": {
-      "address": ["client.address"],
-      "domain": ["client.domain"],
-      "nat.ip": ["client.nat.ip"],
-      "nat.port": ["client.nat.port"],
-      "registered_domain": ["client.registered_domain"],
-      "top_level_domain": ["client.top_level_domain"],
-      "geo.city_name": ["client.geo.city_name"],
-      "geo.continent_name": ["client.geo.continent_name"],
-      "geo.country_iso_code": ["client.geo.country_iso_code"],
-      "geo.country_name": ["client.geo.country_name"],
-      "geo.location": ["client.geo.location"],
-      "geo.name": ["client.geo.name"],
-      "geo.region_iso_code": ["client.geo.region_iso_code"],
-      "geo.region_name": ["client.geo.region_name"]
-    }
-  },
-  "x-ecs-server": {
-    "fields": {
-      "address": ["server.address"],
-      "domain": ["server.domain"],
-      "nat.ip": ["server.nat.ip"],
-      "nat.port": ["server.nat.port"],
-      "registered_domain": ["server.registered_domain"],
-      "top_level_domain": ["server.top_level_domain"],
-      "geo.city_name": ["server.geo.city_name"],
-      "geo.continent_name": ["server.geo.continent_name"],
-      "geo.country_iso_code": ["server.geo.country_iso_code"],
-      "geo.country_name": ["server.geo.country_name"],
-      "geo.location": ["server.geo.location"],
-      "geo.name": ["server.geo.name"],
-      "geo.region_iso_code": ["server.geo.region_iso_code"],
-      "geo.region_name": ["server.geo.region_name"]
     }
   }
 }
