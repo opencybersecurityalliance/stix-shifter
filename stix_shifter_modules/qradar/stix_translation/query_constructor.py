@@ -131,7 +131,7 @@ class AqlQueryStringPatternTranslator:
                                                                                              value=value)
             else:
                 # There's no aql field for domain-name. using Like operator to find domian name from the url
-                if mapped_field == 'domainname' and comparator != ComparisonComparators.Like:
+                if mapped_field == 'dnsdomainname' and comparator != ComparisonComparators.Like:
                     comparator = self.comparator_lookup["ComparisonComparators.Like"]
                     value = self._format_like(expression.value)
 
