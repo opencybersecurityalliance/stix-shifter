@@ -84,18 +84,30 @@
       {
         "key": "domain-name.resolves_to_refs",
         "object": "source_host_domain",
-        "references": ["src_ip"]
+        "references": ["src_ip", "source_nat"]
       }
     ],
     "nat": {
-      "ip": {
-        "key": "x-ecs-source.nat_ip",
-        "object": "source"
-      },
-      "port": {
-        "key": "x-ecs-source.nat_port",
-        "object": "source"
-      }
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "source_nat"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "source_nat"
+        }
+      ],
+      "port": [
+        {
+          "key": "ipv4-addr.x_port",
+          "object": "source_nat"
+        },
+        {
+          "key": "ipv6-addr.x_port",
+          "object": "source_nat"
+        }
+      ]
     },
     "registered_domain": {
       "key": "x-ecs-source.registered_domain",
@@ -216,18 +228,30 @@
       {
         "key": "domain-name.resolves_to_refs",
         "object": "client_host_domain",
-        "references": ["src_ip"]
+        "references": ["src_ip", "client_nat"]
       }
     ],
     "nat": {
-      "ip": {
-        "key": "x-ecs-client.nat_ip",
-        "object": "client"
-      },
-      "port": {
-        "key": "x-ecs-client.nat_port",
-        "object": "client"
-      }
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "client_nat"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "client_nat"
+        }
+      ],
+      "port": [
+        {
+          "key": "ipv4-addr.x_port",
+          "object": "client_nat"
+        },
+        {
+          "key": "ipv6-addr.x_port",
+          "object": "client_nat"
+        }
+      ]
     },
     "registered_domain": {
       "key": "x-ecs-client.registered_domain",
@@ -339,19 +363,38 @@
       "key": "x-ecs-destination.address",
       "object": "destination"
     },
-    "domain": {
-      "key": "x-ecs-destination.domain",
-      "object": "destination"
-    },
-    "nat": {
-      "ip": {
-        "key": "x-ecs-destination.nat_ip",
-        "object": "destination"
+    "domain": [
+      {
+        "key": "domain-name.value",
+        "object": "destination_host_domain"
       },
-      "port": {
-        "key": "x-ecs-destination.nat_port",
-        "object": "destination"
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "destination_host_domain",
+        "references": ["dst_ip", "destination_nat"]
       }
+  ],
+    "nat": {
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "destination_nat"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "destination_nat"
+        }
+      ],
+      "port": [
+        {
+          "key": "ipv4-addr.x_port",
+          "object": "destination_nat"
+        },
+        {
+          "key": "ipv6-addr.x_port",
+          "object": "destination_nat"
+        }
+      ]
     },
     "registered_domain": {
       "key": "x-ecs-destination.registered_domain",
@@ -471,18 +514,30 @@
       {
         "key": "domain-name.resolves_to_refs",
         "object": "server_host_domain",
-        "references": ["dst_ip"]
+        "references": ["dst_ip", "server_nat"]
       }
     ],
     "nat": {
-      "ip": {
-        "key": "x-ecs-server.nat_ip",
-        "object": "server"
-      },
-      "port": {
-        "key": "x-ecs-server.nat_port",
-        "object": "server"
-      }
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "server_nat"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "server_nat"
+        }
+      ],
+      "port": [
+        {
+          "key": "ipv4-addr.x_port",
+          "object": "server_nat"
+        },
+        {
+          "key": "ipv6-addr.x_port",
+          "object": "server_nat"
+        }
+      ]
     },
     "registered_domain": {
       "key": "x-ecs-server.registered_domain",
