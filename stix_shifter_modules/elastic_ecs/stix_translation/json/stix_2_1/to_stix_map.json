@@ -132,37 +132,49 @@
       }
     ],
     "geo": {
-      "city_name": {
-        "key": "x-ecs-source.geo_city_name",
-        "object": "source"
-      },
+      "city_name": [
+        {
+          "key": "x-ecs-geo.city_name",
+          "object": "source_geo"
+        },
+        {
+          "key": "ipv4-addr.x_geo_ref",
+          "object": "src_ip",
+          "references": "source_geo"
+        },
+        {
+          "key": "ipv6-addr.x_geo_ref",
+          "object": "src_ip",
+          "references": "source_geo"
+        }
+      ],
       "continent_name": {
-        "key": "x-ecs-source.geo_continent_name",
-        "object": "source"
+        "key": "x-ecs-geo.continent_name",
+        "object": "source_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-source.geo_country_iso_code",
-        "object": "source"
+        "key": "x-ecs-geo.country_iso_code",
+        "object": "source_geo"
       },
       "country_name": {
-        "key": "x-ecs-source.geo_country_name",
-        "object": "source"
+        "key": "x-ecs-geo.country_name",
+        "object": "source_geo"
       },
       "location": {
-        "key": "x-ecs-source.geo_location",
-        "object": "source"
+        "key": "x-ecs-geo.location",
+        "object": "source_geo"
       },
       "name": {
-        "key": "x-ecs-source.geo_name",
-        "object": "source"
+        "key": "x-ecs-geo.name",
+        "object": "source_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-source.geo_region_iso_code",
-        "object": "source"
+        "key": "x-ecs-geo.region_iso_code",
+        "object": "source_geo"
       },
       "region_name": {
-        "key": "x-ecs-source.geo_region_name",
-        "object": "source"
+        "key": "x-ecs-geo.region_name",
+        "object": "source_geo"
       }
     }
   },
@@ -290,37 +302,49 @@
       }
     ],
     "geo": {
-      "city_name": {
-        "key": "x-ecs-client.geo_city_name",
-        "object": "client"
-      },
+      "city_name": [
+        {
+          "key": "x-ecs-geo.city_name",
+          "object": "client_geo"
+        },
+        {
+          "key": "ipv4-addr.x_geo_ref",
+          "object": "src_ip",
+          "references": "client_geo"
+        },
+        {
+          "key": "ipv6-addr.x_geo_ref",
+          "object": "src_ip",
+          "references": "client_geo"
+        }
+      ],
       "continent_name": {
-        "key": "x-ecs-client.geo_continent_name",
-        "object": "client"
+        "key": "x-ecs-geo.continent_name",
+        "object": "client_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-client.geo_country_iso_code",
-        "object": "client"
+        "key": "x-ecs-geo.country_iso_code",
+        "object": "client_geo"
       },
       "country_name": {
-        "key": "x-ecs-client.geo_country_name",
-        "object": "client"
+        "key": "x-ecs-geo.country_name",
+        "object": "client_geo"
       },
       "location": {
-        "key": "x-ecs-client.geo_location",
-        "object": "client"
+        "key": "x-ecs-geo.location",
+        "object": "client_geo"
       },
       "name": {
-        "key": "x-ecs-client.geo_name",
-        "object": "client"
+        "key": "x-ecs-geo.name",
+        "object": "client_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-client.geo_region_iso_code",
-        "object": "client"
+        "key": "x-ecs-geo.region_iso_code",
+        "object": "client_geo"
       },
       "region_name": {
-        "key": "x-ecs-client.geo_region_name",
-        "object": "client"
+        "key": "x-ecs-geo.region_name",
+        "object": "client_geo"
       }
     }
   },
@@ -447,37 +471,49 @@
       }
     ],
     "geo": {
-      "city_name": {
-        "key": "x-ecs-destination.geo_city_name",
-        "object": "destination"
-      },
+      "city_name": [
+        {
+          "key": "x-ecs-geo.city_name",
+          "object": "destination_geo"
+        },
+        {
+          "key": "ipv4-addr.x_geo_ref",
+          "object": "dst_ip",
+          "references": "destination_geo"
+        },
+        {
+          "key": "ipv6-addr.x_geo_ref",
+          "object": "dst_ip",
+          "references": "destination_geo"
+        }
+      ],
       "continent_name": {
-        "key": "x-ecs-destination.geo_continent_name",
-        "object": "destination"
+        "key": "x-ecs-geo.continent_name",
+        "object": "destination_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-destination.geo_country_iso_code",
-        "object": "destination"
+        "key": "x-ecs-geo.country_iso_code",
+        "object": "destination_geo"
       },
       "country_name": {
-        "key": "x-ecs-destination.geo_country_name",
-        "object": "destination"
+        "key": "x-ecs-geo.country_name",
+        "object": "destination_geo"
       },
       "location": {
-        "key": "x-ecs-destination.geo_location",
-        "object": "destination"
+        "key": "x-ecs-geo.location",
+        "object": "destination_geo"
       },
       "name": {
-        "key": "x-ecs-destination.geo_name",
-        "object": "destination"
+        "key": "x-ecs-geo.name",
+        "object": "destination_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-destination.geo_region_iso_code",
-        "object": "destination"
+        "key": "x-ecs-geo.region_iso_code",
+        "object": "destination_geo"
       },
       "region_name": {
-        "key": "x-ecs-destination.geo_region_name",
-        "object": "destination"
+        "key": "x-ecs-geo.region_name",
+        "object": "destination_geo"
       }
     }
   },
@@ -604,37 +640,49 @@
       }
     ],
     "geo": {
-      "city_name": {
-        "key": "x-ecs-server.geo_city_name",
-        "object": "server"
-      },
+      "city_name": [
+        {
+          "key": "x-ecs-geo.city_name",
+          "object": "server_geo"
+        },
+        {
+          "key": "ipv4-addr.x_geo_ref",
+          "object": "dst_ip",
+          "references": "server_geo"
+        },
+        {
+          "key": "ipv6-addr.x_geo_ref",
+          "object": "dst_ip",
+          "references": "server_geo"
+        }
+      ],
       "continent_name": {
-        "key": "x-ecs-server.geo_continent_name",
-        "object": "server"
+        "key": "x-ecs-geo.continent_name",
+        "object": "server_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-server.geo_country_iso_code",
-        "object": "server"
+        "key": "x-ecs-geo.country_iso_code",
+        "object": "server_geo"
       },
       "country_name": {
-        "key": "x-ecs-server.geo_country_name",
-        "object": "server"
+        "key": "x-ecs-geo.country_name",
+        "object": "server_geo"
       },
       "location": {
-        "key": "x-ecs-server.geo_location",
-        "object": "server"
+        "key": "x-ecs-geo.location",
+        "object": "server_geo"
       },
       "name": {
-        "key": "x-ecs-server.geo_name",
-        "object": "server"
+        "key": "x-ecs-geo.name",
+        "object": "server_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-server.geo_region_iso_code",
-        "object": "server"
+        "key": "x-ecs-geo.region_iso_code",
+        "object": "server_geo"
       },
       "region_name": {
-        "key": "x-ecs-server.geo_region_name",
-        "object": "server"
+        "key": "x-ecs-geo.region_name",
+        "object": "server_geo"
       }
     }
   },
@@ -1662,37 +1710,44 @@
       "object": "host"
     },
     "geo": {
-      "city_name": {
-        "key": "x-oca-asset.geo_city_name",
-        "object": "host"
-      },
+      "city_name": [
+        {
+          "key": "x-ecs-geo.city_name",
+          "object": "host_geo"
+        },
+        {
+          "key": "x-oca-asset.geo_ref",
+          "object": "host",
+          "references": "host_geo"
+        }
+      ],
       "continent_name": {
-        "key": "x-oca-asset.geo_continent_name",
-        "object": "host"
+        "key": "x-ecs-geo.continent_name",
+        "object": "host_geo"
       },
       "country_iso_code": {
-        "key": "x-oca-asset.geo_country_iso_code",
-        "object": "host"
+        "key": "x-ecs-geo.country_iso_code",
+        "object": "host_geo"
       },
       "country_name": {
-        "key": "x-oca-asset.geo_country_name",
-        "object": "host"
+        "key": "x-ecs-geo.country_name",
+        "object": "host_geo"
       },
       "location": {
-        "key": "x-oca-asset.geo_location",
-        "object": "host"
+        "key": "x-ecs-geo.location",
+        "object": "host_geo"
       },
       "name": {
-        "key": "x-oca-asset.geo_name",
-        "object": "host"
+        "key": "x-ecs-geo.name",
+        "object": "host_geo"
       },
       "region_iso_code": {
-        "key": "x-oca-asset.geo_region_iso_code",
-        "object": "host"
+        "key": "x-ecs-geo.region_iso_code",
+        "object": "host_geo"
       },
       "region_name": {
-        "key": "x-oca-asset.geo_region_name",
-        "object": "host"
+        "key": "x-ecs-geo.region_name",
+        "object": "host_geo"
       }
     },
     "os": {
@@ -1982,37 +2037,44 @@
       }
     },
     "geo": {
-      "city_name": {
-        "key": "x-ecs-observer.geo_city_name",
-        "object": "observer"
-      },
+      "city_name": [
+        {
+          "key": "x-ecs-geo.city_name",
+          "object": "observer_geo"
+        },
+        {
+          "key": "x-ecs-observer.geo_ref",
+          "object": "observer",
+          "references": "observer_geo"
+        }
+      ],
       "continent_name": {
-        "key": "x-ecs-observer.geo_continent_name",
-        "object": "observer"
+        "key": "x-ecs-geo.continent_name",
+        "object": "observer_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-observer.geo_country_iso_code",
-        "object": "observer"
+        "key": "x-ecs-geo.country_iso_code",
+        "object": "observer_geo"
       },
       "country_name": {
-        "key": "x-ecs-observer.geo_country_name",
-        "object": "observer"
+        "key": "x-ecs-geo.country_name",
+        "object": "observer_geo"
       },
       "location": {
-        "key": "x-ecs-observer.geo_location",
-        "object": "observer"
+        "key": "x-ecs-geo.location",
+        "object": "observer_geo"
       },
       "name": {
-        "key": "x-ecs-observer.geo_name",
-        "object": "observer"
+        "key": "x-ecs-geo.name",
+        "object": "observer_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-observer.geo_region_iso_code",
-        "object": "observer"
+        "key": "x-ecs-geo.region_iso_code",
+        "object": "observer_geo"
       },
       "region_name": {
-        "key": "x-ecs-observer.geo_region_name",
-        "object": "observer"
+        "key": "x-ecs-geo.region_name",
+        "object": "observer_geo"
       }
     }
   },
