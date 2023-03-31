@@ -1,15 +1,13 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value": ["source.ip.keyword", "destination.ip.keyword", "client.ip", "server.ip", "host.ip.keyword", "dns.resolved_ip", "source.nat.ip", "destination.nat.ip", "client.nat.ip", "server.nat.ip"],
-      "x_port": ["server.port", "client.port", "source.port", "destination.port", "source.nat.port", "destination.nat.port", "client.nat.port", "server.nat.port"]
-    }
+      "value": ["source.ip.keyword", "destination.ip.keyword", "client.ip", "server.ip", "host.ip.keyword", "dns.resolved_ip", "source.nat.ip", "destination.nat.ip", "client.nat.ip", "server.nat.ip"]
+       }
   },
   "ipv6-addr": {
     "fields": {
-      "value": ["source.ip.keyword", "destination.ip.keyword", "client.ip", "server.ip", "host.ip.keyword", "dns.resolved_ip", "source.nat.ip", "destination.nat.ip", "client.nat.ip", "server.nat.ip"],
-      "x_port": ["server.port", "client.port", "source.port", "destination.port", "source.nat.port", "destination.nat.port", "client.nat.port", "server.nat.port"]
-    }
+      "value": ["source.ip.keyword", "destination.ip.keyword", "client.ip", "server.ip", "host.ip.keyword", "dns.resolved_ip", "source.nat.ip", "destination.nat.ip", "client.nat.ip", "server.nat.ip"]
+     }
   },
   "mac-addr": {
     "fields": {
@@ -18,8 +16,8 @@
   },
   "network-traffic": {
     "fields": {
-      "src_port": ["source.port", "client.port"],
-      "dst_port": ["destination.port", "server.port"],
+      "src_port": ["source.port", "client.port", "source.nat.port", "client.nat.port"],
+      "dst_port": ["destination.port", "server.port", "destination.nat.port", "server.nat.port"],
       "protocols[*]": ["network.transport.keyword", "network.type.keyword", "network.protocol.keyword"],
       "src_ref.value": ["source.ip.keyword", "client.ip"],
       "dst_ref.value": ["destination.ip.keyword", "server.ip"],

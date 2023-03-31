@@ -98,16 +98,10 @@
           "object": "source_nat"
         }
       ],
-      "port": [
-        {
-          "key": "ipv4-addr.x_port",
-          "object": "source_nat"
-        },
-        {
-          "key": "ipv6-addr.x_port",
-          "object": "source_nat"
-        }
-      ]
+      "port": {
+        "key": "network-traffic.src_port",
+        "object": "source_nat_port"
+      }
     },
     "registered_domain": [
       {
@@ -268,16 +262,10 @@
           "object": "client_nat"
         }
       ],
-      "port": [
-        {
-          "key": "ipv4-addr.x_port",
-          "object": "client_nat"
-        },
-        {
-          "key": "ipv6-addr.x_port",
-          "object": "client_nat"
-        }
-      ]
+      "port": {
+        "key": "network-traffic.src_port",
+        "object": "client_nat_port"
+      }
     },
     "registered_domain": [
       {
@@ -437,16 +425,10 @@
           "object": "destination_nat"
         }
       ],
-      "port": [
-        {
-          "key": "ipv4-addr.x_port",
-          "object": "destination_nat"
-        },
-        {
-          "key": "ipv6-addr.x_port",
-          "object": "destination_nat"
-        }
-      ]
+      "port": {
+        "key": "network-traffic.dst_port",
+        "object": "destination_nat_port"
+      }
     },
     "registered_domain": [
       {
@@ -606,16 +588,10 @@
           "object": "server_nat"
         }
       ],
-      "port": [
-        {
-          "key": "ipv4-addr.x_port",
-          "object": "server_nat"
-        },
-        {
-          "key": "ipv6-addr.x_port",
-          "object": "server_nat"
-        }
-      ]
+      "port": {
+        "key": "network-traffic.dst_port",
+        "object": "server_nat_port"
+      }
     },
     "registered_domain": [
       {
