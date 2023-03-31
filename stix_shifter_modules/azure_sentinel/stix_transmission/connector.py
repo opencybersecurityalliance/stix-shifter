@@ -11,6 +11,7 @@ from stix_shifter_utils.utils import logger
 class Connector(BaseJsonSyncConnector):
     init_error = None
     max_limit = 1000
+    base_uri = 'graph.microsoft.com' # Microsoft Graph API has single endpoint
 
     def __init__(self, connection, configuration):
         """Initialization.
@@ -18,10 +19,10 @@ class Connector(BaseJsonSyncConnector):
         :param configuration: dict,config dict"""
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
-        self.adal_response = Connector.generate_token(self, connection, configuration)
+        self.adal_response = Connector.generate_token(self, self.base_uri, configuration)
         if self.adal_response['success']:
             configuration['auth']['access_token'] = self.adal_response['access_token']
-            self.api_client = APIClient(connection, configuration)
+            self.api_client = APIClient(self.base_uri, connection, configuration)
         else:
             self.init_error = True
 
@@ -124,7 +125,7 @@ class Connector(BaseJsonSyncConnector):
         return return_obj
 
     @staticmethod
-    def generate_token(self, connection, configuration):
+    def generate_token(self, base_uri, configuration):
         """To generate the Token
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
@@ -132,7 +133,7 @@ class Connector(BaseJsonSyncConnector):
 
         authority_url = ('https://login.microsoftonline.com/' +
                          configuration['auth']['tenant'])
-        resource = "https://" + str(connection.get('host'))
+        resource = "https://" + base_uri
 
         try:
             context = adal.AuthenticationContext(
