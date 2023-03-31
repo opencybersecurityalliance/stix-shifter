@@ -225,22 +225,6 @@
       "runtime": ["container.runtime"]
     }
   },
-  "x-ecs-dll": {
-    "fields": {
-      "name": ["dll.name"],
-      "path": ["dll.path"],
-      "pe.company": ["dll.pe.company"],
-      "pe.description": ["dll.pe.description"],
-      "pe.file_version": ["dll.pe.file_version"],
-      "pe.original_file_name": ["dll.pe.original_file_name"],
-      "pe.product": ["dll.pe.product"],
-      "code_signature.exists": ["dll.code_signature.exists"],
-      "code_signature.status": ["dll.code_signature.status"],
-      "code_signature.subject_name": ["dll.code_signature.subject_name"],
-      "code_signature.trusted": ["dll.code_signature.trusted"],
-      "code_signature.valid": ["dll.code_signature.valid"]
-    }
-  },
   "x-ecs-dns": {
     "fields": {
       "answers_class": ["dns.answers.class"],
