@@ -1199,62 +1199,61 @@
     }
   },
   "dll":{
-    "name": {
-      "key": "x-ecs-dll.name",
-      "object": "dll"
-    },
+    "name": [
+      {
+        "key": "file.name",
+        "object": "file_dll"
+      },
+      {
+        "key": "file.dll_ref",
+        "object": "file",
+        "references": "file_dll"
+      }
+    ],
     "path": {
-      "key": "x-ecs-dll.path",
-      "object": "dll"
+      "key": "file.x_path",
+      "object": "file_dll"
     },
     "pe": {
       "company": {
-        "key": "x-ecs-dll.pe_company",
-        "object": "dll"
-      },
-      "description": {
-        "key": "x-ecs-dll.pe_description",
-        "object": "dll"
+        "key": "file.x_software_ref.vendor",
+        "object": "file_dll"
       },
       "file_version": {
-        "key": "x-ecs-dll.pe_file_version",
-        "object": "dll"
+        "key": "file.x_software_ref.version",
+        "object": "file_dll"
       },
       "original_file_name": {
-        "key": "x-ecs-dll.pe_original_file_name",
-        "object": "dll"
-      },
-      "product": {
-        "key": "x-ecs-dll.pe_product",
-        "object": "dll"
+        "key": "file.x_software_ref.name",
+        "object": "file_dll"
       }
     },
     "code_signature": {
       "exists": {
-        "key": "x-ecs-dll.code_signature_exists",
-        "object": "dll"
+        "key": "file.x_code_signature.exists",
+        "object": "file_dll"
       },
       "subject_name": {
-        "key": "x-ecs-dll.code_signature_subject_name",
-        "object": "dll"
+        "key": "file.x_code_signature.subject_name",
+        "object": "file_dll"
       }
     },
     "hash": {
       "sha256": {
-        "key": "x-ecs-dll.hashes.SHA-256",
-        "object": "dll"
+        "key": "file.hashes.SHA-256",
+        "object": "file_dll"
       },
       "sha1": {
-        "key": "x-ecs-dll.hashes.SHA-1",
-        "object": "dll"
+        "key": "file.hashes.SHA-1",
+        "object": "file_dll"
       },
       "md5": {
-        "key": "x-ecs-dll.hashes.MD5",
-        "object": "dll"
+        "key": "file.hashes.MD5",
+        "object": "file_dll"
       },
       "sha512": {
-        "key": "x-ecs-dll.hashes.SHA-512",
-        "object": "dll"
+        "key": "file.hashes.SHA-512",
+        "object": "file_dll"
       }
     }
   },

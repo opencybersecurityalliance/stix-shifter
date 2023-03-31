@@ -48,7 +48,7 @@
   },
   "file": {
     "fields": {
-      "name": ["file.name", "file.path", "process.name.keyword", "process.executable.keyword", "process.parent.name.keyword", "process.parent.executable.keyword"],
+      "name": ["file.name", "dll.name", "file.path", "process.name.keyword", "process.executable.keyword", "process.parent.name.keyword", "process.parent.executable.keyword"],
       "ctime": ["file.created"],
       "size": ["file.size"],
       "atime": ["file.accessed"],
@@ -61,7 +61,7 @@
       "parent_directory_ref.path": ["file.directory"],
       "x_attributes": ["file.attributes"],
       "x_extension": ["file.extension"],
-      "x_path": ["file.path"],
+      "x_path": ["file.path", "dll.path"],
       "x_target_path": ["file.target_path"],
       "x_type": ["file.type"],
       "x_unix.device": ["file.device"],
@@ -72,14 +72,14 @@
       "x_owner_ref.user_id": ["file.uid"],
       "x_owner_ref.account_login": ["file.owner"],
       "x_win_drive_letter": ["file.drive_letter"],
-      "x_software_ref.name": ["file.pe.original_file_name"],
-      "x_software_ref.vendor": ["file.pe.company"],
-      "x_software_ref.version": ["file.pe.file_version"],
-      "x_code_signature.exists": ["file.code_signature.exists"],
-      "x_code_signature.status": ["file.code_signature.status"],
-      "x_code_signature.subject_name": ["file.code_signature.subject_name"],
-      "x_code_signature.trusted": ["file.code_signature.trusted"],
-      "x_code_signature.valid": ["file.code_signature.valid"]
+      "x_software_ref.name": ["file.pe.original_file_name", "dll.pe.original_file_name"],
+      "x_software_ref.vendor": ["file.pe.company", "dll.pe.company"],
+      "x_software_ref.version": ["file.pe.file_version", "dll.pe.file_version"],
+      "x_code_signature.exists": ["file.code_signature.exists", "dll.code_signature.exists"],
+      "x_code_signature.status": ["file.code_signature.status", "dll.code_signature.status"],
+      "x_code_signature.subject_name": ["file.code_signature.subject_name", "dll.code_signature.subject_name"],
+      "x_code_signature.trusted": ["file.code_signature.trusted", "dll.code_signature.trusted"],
+      "x_code_signature.valid": ["file.code_signature.valid", "dll.code_signature.valid"]
     }
   },
   "directory": {
