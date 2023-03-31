@@ -24,6 +24,6 @@ class ProtocolNumToName(ValueTransformer):
             for key, value in protocol_dict.items():
                 if str(protocol_decimal) == value:
                     protocol = key
-            return protocol
+            return [protocol]
         except ValueError:
             LOGGER.error("Cannot convert protocol number to protocol name")

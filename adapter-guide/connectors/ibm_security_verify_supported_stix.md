@@ -1,10 +1,13 @@
-##### Updated on 12/13/22
+##### Updated on 02/27/23
 ## IBM Security Verify
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | = |
+| AND (Comparision) | & |
 | = | = |
+| AND (Observation) | = |
 | IN | = |
 | <br> | |
 ### Searchable STIX objects and properties

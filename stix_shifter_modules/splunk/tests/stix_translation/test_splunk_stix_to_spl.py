@@ -59,6 +59,7 @@ fields = ", ".join([
     "process_exec",
     "process_path",
     "process_hash",
+    "process_guid",
     "parent_process",
     "parent_process_id",
     "parent_process_name",

@@ -1,10 +1,12 @@
-##### Updated on 01/24/23
+##### Updated on 03/08/23
 ## Amazon Athena
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | INTERSECT |
-| OR | UNION |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | > | > |
 | >= | >= |
 | < | < |
@@ -14,8 +16,10 @@
 | LIKE | LIKE |
 | IN | IN |
 | MATCHES | REGEXP_LIKE |
+| OR (Observation) | UNION |
+| AND (Observation) | INTERSECT |
 | <br> | |
-### Searchable STIX objects and properties for Guardduty
+### Searchable STIX objects and properties for Guardduty dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | eth0_private_ip, eth1_private_ip, public_ip, remote_ip |
@@ -54,7 +58,7 @@
 | **x-ibm-finding**:src_os_ref.value | platform |
 | **x-ibm-finding**:dst_geolocation | country_name |
 | <br> | |
-### Searchable STIX objects and properties for Ocsf
+### Searchable STIX objects and properties for Ocsf dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **email-addr**:value | identity.user.email_addr |
@@ -98,8 +102,8 @@
 | **network-traffic**:extensions.'x-network-ext'.direction_id | connection_info.direction_id |
 | **network-traffic**:extensions.'x-network-ext'.packets | traffic.packets |
 | **network-traffic**:extensions.'x-network-ext'.protocol_ver | connection_info.protocol_ver |
-| **network-traffic**:extensions.'x-network-ext'.tcp_flags | connection_info.tcp_flags |
-| **network-traffic**:protocols[*] | connection_info.protocol_num |
+| **network-traffic**:extensions.'tcp-ext'.src_flags_hex | connection_info.tcp_flags |
+| **network-traffic**:protocols[*] | connection_info.protocol_num, connection_info.protocol_ver_id |
 | **network-traffic**:src_byte_count | traffic.bytes_out |
 | **network-traffic**:src_packets | traffic.packets_out |
 | **network-traffic**:src_port | src_endpoint.port |
@@ -300,7 +304,7 @@
 | **x-ocsf-resources**:type | resources.type |
 | **x-ocsf-resources**:uid | resources.uid |
 | <br> | |
-### Searchable STIX objects and properties for Vpcflow
+### Searchable STIX objects and properties for Vpcflow dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | sourceaddress, destinationaddress |
@@ -345,9 +349,13 @@
 | file | extensions.x-ocsf-file-ext.confidentiality_id | confidentiality_id |
 | file | created | created_time |
 | file | extensions.x-ocsf-file-ext.description | desc |
-| file | extensions.x-ocsf-file-ext.algorithm | algorithm |
-| file | extensions.x-ocsf-file-ext.algorithm_id | algorithm_id |
-| file | extensions.x-ocsf-file-ext.algorithm_value | value |
+| file | hashes.Unknown | Unknown |
+| file | hashes.MD5 | MD5 |
+| file | hashes.SHA-1 | SHA-1 |
+| file | hashes.SHA-256 | SHA-256 |
+| file | hashes.SHA-512 | SHA-512 |
+| file | hashes.CTPH | CTPH |
+| file | hashes.Other | Other |
 | file | name | name |
 | file | parent_directory_ref | parent_folder |
 | file | extensions.x-ocsf-file-ext.path | path |
@@ -401,10 +409,11 @@
 | network-traffic | src_ref | ip |
 | network-traffic | dst_port | port |
 | network-traffic | dst_ref | ip |
-| network-traffic | protocol | protocol_num |
-| network-traffic | protocol | protocol_name |
-| network-traffic | extensions.x-network-ext.tcp_flags | tcp_flags |
-| network-traffic | extensions.x-network-ext.protocol_ver | protocol_ver |
+| network-traffic | protocols | protocol_num |
+| network-traffic | extensions.x-network-ext.protocol_name | protocol_name |
+| network-traffic | extensions.tcp-ext.src_flags_hex | tcp_flags |
+| network-traffic | protocols | protocol_ver |
+| network-traffic | extensions.x-network-ext.protocol_ver_id | protocol_ver_id |
 | network-traffic | extensions.x-network-ext.direction | direction |
 | network-traffic | extensions.x-network-ext.boundary_id | boundary_id |
 | network-traffic | extensions.x-network-ext.boundary | boundary |

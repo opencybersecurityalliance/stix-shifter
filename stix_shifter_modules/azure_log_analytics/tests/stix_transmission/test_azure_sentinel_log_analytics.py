@@ -1,17 +1,11 @@
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from stix_shifter_modules.azure_log_analytics.entry_point import EntryPoint
+from stix_shifter.stix_transmission import stix_transmission
+from tests.utils.async_utils import get_mock_response
+
+from azure.core.exceptions import ODataV4Format
 import unittest
 from unittest.mock import patch
-from stix_shifter.stix_transmission import stix_transmission
-from azure.core.exceptions import ODataV4Format
-
-
-class AzureSentinelMockResponse:
-    def __init__(self, response_code, obj):
-        self.code = response_code
-        self.object = obj
-
-    def read(self):
-        return self.object
 
 
 class MockToken:
@@ -19,7 +13,6 @@ class MockToken:
 
 
 class ClientSecretMockResponse:
-
     @staticmethod
     def get_token(scope):
         return MockToken
@@ -58,7 +51,7 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         mock_generate_token.return_value = ClientSecretMockResponse
         mocked_return_value = '["mock", "placeholder"]'
 
-        mock_ping_response.return_value = AzureSentinelMockResponse(200, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(200, mocked_return_value)
         transmission = stix_transmission.StixTransmission('azure_log_analytics', self.connection(), self.config())
         ping_response = transmission.ping()
 
@@ -79,7 +72,7 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         }
         """
         
-        mock_ping_response.return_value = AzureSentinelMockResponse(404, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(404, mocked_return_value)
 
         transmission = stix_transmission.StixTransmission('azure_log_analytics', self.connection(), self.config())
         ping_response = transmission.ping()
@@ -108,7 +101,7 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         search_id = "SecurityEvent | where IpAddress == '80.66.76.145'"
 
         entry_point = EntryPoint(self.connection(), self.config())
-        status_response = entry_point.create_status_connection(search_id)
+        status_response = run_in_thread(entry_point.create_status_connection, search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
@@ -164,7 +157,7 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         length = 1
         search_id = "SecurityAlert | where AlertName == 'AlertLog' | limit {len}".format(len=length)
         entry_point = EntryPoint(self.connection(), self.config())
-        results_response = entry_point.create_results_connection(search_id, offset, length)
+        results_response = run_in_thread(entry_point.create_results_connection, search_id, offset, length)
 
         assert results_response is not None
         assert results_response['success']
@@ -185,7 +178,7 @@ class TestAzureSentinalConnection(unittest.TestCase, object):
         length = 1
         search_id = "SecurityAlert | where AlertName == 'AlertLog' | limit {len}".format(len=length)
         entry_point = EntryPoint(self.connection(), self.config())
-        results_response = entry_point.create_results_connection(search_id, offset, length)
+        results_response = run_in_thread(entry_point.create_results_connection, search_id, offset, length)
 
         assert 'success' in results_response
         assert results_response['success'] is True

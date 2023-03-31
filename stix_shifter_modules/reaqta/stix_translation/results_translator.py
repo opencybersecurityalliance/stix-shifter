@@ -1,5 +1,4 @@
 import os
-import json
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 
 class ResultsTranslator(JSONToStix):
@@ -13,8 +12,7 @@ class ResultsTranslator(JSONToStix):
         self.network_protocol = self.read_json(network_protocol_path, options)
     
     def translate_results(self, data_source, data):
-        results = json.loads(data)
-        for result in results:
+        for result in data:
             payload = result['payload']
             if payload.get('eventType'):
                 event_name = self.event_names[str(payload.get('eventType'))]
@@ -22,7 +20,6 @@ class ResultsTranslator(JSONToStix):
             
             result['payload'] = self.update_net_traffic_flow(payload)
 
-        data = json.dumps(results)
         return super().translate_results(data_source, data)
 
     def update_net_traffic_flow(self, payload):

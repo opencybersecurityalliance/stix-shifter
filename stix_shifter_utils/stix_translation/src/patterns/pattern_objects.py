@@ -181,7 +181,7 @@ class StartStopQualifier(Qualifier):
         self.start = start
         self.stop = stop
 
-        pattern = "^t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
+        pattern = r"^t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
         match = re.search(pattern, start)
         if not bool(match):
             raise RuntimeError("Invalid STIX timestamp {}".format(start))

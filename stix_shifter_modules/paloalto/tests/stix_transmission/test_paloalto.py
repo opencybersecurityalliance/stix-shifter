@@ -1,56 +1,11 @@
+from aiohttp.client_exceptions import ClientConnectionError
+import json
 import unittest
 from unittest.mock import patch
+
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter_modules.paloalto.entry_point import EntryPoint
-import json
-from requests.exceptions import ConnectionError
-
-
-class MockStatusObj:
-    def __init__(self, code):
-        self.status_code = code
-
-
-class MockResponse:
-    def __init__(self, response_code, obj):
-        self.response = response_code
-        self.object = obj
-
-    def read(self):
-        return bytearray(self.object, 'utf-8')
-
-
-class PaloaltoMockResponse:
-    """ class for Palo Alto mock response"""
-
-    def __init__(self, response_code, txt):
-        self.status_code = response_code
-        self.content = txt
-
-    def read(self):
-        """ to read contents of results returned by api"""
-        return bytearray(self.content, 'utf-8')
-
-
-class StatusResponse:
-    """ class for status response"""
-
-    def __init__(self, code, txt):
-        self.code = code
-        self.content = txt
-
-    def read(self):
-        return bytearray(self.content, 'utf-8')
-
-
-class PingResponse:
-    """ class for ping outer response"""
-
-    def __init__(self, response_object):
-        self.response = response_object
-
-    def read(self):
-        return bytearray(self.response.content, 'utf-8')
+from tests.utils.async_utils import get_mock_response, RequestMockResponse
 
 
 class TestPaloaltoConnection(unittest.TestCase, object):
@@ -75,8 +30,8 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_ping(self, mock_ping_response):
         """test ping connection"""
         mocked_return_value = '{"reply":{"used_quota": 0.08015277777777775}}'
-        mock_ping = PaloaltoMockResponse(200, mocked_return_value)
-        mock_ping_response.return_value = PingResponse(mock_ping)
+        mock_ping = RequestMockResponse(200, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(200, mocked_return_value, 'byte', response=mock_ping)
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         ping_response = transmission.ping()
         assert ping_response is not None
@@ -86,8 +41,8 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_query_response(self, mock_search_response):
         """test create search query"""
         mocked_return_value = '{"reply": {"search_id": "07f63c733f5946_15006_inv"}}'
-        mock_search = PaloaltoMockResponse(200, mocked_return_value)
-        search_response = PingResponse(mock_search)
+        mock_search = RequestMockResponse(200, mocked_return_value)
+        search_response = get_mock_response(200, mocked_return_value, 'byte',response=mock_search)
         mock_search_response.return_value = search_response
 
         query = json.dumps({"xdr_data": {"query": "dataset = xdr_data | filter ((action_process_image_name not in ("
@@ -150,7 +105,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_status_response(self, mock_status_response):
         """test status response"""
         mocked_return_value = '{"reply" : {"status": "SUCCESS","number_of_results":100}}'
-        mock_status_response.return_value = StatusResponse(200, mocked_return_value)
+        mock_status_response.return_value = get_mock_response(200, mocked_return_value)
         search_id = "e1d1b56ca81845_15180_inv"
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         status_response = transmission.status(search_id)
@@ -167,7 +122,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
                                                     "results": {"data": [{"dataset_name": "xdr_data",
                                                                           "causality_actor_process_image_name":
                                                                               "taskhostw.exe"}]}}})
-        mock_result_response.return_value = StatusResponse(200, mocked_return_value)
+        mock_result_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
         search_id = "e1d1b56ca81845_15180_inv"
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         offset = 0
@@ -193,7 +148,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
                                                                           'action_pkts_received': None,
                                                                           'action_network_protocol': "NULL",
                                                                           'actor_process_image_name': "lsass.exe"}]}}})
-        mock_result_response.return_value = StatusResponse(200, mocked_return_value)
+        mock_result_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
         search_id = "62428d95420f47_24655_inv"
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         offset = 0
@@ -223,8 +178,8 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_ping_400_exception(self, mock_ping_response):
         """Test ping response with 400 exception"""
         mocked_return_value = '{"reply":{"err_msg": "InvalidJson"}}'
-        mock_ping = PaloaltoMockResponse(400, mocked_return_value)
-        mock_ping_response.return_value = PingResponse(mock_ping)
+        mock_ping = RequestMockResponse(400, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(400, mocked_return_value, 'byte', response=mock_ping)
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         ping_response = transmission.ping()
         assert ping_response is not None
@@ -236,8 +191,8 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_ping_401_auth_exception(self, mock_ping_response):
         """test 401 authentication error exception"""
         mocked_return_value = '{"reply": { "err_msg" : "auth Error"}}'
-        mock_ping = PaloaltoMockResponse(401, mocked_return_value)
-        mock_ping_response.return_value = PingResponse(mock_ping)
+        mock_ping = RequestMockResponse(401, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(401, mocked_return_value, 'byte', response=mock_ping)
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         ping_response = transmission.ping()
         assert ping_response is not None
@@ -249,8 +204,8 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_ping_500_exception(self, mock_ping_response):
         """check 500 bad query exception"""
         mocked_return_value = '{"reply": {"err_extra":{"parse_err" :"Internal server error" }}}'
-        mock_ping = PaloaltoMockResponse(500, mocked_return_value)
-        mock_ping_response.return_value = PingResponse(mock_ping)
+        mock_ping = RequestMockResponse(500, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(500, mocked_return_value, 'byte', response=mock_ping)
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         ping_response = transmission.ping()
         assert ping_response is not None
@@ -262,8 +217,8 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_ping_internal_server_exception(self, mock_ping_response):
         """check 500 bad query exception"""
         mocked_return_value = '{"reply": {"err_msg":"Internal server error","err_extra":"server error"}}'
-        mock_ping = PaloaltoMockResponse(500, mocked_return_value)
-        mock_ping_response.return_value = PingResponse(mock_ping)
+        mock_ping = RequestMockResponse(500, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(500, mocked_return_value, 'byte', response=mock_ping)
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         ping_response = transmission.ping()
         assert ping_response is not None
@@ -275,8 +230,8 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_ping_402_license_exception(self, mock_ping_response):
         """Check 402 invalid license exception"""
         mocked_return_value = '{"reply": { "err_msg" : "Invalid license"}}'
-        mock_ping = PaloaltoMockResponse(402, mocked_return_value)
-        mock_ping_response.return_value = PingResponse(mock_ping)
+        mock_ping = RequestMockResponse(402, mocked_return_value)
+        mock_ping_response.return_value = get_mock_response(402, mocked_return_value, 'byte', response=mock_ping)
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         ping_response = transmission.ping()
         assert ping_response is not None
@@ -289,7 +244,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_status_empty_result_exception(self, mock_status_response):
         """Test empty results exception"""
         mocked_return_value = '{"reply" : {"status": "SUCCESS"}}'
-        mock_status_response.return_value = StatusResponse(200, mocked_return_value)
+        mock_status_response.return_value = get_mock_response(200, mocked_return_value)
         search_id = "e1d1b56ca81845_15180_inv"
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         status_response = transmission.status(search_id)
@@ -304,7 +259,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_status_partial_success_exception(self, mock_status_response):
         """Test partial success status response exception"""
         mocked_return_value = '{"reply" : {"status": "PARTIAL_SUCCESS"}}'
-        mock_status_response.return_value = StatusResponse(200, mocked_return_value)
+        mock_status_response.return_value = get_mock_response(200, mocked_return_value)
         search_id = "e1d1b56ca81845_15180_inv"
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         status_response = transmission.status(search_id)
@@ -318,7 +273,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_status_fail_exception(self, mock_search_response):
         """Test status fail exception"""
         mocked_return_value = '{"reply" : {"status": "FAIL"}}'
-        mock_search_response.return_value = StatusResponse(200, mocked_return_value)
+        mock_search_response.return_value = get_mock_response(200, mocked_return_value)
         search_id = "e1d1b56ca81845_15180_inv"
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         status_response = transmission.status(search_id)
@@ -332,7 +287,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_failed_query_response(self, mock_result_response):
         """Test failed query result response"""
         mocked_return_value = json.dumps({"reply": {"status": "FAIL"}})
-        mock_result_response.return_value = StatusResponse(200, mocked_return_value)
+        mock_result_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
         search_id = "e1d1b56ca81845_15180_inv"
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         offset = 0
@@ -348,9 +303,8 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_create_query_value_error_exception(self, mock_search_response):
         """test create query value error with invalid json"""
         mocked_return_value = "Invalid_json"
-        mock_search = PaloaltoMockResponse(200, mocked_return_value)
-        search_response = PingResponse(mock_search)
-        mock_search_response.return_value = search_response
+        mock_search = RequestMockResponse(200, mocked_return_value)
+        mock_search_response.return_value = get_mock_response(200, mocked_return_value, 'byte', response=mock_search)
         query = ""
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         query_response = transmission.query(query)
@@ -363,9 +317,8 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_ping_value_error_exception(self, mock_search_response):
         """test ping connector value error with invalid json"""
         mocked_return_value = "Invalid_json"
-        mock_search = PaloaltoMockResponse(200, mocked_return_value)
-        search_response = PingResponse(mock_search)
-        mock_search_response.return_value = search_response
+        mock_search = RequestMockResponse(200, mocked_return_value)
+        mock_search_response.return_value = get_mock_response(200, mocked_return_value, 'byte', response=mock_search)
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         query_response = transmission.ping()
         assert query_response is not None
@@ -377,8 +330,8 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_create_query_exception(self, mock_search_response):
         """Test search response with 400 exception"""
         mocked_return_value = '{"reply": { "err_msg" : "400 error"}}'
-        mock_ping = PaloaltoMockResponse(400, mocked_return_value)
-        mock_search_response.return_value = PingResponse(mock_ping)
+        mock_search = RequestMockResponse(400, mocked_return_value)
+        mock_search_response.return_value = get_mock_response(400, mocked_return_value, 'byte', response=mock_search)
         query = "{}"
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         ping_response = transmission.query(query)
@@ -391,7 +344,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_results_value_error_exception(self, get_search_results):
         """test results connector value error with invalid json"""
         mocked_return_value = "Invalid json"
-        get_search_results.return_value = StatusResponse(200, mocked_return_value)
+        get_search_results.return_value = get_mock_response(200, mocked_return_value, 'byte')
         search_id = "e1d1b56ca81845_15180_inv"
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         offset = 0
@@ -406,7 +359,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_results_401_exception(self, get_search_results):
         """test results with 401 exception"""
         mocked_return_value = '{"reply": { "err_msg" : "auth Error"}}'
-        get_search_results.return_value = StatusResponse(401, mocked_return_value)
+        get_search_results.return_value = get_mock_response(401, mocked_return_value, 'byte')
         search_id = "e1d1b56ca81845_15180_inv"
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         offset = 0
@@ -421,7 +374,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_status_pending_response(self, mock_search_response):
         """Test status pending exception"""
         mocked_return_value = '{"reply" : {"status": "PENDING"}}'
-        mock_search_response.return_value = StatusResponse(200, mocked_return_value)
+        mock_search_response.return_value = get_mock_response(200, mocked_return_value)
         search_id = "e1d1b56ca81845_15180_inv"
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         status_response = transmission.status(search_id)
@@ -435,7 +388,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_status_value_error_exception(self, mock_search_status):
         """test status connector value error with invalid json"""
         mocked_return_value = "Invalid json"
-        mock_search_status.return_value = StatusResponse(200, mocked_return_value)
+        mock_search_status.return_value = get_mock_response(200, mocked_return_value)
         search_id = "e1d1b56ca81845_15180_inv"
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         status_response = transmission.status(search_id)
@@ -448,7 +401,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
     def test_status_403_exception(self, get_search_results):
         """test results with 403 exception"""
         mocked_return_value = '{"reply": { "err_msg" : "api permission exception"}}'
-        get_search_results.return_value = StatusResponse(403, mocked_return_value)
+        get_search_results.return_value = get_mock_response(403, mocked_return_value)
         search_id = "e1d1b56ca81845_15180_inv"
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         status_response = transmission.status(search_id)
@@ -458,12 +411,13 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert "The provided API Key does not have the required RBAC permissions to run this API" in \
                status_response['error']
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    def test_max_quota_exception(self, mock_ping):
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
+    def test_max_quota_exception(self, mock_quota_response):
         """test maximum quota threshold exception"""
-        response = {
-            'reply': {'license_quota': 5, 'additional_purchased_quota': 0.0, 'used_quota': 5.01, 'eval_quota': 0.0}}
-        mock_ping.side_effect = [MockResponse(MockStatusObj(200), json.dumps(response))]
+        response = {'reply': {'license_quota': 5, 'additional_purchased_quota': 0.0, 'used_quota': 5.01, 'eval_quota': 0.0}}
+        mocked_return_value = json.dumps(response)
+        mock_search = RequestMockResponse(200, mocked_return_value)
+        mock_quota_response.return_value = get_mock_response(200, mocked_return_value, 'byte', response=mock_search)
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         query_response = transmission.query({})
         assert query_response is not None
@@ -471,12 +425,13 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert query_response['code'] == "service_unavailable"
         assert "query usage exceeded max daily quota" in query_response['error']
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    def test_max_additional_quota_exception(self, mock_ping):
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
+    def test_max_additional_quota_exception(self, mock_quota_response):
         """test maximum additional quota threshold exception"""
-        response = {
-            'reply': {'license_quota': 5, 'additional_purchased_quota': 10.0, 'used_quota': 12, 'eval_quota': 0.0}}
-        mock_ping.side_effect = [MockResponse(MockStatusObj(200), json.dumps(response))]
+        response = {'reply': {'license_quota': 5, 'additional_purchased_quota': 10.0, 'used_quota': 12, 'eval_quota': 0.0}}
+        mocked_return_value = json.dumps(response)
+        mock_search = RequestMockResponse(200, mocked_return_value)
+        mock_quota_response.return_value = get_mock_response(200, mocked_return_value, 'byte', response=mock_search)
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         query_response = transmission.query({})
         assert query_response is not None
@@ -484,11 +439,12 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert query_response['code'] == "service_unavailable"
         assert "query usage exceeded max daily quota" in query_response['error']
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
-    def test_quota_invalid_json_exception(self, mock_ping):
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
+    def test_quota_invalid_json_exception(self, mock_quota_response):
         """test quota invalid json exception"""
-        response = "invalid json"
-        mock_ping.side_effect = [MockResponse(MockStatusObj(200), response)]
+        mocked_return_value = "invalid json"
+        mock_search = RequestMockResponse(200, mocked_return_value)
+        mock_quota_response.return_value = get_mock_response(200, mocked_return_value, 'byte', response=mock_search)
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         query_response = transmission.query({})
         assert query_response is not None
@@ -496,10 +452,10 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert 'error' in query_response
         assert "Cannot parse response" in query_response["error"]
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host(self, mock_ping):
         """Test Invalid host"""
-        mock_ping.side_effect = ConnectionError("Invalid Host")
+        mock_ping.side_effect = ClientConnectionError("Invalid Host")
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         ping_response = transmission.ping()
         assert ping_response is not None
@@ -507,10 +463,10 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert "Invalid Host" in ping_response['error']
         assert ping_response['code'] == "service_unavailable"
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host_for_status(self, mock_query):
         """Test Invalid host for Status API"""
-        mock_query.side_effect = ConnectionError("Invalid Host")
+        mock_query.side_effect = ClientConnectionError("Invalid Host")
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         status_response = transmission.status("123_inv")
         assert status_response is not None
@@ -518,10 +474,10 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert "Invalid Host" in status_response['error']
         assert status_response['code'] == "service_unavailable"
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host_for_results(self, mock_query):
         """Test Invalid host for Results API"""
-        mock_query.side_effect = ConnectionError("Invalid Host")
+        mock_query.side_effect = ClientConnectionError("Invalid Host")
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         results_response = transmission.results("123_inv", 0, 2)
         assert results_response is not None
@@ -529,7 +485,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert "Invalid Host" in results_response['error']
         assert results_response['code'] == "service_unavailable"
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_timeout_error(self, mock_ping):
         """Test Timeout Error"""
         mock_ping.side_effect = TimeoutError("timeout_error (30 sec)")
@@ -547,12 +503,12 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         mocked_return_value = json.dumps({"reply": {"status": "SUCCESS",
                                                     "number_of_results": 10001,
                                                     "results": {"stream_id": stream_id}}})
-        mock_search_response.return_value = StatusResponse(200, mocked_return_value)
+        mock_search_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
         search_id = "e1d1b56ca81845_15180_inv"
         stream_return_value = '{"dataset_name":"xdr_data","action_local_ip":"65.0.202.35","action_remote_ip":' \
                               '"172.31.90.48","action_local_port":"50893","action_remote_port":"3389",' \
                               '"action_network_protocol":"TCP"}'
-        mock_stream_response.return_value = StatusResponse(200, stream_return_value)
+        mock_stream_response.return_value = get_mock_response(200, stream_return_value, 'byte')
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         offset = 0
         length = 3
@@ -575,7 +531,7 @@ class TestPaloaltoConnection(unittest.TestCase, object):
                                                                           "actor_primary_user_sid": "S123",
                                                                           "actor_primary_username": "username",
                                                                           "actor_process_logon_id": "id12"}]}}})
-        mock_result_response.return_value = StatusResponse(200, mocked_return_value)
+        mock_result_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
         search_id = "62428d95420f47_24655_inv"
         transmission = stix_transmission.StixTransmission('paloalto', self.connection(), self.configuration())
         offset = 0

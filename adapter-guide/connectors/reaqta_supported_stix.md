@@ -1,10 +1,12 @@
-##### Updated on 11/04/22
+##### Updated on 03/08/23
 ## IBM Security ReaQta
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | AND |
-| OR | OR |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | >= | = |
 | <= | = |
 | = | = |
@@ -12,6 +14,8 @@
 | LIKE | = |
 | IN | = |
 | MATCHES | = |
+| OR (Observation) | OR |
+| AND (Observation) | AND |
 | <br> | |
 ### Searchable STIX objects and properties
 | STIX Object and Property | Mapped Data Source Fields |
@@ -19,13 +23,13 @@
 | **directory**:path | __etwHomePath, accessor.path, consumer.workingDirectory, path |
 | **file**:extensions.'x-reaqta-data'.arch | eventdata.arch |
 | **file**:extensions.'x-reaqta-data'.file_type | eventdata.filetype |
-| **file**:extensions.'x-reaqta-data'.fsname | filename |
+| **file**:extensions.'x-reaqta-data'.fsname | fsName |
 | **file**:extensions.'x-reaqta-program'.arch | service.arch |
-| **file**:extensions.'x-reaqta-program'.fsname | filename |
+| **file**:extensions.'x-reaqta-program'.fsname | fsName |
 | **file**:hashes.MD5 | md5 |
 | **file**:hashes.'SHA-1' | sha1 |
 | **file**:hashes.'SHA-256' | sha256 |
-| **file**:name | consumer.script.filename, filename |
+| **file**:name | consumer.script.filename, fsName |
 | **file**:parent_directory_ref.path | path |
 | **file**:size | eventdata.size |
 | **ipv4-addr**:value | ip, login.ip |
@@ -35,13 +39,13 @@
 | **network-traffic**:extensions.'x-reaqta-network'.outbound | isOutbound |
 | **network-traffic**:src_port | eventdata.localPort |
 | **network-traffic**:src_ref.value | ip |
-| **process**:binary_ref.name | filename |
+| **process**:binary_ref.name | fsName |
 | **process**:creator_user_ref.user_id |  |
 | **process**:extensions.'windows-process-ext'.owner_sid | user.sid |
 | **process**:extensions.'x-reaqta-process'.logon_id | service.login.id |
 | **process**:extensions.'x-reaqta-process'.no_gui | service.hasGui |
 | **process**:extensions.'x-reaqta-process'.privilege_level | service.privilege |
-| **process**:name | __etwCallerProcessName, __etwLogonProcessName, __etwProcessName, login.processName |
+| **process**:name | __etwCallerProcessName, __etwLogonProcessName, __etwProcessName, login.processName, filename |
 | **process**:parent_ref.binary_ref.name | service.ppid |
 | **process**:pid | __etwCallerProcessId, __etwProcessId, accessor.pid, accessor.ppid, allocator.pid, allocator.ppid, engine.pid, engine.ppid, eventdata.targetProcessId, host.pid, pid, ppid, service.pid, service.ppid, wmi.clientPid, wmiHost.pid |
 | **url**:value | eventdata.url |
@@ -201,21 +205,21 @@
 | directory | path | etwHomePath |
 | <br> | | |
 | file | extensions.x-reaqta-program.arch | arch |
-| file | name | filename |
-| file | extensions.x-reaqta-program.fsname | fsName |
+| file | name | fsName |
 | file | hashes.MD5 | md5 |
 | file | parent_directory_ref | path |
 | file | hashes.SHA-1 | sha1 |
 | file | hashes.SHA-256 | sha256 |
 | file | size | size |
+| file | extensions.x-reaqta-program.filename | filename |
 | file | extensions.x-reaqta-data.arch | arch |
 | file | name | scriptFileName |
 | file | parent_directory_ref | workingDirectory |
 | file | parent_directory_ref | etwHomePath |
 | file | name | file |
 | file | extensions.x-reaqta-data.file_type | fileType |
-| file | created | creationTime |
 | file | extensions.x-reaqta-data.fsname | fsName |
+| file | created | creationTime |
 | <br> | | |
 | ipv4-addr | value | etwIpAddress |
 | ipv4-addr | value | localAddrV4 |
@@ -242,7 +246,8 @@
 | process | pid | ppid |
 | process | parent_ref | ppid |
 | process | extensions.x-reaqta-process.privilege_level | privilegeLevel |
-| process | binary_ref | filename |
+| process | binary_ref | fsName |
+| process | name | filename |
 | process | created | pstartTime |
 | process | created | startTime |
 | process | creator_user_ref | user |
@@ -305,7 +310,7 @@
 | x-oca-event | category | eventType |
 | x-oca-event | process_ref | pid |
 | x-oca-event | parent_process_ref | ppid |
-| x-oca-event | file_ref | filename |
+| x-oca-event | file_ref | fsName |
 | x-oca-event | file_ref | path |
 | x-oca-event | user_ref | user |
 | x-oca-event | agent | appName |

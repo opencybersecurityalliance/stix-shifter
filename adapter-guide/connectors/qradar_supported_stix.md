@@ -1,10 +1,12 @@
-##### Updated on 11/04/22
+##### Updated on 03/08/23
 ## IBM QRadar
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | OR |
-| OR | OR |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | > | > |
 | >= | >= |
 | < | < |
@@ -15,8 +17,10 @@
 | IN | IN |
 | MATCHES | MATCHES |
 | ISSUBSET | INCIDR |
+| OR (Observation) | OR |
+| AND (Observation) | OR |
 | <br> | |
-### Searchable STIX objects and properties for Events
+### Searchable STIX objects and properties for Events dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | sourceaddress, destinationaddress, identityip |
@@ -102,7 +106,7 @@
 | **windows-registry-key**:key | ObjectName, "Registry Key" |
 | **windows-registry-key**:values[*].name | "Registry Value Name" |
 | <br> | |
-### Searchable STIX objects and properties for Flows
+### Searchable STIX objects and properties for Flows dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | sourceaddress, destinationaddress |

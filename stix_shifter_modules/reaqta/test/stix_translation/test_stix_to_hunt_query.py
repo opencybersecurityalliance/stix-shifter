@@ -153,7 +153,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 
-        test_string = ['((consumer.script.filename = "serv" OR $filename = "serv")) {}'.format(TEST_START_STOP_TRANSLATED1)]
+        test_string = ['((consumer.script.filename = "serv" OR fsName = "serv")) {}'.format(TEST_START_STOP_TRANSLATED1)]
 
         self.assertQuery(query, test_string, stix_pattern)
 
@@ -163,7 +163,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 
-        test_string = ['((consumer.script.filename = "svc" OR $filename = "svc")) {}'.format(TEST_START_STOP_TRANSLATED1)]
+        test_string = ['((consumer.script.filename = "svc" OR fsName = "svc")) {}'.format(TEST_START_STOP_TRANSLATED1)]
 
         self.assertQuery(query, test_string, stix_pattern)
 
@@ -218,7 +218,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 
-        test_string = ['((consumer.script.filename = "winword.exe" OR $filename = "winword.exe")) {}'.format(TEST_START_STOP_TRANSLATED1)]
+        test_string = ['((consumer.script.filename = "winword.exe" OR fsName = "winword.exe")) {}'.format(TEST_START_STOP_TRANSLATED1)]
 
         self.assertQuery(query, test_string, stix_pattern)
 
@@ -250,7 +250,7 @@ class TestQueryTranslator(unittest.TestCase):
         self.assertQuery(query, test_string, stix_pattern)
 
     def test_directory_file_path(self):
-        stix_pattern = "[file:parent_directory_ref.path = 'c:\\\program files\\\microsoft office\\\\root\\\office16\\\winword.exe' OR directory:path = 'c:\\\program files\\\microsoft office\\\\root\\\office16\\\winword.exe'] {}".format(TEST_START_STOP_STIX_VALUE1)
+        stix_pattern = "[file:parent_directory_ref.path = 'c:\\\\program files\\\\microsoft office\\\\root\\\\office16\\\\winword.exe' OR directory:path = 'c:\\\\program files\\\\microsoft office\\\\root\\\\office16\\\\winword.exe'] {}".format(TEST_START_STOP_STIX_VALUE1)
         queries = translation.translate('reaqta', 'query', '{}', stix_pattern)
         query = queries['queries']
 

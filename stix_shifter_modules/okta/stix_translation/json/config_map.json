@@ -1,0 +1,22 @@
+{
+		"severity": [
+			"DEBUG","INFO","WARN","ERROR"
+		],
+		"outcome.result": [
+			"SUCCESS", "FAILURE", "SKIPPED", "ALLOW", "DENY", "CHALLENGE", "UNKNOWN"
+		],
+		"transaction.type": [
+			"WEB", "JOB"
+		],
+		"authenticationContext.authenticationProvider":[
+			"OKTA_AUTHENTICATION_PROVIDER", "ACTIVE_DIRECTORY", "LDAP",
+			"FEDERATION","SOCIAL", "FACTOR_PROVIDER"
+		],
+		"authenticationContext.credentialProvider": [
+			"OKTA_CREDENTIAL_PROVIDER", "RSA", "SYMANTEC", "GOOGLE", "DUO", "YUBIKEY"
+		],
+		"authenticationContext.credentialType": [
+			"OTP", "SMS", "PASSWORD", "ASSERTION", "IWA", "EMAIL", "OAUTH2", "JWT",
+			"CERTIFICATE", "PRE_SHARED_SYMMETRIC_KEY", "OKTA_CLIENT_SESSION", "DEVICE_UDID"
+		]
+}

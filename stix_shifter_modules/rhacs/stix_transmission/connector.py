@@ -1,6 +1,6 @@
 import json
 from requests.exceptions import ConnectionError, RetryError
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 from .api_client import APIClient
@@ -10,7 +10,7 @@ class InvalidAuthenticationException(Exception):
     pass
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     """connector class"""
 
     def __init__(self, connection, configuration):
@@ -18,7 +18,7 @@ class Connector(BaseSyncConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_results_connection(self, query, offset, length):
+    async def create_results_connection(self, query, offset, length):
         """
         Fetching the results using query, offset and length
         :param query: str, Data Source query
@@ -37,9 +37,9 @@ class Connector(BaseSyncConnector):
                 max_range = int(self.api_client.get_limit())
 
             """api call for searching alert based on query"""
-            response_wrapper = self.api_client.get_search_results(query)
-            response_code = response_wrapper.response.status_code
-            response_dict = json.loads(response_wrapper.response.text)
+            response_wrapper = await self.api_client.get_search_results(query)
+            response_code = response_wrapper.code
+            response_dict = json.loads(response_wrapper.read())
 
             if response_code == 200:
                 return_obj['success'] = True
@@ -53,8 +53,8 @@ class Connector(BaseSyncConnector):
                     break
                 if firstresult['id'] is not None:
                     """second level api call for getting details of particular alert id"""
-                    inner_data = self.api_client.get_inner_results(firstresult['id'])
-                    inner_dict = json.loads(inner_data.response.text)
+                    inner_data = await self.api_client.get_inner_results(firstresult['id'])
+                    inner_dict = json.loads(inner_data.read())
                     dt = {}
                     dt_main = {}
                     is_process_or_netflow = False
@@ -193,7 +193,7 @@ class Connector(BaseSyncConnector):
                                       connector=self.connector)
         return return_obj
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """
         Ping the endpoint
         :return: dict
@@ -201,9 +201,9 @@ class Connector(BaseSyncConnector):
         return_obj = {}
         response_dict = {}
         try:
-            response = self.api_client.ping_data_source()
-            response_code = response.response.status_code
-            response_dict = json.loads(response.response.text)
+            response = await self.api_client.ping_data_source()
+            response_code = response.code
+            response_dict = json.loads(response.read())
             if response_code == 200 and response_dict['status'] == 'ok':
                 return_obj['success'] = True
         except RetryError:
@@ -224,7 +224,7 @@ class Connector(BaseSyncConnector):
                                       connector=self.connector)
         return return_obj
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         """
         Delete query is not supported in rhacs
         :return: success

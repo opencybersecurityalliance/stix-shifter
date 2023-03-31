@@ -2,13 +2,13 @@ import json
 import adal
 import re
 from flatten_json import flatten
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     init_error = None
     max_limit = 1000
 
@@ -26,13 +26,13 @@ class Connector(BaseSyncConnector):
             self.init_error = True
 
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
         if self.init_error:
             self.logger.error("Token Generation Failed:")
             return self.adal_response
-        response = self.api_client.ping_box()
+        response = await self.api_client.ping_box()
         response_code = response.code
         response_dict = json.loads(response.read())
         if 200 <= response_code < 300:
@@ -41,12 +41,12 @@ class Connector(BaseSyncConnector):
             ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
         return return_obj
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         """"delete_query_connection response
         :param search_id: str, search_id"""
         return {"success": True, "search_id": search_id}
 
-    def create_results_connection(self, query, offset, length):
+    async def create_results_connection(self, query, offset, length):
         """"built the response object
         :param query: str, search_id
         :param offset: int,offset value
@@ -67,9 +67,9 @@ class Connector(BaseSyncConnector):
             # check for length value against the max limit(1000) of $top param in data source
             if length <= self.max_limit:
                 # $skip(offset) param not included as data source provides incorrect results for some of the queries
-                response = self.api_client.run_search(query, total_records)
+                response = await self.api_client.run_search(query, total_records)
             elif length > self.max_limit:
-                response = self.api_client.run_search(query, self.max_limit)
+                response = await self.api_client.run_search(query, self.max_limit)
             response_code = response.code
             response_dict = json.loads(response.read())
             if 199 < response_code < 300:
@@ -78,7 +78,7 @@ class Connector(BaseSyncConnector):
                 while len(return_obj['data']) < total_records:
                     try:
                         next_page_link = response_dict['@odata.nextLink']
-                        response = self.api_client.next_page_run_search(next_page_link)
+                        response = await self.api_client.next_page_run_search(next_page_link)
                         response_code = response.code
                         response_dict = json.loads(response.read())
                         if 199 < response_code < 300:
