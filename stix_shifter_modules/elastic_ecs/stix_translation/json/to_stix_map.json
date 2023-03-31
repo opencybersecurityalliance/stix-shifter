@@ -122,22 +122,10 @@
       }
     ],
     "geo": {
-      "city_name": [
-        {
-          "key": "x-ecs-geo.city_name",
-          "object": "source_geo"
-        },
-        {
-          "key": "ipv4-addr.x_geo_ref",
-          "object": "src_ip",
-          "references": "source_geo"
-        },
-        {
-          "key": "ipv6-addr.x_geo_ref",
-          "object": "src_ip",
-          "references": "source_geo"
-        }
-      ],
+      "city_name": {
+        "key": "x-ecs-geo.city_name",
+        "object": "source_geo"
+      },
       "continent_name": {
         "key": "x-ecs-geo.continent_name",
         "object": "source_geo"
@@ -286,22 +274,10 @@
       }
     ],
     "geo": {
-      "city_name": [
-        {
-          "key": "x-ecs-geo.city_name",
-          "object": "client_geo"
-        },
-        {
-          "key": "ipv4-addr.x_geo_ref",
-          "object": "src_ip",
-          "references": "client_geo"
-        },
-        {
-          "key": "ipv6-addr.x_geo_ref",
-          "object": "src_ip",
-          "references": "client_geo"
-        }
-      ],
+      "city_name": {
+        "key": "x-ecs-geo.city_name",
+        "object": "client_geo"
+      },
       "continent_name": {
         "key": "x-ecs-geo.continent_name",
         "object": "client_geo"
@@ -449,22 +425,10 @@
       }
     ],
     "geo": {
-      "city_name": [
-        {
-          "key": "x-ecs-geo.city_name",
-          "object": "destination_geo"
-        },
-        {
-          "key": "ipv4-addr.x_geo_ref",
-          "object": "dst_ip",
-          "references": "destination_geo"
-        },
-        {
-          "key": "ipv6-addr.x_geo_ref",
-          "object": "dst_ip",
-          "references": "destination_geo"
-        }
-      ],
+      "city_name": {
+        "key": "x-ecs-geo.city_name",
+        "object": "destination_geo"
+      },
       "continent_name": {
         "key": "x-ecs-geo.continent_name",
         "object": "destination_geo"
@@ -612,22 +576,10 @@
       }
     ],
     "geo": {
-      "city_name": [
-        {
-          "key": "x-ecs-geo.city_name",
-          "object": "server_geo"
-        },
-        {
-          "key": "ipv4-addr.x_geo_ref",
-          "object": "dst_ip",
-          "references": "server_geo"
-        },
-        {
-          "key": "ipv6-addr.x_geo_ref",
-          "object": "dst_ip",
-          "references": "server_geo"
-        }
-      ],
+      "city_name": {
+        "key": "x-ecs-geo.city_name",
+        "object": "server_geo"
+      },
       "continent_name": {
         "key": "x-ecs-geo.continent_name",
         "object": "server_geo"
@@ -1772,7 +1724,7 @@
         {
           "key": "x-oca-asset.geo_ref",
           "object": "host",
-          "references": "host_geo"
+          "references": ["host_geo", "source_geo", "destination_geo", "client_geo", "server_geo"]
         }
       ],
       "continent_name": {
