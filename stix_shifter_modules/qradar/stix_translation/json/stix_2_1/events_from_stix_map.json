@@ -58,7 +58,7 @@
   },
   "domain-name": {
     "fields": {
-      "value": ["domainname", "UrlHost"]
+      "value": ["dnsdomainname", "UrlHost"]
     }
   },
   "x-qradar": {
@@ -122,7 +122,7 @@
       "process_ref.pid": ["ProcessId"],
       "parent_process_ref.command_line": ["ParentCommandLine"],
       "parent_process_ref.image_ref.name": ["ParentImage", "TargetImage"],
-      "domain_ref.value": ["domainname", "UrlHost"],
+      "domain_ref.value": ["dnsdomainname", "UrlHost"],
       "file_ref.name": ["filename"],
       "host_ref.hostname": ["identityhostname", "MachineId"],
       "host_ref.ip_refs[*].value": ["identityip", "sourceip"],

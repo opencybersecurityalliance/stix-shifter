@@ -460,12 +460,7 @@
     "object": "nt",
     "transformer": "ToLowercaseArray"
   },
-  "domainname": [
-    {
-      "key": "domain-name.value",
-      "object": "domain2",
-      "transformer": "ToDomainName"
-    },
+  "qradardomain": [
     {
       "key": "x-qradar.domain_name",
       "object": "x-qradar"
@@ -473,17 +468,9 @@
   ],
   "dnsdomainname": [
     {
-      "key": "url.value",
-      "object": "url"
-    },
-    {
       "key": "domain-name.value",
-      "object": "domain1",
+      "object": "domain",
       "transformer": "ToDomainName"
-    },
-    {
-      "key": "x-qradar.domain_name",
-      "object": "x-qradar"
     }
   ],
   "flowsource": [
