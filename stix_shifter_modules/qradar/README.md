@@ -6,6 +6,7 @@ The QRadar connector works with QRadar 7.3.3 and newer versions. The following Q
 
 * [IBM QRadar Content Extension for Sysmon](https://exchange.xforce.ibmcloud.com/hub/extension/e41e758e2ab5786173438cd09219a9d0) version 1.1.3 or later
 * [IBM QRadar Custom Properties for Microsoft Windows](https://exchange.xforce.ibmcloud.com/hub/extension/IBMQRadar:MicrosoftWindowsCustomProperties) version 1.1.7 or later
+* [IBM QRadar Custom Properties Dictionary](https://exchange.xforce.ibmcloud.com/hub/extension/73f46b27280d30a4b8ec4685da391b1c) version 1.3.1 or later
 
 ### Format for making STIX translation calls via the CLI
 
