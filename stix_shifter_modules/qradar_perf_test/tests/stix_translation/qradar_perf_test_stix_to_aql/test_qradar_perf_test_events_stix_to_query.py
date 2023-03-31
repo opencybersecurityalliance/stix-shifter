@@ -247,7 +247,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_domainname_query(self):
         stix_pattern = "[domain-name:value = 'example.com']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (domainname LIKE '%example.com%' OR UrlHost LIKE '%example.com%') {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (dnsdomainname LIKE '%example.com%' OR UrlHost LIKE '%example.com%') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_generic_filehash_query(self):
