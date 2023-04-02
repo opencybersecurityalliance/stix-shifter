@@ -16,9 +16,9 @@ class TestMSATPConnection(unittest.TestCase):
                 "clientId": "bla",
                 "clientSecret": "bla"
             },
-            "includeAlerts": "true",
-            "includeHostOs": "true",
-            "includeNetworkInfo": "true"
+            "includeAlerts": True,
+            "includeHostOs": True,
+            "includeNetworkInfo": True
         }
 
     def connection(self):

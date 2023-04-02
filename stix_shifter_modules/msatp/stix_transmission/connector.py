@@ -164,9 +164,9 @@ class Connector(BaseJsonSyncConnector):
         :param configuration: dict,config dict"""
         self.connector = __name__.split('.')[1]
         self.alert_mode = False
-        self.should_include_alerts = True if configuration.get("includeAlerts") == "true" else False
-        self.should_include_network_info = True if configuration.get("includeNetworkInfo") == "true" else False
-        self.should_include_host_os = True if configuration.get("includeHostOs") == "true" else False
+        self.should_include_alerts = configuration.get("includeAlerts")
+        self.should_include_network_info = configuration.get("includeNetworkInfo")
+        self.should_include_host_os = configuration.get("includeHostOs")
         self.adal_response = Connector.generate_token(self, connection, configuration)
         if self.adal_response['success']:
             configuration['auth']['access_token'] = self.adal_response['access_token']

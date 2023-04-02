@@ -41,16 +41,16 @@
             }
         },
         "includeAlerts":{
-            "type": "text",
-            "default": "true"
+            "type": "boolean",
+            "default": true
         },
         "includeHostOs": {
-            "type": "text",
-            "default": "true"
+            "type": "boolean",
+            "default": true
         },
         "includeNetworkInfo": {
-            "type": "text",
-            "default": "true"
+            "type": "boolean",
+            "default": true
         }
     }
 }
