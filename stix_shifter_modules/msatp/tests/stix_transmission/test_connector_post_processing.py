@@ -1,6 +1,8 @@
 import json
 
-from stix_shifter_modules.msatp.stix_transmission import connector
+from stix_shifter_modules.msatp.stix_transmission.connector_post_processing import merge_alerts, \
+    remove_duplicate_and_empty_fields, get_table_name, ConnectorPostProcessing, unify_alert_fields, \
+    organize_registry_data, organize_ips, create_event_link, remove_duplicate_ips
 from stix_shifter_modules.msatp.tests.test_utils import all_keys_in_object
 from unittest.mock import patch
 import unittest
@@ -8,7 +10,7 @@ from tests.utils.async_utils import get_adal_mock_response
 
 
 @patch('stix_shifter_modules.msatp.stix_transmission.connector.adal.AuthenticationContext')
-class TestMSATPConnection(unittest.TestCase):
+class TestMSATPConnectorPostProcessing(unittest.TestCase):
     def config(self):
         return {
             "auth": {
@@ -100,7 +102,7 @@ class TestMSATPConnection(unittest.TestCase):
                 'DeviceName': 'host2.test.com',
             }
         ]
-        merged = connector.merge_alerts(data)
+        merged = merge_alerts(data)
         assert len(merged) == 3
         alert = merged[0]
         assert alert.get("TableName") == "DeviceAlertEvents"
@@ -133,7 +135,7 @@ class TestMSATPConnection(unittest.TestCase):
             'SHA1': None,
             'MD5': ''
         }
-        connector.remove_duplicate_and_empty_fields(data)
+        remove_duplicate_and_empty_fields(data)
         assert all_keys_in_object({'ReportId', 'DeviceName', 'DeviceId', 'Timestamp', 'TableName',
                                    'InitiatingProcessSHA1', 'InitiatingProcessSHA256', 'InitiatingProcessMD5'}, data)
         assert 'DeviceId1' not in data
@@ -147,17 +149,17 @@ class TestMSATPConnection(unittest.TestCase):
 
     def test_get_table_name(self, mock_adal_auth):
         query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
-        table = connector.get_table_name(query)
+        table = get_table_name(query)
         assert table == "DeviceAlertEvents"
         query = 'union (find withsource = TableName in (DeviceProcessEvents)  where Timestamp >= datetime(2023-03-17T20:19:41.000Z) and Timestamp < datetime(2023-03-17T20:19:42.7016812Z)  | order by Timestamp desc | where ((DeviceId =~ "1234567890abcdef1234567890abcdef12345678") and (ActionType =~ "FileModified")) and ((tostring(ProcessId) == "3892") or (tostring(InitiatingProcessId) == "3892") or (tostring(InitiatingProcessId) == "3892"))),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-03-17T20:19:41.000Z) and Timestamp < datetime(2023-03-17T20:19:42.7016812Z)  | order by Timestamp desc | where ((DeviceId =~ "1234567890abcdef1234567890abcdef12345678") and (ActionType =~ "FileModified")) and ((tostring(ProcessId) == "3892") or (tostring(InitiatingProcessId) == "3892"))),(find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-03-17T20:19:41.000Z) and Timestamp < datetime(2023-03-17T20:19:42.7016812Z)  | order by Timestamp desc | where ((DeviceId =~ "1234567890abcdef1234567890abcdef12345678") and (ActionType =~ "FileModified")) and (tostring(InitiatingProcessId) == "3892")),(find withsource = TableName in (DeviceRegistryEvents)  where Timestamp >= datetime(2023-03-17T20:19:41.000Z) and Timestamp < datetime(2023-03-17T20:19:42.7016812Z)  | order by Timestamp desc | where ((DeviceId =~ "1234567890abcdef1234567890abcdef12345678") and (ActionType =~ "FileModified")) and (tostring(InitiatingProcessId) == "3892")),(find withsource = TableName in (DeviceFileEvents)  where Timestamp >= datetime(2023-03-17T20:19:41.000Z) and Timestamp < datetime(2023-03-17T20:19:42.7016812Z)  | order by Timestamp desc | where ((DeviceId =~ "1234567890abcdef1234567890abcdef12345678") and (ActionType =~ "FileModified")) and (tostring(InitiatingProcessId) == "3892")),(find withsource = TableName in (DeviceImageLoadEvents)  where Timestamp >= datetime(2023-03-17T20:19:41.000Z) and Timestamp < datetime(2023-03-17T20:19:42.7016812Z)  | order by Timestamp desc | where ((DeviceId =~ "1234567890abcdef1234567890abcdef12345678") and (ActionType =~ "FileModified")) and (tostring(InitiatingProcessId) == "3892"))'
-        table = connector.get_table_name(query)
+        table = get_table_name(query)
         assert table == "DeviceProcessEvents"
 
     def test_join_alerts_with_events(self, mock_adal_auth):
         mock_adal_auth.return_value = get_adal_mock_response()
 
-        entry_point = connector.Connector(self.connection(), self.config())
-        joined_query = entry_point.join_alert_with_events('<<timestamp>>', 'devicename', 1234)
+        util = ConnectorPostProcessing(self.config(), False)
+        joined_query = util.join_alert_with_events('<<timestamp>>', 'devicename', 1234)
         assert joined_query == ('(union (find withsource = TableName in (DeviceNetworkEvents)  where '
                                 '(Timestamp == datetime(<<timestamp>>)) and (DeviceName == "devicename") and '
                                 '(ReportId == 1234)),(find withsource = TableName in (DeviceProcessEvents)  '
@@ -184,7 +186,7 @@ class TestMSATPConnection(unittest.TestCase):
     def test_join_query_with_alerts(self, mock_adal_auth):
         mock_adal_auth.return_value = get_adal_mock_response()
         query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
-        entry_point = connector.Connector(self.connection(), self.config())
+        entry_point = ConnectorPostProcessing(self.config(), False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             "(union (find withsource = TableName in (DeviceNetworkEvents)  "
@@ -208,7 +210,7 @@ class TestMSATPConnection(unittest.TestCase):
         )
 
         query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
-        entry_point = connector.Connector(self.connection(), self.config())
+        entry_point = ConnectorPostProcessing(self.config(), False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             '((find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z)'
@@ -229,7 +231,7 @@ class TestMSATPConnection(unittest.TestCase):
         config = json.loads(json.dumps(self.config()))
         config['includeHostOs'] = False
         config['includeNetworkInfo'] = False
-        entry_point = connector.Connector(self.connection(), config)
+        entry_point = ConnectorPostProcessing(config, False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             "(union (find withsource = TableName in (DeviceNetworkEvents)  "
@@ -246,7 +248,7 @@ class TestMSATPConnection(unittest.TestCase):
         )
 
         query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
-        entry_point = connector.Connector(self.connection(), config)
+        entry_point = ConnectorPostProcessing(config, False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             '((find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z)'
@@ -259,7 +261,7 @@ class TestMSATPConnection(unittest.TestCase):
         query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
         config = json.loads(json.dumps(self.config()))
         config['includeAlerts'] = False
-        entry_point = connector.Connector(self.connection(), config)
+        entry_point = ConnectorPostProcessing(config, False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             "(union (find withsource = TableName in (DeviceNetworkEvents)  "
@@ -279,7 +281,7 @@ class TestMSATPConnection(unittest.TestCase):
         )
 
         query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
-        entry_point = connector.Connector(self.connection(), config)
+        entry_point = ConnectorPostProcessing(config, False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             '((find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z)'
@@ -301,7 +303,7 @@ class TestMSATPConnection(unittest.TestCase):
         config['includeAlerts'] = False
         config['includeHostOs'] = False
         config['includeNetworkInfo'] = False
-        entry_point = connector.Connector(self.connection(), config)
+        entry_point = ConnectorPostProcessing(config, False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             "(union (find withsource = TableName in (DeviceNetworkEvents)  "
@@ -314,7 +316,7 @@ class TestMSATPConnection(unittest.TestCase):
         )
 
         query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
-        entry_point = connector.Connector(self.connection(), config)
+        entry_point = ConnectorPostProcessing(config, False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             '((find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z)'
@@ -335,7 +337,7 @@ class TestMSATPConnection(unittest.TestCase):
             'Table': 'DeviceEvents'
         }
 
-        connector.unify_alert_fields(data)
+        unify_alert_fields(data)
         alerts = data.get("Alerts")
         assert alerts is not None
         assert type(alerts) is str
@@ -365,7 +367,7 @@ class TestMSATPConnection(unittest.TestCase):
             }
         }
 
-        connector.organize_registry_data(data["DeviceRegistryEvents"])
+        organize_registry_data(data["DeviceRegistryEvents"])
         assert "RegistryValues" in data["DeviceRegistryEvents"]
         values = data["DeviceRegistryEvents"]["RegistryValues"]
         assert len(values) == 1
@@ -380,7 +382,7 @@ class TestMSATPConnection(unittest.TestCase):
                 "IPAddressesSet": ["[{\"IPAddress\":\"9.9.9.9\",\"SubnetPrefix\":24,\"AddressType\":\"Private\"}]"]
             }
         }
-        connector.organize_ips(data["DeviceRegistryEvents"])
+        organize_ips(data["DeviceRegistryEvents"])
         assert "IPAddresses" in data["DeviceRegistryEvents"]
         values = data["DeviceRegistryEvents"]["IPAddresses"]
         assert len(values) == 1
@@ -390,7 +392,7 @@ class TestMSATPConnection(unittest.TestCase):
         data = {
             "DeviceId": "deviceid"
         }
-        connector.create_event_link(data, "2019-10-10T10:43:07.2363291Z")
+        create_event_link(data, "2019-10-10T10:43:07.2363291Z")
         assert data.get(
             "event_link") == "https://security.microsoft.com/machines/deviceid/timeline?from=2019-10-10T10:43:06.000Z&to=2019-10-10T10:43:08.000Z"
 
@@ -400,7 +402,7 @@ class TestMSATPConnection(unittest.TestCase):
             "LocalIP": "9.9.9.9",
             "IPAddresses": ["9.9.9.9", "9.9.9.1"]
         }
-        connector.remove_duplicate_ips(data)
+        remove_duplicate_ips(data)
         assert "PublicIP" not in data
         assert data.get("LocalIP") == "9.9.9.9"
         assert len(data["IPAddresses"]) == 1
@@ -412,7 +414,7 @@ class TestMSATPConnection(unittest.TestCase):
             "LocalIP": "9.9.9.2",
             "IPAddresses": ["9.9.9.3", "9.9.9.4"]
         }
-        connector.remove_duplicate_ips(data)
+        remove_duplicate_ips(data)
         assert data.get("PublicIP") == "9.9.9.1"
         assert data.get("LocalIP") == "9.9.9.2"
         assert len(data["IPAddresses"]) == 2
