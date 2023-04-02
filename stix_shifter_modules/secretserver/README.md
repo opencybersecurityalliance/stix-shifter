@@ -119,7 +119,7 @@ python3 main.py execute secretserver secretserver '{"type": "identity", "id": "i
 }
 
 ```
-Supported queries for secret server conncetor:
+ These are examples of supported queries for secret server conncetor:
 
 1. "[x-ibm-finding:event_name LIKE '%'] START t'2022-09-14T11:27:00.000Z' STOP t'2022-09-16T11:32:00.000Z'"
 2. "[x-ibm-finding:time_observed LIKE '%'] START t'2022-09-14T11:27:00.000Z' STOP t'2022-09-16T11:32:00.000Z'"
