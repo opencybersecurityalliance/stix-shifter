@@ -5,20 +5,21 @@ REST Web Service APIs: https://www.ibm.com/support/pages/node/1136272
 Prerequisite :
 
 Create custom report on IBM Privilege Vault Secret Server/ Delinea Secret Server by using following steps:
-1.  Login to  IBM Privilege Vault Secret Server/ Delinea Secret Server.
-2.	Click on Report tab. 
-3.	Fill the details as below and click the save button.
-       Report Name:	Secret Server Events Logs
-       Report Description:	Secret Server Events Logs
-       Report Category:	Activity
-       Chart Type:	None
-       Page Size:	15
-       Report SQL:	SELECT a.EventDetails AS [EventDetails],a.EventNote,a.EventTime,a.ItemId,a.UserId,u.UserName as Name, u.EmailAddress as  
-                    Unique_Identtification,a.EventSubject, s.secretname As [SecretName], a.ipaddress AS [IpAddress] FROM tbEventAudit a WITH (NOLOCK)    
-                    INNER JOIN tbuser u WITH (NOLOCK) ON u.userid = a.userid INNER JOIN tbsecret s WITH (NOLOCK) ON s.secretid = a.ItemId  WHERE 
-                    a.EventTime >= #StartDate AND a.EventTime <= #EndDate ORDER BY a.EventTime DESC
+- Login to  IBM Privilege Vault Secret Server/ Delinea Secret Server.
+- Click on Report tab. 
+- Fill the details as below and click the save button. 
 
-4.	New custom report will get listed in General section of Reports tab.
+
+|        |        |
+|-------------|-------------|
+| Report Name         | Secret Server Events Logs |       
+| Report Description  | Secret Server Events Logs |
+| Report Category     | Activity                  |
+| Chart Type          | None                      |
+| Page Size           | 15                        |
+| Report SQL          | SELECT a.EventDetails AS [EventDetails],a.EventNote,a.EventTime,a.ItemId,a.UserId,u.UserName as Name, u.EmailAddress as Unique_Identtification,a.EventSubject, s.secretname As [SecretName], a.ipaddress AS [IpAddress] FROM tbEventAudit a WITH (NOLOCK) INNER JOIN tbuser u WITH (NOLOCK) ON u.userid = a.userid INNER JOIN tbsecret s WITH (NOLOCK) ON s.secretid = a.ItemId  WHERE a.EventTime >= #StartDate AND a.EventTime <= #EndDate ORDER BY a.EventTime DESC
+     
+-	New custom report will get listed in General section of Reports tab.
  
 
 ### Format for making STIX translation calls via the CLI
