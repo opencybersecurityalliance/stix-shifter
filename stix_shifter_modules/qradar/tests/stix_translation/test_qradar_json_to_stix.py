@@ -100,7 +100,7 @@ class TestTransform(object):
         
         data = [{"sourceip": source_ip, "destinationip": destination_ip, "url": url, "eventpayload": payload, "username": user_id, "protocol": 'TCP',
                 "sourceport": "3000", "destinationport": 2000, "filename": file_name, "filehash": filehash, "md5hash": md5hash, "sha1hash": sha1hash, "sha256hash": sha256hash,
-                "domainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac, "Image": process_image, "ParentImage": process_parent_image, 
+                "dnsdomainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac, "Image": process_image, "ParentImage": process_parent_image, 
                 "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, "LoadedImage": process_loaded_image }]
 
         result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
@@ -528,7 +528,7 @@ class TestTransform(object):
         source_mac = "00-00-5E-00-53-00"
         destination_mac = "00-00-5A-00-55-01"
         data = [{"sourceip": source_ip, "destinationip": destination_ip, "url": url, "base64_payload": payload, "username": user_id, "protocol": 'TCP',
-                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}]
+                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "dnsdomainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}]
         
         result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
         

@@ -127,7 +127,7 @@ class TestStixToAql(unittest.TestCase, object):
     def test_domainname_query(self):
         stix_pattern = "[domain-name:value = 'example.com']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE dnsdomainname = 'example.com' {} {}".format(default_limit, default_time)
+        where_statement = "WHERE dnsdomainname LIKE '%example.com%' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_filename_query(self):
@@ -235,7 +235,7 @@ class TestStixToAql(unittest.TestCase, object):
     def test_url_query(self):
         stix_pattern = "[url:value = 'example.com' ]"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (dnsdomainname = 'example.com' OR tlsservernameindication = 'example.com' OR httphost = 'example.com') {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (dnsdomainname LIKE '%example.com%' OR tlsservernameindication LIKE '%example.com%' OR httphost LIKE '%example.com%') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
     
     def test_in_operators(self):
