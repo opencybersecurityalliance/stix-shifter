@@ -2,6 +2,26 @@
 
 REST Web Service APIs: https://www.ibm.com/support/pages/node/1136272
 
+Prerequisite :
+
+Create custom report on IBM Privilege Vault Secret Server/ Delinea Secret Server by using following steps:
+- Login to  IBM Privilege Vault Secret Server/ Delinea Secret Server.
+- Click on Report tab. 
+- Fill the details as below and click the save button. 
+
+
+|        |        |
+|-------------|-------------|
+| Report Name         | Secret Server Events Logs |       
+| Report Description  | Secret Server Events Logs |
+| Report Category     | Activity                  |
+| Chart Type          | None                      |
+| Page Size           | 15                        |
+| Report SQL          | SELECT a.EventDetails AS [EventDetails],a.EventNote,a.EventTime,a.ItemId,a.UserId,u.UserName as Name, u.EmailAddress as Unique_Identtification,a.EventSubject, s.secretname As [SecretName], a.ipaddress AS [IpAddress] FROM tbEventAudit a WITH (NOLOCK) INNER JOIN tbuser u WITH (NOLOCK) ON u.userid = a.userid INNER JOIN tbsecret s WITH (NOLOCK) ON s.secretid = a.ItemId  WHERE a.EventTime >= #StartDate AND a.EventTime <= #EndDate ORDER BY a.EventTime DESC
+     
+-	New custom report will get listed in General section of Reports tab.
+ 
+
 ### Format for making STIX translation calls via the CLI
 
 `python3 main.py <translator_module> <query or result> <STIX identity object> <data>`
@@ -99,3 +119,9 @@ python3 main.py execute secretserver secretserver '{"type": "identity", "id": "i
 }
 
 ```
+ These are examples of supported queries for secret server conncetor:
+
+1. "[x-ibm-finding:event_name LIKE '%'] START t'2022-09-14T11:27:00.000Z' STOP t'2022-09-16T11:32:00.000Z'"
+2. "[x-ibm-finding:time_observed LIKE '%'] START t'2022-09-14T11:27:00.000Z' STOP t'2022-09-16T11:32:00.000Z'"
+3. “[x-secret:secret_name LIKE '%'] START t'2022-09-14T11:27:00.000Z' STOP t'2022-09-16T11:32:00.000Z'"
+4. “[ipv4-addr:value LIKE '%'] START t'2022-09-14T11:27:00.000Z' STOP t'2022-09-16T11:32:00.000Z'"
