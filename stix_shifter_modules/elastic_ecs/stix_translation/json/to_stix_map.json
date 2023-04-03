@@ -1581,7 +1581,7 @@
       {
         "key": "x-oca-asset.mac_refs",
         "object": "host",
-        "references": "host_mac",
+        "references": ["host_mac"],
         "unwrap": true
       }
     ],

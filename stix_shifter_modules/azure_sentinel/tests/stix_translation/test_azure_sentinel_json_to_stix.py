@@ -91,6 +91,18 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         return TestAzureSentinelResultsToStix.get_first(itr, lambda o: isinstance(o, dict) and o.get('type') == typ)
 
     @staticmethod
+    def get_n_of_type(itr, typ, n):
+        """
+        gets n's value from the list of respective stix objects
+        """
+
+        obj_list = [obj for obj in itr if isinstance(obj, dict) and obj.get('type') == typ]
+        if len(obj_list) >= n:
+            return obj_list[n-1]
+
+        return None
+
+    @staticmethod
     def test_common_prop():
         """
         to test the common stix object properties
@@ -133,6 +145,7 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         
         x_msazure_sentinel = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'x-msazure-sentinel')
         x_msazure_sentinel_alert = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'x-msazure-sentinel-alert')
+        x_msazure_sentinel_alert2 = TestAzureSentinelResultsToStix.get_n_of_type(objects.values(), 'x-msazure-sentinel-alert', 2)
         x_ibm_finding = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
         x_oca_event = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
 
@@ -142,10 +155,12 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         assert x_msazure_sentinel['subscription_id'] == '083de1fb-cd2d-4b7c-895a-2b5af1d091e8'
 
         assert x_msazure_sentinel_alert is not None, 'Custom object type not found'
+        assert x_msazure_sentinel_alert2 is not None, 'Custom object type not found'
 
-        assert x_msazure_sentinel_alert.keys() == {'type', 'recommendedactions', 'status', 'userStates'}
+        assert x_msazure_sentinel_alert.keys() == {'type', 'recommendedactions', 'status'}
+        assert x_msazure_sentinel_alert2.keys() == {'type', 'userStates'}
         assert type(x_msazure_sentinel_alert['recommendedactions']) is list
-        assert x_ibm_finding.keys() == {'type', 'createddatetime', 'description', 'time_observed', 'severity', 'name', 'src_os_ref'}
+        assert x_ibm_finding.keys() == {'type', 'createddatetime', 'description', 'time_observed', 'severity', 'name'}
         assert x_ibm_finding['name'] == 'Rare SVCHOST service group executed'
         assert x_oca_event.keys() == {'type', 'code', 'category', 'created', 'action'}
         assert x_oca_event['category'] == 'SuspiciousSVCHOSTRareGroup'
