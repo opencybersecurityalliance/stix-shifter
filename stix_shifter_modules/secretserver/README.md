@@ -42,6 +42,9 @@ will return
 
 IBM Security Verify Privilege Vault data to STIX mapping is defined in `to_stix_map.json`
 
+Note: For on Prem IBM Privilege Vault Secret Server Instace "host":"<hostname/SecretServer>" 
+      example: "host":"X.XX.XX.XXX/SecretServer"
+
 This example IBM Security Verify Privilege Vault data:
 
 python3 main.py transmit secretserver '{"host":"<hostname>"}' '{"auth":{"username":"<username>","password":"<password>"}}' results "eyJxdWVyeSI6ICJTRUxFQ1QgKiBGUk9NIFNlY3JldEV2ZW50RGV0YWlsIFdIRVJFIEV2ZW50U3ViamVjdCBMSUtFICclJSUnIFNUQVJUIHQnMjAxOS0wMS0yOFQxMjoyNDowMS4wMDlaJyBTVE9QIHQnMjAyMS0wNy0xNFQxMjo1NDowMS4wMDlaJyIsICJ0YXJnZXQiIDogImh0dHA6Ly85LjQ2Ljg2LjEyMC9TZWNyZXRTZXJ2ZXIvb2F1dGgyL3Rva2VuIn0=" 1 2
