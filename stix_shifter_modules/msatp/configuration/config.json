@@ -42,15 +42,15 @@
         },
         "includeAlerts":{
             "type": "boolean",
-            "default": true
+            "default": false
         },
         "includeHostOs": {
             "type": "boolean",
-            "default": true
+            "default": false
         },
         "includeNetworkInfo": {
             "type": "boolean",
-            "default": true
+            "default": false
         }
     }
 }

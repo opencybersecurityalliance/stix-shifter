@@ -47,7 +47,7 @@
             "description": "With this feature enabled every event will include also the device OS details from the DeviceInfo table. Keep in mind that this feature will add API CPU consumption."
         },
         "includeNetworkInfo": {
-            "label": "Join events with Device Network info? ('true' for yes, anything else for no)",
+            "label": "Join events with Device Network info?",
             "description": "With this feature enabled every event will include also the active network adapters IP and MAC addresses of the device at the time of the event from the DeviceNetworkInfo table. Keep in mind that this feature will add API CPU consumption."
         }
     }
