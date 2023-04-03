@@ -17,8 +17,8 @@ class APIClient():
 
     def __init__(self, connection, configuration):
         self.url = "https://" + connection["host"]
-        self.auth_token_url = "/SecretServer/oauth2/token"
-        self.secret_detail = "/SecretServer/api/v1/secrets"
+        self.auth_token_url = "/oauth2/token"
+        self.secret_detail = "/api/v1/secrets"
         self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
         self.connect_timeout = int(self.connect_timeout)
         self.server_cert_content = False
@@ -35,7 +35,8 @@ class APIClient():
             configuration["auth"]["username"], configuration["auth"]["password"])
         self.server_ip = connection["host"]
 
-        self.secret_server_userdetail_url = "SecretServer/api/v1/users/"
+        self.secret_server_userdetail_url = "/api/v1/users/"
+        self.report_endpoint = "api/v1/reports/execute"
 
     def get_token(self):
         response = RestApiClient.call_api(self, self.auth_token_url, 'GET', headers=self.headers,
@@ -147,9 +148,8 @@ class APIClient():
             'Authorization': self.accessToken,
             'Content-Type': 'application/json'
         }
-        endpoint = "SecretServer/api/v1/reports/execute"
 
-        response = RestApiClient.call_api(self, endpoint, 'POST', headers=headers, data=payload, urldata=None,
+        response = RestApiClient.call_api(self, self.report_endpoint, 'POST', headers=headers, data=payload, urldata=None,
                                           timeout=None)
         return_obj = {}
         if response.code != 200:
