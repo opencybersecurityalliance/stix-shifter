@@ -20,11 +20,11 @@
                 "description": "Tenant Id of Palo Alto Cortex XDR Application"
             },
             "api_key": {
-                "label": "API Key",
+                "label": "API key",
                 "description": "The API Key is a unique identifier required for authenticating API calls."
             },
             "api_key_id": {
-                "label": "API Key Id",
+                "label": "API key ID",
                 "description": "The API Key ID is a unique token used to authenticate the API Key"
             }
         }

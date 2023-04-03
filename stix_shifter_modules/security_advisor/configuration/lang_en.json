@@ -16,7 +16,7 @@
                 "description": "Account ID of IBM Cloud Security Advisor"
             },
             "apiKey": {
-                "label": "API Key",
+                "label": "API key",
                 "description": "API Key of IBM Cloud Security Advisor"
             }
         }
