@@ -90,7 +90,7 @@ class Connector(BaseJsonSyncConnector):
             return_obj = self.check_empty_data(return_obj)
 
         except json.decoder.JSONDecodeError as ex:
-            response_dict['code'] = 1001
+            response_dict['code'] = 1004
             response_dict['message'] = str(ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except InvalidArguments as ex:
