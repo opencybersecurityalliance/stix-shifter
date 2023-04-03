@@ -43,10 +43,9 @@ class APIClient:
         await self.credential.close()
         return resp
 
-    async def run_search(self, query_expression, start, stop, length):
+    async def run_search(self, query_expression, start, stop):
         """get the response from azure_sentinel endpoints
         :param query_expression: str, search_id
-        :param length: int,length value
         :return: response, json object"""
         await self.init_async_client()
         try:

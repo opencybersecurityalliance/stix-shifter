@@ -21,7 +21,6 @@ class TestAzureSentinalConnection(TestCase):
 
     def connection(self):
         return {
-                "host": "abc.amazon.com",
                 "port": 443
                 }
 
