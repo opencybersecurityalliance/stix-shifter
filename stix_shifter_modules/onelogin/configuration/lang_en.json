@@ -13,11 +13,11 @@
     "configuration": {
         "auth": {
             "clientId": {
-                "label": "Client Id",
+                "label": "Client ID",
                 "description": "Client ID of OneLogin"
             },
             "clientSecret": {
-                "label": "Client Secret",
+                "label": "Client secret",
                 "description": "Client secret of OneLogin"
             }
         }

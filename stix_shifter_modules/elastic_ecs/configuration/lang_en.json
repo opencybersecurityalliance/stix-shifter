@@ -6,7 +6,7 @@
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
@@ -38,15 +38,15 @@
                 "description": "Password of the user with access to the search API"
             },
             "access_token": {
-                "label": "Access Token (Token Based Access)",
+                "label": "Access token (Token based access)",
                 "description": "Access Token is required for token based authentication"
             },
             "api_key": {
-                "label": "API Key (Key Based Access)",
+                "label": "API key (Key based access)",
                 "description": "API Key is required for Key based authentication"
             },
             "id": {
-                "label": "ID (Key Based Access)",
+                "label": "ID (Key based access)",
                 "description": "ID is required for Key based authentication with API Key"
             }
         }

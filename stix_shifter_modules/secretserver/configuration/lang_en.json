@@ -6,7 +6,7 @@
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "placeholder": "443",
             "description": "Specify the associated port number of the data source."
         },
