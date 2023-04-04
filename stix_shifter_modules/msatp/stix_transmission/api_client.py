@@ -1,6 +1,6 @@
 """Apiclient for MSATP"""
 import json
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 
 DEFAULT_LIMIT = 10000
 DEFAULT_OFFSET = 0
@@ -21,10 +21,10 @@ class APIClient:
         self.host = connection.get('host')
 
         if auth:
-            if 'access_token' in auth:
+            if 'access_token' in auth and auth['access_token']:
                 headers['Authorization'] = "Bearer " + auth['access_token']
 
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port', None),
                                     headers,
                                     url_modifier_function=url_modifier_function,
@@ -33,12 +33,12 @@ class APIClient:
                                     )
         self.timeout = connection['options'].get('timeout')
 
-    def ping_box(self):
+    async def ping_box(self):
         """Ping the endpoint."""
         endpoint = '/api'
-        return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', timeout=self.timeout)
 
-    def run_search(self, query_expression, offset=DEFAULT_OFFSET, length=DEFAULT_LIMIT):
+    async def run_search(self, query_expression, offset=DEFAULT_OFFSET, length=DEFAULT_LIMIT):
         """get the response from MSatp endpoints
         :param query_expression: str, search_id
         :param offset: int,offset value
@@ -51,4 +51,4 @@ class APIClient:
         endpoint = self.endpoint
         query_expression = query_expression + serialize.format(offset=offset, length=length)
         query_expression = json.dumps({'Query': query_expression}).encode("utf-8")
-        return self.client.call_api(endpoint, 'POST', headers=headers, data=query_expression, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'POST', headers=headers, data=query_expression, timeout=self.timeout)
