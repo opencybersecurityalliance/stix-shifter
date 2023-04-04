@@ -1,7 +1,7 @@
 import json
 
 import adal
-from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
@@ -9,7 +9,7 @@ from stix_shifter_utils.utils import logger
 from .connector_post_processing import ConnectorPostProcessing
 
 
-class Connector(BaseJsonSyncConnector):
+class Connector(BaseSyncConnector):
     init_error = None
     logger = logger.set_logger(__name__)
 

@@ -1,6 +1,6 @@
 """Apiclient for MSATP"""
 import json
-from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
+from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
 
 DEFAULT_LIMIT = 10000
 DEFAULT_OFFSET = 0
@@ -24,7 +24,7 @@ class APIClient:
             if 'access_token' in auth and auth['access_token']:
                 headers['Authorization'] = "Bearer " + auth['access_token']
 
-        self.client = RestApiClientAsync(connection.get('host'),
+        self.client = RestApiClient(connection.get('host'),
                                     connection.get('port', None),
                                     headers,
                                     url_modifier_function=url_modifier_function,
@@ -33,12 +33,12 @@ class APIClient:
                                     )
         self.timeout = connection['options'].get('timeout')
 
-    async def ping_box(self):
+    def ping_box(self):
         """Ping the endpoint."""
         endpoint = '/api'
-        return await self.client.call_api(endpoint, 'GET', timeout=self.timeout)
+        return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
 
-    async def run_search(self, query_expression, offset=DEFAULT_OFFSET, length=DEFAULT_LIMIT):
+    def run_search(self, query_expression, offset=DEFAULT_OFFSET, length=DEFAULT_LIMIT):
         """get the response from MSatp endpoints
         :param query_expression: str, search_id
         :param offset: int,offset value
@@ -51,4 +51,4 @@ class APIClient:
         endpoint = self.endpoint
         query_expression = query_expression + serialize.format(offset=offset, length=length)
         query_expression = json.dumps({'Query': query_expression}).encode("utf-8")
-        return await self.client.call_api(endpoint, 'POST', headers=headers, data=query_expression, timeout=self.timeout)
+        return self.client.call_api(endpoint, 'POST', headers=headers, data=query_expression, timeout=self.timeout)

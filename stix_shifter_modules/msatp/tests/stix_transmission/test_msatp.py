@@ -220,7 +220,7 @@ class TestMSATPConnection(unittest.TestCase):
                     'or InitiatingProcessParentFileName !~ "updater.exe")'
 
         entry_point = EntryPoint(self.connection(), self.config())
-        status_response = run_in_thread(entry_point.delete_query_connection, search_id)
+        status_response = entry_point.delete_query_connection(search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
@@ -234,7 +234,7 @@ class TestMSATPConnection(unittest.TestCase):
                     'or InitiatingProcessParentFileName !~ "updater.exe")'
 
         entry_point = EntryPoint(self.connection(), self.config())
-        status_response = run_in_thread(entry_point.create_status_connection, search_id)
+        status_response = entry_point.create_status_connection(search_id)
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
