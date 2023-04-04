@@ -12,11 +12,11 @@
     "configuration": {
         "auth": {
             "private_token": {
-                "label": "Private Token",
+                "label": "Private token",
                 "description": "Private tokens are used in token-based authentication to access an API."
             },
             "public_token": {
-                "label": "Public Token",
+                "label": "Public token",
                 "description": "Public tokens are used in token-based authentication to access an API."
             }
         }

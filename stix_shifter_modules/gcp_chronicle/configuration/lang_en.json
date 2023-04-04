@@ -9,15 +9,15 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
          "selfSignedCert": {
-                "label": "Private Key (Required)",
+                "label": "Private key (Required)",
                 "description": "Private Key is a mandatory authentication parameter to communicate with the GCP Chronicle security datasource."
             }
     },
     "configuration": {
         "auth": {
             "client_email": {
-                "label": "Client Email",
-                "description": "Client Email used in authentication to make API calls"
+                "label": "Client email",
+                "description": "Client email used in authentication to make API calls"
             }
         }
     }

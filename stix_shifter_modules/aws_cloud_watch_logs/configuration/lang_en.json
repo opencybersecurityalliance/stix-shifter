@@ -10,7 +10,7 @@
             "description": "Specify the region of the CloudWatch Logs for the data source"
         },
         "log_group_names": {
-            "label": "Log Group Names",
+            "label": "Log group names",
             "description": "Specify the Log group name of the CloudWatch Logs from which you would like to get the logs from in a JSON format. For example:  {\"vpcflow\": \"<log group name>\"}. To get logs from multiple service type logs: {\"vpcflow\": \"<log group name>\", \"guardduty\": \"<log group name>\"}",
             "placeholder": "{\"vpcflow\": \"YOUR_LOG_GROUP_NAME1\"}"
         }
@@ -18,15 +18,15 @@
     "configuration": {
         "auth": {
             "aws_access_key_id": {
-                "label": "AWS Access Key ID",
+                "label": "AWS access key ID",
                 "description": "AWS Access Key ID is required for both AWS key-based and role-based authentication"
             },
             "aws_iam_role": {
-                "label": "AWS IAM Role",
+                "label": "AWS IAM role",
                 "description": "AWS IAM Role is required for only AWS role-based authentication"
             },
             "aws_secret_access_key": {
-                "label": "AWS Secret Access Key",
+                "label": "AWS secret access key",
                 "description": "AWS Secret Access Key ID is required for both AWS key-based and role-based authentication"
             }
         }
