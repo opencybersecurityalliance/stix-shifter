@@ -5,12 +5,16 @@ Queries are constructed as unions for all the relevant event tables based on the
 The potential tables are `DeviceProcessEvents`, `DeviceNetworkEvents`, 
 `DeviceRegistryEvents`, `DeviceFileEvents`, `DeviceImageLoadEvents` and `DeviceEvents`
 
-Every query is joined with `DeviceNetworkInfo` in order to get the active network adapters from the relevant time of\
+There are 3 new configuration properties (default to `false`):
+### `includeNetworkInfo`:
+If true, every query is joined with `DeviceNetworkInfo` table in order to get the active network adapters from the relevant time of\
 the event (IP and mac addresses).
 
-Every query is also joined with `DeviceInfo` to get the host operating system.
+### `includeHostOs`:
+If true, every query is also joined with `DeviceInfo` table to get the host operating system.
 
-Queries are joined with `DeviceAlertEvents` to look for relevant alerts. An alert is joined based on
+### `includeAlerts`:
+If true, queries are joined with `DeviceAlertEvents` to look for relevant alerts. An alert is joined based on
 the `Timestamp` of the event, `DeviceId` and `ReportId`. Relevant alerts will be mapped to `x-ibm-finding` 
 with their relevant TTP's.
 Searching for an alert field (for example `x-ibm-finding:alert_id`) will search the alerts table first
