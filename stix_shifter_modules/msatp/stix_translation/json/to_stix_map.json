@@ -1131,14 +1131,6 @@
         "key": "x-oca-event.original_ref",
         "object": "event",
         "references": "original_ref"
-      },
-      {
-        "key": "x-oca-event.finding_refs",
-        "object": "event",
-        "references": [
-          "finding"
-        ],
-        "group": true
       }
     ],
     "event_link": [
@@ -1588,14 +1580,6 @@
         "key": "x-oca-event.original_ref",
         "object": "event",
         "references": "original_ref"
-      },
-      {
-        "key": "x-oca-event.finding_refs",
-        "object": "event",
-        "references": [
-          "finding"
-        ],
-        "group": true
       }
     ],
     "event_link": [
@@ -1995,14 +1979,6 @@
         "key": "x-oca-event.original_ref",
         "object": "event",
         "references": "original_ref"
-      },
-      {
-        "key": "x-oca-event.finding_refs",
-        "object": "event",
-        "references": [
-          "finding"
-        ],
-        "group": true
       }
     ],
     "event_link": [
@@ -2362,14 +2338,6 @@
         "key": "x-oca-event.original_ref",
         "object": "event",
         "references": "original_ref"
-      },
-      {
-        "key": "x-oca-event.finding_refs",
-        "object": "event",
-        "references": [
-          "finding"
-        ],
-        "group": true
       }
     ],
     "event_link": [
@@ -2968,14 +2936,6 @@
         "key": "x-oca-event.original_ref",
         "object": "event",
         "references": "original_ref"
-      },
-      {
-        "key": "x-oca-event.finding_refs",
-        "object": "event",
-        "references": [
-          "finding"
-        ],
-        "group": true
       }
     ],
     "event_link": [
