@@ -468,15 +468,15 @@
         "key": "process.pid"
       },
       "valueData": {
-        "key": "extensions.windows-registry-value-type.valueData",
+        "key": "windows-registry-value-type.data",
         "object": "registry"
       },
       "valueName": {
-        "key": "extensions.windows-registry-value-type.name",
+        "key": "windows-registry-value-type.name",
         "object": "registry"
       },
       "valueType": {
-        "key": "extensions.windows-registry-value-type.valuetype",
+        "key": "windows-registry-value-type.data_type",
         "object": "registry",
         "transformer": "ToString"
       }

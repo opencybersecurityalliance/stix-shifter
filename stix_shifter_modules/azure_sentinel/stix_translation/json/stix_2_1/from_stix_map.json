@@ -46,7 +46,7 @@
       "pid": ["processes.processId", "processes.parentProcessId", "registryKeyStates.processId"],
       "created_time": ["processes.createdDateTime"],
       "parent_ref.pid": ["processes.parentProcessId"],
-      "image_ref.path": ["processes.path"]
+      "image_ref.parent_directory.path": ["processes.path"]
     }
   },
   "domain-name": {
@@ -71,15 +71,15 @@
   },
   "url": {
     "fields": {
-      "name": ["networkConnections.destinationUrl"]
+      "value": ["networkConnections.destinationUrl"]
     }
   },
   "windows-registry-key": {
     "fields": {
       "key": ["registryKeyStates.key"],
-      "extensions.windows-registry-value-type.valueData": [ "registryKeyStates.valueData" ],
-      "extensions.windows-registry-value-type.name": [ "registryKeyStates.valueName" ],
-      "extensions.windows-registry-value-type.valueType": [ "registryKeyStates.valueType" ]
+      "windows-registry-value-type.valueData": ["registryKeyStates.valueData"],
+      "windows-registry-value-type.name": ["registryKeyStates.valueName"],
+      "windows-registry-value-type.valueType": ["registryKeyStates.valueType"]
     }
   },
   "x-msazure-sentinel": {
