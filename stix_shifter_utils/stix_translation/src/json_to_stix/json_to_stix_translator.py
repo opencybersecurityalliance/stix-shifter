@@ -19,33 +19,41 @@ LAST_OBSERVED_KEY = 'last_observed'
 
 # convert JSON data to STIX object using map_data and transformers
 def convert_to_stix(data_source, map_data, data, transformers, options, callback=None):
+    try:
+        ds2stix = DataSourceObjToStixObj(data_source, map_data, transformers, options, callback)
 
-    ds2stix = DataSourceObjToStixObj(data_source, map_data, transformers, options, callback)
+        # map data list to list of transformed objects
+        observation = ds2stix.transform
+        results = list(map(observation, data))
 
-    # map data list to list of transformed objects
-    observation = ds2stix.transform
-    results = list(map(observation, data))
+        for stix_object in results:
+            if ds2stix.spec_version == "2.1":
+                del stix_object["objects"]
+            ds2stix.bundle["objects"].append(stix_object)
 
-    for stix_object in results:
-        if ds2stix.spec_version == "2.1":
-            del stix_object["objects"]
-        ds2stix.bundle["objects"].append(stix_object)
+        for _, value in ds2stix.unique_cybox_objects.items():
+            ds2stix.bundle["objects"].append(value)
 
-    for _, value in ds2stix.unique_cybox_objects.items():
-        ds2stix.bundle["objects"].append(value)
+        if options.get('stix_validator'):
+            if ds2stix.spec_version == "2.1":
+                # Serialize and Deserialize bundle to covert StixObjectIds to strings
+                bundle_obj = json.dumps(ds2stix.bundle, sort_keys=False)
+                bundle_obj = json.loads(bundle_obj)
+            else:
+                bundle_obj = ds2stix.bundle
+            validated_result = validate_instance(bundle_obj, ValidationOptions(version=ds2stix.spec_version))
+            print_results(validated_result)
 
-    if options.get('stix_validator'):
-        if ds2stix.spec_version == "2.1":
-            # Serialize and Deserialize bundle to covert StixObjectIds to strings
-            bundle_obj = json.dumps(ds2stix.bundle, sort_keys=False)
-            bundle_obj = json.loads(bundle_obj)
-        else:
-            bundle_obj = ds2stix.bundle
-        validated_result = validate_instance(bundle_obj, ValidationOptions(version=ds2stix.spec_version))
-        print_results(validated_result)
+        return ds2stix.bundle
 
-    return ds2stix.bundle
-
+    except Exception as e:
+        try:
+            # try to print the error line
+            logger_log = logger.set_logger(__name__)
+            logger_log.error(logger.last_tb_to_string(e))
+        except:
+            pass
+        raise e
 
 class DataSourceObjToStixObj:
     logger = logger.set_logger(__name__)
