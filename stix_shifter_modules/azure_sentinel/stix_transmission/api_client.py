@@ -4,6 +4,7 @@ from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestAp
 
 class APIClient:
     """API Client to handle all calls."""
+    credential = None
     
     def __init__(self, base_uri, connection, configuration):
         """Initialization.
