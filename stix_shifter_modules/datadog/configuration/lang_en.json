@@ -6,7 +6,7 @@
             "description": "Specify the Site URL of the datasource"
         },
         "selfSignedCert": {
-            "label": "Datadog Certificate",
+            "label": "Datadog certificate",
             "placeholder": "Paste your certificate"
         },
         "help": {

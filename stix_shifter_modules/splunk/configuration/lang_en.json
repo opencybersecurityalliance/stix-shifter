@@ -6,7 +6,7 @@
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
@@ -23,7 +23,7 @@
 	},
         "options": {
             "index": {
-                "label": "Index Name(s)",
+                "label": "Index name(s)",
                 "description": "The (comma-separated) name(s) of the Splunk index (or indices) to be queried by this connector."
             }
         }

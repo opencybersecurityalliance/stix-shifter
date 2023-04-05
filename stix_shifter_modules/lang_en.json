@@ -5,15 +5,15 @@
         },
         "options": {
             "result_limit": {
-                "label": "Result Size Limit",
+                "label": "Result size limit",
                 "description": "The maximum number of entries or objects that are returned by search query.  Valid input range is {{min}} to {{max}}."
             },
             "time_range": {
-                "label": "Query Time Range",
+                "label": "Query time range",
                 "description": "Time range for the search, in minutes, represented as last x minutes.  Valid input range is {{min}} to {{max}}."
             },
             "timeout": {
-                "label": "Query Response Timeout Limit",
+                "label": "Query response timeout limit",
                 "description": "The limit on how long to wait for the data source response, in seconds. Valid input range is {{min}} to {{max}}."
             },
             "dialects": {
@@ -21,19 +21,19 @@
                 "description": "The dialect to use if the data source needs to search multiple schema or database tables."
             },
             "validate_pattern": {
-                "label": "STIX Pattern Validator",
+                "label": "STIX pattern validator",
                 "description": "Validate STIX patterns that needs to be translated into native data source query"
             },
             "stix_validator": {
-                "label": "STIX Object Validator",
+                "label": "STIX object validator",
                 "description": "Validate translated STIX Objects"
             },
             "mapping": {
-                "label": "Custom Mapping",
+                "label": "Custom mapping",
                 "description": "Custom stix mapping if default mapping needs to be replaced"
             },
             "concurrent": {
-                "label": "Concurrent Search Limit",
+                "label": "Concurrent search limit",
                 "description": "The number of simultaneous connections that can be made to the data source.  Valid input range is {{min}} to {{max}}."
             }
         }
