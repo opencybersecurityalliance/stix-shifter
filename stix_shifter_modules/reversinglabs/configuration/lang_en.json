@@ -6,14 +6,14 @@
             "description": "Specify the OCP Cluster hostname or the XForce API host URL"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
             "label": "Need additional help?"
         },
         "selfSignedCert": {
-            "label": "X-Force Exchange Connection Certificate",
+            "label": "X-Force Exchange connection certificate",
             "description": "Paste your certificate"
         },
         "sni": {

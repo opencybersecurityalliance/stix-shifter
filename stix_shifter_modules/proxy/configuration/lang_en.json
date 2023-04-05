@@ -11,7 +11,7 @@
                 "description": "Specify the IP address or hostname of the proxy"
             },
             "proxy_port": {
-                "label": "Host Port",
+                "label": "Host port",
                 "description": "Set the port number that is associated with the proxy hostname or IP address"
             },
             "destination": {

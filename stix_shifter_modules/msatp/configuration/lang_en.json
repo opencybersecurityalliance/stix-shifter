@@ -6,7 +6,7 @@
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
@@ -14,7 +14,7 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "Microsoft Defender for Endpoint Certificate",
+            "label": "Microsoft Defender for Endpoint certificate",
             "description": "Use self-signed Security Sockets Layer (SSL) certificate only if Microsoft Defender for Endpoint is configured with a self-signed SSL certificate"
         },
         "sni": {
@@ -30,11 +30,11 @@
                 "description": "Tenant ID of Azure Active directory Application with access to the Microsoft Graph API"
             },
             "clientId": {
-                "label": "Client Id",
+                "label": "Client ID",
                 "description": "Client ID of Azure Active directory Application with access to the Microsoft Graph API"
             },
             "clientSecret": {
-                "label": "Client Secret",
+                "label": "Client secret",
                 "description": "Client Secret of Azure Active directory Application with access to the Microsoft Graph API"
             }
         },
