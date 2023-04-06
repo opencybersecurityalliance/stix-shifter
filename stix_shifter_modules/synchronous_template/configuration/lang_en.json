@@ -6,7 +6,7 @@
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
@@ -14,7 +14,7 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "cert": {
-            "label": "Synchronous Connection Certificate",
+            "label": "Synchronous connection certificate",
             "description": "Use self-signed SSL certificate and CA content(root and intermediate) of data source"
         },
         "sni": {

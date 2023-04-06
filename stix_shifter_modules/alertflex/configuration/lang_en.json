@@ -6,7 +6,7 @@
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
@@ -18,7 +18,7 @@
             "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
         },
         "selfSignedCert": {
-            "label": "Alertflex Connection Certificate",
+            "label": "Alertflex connection certificate",
             "description": "Use self-signed SSL certificate and CA content(root and intermediate) of data source"
         }
     },

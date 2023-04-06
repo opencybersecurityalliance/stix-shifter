@@ -12,7 +12,7 @@
     "configuration": {
         "auth": {
             "api_token": {
-                "label": "API Token",
+                "label": "API token",
                 "description": "Okta API tokens to authenticate requests for Okta APIs"
             }
         }
