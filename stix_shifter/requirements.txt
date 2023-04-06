@@ -5,6 +5,7 @@ aiomysql==0.1.1
 antlr4-python3-runtime==4.8
 asyncio==3.4.3
 asynctest==0.13.0
+azure-identity==1.12.0
 colorlog==6.7.0
 flask==2.2.3
 flatten_json==0.1.13
