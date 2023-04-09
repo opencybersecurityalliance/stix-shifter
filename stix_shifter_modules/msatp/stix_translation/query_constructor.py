@@ -180,6 +180,8 @@ class QueryStringPatternTranslator:
                 if is_int_field or is_date_field:
                     mapped_field = 'tostring({mapped_field})'.format(mapped_field=mapped_field)
                 elif expression.object_path == "domain-name:value":
+                    # since msatp has one field RemoteUrl that sometimes contains urls and sometime only domain names
+                    # in order to find a domain name we need to replace the normal equality comparator to contains
                     comparator = 'contains'
             elif expression.comparator in [ComparisonComparators.GreaterThan, ComparisonComparators.GreaterThanOrEqual,
                                            ComparisonComparators.LessThan,
