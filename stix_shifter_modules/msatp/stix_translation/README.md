@@ -7,7 +7,9 @@ Queries are constructed as unions for all the relevant event tables based on the
 The potential tables are `DeviceProcessEvents`, `DeviceNetworkEvents`, 
 `DeviceRegistryEvents`, `DeviceFileEvents`, `DeviceImageLoadEvents` and `DeviceEvents`
 
-There are 4 configuration properties (default to `false`):
+## Connection options:
+
+There are 4 connection options (default to `false`):
 ### `includeNetworkInfo`:
 If true, every query is joined with `DeviceNetworkInfo` table in order to get the active network adapters from the relevant time of\
 the event (IP and mac addresses).
@@ -59,6 +61,8 @@ For a local IP use `[network-traffic:src_ref.value = '9.9.9.1' ]`
 Here are a few examples for results from different tables and how to interpret them:
 
 ### DeviceProcessEvents
+
+In this example all connection options are set to `true`.  
 The main starting point to look at will be `x-oca-event:action` which tells us the 
 event is a process create event.
 
@@ -216,8 +220,125 @@ there.
 }
 ```
 
+This same event with all connection options set to `false` will be missing the host ip and mac addresses, the host OS details and the `original_ref` in `x-oca-event`:
+```json
+{
+    "0":
+    {
+        "type": "x-msatp",
+        "ReportId": 1234
+    },
+    "1":
+    {
+        "type": "x-oca-asset",
+        "hostname": "host.test.com",
+        "device_id": "deviceid"
+    },
+    "2":
+    {
+        "type": "x-oca-event",
+        "host_ref": "1",
+        "created": "2023-03-17T20:23:03.7116107Z",
+        "action": "ProcessCreated",
+        "process_ref": "4",
+        "user_ref": "7",
+        "provider": "Microsoft Defender for Endpoint",
+        "external_ref": "13"
+    },
+    "3":
+    {
+        "type": "file",
+        "name": "msedge.exe",
+        "parent_directory_ref": "6",
+        "hashes":
+        {
+            "SHA-1": "c737742b81292c764ac2a7e419a37ed7fdf4a1ed",
+            "SHA-256": "470ea019c1ea8882b258dea27e77261dd297eb225fd08edbe591c82796189d75",
+            "MD5": "e180c9a532c45eba99eefd01601f5c41"
+        }
+    },
+    "4":
+    {
+        "type": "process",
+        "name": "msedge.exe",
+        "binary_ref": "3",
+        "pid": 37384,
+        "command_line": "\"msedge.exe\" --type=gpu-process",
+        "created": "2023-03-17T20:23:03.702Z",
+        "creator_user_ref": "7",
+        "parent_ref": "5"
+    },
+    "5":
+    {
+        "type": "process",
+        "child_refs": ["4"],
+        "creator_user_ref": "8",
+        "binary_ref": "9",
+        "name": "msedge.exe",
+        "pid": 400,
+        "command_line": "\"msedge.exe\" -- \"https://test.com/login/login.asp\"",
+        "created": "2023-03-17T20:23:03.441Z",
+        "parent_ref": "11"
+    },
+    "6":
+    {
+        "type": "directory",
+        "path": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application"
+    },
+    "7":
+    {
+        "type": "user-account",
+        "user_id": "username",
+        "account_login": "username@test.com"
+    },
+    "8":
+    {
+        "type": "user-account",
+        "user_id": "username",
+        "account_login": "username@test.com"
+    },
+    "9":
+    {
+        "type": "file",
+        "hashes":
+        {
+            "SHA-1": "c737742b81292c764ac2a7e419a37ed7fdf4a1ed",
+            "SHA-256": "470ea019c1ea8882b258dea27e77261dd297eb225fd08edbe591c82796189d75",
+            "MD5": "e180c9a532c45eba99eefd01601f5c41"
+        },
+        "name": "msedge.exe",
+        "parent_directory_ref": "10"
+    },
+    "10":
+    {
+        "type": "directory",
+        "path": "c:\\program files (x86)\\microsoft\\edge\\application"
+    },
+    "11":
+    {
+        "type": "process",
+        "pid": 30972,
+        "name": "iexplore.exe",
+        "binary_ref": "12",
+        "created": "2023-03-17T20:23:03.169Z"
+    },
+    "12":
+    {
+        "type": "file",
+        "name": "iexplore.exe"
+    },
+    "13":
+    {
+        "type": "external-reference",
+        "url": "https://security.microsoft.com/machines/deviceid/timeline?from=2023-03-17T20:23:02.000Z&to=2023-03-17T20:23:04.000Z"
+    }
+}
+```
+
+
 ### DeviceNetworkEvents with associated alert
 
+In this example all connection options are set to `true`.  
 An example including a network event to an url. 
 Query example: `[domain-name:value='malicious.com']`
 

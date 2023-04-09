@@ -18,7 +18,7 @@ class Connector(BaseJsonSyncConnector):
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
         self.connector = __name__.split('.')[1]
-        self.configuration = configuration
+        self.options = connection['options']
         self.adal_response = Connector.generate_token(self, connection, configuration)
         if self.adal_response['success']:
             configuration['auth']['access_token'] = self.adal_response['access_token']
@@ -72,7 +72,7 @@ class Connector(BaseJsonSyncConnector):
         :param offset: int,offset value
         :param length: int,length value"""
 
-        util = ConnectorPostProcessing(self.configuration, False)
+        util = ConnectorPostProcessing(self.options, False)
         response_txt = None
         return_obj = {
             'success': True,
