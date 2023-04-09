@@ -114,7 +114,7 @@ class QueryConnector(BaseQueryConnector):
             for row in results:
                 columns.append(row['Data'][0]['VarCharValue'])
         else:
-            raise Exception("Error in getting Athena table column list")
+            raise InvalidParameterException("Error in getting Athena table column list")
         
         s3_output_bucket_with_file = s3_output_location.split('//')[1]
         s3_output_bucket = s3_output_bucket_with_file.split('/')[0]
@@ -127,6 +127,9 @@ class QueryConnector(BaseQueryConnector):
         if delete_object.get('Errors'):
             message = delete_object.get('Errors')[0].get('Message')
             raise Exception("Error in deleting s3 metadata after Athena query: " + message)
+        
+        if not columns:
+            raise InvalidParameterException('No Athena table with name ' + table)
 
         return columns
 

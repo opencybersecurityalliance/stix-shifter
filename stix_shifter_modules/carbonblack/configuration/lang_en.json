@@ -6,7 +6,7 @@
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
@@ -23,7 +23,7 @@
         },
         "options": {
             "events_mode": {
-                "label": "Include Process Events?",
+                "label": "Include process events?",
                 "description": "When enabled results will include process events. When disabled only process metadata will be included."
             }
         }
@@ -32,8 +32,8 @@
         "auth": {
             "type": "fields",
             "token": {
-                "label": "API Token",
-                "description": "API Token of the CarbonBlack response account"
+                "label": "API token",
+                "description": "API token of the CarbonBlack response account"
             }
         }
     }
