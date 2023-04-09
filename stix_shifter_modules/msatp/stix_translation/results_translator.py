@@ -39,6 +39,32 @@ def get_first_object_by_type(objects, type_name):
     return None, None
 
 
+def delete_object(objects, remove_ref):
+    """removes an object with all its references from objects"""
+    index_to_remove = int(remove_ref)
+    objects.pop(remove_ref)
+    renames = []
+    for ref, sco in objects.items():
+        if int(ref) > index_to_remove:
+            renames.append(ref)
+        remove = []
+        for key, value in sco.items():
+            if key.endswith("_ref"):
+                if int(value) == index_to_remove:
+                    remove.append(key)
+                elif int(value) > index_to_remove:
+                    sco[key] = str(int(value) - 1)
+            elif key.endswith("_refs"):
+                sco[key] = [str(int(item) - 1) if int(item) > index_to_remove else item for item in value if
+                            int(item) != index_to_remove]
+                if len(sco[key]) == 0:
+                    remove.append(key)
+        for i in remove:
+            sco.pop(i)
+    for ref in renames:
+        objects[str(int(ref) - 1)] = objects.pop(ref)
+
+
 def get_next_index(objects):
     """returns the next available index in the objects dictionary"""
     i = 0
@@ -60,6 +86,15 @@ def get_next_index(objects):
         for i in remove:
             sco.pop(i)
     return next_ref
+
+
+def add_to_objects(observed, obj_to_add):
+    objects = observed['objects']
+    index = get_next_index(objects)
+    objects[index] = obj_to_add
+    if int(index) < len(objects) - 1:
+        observed['objects'] = sort_objects(objects)
+    return index
 
 
 def parse_technique(technique):
@@ -112,8 +147,7 @@ def fix_alerts(observed):
                 'severity': SeverityToNumericVal.transform(alert.get("Severity")),
                 'ttp_tagging_refs': []
             }
-            finding_ref = get_next_index(objects)
-            objects[finding_ref] = finding
+            finding_ref = add_to_objects(observed, finding)
             if 'finding_refs' not in event:
                 event['finding_refs'] = []
             event['finding_refs'].append(finding_ref)
@@ -121,16 +155,14 @@ def fix_alerts(observed):
                 cat = alert['Category']
                 if cat not in ttps:
                     cat_ttp = create_ttp_from_category(cat)
-                    cat_ref = get_next_index(objects)
-                    objects[cat_ref] = cat_ttp
+                    cat_ref = add_to_objects(observed, cat_ttp)
                     ttps[cat] = cat_ref
                 finding['ttp_tagging_refs'].append(ttps[cat])
             if 'AttackTechniques' in alert:
                 for technique in alert['AttackTechniques']:
                     if technique not in ttps:
                         ttp = create_ttps_from_technique(technique)
-                        ttp_ref = get_next_index(objects)
-                        objects[ttp_ref] = ttp
+                        ttp_ref = add_to_objects(observed, ttp)
                         ttps[technique] = ttp_ref
                     finding['ttp_tagging_refs'].append(ttps[technique])
             if len(finding['ttp_tagging_refs']) == 0:
@@ -179,17 +211,20 @@ def validate_process_ref_in_event(event, objects):
         if 'process_ref' in event:
             proc_ref = event['process_ref']
             proc = get_reference(objects, event, 'process_ref', 'process')
-            event['process_ref'] = proc['parent_ref']
             ref = proc['binary_ref']
             event['file_ref'] = ref
-            del objects[proc_ref]
-        if pid is not None and pid != "":
+            delete_object(objects, proc_ref)
+        if pid is not None and pid != "-1":
             init_proc = [key for key, value in objects.items()
                          if value.get("type") == "process"
                          and value.get("pid") == event['missingChildShouldMapInitiatingPid']]
             if len(init_proc) == 1:
                 event['process_ref'] = init_proc[0]
         del event['missingChildShouldMapInitiatingPid']
+
+
+def sort_objects(objects):
+    return {k: objects[k] for k in sorted(objects, key=lambda x: int(x))}
 
 
 class ResultsTranslator(JSONToStix):
@@ -200,5 +235,5 @@ class ResultsTranslator(JSONToStix):
             if observed["type"] == "observed-data" and "objects" in observed:
                 fix_alerts(observed)
                 fix_device_event_refs(observed)
-                observed['objects'] = {k: observed['objects'][k] for k in sorted(observed['objects'], key=lambda x: int(x))}
+                observed['objects'] = sort_objects(observed['objects'])
         return result
