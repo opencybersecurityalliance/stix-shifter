@@ -44,7 +44,7 @@
 | **user-account**:user_id | username |
 | **user-account**:account_login | username |
 | **artifact**:payload_bin | UTF8(payload) |
-| **domain-name**:value | DOMAINNAME(domainid), UrlHost |
+| **domain-name**:value | "DNS Request Domain", UrlHost |
 | **x-qradar**:qid | qid |
 | **x-qradar**:magnitude | magnitude |
 | **x-qradar**:log_source_id | logsourceid |
@@ -183,7 +183,6 @@
 | directory | path | ServiceFileName |
 | <br> | | |
 | domain-name | value | UrlHost |
-| domain-name | value | DOMAINNAME(domainid) |
 | domain-name | value | dnsdomainname |
 | <br> | | |
 | email-message | content_type | contenttype |
@@ -262,7 +261,6 @@
 | software | name | applicationname |
 | <br> | | |
 | url | value | URL |
-| url | value | dnsdomainname |
 | url | value | httphost |
 | url | value | tlsservernameindication |
 | <br> | | |
@@ -332,7 +330,6 @@
 | x-qradar | direction | eventdirection |
 | x-qradar | qid | qid |
 | x-qradar | domain_name | DOMAINNAME(domainid) |
-| x-qradar | domain_name | dnsdomainname |
 | x-qradar | flow_source | flowsource |
 | x-qradar | flow_interface | flowinterface |
 | x-qradar | flow_interface_id | flowinterfaceid |

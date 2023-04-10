@@ -1,38 +1,49 @@
+from azure.identity.aio import ClientSecretCredential
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 
 
 class APIClient:
     """API Client to handle all calls."""
+    credential = None
     
-    def __init__(self, connection, configuration):
+    def __init__(self, base_uri, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
-
-        headers = dict()
-        url_modifier_function = None
         default_api_version = 'v1.0'
-        auth = configuration.get('auth')
+        self.host = base_uri
         self.endpoint = '{api_version}/security/alerts'.format(api_version=default_api_version)
-        self.host = connection.get('host')
+        self.connection = connection
+        self.configuration = configuration
         self.timeout = connection['options'].get('timeout')
+    
+    async def init_async_client(self):
+        headers = dict()
 
-        if auth:
-            if 'access_token' in auth:
-                headers['Authorization'] = "Bearer " + auth['access_token']
+        if 'access_token' in self.configuration.get("auth"):
+            self.access_token = self.configuration["auth"]['access_token']
+            headers['Authorization'] = "Bearer " + self.access_token
+        else:
+            self.credential = ClientSecretCredential(tenant_id=self.configuration["auth"]["tenant"],
+                                                    client_id=self.configuration["auth"]["clientId"],
+                                                    client_secret=self.configuration["auth"]["clientSecret"])
+            async with self.credential:
+                self.access_token = await self.credential.get_token("https://{host}/.default".format(host=self.host))
+                headers['Authorization'] = "Bearer " + self.access_token.token
 
-        self.client = RestApiClientAsync(connection.get('host'),
-                                    connection.get('port', None),
+        self.client = RestApiClientAsync(self.host,
+                                    self.connection.get('port', None),
                                     headers,
-                                    url_modifier_function=url_modifier_function,
-                                    cert_verify=connection.get('selfSignedCert', True),
-                                    sni=connection.get('sni', None)
+                                    cert_verify=self.connection.get('selfSignedCert', True),
+                                    sni=self.connection.get('sni', None)
                                     )
+        return self.client
 
     async def ping_box(self):
         """Ping the endpoint."""
         params = dict()
         params['$top'] = 1
+        await self.init_async_client()
         return await self.client.call_api(self.endpoint, 'GET', urldata=params, timeout=self.timeout)
 
     async def run_search(self, query_expression, length):
@@ -45,6 +56,7 @@ class APIClient:
         params = dict()
         params['$filter'] = query_expression
         params['$top'] = length
+        await self.init_async_client()
         return await self.client.call_api(self.endpoint, 'GET', headers, urldata=params, timeout=self.timeout)
 
     async def next_page_run_search(self, next_page_url):
@@ -55,4 +67,5 @@ class APIClient:
         headers['Accept'] = 'application/json'
         url = next_page_url.split('?', maxsplit=1)[1]
         endpoint = self.endpoint + '?' + url
+        await self.init_async_client()
         return await self.client.call_api(endpoint, 'GET', headers, timeout=self.timeout)

@@ -7,7 +7,7 @@ from unittest.mock import patch
 from unittest import TestCase
 
 
-@patch('stix_shifter_modules.azure_sentinel.stix_transmission.connector.adal.AuthenticationContext')
+@patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.credential')
 @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.__init__')
 class TestAzureSentinalConnection(TestCase):
     def config(self):
@@ -21,7 +21,6 @@ class TestAzureSentinalConnection(TestCase):
 
     def connection(self):
         return {
-                "host": "abc.amazon.com",
                 "port": 443
                 }
 

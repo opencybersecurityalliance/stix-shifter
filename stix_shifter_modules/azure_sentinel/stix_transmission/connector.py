@@ -1,7 +1,5 @@
 import json
-import adal
-import re
-from flatten_json import flatten
+from azure.core.exceptions import ClientAuthenticationError
 from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
@@ -9,8 +7,9 @@ from stix_shifter_utils.utils import logger
 
 
 class Connector(BaseJsonSyncConnector):
-    init_error = None
+    api_client = None
     max_limit = 1000
+    base_uri = 'graph.microsoft.com' # Microsoft Graph API has single endpoint
 
     def __init__(self, connection, configuration):
         """Initialization.
@@ -18,27 +17,34 @@ class Connector(BaseJsonSyncConnector):
         :param configuration: dict,config dict"""
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
-        self.adal_response = Connector.generate_token(self, connection, configuration)
-        if self.adal_response['success']:
-            configuration['auth']['access_token'] = self.adal_response['access_token']
-            self.api_client = APIClient(connection, configuration)
-        else:
-            self.init_error = True
-
+        self.connection = connection
+        self.configuration = configuration
+        self.api_client = APIClient(self.base_uri, self.connection, self.configuration)
 
     async def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
-        if self.init_error:
-            self.logger.error("Token Generation Failed:")
-            return self.adal_response
-        response = await self.api_client.ping_box()
-        response_code = response.code
-        response_dict = json.loads(response.read())
-        if 200 <= response_code < 300:
-            return_obj['success'] = True
-        else:
+        response_dict = dict()
+        try:
+            response = await self.api_client.ping_box()
+            response_code = response.code
+            response_dict = json.loads(response.read())
+            if 200 <= response_code < 300:
+                return_obj['success'] = True
+            else:
+                ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
+        except ClientAuthenticationError as ex:
+            response_dict['code'] = 'unauthorized_client'
+            response_dict['message'] = str(ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
+        except Exception as ex:
+            if "server timeout_error" in str(ex) or "timeout_error" in str(ex):
+                response_dict['code'] = 'HTTPSConnectionError'
+            else:
+                response_dict['code'] = 'invalid_client'
+            response_dict['error'] = str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
+
         return return_obj
 
     async def delete_query_connection(self, search_id):
@@ -61,9 +67,6 @@ class Connector(BaseJsonSyncConnector):
         total_records = offset + length
 
         try:
-            if self.init_error:
-                self.logger.error("Token Generation Failed:")
-                return self.adal_response
             # check for length value against the max limit(1000) of $top param in data source
             if length <= self.max_limit:
                 # $skip(offset) param not included as data source provides incorrect results for some of the queries
@@ -115,42 +118,17 @@ class Connector(BaseJsonSyncConnector):
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
 
+        except ClientAuthenticationError as ex:
+            response_dict['code'] = 'unauthorized_client'
+            response_dict['message'] = str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
         except Exception as ex:
-            if response_dict is not None:
-                ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
-                self.logger.error('can not parse response: ' + str(response_dict))
+            if "server timeout_error" in str(ex) or "timeout_error" in str(ex):
+                response_dict['code'] = 'HTTPSConnectionError'
             else:
-                raise ex
+                response_dict['code'] = 'invalid_client'
+            response_dict['error'] = str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
         return return_obj
 
-    @staticmethod
-    def generate_token(self, connection, configuration):
-        """To generate the Token
-        :param connection: dict, connection dict
-        :param configuration: dict,config dict"""
-        return_obj = dict()
-
-        authority_url = ('https://login.microsoftonline.com/' +
-                         configuration['auth']['tenant'])
-        resource = "https://" + str(connection.get('host'))
-
-        try:
-            context = adal.AuthenticationContext(
-                authority_url, validate_authority=configuration['auth']['tenant'] != 'adfs',
-            )
-            response_dict = context.acquire_token_with_client_credentials(
-                resource,
-                configuration['auth']['clientId'],
-                configuration['auth']['clientSecret'])
-
-            return_obj['success'] = True
-            return_obj['access_token'] = response_dict['accessToken']
-
-        except Exception as ex:
-            if ex.__class__.__name__ == 'AdalError':
-                response_dict = ex.error_response
-                ErrorResponder.fill_error(return_obj, response_dict, ['error_description'],  connector=self.connector)
-            else:
-                ErrorResponder.fill_error(return_obj, message=str(ex), connector=self.connector)
-
-        return return_obj
+    
