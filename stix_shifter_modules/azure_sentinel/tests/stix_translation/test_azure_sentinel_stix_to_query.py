@@ -258,8 +258,6 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        print(query['queries'])
-
         queries = ["(tolower(title) eq 'photos') and (eventDateTime ge 2021-10-08T00:18:50.449Z and eventDateTime le "
                     "2021-10-08T00:23:50.449Z)",
                     "(tolower(category) eq 'test type') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
@@ -272,5 +270,17 @@ class TestQueryTranslator(unittest.TestCase):
                     "ge 2021-10-08T00:18:50.449Z and eventDateTime le 2021-10-08T00:23:50.449Z)",
                     "(networkConnections/any(query6:tolower(query6/destinationLocation) eq 'us')) and (eventDateTime "
                     "ge 2021-10-08T00:18:50.449Z and eventDateTime le 2021-10-08T00:23:50.449Z)"]
+        queries = _remove_timestamp_from_query(queries)
+        self._test_query_assertions(query, queries)
+    
+    def test_lamda_operator_with_collection(self):
+        stix_pattern = "[x-msazure-sentinel-alert:recommendedActions = 'Enforce' OR x-msazure-sentinel-alert:detectionIds != '111']"
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query['queries'] = _remove_timestamp_from_query(query['queries'])
+
+        queries = ["(NOT(detectionIds/any(query1:query1 eq '111')) or "
+                   "recommendedActions/any(query2:query2 eq 'Enforce')) and "
+                   "(eventDateTime ge 2023-04-06T15:28:36.645Z and eventDateTime le 2023-04-06T15:33:36.645Z)"]
+        
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
