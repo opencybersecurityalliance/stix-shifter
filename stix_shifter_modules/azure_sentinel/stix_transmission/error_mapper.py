@@ -46,11 +46,13 @@ class ErrorMapper:
         
         if isinstance(json_data, tuple):
             error_type = 'HTTPSConnectionError'
+        elif 'code' in json_data.get('error', {}):
+            error_type = json_data['error']['code']
+        elif json_data.get('error'):
+            error_type = json_data['error']
         else:
-            try:
-                error_type = json_data['error']['code']
-            except Exception:
-                error_type = json_data['error']
+            error_type = 'notSupported'
+                
 
         error_code = ErrorMapper.DEFAULT_ERROR
 
