@@ -444,16 +444,19 @@
       },
       "valueData": {
         "key": "windows-registry-key.values.data",
-        "object": "registry"
+        "object": "registry",
+        "group": "windows-registry-value-type"
       },
       "valueName": {
         "key": "windows-registry-key.values.name",
-        "object": "registry"
+        "object": "registry",
+        "group": "windows-registry-value-type"
       },
       "valueType": {
         "key": "windows-registry-key.values.data_type",
         "object": "registry",
-        "transformer": "ToString"
+        "transformer": "ToString",
+        "group": "windows-registry-value-type"
       }
     },
     "securityResources": {

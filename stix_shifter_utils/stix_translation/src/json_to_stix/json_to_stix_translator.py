@@ -211,6 +211,8 @@ class DataSourceObjToStixObj:
         parent_key_ind_str = str(parent_key_ind)
         if not parent_key_ind_str in objects:
             if cybox:
+                if group:
+                    value = [value]
                 objects[parent_key_ind_str] = {
                     'type': type_name,
                     property_key: value
@@ -223,14 +225,16 @@ class DataSourceObjToStixObj:
                 property_key: value
             }
         else:
+            property_value = objects[parent_key_ind_str][property_key]
             if not property_key in objects[parent_key_ind_str]:
-                objects[parent_key_ind_str][property_key] = value
-            elif isinstance(value, dict) and group and not isinstance(objects[parent_key_ind_str][property_key], list):
-                objects[parent_key_ind_str][property_key] = [dict_merge(objects[parent_key_ind_str][property_key], value)]
+                property_value = value
+            # Add grouped value in existing list element
+            elif isinstance(value, dict) and group and isinstance(property_value, list):
+                property_value[0] = dict_merge(property_value[0], value)
             elif isinstance(value, dict):
-                objects[parent_key_ind_str][property_key] = dict_merge(objects[parent_key_ind_str][property_key], value)
-            elif isinstance(objects[parent_key_ind_str][property_key], list) and group:
-                objects[parent_key_ind_str][property_key].extend(value)
+                property_value = dict_merge(property_value, value)
+            elif isinstance(property_value, list) and group:
+                property_value.extend(value)
 
             
     def _handle_properties(self, to_stix_config_prop, data, objects, object_tag_ref_map, parent_data=None, ds_sub_key=None, object_key_ind=None):
@@ -317,7 +321,7 @@ class DataSourceObjToStixObj:
                     # set the object to combine properties from same SCO
                     parent_key = prop['object'] if 'object' in prop else type_name
 
-                    # set the group, is this a list?
+                    # set the group to combine properties in a list
                     group = prop['group'] if 'group' in prop else False
                     substitute_key = prop['ds_key'] if 'ds_key' in prop else None
 
