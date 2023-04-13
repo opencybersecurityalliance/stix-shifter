@@ -9,7 +9,7 @@ azure-identity==1.12.0
 colorlog==6.7.0
 flask==2.2.3
 flatten_json==0.1.13
-json-fix==0.5.1
+json-fix==0.5.2
 jsonmerge==1.9.0
 pyOpenSSL==23.1.1
 python-dateutil==2.8.2
