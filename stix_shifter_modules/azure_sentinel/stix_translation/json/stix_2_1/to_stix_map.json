@@ -443,15 +443,15 @@
         "key": "process.pid"
       },
       "valueData": {
-        "key": "windows-registry-value-type.data",
+        "key": "windows-registry-key.values.data",
         "object": "registry"
       },
       "valueName": {
-        "key": "windows-registry-value-type.name",
+        "key": "windows-registry-key.values.name",
         "object": "registry"
       },
       "valueType": {
-        "key": "windows-registry-value-type.data_type",
+        "key": "windows-registry-key.values.data_type",
         "object": "registry",
         "transformer": "ToString"
       }
