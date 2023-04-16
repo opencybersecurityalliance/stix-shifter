@@ -368,11 +368,8 @@
         "DeviceNetworkEvents.DeviceId",
         "DeviceRegistryEvents.DeviceId",
         "DeviceEvents.DeviceId",
-        "DeviceInfo.DeviceId",
-        "DeviceAlertEvents.DeviceId",
         "DeviceImageLoadEvents.DeviceId",
-        "DeviceLogonEvents.DeviceId",
-        "DeviceNetworkInfo.DeviceId"
+        "DeviceLogonEvents.DeviceId"
       ],
       "hostname": [
         "DeviceFileEvents.DeviceName",
@@ -380,11 +377,8 @@
         "DeviceNetworkEvents.DeviceName",
         "DeviceRegistryEvents.DeviceName",
         "DeviceEvents.DeviceName",
-        "DeviceInfo.DeviceName",
-        "DeviceAlertEvents.DeviceName",
         "DeviceImageLoadEvents.DeviceName",
-        "DeviceLogonEvents.DeviceName",
-        "DeviceNetworkInfo.DeviceName"
+        "DeviceLogonEvents.DeviceName"
       ],
       "ip_refs[*].value": [
         "DeviceNetworkEvents.LocalIP"
@@ -539,11 +533,8 @@
         "DeviceNetworkEvents.DeviceName",
         "DeviceRegistryEvents.DeviceName",
         "DeviceEvents.DeviceName",
-        "DeviceInfo.DeviceName",
-        "DeviceAlertEvents.DeviceName",
         "DeviceImageLoadEvents.DeviceName",
-        "DeviceLogonEvents.DeviceName",
-        "DeviceNetworkInfo.DeviceName"
+        "DeviceLogonEvents.DeviceName"
       ],
       "host_ref.device_id": [
         "DeviceFileEvents.DeviceId",
@@ -551,11 +542,8 @@
         "DeviceNetworkEvents.DeviceId",
         "DeviceRegistryEvents.DeviceId",
         "DeviceEvents.DeviceId",
-        "DeviceInfo.DeviceId",
-        "DeviceAlertEvents.DeviceId",
         "DeviceImageLoadEvents.DeviceId",
-        "DeviceLogonEvents.DeviceId",
-        "DeviceNetworkInfo.DeviceId"
+        "DeviceLogonEvents.DeviceId"
       ]
     }
   },

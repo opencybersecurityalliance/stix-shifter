@@ -17,10 +17,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
                 "tenant": "bla",
                 "clientId": "bla",
                 "clientSecret": "bla"
-            },
-            "includeAlerts": True,
-            "includeHostOs": True,
-            "includeNetworkInfo": True
+            }
         }
 
     def connection(self):
@@ -29,7 +26,10 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
             "port": 8080,
             "selfSignedCert": "cert",
             "options": {
-
+                "includeAlerts": True,
+                "includeHostOs": True,
+                "includeNetworkInfo": True,
+                "retainOriginal": True
             }
         }
 
@@ -158,7 +158,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
     def test_join_alerts_with_events(self, mock_adal_auth):
         mock_adal_auth.return_value = get_adal_mock_response()
 
-        util = ConnectorPostProcessing(self.config(), False)
+        util = ConnectorPostProcessing(self.connection()['options'], False)
         joined_query = util.join_alert_with_events('<<timestamp>>', 'devicename', 1234)
         assert joined_query == ('(union (find withsource = TableName in (DeviceNetworkEvents)  where '
                                 '(Timestamp == datetime(<<timestamp>>)) and (DeviceName == "devicename") and '
@@ -186,7 +186,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
     def test_join_query_with_alerts(self, mock_adal_auth):
         mock_adal_auth.return_value = get_adal_mock_response()
         query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
-        entry_point = ConnectorPostProcessing(self.config(), False)
+        entry_point = ConnectorPostProcessing(self.connection()['options'], False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             "(union (find withsource = TableName in (DeviceNetworkEvents)  "
@@ -210,7 +210,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
         )
 
         query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
-        entry_point = ConnectorPostProcessing(self.config(), False)
+        entry_point = ConnectorPostProcessing(self.connection()['options'], False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             '((find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z)'
@@ -228,10 +228,13 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
     def test_join_query_no_info(self, mock_adal_auth):
         mock_adal_auth.return_value = get_adal_mock_response()
         query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
-        config = json.loads(json.dumps(self.config()))
-        config['includeHostOs'] = False
-        config['includeNetworkInfo'] = False
-        entry_point = ConnectorPostProcessing(config, False)
+        opts = {
+            "includeAlerts": True,
+            "includeHostOs": False,
+            "includeNetworkInfo": False,
+            "retainOriginal": True
+        }
+        entry_point = ConnectorPostProcessing(opts, False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             "(union (find withsource = TableName in (DeviceNetworkEvents)  "
@@ -248,7 +251,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
         )
 
         query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
-        entry_point = ConnectorPostProcessing(config, False)
+        entry_point = ConnectorPostProcessing(opts, False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             '((find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z)'
@@ -259,9 +262,13 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
     def test_join_query_no_alerts(self, mock_adal_auth):
         mock_adal_auth.return_value = get_adal_mock_response()
         query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
-        config = json.loads(json.dumps(self.config()))
-        config['includeAlerts'] = False
-        entry_point = ConnectorPostProcessing(config, False)
+        opts = {
+            "includeAlerts": False,
+            "includeHostOs": True,
+            "includeNetworkInfo": True,
+            "retainOriginal": True
+        }
+        entry_point = ConnectorPostProcessing(opts, False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             "(union (find withsource = TableName in (DeviceNetworkEvents)  "
@@ -281,7 +288,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
         )
 
         query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
-        entry_point = ConnectorPostProcessing(config, False)
+        entry_point = ConnectorPostProcessing(opts, False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             '((find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z)'
@@ -299,11 +306,13 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
     def test_join_query_only_events(self, mock_adal_auth):
         mock_adal_auth.return_value = get_adal_mock_response()
         query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
-        config = json.loads(json.dumps(self.config()))
-        config['includeAlerts'] = False
-        config['includeHostOs'] = False
-        config['includeNetworkInfo'] = False
-        entry_point = ConnectorPostProcessing(config, False)
+        opts = {
+            "includeAlerts": False,
+            "includeHostOs": False,
+            "includeNetworkInfo": False,
+            "retainOriginal": True
+        }
+        entry_point = ConnectorPostProcessing(opts, False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             "(union (find withsource = TableName in (DeviceNetworkEvents)  "
@@ -316,7 +325,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
         )
 
         query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
-        entry_point = ConnectorPostProcessing(config, False)
+        entry_point = ConnectorPostProcessing(opts, False)
         joined_query = entry_point.join_query_with_other_tables(query)
         assert joined_query == (
             '((find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z)'

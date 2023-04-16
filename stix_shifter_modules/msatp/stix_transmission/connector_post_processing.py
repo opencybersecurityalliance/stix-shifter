@@ -105,7 +105,10 @@ def unify_alert_fields(event_data):
     if 'AttackTechniques' in event_data:
         for techniques_lst in event_data['AttackTechniques']:
             try:
-                attack_techniques = json.loads(techniques_lst)
+                if techniques_lst == '':
+                    attack_techniques = ''
+                else:
+                    attack_techniques = json.loads(techniques_lst)
             except json.decoder.JSONDecodeError:
                 attack_techniques = ''
             finally:
@@ -151,13 +154,14 @@ class ConnectorPostProcessing:
     EVENTS_TABLES = ['DeviceNetworkEvents', 'DeviceProcessEvents', 'DeviceFileEvents', 'DeviceRegistryEvents',
                      'DeviceEvents', 'DeviceImageLoadEvents']
 
-    def __init__(self, configuration, alert_mode):
+    def __init__(self, options, alert_mode):
         """Initialization.
-        :param configuration: dict,config dict"""
+        :param options: dict,config dict"""
         self.alert_mode = alert_mode
-        self.should_include_alerts = configuration.get("includeAlerts")
-        self.should_include_network_info = configuration.get("includeNetworkInfo")
-        self.should_include_host_os = configuration.get("includeHostOs")
+        self.should_include_alerts = options.get("includeAlerts")
+        self.should_include_network_info = options.get("includeNetworkInfo")
+        self.should_include_host_os = options.get("includeHostOs")
+        self.should_retain_original = options.get("retainOriginal")
 
     def join_alert_with_events(self, timestamp, device_name, report_id):
         events_query = "union {}".format(','.join(
@@ -232,9 +236,10 @@ class ConnectorPostProcessing:
             if table == "DeviceEvents":
                 if 'ProcessId' not in event_data or event_data['ProcessId'] is None or \
                         event_data['ProcessId'] == "":
-                    event_data["missingChildShouldMapInitiatingPid"] = event_data.get("InitiatingProcessId")
+                    event_data["missingChildShouldMapInitiatingPid"] = -1 if event_data.get("InitiatingProcessId") is None else event_data.get("InitiatingProcessId")
             event_data['event_count'] = '1'
             remove_duplicate_ips(event_data)
             remove_duplicate_and_empty_fields(event_data)
-            event_data['original_ref'] = json.dumps(event_data)
+            if self.should_retain_original:
+                event_data['original_ref'] = json.dumps(event_data)
         return return_obj

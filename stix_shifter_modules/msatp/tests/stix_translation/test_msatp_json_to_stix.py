@@ -662,3 +662,161 @@ class TestMsatpResultsToStix(unittest.TestCase):
         results_translator.extract_pipe_name(xmsatp, event)
         assert 'pipe_name' in event
         assert event['pipe_name'] == r'\\Device\\NamedPipe\\PrinterProviderProbePipe01'
+
+    def test_delete_object(self):
+        objects = {
+            '0': {
+                'type': 'x-oca-event',
+                'ip_ref': '1',
+                'other_ref': '2',
+                'ip_refs': ['1', '2']
+            },
+            '1': {
+                'type': 'ipv4-addr',
+                'value': '9.9.9.9'
+            },
+            '2': {
+                'type': 'ipv4-addr',
+                'value': '9.9.9.1'
+            }
+        }
+        from stix_shifter_modules.msatp.stix_translation import results_translator
+        results_translator.delete_object(objects, '1')
+        assert len(objects) == 2
+        event = TestMsatpResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
+        assert event is not None, 'event object type not found'
+        assert 'ip_ref' not in event, 'ip_ref should have been removed'
+        assert 'other_ref' in event, 'other_ref should not have been removed'
+        assert event['other_ref'] == '1', 'other_ref reference was not decreased by one'
+        assert 'ip_refs' in event
+        assert len(event['ip_refs']) == 1
+        assert event['ip_refs'][0] == '1'
+        assert objects['1']['value'] == '9.9.9.1'
+
+    def test_sort_objects(self):
+        objects = {
+            '0': {
+                'type': 'x-oca-event'
+            },
+            '2': {
+                'type': 'ipv4-addr',
+                'value': '9.9.9.9'
+            },
+            '1': {
+                'type': 'ipv4-addr',
+                'value': '9.9.9.1'
+            }
+        }
+        wanted_result = {
+            '0': {
+                'type': 'x-oca-event'
+            },
+            '1': {
+                'type': 'ipv4-addr',
+                'value': '9.9.9.1'
+            },
+            '2': {
+                'type': 'ipv4-addr',
+                'value': '9.9.9.9'
+            }
+        }
+        from stix_shifter_modules.msatp.stix_translation import results_translator
+        sorted_objects = results_translator.sort_objects(objects)
+        list1 = [(key, value) for key, value in sorted_objects.items()]
+        list2 = [(key, value) for key, value in wanted_result.items()]
+
+        assert list1 == list2
+
+    def test_add_object(self):
+        observed = {
+            'objects': {
+                '0': {
+                    'type': 'x-oca-event',
+                    'ip_ref': '1',
+                    'other_ref': '2',
+                    'ip_refs': ['1', '2']
+                },
+                '1': {
+                    'type': 'ipv4-addr',
+                    'value': '9.9.9.9'
+                },
+                '2': {
+                    'type': 'ipv4-addr',
+                    'value': '9.9.9.1'
+                }
+            }
+        }
+        new_obj = {
+            'type': 'url',
+            'value': 'https://quad9.net'
+        }
+        from stix_shifter_modules.msatp.stix_translation import results_translator
+        index = results_translator.add_to_objects(observed, new_obj)
+        assert index == '3'
+        assert observed['objects'] == {
+            '0': {
+                'type': 'x-oca-event',
+                'ip_ref': '1',
+                'other_ref': '2',
+                'ip_refs': ['1', '2']
+            },
+            '1': {
+                'type': 'ipv4-addr',
+                'value': '9.9.9.9'
+            },
+            '2': {
+                'type': 'ipv4-addr',
+                'value': '9.9.9.1'
+            },
+            '3': {
+                'type': 'url',
+                'value': 'https://quad9.net'
+            }
+        }
+
+    def test_add_object_unordered(self):
+        observed = {
+            'objects': {
+                '0': {
+                    'type': 'x-oca-event',
+                    'ip_ref': '2',
+                    'other_ref': '3',
+                    'ip_refs': ['2', '3']
+                },
+                '2': {
+                    'type': 'ipv4-addr',
+                    'value': '9.9.9.9'
+                },
+                '3': {
+                    'type': 'ipv4-addr',
+                    'value': '9.9.9.1'
+                }
+            }
+        }
+        new_obj = {
+            'type': 'url',
+            'value': 'https://quad9.net'
+        }
+        from stix_shifter_modules.msatp.stix_translation import results_translator
+        index = results_translator.add_to_objects(observed, new_obj)
+        assert index == '1'
+        assert observed['objects'] == {
+            '0': {
+                'type': 'x-oca-event',
+                'ip_ref': '2',
+                'other_ref': '3',
+                'ip_refs': ['2', '3']
+            },
+            '1': {
+                'type': 'url',
+                'value': 'https://quad9.net'
+            },
+            '2': {
+                'type': 'ipv4-addr',
+                'value': '9.9.9.9'
+            },
+            '3': {
+                'type': 'ipv4-addr',
+                'value': '9.9.9.1'
+            }
+        }
