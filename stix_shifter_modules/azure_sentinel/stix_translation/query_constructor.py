@@ -6,7 +6,13 @@ from datetime import datetime, timedelta
 import re
 
 START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
-
+# List of Alert properties of type collection without nested properties
+ALERT_COLLECTION = ['comments',
+                    'detectionIds',
+                    'incidentIds',
+                    'recommendedActions',
+                    'sourceMaterials',
+                    'tags']
 
 class QueryStringPatternTranslator:
     COUNTER = 0
@@ -193,6 +199,17 @@ class QueryStringPatternTranslator:
                             .format(collection_name=collection_name, fn=lambda_func,
                                     attribute_expression=attribute_expression,
                                     comparator=comparator, value=value)
+            # this condition construct query string for string collection that doesn't contain any nested properties
+            elif mapped_field in ALERT_COLLECTION:
+                if comparator == 'ne':
+                    # To negate the result of the expression use the not operator, not the ne operator.
+                    comparison_string += "NOT({collection_name}/any({fn}:{fn} eq {value}))".format(
+                            collection_name=mapped_field, fn=lambda_func, comparator=comparator,
+                            value=value)
+                else:
+                    comparison_string += "{collection_name}/any({fn}:{fn} {comparator} {value})".format(
+                            collection_name=mapped_field, fn=lambda_func, comparator=comparator,
+                            value=value)
             else:
                 # check for mapped field that does not have '.' character -> example [azureTenantId,title]
                 if comparator == 'contains':
