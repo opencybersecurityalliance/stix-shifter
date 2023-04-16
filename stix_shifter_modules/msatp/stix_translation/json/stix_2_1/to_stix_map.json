@@ -380,7 +380,7 @@
         "object": "nc_process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "nc_process",
         "references": "nc_process_file"
       },
@@ -396,7 +396,7 @@
         "object": "nc_process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "nc_process",
         "references": "nc_process_file"
       },
@@ -412,7 +412,7 @@
         "object": "nc_process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "nc_process",
         "references": "nc_process_file"
       },
@@ -429,12 +429,7 @@
         "transformer": "ToFileName"
       },
       {
-        "key": "process.name",
-        "object": "nc_process",
-        "transformer": "ToFileName"
-      },
-      {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "nc_process",
         "references": "nc_process_file"
       },
@@ -461,17 +456,12 @@
         "transformer": "ToFileName"
       },
       {
-        "key": "process.name",
-        "object": "nc_parent_process",
-        "transformer": "ToFileName"
-      },
-      {
         "key": "process.parent_ref",
         "object": "nc_process",
         "references": "nc_parent_process"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "nc_parent_process",
         "references": "nc_parent_process_file"
       },
@@ -572,7 +562,7 @@
         "references": "nc_process_file_dir"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "nc_process",
         "references": "nc_process_file"
       }
@@ -774,12 +764,7 @@
         "transformer": "ToFileName"
       },
       {
-        "key": "process.name",
-        "object": "child_process",
-        "transformer": "ToFileName"
-      },
-      {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "child_process",
         "references": "child_process_file"
       },
@@ -873,7 +858,7 @@
         "object": "process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "process",
         "references": "process_file"
       }
@@ -884,7 +869,7 @@
         "object": "process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "process",
         "references": "process_file"
       }
@@ -895,7 +880,7 @@
         "object": "process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "process",
         "references": "process_file"
       }
@@ -907,12 +892,7 @@
         "transformer": "ToFileName"
       },
       {
-        "key": "process.name",
-        "object": "process",
-        "transformer": "ToFileName"
-      },
-      {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "process",
         "references": "process_file"
       },
@@ -965,7 +945,7 @@
         "references": "process_file_dir"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "process",
         "references": "process_file"
       }
@@ -982,17 +962,12 @@
         "transformer": "ToFileName"
       },
       {
-        "key": "process.name",
-        "object": "parent_process",
-        "transformer": "ToFileName"
-      },
-      {
         "key": "process.parent_ref",
         "object": "process",
         "references": "parent_process"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "parent_process",
         "references": "parent_process_file"
       },
@@ -1325,7 +1300,7 @@
         "object": "fc_process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "fc_process",
         "references": "fc_process_file"
       }
@@ -1336,7 +1311,7 @@
         "object": "fc_process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "fc_process",
         "references": "fc_process_file"
       }
@@ -1347,7 +1322,7 @@
         "object": "fc_process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "fc_process",
         "references": "fc_process_file"
       }
@@ -1359,12 +1334,7 @@
         "transformer": "ToFileName"
       },
       {
-        "key": "process.name",
-        "object": "fc_process",
-        "transformer": "ToFileName"
-      },
-      {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "fc_process",
         "references": "fc_process_file"
       },
@@ -1391,17 +1361,12 @@
         "transformer": "ToFileName"
       },
       {
-        "key": "process.name",
-        "object": "fc_parent_process",
-        "transformer": "ToFileName"
-      },
-      {
         "key": "process.parent_ref",
         "object": "fc_process",
         "references": "fc_parent_process"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "fc_parent_process",
         "references": "fc_parent_process_file"
       },
@@ -1517,7 +1482,7 @@
         "references": "fc_process_file_dir"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "fc_process",
         "references": "fc_process_file"
       }
@@ -1724,7 +1689,7 @@
         "object": "fc_process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "fc_process",
         "references": "fc_process_file"
       }
@@ -1735,7 +1700,7 @@
         "object": "fc_process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "fc_process",
         "references": "fc_process_file"
       }
@@ -1746,7 +1711,7 @@
         "object": "fc_process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "fc_process",
         "references": "fc_process_file"
       }
@@ -1758,12 +1723,7 @@
         "transformer": "ToFileName"
       },
       {
-        "key": "process.name",
-        "object": "fc_process",
-        "transformer": "ToFileName"
-      },
-      {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "fc_process",
         "references": "fc_process_file"
       },
@@ -1790,17 +1750,12 @@
         "transformer": "ToFileName"
       },
       {
-        "key": "process.name",
-        "object": "fc_parent_process",
-        "transformer": "ToFileName"
-      },
-      {
         "key": "process.parent_ref",
         "object": "fc_process",
         "references": "fc_parent_process"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "fc_parent_process",
         "references": "fc_parent_process_file"
       },
@@ -1916,7 +1871,7 @@
         "references": "fc_process_file_dir"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "fc_process",
         "references": "fc_process_file"
       }
@@ -2105,7 +2060,7 @@
         "object": "re_process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "re_process",
         "references": "re_process_file"
       }
@@ -2116,7 +2071,7 @@
         "object": "re_process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "re_process",
         "references": "re_process_file"
       }
@@ -2127,7 +2082,7 @@
         "object": "re_process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "re_process",
         "references": "re_process_file"
       }
@@ -2139,12 +2094,7 @@
         "transformer": "ToFileName"
       },
       {
-        "key": "process.name",
-        "object": "re_process",
-        "transformer": "ToFileName"
-      },
-      {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "re_process",
         "references": "re_process_file"
       },
@@ -2171,17 +2121,12 @@
         "transformer": "ToFileName"
       },
       {
-        "key": "process.name",
-        "object": "re_parent_process",
-        "transformer": "ToFileName"
-      },
-      {
         "key": "process.parent_ref",
         "object": "re_process",
         "references": "re_parent_process"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "re_parent_process",
         "references": "re_parent_process_file"
       },
@@ -2275,7 +2220,7 @@
         "references": "re_process_file_dir"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "re_process",
         "references": "re_process_file"
       }
@@ -2585,12 +2530,7 @@
         "transformer": "ToFileName"
       },
       {
-        "key": "process.name",
-        "object": "child_process",
-        "transformer": "ToFileName"
-      },
-      {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "child_process",
         "references": "child_process_file"
       },
@@ -2684,7 +2624,7 @@
         "object": "process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "process",
         "references": "process_file"
       }
@@ -2695,7 +2635,7 @@
         "object": "process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "process",
         "references": "process_file"
       }
@@ -2706,7 +2646,7 @@
         "object": "process_file"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "process",
         "references": "process_file"
       }
@@ -2718,12 +2658,7 @@
         "transformer": "ToFileName"
       },
       {
-        "key": "process.name",
-        "object": "process",
-        "transformer": "ToFileName"
-      },
-      {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "process",
         "references": "process_file"
       },
@@ -2776,7 +2711,7 @@
         "references": "process_file_dir"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "process",
         "references": "process_file"
       }
@@ -2797,17 +2732,12 @@
         "transformer": "ToFileName"
       },
       {
-        "key": "process.name",
-        "object": "parent_process",
-        "transformer": "ToFileName"
-      },
-      {
         "key": "process.parent_ref",
         "object": "process",
         "references": "parent_process"
       },
       {
-        "key": "process.binary_ref",
+        "key": "process.image_ref",
         "object": "parent_process",
         "references": "parent_process_file"
       },
