@@ -21,7 +21,7 @@ class APIClient:
         self.host = connection.get('host')
 
         if auth:
-            if 'access_token' in auth:
+            if 'access_token' in auth and auth['access_token']:
                 headers['Authorization'] = "Bearer " + auth['access_token']
 
         self.client = RestApiClient(connection.get('host'),
