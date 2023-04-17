@@ -1,5 +1,4 @@
 import json
-import adal
 from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
@@ -8,7 +7,6 @@ import copy
 
 
 class Connector(BaseJsonSyncConnector):
-    init_error = None
     logger = logger.set_logger(__name__)
 
     def __init__(self, connection, configuration):
@@ -16,13 +14,8 @@ class Connector(BaseJsonSyncConnector):
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
         self.connector = __name__.split('.')[1]
-
-        self.adal_response = Connector.generate_token(self, connection, configuration)
-        if self.adal_response['success']:
-            configuration['auth']['access_token'] = self.adal_response['access_token']
-            self.api_client = APIClient(connection, configuration)
-        else:
-            self.init_error = True
+        self.options = connection['options']
+        self.api_client = APIClient(connection, configuration)
 
     def _handle_errors(self, response, return_obj):
         """Handling API error response
@@ -49,8 +42,6 @@ class Connector(BaseJsonSyncConnector):
     async def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
-        if self.init_error:
-            return self.adal_response
         response = await self.api_client.ping_box()
         response_code = response.code
         if 200 <= response_code < 300:
@@ -74,8 +65,6 @@ class Connector(BaseJsonSyncConnector):
         return_obj = dict()
 
         try:
-            if self.init_error:
-                return self.adal_response
             response = await self.api_client.run_search(query, offset, length)
             return_obj = self._handle_errors(response, return_obj)
             response_json = json.loads(return_obj["data"])
@@ -113,34 +102,3 @@ class Connector(BaseJsonSyncConnector):
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise ex
-
-    def generate_token(self, connection, configuration):
-        """To generate the Token
-        :param connection: dict, connection dict
-        :param configuration: dict,config dict"""
-        return_obj = dict()
-
-        authority_url = ('https://login.windows.net/' +
-                         configuration['auth']['tenant'])
-        resource = "https://" + str(connection.get('host'))
-
-        try:
-            context = adal.AuthenticationContext(
-                authority_url, validate_authority=configuration['auth']['tenant'] != 'adfs',
-            )
-            response_dict = context.acquire_token_with_client_credentials(
-                resource,
-                configuration['auth']['clientId'],
-                configuration['auth']['clientSecret'])
-
-            return_obj['success'] = True
-            return_obj['access_token'] = response_dict['accessToken']
-        except Exception as ex:
-            if ex.__class__.__name__ == 'AdalError':
-                response_dict = ex.error_response
-                ErrorResponder.fill_error(return_obj, response_dict, ['error_description'], connector=self.connector)
-            else:
-                ErrorResponder.fill_error(return_obj, message=str(ex), connector=self.connector)
-            Connector.logger.error("Token generation Failed: " + str(ex.error_response))
-
-        return return_obj
