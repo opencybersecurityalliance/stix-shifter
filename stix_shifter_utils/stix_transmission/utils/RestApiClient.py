@@ -41,6 +41,10 @@ def exception_catcher(func, *args, **kwargs):
 
 
 class RestApiClient:
+    """
+    Deprecated RestApiClient, 
+    consider using RestApiClientAsync
+    """
     # cert_verify can be
     #  True -- do proper signed cert check that is in trust store,
     #  False -- skip all cert checks,
