@@ -1,5 +1,4 @@
 import json
-from requests.exceptions import ConnectionError, RetryError
 from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
@@ -175,16 +174,6 @@ class Connector(BaseJsonSyncConnector):
             response_dict['message'] = "Invalid Authentication"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'],
                                       connector=self.connector)
-        except ConnectionError:
-            response_dict['type'] = "ConnectionError"
-            response_dict['message'] = "Invalid Host/Port"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
-                                      connector=self.connector)
-        except RetryError:
-            response_dict['type'] = "RetryError"
-            response_dict['message'] = "Invalid parameter or Url"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
-                                      connector=self.connector)
         except Exception as ex:
             response_dict['type'] = ex.__class__.__name__
             response_dict['message'] = ex
@@ -206,16 +195,7 @@ class Connector(BaseJsonSyncConnector):
             response_dict = json.loads(response.read())
             if response_code == 200 and response_dict['status'] == 'ok':
                 return_obj['success'] = True
-        except RetryError:
-            response_dict['type'] = "RetryError"
-            response_dict['message'] = "Invalid parameter or Url"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
-                                      connector=self.connector)
-        except ConnectionError:
-            response_dict['type'] = "ConnectionError"
-            response_dict['message'] = "Invalid Host/Port"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'],
-                                      connector=self.connector)
+
         except Exception as ex:
             response_dict['type'] = ex.__class__.__name__
             response_dict['message'] = ex
