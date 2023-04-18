@@ -1,4 +1,4 @@
-##### Updated on 03/15/23
+##### Updated on 04/18/23
 ## Okta
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
@@ -71,7 +71,7 @@
 | **x-oca-event**:x_actor_ref.user_id | actor.id |
 | **x-oca-event**:x_client_ref.client_ip | client.ipAddress |
 | **x-oca-event**:x_authentication_context_ref.session_id | authenticationContext.externalSessionId |
-| **x-oca-event**:x_target_refs[*].target_type| target.type |
+| **x-oca-event**:x_target_refs[*].target_type | target.type |
 | **x-oca-event**:x_target_refs[*].display_name | target.displayName |
 | **x-oca-event**:x_target_refs[*].target_id | target.id |
 | **x-oca-event**:x_client_ref.id | client.id |
@@ -99,9 +99,9 @@
 | ipv4-addr | value | ip |
 | ipv4-addr | value | ipAddress |
 | <br> | | |
-| software | name | browser |
 | software | x_raw_user_agent | rawUserAgent |
 | software | x_client_os | os |
+| software | name | browser |
 | <br> | | |
 | user-account | user_id | id |
 | user-account | display_name | displayName |
@@ -112,7 +112,7 @@
 | x-oca-event | action | eventType |
 | x-oca-event | x_event_unique_id | uuid |
 | x-oca-event | outcome | result |
-| x-oca-event | x_outcome_reason| reason |
+| x-oca-event | x_outcome_reason | reason |
 | x-oca-event | x_legacy_event_type | legacyEventType |
 | x-oca-event | x_event_description | displayMessage |
 | x-oca-event | x_severity | severity |
@@ -122,12 +122,12 @@
 | x-oca-event | x_client_ref | id |
 | x-oca-event | ip_refs | ipAddress |
 | x-oca-event | x_client_ref | device |
-| x-oca-event | x_client_ref| country |
+| x-oca-event | x_client_ref | country |
 | x-oca-event | x_transaction_id | id |
-| x-oca-event | x_request_api_token_id | requestApiTokenId |
 | x-oca-event | category | type |
-| x-oca-event | x_authentication_context_ref | externalSessionId |
+| x-oca-event | x_request_api_token_id | requestApiTokenId |
 | x-oca-event | x_debug_ref | groupReference |
+| x-oca-event | x_authentication_context_ref | externalSessionId |
 | <br> | | |
 | x-okta-authentication-context | authentication_provider | authenticationProvider |
 | x-okta-authentication-context | credential_provider | credentialProvider |

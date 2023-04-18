@@ -1,4 +1,4 @@
-##### Updated on 03/08/23
+##### Updated on 04/18/23
 ## Elasticsearch ECS
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
@@ -36,13 +36,15 @@
 | **network-traffic**:dst_byte_count | destination.bytes, server.bytes |
 | **network-traffic**:src_packets | source.packets, client.packets |
 | **network-traffic**:dst_packets | destination.packets, server.packets |
-| **x-ecs-network**:inner.vlan.id | network.inner.vlan.id |
-| **x-ecs-network**:inner.vlan.name | network.inner.vlan.name |
-| **x-ecs-network**:name | network.name |
-| **x-ecs-network**:application | network.application |
-| **x-ecs-network**:direction | network.direction |
-| **x-ecs-network**:forwarded_ip | network.forwarded_ip |
-| **x-ecs-network**:community_id | network.community_id |
+| **network-traffic**:x_vlan.id | network.vlan.id |
+| **network-traffic**:x_vlan.name | network.vlan.name |
+| **network-traffic**:x_vlan.inner.id | network.inner.vlan.id |
+| **network-traffic**:x_vlan.inner.name | network.inner.vlan.name |
+| **network-traffic**:x_name | network.name |
+| **network-traffic**:x_application | network.application |
+| **network-traffic**:x_direction | network.direction |
+| **network-traffic**:x_forwarded_ip | network.forwarded_ip |
+| **network-traffic**:x_community_id | network.community_id |
 | **artifact**:payload_bin | event.original |
 | **file**:name | file.name, file.path, process.name, process.executable, process.parent.name, process.parent.executable |
 | **file**:created | file.created, file.ctime |
@@ -68,11 +70,9 @@
 | **file**:x_owner_ref.user_id | file.uid |
 | **file**:x_owner_ref.account_login | file.owner |
 | **file**:x_win_drive_letter | file.drive_letter |
-| **file**:x_pe.company | file.pe.company |
-| **file**:x_pe.description | file.pe.description |
-| **file**:x_pe.file_version | file.pe.file_version |
-| **file**:x_pe.original_file_name | file.pe.original_file_name |
-| **file**:x_pe.product | file.pe.product |
+| **file**:x_software_ref.name | file.pe.original_file_name |
+| **file**:x_software_ref.vendor | file.pe.company |
+| **file**:x_software_ref.version | file.pe.file_version |
 | **file**:x_code_signature.exists | file.code_signature.exists |
 | **file**:x_code_signature.status | file.code_signature.status |
 | **file**:x_code_signature.subject_name | file.code_signature.subject_name |
@@ -81,13 +81,12 @@
 | **directory**:path | file.directory, file.path |
 | **user-account**:user_id | user.name, user.id |
 | **user-account**:account_login | user.name |
-| **x-ecs-user**:domain | user.domain |
-| **x-ecs-user**:full_name | user.full_name |
-| **x-ecs-user**:hash | user.hash |
-| **x-ecs-user**:id | user.id |
-| **x-ecs-user**:group_domain | user.group.domain |
-| **x-ecs-user**:group_id | user.group.id |
-| **x-ecs-user**:group_name | user.group.name |
+| **user-account**:display_name | user.full_name |
+| **user-account**:x_domain | user.domain |
+| **user-account**:x_hash | user.hash |
+| **user-account**:x_group.domain | user.group.domain |
+| **user-account**:x_group.id | user.group.id |
+| **user-account**:x_group.name | user.group.name |
 | **process**:command_line | process.command_line, powershell.command.value |
 | **process**:created | process.start |
 | **process**:cwd | process.working_directory |
@@ -119,7 +118,11 @@
 | **url**:value | url.original |
 | **domain-name**:value | url.domain, dns.question.name, dns.question.registered_domain, host.hostname |
 | **windows-registry-key**:key | registry.key |
-| **software**:name | agent.name |
+| **software**:name | agent.name, process.pe.original_file_name, file.pe.original_file_name, dll.pe.original_file_name |
+| **software**:vendor | process.pe.company, file.pe.company, dll.pe.company |
+| **software**:version | process.pe.file_version, file.pe.file_version, dll.pe.file_version |
+| **software**:x_product | process.pe.product, file.pe.product, dll.pe.product |
+| **software**:x_description | process.pe.description, file.pe.description, dll.pe.description |
 | **autonomous-system**:value | client.as.organization.name, server.as.organization.name, source.as.organization.name, destination.as.organization.name |
 | **autonomous-system**:number | client.as.number, server.as.number, source.as.number, destination.as.number |
 | **email-addr**:name | user.email |
@@ -387,13 +390,15 @@
 | **network-traffic**:dst_byte_count | destination.bytes, server.bytes |
 | **network-traffic**:src_packets | source.packets, client.packets |
 | **network-traffic**:dst_packets | destination.packets, server.packets |
-| **x-ecs-network**:inner.vlan.id | network.inner.vlan.id |
-| **x-ecs-network**:inner.vlan.name | network.inner.vlan.name |
-| **x-ecs-network**:name | network.name |
-| **x-ecs-network**:application | network.application |
-| **x-ecs-network**:direction | network.direction.keyword |
-| **x-ecs-network**:forwarded_ip | network.forwarded_ip |
-| **x-ecs-network**:community_id | network.community_id.keyword |
+| **network-traffic**:x_vlan.id | network.vlan.id |
+| **network-traffic**:x_vlan.name | network.vlan.name |
+| **network-traffic**:x_vlan.inner.id | network.inner.vlan.id |
+| **network-traffic**:x_vlan.inner.name | network.inner.vlan.name |
+| **network-traffic**:x_name | network.name |
+| **network-traffic**:x_application | network.application |
+| **network-traffic**:x_direction | network.direction.keyword |
+| **network-traffic**:x_forwarded_ip | network.forwarded_ip |
+| **network-traffic**:x_community_id | network.community_id.keyword |
 | **artifact**:payload_bin | event.original |
 | **file**:name | file.name, file.path, process.name.keyword, process.executable.keyword, process.parent.name.keyword, process.parent.executable.keyword |
 | **file**:created | file.created, file.ctime |
@@ -419,11 +424,9 @@
 | **file**:x_owner_ref.user_id | file.uid |
 | **file**:x_owner_ref.account_login | file.owner |
 | **file**:x_win_drive_letter | file.drive_letter |
-| **file**:x_pe.company | file.pe.company |
-| **file**:x_pe.description | file.pe.description |
-| **file**:x_pe.file_version | file.pe.file_version |
-| **file**:x_pe.original_file_name | file.pe.original_file_name |
-| **file**:x_pe.product | file.pe.product |
+| **file**:x_software_ref.name | file.pe.original_file_name |
+| **file**:x_software_ref.vendor | file.pe.company |
+| **file**:x_software_ref.version | file.pe.file_version |
 | **file**:x_code_signature.exists | file.code_signature.exists |
 | **file**:x_code_signature.status | file.code_signature.status |
 | **file**:x_code_signature.subject_name | file.code_signature.subject_name |
@@ -432,13 +435,12 @@
 | **directory**:path | file.directory, file.path |
 | **user-account**:user_id | user.name.keyword, user.id.keyword |
 | **user-account**:account_login | user.name.keyword |
-| **x-ecs-user**:domain | user.domain.keyword |
-| **x-ecs-user**:full_name | user.full_name |
-| **x-ecs-user**:hash | user.hash |
-| **x-ecs-user**:id | user.id.keyword |
-| **x-ecs-user**:group_domain | user.group.domain |
-| **x-ecs-user**:group_id | user.group.id |
-| **x-ecs-user**:group_name | user.group.name |
+| **user-account**:display_name | user.full_name |
+| **user-account**:x_domain | user.domain.keyword |
+| **user-account**:x_hash | user.hash |
+| **user-account**:x_group.domain | user.group.domain |
+| **user-account**:x_group.id | user.group.id |
+| **user-account**:x_group.name | user.group.name |
 | **process**:command_line | process.command_line.keyword, powershell.command.value |
 | **process**:created | process.start |
 | **process**:cwd | process.working_directory.keyword |
@@ -470,7 +472,11 @@
 | **url**:value | url.original |
 | **domain-name**:value | url.domain, dns.question.name, dns.question.registered_domain, host.hostname.keyword |
 | **windows-registry-key**:key | registry.key |
-| **software**:name | agent.name.keyword |
+| **software**:name | agent.name.keyword, process.pe.original_file_name.keyword, file.pe.original_file_name.keyword, dll.pe.original_file_name.keyword |
+| **software**:vendor | process.pe.company.keyword, file.pe.company.keyword, dll.pe.company.keyword |
+| **software**:version | process.pe.file_version.keyword, file.pe.file_version.keyword, dll.pe.file_version.keyword |
+| **software**:x_product | process.pe.product.keyword, file.pe.product.keyword, dll.pe.product.keyword |
+| **software**:x_description | process.pe.description.keyword, file.pe.description.keyword, dll.pe.description.keyword |
 | **autonomous-system**:value | client.as.organization.name, server.as.organization.name, source.as.organization.name, destination.as.organization.name |
 | **autonomous-system**:number | client.as.number, server.as.number, source.as.number, destination.as.number |
 | **email-addr**:name | user.email |
@@ -743,13 +749,9 @@
 | email-addr | value | email |
 | email-addr | belongs_to_ref | email |
 | <br> | | |
-| file | x_pe.company | company |
-| file | x_pe.description | description |
-| file | x_pe.file_version | file_version |
-| file | x_pe.original_file_name | original_file_name |
-| file | x_pe.product | product |
 | file | name | executable |
 | file | parent_directory_ref | executable |
+| file | x_software_ref | executable |
 | file | hashes.MD5 | md5 |
 | file | hashes.SHA-1 | sha1 |
 | file | hashes.SHA-256 | sha256 |
@@ -816,6 +818,16 @@
 | network-traffic | extensions.dns-ext.response_code | response_code |
 | network-traffic | extensions.dns-ext.type | type |
 | <br> | | |
+| network_traffic | x_vlan.id | id |
+| network_traffic | x_vlan.name | name |
+| network_traffic | x_vlan.inner.id | id |
+| network_traffic | x_vlan.inner.name | name |
+| network_traffic | x_name | name |
+| network_traffic | x_application | application |
+| network_traffic | x_direction | direction |
+| network_traffic | x_forwarded_ip | forwarded_ip |
+| network_traffic | x_community_id | community_id |
+| <br> | | |
 | process | opened_connection_refs | transport |
 | process | opened_connection_refs | type |
 | process | opened_connection_refs | protocol |
@@ -841,6 +853,11 @@
 | process | creator_user_ref | id |
 | process | x_ttp_tags | tags |
 | <br> | | |
+| software | vendor | company |
+| software | version | file_version |
+| software | name | original_file_name |
+| software | x_product | product |
+| software | x_description | description |
 | software | name | name |
 | software | vendor | type |
 | software | version | version |
@@ -849,7 +866,13 @@
 | <br> | | |
 | user-account | user_id | name |
 | user-account | account_login | name |
+| user-account | x_domain | domain |
+| user-account | display_name | full_name |
+| user-account | x_hash | hash |
 | user-account | user_id | id |
+| user-account | x_group.domain | domain |
+| user-account | x_group.id | id |
+| user-account | x_group.name | name |
 | <br> | | |
 | windows-registry-key | key | registry |
 | windows-registry-key | values | registry |
@@ -947,16 +970,6 @@
 | x-ecs-log | syslog_priority | priority |
 | x-ecs-log | severity_syslog_code | code |
 | x-ecs-log | severity_syslog_name | name |
-| <br> | | |
-| x-ecs-network | vlan_id | id |
-| x-ecs-network | vlan_name | name |
-| x-ecs-network | inner_vlan_id | id |
-| x-ecs-network | inner_vlan_name | name |
-| x-ecs-network | name | name |
-| x-ecs-network | application | application |
-| x-ecs-network | direction | direction |
-| x-ecs-network | forwarded_ip | forwarded_ip |
-| x-ecs-network | community_id | community_id |
 | <br> | | |
 | x-ecs-observer | egress_zone | zone |
 | x-ecs-observer | egress_interface_alias | alias |
@@ -1081,14 +1094,6 @@
 | x-ecs-trace | trace_id | id |
 | <br> | | |
 | x-ecs-transaction | transaction_id | id |
-| <br> | | |
-| x-ecs-user | domain | domain |
-| x-ecs-user | full_name | full_name |
-| x-ecs-user | hash | hash |
-| x-ecs-user | user_id | id |
-| x-ecs-user | group_domain | domain |
-| x-ecs-user | group_id | id |
-| x-ecs-user | group_name | name |
 | <br> | | |
 | x-ecs-user_agent | name | name |
 | x-ecs-user_agent | original | original |

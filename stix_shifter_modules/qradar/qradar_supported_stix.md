@@ -1,4 +1,4 @@
-##### Updated on 03/08/23
+##### Updated on 04/18/23
 ## IBM QRadar
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
@@ -92,7 +92,7 @@
 | **x-oca-event**:process_ref.pid | "Process ID" |
 | **x-oca-event**:parent_process_ref.command_line | ParentCommandLine |
 | **x-oca-event**:parent_process_ref.binary_ref.name | ParentImage |
-| **x-oca-event**:domain_ref.value | DOMAINNAME(domainid), UrlHost |
+| **x-oca-event**:domain_ref.value | "DNS Request Domain", UrlHost |
 | **x-oca-event**:file_ref.name | Filename |
 | **x-oca-event**:host_ref.hostname | identityhostname, "Machine ID" |
 | **x-oca-event**:host_ref.ip_refs[*].value | identityip, sourceaddress |
@@ -117,8 +117,8 @@
 | **file**:hashes.MD5 | "MD5 Hash" |
 | **file**:hashes.'SHA-1' | "SHA1 Hash" |
 | **file**:'mime-type' | contenttype |
-| **domain-name**:value | dnsdomainname |
-| **url**:value | dnsdomainname, tlsservernameindication, httphost |
+| **domain-name**:value | "DNS Request Domain" |
+| **url**:value | "DNS Request Domain", tlsservernameindication, httphost |
 | **network-traffic**:src_port | sourceport |
 | **network-traffic**:dst_port | destinationport |
 | **network-traffic**:protocols[*] | protocolid |
@@ -183,7 +183,7 @@
 | directory | path | ServiceFileName |
 | <br> | | |
 | domain-name | value | UrlHost |
-| domain-name | value | dnsdomainname |
+| domain-name | value | "DNS Request Domain" |
 | <br> | | |
 | email-message | content_type | contenttype |
 | <br> | | |
