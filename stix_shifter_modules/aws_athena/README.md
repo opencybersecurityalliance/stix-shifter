@@ -1,10 +1,10 @@
-# AWS Athena Connector
+# Amazon Athena Connector
 
 ### Data Source: 
 Amazon Athena is an interactive query service that makes it easy to analyze data in Amazon S3 using standard SQL. 
 Athena is serverless, so there is no infrastructure to manage, and you pay only for the queries that you run.
 
-### Supported AWS schema
+### Supported Amazon schema
 
 1. [OCSF Schema](https://github.com/ocsf/ocsf-schema): Currently supports partial OCSF schema that includes the base events and few objecs such as api, cloud, identity, enrichments, http_request, identity, metadata, observables and resources.
 
@@ -12,7 +12,7 @@ Athena is serverless, so there is no infrastructure to manage, and you pay only 
 
 3. [GuardDuty findings](https://docs.aws.amazon.com/athena/latest/ug/querying-guardduty.html)
 
-##### AWS Athena API Endpoints:
+##### Amazon Athena API Endpoints:
 |  Connector Method  |  Boto3 library API Methods  |  
 | --- | --- |
 | Ping | list_work_groups() |
@@ -23,7 +23,7 @@ Athena is serverless, so there is no infrastructure to manage, and you pay only 
 
 #####Reference - [Athena Boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html)
 
-###AWS Authentication Types
+### AWS Authentication Types
 
 ##### This connector supports two types of datasource authentication:
 
