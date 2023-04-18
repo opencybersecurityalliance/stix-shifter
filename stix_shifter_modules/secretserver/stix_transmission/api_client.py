@@ -4,14 +4,20 @@ import re
 from datetime import date, timedelta
 from dateutil import parser
 import os
-from datetime import datetime
-from requests import Response
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync, ResponseWrapper, \
     CONNECT_TIMEOUT_DEFAULT
 import random
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
+
+class ClientResponse:
+    message = None
+    def read(self):
+        return self._content
+
+    def __repr__(self):
+        return self.message
 
 class APIClient():
 
@@ -64,7 +70,7 @@ class APIClient():
         return response.code
 
     async def create_search(self, query_expression):
-        respObj = Response()
+        respObj = ClientResponse()
         token = await self.get_token()
         if (token):
             self.query = query_expression

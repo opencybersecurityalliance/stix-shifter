@@ -1,5 +1,4 @@
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
-import requests
 from datetime import datetime, timedelta
 import json
 
