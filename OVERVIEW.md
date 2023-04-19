@@ -47,9 +47,7 @@ STIX 2 Patterning is a part of STIX that deals with the "matching things" part o
 
 `[url:value = 'http://www.testaddress.com'] OR [ipv4-addr:value = '192.168.122.84']`
 
-This library takes in STIX 2 Patterns as input, and "finds" data that matches the patterns inside various products that house repositories of cybersecurity data. Examples of such products include SIEM systems, endpoint management systems, threat intelligence platforms, orchestration platforms, network control points, data lakes, and more.
-
-In addition to "finding" the data by using these patterns, STIX-Shifter uniquely also _transforms the output_ into STIX 2 Observations. Why would we do that you ask? To put it simply - so that all of the security data, regardless of the source, mostly looks and behaves the same.
+A STIX Observation is the `observed-data` STIX Domain Object (SDO). You can think of this as a row of data that is returned from a search triggered by the STIX pattern, and can represent an indicator of compromise. Each observation contains one or more STIX Cyber observable Objects (SCO) which in turn has one or more properties associated to the data returned from the search. 
 
 ##### An example of a STIX Observation:
 
@@ -110,60 +108,7 @@ You might want to use this library and contribute to development, if any of the 
 - You are a vendor or project owner who has data that can be made available, and you want to contribute a connector
 - You just want to help make the world a safer place!
 
-## Available Connectors
-
-Each connector supports a set of STIX objects and properties as defined in the connector's mapping files. There is also a set of common STIX properties that all cyber observable objects must contain. See [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for more information on STIX objects.
-
-### Common cyber observable properties
-- created
-- modified
-- first_observed
-- last_observed
-- number_observed
-
-Stix-shifter currently offers connector support for the following cybersecurity products.
-
-List updated: April 18, 2023
-
-|         Connector          |      Module Name     | Data Model |  Developer   | Translation | Transmission | Availability |
-| :------------------------: | :------------------: | :--------: | :----------: | :---------: | :----------: | :----------: |
-|         [IBM QRadar](stix_shifter_modules/qradar)         |        qradar        |  QRadar AQL   | IBM Security |     Yes     |     Yes      |   Released    |
-|    [IBM QRadar on Cloud](stix_shifter_modules/qradar)     |        qradar        | QRadar AQL | IBM Security |     Yes     |     Yes      |   Released    |
-|         [HCL BigFix](stix_shifter_modules/bigfix)         |        bigfix        |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|  [Carbon Black CB Response](stix_shifter_modules/carbonblack)  |      carbonblack     |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|  [Carbon Black Cloud](stix_shifter_modules/cbcloud)  |      cbcloud     |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|       Elasticsearch       |       elastic        | MITRE CAR  |    MITRE     |     Yes     |      No      |   Released    |
-|       [Elasticsearch (ECS)](stix_shifter_modules/elastic_ecs)       |     elastic_ecs      |    ECS     | IBM Security |     Yes     |     Yes      |   Released    |
-| [IBM Cloud Security Advisor](stix_shifter_modules/security_advisor) |   security_advisor   |  Default   |  IBM Cloud   |     Yes     |     Yes      |   Released    |
-|           [Splunk Enterprise Security](stix_shifter_modules/splunk)           |        splunk        | Splunk CIM | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Microsoft Defender for Endpoint](stix_shifter_modules/msatp)        |        msatp         |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Microsoft Graph Security](stix_shifter_modules/azure_sentinel)       |    azure_sentinel    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|        [IBM Guardium Data Protection](stix_shifter_modules/guardium)       |       guardium       |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|    [AWS CloudWatch Logs](stix_shifter_modules/aws_cloud_watch_logs)     | aws_cloud_watch_logs |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Amazon Athena](stix_shifter_modules/aws_athena)       |   aws_athena   |  SQL   | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Alertflex](stix_shifter_modules/alertflex)       |    alertflex    |  Default   | Alertflex |     Yes     |     Yes      |   Released    |
-|       [Micro Focus ArcSight](stix_shifter_modules/arcsight)       |    arcsight    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|       [CrowdStrike Falcon](stix_shifter_modules/crowdstrike)       |    crowdstrike    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Trend Micro Vision One](stix_shifter_modules/trendmicro_vision_one)       |    trendmicro_vision_one    |  Default   | Trend Micro |     Yes     |     Yes      |   Released    |
-|       [IBM Security Verify Privilege Vault](stix_shifter_modules/secretserver)       |    secretserver    |  Default   | IBM |     Yes     |     Yes      |   Released    |
-|       [One Login](stix_shifter_modules/onelogin)       |    onelogin    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
-|       [MySQL](stix_shifter_modules/mysql)                                                                  |    mysql    |  Default   | IBM |     Yes     |     Yes      |   Released    |
-|       [Sumo Logic](stix_shifter_modules/sumologic)       |    sumologic    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
-|       [Datadog](stix_shifter_modules/datadog)       |    datadog    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
-|       [Infoblox BloxOne Threat Defense](stix_shifter_modules/infoblox)       |    infoblox    |  Default   | Infoblox |     Yes     |     Yes      |   Released    |
-|       [Proofpoint (SIEM API)](stix_shifter_modules/proofpoint)       |    proofpoint    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Cybereason](stix_shifter_modules/cybereason)                        | cybereason              | Default    | IBM Security | Yes         | Yes          | Released     |
-|       [Palo Alto Cortex XDR](stix_shifter_modules/paloalto)                        | paloalto              | Default    | IBM Security | Yes         | Yes          | Released     |
-|       [SentinelOne](stix_shifter_modules/sentinelone)                        | sentinelone              | Default    | IBM Security | Yes         | Yes          | Released     |
-|       [Darktrace](stix_shifter_modules/darktrace)                           | darktrace              | Default    | IBM Security | Yes         | Yes          | Released     |
-|       [IBM Security ReaQta](stix_shifter_modules/reaqta)                           | reaqta             | Default    | IBM Security | Yes         | Yes          | Released     |
-|       [IBM Security Verify](stix_shifter_modules/ibm_security_verify)                           | ibm_security_verify             | Default    | IBM Security | Yes         | Yes          | Released     |
-|       [Red Hat Advanced Cluster Security for Kubernetes (StackRox)](stix_shifter_modules/rhacs)                           | rhacs             | Default    | IBM Security | Yes         | Yes          | Released     |
-|      [GCP Chronicle](stix_shifter_modules/gcp_chronicle)                   | gcp_chronicle              | Default    | IBM Security | Yes         | Yes          | Released     |
-|      [Azure Log Analytics](stix_shifter_modules/azure_log_analytics)                   | azure_log_analytics              | Default    | IBM Security | Yes         | Yes          | Released     |
-|      [Okta](stix_shifter_modules/okta)                   | okta              | Default    | IBM Security | Yes         | Yes          | Released     |
-
-
+Take a look at the [**currently available connectors**](CONNECTORS.md).
 
 
 ## How to use
