@@ -1,6 +1,9 @@
 # Currently supported STIX objects and properties
+
 Each connector supports a set of STIX objects and properties as defined in the connector's mapping files. There is also a set of common STIX properties that all cyber observable objects must contain. See [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for more information on STIX objects.
+
 ## Common cyber observable properties
+
 - created
 - modified
 - first_observed
@@ -8,6 +11,7 @@ Each connector supports a set of STIX objects and properties as defined in the c
 - number_observed
 
 ## Supported data sources
+
 Stix-shifter currently offers connector support for the following cybersecurity products. Click on a data source to see a list of STIX attributes and properties it supports.
 
 - [IBM QRadar](../stix_shifter_modules/qradar/qradar_supported_stix.md)

@@ -85,15 +85,15 @@ UPDATED_AT = now.strftime("%D")
 
 def __main__():
 
-    table_of_contents = "# Currently supported STIX objects and properties\n"
+    table_of_contents = "# Currently supported STIX objects and properties\n\n"
     table_of_contents += "Each connector supports a set of STIX objects and properties as defined in the connector's mapping files. There is also a set of common STIX properties that all cyber observable objects must contain. See [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for more information on STIX objects.\n"
-    table_of_contents += "## Common cyber observable properties\n"
+    table_of_contents += "## Common cyber observable properties\n\n"
     table_of_contents += "- created\n"
     table_of_contents += "- modified\n"
     table_of_contents += "- first_observed\n"
     table_of_contents += "- last_observed\n"
     table_of_contents += "- number_observed\n\n"
-    table_of_contents += "## Supported data sources\n"
+    table_of_contents += "## Supported data sources\n\n"
     table_of_contents += "Stix-shifter currently offers connector support for the following cybersecurity products. Click on a data source to see a list of STIX attributes and properties it supports.\n\n"
 
     table_of_contents_file_path = path.abspath(path.join(ADAPTER_GUIDE_PATH, "supported-mappings.md"))
