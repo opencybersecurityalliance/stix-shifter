@@ -23,15 +23,15 @@
         },
         "options": {
             "includeAlerts": {
-                "label": "Join events with Alerts?",
+                "label": "Join events with alerts?",
                 "description": "With this feature enabled every event will be searched for correlated alerts in the DeviceAlertsEvent table and the alert data will be included in the results. Keep in mind that this feature will add API CPU consumption."
             },
             "includeHostOs": {
-                "label": "Join events with Host OS info?",
+                "label": "Join events with host os info?",
                 "description": "With this feature enabled every event will include also the device OS details from the DeviceInfo table. Keep in mind that this feature will add API CPU consumption."
             },
             "includeNetworkInfo": {
-                "label": "Join events with Device Network info?",
+                "label": "Join events with device network info?",
                 "description": "With this feature enabled every event will include also the active network adapters IP and MAC addresses of the device at the time of the event from the DeviceNetworkInfo table. Keep in mind that this feature will add API CPU consumption."
             },
             "retainOriginal": {
