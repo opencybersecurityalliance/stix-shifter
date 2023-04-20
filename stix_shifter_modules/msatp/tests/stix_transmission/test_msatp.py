@@ -26,7 +26,6 @@ def mocked_2():
     return get_mock_response(200, mocked_return_value, 'byte')
 
 
-@patch('stix_shifter_modules.msatp.stix_transmission.connector.adal.AuthenticationContext')
 class TestMSATPConnection(unittest.TestCase):
     def config(self):
         return {
@@ -51,8 +50,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert check_async is False
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
-    def test_ping_endpoint(self, mock_ping_response, mock_adal_auth):
-        mock_adal_auth.return_value = get_adal_mock_response()
+    def test_ping_endpoint(self, mock_ping_response):
         mocked_return_value = '["mock", "placeholder"]'
 
         mock_ping_response.return_value = get_mock_response(200, mocked_return_value)
@@ -117,9 +115,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-
-    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
-           autospec=True)
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search', autospec=True)
     def test_results_registry_response(self, mock_results_response):
         mocked_return_value = """{"Results": [{"TableName": "DeviceRegistryEvents","Timestamp": "2019-10-10T10:43:07.2363291Z","DeviceId":
 "db40e68dd7358aa450081343587941ce96ca4777","DeviceName": "testmachine1","ActionType": "RegistryValueSet",
@@ -143,8 +139,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
-           autospec=True)
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search', autospec=True)
     def test_results_response_exception(self, mock_results_response):
         mocked_return_value = """ {    } """
         mock_results_response.return_value = get_mock_response(404, mocked_return_value)
@@ -161,8 +156,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert results_response['code'] == 'unknown'
         assert results_response['success'] is False
 
-    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
-           autospec=True)
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search', autospec=True)
     def test_query_flow(self, mock_results_response):
         results_mock = """{
                             "Results": [{

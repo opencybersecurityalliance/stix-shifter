@@ -6,10 +6,9 @@ from stix_shifter_modules.msatp.stix_transmission.connector_post_processing impo
 from stix_shifter_modules.msatp.tests.test_utils import all_keys_in_object
 from unittest.mock import patch
 import unittest
-from tests.utils.async_utils import get_adal_mock_response
+from tests.utils.async_utils import get_mock_response
 
 
-@patch('stix_shifter_modules.msatp.stix_transmission.connector.adal.AuthenticationContext')
 class TestMSATPConnectorPostProcessing(unittest.TestCase):
     def config(self):
         return {
@@ -33,7 +32,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
             }
         }
 
-    def test_merge_alert_events(self, mock_adal_auth):
+    def test_merge_alert_events(self):
         data = [
             {
                 'TableName': 'DeviceAlertEvents',
@@ -116,7 +115,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
         assert proc_event2.get("TableName") == "DeviceProcessEvents"
         assert proc_event2.get("DeviceName") == "host2.test.com"
 
-    def test_remove_duplicate_fields(self, mock_adal_auth):
+    def test_remove_duplicate_fields(self):
         data = {
             'ReportId': 1234,
             'DeviceName': 'host.example.com',
@@ -147,7 +146,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
         assert 'SHA1' not in data
         assert 'MD5' not in data
 
-    def test_get_table_name(self, mock_adal_auth):
+    def test_get_table_name(self):
         query = '(find withsource = TableName in (DeviceAlertEvents)  where Timestamp >= datetime(2023-03-16T17:21:30.000Z) and Timestamp < datetime(2023-03-18T17:30:36.000Z)  | order by Timestamp desc | where AlertId =~ "123123")'
         table = get_table_name(query)
         assert table == "DeviceAlertEvents"
@@ -155,8 +154,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
         table = get_table_name(query)
         assert table == "DeviceProcessEvents"
 
-    def test_join_alerts_with_events(self, mock_adal_auth):
-        mock_adal_auth.return_value = get_adal_mock_response()
+    def test_join_alerts_with_events(self):
 
         util = ConnectorPostProcessing(self.connection()['options'], False)
         joined_query = util.join_alert_with_events('<<timestamp>>', 'devicename', 1234)
@@ -183,8 +181,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
                                 'DeviceId, DNI_TS) on DeviceId | where DNI_TS < Timestamp | summarize '
                                 'arg_max(DNI_TS, *) by ReportId, DeviceName, Timestamp ')
 
-    def test_join_query_with_alerts(self, mock_adal_auth):
-        mock_adal_auth.return_value = get_adal_mock_response()
+    def test_join_query_with_alerts(self):
         query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
         entry_point = ConnectorPostProcessing(self.connection()['options'], False)
         joined_query = entry_point.join_query_with_other_tables(query)
@@ -225,8 +222,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
             '| summarize arg_max(DNI_TS, *) by ReportId, DeviceName, Timestamp '
         )
 
-    def test_join_query_no_info(self, mock_adal_auth):
-        mock_adal_auth.return_value = get_adal_mock_response()
+    def test_join_query_no_info(self):
         query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
         opts = {
             "includeAlerts": True,
@@ -259,8 +255,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
             '| where AlertId =~ "123123"))'
         )
 
-    def test_join_query_no_alerts(self, mock_adal_auth):
-        mock_adal_auth.return_value = get_adal_mock_response()
+    def test_join_query_no_alerts(self):
         query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
         opts = {
             "includeAlerts": False,
@@ -303,8 +298,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
             '| summarize arg_max(DNI_TS, *) by ReportId, DeviceName, Timestamp '
         )
 
-    def test_join_query_only_events(self, mock_adal_auth):
-        mock_adal_auth.return_value = get_adal_mock_response()
+    def test_join_query_only_events(self):
         query = 'union (find withsource = TableName in (DeviceNetworkEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (LocalIP =~ "9.9.9.9") or (RemoteIP =~ "9.9.9.9")),(find withsource = TableName in (DeviceEvents)  where Timestamp >= datetime(2023-02-13T14:25:46.000Z) and Timestamp < datetime(2023-02-13T14:26:55.500Z)  | order by Timestamp desc | where (RemoteIP =~ "9.9.9.9") or (LocalIP =~ "9.9.9.9"))'
         opts = {
             "includeAlerts": False,
@@ -333,8 +327,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
             '| where AlertId =~ "123123"))'
         )
 
-    def test_unify_alert_fields(self, mock_adal_auth):
-        mock_adal_auth.return_value = get_adal_mock_response()
+    def test_unify_alert_fields(self):
         data = {
             'AlertId': ['da111111111111111111_-1111111111'],
             'Timestamp': '2023-03-17T16:59:12.3036191Z',
@@ -361,7 +354,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
         ttp = ttps[0]
         assert ttp == 'Spearphishing Link (T1566.002)'
 
-    def test_organize_registry_data(self, mock_adal_auth):
+    def test_organize_registry_data(self):
         data = {
             "DeviceRegistryEvents": {
                 "TableName": "DeviceRegistryEvents",
@@ -385,7 +378,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
         assert val.get("RegistryValueName") == "FailureActions"
         assert val.get("RegistryValueData") == ""
 
-    def test_organize_ips(self, mock_adal_auth):
+    def test_organize_ips(self):
         data = {
             "DeviceRegistryEvents": {
                 "IPAddressesSet": ["[{\"IPAddress\":\"9.9.9.9\",\"SubnetPrefix\":24,\"AddressType\":\"Private\"}]"]
@@ -397,7 +390,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
         assert len(values) == 1
         assert values[0] == "9.9.9.9"
 
-    def test_create_event_link(self, mock_adal_auth):
+    def test_create_event_link(self):
         data = {
             "DeviceId": "deviceid"
         }
@@ -405,7 +398,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
         assert data.get(
             "event_link") == "https://security.microsoft.com/machines/deviceid/timeline?from=2019-10-10T10:43:06.000Z&to=2019-10-10T10:43:08.000Z"
 
-    def test_remove_duplicate_ips(self, mock_adal_auth):
+    def test_remove_duplicate_ips(self):
         data = {
             "PublicIP": "9.9.9.9",
             "LocalIP": "9.9.9.9",
@@ -417,7 +410,7 @@ class TestMSATPConnectorPostProcessing(unittest.TestCase):
         assert len(data["IPAddresses"]) == 1
         assert data["IPAddresses"][0] == "9.9.9.1"
 
-    def test_do_not_remove_duplicate_ips(self, mock_adal_auth):
+    def test_do_not_remove_duplicate_ips(self):
         data = {
             "PublicIP": "9.9.9.1",
             "LocalIP": "9.9.9.2",
