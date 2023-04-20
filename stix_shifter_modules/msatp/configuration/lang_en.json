@@ -35,7 +35,7 @@
                 "description": "With this feature enabled every event will include also the active network adapters IP and MAC addresses of the device at the time of the event from the DeviceNetworkInfo table. Keep in mind that this feature will add API CPU consumption."
             },
             "retainOriginal": {
-                "label": "Keep the original json payload before translation base64 encoded as original_ref?",
+                "label": "Keep the original json payload as original_ref?",
                 "description": "Setting this to true will encode the original json results from the EDR before they are translated to STIX and put them in an artifact object referenced as original_ref from x-oca-event. This is helpful if critical data is missing in the final translation."
             }
         }
