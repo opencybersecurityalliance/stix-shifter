@@ -164,7 +164,7 @@
         "DeviceFileEvents.InitiatingProcessId",
         "DeviceImageLoadEvents.InitiatingProcessId"
       ],
-      "created": [
+      "created_time": [
         "DeviceProcessEvents.ProcessCreationTime",
         "DeviceEvents.ProcessCreationTime",
         "DeviceNetworkEvents.InitiatingProcessCreationTime",
@@ -188,7 +188,7 @@
         "DeviceEvents.InitiatingProcessParentId",
         "DeviceImageLoadEvents.InitiatingProcessParentId"
       ],
-      "parent_ref.created": [
+      "parent_ref.created_time": [
         "DeviceProcessEvents.InitiatingProcessCreationTime",
         "DeviceEvents.InitiatingProcessCreationTime",
         "DeviceNetworkEvents.InitiatingProcessParentCreationTime",
@@ -204,7 +204,7 @@
         "DeviceProcessEvents.InitiatingProcessParentId",
         "DeviceNetworkEvents.InitiatingProcessParentId"
       ],
-      "parent_ref.parent_ref.created": [
+      "parent_ref.parent_ref.created_time": [
         "DeviceProcessEvents.InitiatingProcessParentCreationTime",
         "DeviceEvents.InitiatingProcessParentCreationTime"
       ],

@@ -512,13 +512,13 @@
       }
     ],
     "InitiatingProcessCreationTime": {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "nc_process",
       "transformer": "MsatpToTimestamp"
     },
     "InitiatingProcessParentCreationTime": [
       {
-        "key": "process.created",
+        "key": "process.created_time",
         "object": "nc_parent_process",
         "transformer": "MsatpToTimestamp"
       },
@@ -848,7 +848,7 @@
       }
     ],
     "ProcessCreationTime": {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "child_process",
       "transformer": "MsatpToTimestamp"
     },
@@ -929,7 +929,7 @@
       "object": "process"
     },
     "InitiatingProcessCreationTime": {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "process",
       "transformer": "MsatpToTimestamp"
     },
@@ -984,7 +984,7 @@
     ],
     "InitiatingProcessParentCreationTime": [
       {
-        "key": "process.created",
+        "key": "process.created_time",
         "object": "parent_process",
         "transformer": "MsatpToTimestamp"
       },
@@ -1415,13 +1415,13 @@
       "object": "fc_process"
     },
     "InitiatingProcessCreationTime": {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "fc_process",
       "transformer": "MsatpToTimestamp"
     },
     "InitiatingProcessParentCreationTime": [
       {
-        "key": "process.created",
+        "key": "process.created_time",
         "object": "fc_parent_process",
         "transformer": "MsatpToTimestamp"
       },
@@ -1804,13 +1804,13 @@
       "object": "fc_process"
     },
     "InitiatingProcessCreationTime": {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "fc_process",
       "transformer": "MsatpToTimestamp"
     },
     "InitiatingProcessParentCreationTime": [
       {
-        "key": "process.created",
+        "key": "process.created_time",
         "object": "fc_parent_process",
         "transformer": "MsatpToTimestamp"
       },
@@ -2170,13 +2170,13 @@
       "object": "re_process"
     },
     "InitiatingProcessCreationTime": {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "re_process",
       "transformer": "MsatpToTimestamp"
     },
     "InitiatingProcessParentCreationTime": [
       {
-        "key": "process.created",
+        "key": "process.created_time",
         "object": "re_parent_process",
         "transformer": "MsatpToTimestamp"
       },
@@ -2614,7 +2614,7 @@
       }
     ],
     "ProcessCreationTime": {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "child_process",
       "transformer": "MsatpToTimestamp"
     },
@@ -2695,7 +2695,7 @@
       "object": "process"
     },
     "InitiatingProcessCreationTime": {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "process",
       "transformer": "MsatpToTimestamp"
     },
@@ -2754,7 +2754,7 @@
     ],
     "InitiatingProcessParentCreationTime": [
       {
-        "key": "process.created",
+        "key": "process.created_time",
         "object": "parent_process",
         "transformer": "MsatpToTimestamp"
       },
