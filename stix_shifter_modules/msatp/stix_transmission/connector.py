@@ -1,5 +1,4 @@
 import json
-
 import adal
 from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from .api_client import APIClient
@@ -10,7 +9,6 @@ from .connector_post_processing import ConnectorPostProcessing
 
 
 class Connector(BaseJsonSyncConnector):
-    init_error = None
     logger = logger.set_logger(__name__)
 
     def __init__(self, connection, configuration):
@@ -25,6 +23,7 @@ class Connector(BaseJsonSyncConnector):
             self.api_client = APIClient(connection, configuration)
         else:
             self.init_error = True
+
 
     def _handle_errors(self, response, return_obj):
         """Handling API error response
@@ -51,8 +50,6 @@ class Connector(BaseJsonSyncConnector):
     async def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
-        if self.init_error:
-            return self.adal_response
         response = await self.api_client.ping_box()
         response_code = response.code
         if 200 <= response_code < 300:
@@ -89,13 +86,13 @@ class Connector(BaseJsonSyncConnector):
                 return await self.api_client_run_search(q, length, offset)
 
             return util.post_process(response_data, return_obj, api_run)
-
         except Exception as ex:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise ex
+
 
     async def api_client_run_search(self, joined_query, length, offset):
         temp_return_obj = dict()
@@ -134,3 +131,4 @@ class Connector(BaseJsonSyncConnector):
             Connector.logger.error("Token generation Failed: " + str(ex.error_response))
 
         return return_obj
+
