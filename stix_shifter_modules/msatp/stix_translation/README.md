@@ -1,6 +1,6 @@
 # Microsoft Defender for Endpoint (previously Microsoft Defender ATP) UDS Connector
 
-# MSATP - microsoft defender for endpoint module
+# MSATP - Microsoft Defender for Endpoint module
 This module uses KQL to query the EDR API.
 
 Queries are constructed as unions for all the relevant event tables based on the queried fields.
