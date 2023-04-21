@@ -7,6 +7,25 @@ from stix_shifter_utils.utils.error_response import ErrorCode
 from tests.utils.async_utils import get_mock_response
 
 
+def mocked_1():
+    return get_mock_response(200, "{}", 'byte')
+
+
+def mocked_2():
+    mocked_return_value = """{
+                                    "Results": [{
+                                        "TableName": "DeviceFileEvents",
+                                        "Timestamp": "2019-09-13T11:34:14.0075314Z",
+                                        "DeviceName": "desktop-536bt46",
+                                        "FileName": "runcit_tlm_hw.bat",
+                                        "SHA1": "93b458752aea37a257a7dd2ed51e98ffffc35be8",
+                                        "SHA256": "",
+                                        "MD5": "26a2fe38dc6f42386659e611219c563c"
+                                    }]
+                                    }"""
+    return get_mock_response(200, mocked_return_value, 'byte')
+
+
 class TestMSATPConnection(unittest.TestCase):
     def config(self):
         return {
@@ -22,8 +41,7 @@ class TestMSATPConnection(unittest.TestCase):
             "host": "hostbla",
             "port": 8080,
             "selfSignedCert": "cert"
-            }
-
+        }
 
     def test_is_async(self):
         entry_point = EntryPoint(self.connection(), self.config())
@@ -33,13 +51,12 @@ class TestMSATPConnection(unittest.TestCase):
 
     @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.ping_box')
     def test_ping_endpoint(self, mock_ping_response):
-
         mocked_return_value = '["mock", "placeholder"]'
 
         mock_ping_response.return_value = get_mock_response(200, mocked_return_value)
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
         ping_response = transmission.ping()
-        
+
         assert ping_response is not None
         assert ping_response['success']
 
@@ -98,8 +115,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
-           autospec=True)
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search', autospec=True)
     def test_results_registry_response(self, mock_results_response):
         mocked_return_value = """{"Results": [{"TableName": "DeviceRegistryEvents","Timestamp": "2019-10-10T10:43:07.2363291Z","DeviceId":
 "db40e68dd7358aa450081343587941ce96ca4777","DeviceName": "testmachine1","ActionType": "RegistryValueSet",
@@ -123,9 +139,7 @@ class TestMSATPConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    
-    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
-           autospec=True)
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search', autospec=True)
     def test_results_response_exception(self, mock_results_response):
         mocked_return_value = """ {    } """
         mock_results_response.return_value = get_mock_response(404, mocked_return_value)
@@ -135,15 +149,14 @@ class TestMSATPConnection(unittest.TestCase):
                 "| order by Timestamp desc | where LocalPort < 443) "
         offset = 0
         length = 1
-        
+
         transmission = stix_transmission.StixTransmission('msatp', self.connection(), self.config())
         results_response = transmission.results(query, offset, length)
 
         assert results_response['code'] == 'unknown'
         assert results_response['success'] is False
 
-    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search',
-           autospec=True)
+    @patch('stix_shifter_modules.msatp.stix_transmission.api_client.APIClient.run_search', autospec=True)
     def test_query_flow(self, mock_results_response):
         results_mock = """{
                             "Results": [{
@@ -211,3 +224,4 @@ class TestMSATPConnection(unittest.TestCase):
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
+
