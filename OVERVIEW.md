@@ -133,6 +133,34 @@ Stix-shifter provides several functions: `translate` and `transmit` are the prim
 
 ## Translate
 
+### CLI Arguments
+
+| Argument | Description | Accepted Input |
+| -------- | ------------ | --------------- |
+| TRANSLATION KEYWORD | The keyword specifiying a function will be used to translate queries and results. | `translate` |
+| MODULE NAME | The name of the connector being used. This is the module directory name as it appears in [stix_shifter_modules](stix_shifter_modules/). If the connector supports multiple dialects, then by default a query will be generated for each one. You may specifiy a specific dialect by adding `:<DIALECT>` directly after the module name | The connector module name with an optional `:<DIALECT>` |
+| TRANSLATION DATA TYPE | The type of data you wish to translate. This will be `query` for translating STIX patterns to native queries and `results` for translating data source results to STIX.  | `query` or `results` |
+| STIX IDENTITY OBJECT | This is an object that represents the data source being queried and is inserted into the results bundle of STIX objects. An empty object `"{}"` may be used for the query translation. This must be wrapped in quotes to use with the CLI. | A stringified STIX identity object |
+| TRANSLATION DATA | This is the STIX pattern for query translation and a list of JSON results for results translation. This must be wrapped in quote to use with the CLI. | A stringified STIX pattern or list of JSON data |
+| OPTIONS | An object of optional parameters. This must be wrapped in quotes to use with the CLI. | A stringified object of options |
+
+#### Translation Options
+
+These are general options defined in [`config.json`](stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules.
+
+| Option | Translation Data Type | Description | Accepted Values |
+| ------ | --------------------- | ----------- | -------------- |
+| result_limit | query | The max number of results that can be returned from a query. This value is generally included in translated queries before getting sent to the data source's API query call. The default is `10000` | A number between `1` and `500000` |
+| time_range | query | A default time range, in minutes, applied to the translated query when no `START STOP` qualifier is present in the STIX pattern. As an example, this would be the `last x minutes` in a SQL query. The default is `5` | A number between `1` and `10000` |
+<!-- | dialects |        |        |      | -->
+<!-- | language |      |          |   | -->
+| validate_pattern | query | Specifies if pattern validation is run during the query translation call. This can catch errors in the submitted STIX pattern that would otherwise raise exceptions during translation. | `true` or `false` |
+| stix_validator | results | Specifies if validation is run on the bundle of STIX data returned with results translation. This is performance intensive and should be used on a small result set. The default if `false`. | `true` or `false` |
+<!-- | mapping |     |       |       |  -->
+| unmapped_fallback | results | If set to `true`, any results data returned, that is not specifired in the to-STIX mapping, will be included in the results in the following STIX object:property format `x-<MODULE NAME>:<NATIVE DATA FIELD>`. The default is `false` | `true` or `false` |
+| stix_2.1 | results | Results are returned as STIX 2.0 objects by default. Setting this option will return results in STIX 2.1 format. The default is `false` | `true` or `false` |
+
+
 ### 1. Translate a STIX pattern to a native data source query
 
 #### INPUT: STIX 2 pattern
@@ -152,6 +180,7 @@ OR
 ```
 
 ### CLI Command
+
 Open a terminal and navigate to your python 3 environment. Translation of a **query** is called in the format of:
 
 `stix-shifter translate <MODULE NAME> query "<STIX IDENTITY OBJECT>" "<STIX PATTERN>" "<OPTIONS>"`
@@ -240,6 +269,7 @@ _pattern.txt_
 ```
 
 ### CLI Command
+
 Open a terminal and navigate to your python 3 environment. Translation of a **results** is called in the format of:
 
 `stix-shifter translate <MODULE NAME> result '<STIX IDENTITY OBJECT>' '<LIST OF JSON RESULTS>'`
@@ -312,7 +342,7 @@ _results.json_
 
 STIX-shifter expects connection and configuration objects to be passed in during transmission calls. The connection object contains the host address and port of the data source being connected to, as well as an optional server name indicator (SNI) and self signed certificate.
 
-#### Connection
+### Connection
 
 This object contains information needed to connect to a specific data source. The `host` and `port` keys are required.
 
@@ -329,9 +359,19 @@ This object contains information needed to connect to a specific data source. Th
 }
 ```
 
-#### Configuration
+#### Connection Options
 
-This object contains an `auth` key who's value stores authentication information for the data source. What keys and values get stored in the auth will depend on the authentication requirements of the data source.
+These are general options defined in [`config.json`](stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules.
+
+| Option | Description | Accepted Values |
+| ------ | ----------- | -------------- |
+| timeout | The max amount of time in seconds before the query times out. The default is `30`. | A number between `1` and `60` |
+<!-- Should result size and time range be included? -->
+
+
+### Configuration
+
+This object contains an `auth` key who's value stores authentication information for the data source. What keys and values get stored in the auth will depend on the authentication requirements of the data source (username, password, auth token, etc).
 
 ```
 {
@@ -386,6 +426,28 @@ Each of the transmit functions takes in common arguments: the module name, the c
 Any failed transmission function call will return an error in the format of:
 
 `{'success': False, 'error': <Error message reported by API>, 'code': <Error code>}`
+
+
+### CLI Arguments
+
+| Argument | Description | Accepted Input |
+| -------- | ------------ | --------------- |
+| TRANSMISSION KEYWORD | The keyword specifiying a function will be used to transmit API calls to the target data source. | `transmit` |
+| MODULE NAME | The name of the connector being used. This is the module directory name as it appears in [stix_shifter_modules](stix_shifter_modules/). | The connector module name |
+| CONNECTION OBJECT | This contains the information needed to connect to the target data source, such as host and port. This must be wrapped in quotes to use with the CLI. | A stringified connection object |
+| CONFIGURATION OBJECT |  This contains the information needed to authenticate with the target data source, such as username and password. This must be wrapped in quotes to use with the CLI. | A stringified configuration object |
+| TRANSMISSION FUNCTION | The transmission function used to communicate with the target data source. | `is_async`, `ping`, `query`, `status`, `results`, `delete` |
+
+#### Transmission Functions and Arguments
+
+| Function | Description | Function Argument | Function Returns |
+| ------ | --------------------- | ----------- | -------------- |
+| is_async | Checks if the connector is asynchronous. | NA | `true` or `false`
+| ping | Calls the data source ping API endpont (or equivalent) to see if a connection can be made.| NA | Object containing `success` of `true` or `false` |
+| query | Sends a native query string, as translated from the STIX pattern, to target data source API. | Tranlated query string | Query string | Object containing `success` of `true` or `false` and the `search_id`. If the connector is synchronous, the search_id will be the original query string. |
+| status | Checks the status of a query. Only used by asynchronous connectors. | The `search_id` returned from the query call | Object continaing `success` of `true` or `false`, `status` of `RUNNING`, `COMPLETED`, `CANCELED`, or `ERROR`, and `progress` with a number indicating the percentage complete. |
+| results | Fetches the native results of a completed query. | The `search_id` returned from the query call followed by length and offset as numbers | A list of JSON results |
+| delete | Deletes a query from the target data source | The `search_id` returned from the query call | Object continaing `success` of `true` or `false` |
 
 ### Ping
 
