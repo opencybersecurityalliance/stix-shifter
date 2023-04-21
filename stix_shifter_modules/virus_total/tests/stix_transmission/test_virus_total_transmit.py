@@ -261,20 +261,20 @@ class TestMockingDemo(unittest.IsolatedAsyncioTestCase):
 
     async def test_virus_total_get_search_results(self):
         transmission = stix_transmission.StixTransmission(MODULE_NAME,  connection, config)
-        ping_response = await transmission.results_async(SAMPLE_DATA_IP, 1, 1)
-        assert ping_response is not None
-        assert ping_response['success'] is False
-        assert 'code' in ping_response and ping_response['code'] == 'unknown'
-        assert 'connector' in ping_response and ping_response['connector'] == 'virus_total'
+        results_response = await transmission.results_async(SAMPLE_DATA_IP, 1, 1)
+        assert results_response is not None
+        assert results_response['success'] is False
+        assert 'code' in results_response and results_response['code'] == 'unknown'
+        assert 'connector' in results_response and results_response['connector'] == 'virus_total'
 
-        ping_response = await transmission.results_async(SAMPLE_DATA_HASH, 1, 1)
-        assert ping_response is not None
-        assert ping_response['success'] is False
-        assert 'code' in ping_response and ping_response['code'] == 'unknown'
-        assert 'connector' in ping_response and ping_response['connector'] == 'virus_total'
+        results_response = await transmission.results_async(SAMPLE_DATA_HASH, 1, 1)
+        assert results_response is not None
+        assert results_response['success'] is False
+        assert 'code' in results_response and results_response['code'] == 'unknown'
+        assert 'connector' in results_response and results_response['connector'] == 'virus_total'
 
-        ping_response = await transmission.results_async(SAMPLE_DATA_URL, 1, 1)
-        assert ping_response is not None
-        assert ping_response['success'] is False
-        assert 'code' in ping_response and ping_response['code'] == 'unknown'
-        assert 'connector' in ping_response and ping_response['connector'] == 'virus_total'
+        results_response = await transmission.results_async(SAMPLE_DATA_URL, 1, 1)
+        assert results_response is not None
+        assert results_response['success'] is False
+        assert 'code' in results_response and results_response['code'] == 'unknown'
+        assert 'connector' in results_response and results_response['connector'] == 'virus_total'
