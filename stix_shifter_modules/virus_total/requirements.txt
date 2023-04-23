@@ -1,3 +1,0 @@
-requests
-vt-py
-uuid
