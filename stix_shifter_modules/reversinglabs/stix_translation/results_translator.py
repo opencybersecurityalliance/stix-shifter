@@ -3,7 +3,7 @@ from . import sdo_translator
 # from stix_shifter_utils.normalization.normalization_helper import create_attributes, evaluate_attribute_type
 from os import path
 import json
-from ipaddress import ip_network, IPv4Network
+from ipaddress import ip_network, IPv4Network, IPv6Network
 from stix_shifter_utils.utils import logger
 import uuid
 from urllib.parse import urlparse
