@@ -3,7 +3,8 @@ from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector 
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
-import copy
+
+from .connector_post_processing import ConnectorPostProcessing
 
 
 class Connector(BaseJsonSyncConnector):
@@ -61,44 +62,31 @@ class Connector(BaseJsonSyncConnector):
         :param offset: int,offset value
         :param length: int,length value"""
 
+        util = ConnectorPostProcessing(self.options, False)
         response_txt = None
-        return_obj = dict()
+        return_obj = {
+            'success': True,
+            'data': []
+        }
 
         try:
-            response = await self.api_client.run_search(query, offset, length)
-            return_obj = self._handle_errors(response, return_obj)
-            response_json = json.loads(return_obj["data"])
-            return_obj['data'] = response_json['Results']
-            # Customizing the output json,
-            # Get 'TableName' attribute from each row of event data
-            # Create a dictionary with 'TableName' as key and other attributes in an event data as value
-            # Filter the "None" and empty values except for RegistryValueName, which support empty string
-            # Customizing of Registryvalues json
-            table_event_data = []
-            for event_data in return_obj['data']:
-                lookup_table = event_data['TableName']
-                event_data.pop('TableName')
-                build_data = dict()
-                build_data[lookup_table] = {k: v for k, v in event_data.items() if v or k == "RegistryValueName"}
-                if lookup_table == "DeviceRegistryEvents":
-                    registry_build_data = copy.deepcopy(build_data)
-                    registry_build_data[lookup_table]["RegistryValues"] = []
-                    registry_value_dict = {}
-                    for k, v in build_data[lookup_table].items():
-                        if k in ["RegistryValueData", "RegistryValueName", "RegistryValueType"]:
-                            registry_value_dict.update({k: v})
-                            registry_build_data[lookup_table].pop(k)
-                    registry_build_data[lookup_table]["RegistryValues"].append(registry_value_dict)
+            joined_query = util.join_query_with_other_tables(query)
+            response_data = await self.api_client_run_search(joined_query, length, offset)
 
-                    build_data[lookup_table] = registry_build_data[lookup_table]
-                build_data[lookup_table]['event_count'] = '1'
-                table_event_data.append(build_data)
-            return_obj['data'] = table_event_data
-            return return_obj
+            async def api_run(q):
+                return await self.api_client_run_search(q, length, offset)
 
+            return util.post_process(response_data, return_obj, api_run)
         except Exception as ex:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
                 self.logger.error('can not parse response: ' + str(response_txt))
             else:
                 raise ex
+
+    async def api_client_run_search(self, joined_query, length, offset):
+        temp_return_obj = dict()
+        response = await self.api_client.run_search(joined_query, offset, length)
+        temp_return_obj = self._handle_errors(response, temp_return_obj)
+        response_data = json.loads(temp_return_obj["data"]).get("Results")
+        return response_data
