@@ -21,7 +21,7 @@ class Connector(BaseJsonSyncConnector):
         response = await self.client.call_api('/create_query_connection', 'POST', data=data, timeout=self.timeout)
         return json.loads(response.bytes)
 
-    async def create_results_stix_connection(self, entry_point, search_id, offset, length, data_source, metadata=None):
+    async def create_results_connection(self, entry_point, search_id, offset, length, data_source, metadata=None):
         data = json.dumps({"connection": self.connection, "configuration": self.configuration, "search_id": search_id, "offset": offset, "length": length, "data_source": data_source, "metadata": metadata})
         response = await self.client.call_api('/create_results_connection', 'POST', data=data, timeout=self.timeout)
         return json.loads(response.bytes)
