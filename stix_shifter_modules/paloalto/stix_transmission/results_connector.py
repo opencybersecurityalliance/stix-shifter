@@ -1,8 +1,8 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseJsonResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 import json
-from requests.exceptions import ConnectionError
+from aiohttp.client_exceptions import ClientConnectionError
 from .response_mapper import ResponseMapper
 from os import path
 
@@ -18,7 +18,7 @@ class InvalidQueryException(Exception):
     pass
 
 
-class ResultsConnector(BaseResultsConnector):
+class ResultsConnector(BaseJsonResultsConnector):
 
     def __init__(self, api_client):
         self.api_client = api_client
@@ -40,7 +40,7 @@ class ResultsConnector(BaseResultsConnector):
         except FileNotFoundException as e:
             raise FileNotFoundError(f'{rel_path_of_file} not found') from e
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         """
         Fetching the results using search id, offset and length
         :param search_id: str, search id generated in transmit query
@@ -58,7 +58,7 @@ class ResultsConnector(BaseResultsConnector):
             min_range = int(offset)
             max_range = int(offset) + int(length)
             # Grab the response, extract the response code, and convert it to readable json
-            response_wrapper = self.api_client.get_search_results(search_id)
+            response_wrapper = await self.api_client.get_search_results(search_id)
             response_text = json.loads(response_wrapper.read().decode('utf-8'))
             if response_wrapper.code != 200:
                 return_obj = ResponseMapper().status_code_mapping(response_wrapper.code, response_text)
@@ -70,7 +70,7 @@ class ResultsConnector(BaseResultsConnector):
                         results = ResultsConnector.format_results_data(
                             response_text['reply']['results']['data'], to_stix_mapping, mandatory_map)
                     elif 'stream_id' in response_text['reply']['results'].keys():
-                        stream_wrapper = self.api_client.get_stream_results(
+                        stream_wrapper = await self.api_client.get_stream_results(
                             response_text['reply']['results']['stream_id'])
                         if stream_wrapper.code != 200:
                             return_obj = ResponseMapper().status_code_mapping(stream_wrapper.code,
@@ -92,7 +92,7 @@ class ResultsConnector(BaseResultsConnector):
             response_dict['type'] = "SyntaxError"
             response_dict['message'] = 'Tenant Query Failed'
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)
-        except ConnectionError:
+        except ClientConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.api_client.connector)
@@ -126,6 +126,8 @@ class ResultsConnector(BaseResultsConnector):
                     if value is not None and value != "NULL" and value != '' and field != 'dataset_name' \
                             and (field in to_stix_mapping[dataset_map].keys()):
                         stix_data_map = to_stix_mapping[dataset_map][field]
+                        if '\x00' in str(value):
+                            value = value.replace('\x00', '')
                         data = ResultsConnector.check_object(stix_data_map, mandatory_map, data, log,
                                                              field, value)
                     elif field == 'dataset_name':
@@ -160,6 +162,8 @@ class ResultsConnector(BaseResultsConnector):
                         if value is not None and value != "NULL" and value != '' and field != 'dataset_name' \
                                 and (field in to_stix_mapping[dataset_map].keys()):
                             stix_data_map = to_stix_mapping[dataset_map][field]
+                            if '\x00' in str(value):
+                                value = value.replace('\x00', '')
                             data = ResultsConnector.check_object(stix_data_map, mandatory_map,
                                                                  data, log_dict, field, value)
                         elif field == 'dataset_name':

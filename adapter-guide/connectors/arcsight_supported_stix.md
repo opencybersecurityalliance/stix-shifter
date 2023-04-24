@@ -1,10 +1,12 @@
-##### Updated on 06/01/22
+##### Updated on 02/27/23
 ## Micro Focus ArcSight
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | AND |
-| OR | OR |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | > | > |
 | >= | >= |
 | < | < |
@@ -15,8 +17,97 @@
 | IN | IN |
 | MATCHES | CONTAINS |
 | ISSUBSET | insubnet |
+| OR (Observation) | OR |
+| AND (Observation) | AND |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **ipv4-addr**:value | sourceAddress, destinationAddress |
+| **ipv6-addr**:value | fulltextSearch |
+| **mac-addr**:value | sourceMacAddress, destinationMacAddress |
+| **network-traffic**:src_port | sourcePort |
+| **network-traffic**:dst_port | destinationPort |
+| **network-traffic**:protocols[*] | transportProtocol, applicationProtocol |
+| **network-traffic**:src_ref.value | sourceAddress, sourceMacAddress |
+| **network-traffic**:dst_ref.value | destinationAddress, destinationMacAddress |
+| **directory**:path | filePath |
+| **file**:parent_directory_ref.path | filePath |
+| **file**:name | fileName |
+| **file**:hashes.'SHA-256' | fulltextSearch |
+| **file**:hashes.'SHA-1' | fulltextSearch |
+| **file**:hashes.MD5 | fulltextSearch |
+| **process**:name | destinationProcessName, sourceProcessName |
+| **process**:parent_ref.name | sourceProcessName |
+| **process**:command_line | destinationServiceName, sourceServiceName |
+| **domain-name**:value | sourceHostName, destinationHostName |
+| **user-account**:user_id | destinationUserId, sourceUserId |
+| **user-account**:account_login | destinationUserName, sourceUserName |
+| **windows-registry-key**:key | filePath |
+| **windows-registry-key**:values[*] | deviceCustomString4 |
+| **x-arcsight-event**:priority | priority |
+| **x-arcsight-event**:base_event_count | baseEventCount |
+| **x-arcsight-event**:event_id | eventId |
+| **x-arcsight-event**:external_id | externalId |
+| **x-arcsight-event**:name | name |
+| **x-arcsight-event**:type | type |
+| **x-arcsight-event**:start_time | startTime |
+| **x-arcsight-event**:end_time | endTime |
+| **x-arcsight-event**:request_url | requestUrl |
+| **x-arcsight-event**:request_method | requestMethod |
+| **x-arcsight-event-category**:category_behavior | categoryBehavior |
+| **x-arcsight-event-category**:category_device_group | categoryDeviceGroup |
+| **x-arcsight-event-category**:category_object | categoryObject |
+| **x-arcsight-event-category**:category_outcome | categoryOutcome |
+| **x-arcsight-event-category**:category_significance | categorySignificance |
+| **x-arcsight-event-category**:category_technique | categoryTechnique |
+| **x-arcsight-event-device**:product | deviceProduct |
+| **x-arcsight-event-device**:vendor | deviceVendor |
+| **x-arcsight-event-device**:device_action | deviceAction |
+| **x-arcsight-event-device**:device_receipt_time | deviceReceiptTime |
+| **x-arcsight-event-device**:device_event_category | deviceEventCategory |
+| **x-arcsight-event-device**:device_severity | deviceSeverity |
+| **x-arcsight-event-device**:device_version | deviceVersion |
+| **x-arcsight-event-device**:device_address | deviceAddress |
+| **x-arcsight-event-device**:device_external_id | deviceExternalId |
+| **x-arcsight-event-device**:device_asset_id | fulltextSearch |
+| **x-arcsight-event-device**:device_asset_name | fulltextSearch |
+| **x-arcsight-event-device**:device_dns_domain | fulltextSearch |
+| **x-arcsight-event-device**:device_domain | fulltextSearch |
+| **x-arcsight-event-device**:device_nt_domain | fulltextSearch |
+| **x-arcsight-event-destination**:destination_asset_id | fulltextSearch |
+| **x-arcsight-event-destination**:destination_asset_name | fulltextSearch |
+| **x-arcsight-event-destination**:destination_dns_domain | destinationDnsDomain |
+| **x-arcsight-event-destination**:destination_fqdn | fulltextSearch |
+| **x-arcsight-event-destination**:destination_nt_domain | destinationNtDomain |
+| **x-arcsight-event-destination**:destination_geo_location_info | fulltextSearch |
+| **x-arcsight-event-destination**:destination_geo_postal_code | fulltextSearch |
+| **x-arcsight-event-source**:source_asset_id | fulltextSearch |
+| **x-arcsight-event-source**:source_asset_name | fulltextSearch |
+| **x-arcsight-event-source**:source_dns_domain | fulltextSearch |
+| **x-arcsight-event-source**:source_fqdn | fulltextSearch |
+| **x-arcsight-event-source**:source_nt_domain | sourceNtDomain |
+| **x-arcsight-event-source**:source_geo_location_info | fulltextSearch |
+| **x-arcsight-event-source**:source_geo_postal_code | fulltextSearch |
+| **x-arcsight-event-vulnerability**:vulnerability | fulltextSearch |
+| **x-arcsight-event-vulnerability**:vulnerability_external_id | vulnerabilityExternalID |
+| **x-arcsight-event-vulnerability**:vulnerability_id | fulltextSearch |
+| **x-arcsight-event-vulnerability**:vulnerability_name | fulltextSearch |
+| **x-arcsight-event-vulnerability**:vulnerability_reference_id | fulltextSearch |
+| **x-arcsight-event-vulnerability**:vulnerability_resource | fulltextSearch |
+| **x-arcsight-event-vulnerability**:vulnerability_uri | vulnerabilityURI |
+| **x-ibm-finding**:name | name |
+| **x-ibm-finding**:finding_type | categorySignificance |
+| **x-ibm-finding**:src_device | fulltextSearch |
+| **x-ibm-finding**:dst_device | fulltextSearch |
+| **x-ibm-finding**:src_geolocation | fulltextSearch |
+| **x-ibm-finding**:dst_geolocation | fulltextSearch |
+| **x-ibm-finding**:src_ip_ref.value | sourceAddress |
+| **x-ibm-finding**:dst_ip_ref.value | destinationAddress |
+| **x-oca-asset**:hostname | deviceHostName, deviceAssetName |
+| **x-oca-asset**:host_id | deviceAssetId |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | filePath |

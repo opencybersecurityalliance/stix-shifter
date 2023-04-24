@@ -22,6 +22,14 @@
             "type": "text",
             "optional": true
         },
+        "ocsf_database_name": {
+            "type": "text",
+            "optional": true
+        },
+        "ocsf_table_name": {
+            "type": "text",
+            "optional": true
+        },
         "guardduty_database_name": {
             "type": "text",
             "optional": true
@@ -44,6 +52,10 @@
                 "type": "password"
             },
             "aws_iam_role": {
+                "type": "password",
+                "optional": true
+            },
+            "aws_assume_role_external_id": {
                 "type": "password",
                 "optional": true
             },

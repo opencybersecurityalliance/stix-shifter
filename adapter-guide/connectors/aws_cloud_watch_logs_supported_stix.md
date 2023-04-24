@@ -1,10 +1,12 @@
-##### Updated on 06/01/22
+##### Updated on 03/08/23
 ## Amazon CloudWatch Logs
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | OR |
-| OR | OR |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | > | > |
 | >= | >= |
 | < | < |
@@ -14,8 +16,58 @@
 | LIKE | LIKE |
 | IN | IN |
 | MATCHES | LIKE |
+| OR (Observation) | OR |
+| AND (Observation) | OR |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties for Guardduty dialect
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **ipv4-addr**:value | eth0_private_ip, eth1_private_ip, public_ip, remote_ip |
+| **ipv4-addr**:x_aws_interface_id | interface_id |
+| **ipv4-addr**:x_aws_remote_city_name | city_name |
+| **ipv4-addr**:x_aws_remote_country_name | country_name |
+| **ipv6-addr**:value | ipv6_address |
+| **ipv6-addr**:x_aws_interface_id | interface_id |
+| **network-traffic**:src_port | local_port |
+| **network-traffic**:dst_port | remote_port |
+| **network-traffic**:src_ref.value | eth0_private_ip |
+| **network-traffic**:dst_ref.value | remote_ip |
+| **network-traffic**:protocols[*] | protocol |
+| **domain-name**:value | eth0_private_dns_name, eth1_private_dns_name, public_dns_name, dns_domain |
+| **user-account**:user_id | principal_id |
+| **user-account**:account_login | user_name |
+| **x-aws**:account_id | account_id |
+| **x-aws**:region | aws_region |
+| **x-aws-instance**:instance_id | instance_id |
+| **x-aws-instance**:image_id | image_id |
+| **x-aws-instance**:availability_zone | availability_zone |
+| **x-aws-vpc**:vpc_id | vpc_id |
+| **x-aws-vpc**:subnet_id | subnet_id |
+| **x-aws-vpc**:security_group_name | security_group_name |
+| **x-aws-vpc**:security_group_id | security_group_id |
+| **x-aws-api**:access_key_id | access_key_id |
+| **x-aws-api**:api | api |
+| **x-aws-api**:api_service_name | api_service_name |
+| **x-ibm-finding**:finding_id | finding_id |
+| **x-ibm-finding**:finding_type | finding_type |
+| <br> | |
+### Searchable STIX objects and properties for Vpcflow dialect
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **ipv4-addr**:value | srcAddr, dstAddr |
+| **ipv4-addr**:x_aws_interface_id | interfaceId |
+| **ipv6-addr**:value | srcAddr, dstAddr |
+| **ipv6-addr**:x_aws_interface_id | interfaceId |
+| **network-traffic**:src_port | srcPort |
+| **network-traffic**:dst_port | dstPort |
+| **network-traffic**:src_ref.value | srcAddr |
+| **network-traffic**:dst_ref.value | dstAddr |
+| **network-traffic**:protocols[*] | protocol |
+| **network-traffic**:start | start |
+| **network-traffic**:end | end |
+| **x-aws**:account_id | accountId |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | domain-name | resolves_to_refs | detail_resource_instanceDetails_networkInterfaces_0_privateIpAddress |

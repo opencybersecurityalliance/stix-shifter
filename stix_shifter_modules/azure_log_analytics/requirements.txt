@@ -1,0 +1,2 @@
+azure-monitor-query==1.0.2
+pandas==1.5.2

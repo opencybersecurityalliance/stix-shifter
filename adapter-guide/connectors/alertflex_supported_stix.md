@@ -1,10 +1,12 @@
-##### Updated on 06/01/22
+##### Updated on 02/27/23
 ## Alertflex
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | OR |
-| OR | OR |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | > | > |
 | >= | >= |
 | < | < |
@@ -14,8 +16,32 @@
 | LIKE | LIKE |
 | IN | IN |
 | MATCHES | LIKE |
+| OR (Observation) | OR |
+| AND (Observation) | OR |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **ipv4-addr**:value | a.dstIp, a.srcIp |
+| **network-traffic**:src_port | a.srcPort |
+| **network-traffic**:dst_port | a.dstPort |
+| **network-traffic**:src_ref | a.srcIp |
+| **network-traffic**:dst_ref | a.dstIp |
+| **file**:name | a.fileName |
+| **file**:hashes.'SHA-256' | a.hashSha256 |
+| **file**:hashes.'SHA-1' | a.hashSha1 |
+| **file**:hashes.MD5 | a.hashMd5 |
+| **process**:name | a.processName |
+| **process**:pid | a.processId |
+| **user-account**:user_id | a.userName |
+| **x_org_alertflex**:agent | a.agentName |
+| **x_org_alertflex**:node | a.nodeId |
+| **x_org_alertflex**:source | a.alertSource |
+| **x_org_alertflex**:type | a.alertType |
+| **x_org_alertflex**:id | a.eventId |
+| **x_org_alertflex**:severity | a.alertSeverity |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | file | name | file |

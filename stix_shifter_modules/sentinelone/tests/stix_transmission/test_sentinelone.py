@@ -1,19 +1,12 @@
 from unittest.mock import patch
 import unittest
 import json
+from aiohttp.client_exceptions import ClientConnectionError
+
 from stix_shifter_modules.sentinelone.entry_point import EntryPoint
 from stix_shifter.stix_transmission import stix_transmission
-from requests.exceptions import ConnectionError
+from tests.utils.async_utils import get_mock_response
 
-class PingResponse:
-    """ class for capturing response"""
-    def __init__(self, st_code, obj):
-        self.code = st_code
-        self.object = obj
-
-    def read(self):
-        """ to read contents of results returned by api"""
-        return bytearray(self.object, 'utf-8')
 
 class TestSentineloneConnection(unittest.TestCase):
     """ class for test sentinelone connection"""
@@ -35,28 +28,21 @@ class TestSentineloneConnection(unittest.TestCase):
             "port": 443
         }
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
-    def test_is_async(self, mock_api_client):
-        """check for synchronous or asynchronous"""
-        mock_api_client.return_value = None
-        entry_point = EntryPoint(self.connection(), self.config())
-        check_async = entry_point.is_async()
-        assert check_async is True
+    def test_is_async(self):
+       """check for synchronous or asynchronous"""
+       entry_point = EntryPoint(self.connection(), self.config())
+       check_async = entry_point.is_async()
+       assert check_async is True
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.ping_datasource')
-    def test_ping_endpoint(self, mock_ping_source, mock_api_client):
+    def test_ping_endpoint(self, mock_ping_source):
         """ test to check ping_data_source function"""
-
         obj = """{"data":{"health":"ok"}}"""
-        pingresponse = PingResponse(200, obj)
-        mock_ping_source.return_value = pingresponse
+        response = get_mock_response(200, obj, 'byte')
+        mock_ping_source.return_value = response
 
-        mock_api_client.return_value = None
-
+        
         transmission = stix_transmission.StixTransmission('sentinelone',
                                                           self.connection(),
                                                           self.config())
@@ -65,17 +51,16 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['success'] is True
         assert ping_response['code'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
+
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.ping_datasource')
-    def test_ping_endpoint_error(self, mock_ping_source, mock_api_client):
+    def test_ping_endpoint_error(self, mock_ping_source):
         """ test to check ping_data_source function"""
         obj = """{"errors":[{"code":4000040,"detail":"empty result"}]}"""
-        pingresponse = PingResponse(400, obj)
-        mock_ping_source.return_value = pingresponse
+        response = get_mock_response(400, obj)
+        mock_ping_source.return_value = response
 
-        mock_api_client.return_value = None
+        
         transmission = stix_transmission.StixTransmission('sentinelone',
                                                           self.connection(),
                                                           self.config())
@@ -84,18 +69,14 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['success'] is False
         assert ping_response['code'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
+
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.ping_datasource')
-    def test_ping_endpoint_parseerror(self, mock_ping_source, mock_api_client):
+    def test_ping_endpoint_parseerror(self, mock_ping_source):
         """ test to check ping_data_source parse error"""
-
         obj = """{"errors":"error"n}"""
-        pingresponse = PingResponse(400, obj)
-        mock_ping_source.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(400, obj)
+        mock_ping_source.return_value = response
 
         transmission = stix_transmission.StixTransmission('sentinelone',
                                                           self.connection(),
@@ -104,19 +85,16 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert ping_response['error'] is not None
+        assert ping_response['connector'] is not None
+        assert ping_response['code'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.create_search')
-    def test_process_query(self, mock_create_search, mock_api_client):
+    def test_process_query(self, mock_create_search):
         """ test to check query of process """
-
         obj = """{"data":{"queryId":"qf7a4b38c654e93d22b33017b1a0faadf"}}"""
-        pingresponse = PingResponse(200, obj)
-        mock_create_search.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(200, obj, 'byte')
+        mock_create_search.return_value = response
 
         query = json.dumps('{"query": "(SrcProcName In Contains (\\"host.exe\\") and EventTime ' \
                 'BETWEEN \\"2022-01-02T18:49:35.296Z\\" AND \\"2022-02-18T18:49:35.296Z\\")",' \
@@ -132,18 +110,14 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response['search_id'] is not None
         assert query_response['search_id'] == 'qf7a4b38c654e93d22b33017b1a0faadf'
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
+
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.create_search')
-    def test_search_query_error(self, mock_create_search, mock_api_client):
+    def test_search_query_error(self, mock_create_search):
         """ test to check search query error """
-
         obj = """{"errors":[{"code":4000040,"detail":"bad request"}]}"""
-        pingresponse = PingResponse(400, obj)
-        mock_create_search.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(400, obj)
+        mock_create_search.return_value = response
 
         query = json.dumps('{"query": "(SrcProcName In Contains (\\"host.exe\\") and TestEventTime ' \
                            'BETWEEN \\"2022-01-02T18:49:35.296Z\\" AND \\"2022-02-18T18:49:35.296Z\\")",' \
@@ -157,20 +131,17 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response is not None
         assert query_response['success'] is False
         assert query_response['error'] is not None
+        assert query_response['connector'] is not None
+        assert query_response['code'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.create_search')
-    def test_search_query_limiterror(self, mock_create_search, mock_api_client):
+    def test_search_query_limiterror(self, mock_create_search):
         """ test to check search query limit error """
-
         obj = '{"errors":[{"code":4000010,"detail":"Limit must be greater than or ' \
               'equals to 1 and less than equals to 100000"}]}'
-        pingresponse = PingResponse(400, obj)
-        mock_create_search.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(400, obj)
+        mock_create_search.return_value = response
 
         query = json.dumps('{"query": "(SrcProcName In Contains (\\"host.exe\\") and EventTime ' \
                            'BETWEEN \\"2022-01-02T18:49:35.296Z\\" AND \\"2022-02-18T18:49:35.296Z\\")",' \
@@ -184,19 +155,16 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response is not None
         assert query_response['success'] is False
         assert query_response['error'] is not None
+        assert query_response['connector'] is not None
+        assert query_response['code'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.create_search')
-    def test_search_authentication_error(self, mock_create_search, mock_api_client):
+    def test_search_authentication_error(self, mock_create_search):
         """ test to check search query authentication error """
-
         obj = '{"errors":[{"code":4010010,"detail":"Authentication failed"}]}'
-        pingresponse = PingResponse(401, obj)
-        mock_create_search.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(401, obj)
+        mock_create_search.return_value = response
 
         query = json.dumps('{"query": "(SrcProcName In Contains (\\"host.exe\\") and EventTime ' \
                            'BETWEEN \\"2022-01-02T18:49:35.296Z\\" AND \\"2022-02-18T18:49:35.296Z\\")",' \
@@ -210,19 +178,16 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response is not None
         assert query_response['success'] is False
         assert query_response['error'] is not None
+        assert query_response['connector'] is not None
+        assert query_response['code'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.create_search')
-    def test_file_query(self, mock_create_search, mock_api_client):
+    def test_file_query(self, mock_create_search):
         """ test to check query of file object """
-
         obj = """{"data":{"queryId":"qf7a4b38c654e93d22b33017b1a0faadf"}}"""
-        pingresponse = PingResponse(200, obj)
-        mock_create_search.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(200, obj, 'byte')
+        mock_create_search.return_value = response
 
         query = json.dumps('{"query": "(TgtFilePath  In Contains (\\"wildfire\\") and EventTime ' \
                            'BETWEEN \\"2022-01-02T18:49:35.296Z\\" AND \\"2022-02-18T18:49:35.296Z\\")",' \
@@ -237,18 +202,14 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response['success'] is True
         assert query_response['search_id'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
+ 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.create_search')
-    def test_network_traffic_query(self, mock_create_search, mock_api_client):
+    def test_network_traffic_query(self, mock_create_search):
         """ test to check query of network traffic """
-
         obj = """{"data":{"queryId":"qf7a4b38c654e93d22b33017b1a0faadf"}}"""
-        pingresponse = PingResponse(200, obj)
-        mock_create_search.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(200, obj, 'byte')
+        mock_create_search.return_value = response
 
         query = json.dumps('{"query": "(SrcIP = \\"172-31-31-110\\" OR DstIP = \\"172-31-31-110\\") '
                            'and EventTime BETWEEN \\"2022-01-02T18:49:35.296Z\\" AND \\"2022-02-18T18:49:35.296Z\\")",' \
@@ -264,13 +225,11 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response['success'] is True
         assert query_response['search_id'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
+
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_results')
-    def test_process_result(self, mock_results_response, mock_api_client):
+    def test_process_result(self, mock_results_response):
         """ test to check result of process object"""
-
         obj = """{"data":[{
             "activeContentFileId": null,
             "activeContentHash": null,
@@ -529,10 +488,8 @@ class TestSentineloneConnection(unittest.TestCase):
         "pagination": {"nextCursor": null,
         "totalItems": 1}
         }"""
-        pingresponse = PingResponse(200, obj)
-        mock_results_response.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(200, obj, 'byte')
+        mock_results_response.return_value = response
 
         search_id = "qf7a4b38c654e93d22b33017b1a0faadf"
 
@@ -547,18 +504,15 @@ class TestSentineloneConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
+
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_results')
-    def test_process_result_error(self, mock_results_response, mock_api_client):
+    def test_process_result_error(self, mock_results_response):
         """ test to check result of process """
         obj =  obj = '{"errors":[{"code":4000010,"detail":"Limit must be greater than or ' \
               'equals to 1 and less than equals to 1000"}]}'
-        pingresponse = PingResponse(400, obj)
-        mock_results_response.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(400, obj)
+        mock_results_response.return_value = response
 
         search_id = "qf7a4b38c654e93d22b33017b1a0faadf"
 
@@ -572,18 +526,16 @@ class TestSentineloneConnection(unittest.TestCase):
         assert results_response is not None
         assert results_response['success'] is False
         assert results_response['error'] is not None
+        assert results_response['connector'] is not None
+        assert results_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_results')
-    def test_result_query_id_notfound_error(self, mock_results_response, mock_api_client):
+    def test_result_query_id_notfound_error(self, mock_results_response):
         """ test to check result of process """
         obj = '{"errors":[{"code":4040010,"detail":"QueryId not found"}]}'
-        pingresponse = PingResponse(404, obj)
-        mock_results_response.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(404, obj)
+        mock_results_response.return_value = response
 
         search_id = "qf7a4b38c654e93d22b33017b1a0faadf"
 
@@ -596,18 +548,16 @@ class TestSentineloneConnection(unittest.TestCase):
         assert results_response is not None
         assert results_response['success'] is False
         assert results_response['error'] is not None
+        assert results_response['connector'] is not None
+        assert results_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_results')
-    def test_process_result_auth_error(self, mock_results_response, mock_api_client):
+    def test_process_result_auth_error(self, mock_results_response):
         """ test to check result auth error """
         obj = '{"errors":[{"code":4010010,"detail":"Authentication failed"}]}'
-        pingresponse = PingResponse(401, obj)
-        mock_results_response.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(401, obj)
+        mock_results_response.return_value = response
 
         search_id = "qf7a4b38c654e93d22b33017b1a0faadf"
 
@@ -621,14 +571,13 @@ class TestSentineloneConnection(unittest.TestCase):
         assert results_response is not None
         assert results_response['success'] is False
         assert results_response['error'] is not None
+        assert results_response['connector'] is not None
+        assert results_response['code'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_results')
-    def test_file_result(self, mock_results_response, mock_api_client):
+    def test_file_result(self, mock_results_response):
         """ test to check result of files object"""
-
         obj = """{"data":[{
             "activeContentFileId": null,
             "activeContentHash": null,
@@ -900,10 +849,10 @@ class TestSentineloneConnection(unittest.TestCase):
         "pagination": {"nextCursor": null,
         "totalItems": 1}
         }"""
-        pingresponse = PingResponse(200, obj)
-        mock_results_response.return_value = pingresponse
+        response = get_mock_response(200, obj, 'byte')
+        mock_results_response.return_value = response
 
-        mock_api_client.return_value = None
+        
 
         search_id = "qf7a4b38c654e93d22b33017b1a0faadf"
 
@@ -918,18 +867,14 @@ class TestSentineloneConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
+
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.create_search')
-    def test_multiobject_query(self, mock_create_search, mock_api_client):
+    def test_multiobject_query(self, mock_create_search):
         """ test to check query of multi object"""
-
         obj = """{"data":{"queryId":"qf7a4b38c654e93d22b33017b1a0faadf"}}"""
-        pingresponse = PingResponse(200, obj)
-        mock_create_search.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(200, obj, 'byte')
+        mock_create_search.return_value = response
 
         query = json.dumps('{"query": "(SrcProcName In Contains (\\"host.exe\\") and EventTime ' \
                 'BETWEEN \\"2022-01-02T18:49:35.296Z\\" AND \\"2022-02-18T18:49:35.296Z\\") or '
@@ -948,18 +893,14 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response['search_id'] is not None
         assert query_response['search_id'] == 'qf7a4b38c654e93d22b33017b1a0faadf'
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
+
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.create_search')
-    def test_multiobject_query_parseerror(self, mock_create_search, mock_api_client):
+    def test_multiobject_query_parseerror(self, mock_create_search):
         """ test to check query of multi object error"""
-
         obj = """{"data":{"queryId":"test"n}}"""
-        pingresponse = PingResponse(200, obj)
-        mock_create_search.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(200, obj)
+        mock_create_search.return_value = response
 
         query = json.dumps('{"query": "(SrcProcName In Contains (\\"host.exe\\") and EventTime ' \
                            'BETWEEN \\"2022-01-02T18:49:35.296Z\\" AND \\"2022-02-18T18:49:35.296Z\\") or '
@@ -976,14 +917,13 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response is not None
         assert query_response['success'] is False
         assert query_response['error'] is not None
+        assert query_response['connector'] is not None
+        assert query_response['code'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_results')
-    def test_multiobject_result(self, mock_results_response, mock_api_client):
+    def test_multiobject_result(self, mock_results_response):
         """ test to check result of multi object"""
-
         obj = """{"data":[{
             "activeContentFileId": null,
             "activeContentHash": null,
@@ -1239,10 +1179,8 @@ class TestSentineloneConnection(unittest.TestCase):
             "user": "NT AUTHORITY\\\\NETWORK SERVICE",
             "verifiedStatus": "verified"                     
         }]}"""
-        pingresponse = PingResponse(200, obj)
-        mock_results_response.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(200, obj, 'byte')
+        mock_results_response.return_value = response
 
         search_id = "qf7a4b38c654e93d22b33017b1a0faadf"
 
@@ -1258,13 +1196,11 @@ class TestSentineloneConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
+
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_results')
-    def test_multiobject_result_parseerror(self, mock_results_response, mock_api_client):
+    def test_multiobject_result_parseerror(self, mock_results_response):
         """ test to check result of multi object parse error"""
-
         obj = """{"data":[{
                 "activeContentFileId": null,
                 "activeContentHash": null,
@@ -1288,10 +1224,8 @@ class TestSentineloneConnection(unittest.TestCase):
                 "childProcCount": "28",
                 "connectionStatus": "SUCCESS",
                 }"""
-        pingresponse = PingResponse(200, obj)
-        mock_results_response.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(200, obj)
+        mock_results_response.return_value = response
 
         search_id = "qf7a4b38c654e93d22b33017b1a0faadf"
 
@@ -1305,19 +1239,18 @@ class TestSentineloneConnection(unittest.TestCase):
         assert results_response is not None
         assert results_response['success'] is False
         assert results_response['error'] is not None
+        assert results_response['connector'] is not None
+        assert results_response['code'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.get_search_status')
-    def test_search_status(self, mock_status_response, mock_api_client):
+
+    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client.APIClient.get_search_status')
+    def test_search_status(self, mock_status_response):
         """ test to check query status function"""
 
         obj = """{"data":{"progressStatus":"100","responseState":"FINISHED"}}"""
-        pingresponse = PingResponse(200, obj)
-        mock_status_response.return_value = pingresponse
+        response = get_mock_response(200, obj, 'byte')
+        mock_status_response.return_value = response
 
-        mock_api_client.return_value = None
         search_id = "qf7a4b38c654e93d22b33017b1a0faadf"
 
         transmission = stix_transmission.StixTransmission('sentinelone',
@@ -1328,18 +1261,15 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['success'] is True
         assert ping_response['status'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
+ 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_status')
-    def test_search_status_Running(self, mock_status_response, mock_api_client):
+    def test_search_status_Running(self, mock_status_response):
         """ test to check query status function"""
-
         obj = """{"data":{"progressStatus":"60","responseState":"RUNNING"}}"""
-        pingresponse = PingResponse(200, obj)
-        mock_status_response.return_value = pingresponse
-
-        mock_api_client.return_value = None
+        response = get_mock_response(200, obj, 'byte')
+        mock_status_response.return_value = response
+        
         search_id = "qf7a4b38c654e93d22b33017b1a0faadf"
 
         transmission = stix_transmission.StixTransmission('sentinelone',
@@ -1350,18 +1280,15 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['success'] is True
         assert ping_response['status'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
+
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_status')
-    def test_search_status_notfound_error(self, mock_status_response, mock_api_client):
+    def test_search_status_notfound_error(self, mock_status_response):
         """ test to check query status error function"""
-
         obj = """{"errors":[{"code":4040010,"detail":"Query Not Found"}]}"""
-        pingresponse = PingResponse(404, obj)
-        mock_status_response.return_value = pingresponse
+        response = get_mock_response(404, obj)
+        mock_status_response.return_value = response
 
-        mock_api_client.return_value = None
         search_id = "test"
 
         transmission = stix_transmission.StixTransmission('sentinelone',
@@ -1371,19 +1298,17 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert ping_response['error'] is not None
+        assert ping_response['connector'] is not None
+        assert ping_response['code'] is not None
 
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_status')
-    def test_search_status_error(self, mock_status_response, mock_api_client):
+    def test_search_status_error(self, mock_status_response):
         """ test to check query status error function"""
-
         obj = """{"errors":"test"n}"""
-        pingresponse = PingResponse(404, obj)
-        mock_status_response.return_value = pingresponse
+        response = get_mock_response(404, obj)
+        mock_status_response.return_value = response
 
-        mock_api_client.return_value = None
         search_id = "test"
 
         transmission = stix_transmission.StixTransmission('sentinelone',
@@ -1393,19 +1318,17 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert ping_response['error'] is not None
+        assert ping_response['connector'] is not None
+        assert ping_response['code'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_status')
-    def test_search_status_auth_error(self, mock_status_response, mock_api_client):
+    def test_search_status_auth_error(self, mock_status_response):
         """ test to check query status auth error """
-
         obj = '{"errors":[{"code":4010010,"detail":"Authentication failed"}]}'
-        pingresponse = PingResponse(401, obj)
-        mock_status_response.return_value = pingresponse
+        response = get_mock_response(401, obj)
+        mock_status_response.return_value = response
 
-        mock_api_client.return_value = None
         search_id = "test"
 
         transmission = stix_transmission.StixTransmission('sentinelone',
@@ -1415,18 +1338,17 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert ping_response['error'] is not None
+        assert ping_response['connector'] is not None
+        assert ping_response['code'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.delete_search')
-    def test_delete_search(self, mock_status_response, mock_api_client):
+    def test_delete_search(self, mock_status_response):
         """ test to check query cancel function"""
 
-        pingresponse = {"code":200,"success": True}
-        mock_status_response.return_value = pingresponse
+        response = {"code":200,"success": True}
+        mock_status_response.return_value = response
 
-        mock_api_client.return_value = None
         search_id = "qf7a4b38c654e93d22b33017b1a0faadf"
 
         transmission = stix_transmission.StixTransmission('sentinelone',
@@ -1437,17 +1359,13 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['success'] is True
         assert ping_response['message'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
+
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.delete_search')
-    def test_delete_queryparse_error(self, mock_status_response, mock_api_client):
+    def test_delete_queryparse_error(self, mock_status_response):
         """ test to check query status parse error"""
-
         obj = """{"errors":"test"n}"""
-        pingresponse = PingResponse(0, obj)
-        mock_status_response.return_value = pingresponse
-        mock_api_client.return_value = None
+        mock_status_response.return_value = obj
         search_id = "test"
 
         transmission = stix_transmission.StixTransmission('sentinelone',
@@ -1458,15 +1376,13 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['success'] is False
         assert ping_response['error'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
+
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.ping_datasource')
-    def test_ping_maxretried_error(self, mock_ping_source, mock_api_client):
+    def test_ping_maxretried_error(self, mock_ping_source):
         """ test to check ping_data_source function"""
         mock_ping_source.side_effect = Exception('Max retries exceeded')
 
-        mock_api_client.return_value = None
         transmission = stix_transmission.StixTransmission('sentinelone',
                                                           self.connection(),
                                                           self.config())
@@ -1474,19 +1390,18 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert ping_response['error'] is not None
+        assert ping_response['connector'] is not None
+        assert ping_response['code'] is not None
 
-    @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
-           '.APIClient.__init__')
     @patch('stix_shifter_modules.sentinelone.stix_transmission.api_client'
            '.APIClient.get_search_status')
-    def test_search_status_maxretried_error(self, mock_status_response, mock_api_client):
+    def test_search_status_maxretried_error(self, mock_status_response):
         """ test to check query status function"""
         #obj = """{"data":{"progressStatus":"100","responseState":"FINISHED"}}"""
-        #pingresponse = PingResponse(200, obj)
-        #mock_status_response.return_value = pingresponse
+        #response = get_mock_response(200, obj)
+        #mock_status_response.return_value = response
         mock_status_response.side_effect = Exception('Max retries exceeded')
 
-        mock_api_client.return_value = None
         search_id = "qf7a4b38c654e93d22b33017b1a0faadf"
 
         transmission = stix_transmission.StixTransmission('sentinelone',
@@ -1497,33 +1412,37 @@ class TestSentineloneConnection(unittest.TestCase):
         assert ping_response['status'] == "RUNNING"
         assert ping_response['progress'] is not None
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host_ping(self, mock_ping):
         """Test Invalid host"""
-        mock_ping.side_effect = ConnectionError("Invalid Host")
+        mock_ping.side_effect = ClientConnectionError("Invalid Host")
         transmission = stix_transmission.StixTransmission('sentinelone', self.connection(), self.config())
         ping_response = transmission.ping()
         assert ping_response is not None
         assert ping_response['success'] is False
         assert "Invalid Host" in ping_response['error']
+        assert ping_response['connector'] is not None
+        assert ping_response['code'] is not None
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host_status(self, mock_ping):
         """Test Invalid host"""
-        mock_ping.side_effect = ConnectionError("Invalid Host")
+        mock_ping.side_effect = ClientConnectionError("Invalid Host")
         transmission = stix_transmission.StixTransmission('sentinelone', self.connection(), self.config())
         search_id = "test"
         ping_response = transmission.status(search_id)
         assert ping_response is not None
         assert ping_response['success'] is False
         assert "Invalid Host" in ping_response['error']
+        assert ping_response['connector'] is not None
+        assert ping_response['code'] is not None
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host_query(self, mock_create_search):
         """ test to check query of process """
 
         """Test Invalid host"""
-        mock_create_search.side_effect = ConnectionError("Invalid Host")
+        mock_create_search.side_effect = ClientConnectionError("Invalid Host")
         transmission = stix_transmission.StixTransmission('sentinelone', self.connection(), self.config())
 
         query = json.dumps('{"query": "(SrcProcName In Contains (\\"host.exe\\") and EventTime ' \
@@ -1538,11 +1457,13 @@ class TestSentineloneConnection(unittest.TestCase):
         assert query_response is not None
         assert query_response['success'] is False
         assert "Invalid Host" in query_response['error']
+        assert query_response['connector'] is not None
+        assert query_response['code'] is not None
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host_result(self, mock_result):
         """Test Invalid host"""
-        mock_result.side_effect = ConnectionError("Invalid Host")
+        mock_result.side_effect = ClientConnectionError("Invalid Host")
         transmission = stix_transmission.StixTransmission('sentinelone', self.connection(), self.config())
 
         search_id = "test"
@@ -1557,3 +1478,5 @@ class TestSentineloneConnection(unittest.TestCase):
         assert results_response is not None
         assert results_response['success'] is False
         assert "Invalid Host" in results_response['error']
+        assert results_response['connector'] is not None
+        assert results_response['code'] is not None

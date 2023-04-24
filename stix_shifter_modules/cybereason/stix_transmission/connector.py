@@ -1,9 +1,9 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 from .api_client import APIClient
 import json
-from requests.exceptions import ConnectionError
+from aiohttp.client_exceptions import ClientConnectionError
 
 
 class InvalidRequestException(Exception):
@@ -18,14 +18,14 @@ class InvalidAuthenticationException(Exception):
     pass
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
 
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_results_connection(self, query, offset, length):
+    async def create_results_connection(self, query, offset, length):
         """
         Fetching the results using query, offset and length
         :param query: str, Data Source query
@@ -40,9 +40,9 @@ class Connector(BaseSyncConnector):
             length = int(length)
             if isinstance(query, dict):
                 query = json.dumps(query)
-            response_wrapper = self.api_client.get_search_results(query)
+            response_wrapper = await self.api_client.get_search_results(query)
             if response_wrapper.response.history:                       # If the authentication is invalid, the history
-                if response_wrapper.response.history[0].status_code == 302:  # will be returned with 302 status code.
+                if response_wrapper.response.history[0].status == 302:  # will be returned with 302 status code.
                     raise InvalidAuthenticationException
             if response_wrapper.code == 200:
                 return_obj['success'] = True
@@ -53,10 +53,10 @@ class Connector(BaseSyncConnector):
 
             response_dict = json.loads(response_wrapper.read().decode('utf-8'))
             results = self.get_results_data(response_dict)
-            return_obj['data'] = results[offset:length]
+            return_obj['data'] = results[offset:(offset+length)]
 
             # session log out
-            response_wrapper = self.api_client.session_log_out(response_wrapper)
+            response_wrapper = await self.api_client.session_log_out(response_wrapper)
             if not response_wrapper.code == 200:
                 raise InvalidRequestException(response_wrapper.response.text)
 
@@ -64,7 +64,7 @@ class Connector(BaseSyncConnector):
             response_dict['type'] = "AuthenticationError"
             response_dict['message'] = "Invalid Authentication"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
-        except ConnectionError:
+        except ClientConnectionError:
             response_dict['type'] = "ConnectionError"
             response_dict['message'] = "Invalid Host/Port"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
@@ -103,10 +103,10 @@ class Connector(BaseSyncConnector):
         :param res_dict: dict, log
         :return: str, element name
         """
-        element_name = res_dict['data']['pathResultCounts'][0]['featureDescriptor']['elementInstanceType']
+        element_name = res_dict['data']['queryLimits']['groupingFeature']['elementInstanceType']
         return element_name
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """
         Ping the endpoint
         :return: dict
@@ -114,14 +114,23 @@ class Connector(BaseSyncConnector):
         return_obj = {}
         response_dict = {}
         try:
-            response = self.api_client.ping_box()
-            if response.response.history:                           # If the authentication is invalid, the history
-                if response.response.history[0].status_code == 302:  # will be returned with 302 status code.
-                    raise InvalidAuthenticationException
-            response_code = response.response.status_code
-            response_dict = json.loads(response.response.text)
-            if response_code == 200 and response_dict['status'] == 'SUCCESS':
-                return_obj['success'] = True
+            response = await self.api_client.ping_box()
+            response_code = response.code
+            response_str = response.read().decode('utf-8')
+            if response_code == 302 or ('html' in response_str and 'login' in response_str):
+                raise InvalidAuthenticationException
+            if response_code == 200:
+                response_dict = json.loads(response_str)
+                if response_dict.get('online', False) and response_dict.get('readyToServe', False):
+                    return_obj['success'] = True
+                else:
+                    return_obj['success'] = False
+                    response_dict['message'] = str(response_dict)
+            else:
+                response_dict['type'] = "UnexpectedResponseCode"
+                response_dict['message'] = "code: " + str(response_code)
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+
         except InvalidAuthenticationException:
             response_dict['type'] = "AuthenticationError"
             response_dict['message'] = "Invalid Authentication"
@@ -137,7 +146,7 @@ class Connector(BaseSyncConnector):
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
 
-    def delete_query_connection(self, query):
+    async def delete_query_connection(self, query):
         """
         Delete query response
         :param query:

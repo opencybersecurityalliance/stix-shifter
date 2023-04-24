@@ -2,7 +2,7 @@
     "connection": {
         "host": {
             "label": "Host URL",
-            "description": "Specify theHost URL of the data source so that IBM Cloud Pak for Security can communicate with it"
+            "description": "Specify the host URL of the data source"
         },
         "help": {
             "label": "Need additional help?",
@@ -16,7 +16,7 @@
                 "description": "Account ID of IBM Cloud Security Advisor"
             },
             "apiKey": {
-                "label": "API Key",
+                "label": "API key",
                 "description": "API Key of IBM Cloud Security Advisor"
             }
         }

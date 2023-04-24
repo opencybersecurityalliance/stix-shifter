@@ -97,7 +97,7 @@ class ToInteger(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
-            if type(obj) is str and re.search('\.', obj):
+            if type(obj) is str and re.search(r'\.', obj):
                 obj = float(obj)
             return int(obj)
         except ValueError:

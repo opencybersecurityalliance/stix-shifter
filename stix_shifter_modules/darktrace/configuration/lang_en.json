@@ -1,8 +1,8 @@
 {
     "connection": {
         "host": {
-            "label": "Management IP address or Hostname",
-            "description": "Specify the IP address or hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+            "label": "Management IP address or hostname",
+            "description": "Specify the IP address or hostname of the data source"
         },
         "help": {
             "label": "Need additional help?",
@@ -12,11 +12,11 @@
     "configuration": {
         "auth": {
             "private_token": {
-                "label": "Private Token",
+                "label": "Private token",
                 "description": "Private tokens are used in token-based authentication to access an API."
             },
             "public_token": {
-                "label": "Public Token",
+                "label": "Public token",
                 "description": "Public tokens are used in token-based authentication to access an API."
             }
         }

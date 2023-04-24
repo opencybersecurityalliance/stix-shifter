@@ -1,9 +1,11 @@
-##### Updated on 06/01/22
+##### Updated on 02/27/23
 ## Cybereason
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | AND |
+| AND (Comparision) | AND |
 | > | GreaterThan |
 | >= | GreaterOrEqualsTo |
 | < | LessThan |
@@ -13,8 +15,190 @@
 | LIKE | ContainsIgnoreCase |
 | IN | Equals |
 | MATCHES | ContainsIgnoreCase |
+| AND (Observation) | OR |
+| OR (Observation) | OR |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties
+*The Cybereason connector can only join specific linked fields with the AND operator as defined in its [configmap](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_modules/aws_athena/stix_translation/json/operators.json).*
+
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **ipv4-addr**:value | Connection.localAddress, Connection.remoteAddress |
+| **ipv6-addr**:value | Connection.localAddress, Connection.remoteAddress |
+| **network-traffic**:src_port | Connection.localPort |
+| **network-traffic**:dst_port | Connection.remotePort |
+| **network-traffic**:protocols[*] | Connection.transportProtocol |
+| **network-traffic**:src_ref.value | Connection.localAddress |
+| **network-traffic**:dst_ref.value | Connection.remoteAddress |
+| **network-traffic**:src_byte_count | Connection.aggregatedTransmittedBytesCount |
+| **network-traffic**:dst_byte_count | Connection.aggregatedReceivedBytesCount, Connection.receivedBytesCount |
+| **email-addr**:value | User.emailAddress, User.adMail, User.adLogonName |
+| **domain-name**:value | Connection.domainName, Connection.urlDomains, Machine.domainFqdn, Machine.adDNSHostName, User.domain, User.adAssociatedDomain |
+| **url**:value | Proxy.pacUrl |
+| **mac-addr**:value | NetworkInterface.macAddressFormat |
+| **process**:command_line | Process.commandLine, Process.decodedCommandLine |
+| **process**:created | Process.creationTime, DetectionEvents.firstSeen |
+| **process**:pid | Process.applicablePid |
+| **process**:name | Process.elementDisplayName, Process.parentProcess, Process.execedBy |
+| **process**:creator_user_ref.user_id | Process.user |
+| **process**:parent_ref.pid | Process.applicablePid |
+| **process**:parent_ref.name | Process.parentProcess |
+| **process**:binary_ref.name | Process.elementDisplayName |
+| **user-account**:user_id | Machine.adSid, Process.user, Process.hostUser, User.elementDisplayName |
+| **user-account**:account_login | LogonSession.user, LogonSession.winLogonDetails |
+| **user-account**:is_privileged | User.isAdmin |
+| **user-account**:display_name | User.elementDisplayName, User.adDisplayName, User.adCanonicalName |
+| **file**:name | File.elementDisplayName, File.originalFileName, DetectionEvents.file, Driver.file, Service.binaryFile, Service.oldBinaryFile |
+| **file**:size | File.size |
+| **file**:hashes.MD5 | File.md5String |
+| **file**:hashes.'SHA-1' | File.sha1String |
+| **file**:hashes.'SHA-256' | File.sha256String |
+| **file**:parent_directory_ref.path | File.canonizedPath, File.correctedPath, File.path, FileAccessEvent.path, Service.unitFilePath |
+| **directory**:path | File.canonizedPath, File.correctedPath, File.path, FileAccessEvent.path, Service.unitFilePath |
+| **windows-registry-key**:key | Autorun.elementDisplayName |
+| **windows-registry-key**:values[*] | Autorun.value |
+| **x-cybereason-file**:company_name | File.companyName |
+| **x-cybereason-file**:extension_type | File.extensionType, File.secondExtensionType |
+| **x-cybereason-file**:classification_type | File.maliciousClassificationType |
+| **x-cybereason-file**:description | File.fileDescription |
+| **x-cybereason-file**:internal_name | File.internalName |
+| **x-cybereason-file**:product_name | File.productName |
+| **x-cybereason-file**:product_type | File.productType |
+| **x-cybereason-file**:product_version | File.productVersion |
+| **x-cybereason-file**:version | File.fileVersion, File.originalVersion |
+| **x-cybereason-file**:copyright | File.legalCopyright |
+| **x-cybereason-file**:build | File.privateBuild, File.specialBuild |
+| **x-cybereason-file**:classification_link | File.classificationLink |
+| **x-cybereason-file**:is_sign_verified | File.signatureVerifiedInternalOrExternal |
+| **x-cybereason-file**:signer | File.signerInternalOrExternal, File.signer |
+| **x-cybereason-file**:is_file_signed | File.signedInternalOrExternal |
+| **x-cybereason-file**:registry_key | File.autorun |
+| **x-cybereason-file**:quarantined_file_version | File.fileIsQuarantinedVersion |
+| **x-cybereason-file**:event | File.fileAccessEvents |
+| **x-cybereason-file**:downloaded_domain | File.downloadedFromDomain |
+| **x-cybereason-file**:owner_machine | File.ownerMachine |
+| **x-cybereason-file**:mount_point | File.mount |
+| **x-cybereason-file**:mounted_as | File.mountedAs |
+| **x-cybereason-file**:quarantined_action[*] | File.fileIsQuarantined |
+| **x-cybereason-logonsession**:session[*] | LogonSession.clientRemoteSession, LogonSession.serverRemoteSession |
+| **x-cybereason-logonsession**:user_id | LogonSession.LUID |
+| **x-cybereason-logonsession**:type | LogonSession.logonType |
+| **x-cybereason-logonsession**:application | LogonSession.logonApplication |
+| **x-cybereason-logonsession**:name | LogonSession.elementDisplayName |
+| **x-cybereason-logonsession**:machine | LogonSession.ownerMachine, LogonSession.remoteMachine, LogonSession.remoteNetworkMachine |
+| **x-cybereason-logonsession**:processes | LogonSession.processes |
+| **x-cybereason-logonsession**:proxies[*] | LogonSession.proxies |
+| **x-cybereason-logonsession**:ip_address | LogonSession.sourceIp |
+| **x-oca-asset**:name | Machine.elementDisplayName, Machine.adDisplayName, Machine.adCanonicalName |
+| **x-oca-asset**:os_version | Machine.osVersionType |
+| **x-oca-asset**:platform | Machine.platformArchitecture |
+| **x-oca-asset**:os_type | Machine.osType |
+| **x-oca-asset**:timezone | Machine.timezoneUTCOffsetMinutes |
+| **x-oca-asset**:mbr_hash | Machine.mbrHashString |
+| **x-oca-asset**:hosts_file | Machine.hostsFile |
+| **x-oca-asset**:company | Machine.ownerOrganization |
+| **x-oca-asset**:department_or_unit | Machine.adOU |
+| **x-oca-asset**:removable_devices[*] | Machine.removableDevices |
+| **x-oca-asset**:last_communication_with_server | Machine.timeStampSinceLastConnectionTime |
+| **x-oca-asset**:activity_time | Machine.uptime |
+| **x-oca-asset**:model | Machine.deviceModel |
+| **x-oca-asset**:location | Machine.adLocation |
+| **x-oca-asset**:network_interface[*] | Machine.networkInterfaces |
+| **x-cybereason-service**:execution[*] | Service.automaticExecution |
+| **x-cybereason-service**:arguments | Service.commandLineArguments |
+| **x-cybereason-service**:description | Service.description |
+| **x-cybereason-service**:name | Service.displayName, Service.oldServiceStartName, Service.elementDisplayName, Service.serviceStartName, Driver.service, Process.service |
+| **x-cybereason-service**:driver | Service.driver |
+| **x-cybereason-service**:state | Service.serviceState |
+| **x-cybereason-service**:sub_state | Service.serviceSubState |
+| **x-cybereason-service**:type | Service.serviceType |
+| **x-cybereason-service**:start_type | Service.startType |
+| **x-cybereason-service**:machine | Service.ownerMachine |
+| **x-cybereason-connection**:name | Connection.elementDisplayName |
+| **x-cybereason-connection**:location | Connection.remoteAddressCountryName |
+| **x-cybereason-connection**:dns_query[*] | Connection.dnsQuery |
+| **x-cybereason-connection**:direction | Connection.direction |
+| **x-cybereason-connection**:port_type | Connection.portType |
+| **x-cybereason-connection**:state | Connection.state |
+| **x-cybereason-connection**:remote_address_type | Connection.remoteAddressInternalExternalLocal |
+| **x-cybereason-connection**:parent_listening_socket | Connection.parent |
+| **x-cybereason-connection**:classification_type | Connection.remoteAddressMaliciousClassificationType |
+| **x-cybereason-connection**:machine | Connection.ownerMachine, Connection.remoteMachine |
+| **x-cybereason-connection**:owner_process | Connection.ownerProcess, Connection.processName |
+| **x-cybereason-process**:architecture | Process.architecture |
+| **x-cybereason-process**:block_listed_domain | Process.unresolvedQueryFromBlackListDomain |
+| **x-cybereason-process**:extension_type | Process.imageFileExtensionType |
+| **x-cybereason-process**:integrity | Process.integrity |
+| **x-cybereason-process**:thread_id | Process.tid |
+| **x-cybereason-process**:openedFiles[*] | Process.openedFiles |
+| **x-cybereason-process**:injection_method | Process.injectionMethod |
+| **x-cybereason-process**:executed_a_file_with_malicious_hash | Process.maliciousOpenedFiles |
+| **x-cybereason-process**:machine | Process.ownerMachine |
+| **x-cybereason-process**:connections[*] | Process.connectionsToMaliciousDomain, Process.connectionsToBlackListDomain, Process.internalConnections, Process.connectionsToMalwareAddresses, Process.connections, Process.outgoingConnections, Process.outgoingConnectionsOfHostProcess, Process.connectionsOfHostProcess, Process.outgoingExternalConnections, Process.outgoingInternalConnections |
+| **x-cybereason-process**:total_connections | Process.totalNumberOfConnections |
+| **x-cybereason-process**:powershell_modules[*] | Process.powerShellModules |
+| **x-cybereason-process**:loaded_modules[*] | Process.modulesFromTemp, Process.loadedModules |
+| **x-cybereason-process**:product_type | Process.productType |
+| **x-cybereason-process**:registry_events[*] | Process.registryEvents |
+| **x-cybereason-process**:ransomware_classification_modules[*] | Process.ransomwareClassificationModules |
+| **x-cybereason-process**:remote_session[*] | Process.remoteSession |
+| **x-cybereason-process**:resolved_dns_domain_to_domain | Process.resolvedDnsQueriesDomainToDomain |
+| **x-cybereason-process**:resolved_dns_domain_to_ip[*] | Process.resolvedDnsQueriesDomainToIp |
+| **x-cybereason-process**:resolved_dns_ip_to_domain[*] | Process.resolvedDnsQueriesIpToDomain |
+| **x-cybereason-process**:suspicious_domain_to_domain[*] | Process.suspiciousDnsQueryDomainToDomain |
+| **x-cybereason-process**:suspicious_unresolved_dns[*] | Process.unresolvedQueryFromSuspiciousDomain |
+| **x-cybereason-process**:suspicious_external_connections[*] | Process.suspiciousExternalConnections |
+| **x-cybereason-process**:suspicious_internal_connections[*] | Process.suspiciousInternalConnections |
+| **x-cybereason-process**:scheduled_task | Process.scheduledTask |
+| **x-cybereason-process**:service | Process.service |
+| **x-cybereason-process**:received_bytes | Process.totalReceivedBytes |
+| **x-cybereason-process**:transmitted_bytes | Process.totalTransmittedBytes |
+| **x-cybereason-process**:unresolved_domain_lookups[*] | Process.unresolvedDnsQueriesFromDomain |
+| **x-cybereason-process**:unresolved_ip_lookups[*] | Process.unresolvedDnsQueriesFromIp |
+| **x-cybereason-process**:unresolved_record_not_exist | Process.unresolvedRecordNotExist |
+| **x-cybereason-process**:unwanted_classification_modules[*] | Process.unwantedClassificationModules |
+| **x-cybereason-process**:unsigned_with_signed_version_modules[*] | Process.unsignedWithSignedVersionModules |
+| **x-cybereason-process**:well_known_port_connection | Process.wellKnownPortConnections |
+| **x-cybereason-process**:wmi_activities[*] | Process.wmiActivities |
+| **x-cybereason-user**:total_machines | User.numberOfMachines |
+| **x-cybereason-user**:privileges[*] | User.privileges |
+| **x-cybereason-user**:security_id | User.sid, User.adSid |
+| **x-cybereason-user**:company | User.adCompany |
+| **x-cybereason-user**:country | User.adCountry, User.adTextCountry |
+| **x-cybereason-user**:department | User.adDepartment |
+| **x-cybereason-user**:member | User.adMemberOf |
+| **x-cybereason-user**:organization | User.adOU |
+| **x-cybereason-user**:organizational_unit | User.ownerOrganization |
+| **x-cybereason-user**:group_id | User.adPrimaryGroupID |
+| **x-cybereason-user**:sam_account_name | User.adSamAccountName |
+| **x-cybereason-user**:logged_last_machine | User.ownerMachine |
+| **x-cybereason-user**:process_count | User.newProcessesCount |
+| **x-cybereason-driver**:name | Driver.elementDisplayName |
+| **x-cybereason-driver**:service | Driver.service |
+| **x-cybereason-driver**:machine | Driver.ownerMachine |
+| **x-oca-event**:name | DetectionEvents.elementDisplayName, RegistryEvent.elementDisplayName, FileAccessEvent.elementDisplayName |
+| **x-oca-event**:detection_event_user[*] | DetectionEvents.user |
+| **x-oca-event**:file_event_user | FileAccessEvent.ownerUser |
+| **x-oca-event**:connection[*] | DetectionEvents.connection |
+| **x-oca-event**:detection_value | DetectionEvents.detectionValue |
+| **x-oca-event**:detection_value_type | DetectionEvents.detectionValueType |
+| **x-oca-event**:status | DetectionEvents.decisionStatus |
+| **x-oca-event**:engine | DetectionEvents.detectionEngine |
+| **x-oca-event**:script_engine | DetectionEvents.scriptEngine |
+| **x-oca-event**:domain[*] | DetectionEvents.domain |
+| **x-oca-event**:process | DetectionEvents.process, RegistryEvent.registryProcess, FileAccessEvent.ownerProcess |
+| **x-oca-event**:collection_of_machines[*] | DetectionEvents.machine |
+| **x-oca-event**:machine | DetectionEvents.ownerMachine, RegistryEvent.ownerMachine, FileAccessEvent.ownerMachine |
+| **x-oca-event**:file_event_type | FileAccessEvent.fileEventType |
+| **x-oca-event**:data | RegistryEvent.data |
+| **x-oca-event**:detection_time | RegistryEvent.detectionTimesNumber |
+| **x-oca-event**:time | RegistryEvent.firstTime, RegistryEvent.timestamp, FileAccessEvent.firstAccessTime |
+| **x-oca-event**:registry_entry | RegistryEvent.registryEntry |
+| **x-oca-event**:data_type | RegistryEvent.registryDataType |
+| **x-oca-event**:registry_entry_type | RegistryEvent.registryEntryType |
+| **x-oca-event**:operation_type | RegistryEvent.registryOperationType |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | correctedPath |

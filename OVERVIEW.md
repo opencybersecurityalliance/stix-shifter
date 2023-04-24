@@ -137,7 +137,7 @@ List updated: October 29, 2021
 | [IBM Cloud Security Advisor](adapter-guide/connectors/security_advisor_supported_stix.md) |   security_advisor   |  Default   |  IBM Cloud   |     Yes     |     Yes      |   Released    |
 |           [Splunk Enterprise Security](adapter-guide/connectors/splunk_supported_stix.md)           |        splunk        | Splunk CIM | IBM Security |     Yes     |     Yes      |   Released    |
 |       [Microsoft Defender for Endpoint](adapter-guide/connectors/msatp_supported_stix.md)        |        msatp         |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Microsoft Azure Sentinel](adapter-guide/connectors/azure_sentinel_supported_stix.md)       |    azure_sentinel    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
+|       [Microsoft Graph Security](adapter-guide/connectors/azure_sentinel_supported_stix.md)       |    azure_sentinel    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
 |        [IBM Guardium Data Protection](adapter-guide/connectors/guardium_supported_stix.md)       |       guardium       |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
 |    [AWS CloudWatch Logs](adapter-guide/connectors/aws_cloud_watch_logs_supported_stix.md)     | aws_cloud_watch_logs |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
 |       [Amazon Athena](adapter-guide/connectors/aws_athena_supported_stix.md)       |   aws_athena   |  SQL   | IBM Security |     Yes     |     Yes      |   Released    |
@@ -145,7 +145,7 @@ List updated: October 29, 2021
 |       [Micro Focus ArcSight](adapter-guide/connectors/arcsight_supported_stix.md)       |    arcsight    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
 |       [CrowdStrike Falcon](adapter-guide/connectors/crowdstrike_supported_stix.md)       |    crowdstrike    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
 |       [Trend Micro Vision One](adapter-guide/connectors/trendmicro_vision_one_supported_stix.md)       |    trendmicro_vision_one    |  Default   | Trend Micro |     Yes     |     Yes      |   Released    |
-|       [Secret Server](adapter-guide/connectors/secretserver_supported_stix.md)       |    secretserver    |  Default   | IBM |     Yes     |     Yes      |   Released    |
+|       [IBM Security Verify Privilege Vault](adapter-guide/connectors/secretserver_supported_stix.md)       |    secretserver    |  Default   | IBM |     Yes     |     Yes      |   Released    |
 |       [One Login](adapter-guide/connectors/onelogin_supported_stix.md)       |    onelogin    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
 |       MySQL                                                                  |    mysql    |  Default   | IBM |     Yes     |     Yes      |   Released    |
 |       [Sumo Logic](adapter-guide/connectors/sumologic_supported_stix.md)       |    sumologic    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
@@ -160,13 +160,17 @@ List updated: October 29, 2021
 |       [IBM Security Verify](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/ibm_security_verify_supported_stix.md)                           | ibm_security_verify             | Default    | IBM Security | Yes         | Yes          | Released     |
 |       [Red Hat Advanced Cluster Security for Kubernetes (StackRox)](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/rhacs_supported_stix.md)                           | rhacs             | Default    | IBM Security | Yes         | Yes          | Released     |
 |      [GCP Chronicle](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/gcp_chronicle_supported_stix.md)                   | gcp_chronicle              | Default    | IBM Security | Yes         | Yes          | Released     |
+|      [Azure Log Analytics](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/azure_log_analytics_supported_stix.md)                   | azure_log_analytics              | Default    | IBM Security | Yes         | Yes          | Released     |
+|      [Okta](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/okta_supported_stix.md)                   | okta              | Default    | IBM Security | Yes         | Yes          | Released     |
+
+
 
 
 ## How to use
 
 ### Prerequisites
 
-Python 3.6 is required to use stix-shifter.
+Python 3.8 or greater is required to use stix-shifter.
 
 Stix-shifter provides several functions: `translate` and `transmit` are the primary functions, `execute` offers a way to test the complete stix-shifter flow.
 
@@ -466,11 +470,11 @@ An asynchronous data source will typically return a search ID supplied by the AP
 
 ### Status
 
-Uses the data source API to look up the query status based on the `search_id` that is returned from the query call. This is only used for asynchronous data sources where the results are not returned right after making a query call.
+Uses the data source API to look up the query status based on the `search_id` that is returned from the query call. This is only used for asynchronous data sources where the results are not returned right after making a query call. If the connector supports, you can specify `metadata` parameter which may contain extra information to make the status api call.
 
 #### CLI Command
 
-`stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' status <SEARCH ID>`
+`stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' status <SEARCH ID> <METADATA(optional)>`
 
 #### OUTPUT:
 
@@ -480,17 +484,53 @@ The status can be one of: `COMPLETED`, `ERROR`, `CANCELLED`, `TIMEOUT`, or `RUNN
 
 ### Results
 
-Uses the data source API to fetch the query results based on the search ID, offset, and length.
+Uses the data source API to fetch the query results based on the search ID, offset, and length. 
+
+If the connector supports, you can specify `metadata` parameter which may contain extra information to fetch the next batch of results from the datasource. This is a recomended parameter for the datasource that supports pagination.
 
 #### CLI Command
 
-`stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' results <SEARCH ID> <OFFSET> <LENGTH>`
+`stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' results <SEARCH ID> <OFFSET> <LENGTH> <METADATA(optional)>`
+
+The `OFFSET` and `LENGTH` control what pages/rows of data are returned in the query results. 
 
 #### OUTPUT:
 
 `{'success': True, 'data': [<QUERY RESULTS>]}`
 
-The `OFFSET` and `LENGTH` control what pages/rows of data are returned in the query results.
+#### OUTPUT(with metadata):
+
+`{'success': True, 'data': [<QUERY RESULTS>], 'metadata': <metadata values>}`
+
+#### Example:
+```
+{
+    "success": true,
+    "data": [
+        {
+            "event": {
+                "securityEvent": {
+                    "eventTimestamp": "2022-06-13T14:36:54.216539700Z",
+                    "eventType": "FILE_CREATION",
+                    "vendorName": "Microsoft",
+                    "productEventType": "DeviceFileEvents",
+                    "ingestedTimestamp": "2022-06-13T15:36:26.275010Z"
+                },
+                "securityResult": [
+                    {
+                        "summary": "FileCreated",
+                        "category": "alert"
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "result_count": 2,
+        "next_page_token": "CgwIlqLjoAYQ2NfggwESCwiGl52VBhC0xKB"
+    }
+}
+```
 
 ### Results as STIX
 
@@ -550,6 +590,10 @@ You can redirect the output of your CLI command to a file to save the STIX resul
 
 `stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' > results.json`
 
+### OUTPUT:
+
+A bundle of STIX objects
+
 ## Modules
 
 The `modules` command will return a JSON of the existing connectors along with their dialects and supported languages that are used in query translation. 
@@ -558,7 +602,7 @@ The `modules` command will return a JSON of the existing connectors along with t
 
 `python main.py modules`
 
-returns
+#### output
 ```
 {
     "qradar": {
@@ -585,12 +629,204 @@ returns
 }
 ```
 
+This command can also be used to get the dialects of a specific connector.
+
+`python main.py modules <module name>`
+
+### CLI Command
+
+`python main.py modules qradar`
+
+#### output
+```
+{
+    "qradar": {
+        "flows": {
+            "language": "stix",
+            "default": true
+        },
+        "events": {
+            "language": "stix",
+            "default": true
+        },
+        "aql": {
+            "language": "aql",
+            "default": true
+        }
+    }
+}
+```
+
 In the above example, the QRadar connector can use three dialects: `flows`, `events`, and `aql`. When a connector only has a `default` dialect, such as with Security Advisor, only one dialect is used by the connector. Most dialects will use the `stix` language since they translate STIX patterns into native queries. QRadar's `aql` dialect uses the `aql` language since it is meant to accept an AQL query rather than a STIX pattern. See the [QRadar connector README](stix_shifter_modules/qradar/README.md) for more information on AQL passthrough.
 
-### OUTPUT:
+## configs
 
-A bundle of STIX objects
+The `configs` command returns the configuration pararmetes of the existing connectors. It basically returns a JSON of the existing connectors along with their connections and configuation objects that are specified in config.json.
 
+### CLI Command
+
+`python main.py configs`
+#### output
+```
+{
+    "alertflex": {
+        "connection": {
+            "type": {
+                "type": "connectorType",
+                "displayName": "Alertflex"
+            },
+            "options": {
+                "type": "fields",
+                "async_call": {
+                    "type": "text",
+                    "hidden": true,
+                    "optional": true
+                },
+                "result_limit": {
+                    "default": 10000,
+                    "min": 1,
+                    "max": 500000,
+                    "type": "number",
+                    "previous": "connection.resultSizeLimit"
+                },
+                "time_range": {
+                    "default": 5,
+                    "min": 1,
+                    "max": 10000,
+                    "type": "number",
+                    "previous": "connection.timerange",
+                    "nullable": true
+                },
+                .....
+            }
+        }
+    }
+}
+```
+
+Specifying the connector module name will return the configuration parameters of a specific connector.
+
+### CLI Command
+
+`python main.py configs `
+#### output
+```
+{
+    "qradar": {
+        "connection": {
+            "type": {
+                "type": "connectorType",
+                "displayName": "IBM\u00ae QRadar and QRadar On Cloud",
+                "group": "qradar"
+            },
+            "options": {
+                "type": "fields",
+                "async_call": {
+                    "type": "text",
+                    "hidden": true,
+                    "optional": true
+                },
+                "result_limit": {
+                    "default": 10000,
+                    "min": 1,
+                    "max": 500000,
+                    "type": "number",
+                    "previous": "connection.resultSizeLimit"
+                },
+                "time_range": {
+                    "default": 5,
+                    "min": 1,
+                    "max": 10000,
+                    "type": "number",
+                    "previous": "connection.timerange",
+                    "nullable": true
+                },
+                "timeout": {
+                    "default": 30,
+                    "min": 1,
+                    "max": 60,
+                    "hidden": true,
+                    "type": "number",
+                    "previous": "connection.timeoutLimit"
+                },
+                "dialects": {
+                    "type": "array",
+                    "hidden": true,
+                    "optional": true
+                },
+                "language": {
+                    "type": "string",
+                    "default": "stix",
+                    "optional": true,
+                    "hidden": true
+                },
+                "validate_pattern": {
+                    "type": "boolean",
+                    "optional": true,
+                    "hidden": true,
+                    "previous": "connection.validate_pattern",
+                    "default": false
+                },
+                "stix_validator": {
+                    "type": "boolean",
+                    "default": false,
+                    "optional": true,
+                    "hidden": true,
+                    "previous": "connection.stix_validator"
+                },
+                "mapping": {
+                    "type": "json",
+                    "optional": true,
+                    "previous": "connection.mapping"
+                },
+                "unmapped_fallback": {
+                    "type": "boolean",
+                    "default": true,
+                    "optional": true,
+                    "hidden": true
+                },
+                "stix_2.1": {
+                    "type": "boolean",
+                    "default": false,
+                    "optional": true,
+                    "hidden": true
+                }
+            },
+            "host": {
+                "type": "text",
+                "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$"
+            },
+            "port": {
+                "type": "number",
+                "default": 443,
+                "min": 1,
+                "max": 65535
+            },
+            "help": {
+                "default": "data-sources-qradar.html",
+                "type": "link"
+            },
+            "sni": {
+                "type": "text",
+                "optional": true
+            },
+            "selfSignedCert": {
+                "type": "password",
+                "optional": true
+            }
+        },
+        "configuration": {
+            "auth": {
+                "type": "fields",
+                "sec": {
+                    "type": "password",
+                    "previous": "configuration.auth.SEC"
+                }
+            }
+        }
+    }
+}
+```
 ## Limitations
 
 STIX-Shifter has limitations on the length of a pattern that can be translated into a native query. As the pattern length increases, the translation time increases exponentially due to how ANTLR 4 parses the pattern. See [STIX-Shifter Limitations](adapter-guide/stix-shifter-limitations.md) for more details.  

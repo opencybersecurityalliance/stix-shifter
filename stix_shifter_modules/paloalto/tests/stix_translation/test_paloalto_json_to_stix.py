@@ -81,10 +81,10 @@ class TestPaloaltoResultsToStix(unittest.TestCase):
 
     def test_process_json_to_stix(self):
         """  to test process stix object properties  """
-        data = {'xdr_data': {'action_process_image_command_line': 'C:\Windows\system32\lsass.exe',
-                             'actor_process_command_line': 'C:\Windows\system32\lsass.exe',
-                             'causality_actor_process_command_line': 'C:\Windows\system32\lsass.exe',
-                             'os_actor_process_command_line': 'C:\Windows\system32\lsass.exe',
+        data = {'xdr_data': {'action_process_image_command_line': 'C:\\Windows\\system32\\lsass.exe',
+                             'actor_process_command_line': 'C:\\Windows\\system32\\lsass.exe',
+                             'causality_actor_process_command_line': 'C:\\Windows\\system32\\lsass.exe',
+                             'os_actor_process_command_line': 'C:\\Windows\\system32\\lsass.exe',
                              'actor_process_file_create_time': '1631299512000',
                              'causality_actor_process_file_create_time': '1536995564723',
                              'os_actor_process_file_create_time': '1637334466002',
@@ -117,7 +117,7 @@ class TestPaloaltoResultsToStix(unittest.TestCase):
         assert process_obj['type'] == 'process'
         assert process_obj['name'] == 'wevtutil.exe'
         assert process_obj['pid'] == 6228
-        assert process_obj['command_line'] == 'C:\Windows\system32\lsass.exe'
+        assert process_obj['command_line'] == 'C:\\Windows\\system32\\lsass.exe'
 
     def test_network_traffic_json_to_stix(self):
         """to test network-traffic stix object properties"""
@@ -228,7 +228,7 @@ class TestPaloaltoResultsToStix(unittest.TestCase):
         assert domain_obj['value'] == 'dl.delivery.mp.microsoft.com'
 
     def test_windows_registry_key_json_to_stix(self):
-        """to test windows registry stix object properties"""
+        """to test Windows registry stix object properties"""
 
         data = {'xdr_data': {'action_registry_key_name': 'HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Services\\terminpt'
                                                          '\\Enum',
@@ -251,7 +251,7 @@ class TestPaloaltoResultsToStix(unittest.TestCase):
         assert windows_obj is not None
         assert windows_obj['type'] == 'windows-registry-key'
         assert windows_obj['key'] == 'HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Services\\terminpt\\Enum'
-        assert windows_obj['values'] == [{'name':'Start'}]
+        assert windows_obj['values'] == [{'name': 'Start'}]
 
     def test_url_json_to_stix(self):
         """to test url stix object properties"""
@@ -326,11 +326,11 @@ class TestPaloaltoResultsToStix(unittest.TestCase):
         custom_process_obj = TestPaloaltoResultsToStix.get_first_of_type(objects.values(), 'process')
         assert custom_process_obj is not None
         assert custom_process_obj['type'] == 'process'
-        assert custom_process_obj['extensions']['x-paloalto-process']['instance_id'] == "AdgAsdUgVlUAAAbYAAAAAA=="
+        assert custom_process_obj['x_unique_id'] == 'AdgAsdUgVlUAAAbYAAAAAA=='
         assert custom_process_obj['extensions']['x-paloalto-process']['signature_vendor'] == "Microsoft Corporation"
         assert custom_process_obj['extensions']['x-paloalto-process']['signature_status'] == "SIGNED"
         assert custom_process_obj['extensions']['x-paloalto-process']['execution_time'] == "2022-01-04T07:10:55.000Z"
-        assert custom_process_obj['extensions']['x-paloalto-process']['is_native'] == False
+        assert custom_process_obj['extensions']['x-paloalto-process']['is_native'] is False
 
     def test_asset_json_to_stix(self):
         """to test custom oca-asset stix object properties"""
@@ -360,7 +360,7 @@ class TestPaloaltoResultsToStix(unittest.TestCase):
         assert asset_obj['extensions']['x-paloalto-agent']['content_version'] == "350-80787"
         assert asset_obj['extensions']['x-paloalto-agent']['start_time'] == "2022-01-20T07:04:01.933Z"
         assert asset_obj['extensions']['x-paloalto-agent']['os_sub_type'] == "Windows Server 2016"
-        assert asset_obj['extensions']['x-paloalto-agent']['is_vdi'] == False
+        assert asset_obj['extensions']['x-paloalto-agent']['is_vdi'] is False
 
     def test_evtlog_json_to_stix(self):
         """to test custom evtlog stix object properties"""
@@ -439,5 +439,5 @@ class TestPaloaltoResultsToStix(unittest.TestCase):
         assert network_obj is not None
         assert network_obj['extensions']['x-paloalto-network']['creation_time'] == '1975-03-21T11:12:13.729Z'
         assert network_obj['extensions']['x-paloalto-network']['connection_id'] == "AdgAsdUgVlUAAAbYAAAAAA=="
-        assert network_obj['extensions']['x-paloalto-network']['is_proxy'] == False
+        assert network_obj['extensions']['x-paloalto-network']['is_proxy'] is False
         assert network_obj['extensions']['x-paloalto-network']['external_hostname'] == 'Windows 8'

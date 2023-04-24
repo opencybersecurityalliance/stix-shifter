@@ -3,31 +3,13 @@ import unittest
 import json
 from stix_shifter_modules.cybereason.entry_point import EntryPoint
 from stix_shifter.stix_transmission import stix_transmission
-
-
-class CybereasonMockResponse:
-    """ class for cybereason mock response"""
-
-    def __init__(self, response_code, obj, histobj):
-        self.code = response_code
-        self.object = obj
-        self.response = histobj
-
-    def read(self):
-        """ to read contents of results returned by api"""
-        return bytearray(self.object, 'utf-8')
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
+from tests.utils.async_utils import get_mock_response
 
 
 class HistoryMockResponse:
     def __init__(self):
         self.history = []
-
-
-class CybereasonMockLogoutResponse:
-    """ class for cybereason mock response"""
-
-    def __init__(self, response_code):
-        self.code = response_code
 
 
 class CybereasonMockError:
@@ -76,22 +58,6 @@ class ErrorTextA:
         self.status_code = 302
 
 
-class PingResponse:
-    """ class for ping response"""
-
-    def __init__(self, responseobject):
-        self.response = responseobject
-
-
-class InnerResponse:
-    """ class for capturing response"""
-
-    def __init__(self, st_code, txt):
-        self.status_code = st_code
-        self.text = txt
-        self.history = []
-
-
 @patch('stix_shifter_modules.cybereason.stix_transmission.api_client'
        '.APIClient.__init__')
 class TestCybereasonConnection(unittest.TestCase):
@@ -131,8 +97,9 @@ class TestCybereasonConnection(unittest.TestCase):
     def test_ping_endpoint(self, mock_ping_source, mock_cookie,
                            mock_logout, mock_api_client):
         """ test to check ping_data_source function"""
-        pingmock = InnerResponse(200, """{"status":"SUCCESS"}""")
-        pingresponse = PingResponse(pingmock)
+        pingmock = """{"pendingProbesPerServer":{"637b4d77e4b01c68baf5b572":0},"unassignedProbes":0,"online":true,"readyToServe":true}"""
+        histobj = HistoryMockResponse()
+        pingresponse = get_mock_response(200, pingmock, 'byte', response=histobj)
         mock_ping_source.return_value = pingresponse
 
         mock_logout.return_value = """{"response_code":200}"""
@@ -348,7 +315,7 @@ class TestCybereasonConnection(unittest.TestCase):
     def test_process_result(self, mock_results_response, mock_session,
                             mock_session_logout, mock_api_client):
         """ test to check result of process element"""
-        mock_session_logout.return_value = CybereasonMockLogoutResponse(200)
+        mock_session_logout.return_value = get_mock_response(200)
         mock_session.return_value = "JSESSIONID=52DCF6DF6CE150C27D2C7B96CCE66D7D"
         mocked_return_value = """{
             "data": {
@@ -477,7 +444,7 @@ class TestCybereasonConnection(unittest.TestCase):
             "failures": 0
         }"""
         histobj = HistoryMockResponse()
-        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value, histobj)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value, 'byte', histobj)
         mock_api_client.return_value = None
 
         query = json.dumps({
@@ -750,7 +717,7 @@ class TestCybereasonConnection(unittest.TestCase):
     def test_file_result(self, mock_results_response, mock_session,
                          mock_session_logout, mock_api_client):
         """ test to check result of file element"""
-        mock_session_logout.return_value = CybereasonMockLogoutResponse(200)
+        mock_session_logout.return_value = get_mock_response(200)
         mock_session.return_value = "JSESSIONID=52DCF6DF6CE150C27D2C7B96CCE66D7D"
         mocked_return_value = """{
             "data": {
@@ -879,7 +846,7 @@ class TestCybereasonConnection(unittest.TestCase):
             "failures": 0
         }"""
         histobj = HistoryMockResponse()
-        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value, histobj)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value, 'byte', histobj)
         mock_api_client.return_value = None
 
         query = json.dumps({
@@ -925,7 +892,7 @@ class TestCybereasonConnection(unittest.TestCase):
     def test_machine_result(self, mock_results_response, mock_session,
                             mock_session_logout, mock_api_client):
         """ test to check result of machine element"""
-        mock_session_logout.return_value = CybereasonMockLogoutResponse(200)
+        mock_session_logout.return_value = get_mock_response(200)
         mock_session.return_value = "JSESSIONID=52DCF6DF6CE150C27D2C7B96CCE66D7D"
 
         mocked_return_value = """{
@@ -1047,7 +1014,7 @@ class TestCybereasonConnection(unittest.TestCase):
             "failures": 0
         }"""
         histobj = HistoryMockResponse()
-        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value, histobj)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value, 'byte', histobj)
         mock_api_client.return_value = None
 
         query = json.dumps({
@@ -1345,7 +1312,7 @@ class TestCybereasonConnection(unittest.TestCase):
     def test_multielement_result(self, mock_results_response, mock_session,
                                  mock_session_logout, mock_api_client):
         """ test to check multielement result"""
-        mock_session_logout.return_value = CybereasonMockLogoutResponse(200)
+        mock_session_logout.return_value = get_mock_response(200)
         mock_session.return_value = "JSESSIONID=52DCF6DF6CE150C27D2C7B96CCE66D7D"
         mocked_return_value = """{"data":{"resultIdToElementDataMap":{
             "92938357.6664466136019493057":{
@@ -1485,7 +1452,7 @@ class TestCybereasonConnection(unittest.TestCase):
             "hidePartialSuccess":false,
             "message":"","expectedResults":1,"failures":0}"""
         histobj = HistoryMockResponse()
-        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value, histobj)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value, 'byte', histobj)
         mock_api_client.return_value = None
 
         query = json.dumps({
@@ -1730,7 +1697,7 @@ class TestCybereasonConnection(unittest.TestCase):
     def test_registry_events_result(self, mock_results_response, mock_session,
                                     mock_session_logout, mock_api_client):
         """ test to check result of registry event element"""
-        mock_session_logout.return_value = CybereasonMockLogoutResponse(200)
+        mock_session_logout.return_value = get_mock_response(200)
         mock_session.return_value = "JSESSIONID=52DCF6DF6CE150C27D2C7B96CCE66D7D"
         mocked_return_value = """{
             "data": {
@@ -1851,7 +1818,7 @@ class TestCybereasonConnection(unittest.TestCase):
             "status": "SUCCESS"
         }"""
         histobj = HistoryMockResponse()
-        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value, histobj)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value, 'byte', histobj)
         mock_api_client.return_value = None
 
         query = json.dumps({
@@ -1920,7 +1887,7 @@ class TestCybereasonConnection(unittest.TestCase):
         })
 
         entry_point = EntryPoint(self.connection(), self.config())
-        status_response = entry_point.delete_query_connection(search_id)
+        status_response = run_in_thread(entry_point.delete_query_connection, search_id)
 
         assert status_response is not None
         assert 'success' in status_response
@@ -2134,7 +2101,7 @@ class TestCybereasonConnection(unittest.TestCase):
     def test_file_list_result(self, mock_results_response, mock_session,
                          mock_session_logout, mock_api_client):
         """ test to check result of file element"""
-        mock_session_logout.return_value = CybereasonMockLogoutResponse(200)
+        mock_session_logout.return_value = get_mock_response(200)
         mock_session.return_value = "JSESSIONID=52DCF6DF6CE150C27D2C7B96CCE66D7D"
         mocked_return_value = """{
             "data": {
@@ -2270,7 +2237,7 @@ class TestCybereasonConnection(unittest.TestCase):
             "failures": 0
         }"""
         histobj = HistoryMockResponse()
-        mock_results_response.return_value = CybereasonMockResponse(200, mocked_return_value, histobj)
+        mock_results_response.return_value = get_mock_response(200, mocked_return_value, 'byte', histobj)
         mock_api_client.return_value = None
 
         query = json.dumps({

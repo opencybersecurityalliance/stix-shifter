@@ -1,23 +1,23 @@
 {
     "connection": {
         "host": {
-            "label": "Management IP address or Hostname",
-            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+            "label": "Management IP address or hostname",
+            "description": "Specify the IP address or hostname of the data source"
         },
         "help": {
             "label": "Need additional help?",
             "description": "More details on the data source setting can be found in the specified link"
         },
          "selfSignedCert": {
-                "label": "Private Key (Required)",
+                "label": "Private key (Required)",
                 "description": "Private Key is a mandatory authentication parameter to communicate with the GCP Chronicle security datasource."
             }
     },
     "configuration": {
         "auth": {
             "client_email": {
-                "label": "Client Email",
-                "description": "Client Email used in authentication to make API calls"
+                "label": "Client email",
+                "description": "Client email used in authentication to make API calls"
             }
         }
     }

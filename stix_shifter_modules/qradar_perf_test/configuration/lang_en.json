@@ -3,14 +3,14 @@
         "url": {
             "label": "Full URL of a raw response file",
             "placeholder": "https://url.to.raw_events.json.file",
-            "description": "Specify the URL of the raw response JSON file so that IBM Cloud Pak for Security can communicate with it"
+            "description": "Specify the URL of the raw response JSON file"
         },
         "help": {
             "label": "Need additional help?"
         },
         "options": {
             "hash_options": {
-                "label": "Hash Options",
+                "label": "Hash options",
                 "description": "Hash Options"
             }
         }

@@ -1,7 +1,8 @@
 {
 	"connection": {
 		"type": {
-			"displayName": "Google Chronicle Security"
+			"displayName": "Google Chronicle Security",
+			"group": "gcp"
 		},
 		"host": {
 			"type": "text",

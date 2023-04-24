@@ -1,17 +1,17 @@
 {
     "connection": {
         "host": {
-            "label": "Management IP address or Hostname",
+            "label": "Management IP address or hostname",
             "placeholder": "192.168.1.10",
-            "description": "Specify the IP address or hostname of the Carbon Black Cloud instance so that IBM Cloud Pak for Security can communicate with it."
+            "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
-            "description": "Set the port number that is associated with the Host name or IP."
+            "label": "Host port",
+            "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
             "label": "Need additional help?",
-            "description": "More details on the data source setting can be found in the specified link."
+            "description": "More details on the data source setting can be found in the specified link"
         }
     },
     "configuration": {

@@ -3,66 +3,39 @@
         "type": {
             "description": "Data source type"
         },
-        "name": {
-            "label": "Data source name",
-            "description": "Assign a name to identify the connection (minimum of 5 characters)"
-        },
-        "description": {
-            "label": "Data source description",
-            "description": "Assign a description to indicate the purpose of the connection"
-        },
-        "apphostId": {
-            "label": "Edge gateway",
-            "description": "Specify an edge gateway if the connection is to run on an edge gateway.",
-            "linkDescription": "Add or manage edge gateways"
-        },
         "options": {
             "result_limit": {
-                "label": "Result Size Limit",
+                "label": "Result size limit",
                 "description": "The maximum number of entries or objects that are returned by search query.  Valid input range is {{min}} to {{max}}."
             },
             "time_range": {
-                "label": "Query Time Range",
+                "label": "Query time range",
                 "description": "Time range for the search, in minutes, represented as last x minutes.  Valid input range is {{min}} to {{max}}."
             },
             "timeout": {
-                "label": "Query Response Timeout Limit",
+                "label": "Query response timeout limit",
                 "description": "The limit on how long to wait for the data source response, in seconds. Valid input range is {{min}} to {{max}}."
-            },
-            "search_timeout": {
-                "label": "Query Search Timeout Limit",
-                "description": "The limit on how long the query will run, in minutes, on the data source."
             },
             "dialects": {
                 "label": "Dialect",
                 "description": "The dialect to use if the data source needs to search multiple schema or database tables."
             },
             "validate_pattern": {
-                "label": "STIX Pattern Validator",
+                "label": "STIX pattern validator",
                 "description": "Validate STIX patterns that needs to be translated into native data source query"
             },
             "stix_validator": {
-                "label": "STIX Object Validator",
+                "label": "STIX object validator",
                 "description": "Validate translated STIX Objects"
             },
             "mapping": {
-                "label": "Custom Mapping",
+                "label": "Custom mapping",
                 "description": "Custom stix mapping if default mapping needs to be replaced"
             },
             "concurrent": {
-                "label": "Concurrent Search Limit",
-                "description": "The number of simultaneous connections that can be made between IBM Cloud Pak™ for Security and the data source.  Valid input range is {{min}} to {{max}}."
+                "label": "Concurrent search limit",
+                "description": "The number of simultaneous connections that can be made to the data source.  Valid input range is {{min}} to {{max}}."
             }
-        }
-    },
-    "configuration":{
-        "name": {
-            "label": "Configuration Name",
-            "placeholder": "Add a configuration name"
-        },
-        "description": {
-            "label": "Configuration Description",
-            "placeholder": "Add a configuration description"
         }
     }
 }

@@ -38,7 +38,7 @@ class TestResultTranslatorMixin:
         return ob_data["objects"]
 
     def translate_results(self, data):
-        result = self.results_translator.translate_results(json.dumps(self.data_source), json.dumps(data))
+        result = self.results_translator.translate_results(self.data_source, data)
         return result
 
     def _get_objects(self, data):

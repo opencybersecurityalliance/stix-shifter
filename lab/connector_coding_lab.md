@@ -7,7 +7,7 @@ This is a hands-on lab to start implementing a connector module in STIX-shifter 
 
 * Github account
 * Basic knowledge of Git such as forking, committing, branching, pulling, and merging
-* Working knowledge of the Python programming language. This lab will use Python 3.6
+* Working knowledge of the Python programming language. This lab will work with Python 3.8 or greater.
 * An IDE to write Python code, such as VS Code.
 * Knowledge of the data source API that includes API request, response, datatype and schema.
 * Knowledge of STIX 2.0. To learn about STIX Cyber Observable Objects, see the [STIX 2.0](https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) specification.
@@ -184,13 +184,13 @@ class APIClient():
 ```
 import datetime
 import json
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
 
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)

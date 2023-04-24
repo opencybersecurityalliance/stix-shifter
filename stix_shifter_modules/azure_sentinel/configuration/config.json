@@ -1,13 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Microsoft Azure Sentinel",
-            "group": "azure"
-        },
-        "host": {
-            "type": "text",
-            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$",
-            "default": "graph.microsoft.com"
+            "displayName": "Microsoft Graph Security",
+            "group": "microsoft"
         },
         "port": {
             "type": "number",

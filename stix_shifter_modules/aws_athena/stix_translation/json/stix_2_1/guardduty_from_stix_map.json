@@ -1,0 +1,77 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["eth0_private_ip", "eth1_private_ip", "public_ip", "remote_ip"],
+      "x_aws_interface_id": ["interface_id"],
+      "x_aws_remote_city_name": ["city_name"],
+      "x_aws_remote_country_name": ["country_name"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["ipv6_address"],
+      "x_aws_interface_id": ["interface_id"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["local_port"],
+      "dst_port": ["remote_port"],
+      "src_ref.value": ["eth0_private_ip"],
+      "dst_ref.value": ["remote_ip"],
+      "protocols[*]": ["protocol"]
+    }
+  },
+  "domain-name":{
+    "fields": {
+      "value": ["eth0_private_dns_name","eth1_private_dns_name", "public_dns_name", "dns_domain"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["principal_id"],
+      "account_login": ["user_name"]
+    }
+  },
+  "x-aws-details": {
+    "fields": {
+      "account_id": ["accountid"],
+      "region": ["region"]
+    }
+  },
+  "x-aws-instance": {
+    "fields": {
+      "instance_id": ["instance_id"],
+      "image_id": ["image_id"],
+      "availability_zone": ["availability_zone"]
+    }
+  },
+  "x-aws-vpc": {
+    "fields": {
+      "vpc_id": ["vpc_id"],
+      "subnet_id": ["subnet_id"],
+      "security_group_name": ["security_group_name"],
+      "security_group_id": ["security_group_id"]
+    }
+  },
+  "x-aws-api": {
+    "fields": {
+      "access_key_id": ["access_key_id"],
+      "api": ["api"],
+      "api_service_name": ["api_service_name"]
+    }
+  },
+ "x-ibm-finding": {
+  "fields": {
+    "name": ["title"],
+    "finding_type": ["type"],
+    "description": ["description"],
+    "src_ip_ref.value": ["eth0_private_ip"],
+    "dst_ip_ref.value": ["remote_ip"],
+    "start": ["event_firstseen"],
+    "end": ["event_lastseen"],
+    "src_os_ref.value": ["platform"],
+    "dst_geolocation": ["country_name"]
+  }
+  }
+}

@@ -1,16 +1,54 @@
-##### Updated on 06/01/22
+##### Updated on 03/08/23
 ## Trend Micro Vision One
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | AND |
-| OR | OR |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | = | : |
 | != | : |
 | LIKE | : |
 | IN | : |
+| OR (Observation) | OR |
+| AND (Observation) | AND |
 | <br> | |
-### Supported STIX Objects and Properties
+### Searchable STIX objects and properties for Endpointactivitydata dialect
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **ipv4-addr**:value | src, dst, objectIp, objectIps |
+| **ipv6-addr**:value | src, dst, objectIp, objectIps |
+| **url**:value | request |
+| **file**:hashes.'SHA-1' | srcFileHashSha1, objectFileHashSha1, parentFileHashSha1, processFileHashSha1 |
+| **network-traffic**:src_ref.value | src |
+| **network-traffic**:dst_ref.value | dst, objectIp |
+| **network-traffic**:src_port | spt |
+| **network-traffic**:dst_port | dpt, objectPort |
+| **user-account**:account_login | logonUser |
+| **user-account**:user_id | objectUser |
+| **process**:command_line | processCmd, parentCmd, objectCmd |
+| **windows-registry-key**:key | objectRegistryKeyHandle |
+| **windows-registry-key**:values[*].name | objectRegistryValue |
+| **windows-registry-key**:values[*].data | objectRegistryData |
+| **domain-name**:value | hostName |
+| <br> | |
+### Searchable STIX objects and properties for Messageactivitydata dialect
+| STIX Object and Property | Mapped Data Source Fields |
+|--|--|
+| **ipv4-addr**:value | source_ip |
+| **ipv6-addr**:value | source_ip |
+| **url**:value | url |
+| **network-traffic**:src_ref.value | source_ip |
+| **file**:hashes.'SHA-1' | file_sha1 |
+| **file**:name | file_name |
+| **email-message**:sender_ref.value | sender, mailbox |
+| **email-message**:to_refs[*].value | recipient, mailbox |
+| **email-message**:subject | subject |
+| **email-message**:message_id | message_id |
+| **domain-name**:value | source_domain |
+| <br> | |
+### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | directory | path | objectFilePath |

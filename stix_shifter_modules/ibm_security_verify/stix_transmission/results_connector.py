@@ -1,24 +1,24 @@
 import json
 import traceback
 
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import \
-    BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import \
+    BaseJsonResultsConnector
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
-class ResultsConnector(BaseResultsConnector):
+class ResultsConnector(BaseJsonResultsConnector):
 
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         offset = int(offset)
         length = int(length)
 
         try:
-            response = self.api_client.run_search(search_id, length)
+            response = await self.api_client.run_search(search_id, length)
             response_code = response['code']
             # Construct a response object
             return_obj = dict()

@@ -6,13 +6,13 @@
         },
         "options": {
             "proxy_host": {
-                "label": "Management IP address or Hostname",
+                "label": "Management IP address or hostname",
                 "placeholder": "192.168.1.10",
-                "description": "Specify the IP address or hostname of the proxy so that IBM Cloud Pak for Security can communicate with it"
+                "description": "Specify the IP address or hostname of the proxy"
             },
             "proxy_port": {
-                "label": "Host Port",
-                "description": "Set the port number that is associated with the proxy Host name or IP"
+                "label": "Host port",
+                "description": "Set the port number that is associated with the proxy hostname or IP address"
             },
             "destination": {
                 "label": "Destinations",

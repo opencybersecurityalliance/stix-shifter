@@ -1,36 +1,36 @@
 {
     "connection": {
         "host": {
-            "label": "Management IP address or Hostname",
+            "label": "Management IP address or hostname",
             "placeholder": "192.168.1.10",
-            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+            "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
-            "description": "Set the port number that is associated with the Host name or IP"
+            "label": "Host port",
+            "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
             "label": "Need additional help?",
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "ReaQta Certificate",
+            "label": "ReaQta certificate",
             "placeholder": "Paste your certificate"
         },
         "sni": {
-            "label": "Server name indicator",
-            "placeholder": "Add a server name indicator",
+            "label": "Server Name Indicator",
+            "placeholder": "Add a Server Name Indicator",
             "description": "If your hostname or IP address does not match the common name you will need to supply a Server Name Indicator (SNI). This is used to allow a separate hostname to be provided to the TLS handshake of the resource connection."
         }
     },
     "configuration": {
         "auth": {
             "app_id": {
-                "label": "Reaqta App ID",
+                "label": "Reaqta app ID",
                 "description": "Reaqta App ID with access to the Hunt API"
             },
             "secret_key": {
-                "label": "Secret Key",
+                "label": "Secret key",
                 "description": "Reaqta App Secret Key with access to the Hunt API"
             }
         }

@@ -23,7 +23,7 @@
 
 ### Format for calling stix-shifter from the command line
 ```
-$ stix-shifter translate <MODULE NAME> <query "<STIX IDENTITY OBJECT>" "<STIX PATTERN>" "<OPTIONS>"
+python main.py `<translator_module>` `<query or result>` `<STIX identity object>` `<data>`
 ```
 ### Pattern expression with STIX attributes
 
@@ -202,7 +202,10 @@ results
             }
         }
     ],
-   "metadata": "1:abc"
+   "metadata": {
+      "result_count": 1,
+      "next_page_token": "abc"
+   }
 }
 ```
 
@@ -523,7 +526,10 @@ results
             }
         }
     ],
-   "metadata": "1:abc"
+   "metadata": {
+	"result_count": 1,
+	"next_page_token": "abc"
+   }
 }
 ```
 
