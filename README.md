@@ -16,7 +16,7 @@ For general information about STIX, this project, and the command line utilities
 
 # Installation
 
-The recommended method for installing the STIX-shifter is via pip. Two prerequisite packages needs to be installed inlcuding the package of stix-shifter connector module to complete a stix-shifter connector installation. Run below commands to install all the packages-
+The recommended method for installing stix-shifter is via pip. Two prerequisite packages needs to be installed inlcuding the package of stix-shifter connector module to complete a stix-shifter connector installation. Run the below commands to install all the packages:
 
 1. Main stix-shifter package:  `pip install stix-shifter`
 
@@ -27,21 +27,13 @@ The recommended method for installing the STIX-shifter is via pip. Two prerequis
 
 ## Dependencies
 
-STIX-shifter has the following dependencies:
-
-- [stix2-patterns==1.3.0](https://pypi.org/project/stix2-patterns/)
-- [stix2-validator==1.1.2](https://pypi.org/project/stix2-validator/)
-- [stix2-matcher==1.0.0](https://pypi.org/project/stix2-matcher/)
-- [antlr4-python3-runtime==4.8](https://pypi.org/project/antlr4-python3-runtime/)
-- [python-dateutil==2.8.1](https://pypi.org/project/python-dateutil/)
-
-Your development environment must use Python version: 3.8 or greater
+STIX-shifter requries Python 3.8 or greater. See the [requirements file](stix_shifter/requirements.txt) for library dependencies. 
 
 # Usage
 
 STIX-Shifter can use used the following ways:
 
-## 1. As A Command Line Utility
+## 1. As a command line utility
 
 The STIX-Shifter comes with a bundled script which you can use to translate STIX Pattern to a native datasource query. It can also be used to translate a JSON data source query result to a STIX bundle of observable objects. You can also send query to a datasource by using a transmission option. 
 
@@ -62,9 +54,9 @@ In order to build `stix-shifter` packages from source follow the below prerequis
    3. Run setup: `python3 setup.py install`
 
 
-## 2. Running From the Source
+## 2. Running from the source
 
-You may also use `python3 main.py` script. All the options are the same as "As a command line utility" usage above.
+You may also use the `python3 main.py` script. All the options are the same as the command line utility described above.
 
 Example:
 
@@ -80,7 +72,7 @@ In order to run `python3 main.py` from the source follow the below prerequisite 
 
 **Note:** setup.py only installs dependencies when INSTALL_REQUIREMENTS_ONLY=1 directive is used. This option is similar to `python3 generate_requirements.py && pip install -r requirements.txt`
 
-## 3. As A Library
+## 3. As a library
 
 You can also use this library to integrate STIX Shifter into your own tools. You can translate a STIX Pattern:
 
@@ -103,11 +95,11 @@ Refer to [Use of custom mappings](https://github.com/opencybersecurityalliance/s
 We are thrilled you are considering contributing! We welcome all contributors.
 Please read our [guidelines for contributing](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/CONTRIBUTING.md).
 
-[## Connector Developer Guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-stix-adapter.md)
+## [Connector Developer Guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-stix-adapter.md)
 
 <!-- If you want to create a new connector for STIX-shifter, see the [developer guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-stix-adapter.md) -->
 
-[## Jupyter Notebook Development Labs](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/lab)
+## [Jupyter Notebook Development Labs](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/lab)
 
 <!-- There are also a few [Jupyter Notebook labs](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/lab) that cover the CLI commands and dev process. -->
 

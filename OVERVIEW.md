@@ -144,19 +144,16 @@ Stix-shifter provides several functions: `translate` and `transmit` are the prim
 | TRANSLATION DATA | This is the STIX pattern for query translation and a list of JSON results for results translation. This must be wrapped in quote to use with the CLI. | A stringified STIX pattern or list of JSON data |
 | OPTIONS | An object of optional parameters. This must be wrapped in quotes to use with the CLI. | A stringified object of options |
 
-#### Translation Options
+#### CLI Options
 
-These are general options defined in [`config.json`](stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules.
+These are general translation options defined in [`config.json`](stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules.
 
 | Option | Translation Data Type | Description | Accepted Values |
 | ------ | --------------------- | ----------- | -------------- |
 | result_limit | query | The max number of results that can be returned from a query. This value is generally included in translated queries before getting sent to the data source's API query call. The default is `10000` | A number between `1` and `500000` |
 | time_range | query | A default time range, in minutes, applied to the translated query when no `START STOP` qualifier is present in the STIX pattern. As an example, this would be the `last x minutes` in a SQL query. The default is `5` | A number between `1` and `10000` |
-<!-- | dialects |        |        |      | -->
-<!-- | language |      |          |   | -->
 | validate_pattern | query | Specifies if pattern validation is run during the query translation call. This can catch errors in the submitted STIX pattern that would otherwise raise exceptions during translation. | `true` or `false` |
 | stix_validator | results | Specifies if validation is run on the bundle of STIX data returned with results translation. This is performance intensive and should be used on a small result set. The default if `false`. | `true` or `false` |
-<!-- | mapping |     |       |       |  -->
 | unmapped_fallback | results | If set to `true`, any results data returned, that is not specifired in the to-STIX mapping, will be included in the results in the following STIX object:property format `x-<MODULE NAME>:<NATIVE DATA FIELD>`. The default is `false` | `true` or `false` |
 | stix_2.1 | results | Results are returned as STIX 2.0 objects by default. Setting this option will return results in STIX 2.1 format. The default is `false` | `true` or `false` |
 
