@@ -19,7 +19,7 @@ class APIClient:
         Ping the Data Source
         :return: Response object
         """
-        return self.client.call_api(self.PING_ENDPOINT, 'GET', headers=self.headers, data={})
+        return self.client.call_api(self.PING_ENDPOINT, 'GET', headers=self.headers, data={}, timeout=self.timeout)
 
     def get_search_results(self, query, after_number):
         """
@@ -32,4 +32,4 @@ class APIClient:
         if after_number != '0':
             query = query + '&' + after_number
 
-        return self.client.call_api(query, 'GET', headers=self.headers, data={})
+        return self.client.call_api(query, 'GET', headers=self.headers, data={}, timeout=self.timeout)
