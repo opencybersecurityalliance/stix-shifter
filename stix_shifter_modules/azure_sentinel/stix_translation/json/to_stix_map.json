@@ -70,10 +70,6 @@
         "cybox": false
       },
       {
-        "key": "x-ibm-finding.createddatetime",
-        "object": "finding"
-      },
-      {
         "key": "x-oca-event.created",
         "object": "event"
       }
@@ -620,5 +616,718 @@
         "key": "x-msazure-sentinel-alert.vulnerabilityStates.wasRunning",
         "object": "alert"
       }
+    },
+    "@odata.type": {
+      "key": "x-ibm-finding.finding_type",
+      "object": "finding"
+    },
+    "providerAlertId": {
+        "key": "x-ibm-finding.alert_id",
+        "object": "finding"
+    },
+    "incidentId": {
+        "key": "x-microsoft-graph-alert.incidentId",
+        "object": "alert"
+    },
+    "classification": {
+        "key": "x-microsoft-graph-alert.classification",
+        "object": "alert"
+    },
+    "determination": {
+        "key": "x-microsoft-graph-alert.determination",
+        "object": "alert"
+    },
+    "serviceSource": {
+        "key": "software.name",
+        "object": "service_software"
+    },
+    "detectionSource": {
+        "key": "software.name",
+        "object": "detection_software"
+    },
+    "detectorId": {
+        "key": "x-microsoft-graph-alert.detectorId",
+        "object": "alert"
+    },
+    "tenantId": {
+        "key": "x-microsoft-graph-alert.tenantId",
+        "object": "alert"
+    },
+    "alertWebUrl": {
+        "key": "url.value",
+        "object": "alert_url"
+    },
+    "incidentWebUrl": {
+        "key": "url.value",
+        "object": "incident_url"
+    },
+    "actorDisplayName": {
+        "key": "user-account.user_id",
+        "object": "actor"
+    },
+    "threatDisplayName": {
+        "key": "x-microsoft-graph-alert.threatDisplayName",
+        "object": "alert"
+    },
+    "threatFamilyName": {
+        "key": "x-microsoft-graph-alert.threatFamilyName",
+        "object": "alert"
+    },
+    "mitreTechniques": {
+        "key": "x-microsoft-graph-alert.mitreTechniques",
+        "object": "alert"
+    },
+    "lastUpdateDateTime": {
+        "key": "x-microsoft-graph-alert.lastUpdateDateTime",
+        "object": "alert"
+    },
+    "resolvedDateTime": {
+        "key": "x-ibm-finding.end",
+        "object": "finding"
+    },
+    "firstActivityDateTime": {
+        "key": "x-ibm-finding.start",
+        "object": "finding"
+    },
+    "lastActivityDateTime": {
+        "key": "x-microsoft-graph-alert.lastActivityDateTime",
+        "object": "alert"
+    },
+    "deviceEvidence": {
+        "@odata.type": [
+            {
+                "key": "x-alert-evidence.evidence_type",
+                "object": "device-evidence"
+            },
+            {
+                "key": "x-alert-evidence.process_ref",
+                "object": "device-evidence",
+                "references": "x-oca-asset"
+            }
+        ],
+        "createdDateTime": {
+            "key": "x-alert-evidence.created",
+            "object": "device-evidence"
+        },
+        "verdict": {
+            "key": "x-alert-evidence.verdict",
+            "object": "device-evidence"
+        },
+        "remediationStatus": {
+            "key": "x-alert-evidence.remediationStatus",
+            "object": "device-evidence"
+        },
+        "remediationStatusDetails": {
+            "key": "x-alert-evidence.remediationStatusDetails",
+            "object": "device-evidence"
+        },
+        "roles": {
+            "key": "x-alert-evidence.roles",
+            "object": "device-evidence"
+        },
+        "tags": {
+            "key": "x-alert-evidence.tags",
+            "object": "device-evidence"
+        },
+        "firstSeenDateTime": {
+            "key": "x-oca-asset.x_firstSeenDateTime",
+            "object": "x-oca-asset"
+        },
+        "mdeDeviceId": {
+            "key": "x-oca-asset.device_id",
+            "object": "x-oca-asset"
+        },
+        "azureAdDeviceId": {
+            "key": "x-oca-asset.x_azureAdDeviceId",
+            "object": "x-oca-asset"
+        },
+        "deviceDnsName": {
+            "key": "domain-name.value",
+            "object": "domain-name"
+        },
+        "osPlatform": [
+            {
+                "key": "software.name",
+                "object": "asset_software"
+            },
+            {
+                "key": "x-oca-asset.os_ref",
+                "object": "x-oca-asset",
+                "references": "asset_software"
+            }
+        ],
+        "osBuild": {
+            "key": "x-oca-asset.x_tags",
+            "object": "x-oca-asset"
+        },
+        "version": {
+            "key": "software.version",
+            "object": "asset_software"
+        },
+        "healthStatus": {
+            "key": "x-oca-asset.x_tags",
+            "object": "x-oca-asset"
+        },
+        "riskScore": {
+            "key": "x-oca-asset.x_tags",
+            "object": "x-oca-asset"
+        },
+        "rbacGroupId": {
+            "key": "x-oca-asset.x_tags",
+            "object": "x-oca-asset"
+        },
+        "rbacGroupName": {
+            "key": "x-oca-asset.x_tags",
+            "object": "x-oca-asset"
+        },
+        "onboardingStatus": {
+            "key": "x-oca-asset.x_tags",
+            "object": "x-oca-asset"
+        },
+        "defenderAvStatus": {
+            "key": "x-oca-asset.x_tags",
+            "object": "x-oca-asset"
+        },
+        "loggedOnUsers": {
+            "key": "x-oca-asset.x_tags",
+            "object": "x-oca-asset"
+        },
+        "vmMetadata": {
+            "key": "x-oca-asset.x_vmMetadata",
+            "object": "x-oca-asset"
+        }
+    },
+    "fileEvidence": {
+        "@odata.type": [
+            {
+                "key": "x-alert-evidence.evidence_type",
+                "object": "file-evidence"
+            },
+            {
+                "key": "x-alert-evidence.process_ref",
+                "object": "file-evidence",
+                "references": "process"
+            }
+        ],
+        "createdDateTime": {
+            "key": "x-alert-evidence.created",
+            "object": "file-evidence"
+        },
+        "verdict": {
+            "key": "x-alert-evidence.verdict",
+            "object": "file-evidence"
+        },
+        "remediationStatus": {
+            "key": "x-alert-evidence.remediationStatus",
+            "object": "file-evidence"
+        },
+        "remediationStatusDetails": {
+            "key": "x-alert-evidence.remediationStatusDetails",
+            "object": "file-evidence"
+        },
+        "roles": {
+            "key": "x-alert-evidence.roles",
+            "object": "file-evidence"
+        },
+        "tags": {
+            "key": "x-alert-evidence.tags",
+            "object": "file-evidence"
+        },
+        "detectionStatus": {
+            "key": "file.x_detectionStatus",
+            "object": "file"
+        },
+        "mdeDeviceId": {
+            "key": "file.x_mdeDeviceId",
+            "object": "file"
+        },
+        "fileDetails": {
+            "sha1": {
+                "key": "file.hashes.SHA-1",
+                "object": "file"
+            },
+            "sha256": {
+                "key": "file.hashes.SHA-256",
+                "object": "file"
+            },
+            "fileName": {
+                "key": "file.name",
+                "object": "file"
+            },
+            "filePath": [
+                {
+                    "key": "directory.path",
+                    "object": "directory",
+                    "transformer": "ToDirectoryPath"
+                },
+                {
+                    "key": "file.parent_directory_ref",
+                    "object": "file",
+                    "references": "directory"
+                }
+            ],
+            "fileSize": {
+                "key": "file.size",
+                "object": "file"
+            },
+            "filePublisher": {
+                "key": "file.x_filePublisher",
+                "object": "file"
+            },
+            "signer": {
+                "key": "file.x_signer",
+                "object": "file"
+            },
+            "issuer": {
+                "key": "file.x_issuer",
+                "object": "file"
+            }
+        }
+    },
+    "processEvidence": {
+        "@odata.type": [
+            {
+                "key": "x-alert-evidence.evidence_type",
+                "object": "process-evidence"
+            },
+            {
+                "key": "x-alert-evidence.process_ref",
+                "object": "process-evidence",
+                "references": "process"
+            }
+        ],
+        "createdDateTime": {
+            "key": "x-alert-evidence.created",
+            "object": "process-evidence"
+        },
+        "verdict": {
+            "key": "x-alert-evidence.verdict",
+            "object": "process-evidence"
+        },
+        "remediationStatus": {
+            "key": "x-alert-evidence.remediationStatus",
+            "object": "process-evidence"
+        },
+        "remediationStatusDetails": {
+            "key": "x-alert-evidence.remediationStatusDetails",
+            "object": "process-evidence"
+        },
+        "roles": {
+            "key": "x-alert-evidence.roles",
+            "object": "process-evidence"
+        },
+        "tags": {
+            "key": "x-alert-evidence.tags",
+            "object": "process-evidence"
+        },
+        "processId": {
+            "key": "process.pid",
+            "object": "process"
+        },
+        "parentProcessId": [
+            {
+                "key": "process.pid",
+                "object": "parent_process"
+            },
+            {
+                "key": "process.parent_ref",
+                "object": "process",
+                "references": "parent_process"
+            }
+        ],
+        "processCommandLine": {
+            "key": "process.command_line",
+            "object": "process"
+        },
+        "processCreationDateTime": {
+            "key": "process.created",
+            "object": "process"
+        },
+        "parentProcessCreationDateTime": {
+            "key": "process.created",
+            "object": "parent_process"
+        },
+        "detectionStatus": {
+            "key": "process.x_detectionStatus",
+            "object": "process"
+        },
+        "mdeDeviceId": {
+            "key": "process.x_mdeDeviceId",
+            "object": "process"
+        },
+        "imageFile": {
+            "sha1": {
+                "key": "file.hashes.SHA-1",
+                "object": "process_file"
+            },
+            "sha256": {
+                "key": "file.hashes.SHA-256",
+                "object": "process_file"
+            },
+            "fileName": [
+                {
+                    "key": "file.name",
+                    "object": "process_file"
+                },
+                {
+                    "key": "process.binary_ref",
+                    "object": "process",
+                    "references": "process_file"
+                }
+            ],
+            "filePath": [
+                {
+                    "key": "directory.path",
+                    "object": "process_directory",
+                    "transformer": "ToDirectoryPath"
+                },
+                {
+                    "key": "file.parent_directory_ref",
+                    "object": "process_file",
+                    "references": "process_directory"
+                }
+            ],
+            "fileSize": {
+                "key": "file.size",
+                "object": "process_file"
+            },
+            "filePublisher": {
+                "key": "file.x_filePublisher",
+                "object": "process_file"
+            },
+            "signer": {
+                "key": "file.x_signer",
+                "object": "process_file"
+            },
+            "issuer": {
+                "key": "file.x_issuer",
+                "object": "process_file"
+            }
+        },
+        "parentProcessImageFile": {
+            "sha1": {
+                "key": "file.hashes.SHA-1",
+                "object": "parent_process_file"
+            },
+            "sha256": {
+                "key": "file.hashes.SHA-256",
+                "object": "parent_process_file"
+            },
+            "fileName": [
+                {
+                    "key": "file.name",
+                    "object": "parent_process_file"
+                },
+                {
+                    "key": "process.binary_ref",
+                    "object": "process",
+                    "references": "parent_process_file"
+                }
+            ],
+            "filePath": [
+                {
+                    "key": "directory.path",
+                    "object": "parent_process_directory",
+                    "transformer": "ToDirectoryPath"
+                },
+                {
+                    "key": "file.parent_directory_ref",
+                    "object": "parent_process_file",
+                    "references": "parent_process_directory"
+                }
+            ],
+            "fileSize": {
+                "key": "file.size",
+                "object": "parent_process_file"
+            },
+            "filePublisher": {
+                "key": "file.x_filePublisher",
+                "object": "parent_process_file"
+            },
+            "signer": {
+                "key": "file.x_signer",
+                "object": "parent_process_file"
+            },
+            "issuer": {
+                "key": "file.x_issuer",
+                "object": "parent_process_file"
+            }
+        },
+        "userAccount": {
+            "accountName": [
+                {
+                    "key": "user-account.user_id",
+                    "object": "user-account"
+                },
+                {
+                    "key": "process.creator_user_ref",
+                    "object": "process",
+                    "references": "user-account"
+                }
+            ],
+            "domainName": {
+                "key": "user-account.x_azure_domain_name",
+                "object": "user-account"
+            },
+            "userSid": {
+                "key": "user-account.x_userSid",
+                "object": "user-account"
+            },
+            "azureAdUserId": {
+                "key": "user-account.x_azureAdUserId",
+                "object": "user-account"
+            },
+            "userPrincipalName": {
+                "key": "user-account.x_userPrincipalName",
+                "object": "user-account"
+            }
+        }
+    },
+    "registryKeyEvidence": {
+        "@odata.type": [
+            {
+                "key": "x-alert-evidence.evidence_type",
+                "object": "registry-evidence"
+            },
+            {
+                "key": "x-alert-evidence.registry_ref",
+                "object": "registry-evidence",
+                "references": "registry"
+            }
+        ],
+        "createdDateTime": {
+            "key": "x-alert-evidence.created",
+            "object": "registry-evidence"
+        },
+        "verdict": {
+            "key": "x-alert-evidence.verdict",
+            "object": "registry-evidence"
+        },
+        "remediationStatus": {
+            "key": "x-alert-evidence.remediationStatus",
+            "object": "registry-evidence"
+        },
+        "remediationStatusDetails": {
+            "key": "x-alert-evidence.remediationStatusDetails",
+            "object": "registry-evidence"
+        },
+        "roles": {
+            "key": "x-alert-evidence.roles",
+            "object": "registry-evidence"
+        },
+        "tags": {
+            "key": "x-alert-evidence.tags",
+            "object": "registry-evidence"
+        },
+        "registryKey": {
+            "key": "windows-registry-key.key",
+            "object": "registry"
+        },
+        "registryHive": {
+            "key": "windows-registry-key.x_registryHive",
+            "object": "registry"
+        }
+    },
+    "registryValueEvidence": {
+        "@odata.type": [
+            {
+                "key": "x-alert-evidence.evidence_type",
+                "object": "registryValue-evidence"
+            },
+            {
+                "key": "x-alert-evidence.registry_ref",
+                "object": "registryValue-evidence",
+                "references": "registryValue"
+            }
+        ],
+        "createdDateTime": {
+            "key": "x-alert-evidence.created",
+            "object": "registryValue-evidence"
+        },
+        "verdict": {
+            "key": "x-alert-evidence.verdict",
+            "object": "registryValue-evidence"
+        },
+        "remediationStatus": {
+            "key": "x-alert-evidence.remediationStatus",
+            "object": "registryValue-evidence"
+        },
+        "remediationStatusDetails": {
+            "key": "x-alert-evidence.remediationStatusDetails",
+            "object": "registryValue-evidence"
+        },
+        "roles": {
+            "key": "x-alert-evidence.roles",
+            "object": "registryValue-evidence"
+        },
+        "tags": {
+            "key": "x-alert-evidence.tags",
+            "object": "registryValue-evidence"
+        },
+        "registryKey": {
+            "key": "windows-registry-key.key",
+            "object": "registryValue"
+        },
+        "registryHive": {
+            "key": "windows-registry-key.x_registry_hive",
+            "object": "registryValue"
+        },
+        "registryValue": {
+            "key": "windows-registry-key.values.data",
+            "object": "registryValue"
+        },
+        "registryValueName": {
+            "key": "windows-registry-key.values.name",
+            "object": "registryValue"
+        },
+        "registryValueType": {
+            "key": "windows-registry-key.values.data_type",
+            "object": "registryValue"
+        }
+    },
+    "ipEvidence": {
+        "@odata.type": [
+            {
+                "key": "x-alert-evidence.evidence_type",
+                "object": "ip-evidence"
+            },
+            {
+                "key": "x-alert-evidence.ip_ref",
+                "object": "ip-evidence",
+                "references": "ipv4-addr"
+            }
+        ],
+        "createdDateTime": {
+            "key": "x-alert-evidence.created",
+            "object": "ip-evidence"
+        },
+        "verdict": {
+            "key": "x-alert-evidence.verdict",
+            "object": "ip-evidence"
+        },
+        "remediationStatus": {
+            "key": "x-alert-evidence.remediationStatus",
+            "object": "ip-evidence"
+        },
+        "remediationStatusDetails": {
+            "key": "x-alert-evidence.remediationStatusDetails",
+            "object": "ip-evidence"
+        },
+        "ipAddress": {
+            "key": "ipv4-addr.value",
+            "object": "ipv4-addr"
+        },
+        "countryLetterCode": {
+            "key": "ipv4-addr.x_country_letter_code",
+            "object": "ipv4-addr"
+        },
+        "roles": {
+            "key": "x-alert-evidence.roles",
+            "object": "ip-evidence"
+        },
+        "tags": {
+            "key": "x-alert-evidence.tags",
+            "object": "ip-evidence"
+        }
+    },
+    "userEvidence": {
+        "@odata.type": [
+            {
+                "key": "x-alert-evidence.evidence_type",
+                "object": "user-evidence"
+            },
+            {
+                "key": "x-alert-evidence.user_ref",
+                "object": "user-evidence",
+                "references": "user-account"
+            }
+        ],
+        "createdDateTime": {
+            "key": "x-alert-evidence.created",
+            "object": "user-evidence"
+        },
+        "verdict": {
+            "key": "x-alert-evidence.verdict",
+            "object": "user-evidence"
+        },
+        "remediationStatus": {
+            "key": "x-alert-evidence.remediationStatus",
+            "object": "user-evidence"
+        },
+        "remediationStatusDetails": {
+            "key": "x-alert-evidence.remediationStatusDetails",
+            "object": "user-evidence"
+        },
+        "roles": {
+            "key": "x-alert-evidence.roles",
+            "object": "user-evidence"
+        },
+        "tags": {
+            "key": "x-alert-evidence.tags",
+            "object": "user-evidence"
+        },
+        "userAccount": {
+            "accountName": {
+                "key": "user-account.user_id",
+                "object": "user-account"
+            },
+            "domainName": {
+                "key": "user-account.x_azure_domain_name",
+                "object": "user-account"
+            },
+            "userSid": {
+                "key": "user-account.x_userSid",
+                "object": "user-account"
+            },
+            "azureAdUserId": {
+                "key": "user-account.x_azureAdUserId",
+                "object": "user-account"
+            },
+            "userPrincipalName": {
+                "key": "user-account.x_userPrincipalName",
+                "object": "user-account"
+            }
+        }
+    },
+    "urlEvidence": {
+        "@odata.type": [
+            {
+                "key": "x-alert-evidence.evidence_type",
+                "object": "url-evidence"
+            },
+            {
+                "key": "x-alert-evidence.user_ref",
+                "object": "url-evidence",
+                "references": "url"
+            }
+        ],
+        "createdDateTime": {
+            "key": "x-alert-evidence.created",
+            "object": "url-evidence"
+        },
+        "verdict": {
+            "key": "x-alert-evidence.verdict",
+            "object": "url-evidence"
+        },
+        "remediationStatus": {
+            "key": "x-alert-evidence.remediationStatus",
+            "object": "url-evidence"
+        },
+        "remediationStatusDetails": {
+            "key": "x-alert-evidence.remediationStatusDetails",
+            "object": "url-evidence"
+        },
+        "roles": {
+            "key": "x-alert-evidence.roles",
+            "object": "url-evidence"
+        },
+        "tags": {
+            "key": "x-alert-evidence.tags",
+            "object": "url-evidence"
+        },
+        "url": {
+            "key": "url.value",
+            "object": "url"
+        }
     }
 }

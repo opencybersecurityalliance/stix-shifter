@@ -5,14 +5,27 @@ from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestAp
 class APIClient:
     """API Client to handle all calls."""
     credential = None
+    DEFAULT_API_VERSION = 'v1.0'
+    LEGACY_ALERT = 'security/alerts'
+    ALERT_V2 = 'security/alerts_v2'
     
     def __init__(self, base_uri, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
-        default_api_version = 'v1.0'
         self.host = base_uri
-        self.endpoint = '{api_version}/security/alerts'.format(api_version=default_api_version)
+        self.legacy_alert = connection['options'].get('alert')
+        self.alert_v2 = connection['options'].get('alertV2')
+
+        if self.legacy_alert:
+            self.query_alert_type = 'alert'
+            self.endpoint = '{api_version}/{api_resource}'.format(api_version=self.DEFAULT_API_VERSION, api_resource=self.LEGACY_ALERT)
+        elif self.alert_v2:
+            self.query_alert_type = 'alertV2'
+            self.endpoint = '{api_version}/{api_resource}'.format(api_version=self.DEFAULT_API_VERSION, api_resource=self.ALERT_V2)
+        else:
+            raise Exception('Invalid alert resource type. At least one alert type must be selected.')
+        
         self.connection = connection
         self.configuration = configuration
         self.timeout = connection['options'].get('timeout')

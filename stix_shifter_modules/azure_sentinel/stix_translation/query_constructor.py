@@ -30,12 +30,15 @@ class QueryStringPatternTranslator:
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
+        self.alert_type = self.dmm.dialect
+        print("self.alert_type")
+        print(self.alert_type)
         self.comparator_lookup = self.dmm.map_comparator()
         self._time_range = time_range
         self.pattern = pattern
 
         # List of queries for each observation
-        self.final_query_list = []
+        # self.final_query_list = []
         # Translated query string without any qualifiers
         self.translated = self.parse_expression(pattern)
 
@@ -254,8 +257,7 @@ class QueryStringPatternTranslator:
                 "Comparison operator {} unsupported for Azure Sentinel adapter".format(expression_operator.name))
         return self.comparator_lookup[str(expression_operator)]
 
-    @staticmethod
-    def _parse_time_range(qualifier, time_range):
+    def _parse_time_range(self, qualifier, time_range):
         """
         :param qualifier: str, input time range i.e START t'2019-04-10T08:43:10.003Z' STOP t'2019-04-20T10:43:10.003Z'
         :param time_range: int, value available from main.py in options variable
@@ -263,7 +265,10 @@ class QueryStringPatternTranslator:
         """
         try:
             compile_timestamp_regex = re.compile(START_STOP_PATTERN)
-            mapped_field = "eventDateTime"
+            if self.alert_type == 'alert':
+                mapped_field = "eventDateTime"
+            if self.alert_type == 'alertV2':
+                mapped_field = "createdDateTime"
             if qualifier and compile_timestamp_regex.search(qualifier):
                 time_range_iterator = compile_timestamp_regex.finditer(qualifier)
                 time_range_list = [each.group() for each in time_range_iterator]
@@ -364,8 +369,8 @@ class QueryStringPatternTranslator:
         elif isinstance(expression, ObservationExpression):
             parse_string = self._parse_expression(expression.comparison_expression)
             time_string = self._parse_time_range(qualifier, self._time_range)
-            sentinel_query = "({}) and ({})".format(parse_string, time_string)
-            self.final_query_list.append(sentinel_query)
+            return "({}) and ({})".format(parse_string, time_string)
+            # self.final_query_list.append(sentinel_query)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
                 self._parse_expression(expression.observation_expression.expr1, expression.qualifier)
@@ -374,11 +379,20 @@ class QueryStringPatternTranslator:
                 parse_string = self._parse_expression(expression.observation_expression.comparison_expression,
                                                       expression.qualifier)
                 time_string = self._parse_time_range(expression.qualifier, self._time_range)
-                sentinel_query = "({}) and ({})".format(parse_string, time_string)
-                self.final_query_list.append(sentinel_query)
+                return "({}) and ({})".format(parse_string, time_string)
+                # self.final_query_list.append(sentinel_query)
         elif isinstance(expression, CombinedObservationExpression):
-            self._parse_expression(expression.expr1, qualifier)
-            self._parse_expression(expression.expr2, qualifier)
+            expression_01 = self._parse_expression(expression.expr1, qualifier)
+            expression_02 = self._parse_expression(expression.expr2, qualifier)
+            operator = self._lookup_comparison_operator(expression.operator)
+            if expression_01 and expression_02:
+                return "({}) {} ({})".format(expression_01, operator, expression_02)
+            elif expression_01:
+                return "{}".format(expression_01)
+            elif expression_02:
+                return "{}".format(expression_02)
+            else:
+                return ''
         elif isinstance(expression, Pattern):
             return "{expr}".format(expr=self._parse_expression(expression.expression))
         else:
@@ -404,7 +418,11 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     """
     # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the DS
     time_range = options['time_range']
+
     query = QueryStringPatternTranslator(pattern, data_model_mapping, time_range)
 
-    translated_query = query.final_query_list
-    return translated_query
+    # translated_query = query.final_query_list
+    # return translated_query
+
+    query_string = "({condition})".format(condition=query.translated)
+    return [{query.alert_type: query_string}] 

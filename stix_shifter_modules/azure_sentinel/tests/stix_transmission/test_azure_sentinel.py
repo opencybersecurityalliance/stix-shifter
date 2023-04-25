@@ -6,6 +6,8 @@ from tests.utils.async_utils import get_adal_mock_response, get_mock_response
 from unittest.mock import patch
 from unittest import TestCase
 
+import json
+
 
 @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.credential')
 @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.__init__')
@@ -21,7 +23,8 @@ class TestAzureSentinalConnection(TestCase):
 
     def connection(self):
         return {
-                "port": 443
+                "port": 443,
+                "options": {"alert": True}
                 }
 
     def test_is_async(self, mock_api_client, mock_generate_token):
@@ -260,6 +263,7 @@ class TestAzureSentinalConnection(TestCase):
         length = 1
         transmission = stix_transmission.StixTransmission('azure_sentinel', self.connection(), self.config())
         results_response = transmission.results(query, offset, length)
+        print(results_response)
 
         assert results_response['success'] is False
         assert results_response['error'] == "azure_sentinel connector error => Invalid filter clause"
@@ -290,3 +294,23 @@ class TestAzureSentinalConnection(TestCase):
         assert status_response is not None
         assert 'success' in status_response
         assert status_response['success'] is True
+
+    @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.run_search',
+           autospec=True)
+    def test_alert_v2_results(self, mock_results_response, mock_api_client, mock_generate_token):
+        mock_api_client.return_value = None
+        mock_generate_token.return_value = get_adal_mock_response()
+
+        mock_return_value = open('stix_shifter_modules/azure_sentinel/tests/jsons/alert_v2.json', 'r').read()
+        mock_results_response.return_value = get_mock_response(200, mock_return_value)
+        query = "(tolower(severity) eq 'low') and (eventDateTime ge 2023-04-17T20:05:42.261Z and eventDateTime le 2023-04-17T20:10:42.261Z)"
+
+        offset = 0
+        length = 1
+        transmission = stix_transmission.StixTransmission('azure_sentinel', self.connection(), self.config())
+        results_response = transmission.results(query, offset, length)
+        print(json.dumps(results_response,indent=4))
+        assert results_response is not None
+        assert results_response['success']
+        assert 'data' in results_response
+        assert results_response['data'] is not None

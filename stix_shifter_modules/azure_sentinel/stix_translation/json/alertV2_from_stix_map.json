@@ -1,0 +1,88 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["ipEvidence.ipAddress"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["ipEvidence.ipAddress"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["fileEvidence.fileDetails.filePath", "processEvidence.imageFile.filePath","processEvidence.parentProcessImageFile.filePath"]
+    }
+  },
+  "file": {
+    "fields": {
+      "parent_directory_ref.path": ["fileEvidence.fileDetails.filePath"],
+      "name": ["fileEvidence.fileDetails.fileName"],
+      "size": ["fileEvidence.fileDetails.fileSize"],
+      "hashes.'SHA-256'": ["fileEvidence.fileDetails.sha256"],
+      "hashes.'SHA-1'": ["fileEvidence.fileDetails.sha1"],
+      "x_filePublisher": ["fileEvidence.fileDetails.filePublisher"],
+      "x_issuer": ["fileEvidence.fileDetails.issuer"],
+      "x_signer": ["fileEvidence.fileDetails.signer"]
+    }
+  },
+   "process" : {
+    "fields": {
+      "pid": ["processEvidence.processId", "processEvidence.parentProcessId"],
+      "command_line": ["processEvidence.processCommandLine"],
+      "created": ["processEvidence.processCreationDateTime", "processEvidence.parentProcessCreationDateTime"],
+      "parent_ref.pid": ["processEvidence.parentProcessId"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["deviceEvidence.deviceDnsName"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["userEvidence.userAccount.accountName", "processEvidence.userAccount.accountName"]
+    }
+  },
+  "software": {
+    "fields": {
+      "name": ["serviceSource", "detectionSource", "deviceEvidence.osPlatform"],
+      "version": ["deviceEvidence.version"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["alertWebUrl", "incidentWebUrl", "urlEvidence.url"]
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": ["registryKeyEvidence.registryKey", "registryValueEvidence.registryKey"],
+      "extensions.values.data": [ "registryValueEvidence.registryValue" ],
+      "extensions.values.name": [ "registryValueEvidence.registryValueName" ],
+      "extensions.data_type": [ "registryValueEvidence.registryValueType" ]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "alert_id": ["providerAlertId"],
+      "start": ["firstActivityDateTime"],
+      "end": ["resolvedDateTime"]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "device_id": ["title"]
+    }
+  },
+  "x-alert-evidence": {
+    "fields": {
+      "created": ["deviceEvidence.createdDateTime", "fileEvidence.createdDateTime", "processEvidence.createdDateTime", "ipEvidence.createdDateTime", "userEvidence.createdDateTime"],
+      "verdict": ["deviceEvidence.verdict", "fileEvidence.verdict", "processEvidence.verdict", "ipEvidence.verdict", "userEvidence.verdict"],
+      "remediationStatus": ["deviceEvidence.remediationStatus", "fileEvidence.remediationStatus", "processEvidence.remediationStatus", "ipEvidence.remediationStatus", "userEvidence.remediationStatus"],
+      "remediationStatusDetails": ["deviceEvidence.remediationStatusDetails", "fileEvidence.remediationStatusDetails", "processEvidence.remediationStatusDetails", "userEvidence.remediationStatusDetails", "ipEvidence.remediationStatusDetails"],
+      "roles": ["deviceEvidence.roles", "fileEvidence.roles", "processEvidence.roles", "ipEvidence.roles"],
+      "tags": ["deviceEvidence.tags", "fileEvidence.tags", "processEvidence.tags", "ipEvidence.tags"]
+    }
+  }
+}

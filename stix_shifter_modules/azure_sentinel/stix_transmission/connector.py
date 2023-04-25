@@ -65,8 +65,16 @@ class Connector(BaseJsonSyncConnector):
 
         # total records is the sum of the offset and length(limit) value
         total_records = offset + length
-
+        print(query)
+        if not isinstance(query, dict):
+            query_list = json.loads(query)
+        query_alert_type = list(query_list.keys())[0]
+        print('query_alert_type')
+        print(query_alert_type)
+        
         try:
+            query =  query_list.get(self.api_client.query_alert_type)
+            print(query)
             # check for length value against the max limit(1000) of $top param in data source
             if length <= self.max_limit:
                 # $skip(offset) param not included as data source provides incorrect results for some of the queries
@@ -111,6 +119,14 @@ class Connector(BaseJsonSyncConnector):
                                 process["fileHash"].pop('hashType')
                                 process["fileHash"].pop('hashValue')
 
+                    if 'evidence' in node:
+                        evidence_list = node['evidence']
+                        
+                        for evidence in evidence_list:
+                            odata_type =  evidence.get('@odata.type').split('.')[3]
+                            node[odata_type] = evidence
+                        node.pop('evidence')  
+                    
                     update_node.append(node)
 
                 return_obj['data'] = update_node

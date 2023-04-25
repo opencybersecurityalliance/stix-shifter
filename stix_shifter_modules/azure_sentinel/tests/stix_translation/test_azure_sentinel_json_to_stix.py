@@ -249,3 +249,6 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         assert 'objects' in observed_data
         objects = observed_data['objects']
         assert objects == {}
+
+    def test_alert_v2_tranlsation():
+        
