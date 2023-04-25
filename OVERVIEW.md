@@ -443,8 +443,9 @@ Any failed transmission function call will return an error in the format of:
 | ping | Calls the data source ping API endpont (or equivalent) to see if a connection can be made.| NA | Object containing `success` of `true` or `false` |
 | query | Sends a native query string, as translated from the STIX pattern, to target data source API. | Tranlated query string | Query string | Object containing `success` of `true` or `false` and the `search_id`. If the connector is synchronous, the search_id will be the original query string. |
 | status | Checks the status of a query. Only used by asynchronous connectors. | The `search_id` returned from the query call | Object continaing `success` of `true` or `false`, `status` of `RUNNING`, `COMPLETED`, `CANCELED`, or `ERROR`, and `progress` with a number indicating the percentage complete. |
-| results | Fetches the native results of a completed query. | The `search_id` returned from the query call followed by length and offset as numbers | A list of JSON results |
+| results | Fetches the native results of a completed query. | The `search_id` returned from the query call followed by OFFSET and LENGTH as numbers | A list of JSON results |
 | delete | Deletes a query from the target data source | The `search_id` returned from the query call | Object continaing `success` of `true` or `false` |
+| results_stix | Fetches the results of a completed query and runs results-to-stix translation. This essentially combines the `results` transmission function with the results translation | The `search_id` returned from the query call, followed by OFFSET and LENGTH as numbers, followed by the stringified STIX identity object. | A bundle of STIX objects. |
 
 ### Ping
 
