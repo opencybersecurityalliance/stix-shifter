@@ -19,12 +19,11 @@ class CarBaseResultsTranslator(JSONToStix):
       :rtype: str
       """
 
-      json_data = json.loads(data)
-      for obj in json_data:
+      for obj in data:
         typ = obj.pop('object', '')
         fields = obj.pop('fields', [])
         for field in fields:
           obj[f"{typ}.{field}"] = fields[field]
 
-      return super().translate_results(data_source, json.dumps(json_data))
+      return super().translate_results(data_source, data)
 

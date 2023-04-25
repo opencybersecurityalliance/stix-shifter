@@ -8,8 +8,8 @@ class DeleteConnector(BaseDeleteConnector):
         self.api_client = api_client
         self.connector = __name__.split('.')[1]
 
-    def delete_query_connection(self, search_id):
-        response = self.api_client.delete_search(search_id)
+    async def delete_query_connection(self, search_id):
+        response = await self.api_client.delete_search(search_id)
         response_code = response.code
         response_json = json.loads(response.read())
         # Construct a response object

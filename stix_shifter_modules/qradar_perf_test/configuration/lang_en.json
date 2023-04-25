@@ -10,7 +10,7 @@
         },
         "options": {
             "hash_options": {
-                "label": "Hash Options",
+                "label": "Hash options",
                 "description": "Hash Options"
             }
         }

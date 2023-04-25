@@ -1,7 +1,6 @@
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 from ..stix_transmission.connector import Connector
 import os
-import json
 
 
 class ResultsTranslator(JSONToStix):
@@ -23,7 +22,7 @@ class ResultsTranslator(JSONToStix):
         """
 
         results = super().translate_results(data_source, data)
-        json_data = json.loads(data)
+        json_data = data
 
         if len(results['objects']) - 1 == len(json_data):
             for i in range(1, len(results['objects'])):

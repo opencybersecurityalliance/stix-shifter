@@ -2,6 +2,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_query_connector impo
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 import json
+from asyncio.exceptions import TimeoutError
 
 
 class InvalidResponseException(Exception):
@@ -14,7 +15,7 @@ class QueryConnector(BaseQueryConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
 
         """
          Function to create query connection
@@ -24,11 +25,11 @@ class QueryConnector(BaseQueryConnector):
         response_dict = {}
         return_obj = {}
         try:
-            response = self.api_client.create_search(query)
+            response = await self.api_client.create_search(query)
             if isinstance(response, dict):   # return the object, if response code is not 200 in create_rule
                 return response              # in api_client
-            response_code = response[0].status
-            response_text = json.loads(response[1])
+            response_code = response.status_code
+            response_text = response.content
 
             if response_code == 200:
                 if 'retrohuntId' in response_text.keys() and 'ruleId' in response_text.keys():
@@ -53,12 +54,13 @@ class QueryConnector(BaseQueryConnector):
             response_dict['message'] = f'cannot parse {q_ex}'
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
+        except TimeoutError as ex:
+            response_dict['code'] = 120
+            response_dict['message'] = 'TimeoutError ' + str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+
         except Exception as q_ex:
-            if "timed out" in str(q_ex):
-                response_dict['code'] = 120
-                response_dict['message'] = str(q_ex)
-            else:
-                response_dict['message'] = q_ex
+            response_dict['message'] = q_ex
             self.logger.error('error when getting search results: %s', q_ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 

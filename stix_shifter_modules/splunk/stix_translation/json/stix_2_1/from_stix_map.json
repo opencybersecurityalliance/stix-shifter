@@ -135,7 +135,8 @@
             "creator_user_ref.account_login": "user",
             "creator_user_ref.user_login": "user",
             "image_ref.parent_directory_ref.path": "process_path",
-            "image_ref.name": "process_exec"
+            "image_ref.name": "process_exec",
+            "x_unique_id": "process_guid"
         }
     },
     "url": {

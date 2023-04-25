@@ -41,6 +41,10 @@ def exception_catcher(func, *args, **kwargs):
 
 
 class RestApiClient:
+    """
+    Deprecated RestApiClient, 
+    consider using RestApiClientAsync
+    """
     # cert_verify can be
     #  True -- do proper signed cert check that is in trust store,
     #  False -- skip all cert checks,
@@ -78,6 +82,8 @@ class RestApiClient:
         self.headers = headers
         self.url_modifier_function = url_modifier_function
         self.auth = auth
+
+        self.logger.warning('Deprecated RestApiClient, consider using RestApiClientAsync')
 
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):

@@ -1,0 +1,20 @@
+{
+    "connection": {
+        "host": {
+            "label": "Management IP address or Hostname",
+            "description": "Specify the IP address or  hostname of the data source"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "api_token": {
+                "label": "API token",
+                "description": "Okta API tokens to authenticate requests for Okta APIs"
+            }
+        }
+    }
+}

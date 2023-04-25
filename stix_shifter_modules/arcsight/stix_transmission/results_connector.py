@@ -1,6 +1,6 @@
 import json
 import re
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseJsonResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 MAX_LIMIT = 10000
@@ -10,12 +10,12 @@ PROTOCOLS_LIST = ["transportProtocol", "applicationProtocol"]
 FILE_HASHES = ["MD5", "SHA256", "SHA1"]
 
 
-class ResultsConnector(BaseResultsConnector):
+class ResultsConnector(BaseJsonResultsConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.connector = __name__.split('.')[1]
 
-    def create_results_connection(self, search_id, offset, length):
+    async def create_results_connection(self, search_id, offset, length):
         """
         Fetching the results using search id, offset and length
         :param search_id: str, search id generated in transmit query
@@ -35,7 +35,7 @@ class ResultsConnector(BaseResultsConnector):
             else:
                 raise SyntaxError("Invalid search_id format : " + str(search_id))
 
-            response = self.api_client.get_search_results(search_session_id, user_session_id, min_range, max_range)
+            response = await self.api_client.get_search_results(search_session_id, user_session_id, min_range, max_range)
             raw_response = response.read()
             response_code = response.code
 

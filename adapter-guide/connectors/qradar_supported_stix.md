@@ -1,10 +1,12 @@
-##### Updated on 11/04/22
+##### Updated on 03/08/23
 ## IBM QRadar
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | OR |
-| OR | OR |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | > | > |
 | >= | >= |
 | < | < |
@@ -15,8 +17,10 @@
 | IN | IN |
 | MATCHES | MATCHES |
 | ISSUBSET | INCIDR |
+| OR (Observation) | OR |
+| AND (Observation) | OR |
 | <br> | |
-### Searchable STIX objects and properties for Events
+### Searchable STIX objects and properties for Events dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | sourceaddress, destinationaddress, identityip |
@@ -40,7 +44,7 @@
 | **user-account**:user_id | username |
 | **user-account**:account_login | username |
 | **artifact**:payload_bin | UTF8(payload) |
-| **domain-name**:value | DOMAINNAME(domainid), UrlHost |
+| **domain-name**:value | "DNS Request Domain", UrlHost |
 | **x-qradar**:qid | qid |
 | **x-qradar**:magnitude | magnitude |
 | **x-qradar**:log_source_id | logsourceid |
@@ -102,7 +106,7 @@
 | **windows-registry-key**:key | ObjectName, "Registry Key" |
 | **windows-registry-key**:values[*].name | "Registry Value Name" |
 | <br> | |
-### Searchable STIX objects and properties for Flows
+### Searchable STIX objects and properties for Flows dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | sourceaddress, destinationaddress |
@@ -179,7 +183,6 @@
 | directory | path | ServiceFileName |
 | <br> | | |
 | domain-name | value | UrlHost |
-| domain-name | value | DOMAINNAME(domainid) |
 | domain-name | value | dnsdomainname |
 | <br> | | |
 | email-message | content_type | contenttype |
@@ -258,7 +261,6 @@
 | software | name | applicationname |
 | <br> | | |
 | url | value | URL |
-| url | value | dnsdomainname |
 | url | value | httphost |
 | url | value | tlsservernameindication |
 | <br> | | |
@@ -328,7 +330,6 @@
 | x-qradar | direction | eventdirection |
 | x-qradar | qid | qid |
 | x-qradar | domain_name | DOMAINNAME(domainid) |
-| x-qradar | domain_name | dnsdomainname |
 | x-qradar | flow_source | flowsource |
 | x-qradar | flow_interface | flowinterface |
 | x-qradar | flow_interface_id | flowinterfaceid |

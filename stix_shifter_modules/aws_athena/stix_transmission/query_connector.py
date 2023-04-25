@@ -26,7 +26,7 @@ class QueryConnector(BaseQueryConnector):
         self.connection = connection
         self.connector = __name__.split('.')[1]
 
-    def create_query_connection(self, query):
+    async def create_query_connection(self, query):
         """
         Function to create query connection
         :param query: dict, Query
@@ -57,7 +57,7 @@ class QueryConnector(BaseQueryConnector):
                         other_tables += ' %s%s%s ' % ('LEFT JOIN ', match_str.replace('##', ''), ' ON TRUE ')
 
             if query_service_type == 'ocsf':
-                columns = self.column_list(self.connection[config_details[1]])
+                columns = await self.column_list(self.connection[config_details[1]])
                 column_cast = []
                 for column in columns:
                     column_cast.append("CAST(%s as JSON) AS %s" % (column, column))
@@ -74,7 +74,7 @@ class QueryConnector(BaseQueryConnector):
                 query = select_statement + query[query_service_type]
             result_config = self.get_result_config()
             query_args = {"QueryString": query, "ResultConfiguration": result_config}
-            response_dict = self.client.start_query_execution(**query_args)
+            response_dict = await self.client.makeRequest('athena', 'start_query_execution', **query_args)
             return_obj['success'] = True
             return_obj['search_id'] = response_dict['QueryExecutionId'] + ":" + query_service_type
 
@@ -84,38 +84,52 @@ class QueryConnector(BaseQueryConnector):
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
 
-    def column_list(self, table):
+    async def column_list(self, table):
         columns = []
         query = "SELECT column_name FROM information_schema.columns WHERE table_name = '%s'" % table
         result_config = self.get_result_config()
         query_args = {"QueryString": query, "ResultConfiguration": result_config}
-        response_dict = self.client.start_query_execution(**query_args)
+        response_dict = await self.client.makeRequest('athena', 'start_query_execution', **query_args)
         execution_id = response_dict['QueryExecutionId']
 
         state = "RUNNING"
         max_execution = 10
         while max_execution > 0 and state in ["RUNNING", "QUEUED"]:
             max_execution -= 1
-            response = self.client.get_query_execution(QueryExecutionId=execution_id)
+            response = await self.client.makeRequest('athena', 'get_query_execution', QueryExecutionId=execution_id)
             if (
                 "QueryExecution" in response
                 and "Status" in response["QueryExecution"]
                 and "State" in response["QueryExecution"]["Status"]
             ):
                 state = response["QueryExecution"]["Status"]["State"]
+                s3_output_location = response['QueryExecution']['ResultConfiguration']['OutputLocation']
                 if state == "SUCCEEDED":
                     break
             time.sleep(1)
 
         if state == "SUCCEEDED":
-            response = self.client.get_query_results(
-                QueryExecutionId=execution_id
-            )
+            response = await self.client.makeRequest('athena', 'get_query_results', QueryExecutionId=execution_id)
             results = response['ResultSet']['Rows'][1:]
             for row in results:
                 columns.append(row['Data'][0]['VarCharValue'])
         else:
-            raise Exception("Error in getting Athena table column list")
+            raise InvalidParameterException("Error in getting Athena table column list")
+        
+        s3_output_bucket_with_file = s3_output_location.split('//')[1]
+        s3_output_bucket = s3_output_bucket_with_file.split('/')[0]
+        s3_output_key = '/'.join(s3_output_bucket_with_file.split('/')[1:])
+        s3_output_key_metadata = s3_output_key + '.metadata'
+        delete = dict()
+        delete['Objects'] = [{'Key': s3_output_key}, {'Key': s3_output_key_metadata}]
+        # Api call to delete s3 object
+        delete_object = await self.client.makeRequest('s3', 'delete_objects', Bucket=s3_output_bucket, Delete=delete)
+        if delete_object.get('Errors'):
+            message = delete_object.get('Errors')[0].get('Message')
+            raise Exception("Error in deleting s3 metadata after Athena query: " + message)
+        
+        if not columns:
+            raise InvalidParameterException('No Athena table with name ' + table)
 
         return columns
 

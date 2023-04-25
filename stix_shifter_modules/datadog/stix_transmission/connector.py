@@ -1,17 +1,17 @@
 import json
 from stix_shifter_modules.datadog.stix_transmission.api_client import APIClient
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def ping_connection(self):
+    async def ping_connection(self):
         try:
             response = self.api_client.ping_data_source()
             # Construct a response object
@@ -25,7 +25,7 @@ class Connector(BaseSyncConnector):
             self.logger.error('error when pinging datasource {}:'.format(err))
             raise
 
-    def create_results_connection(self, query_expr, offset, length):
+    async def create_results_connection(self, query_expr, offset, length):
         payload = json.loads(query_expr)
         if payload['source'] == 'events':
             return self.get_events(payload, offset, length)

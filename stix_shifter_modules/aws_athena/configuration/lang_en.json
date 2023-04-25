@@ -10,7 +10,7 @@
             "description": "Specify the region of the Amazon Athena data source"
         },
         "s3_bucket_location": {
-            "label": "Amazon S3 Bucket Location",
+            "label": "Amazon S3 bucket location",
             "placeholder": "s3://bucket_name/",
             "description": "Specify the location of the S3 bucket where query results will be stored"
         },
@@ -48,19 +48,19 @@
     "configuration": {
         "auth": {
             "aws_access_key_id": {
-                "label": "AWS Access Key ID",
+                "label": "AWS access key ID",
                 "description": "AWS Access Key ID is required for both AWS key-based and role-based authentication"
             },
             "aws_iam_role": {
-                "label": "AWS IAM Role",
+                "label": "AWS IAM role",
                 "description": "AWS IAM Role is required for only AWS role-based authentication"
             },
             "aws_assume_role_external_id": {
-                "label": "External ID for AWS Assume Role",
+                "label": "External ID for AWS assume role",
                 "description": "External ID is optional for using in AWS role-based authentication"
             },
             "aws_secret_access_key": {
-                "label": "AWS Secret Access Key",
+                "label": "AWS secret access key",
                 "description": "AWS Secret Access Key ID is required for both AWS key-based and role-based authentication"
             }
         }

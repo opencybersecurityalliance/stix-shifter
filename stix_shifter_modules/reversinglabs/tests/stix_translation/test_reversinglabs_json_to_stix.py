@@ -89,7 +89,7 @@ class TestReversingLabsResultsToStix(unittest.TestCase):
         """
         @wraps(func)
         def wrapper_func(self, *args, **kwargs):
-            self.result_bundle = self.result_translator.translate_results(data_source=str(DATA_SOURCE).replace('\'', "\""), data=json.dumps(transmitQueryDataForDomain['data']),)
+            self.result_bundle = self.result_translator.translate_results(data_source=DATA_SOURCE, data=transmitQueryDataForDomain['data'])
             self.result_bundle_domain_objects = self.result_bundle['objects']
             assert self.result_bundle['type'] == 'bundle'
             return func(self, *args, **kwargs)
@@ -196,7 +196,7 @@ class TestReversingLabsResultsToStix(unittest.TestCase):
                     ]
                 }
         sdo_type = 'indicator'
-        result_bundle = self.result_translator.translate_results(data_source=str(DATA_SOURCE).replace('\'', "\""), data=json.dumps(transmitData['data']))
+        result_bundle = self.result_translator.translate_results(data_source=DATA_SOURCE, data=transmitData['data'])
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
         stix_indicator = TestReversingLabsResultsToStix.get_first_of_type(result_bundle_objects, sdo_type)
@@ -335,7 +335,7 @@ class TestReversingLabsResultsToStix(unittest.TestCase):
             ]
         }
         sdo_type = 'indicator'
-        result_bundle = self.result_translator.translate_results(data_source=str(DATA_SOURCE).replace('\'', "\""), data=json.dumps(transmitData['data']))
+        result_bundle = self.result_translator.translate_results(data_source=DATA_SOURCE, data=transmitData['data'])
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
         stix_indicator = TestReversingLabsResultsToStix.get_first_of_type(result_bundle_objects, sdo_type)
@@ -370,7 +370,7 @@ class TestReversingLabsResultsToStix(unittest.TestCase):
                     ]
                 }
         sdo_type = 'indicator'
-        result_bundle = self.result_translator.translate_results(data_source=str(DATA_SOURCE).replace('\'', "\""), data=json.dumps(transmitData['data']))
+        result_bundle = self.result_translator.translate_results(data_source=DATA_SOURCE, data=transmitData['data'])
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
         stix_indicator = TestReversingLabsResultsToStix.get_first_of_type(result_bundle_objects, sdo_type)
@@ -396,7 +396,7 @@ class TestReversingLabsResultsToStix(unittest.TestCase):
                     ]
                 }
         sdo_type = 'indicator'
-        result_bundle = self.result_translator.translate_results(data_source=str(DATA_SOURCE).replace('\'', "\""), data=json.dumps(transmitData['data']))
+        result_bundle = self.result_translator.translate_results(data_source=DATA_SOURCE, data=transmitData['data'])
         assert result_bundle['type'] == 'bundle'
         result_bundle_objects = result_bundle['objects']
         stix_indicator = TestReversingLabsResultsToStix.get_first_of_type(result_bundle_objects, sdo_type)

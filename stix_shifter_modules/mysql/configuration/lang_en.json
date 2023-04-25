@@ -6,7 +6,7 @@
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "placeholder": "3306",
             "description": "Specify the associated port number of the data source."
         },
@@ -19,7 +19,7 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "cert": {
-            "label": "Connection Certificate",
+            "label": "Connection certificate",
             "description": "Use self-signed SSL certificate and CA content(root and intermediate) of data source"
         },
         "sni": {
@@ -28,7 +28,7 @@
         },
         "options": {
             "table": {
-                "label": "Table Name",
+                "label": "Table name",
                 "description": "The name of the MySQL table to be queried by this connector."
             }
         }

@@ -271,6 +271,10 @@
     "object": "process-exec",
     "transformer": "SplunkHash"
   },
+  "process_guid": {
+    "key": "process.x_unique_id",
+    "object": "process"
+  },
   "process_path": [
     {
       "key": "directory.path",
@@ -397,7 +401,8 @@
   "src_mac": [
     {
       "key": "mac-addr.value",
-      "object": "src_mac"
+      "object": "src_mac",
+      "transformer": "SplunkMacFormatChange"
     },
     {
       "key": "ipv4-addr.resolves_to_refs",
@@ -417,7 +422,8 @@
   "dest_mac": [
     {
       "key": "mac-addr.value",
-      "object": "dst_mac"
+      "object": "dst_mac",
+      "transformer": "SplunkMacFormatChange"
     },
     {
       "key": "ipv4-addr.resolves_to_refs",

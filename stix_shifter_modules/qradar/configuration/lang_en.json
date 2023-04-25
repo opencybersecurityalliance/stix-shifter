@@ -6,7 +6,7 @@
             "description": "Management IP address or hostname"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "placeholder": "443",
             "description": "Specify the associated port number of the data source"
         },
@@ -14,19 +14,19 @@
             "label": "Need additional help?"
         },
         "selfSignedCert": {
-            "label": "IBM QRadar Certificate",
+            "label": "IBM QRadar certificate",
             "placeholder": "Paste your certificate"
         },
         "sni": {
-            "label": "Server name indicator",
-            "placeholder": "Add a server name indicator",
+            "label": "Server Name Indicator",
+            "placeholder": "Add a Server Name Indicator",
             "description": "If your hostname or IP address does not match the common name you will need to supply a Server Name Indicator (SNI). This is used to allow a separate hostname to be provided to the TLS handshake of the resource connection."
         }
     },
     "configuration": {
         "auth": {
             "sec": {
-                "label": "Authentication Token"
+                "label": "Authentication token"
             }
         }
     }
