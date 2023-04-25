@@ -127,35 +127,35 @@
     ],
     "geo": {
       "city_name": {
-        "key": "x-ecs-geo.city_name",
+        "key": "x-oca-geo.city_name",
         "object": "source_geo"
       },
       "continent_name": {
-        "key": "x-ecs-geo.continent_name",
+        "key": "x-oca-geo.continent_name",
         "object": "source_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-geo.country_iso_code",
+        "key": "x-oca-geo.country_iso_code",
         "object": "source_geo"
       },
       "country_name": {
-        "key": "x-ecs-geo.country_name",
+        "key": "x-oca-geo.country_name",
         "object": "source_geo"
       },
       "location": {
-        "key": "x-ecs-geo.location",
+        "key": "x-oca-geo.location",
         "object": "source_geo"
       },
       "name": {
-        "key": "x-ecs-geo.name",
+        "key": "x-oca-geo.name",
         "object": "source_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-geo.region_iso_code",
+        "key": "x-oca-geo.region_iso_code",
         "object": "source_geo"
       },
       "region_name": {
-        "key": "x-ecs-geo.region_name",
+        "key": "x-oca-geo.region_name",
         "object": "source_geo"
       }
     }
@@ -279,35 +279,35 @@
     ],
     "geo": {
       "city_name": {
-        "key": "x-ecs-geo.city_name",
+        "key": "x-oca-geo.city_name",
         "object": "client_geo"
       },
       "continent_name": {
-        "key": "x-ecs-geo.continent_name",
+        "key": "x-oca-geo.continent_name",
         "object": "client_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-geo.country_iso_code",
+        "key": "x-oca-geo.country_iso_code",
         "object": "client_geo"
       },
       "country_name": {
-        "key": "x-ecs-geo.country_name",
+        "key": "x-oca-geo.country_name",
         "object": "client_geo"
       },
       "location": {
-        "key": "x-ecs-geo.location",
+        "key": "x-oca-geo.location",
         "object": "client_geo"
       },
       "name": {
-        "key": "x-ecs-geo.name",
+        "key": "x-oca-geo.name",
         "object": "client_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-geo.region_iso_code",
+        "key": "x-oca-geo.region_iso_code",
         "object": "client_geo"
       },
       "region_name": {
-        "key": "x-ecs-geo.region_name",
+        "key": "x-oca-geo.region_name",
         "object": "client_geo"
       }
     }
@@ -430,35 +430,35 @@
     ],
     "geo": {
       "city_name": {
-        "key": "x-ecs-geo.city_name",
+        "key": "x-oca-geo.city_name",
         "object": "destination_geo"
       },
       "continent_name": {
-        "key": "x-ecs-geo.continent_name",
+        "key": "x-oca-geo.continent_name",
         "object": "destination_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-geo.country_iso_code",
+        "key": "x-oca-geo.country_iso_code",
         "object": "destination_geo"
       },
       "country_name": {
-        "key": "x-ecs-geo.country_name",
+        "key": "x-oca-geo.country_name",
         "object": "destination_geo"
       },
       "location": {
-        "key": "x-ecs-geo.location",
+        "key": "x-oca-geo.location",
         "object": "destination_geo"
       },
       "name": {
-        "key": "x-ecs-geo.name",
+        "key": "x-oca-geo.name",
         "object": "destination_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-geo.region_iso_code",
+        "key": "x-oca-geo.region_iso_code",
         "object": "destination_geo"
       },
       "region_name": {
-        "key": "x-ecs-geo.region_name",
+        "key": "x-oca-geo.region_name",
         "object": "destination_geo"
       }
     }
@@ -581,35 +581,35 @@
     ],
     "geo": {
       "city_name": {
-        "key": "x-ecs-geo.city_name",
+        "key": "x-oca-geo.city_name",
         "object": "server_geo"
       },
       "continent_name": {
-        "key": "x-ecs-geo.continent_name",
+        "key": "x-oca-geo.continent_name",
         "object": "server_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-geo.country_iso_code",
+        "key": "x-oca-geo.country_iso_code",
         "object": "server_geo"
       },
       "country_name": {
-        "key": "x-ecs-geo.country_name",
+        "key": "x-oca-geo.country_name",
         "object": "server_geo"
       },
       "location": {
-        "key": "x-ecs-geo.location",
+        "key": "x-oca-geo.location",
         "object": "server_geo"
       },
       "name": {
-        "key": "x-ecs-geo.name",
+        "key": "x-oca-geo.name",
         "object": "server_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-geo.region_iso_code",
+        "key": "x-oca-geo.region_iso_code",
         "object": "server_geo"
       },
       "region_name": {
-        "key": "x-ecs-geo.region_name",
+        "key": "x-oca-geo.region_name",
         "object": "server_geo"
       }
     }
@@ -1639,7 +1639,7 @@
     "geo": {
       "city_name": [
         {
-          "key": "x-ecs-geo.city_name",
+          "key": "x-oca-geo.city_name",
           "object": "host_geo"
         },
         {
@@ -1649,31 +1649,31 @@
         }
       ],
       "continent_name": {
-        "key": "x-ecs-geo.continent_name",
+        "key": "x-oca-geo.continent_name",
         "object": "host_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-geo.country_iso_code",
+        "key": "x-oca-geo.country_iso_code",
         "object": "host_geo"
       },
       "country_name": {
-        "key": "x-ecs-geo.country_name",
+        "key": "x-oca-geo.country_name",
         "object": "host_geo"
       },
       "location": {
-        "key": "x-ecs-geo.location",
+        "key": "x-oca-geo.location",
         "object": "host_geo"
       },
       "name": {
-        "key": "x-ecs-geo.name",
+        "key": "x-oca-geo.name",
         "object": "host_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-geo.region_iso_code",
+        "key": "x-oca-geo.region_iso_code",
         "object": "host_geo"
       },
       "region_name": {
-        "key": "x-ecs-geo.region_name",
+        "key": "x-oca-geo.region_name",
         "object": "host_geo"
       }
     },
@@ -1973,7 +1973,7 @@
     "geo": {
       "city_name": [
         {
-          "key": "x-ecs-geo.city_name",
+          "key": "x-oca-geo.city_name",
           "object": "observer_geo"
         },
         {
@@ -1983,31 +1983,31 @@
         }
       ],
       "continent_name": {
-        "key": "x-ecs-geo.continent_name",
+        "key": "x-oca-geo.continent_name",
         "object": "observer_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-geo.country_iso_code",
+        "key": "x-oca-geo.country_iso_code",
         "object": "observer_geo"
       },
       "country_name": {
-        "key": "x-ecs-geo.country_name",
+        "key": "x-oca-geo.country_name",
         "object": "observer_geo"
       },
       "location": {
-        "key": "x-ecs-geo.location",
+        "key": "x-oca-geo.location",
         "object": "observer_geo"
       },
       "name": {
-        "key": "x-ecs-geo.name",
+        "key": "x-oca-geo.name",
         "object": "observer_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-geo.region_iso_code",
+        "key": "x-oca-geo.region_iso_code",
         "object": "observer_geo"
       },
       "region_name": {
-        "key": "x-ecs-geo.region_name",
+        "key": "x-oca-geo.region_name",
         "object": "observer_geo"
       }
     }
