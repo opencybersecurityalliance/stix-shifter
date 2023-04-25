@@ -266,16 +266,25 @@
     "fields": {
       "architecture": ["host.architecture"],
       "domain": ["host.domain"],
-      "hostname": ["host.hostname"],
-      "asset_id": ["host.id"],
-      "ip": ["host.ip"],
-      "mac": ["host.mac"],
-      "name": ["host.name"],
-      "type": ["host.type"],
+      "hostname": ["host.hostname", "observer.hostname"],
+      "id": ["host.id"],
+      "ip": ["host.ip", "observer.ip"],
+      "mac": ["host.mac", "observer.mac"],
+      "name": ["host.name", "observer.name"],
+      "type": ["host.type", "observer.type"],
+      "serial_number": ["observer.serial_number"],
+      "ingress.zone": ["observer.ingress.zone"],
+      "ingress.interface.alias": ["observer.ingress.interface.alias"],
+      "ingress.interface.id": ["observer.ingress.interface.id"],
+      "ingress.interface.name": ["observer.ingress.interface.name"],
+      "egress.zone": ["observer.egress.zone"],
+      "egress.interface.alias": ["observer.egress.interface.alias"],
+      "egress.interface.id": ["observer.egress.interface.id"],
+      "egress.interface.name": ["observer.egress.interface.name"],
       "uptime": ["host.uptime"],
-      "os_ref.name": ["host.os.name"],
-      "os_ref.vendor": ["host.os.platform"],
-      "os_ref.version": ["host.os.version"]
+      "os_ref.name": ["host.os.name", "observer.os.name", "observer.product"],
+      "os_ref.vendor": ["host.os.platform", "observer.os.platform", "observer.vendor"],
+      "os_ref.version": ["host.os.version", "observer.os.version", "observer.version"]
     }
   },
   "x-ecs-geo": {
@@ -317,30 +326,6 @@
       "syslog_priority": ["log.syslog.priority"],
       "severity_syslog_code": ["log.syslog.severity.code"],
       "severity_syslog_name": ["log.syslog.severity.name"]
-    }
-  },
-  "x-ecs-observer": {
-    "fields": {
-      "egress.zone": ["observer.egress.zone"],
-      "egress.interface.alias": ["observer.egress.interface.alias"],
-      "egress.interface.id": ["observer.egress.interface.id"],
-      "egress.interface.name": ["observer.egress.interface.name"],
-      "hostname": ["observer.hostname"],
-      "ingress.zone": ["observer.ingress.zone"],
-      "ingress.interface.alias": ["observer.ingress.interface.alias"],
-      "ingress.interface.id": ["observer.ingress.interface.id"],
-      "ingress.interface.name": ["observer.ingress.interface.name"],
-      "ip": ["observer.ip"],
-      "mac": ["observer.mac"],
-      "name": ["observer.name"],
-      "product": ["observer.product"],
-      "serial_number": ["observer.serial_number"],
-      "type": ["observer.type"],
-      "vendor": ["observer.vendor"],
-      "version": ["observer.version"],
-      "os_ref.name": ["observer.os.name"],
-      "os_ref.vendor": ["observer.os.platform"],
-      "os_ref.version": ["observer.os.version"]
     }
   },
   "x-ecs-organization": {

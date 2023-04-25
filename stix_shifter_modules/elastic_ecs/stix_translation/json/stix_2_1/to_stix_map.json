@@ -1848,101 +1848,108 @@
   "observer": {
     "egress": {
       "zone": {
-        "key": "x-ecs-observer.egress_zone",
+        "key": "x-oca-asset.egress.zone",
         "object": "observer"
       },
       "interface": {
         "alias": {
-          "key": "x-ecs-observer.egress_interface_alias",
+          "key": "x-oca-asset.egress.interface.alias",
           "object": "observer"
         },
         "id": {
-          "key": "x-ecs-observer.egress_interface_id",
+          "key": "x-oca-asset.egress.interface.id",
           "object": "observer"
         },
         "name": {
-          "key": "x-ecs-observer.egress_interface_name",
+          "key": "x-oca-asset.egress.interface.name",
           "object": "observer"
         }
       },
       "vlan": {
         "id": {
-          "key": "x-ecs-observer.egress_vlan_id",
+          "key": "x-oca-asset.egress.vlan.id",
           "object": "observer"
         },
         "name": {
-          "key": "x-ecs-observer.egress_vlan_name",
+          "key": "x-oca-asset.egress.vlan.name",
           "object": "observer"
         }
       }
     },
     "hostname": {
-      "key": "x-ecs-observer.hostname",
+      "key": "x-oca-asset.hostname",
       "object": "observer"
     },
     "ingress": {
       "zone": {
-        "key": "x-ecs-observer.ingress_zone",
+        "key": "x-oca-asset.ingress.zone",
         "object": "observer"
       },
       "interface": {
         "alias": {
-          "key": "x-ecs-observer.ingress_interface_alias",
+          "key": "x-oca-asset.ingress.interface.alias",
           "object": "observer"
         },
         "id": {
-          "key": "x-ecs-observer.ingress_interface_id",
+          "key": "x-oca-asset.ingress.interface.id",
           "object": "observer"
         },
         "name": {
-          "key": "x-ecs-observer.ingress_interface_name",
+          "key": "x-oca-asset.ingress.interface.name",
           "object": "observer"
         }
       },
       "vlan": {
         "id": {
-          "key": "x-ecs-observer.ingress_vlan_id",
+          "key": "x-oca-asset.ingress.vlan.id",
           "object": "observer"
         },
         "name": {
-          "key": "x-ecs-observer.ingress_vlan_name",
+          "key": "x-oca-asset.ingress.vlan.name",
           "object": "observer"
         }
       }
     },
     "ip": {
-      "key": "x-ecs-observer.ip",
+      "key": "x-oca-asset.ip",
       "object": "observer"
     },
     "mac": {
-      "key": "x-ecs-observer.mac",
+      "key": "x-oca-asset.mac",
       "object": "observer"
     },
     "name": {
-      "key": "x-ecs-observer.name",
+      "key": "x-oca-asset.name",
       "object": "observer"
     },
-    "product": {
-      "key": "x-ecs-observer.product",
-      "object": "observer"
-    },
+    "product": [
+      {
+        "key": "software.name",
+        "object": "observer_sw"
+      },
+      {
+        "key": "x-oca-asset.observer_software_ref",
+        "object": "observer",
+        "references": "observer_sw"
+      }
+    ],
     "serial_number": {
-      "key": "x-ecs-observer.serial_number",
+      "key": "x-oca-asset.serial_number",
       "object": "observer"
     },
     "type": {
-      "key": "x-ecs-observer.type",
+      "key": "x-oca-asset.type",
       "object": "observer"
     },
     "vendor": {
-      "key": "x-ecs-observer.vendor",
-      "object": "observer"
+      "key": "software.vendor",
+      "object": "observer_sw"
     },
     "version": {
-      "key": "x-ecs-observer.version",
-      "object": "observer"
+      "key": "software.version",
+      "object": "observer_sw"
     },
-     "os": {
+    "os": {
       "name": [
         {
         "key": "software.name",
