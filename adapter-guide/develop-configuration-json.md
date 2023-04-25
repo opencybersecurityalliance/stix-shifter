@@ -79,6 +79,7 @@ Each parameter in both the connection and configuration object can also have few
         - text
         - number
         - password
+        - boolean
 2. default
     - The default value for the parameter
 3. min
