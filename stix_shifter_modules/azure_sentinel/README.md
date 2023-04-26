@@ -1,4 +1,8 @@
-# Microsoft Graph Security Connector
+# Microsoft Graph Security
+
+## Supported STIX Mappings
+
+See the [table of mappings](azure_sentinel_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 ### Data Source 
 Microsoft Graph Security API enables fedarated search capabilities on all onboarded security providers. This connector can be used to search security alerts on the Microsoft security products.

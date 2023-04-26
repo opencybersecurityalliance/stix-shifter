@@ -392,8 +392,8 @@ class TestTransform(object):
             "mapping": {
                 "to_stix_map": {
                     "username": {"key": "user-account.user_id"},
-                    "identityip": {"key": "x_ibm_ariel.identity_ip", "cybox": False},
-                    "qidname": {"key": "x_ibm_ariel.qid_name", "cybox": False},
+                    "identityip": {"key": "x_ibm_ariel.identity_ip"},
+                    "qidname": {"key": "x_ibm_ariel.qid_name"},
                     "url": {"key": "url.value"},
                     "custompayload": {"key": "artifact.payload_bin"}
                 }

@@ -1,6 +1,10 @@
-#  Elastic ECS Connector
+#  Elastic ECS
 
 Elastic ECS Connector can be used to search events such as logs and metrics stored Elasticsearch. The connector can search Elastic Common Schema (ECS) formatted events.
+
+## Supported STIX Mappings
+
+See the [table of mappings](elastic_ecs_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 ## Supported version
 

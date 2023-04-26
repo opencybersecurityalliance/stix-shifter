@@ -1,4 +1,8 @@
-# Microsoft Defender for Endpoint (previously Microsoft Defender ATP) UDS Connector
+# Microsoft Defender for Endpoint
+
+## Supported STIX Mappings
+
+See the [table of mappings](msatp_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 # MSATP - Microsoft Defender for Endpoint module
 This module uses KQL to query the EDR API.

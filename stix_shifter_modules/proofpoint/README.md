@@ -1,5 +1,11 @@
 # Proofpoint
 
+## Supported STIX Mappings
+
+See the [table of mappings](proofpoint_supported_stix.md) for the STIX objects and operators supported by this connector.
+
+### API Endpoints
+
 REST Web Service APIs: https://help.proofpoint.com/Threat_Insight_Dashboard/API_Documentation/SIEM_API
 
 ### Format for making STIX translation calls via the CLI
