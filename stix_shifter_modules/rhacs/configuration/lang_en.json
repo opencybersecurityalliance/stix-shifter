@@ -5,7 +5,7 @@
       "description": "Specify the IP address or hostname of the data source"
     },
     "port": {
-      "label": "Host Port",
+      "label": "Host port",
       "description": "Set the port number that is associated with the hostname or IP address"
     },
     "help": {
@@ -17,14 +17,14 @@
       "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
     },
     "selfSignedCert": {
-      "label": "RHACS Connection Certificate",
+      "label": "RHACS connection certificate",
       "description": "Use self-signed SSL certificate or CA content(root and intermediate) of data source"
     }
   },
   "configuration": {
     "auth": {
       "token": {
-        "label": "API Token",
+        "label": "API token",
         "description": "Token with readonly access to the alert API"
       }
     }

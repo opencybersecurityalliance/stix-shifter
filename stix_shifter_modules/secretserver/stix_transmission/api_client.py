@@ -4,8 +4,6 @@ import re
 from datetime import date, timedelta
 from dateutil import parser
 import os
-from datetime import datetime
-from requests import Response
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync, ResponseWrapper, \
     CONNECT_TIMEOUT_DEFAULT
@@ -13,12 +11,20 @@ import random
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
+class ClientResponse:
+    message = None
+    def read(self):
+        return self._content
+
+    def __repr__(self):
+        return self.message
+
 class APIClient():
 
     def __init__(self, connection, configuration):
         self.url = "https://" + connection["host"]
-        self.auth_token_url = "/SecretServer/oauth2/token"
-        self.secret_detail = "/SecretServer/api/v1/secrets"
+        self.auth_token_url = "/oauth2/token"
+        self.secret_detail = "/api/v1/secrets"
         self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
         self.connect_timeout = int(self.connect_timeout)
         self.server_cert_content = False
@@ -35,7 +41,8 @@ class APIClient():
             configuration["auth"]["username"], configuration["auth"]["password"])
         self.server_ip = connection["host"]
 
-        self.secret_server_userdetail_url = "SecretServer/api/v1/users/"
+        self.secret_server_userdetail_url = "/api/v1/users/"
+        self.report_endpoint = "api/v1/reports/execute"
 
     async def get_token(self):
         response = await RestApiClientAsync.call_api(self, self.auth_token_url, 'GET', headers=self.headers,
@@ -63,7 +70,7 @@ class APIClient():
         return response.code
 
     async def create_search(self, query_expression):
-        respObj = Response()
+        respObj = ClientResponse()
         token = await self.get_token()
         if (token):
             self.query = query_expression
@@ -151,9 +158,8 @@ class APIClient():
             'Authorization': self.accessToken,
             'Content-Type': 'application/json'
         }
-        endpoint = "SecretServer/api/v1/reports/execute"
 
-        response = await RestApiClientAsync.call_api(self, endpoint, 'POST', headers=headers, data=payload, urldata=None,
+        response = await RestApiClientAsync.call_api(self, self.report_endpoint, 'POST', headers=headers, data=payload, urldata=None,
                                           timeout=None)
         return_obj = {}
         if response.code != 200:

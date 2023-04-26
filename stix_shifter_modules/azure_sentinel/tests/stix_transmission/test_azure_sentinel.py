@@ -1,13 +1,12 @@
 from stix_shifter_modules.azure_sentinel.entry_point import EntryPoint
 from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from stix_shifter.stix_transmission import stix_transmission
-from tests.utils.async_utils import get_adal_mock_response, get_mock_response
+from tests.utils.async_utils import get_mock_response
 
 from unittest.mock import patch
 from unittest import TestCase
 
 
-@patch('stix_shifter_modules.azure_sentinel.stix_transmission.connector.adal.AuthenticationContext')
 @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.__init__')
 class TestAzureSentinalConnection(TestCase):
     def config(self):
@@ -21,22 +20,19 @@ class TestAzureSentinalConnection(TestCase):
 
     def connection(self):
         return {
-                "host": "abc.amazon.com",
                 "port": 443
                 }
 
-    def test_is_async(self, mock_api_client, mock_generate_token):
+    def test_is_async(self, mock_api_client):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = get_adal_mock_response()
         entry_point = EntryPoint(self.connection(), self.config())
         check_async = entry_point.is_async()
 
         assert check_async is False
 
     @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.ping_box')
-    def test_ping_endpoint(self, mock_ping_response, mock_api_client, mock_generate_token):
+    def test_ping_endpoint(self, mock_ping_response, mock_api_client):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = get_adal_mock_response()
         mocked_return_value = '["mock", "placeholder"]'
         mock_ping_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
         transmission = stix_transmission.StixTransmission('azure_sentinel', self.connection(), self.config())
@@ -46,9 +42,8 @@ class TestAzureSentinalConnection(TestCase):
         assert ping_response['success']
 
     @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.ping_box')
-    def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client, mock_generate_token):
+    def test_ping_endpoint_exception(self, mock_ping_response, mock_api_client):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = get_adal_mock_response()
         mocked_return_value = """{
           "error": {
             "code": "BadRequest",
@@ -67,9 +62,8 @@ class TestAzureSentinalConnection(TestCase):
         assert ping_response['error'] == "azure_sentinel connector error => Resource not found for the segment \'alert\'."
         assert ping_response['code'] == "invalid_parameter"
 
-    def test_query_connection(self, mock_api_client, mock_generate_token):
+    def test_query_connection(self, mock_api_client):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = get_adal_mock_response()
 
         query = "fileStates/any(a:a/path eq 'c:\\windows\\system32\\services.exe') and eventDateTime ge " \
                 "2019-10-13T08:00Z and eventDateTime le 2019-11-13T08:00Z"
@@ -83,9 +77,8 @@ class TestAzureSentinalConnection(TestCase):
 
     @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
-    def test_results_all_response(self, mock_results_response, mock_api_client, mock_generate_token):
+    def test_results_all_response(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = get_adal_mock_response()
         mocked_return_value = """{
             "@odata.context": "https://graph.microsoft.com/beta/$metadata#Security/alerts(fileStates)",
             "@odata.nextLink": "https://graph.microsoft.com/beta/security/alerts?$select=filestates&$filter=fileStates%\
@@ -143,10 +136,8 @@ class TestAzureSentinalConnection(TestCase):
            '.next_page_run_search', autospec=True)
     @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
-    def test_results_paging_response(self, mock_results_response, mock_next_page_response, mock_api_client,
-                                     mock_generate_token):
+    def test_results_paging_response(self, mock_results_response, mock_next_page_response, mock_api_client):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = get_adal_mock_response()
         mocked_return_value = """{
             "@odata.context": "https://graph.microsoft.com/beta/$metadata#Security/alerts(fileStates)",
             "@odata.nextLink": "https://graph.microsoft.com/beta/security/alerts?$select=filestates&$filter=fileStates%\
@@ -240,9 +231,8 @@ class TestAzureSentinalConnection(TestCase):
 
     @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
-    def test_results_response_exception(self, mock_results_response, mock_api_client, mock_generate_token):
+    def test_results_response_exception(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = get_adal_mock_response()
         mocked_return_value = """ {
           "error": {
             "code": "BadRequest",
@@ -266,9 +256,8 @@ class TestAzureSentinalConnection(TestCase):
         assert results_response['error'] == "azure_sentinel connector error => Invalid filter clause"
         assert results_response['code'] == "invalid_parameter"
 
-    def test_delete_query(self, mock_api_client, mock_generate_token):
+    def test_delete_query(self, mock_api_client):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = get_adal_mock_response()
 
         search_id = "$select=filestates&$filter=fileStates/any(x:x/name eq 'services.exe') and eventDateTime ge \
                  2019-10-13T08:00Z and eventDateTime le 2019-11-13T08:00Z&$top=1&$skip=1"
@@ -279,9 +268,8 @@ class TestAzureSentinalConnection(TestCase):
         assert 'success' in status_response
         assert status_response['success'] is True
 
-    def test_status_query(self, mock_api_client, mock_generate_token):
+    def test_status_query(self, mock_api_client):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = get_adal_mock_response()
 
         search_id = "$select=filestates&$filter=fileStates/any(x:x/name eq 'services.exe') and eventDateTime ge \
                  2019-10-13T08:00Z and eventDateTime le 2019-11-13T08:00Z&$top=1&$skip=1"

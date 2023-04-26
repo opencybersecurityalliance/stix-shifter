@@ -4,7 +4,6 @@ from stix_shifter_utils.utils import logger
 from .api_client import APIClient
 import json
 from os import path
-from requests.exceptions import ConnectionError
 
 CONFIG_MAP_PATH = "../stix_translation/json/config_map.json"
 
@@ -89,6 +88,10 @@ class Connector(BaseJsonSyncConnector):
             return_obj['data'] = results[offset:length]
             return_obj = self.check_empty_data(return_obj)
 
+        except json.decoder.JSONDecodeError as ex:
+            response_dict['code'] = 1004
+            response_dict['message'] = "The response is not JSON: " + str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except InvalidArguments as ex:
             response_dict['code'] = 1002
             response_dict['message'] = str(ex)
@@ -96,10 +99,6 @@ class Connector(BaseJsonSyncConnector):
         except InvalidAuthenticationException:
             response_dict['code'] = 1001
             response_dict['message'] = "Invalid Authentication"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
-        except ConnectionError:
-            response_dict['code'] = 1003
-            response_dict['message'] = "Invalid Host/Port"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except TimeoutError as ex:
             response_dict['code'] = 1004
@@ -110,7 +109,10 @@ class Connector(BaseJsonSyncConnector):
             response_dict['message'] = 'Bad Request' if 'Bad request' in str(ex) else str(ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except Exception as ex:
-            response_dict['type'] = ex.__class__.__name__
+            if 'timeout_error' in str(ex):
+                response_dict['code'] = 1003
+            else:
+                response_dict['type'] = ex.__class__.__name__
             response_dict['message'] = ex
             self.logger.error('error when getting search results: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
@@ -188,12 +190,11 @@ class Connector(BaseJsonSyncConnector):
             response_dict['code'] = 1001
             response_dict['message'] = "Invalid Authentication"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
-        except ConnectionError:
-            response_dict['code'] = 1003
-            response_dict['message'] = "Invalid Host/Port"
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         except Exception as ex:
-            response_dict['type'] = ex.__class__.__name__
+            if 'timeout_error' in str(ex):
+                response_dict['code'] = 1003
+            else:
+                response_dict['type'] = ex.__class__.__name__
             response_dict['message'] = ex
             self.logger.error('error while pinging: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)

@@ -2,7 +2,6 @@
 import json
 import unittest
 from unittest.mock import patch
-# from requests.exceptions import ConnectionError, RetryError
 
 from stix_shifter_modules.rhacs.entry_point import EntryPoint
 from stix_shifter.stix_transmission import stix_transmission

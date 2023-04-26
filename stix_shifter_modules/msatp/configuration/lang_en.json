@@ -6,7 +6,7 @@
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
@@ -14,12 +14,30 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "Microsoft Defender for Endpoint Certificate",
+            "label": "Microsoft Defender for Endpoint certificate",
             "description": "Use self-signed Security Sockets Layer (SSL) certificate only if Microsoft Defender for Endpoint is configured with a self-signed SSL certificate"
         },
         "sni": {
             "label": "Server Name Indicator",
             "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
+        },
+        "options": {
+            "includeAlerts": {
+                "label": "Join events with alerts?",
+                "description": "With this feature enabled every event will be searched for correlated alerts in the DeviceAlertsEvent table and the alert data will be included in the results. Keep in mind that this feature will add API CPU consumption."
+            },
+            "includeHostOs": {
+                "label": "Join events with host os info?",
+                "description": "With this feature enabled every event will include also the device OS details from the DeviceInfo table. Keep in mind that this feature will add API CPU consumption."
+            },
+            "includeNetworkInfo": {
+                "label": "Join events with device network info?",
+                "description": "With this feature enabled every event will include also the active network adapters IP and MAC addresses of the device at the time of the event from the DeviceNetworkInfo table. Keep in mind that this feature will add API CPU consumption."
+            },
+            "retainOriginal": {
+                "label": "Keep the original json payload as original_ref?",
+                "description": "Setting this to true will encode the original json results from the EDR before they are translated to STIX and put them in an artifact object referenced as original_ref from x-oca-event. This is helpful if critical data is missing in the final translation."
+            }
         }
     },
     "configuration": {
@@ -30,11 +48,11 @@
                 "description": "Tenant ID of Azure Active directory Application with access to the Microsoft Graph API"
             },
             "clientId": {
-                "label": "Client Id",
+                "label": "Client ID",
                 "description": "Client ID of Azure Active directory Application with access to the Microsoft Graph API"
             },
             "clientSecret": {
-                "label": "Client Secret",
+                "label": "Client secret",
                 "description": "Client Secret of Azure Active directory Application with access to the Microsoft Graph API"
             }
         }
