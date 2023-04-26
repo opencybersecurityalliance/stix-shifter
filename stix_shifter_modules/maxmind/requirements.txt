@@ -1,2 +1,2 @@
-geoip2
+geoip2==4.6.0
 uuid==1.30

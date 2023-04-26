@@ -2,11 +2,8 @@
     "connection": {
         "type": {
             "id": "ThreatGrid_Connector",
-            "type": "connectorType",
             "displayName": "Cisco Threat Grid",
-            "description": "Enrich IP addresses, domains, hashes and URLs with the Threat Grid Sandbox threat intelligence service.",
-            "maxConnections": 1,
-            "maxConfigurations": 1
+            "description": "Enrich IP addresses, domains, hashes and URLs with the Threat Grid Sandbox threat intelligence service."
         },
         "help": {
             "default": "www.ibm.com",
@@ -44,36 +41,6 @@
                 "max": 60,
                 "type": "number",
                 "previous": "connection.timeoutLimit"
-            },
-            "language": {
-                "type": "string",
-                "default": "stix",
-                "optional": true,
-                "hidden": true
-            },
-            "validate_pattern": {
-                "type": "boolean",
-                "optional": true,
-                "hidden": true,
-                "previous": "connection.validate_pattern"
-            },
-            "stix_validator": {
-                "type": "boolean",
-                "default": false,
-                "optional": true,
-                "hidden": true,
-                "previous": "connection.stix_validator"
-            },
-            "mapping": {
-                "type": "json",
-                "optional": true,
-                "previous": "connection.mapping"
-            },
-            "unmapped_fallback": {
-                "type": "boolean",
-                "default": false,
-                "optional": true,
-                "hidden": true
             }
         },
         "namespace":{

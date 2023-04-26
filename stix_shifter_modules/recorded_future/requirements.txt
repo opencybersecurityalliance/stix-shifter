@@ -1,2 +1,2 @@
 uuid==1.30
-jmespath
+jmespath==1.0.1

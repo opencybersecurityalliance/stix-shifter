@@ -19,27 +19,9 @@ dataType = ""
 
 class QueryStringPatternTranslator:
     # Change comparator values to match with supported data source operators
-    comparator_lookup = {
-        ComparisonExpressionOperators.And: "AND",
-        ComparisonExpressionOperators.Or: "OR",
-        ComparisonComparators.GreaterThan: ">",
-        ComparisonComparators.GreaterThanOrEqual: ">=",
-        ComparisonComparators.LessThan: "<",
-        ComparisonComparators.LessThanOrEqual: "<=",
-        ComparisonComparators.Equal: "=",
-        ComparisonComparators.NotEqual: "!=",
-        ComparisonComparators.Like: "LIKE",
-        ComparisonComparators.In: "IN",
-        ComparisonComparators.Matches: 'LIKE',
-        # ComparisonComparators.IsSubSet: '',
-        # ComparisonComparators.IsSuperSet: '',
-        ObservationOperators.Or: 'OR',
-        # Treat AND's as OR's -- Unsure how two ObsExps wouldn't cancel each other out.
-        ObservationOperators.And: 'OR'
-    }
-
     def __init__(self, pattern: Pattern, data_model_mapper):
         self.dmm = data_model_mapper
+        self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
         self.translated = self.parse_expression(pattern)
 
@@ -89,7 +71,6 @@ class QueryStringPatternTranslator:
                 return key
         return None
 
-    #TODO remove self reference from static methods
     @staticmethod
     def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
         if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
@@ -126,23 +107,19 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
-        if expression_operator not in self.comparator_lookup:
+        if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError("Comparison operator {} unsupported for Dummy connector".format(expression_operator.name))
-        return self.comparator_lookup[expression_operator]
+        return self.comparator_lookup[str(expression_operator)]
 
     def _parse_expression(self, expression, qualifier=None) -> str:
         if isinstance(expression, ComparisonExpression):  # Base Case
             # Resolve STIX Object Path to a field in the target Data Model
             stix_object, stix_field = expression.object_path.split(':')
-            # Multiple data source fields may map to the same STIX Object
             mapped_fields_array = self.dmm.map_field(stix_object, stix_field)
-            # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self._lookup_comparison_operator(self, expression.comparator)
-
             if stix_field == 'start' or stix_field == 'end':
                 transformer = TimestampToMilliseconds()
                 expression.value = transformer.transform(expression.value)
-
             # Some values are formatted differently based on how they're being compared
             if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
                 value = self._format_match(expression.value)
@@ -157,7 +134,7 @@ class QueryStringPatternTranslator:
                 value = self._format_like(expression.value)
             else:
                 value = self._escape_value(expression.value)
-            
+
             get_data_source_query(stix_field=stix_field, stix_object=stix_object, value=value)
 
             comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array)
@@ -223,22 +200,12 @@ class QueryStringPatternTranslator:
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the data source.
-    # result_limit = options['result_limit']
-    # time_range = options['time_range']
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
     # Add space around START STOP qualifiers
     query = re.sub("START", "START ", query)
     query = re.sub("STOP", " STOP ", query)
 
-    #TODO DEBUGGING
-    # print("Query is: ", query)
-    # print("PATTERN: " , pattern)
-
-    # If supported by the query language, a limit on the number of results should be added to the query as defined by options['result_limit'].
-    # Translated patterns must be returned as a list of one or more native query strings.
-    # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
     translated_query = {"data": data, "dataType": dataType}
-    # return [translated_query]
     return [str(translated_query)]
 
 def get_data_source_query(stix_field, stix_object, value):
@@ -247,11 +214,13 @@ def get_data_source_query(stix_field, stix_object, value):
     data = value.replace("'", "")
 
 def get_data_type(stix_object, stix_field):
-    if "file" in stix_object and "hashes" in stix_field:
-        return "hash"
+    if "ipv4" in stix_object or "ipv6" in stix_object:
+        return "ip"
     elif "url" in stix_object:
         return "url"
     elif "domain-name" in stix_object:
         return "domain"
+    elif "file" in stix_object and "hashes" in stix_field:
+        return "hash"
     else:
         return "Unsupported Data Type"
