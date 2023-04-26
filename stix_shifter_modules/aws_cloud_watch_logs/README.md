@@ -1,4 +1,8 @@
-# AWS CloudWatchLogs Connector
+# Amazon CloudWatch Logs
+
+## Supported STIX Mappings
+
+See the [table of mappings](aws_cloud_watch_logs_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 ## This connector supports two types of datasource authentication:
 

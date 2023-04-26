@@ -1,5 +1,9 @@
 # Splunk
 
+## Supported STIX Mappings
+
+See the [table of mappings](splunk_supported_stix.md) for the STIX objects and operators supported by this connector.
+
 ### Format for calling stix-shifter from the command line
 
 python stix_shifter.py `<translator_module>` `<query or result>` `<stix identity object>` `<data>`

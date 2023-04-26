@@ -1,5 +1,8 @@
-# Security Advisor
+# IBM Cloud Security Advisor
 
+## Supported STIX Mappings
+
+See the [table of mappings](security_advisor_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 ## Translating Stix Pattern to Security Advisor Query
 

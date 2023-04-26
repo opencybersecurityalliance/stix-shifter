@@ -1,4 +1,8 @@
-# RHACS(StackRox) Connector
+# Redhat Advanced Cluster Security (RHACS) (Previously StackRox)
+
+## Supported STIX Mappings
+
+See the [table of mappings](rhacs_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 **Table of Contents**
 
