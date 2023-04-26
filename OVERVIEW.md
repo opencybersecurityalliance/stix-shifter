@@ -152,6 +152,7 @@ These are general translation options defined in [`config.json`](stix_shifter_mo
 | ------ | --------------------- | ----------- | -------------- |
 | result_limit | query | The max number of results that can be returned from a query. This value is generally included in translated queries before getting sent to the data source's API query call. The default is `10000` | A number between `1` and `500000` |
 | time_range | query | A default time range, in minutes, applied to the translated query when no `START STOP` qualifier is present in the STIX pattern. As an example, this would be the `last x minutes` in a SQL query. The default is `5` | A number between `1` and `10000` |
+| dialects | query | Dialects to be used for pattern translation. This will determine what `from_stix_map.json` files will be used. | A list of one or more dialect strings supported by the connector |
 | validate_pattern | query | Specifies if pattern validation is run during the query translation call. This can catch errors in the submitted STIX pattern that would otherwise raise exceptions during translation. | `true` or `false` |
 | stix_validator | results | Specifies if validation is run on the bundle of STIX data returned with results translation. This is performance intensive and should be used on a small result set. The default if `false`. | `true` or `false` |
 | unmapped_fallback | results | If set to `true`, any results data returned, that is not specifired in the to-STIX mapping, will be included in the results in the following STIX object:property format `x-<MODULE NAME>:<NATIVE DATA FIELD>`. The default is `false` | `true` or `false` |
@@ -356,14 +357,13 @@ This object contains information needed to connect to a specific data source. Th
 }
 ```
 
-#### Connection Options
+### Connection Options
 
 These are general options defined in [`config.json`](stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules.
 
 | Option | Description | Accepted Values |
 | ------ | ----------- | -------------- |
 | timeout | The max amount of time in seconds before the query times out. The default is `30`. | A number between `1` and `60` |
-<!-- Should result size and time range be included? -->
 
 
 ### Configuration
@@ -435,7 +435,7 @@ Any failed transmission function call will return an error in the format of:
 | CONFIGURATION OBJECT |  This contains the information needed to authenticate with the target data source, such as username and password. This must be wrapped in quotes to use with the CLI. | A stringified configuration object |
 | TRANSMISSION FUNCTION | The transmission function used to communicate with the target data source. | `is_async`, `ping`, `query`, `status`, `results`, `delete` |
 
-#### Transmission Functions and Arguments
+### Transmission Functions and Arguments
 
 | Function | Description | Function Argument | Function Returns |
 | ------ | --------------------- | ----------- | -------------- |
@@ -573,9 +573,41 @@ The `execute` command tests all steps of the translation-transmission flow:
 4. A **transmit results** call is made for each query (using the returned query ID in step 2). If data is returned, the resulting JSON objects get added to a list.
 5. The list of JSON results get translated into a bundle of STIX objects with a **translate query** call. This bundle includes the STIX `identity` object and `observed-data` objects.
 
+### CLI Arguments
+
+| Argument | Description | Accepted Input |
+| -------- | ------------ | --------------- |
+| EXECUTE KEYWORD | The keyword specifiying that the execute function will be used. | `execute` |
+| TRANSMISSION MODULE NAME | The name of the connector being used for transmission functions. This is the module directory name as it appears in [stix_shifter_modules](stix_shifter_modules/). | The connector module name |
+| TRANSLATION MODULE NAME | The name of the connector being used for translation functions. This is the module directory name as it appears in [stix_shifter_modules](stix_shifter_modules/). | The connector module name |
+| STIX IDENTITY OBJECT | This is an object that represents the data source being queried and is inserted into the results bundle of STIX objects. An empty object `"{}"` may be used for the query translation. This must be wrapped in quotes to use with the CLI. | A stringified STIX identity object |
+| CONNECTION OBJECT | This contains the information needed to connect to the target data source, such as host and port. This must be wrapped in quotes to use with the CLI. | A stringified connection object |
+| CONFIGURATION OBJECT |  This contains the information needed to authenticate with the target data source, such as username and password. This must be wrapped in quotes to use with the CLI. | A stringified configuration object |
+| STIX PATTERN | This is the STIX pattern to be used for the query. This must be wrapped in quote to use with the CLI. | A stringified STIX pattern |
+
+### Connection Object Options
+
+These are general options defined in [`config.json`](stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules. These should be added as an "options" objects inside the CONNECTION OBJECT.
+
+| Option | Function Type | Description | Accepted Values |
+| ------ | --------------------- | ----------- | -------------- |
+| result_limit | query translation | The max number of results that can be returned from a query. This value is generally included in translated queries before getting sent to the data source's API query call. The default is `10000` | A number between `1` and `500000` |
+| time_range | query translation | A default time range, in minutes, applied to the translated query when no `START STOP` qualifier is present in the STIX pattern. As an example, this would be the `last x minutes` in a SQL query. The default is `5` | A number between `1` and `10000` |
+| dialects | query translation | Dialects to be used for pattern translation. This will determine what `from_stix_map.json` files will be used. | A list of one or more dialect strings supported by the connector |
+| validate_pattern | query translation | Specifies if pattern validation is run during the query translation call. This can catch errors in the submitted STIX pattern that would otherwise raise exceptions during translation. | `true` or `false` |
+| stix_validator | results translation | Specifies if validation is run on the bundle of STIX data returned with results translation. This is performance intensive and should be used on a small result set. The default if `false`. | `true` or `false` |
+| unmapped_fallback | results translation | If set to `true`, any results data returned, that is not specifired in the to-STIX mapping, will be included in the results in the following STIX object:property format `x-<MODULE NAME>:<NATIVE DATA FIELD>`. The default is `false` | `true` or `false` |
+| stix_2.1 | results translation | Results are returned as STIX 2.0 objects by default. Setting this option will return results in STIX 2.1 format. The default is `false` | `true` or `false` |
+| timeout | transmission | The max amount of time in seconds before the query times out. The default is `30`. | A number between `1` and `60` |
+
+
 ### CLI Command
 
 `stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>'`
+
+### CLI Example
+
+`stix-shifter execute mysql mysql '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "mysql","identity_class": "system"}' '{"host": "localhost", "database":"demo_db", "options":{"table":"demo_table", "validate_pattern": true}}' '{"auth": {"username":"root", "password":"MyPassword"}}' "[ipv4-addr:value = '213.213.142.5'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-01-28T12:54:01.009Z'"`
 
 ### Debug
 
