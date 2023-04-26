@@ -7,7 +7,7 @@ ERROR_TYPE_TRANSLATE_EXCEPTION = 'translate_exception'
 
 class ResultsTranslator(BaseResultTranslator):
 
-    def read_json(self, filepath, options):
+    def read_json(self, filepath, options, key_subsitute=None):
         return '{}'
 
     def translate_results(self, data_source, data):

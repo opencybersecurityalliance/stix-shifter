@@ -40,13 +40,6 @@ class BaseEntryPoint:
         self.__delete_connector = None
         self.__query_connector = None
 
-        module_name = self.__connector_module
-        module = importlib.import_module(
-                    "stix_shifter_modules." + module_name + ".stix_translation")
-        json_path = os.path.dirname(module.__file__)
-        json_path = os.path.abspath(json_path)
-        json_path = os.path.join(json_path, 'json')
-
         if connection:
             validation_obj = {'connection': connection, 'configuration': configuration}
             validation_obj = json.loads(json.dumps(validation_obj))
@@ -101,7 +94,7 @@ class BaseEntryPoint:
 
     def setup_translation_simple(self, dialect_default, query_translator=None, results_translator=None):
         module_name = self.__connector_module
-        dialects = dialect_list(module_name)
+        dialects = dialect_list(module_name, []) # get list of dialects from configuration
         for dialect in dialects:
             self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator,
                              default=(dialect == dialect_default))

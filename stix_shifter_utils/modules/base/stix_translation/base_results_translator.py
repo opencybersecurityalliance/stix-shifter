@@ -12,17 +12,16 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
         self.options = options
         self.callback = callback
         self.module_name = base_file_path.split(os.sep)[-2]
-        self.map_data = {}
         self.logger = logger.set_logger(__name__)
         self.map_data = self.fetch_mapping(base_file_path, dialect, options)
         self.transformers = get_module_transformers(self.module_name)
 
-    def read_json(self, filepath, options):
-        return helper_read_json(filepath, options)
+    def read_json(self, filepath, options, key_subsitute=None):
+        return helper_read_json(filepath, options, key_subsitute=key_subsitute)
 
     def fetch_mapping(self, basepath, dialect, options):
         """
-        Fetches datasource-to-STIX mapping JSON from the module's to_stix_map.json file
+        Fetches datasource-to-STIX mapping JSON from the module's <DIALECT>_to_stix_map.json file
         :param basepath: path of data source translation module
         :type basepath: str
         """
@@ -39,9 +38,9 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
             to_stix_path = os.path.join(stix_2_0_mapping_directory_path, mapping_file)
 
         if os.path.isdir(stix_2_0_mapping_directory_path) and not os.path.isfile(to_stix_path):
-            raise Exception('BaseResultTranslator Error: ' + to_stix_path + ' is not found')
+            raise Exception('BaseResultTranslator Error: ' + to_stix_path + ' is not found for dialect ' + dialect)
 
-        return self.read_json(to_stix_path, options)
+        return self.read_json(to_stix_path, options, key_subsitute='to_stix_map')
 
     @abstractmethod
     def translate_results(self, data_source, data):

@@ -6,7 +6,7 @@ from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestAp
 
 class QueryTranslator(EmptyQueryTranslator):
 
-    def read_json(self, filepath, options):
+    def read_json(self, filepath, options, key_subsitute=None):
         return '{}'
 
     def get_language(self):

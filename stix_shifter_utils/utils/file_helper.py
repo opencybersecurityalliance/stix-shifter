@@ -9,7 +9,7 @@ __path_searchable = ['stix_shifter_modules', 'modules']
 __default_search_path = ['stix_translation', 'json']
 
 
-def read_json(filepath, options, search_path=__default_search_path):
+def read_json(filepath, options, search_path=__default_search_path, key_subsitute=None):
     # Read JSON file that is either passed in with the options or internally contained in the module
     # logger.debug('call: read_json: ' + json.dumps(options, indent=4))
     # filepath may be:
@@ -17,7 +17,10 @@ def read_json(filepath, options, search_path=__default_search_path):
     #  'to_stix_map' -> 'to_stix_map' mapping data if present otherwise contents of 'module'/stix_translation/json/to_stix_map.json
     #  '/full/path/somefile.json' -> 'somefile' mapping data if present otherwise contents of /full/path/somefile.json
     file_name = Path(filepath).name
-    file_key = file_name
+    if key_subsitute:
+        file_key = key_subsitute
+    else:
+        file_key = file_name
     trim_str = '.json'
     if file_key.endswith(trim_str):
         file_key = file_key[:-len(trim_str)]
