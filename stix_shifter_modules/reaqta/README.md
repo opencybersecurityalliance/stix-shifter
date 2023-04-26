@@ -1,6 +1,10 @@
-#  ReaQta Connector
+#  ReaQta
 
 Reaqta is an AI-powered, automated endpoint security platform. ReaQta Connector can be used to search security events and alerts generated in ReaQta platform.
+
+## Supported STIX Mappings
+
+See the [table of mappings](reaqta_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 ## API and Query Language
 

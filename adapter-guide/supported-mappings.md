@@ -1,6 +1,9 @@
 # Currently supported STIX objects and properties
+
 Each connector supports a set of STIX objects and properties as defined in the connector's mapping files. There is also a set of common STIX properties that all cyber observable objects must contain. See [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for more information on STIX objects.
+
 ## Common cyber observable properties
+
 - created
 - modified
 - first_observed
@@ -8,35 +11,36 @@ Each connector supports a set of STIX objects and properties as defined in the c
 - number_observed
 
 ## Supported data sources
+
 Stix-shifter currently offers connector support for the following cybersecurity products. Click on a data source to see a list of STIX attributes and properties it supports.
 
-- [IBM QRadar](connectors/qradar_supported_stix.md)
-- [Splunk Enterprise Security](connectors/splunk_supported_stix.md)
-- [HCL BigFix](connectors/bigfix_supported_stix.md)
-- [Carbon Black CB Response](connectors/carbonblack_supported_stix.md)
-- [Carbon Black Cloud](connectors/cbcloud_supported_stix.md)
-- [Elasticsearch ECS](connectors/elastic_ecs_supported_stix.md)
-- [Microsoft Defender for Endpoint](connectors/msatp_supported_stix.md)
-- [IBM Guardium Data Protection](connectors/guardium_supported_stix.md)
-- [Amazon CloudWatch Logs](connectors/aws_cloud_watch_logs_supported_stix.md)
-- [Microsoft Graph Security](connectors/azure_sentinel_supported_stix.md)
-- [Alertflex](connectors/alertflex_supported_stix.md)
-- [Micro Focus ArcSight](connectors/arcsight_supported_stix.md)
-- [Amazon Athena](connectors/aws_athena_supported_stix.md)
-- [CrowdStrike Falcon](connectors/crowdstrike_supported_stix.md)
-- [Trend Micro Vision One](connectors/trendmicro_vision_one_supported_stix.md)
-- [OneLogin](connectors/onelogin_supported_stix.md)
-- [IBM Security Verify Privilege Vault](connectors/secretserver_supported_stix.md)
-- [Sumo Logic](connectors/sumologic_supported_stix.md)
-- [Datadog](connectors/datadog_supported_stix.md)
-- [Proofpoint (SIEM API)](connectors/proofpoint_supported_stix.md)
-- [Cybereason](connectors/cybereason_supported_stix.md)
-- [PaloAlto Cortex XDR](connectors/paloalto_supported_stix.md)
-- [SentinelOne](connectors/sentinelone_supported_stix.md)
-- [IBM Security ReaQta](connectors/reaqta_supported_stix.md)
-- [Darktrace](connectors/darktrace_supported_stix.md)
-- [Red Hat Advanced Cluster Security for Kubernetes (StackRox)](connectors/rhacs_supported_stix.md)
-- [IBM Security Verify](connectors/ibm_security_verify_supported_stix.md)
-- [GCP Chronicle](connectors/gcp_chronicle_supported_stix.md)
-- [Azure Log Analytics](connectors/azure_log_analytics_supported_stix.md)
-- [Okta](connectors/okta_supported_stix.md)
+- [IBM QRadar](../stix_shifter_modules/qradar/qradar_supported_stix.md)
+- [Splunk Enterprise Security](../stix_shifter_modules/splunk/splunk_supported_stix.md)
+- [HCL BigFix](../stix_shifter_modules/bigfix/bigfix_supported_stix.md)
+- [Carbon Black CB Response](../stix_shifter_modules/carbonblack/carbonblack_supported_stix.md)
+- [Carbon Black Cloud](../stix_shifter_modules/cbcloud/cbcloud_supported_stix.md)
+- [Elasticsearch ECS](../stix_shifter_modules/elastic_ecs/elastic_ecs_supported_stix.md)
+- [Microsoft Defender for Endpoint](../stix_shifter_modules/msatp/msatp_supported_stix.md)
+- [IBM Guardium Data Protection](../stix_shifter_modules/guardium/guardium_supported_stix.md)
+- [Amazon CloudWatch Logs](../stix_shifter_modules/aws_cloud_watch_logs/aws_cloud_watch_logs_supported_stix.md)
+- [Microsoft Graph Security](../stix_shifter_modules/azure_sentinel/azure_sentinel_supported_stix.md)
+- [Alertflex](../stix_shifter_modules/alertflex/alertflex_supported_stix.md)
+- [Micro Focus ArcSight](../stix_shifter_modules/arcsight/arcsight_supported_stix.md)
+- [Amazon Athena](../stix_shifter_modules/aws_athena/aws_athena_supported_stix.md)
+- [CrowdStrike Falcon](../stix_shifter_modules/crowdstrike/crowdstrike_supported_stix.md)
+- [Trend Micro Vision One](../stix_shifter_modules/trendmicro_vision_one/trendmicro_vision_one_supported_stix.md)
+- [OneLogin](../stix_shifter_modules/onelogin/onelogin_supported_stix.md)
+- [IBM Security Verify Privilege Vault](../stix_shifter_modules/secretserver/secretserver_supported_stix.md)
+- [Sumo Logic](../stix_shifter_modules/sumologic/sumologic_supported_stix.md)
+- [Datadog](../stix_shifter_modules/datadog/datadog_supported_stix.md)
+- [Proofpoint (SIEM API)](../stix_shifter_modules/proofpoint/proofpoint_supported_stix.md)
+- [Cybereason](../stix_shifter_modules/cybereason/cybereason_supported_stix.md)
+- [PaloAlto Cortex XDR](../stix_shifter_modules/paloalto/paloalto_supported_stix.md)
+- [SentinelOne](../stix_shifter_modules/sentinelone/sentinelone_supported_stix.md)
+- [IBM Security ReaQta](../stix_shifter_modules/reaqta/reaqta_supported_stix.md)
+- [Darktrace](../stix_shifter_modules/darktrace/darktrace_supported_stix.md)
+- [Red Hat Advanced Cluster Security for Kubernetes (StackRox)](../stix_shifter_modules/rhacs/rhacs_supported_stix.md)
+- [IBM Security Verify](../stix_shifter_modules/ibm_security_verify/ibm_security_verify_supported_stix.md)
+- [GCP Chronicle](../stix_shifter_modules/gcp_chronicle/gcp_chronicle_supported_stix.md)
+- [Azure Log Analytics](../stix_shifter_modules/azure_log_analytics/azure_log_analytics_supported_stix.md)
+- [Okta](../stix_shifter_modules/okta/okta_supported_stix.md)
