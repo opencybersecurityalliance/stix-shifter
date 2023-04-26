@@ -5,7 +5,7 @@ from datetime import datetime
 
 current_dir = path.abspath(path.dirname(__file__))
 
-TRANSLATION_MODULE_PATH = path.abspath(path.join(current_dir, "../../stix_shifter_modules"))
+CONNECTOR_MODULE_PATH = path.abspath(path.join(current_dir, "../../stix_shifter_modules"))
 ADAPTER_GUIDE_PATH = path.abspath(path.join(current_dir, '../../adapter-guide'))
 
 # Add new connectors to this dictionary as they become available. The key must match the name of the translation module.
@@ -85,15 +85,15 @@ UPDATED_AT = now.strftime("%D")
 
 def __main__():
 
-    table_of_contents = "# Currently supported STIX objects and properties\n"
+    table_of_contents = "# Currently supported STIX objects and properties\n\n"
     table_of_contents += "Each connector supports a set of STIX objects and properties as defined in the connector's mapping files. There is also a set of common STIX properties that all cyber observable objects must contain. See [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for more information on STIX objects.\n"
-    table_of_contents += "## Common cyber observable properties\n"
+    table_of_contents += "## Common cyber observable properties\n\n"
     table_of_contents += "- created\n"
     table_of_contents += "- modified\n"
     table_of_contents += "- first_observed\n"
     table_of_contents += "- last_observed\n"
     table_of_contents += "- number_observed\n\n"
-    table_of_contents += "## Supported data sources\n"
+    table_of_contents += "## Supported data sources\n\n"
     table_of_contents += "Stix-shifter currently offers connector support for the following cybersecurity products. Click on a data source to see a list of STIX attributes and properties it supports.\n\n"
 
     table_of_contents_file_path = path.abspath(path.join(ADAPTER_GUIDE_PATH, "supported-mappings.md"))
@@ -101,7 +101,7 @@ def __main__():
 
     for index, (key, module) in enumerate(CONNECTORS.items()):
         try:
-            filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "to_stix_map.json"))    
+            filepath = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "stix_translation/json", "to_stix_map.json"))    
             to_stix_json_file = open(filepath)
             loaded_to_stix_json = json.loads(to_stix_json_file.read())
             
@@ -113,7 +113,7 @@ def __main__():
         data_field_alias_mapping = []
         if key == 'qradar':
             try:
-                fields_filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "aql_events_fields.json"))    
+                fields_filepath = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "stix_translation/json", "aql_events_fields.json"))    
                 fields_json_file = open(fields_filepath)
                 loaded_fields_json = json.loads(fields_json_file.read())
                 data_field_alias_mapping = loaded_fields_json.get('default') # array of fields
@@ -127,12 +127,12 @@ def __main__():
         output_string = ""
         output_string += "##### Updated on " + UPDATED_AT + "\n"
         output_string += "## " + module + "\n"
-        table_of_contents += "- [{}]({})\n".format(module, "connectors/{}_supported_stix.md".format(key))
+        table_of_contents += "- [{}]({})\n".format(module, "../stix_shifter_modules/{}/{}_supported_stix.md".format(key, key))
 
 
         # OPERATORS
         try:
-            filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "operators.json")) 
+            filepath = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "stix_translation/json", "operators.json")) 
             operators_json_file = open(filepath)   
             loaded_operators_json = json.loads(operators_json_file.read())
             stix_operator_collection = _parse_operators(loaded_operators_json, {})
@@ -158,10 +158,10 @@ def __main__():
                 if dialect == DEFAULT_DIALECT:
                     dialect = ""
                     output_string += "### Searchable STIX objects and properties\n"
-                    filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "from_stix_map.json"))    
+                    filepath = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "stix_translation/json", "from_stix_map.json"))    
                 else:
                     output_string += "### Searchable STIX objects and properties for {} dialect\n".format(dialect.capitalize())
-                    filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "{}from_stix_map.json".format(dialect + "_")))    
+                    filepath = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "stix_translation/json", "{}from_stix_map.json".format(dialect + "_")))    
                 from_stix_json_file = open(filepath)
                 loaded_from_stix_json = json.loads(from_stix_json_file.read())
                 # sorted_from_stix_objects = json.dumps(loaded_from_stix_json, sort_keys=True)
@@ -197,7 +197,8 @@ def __main__():
         
         # TO-STIX 
         try:
-            supported_stix_file_path = path.abspath(path.join(ADAPTER_GUIDE_PATH, "connectors", "{}_supported_stix.md".format(key)))
+            # supported_stix_file_path = path.abspath(path.join(ADAPTER_GUIDE_PATH, "connectors", "{}_supported_stix.md".format(key)))
+            supported_stix_file_path = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "{}_supported_stix.md".format(key)))
             supported_stix_file = open(supported_stix_file_path, "w")   
             sorted_attribute_objects = json.dumps(stix_attribute_collection, sort_keys=True)
             sorted_attribute_objects = json.loads(sorted_attribute_objects)
