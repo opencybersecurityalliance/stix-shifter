@@ -1,3 +1,5 @@
+# STIX Bundle
+
 Example of stix_bundle translate:
 ```
 python main.py translate stix_bundle query '{}' "[ipv4-addr:value = '127.0.0.1']"

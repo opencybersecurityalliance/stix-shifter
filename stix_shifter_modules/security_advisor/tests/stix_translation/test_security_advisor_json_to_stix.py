@@ -149,8 +149,8 @@ class TestSecurityAdvisorResultsToStix(unittest.TestCase):
             "default": {
                 "from_stix": {
                     "author_id": {"key": "user-account.user_id"},
-                    "id": {"key": "x_finding.id", "cybox": False},
-                    "name": {"key": "x_finding.name", "cybox": False},
+                    "id": {"key": "x_finding.id"},
+                    "name": {"key": "x_finding.name"},
                     "author_email": {"key": "email-addr.value"},
                 }
             }

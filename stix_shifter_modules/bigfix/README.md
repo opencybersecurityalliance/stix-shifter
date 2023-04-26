@@ -1,4 +1,9 @@
-# BigFix UDS Connector
+# BigFix
+
+## Supported STIX Mappings
+
+See the [table of mappings](bigfix_supported_stix.md) for the STIX objects and operators supported by this connector.
+
 
 ## BigFix Relevance Query with XML schema:
 

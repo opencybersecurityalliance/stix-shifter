@@ -1,4 +1,8 @@
-# GCP Chronicle Connector
+# Google Cloud Platform (GCP) Chronicle
+
+## Supported STIX Mappings
+
+See the [table of mappings](gcp_chronicle_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 **Table of Contents**
 
