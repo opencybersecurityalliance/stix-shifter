@@ -13,7 +13,7 @@
         "host": {
             "label": "Management IP address or Hostname",
             "placeholder": "192.168.1.10",
-            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+            "description": "Specify the OCP Cluster hostname or the XForce API host URL"
         },
         "port": {
             "label": "Host Port",
