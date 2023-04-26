@@ -1,4 +1,8 @@
-# Amazon Athena Connector
+# Amazon Athena
+
+## Supported STIX Mappings
+
+See the [table of mappings](aws_athena_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 ### Data Source: 
 Amazon Athena is an interactive query service that makes it easy to analyze data in Amazon S3 using standard SQL. 

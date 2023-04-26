@@ -1,22 +1,8 @@
-# CarbonBlack
+# Carbon Black CB Response
 
-## CarbonBlack Supported STIX Pattern values (Querying):
+## Supported STIX Mappings
 
-The supported query values are defined in the mapping file [from_stix_map.json](json/from_stix_map.json). An example output object can be found [here](#Example-STIX-Output-Format) and is defined in [to_stix_map.json](json/to_stix_map.json).
-
-
-- `network-traffic:src_port`
-- `network-traffic:dst_port`
-- `ipv4-addr:value`
-- `file:name`
-- `file:hashes.MD5`
-- `user-account:user_id`
-- `process:name`
-- `process:command_line`
-- `process:created`
-- `process:pid`
-- `process:parent_ref.pid`
-- `domain-name:value`
+See the [table of mappings](carbonblack_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 
 ## CarbonBlack Module Search API Endpoints
