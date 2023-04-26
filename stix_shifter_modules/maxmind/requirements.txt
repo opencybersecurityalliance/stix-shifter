@@ -1,2 +1,2 @@
 geoip2
-uuid
+uuid==1.30

@@ -1,3 +1,2 @@
-requests
-uuid
+uuid==1.30
 jmespath
