@@ -41,7 +41,7 @@ class Connector(BaseJsonSyncConnector):
         return_obj = dict()
         response_dict = dict()
         try:
-            response = await self.api_client.ping_box()
+            response = await self.api_client.ping_box(self.endpoint)
             response_code = response.code
             response_dict = json.loads(response.read())
             if 200 <= response_code < 300:

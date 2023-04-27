@@ -37,12 +37,12 @@ class APIClient:
                                     )
         return self.client
 
-    async def ping_box(self):
+    async def ping_box(self, endpoint):
         """Ping the endpoint."""
         params = dict()
         params['$top'] = 1
         await self.init_async_client()
-        return await self.client.call_api(self.endpoint, 'GET', urldata=params, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', urldata=params, timeout=self.timeout)
 
     async def run_search(self, query_expression, length, endpoint):
         """get the response from azure_sentinel endpoints
