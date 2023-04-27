@@ -46,7 +46,7 @@
   },
   "software": {
     "fields": {
-      "name": ["serviceSource", "detectionSource", "deviceEvidence.osPlatform"],
+      "name": ["serviceSource"],
       "version": ["deviceEvidence.version"]
     }
   },
@@ -66,6 +66,7 @@
   "x-ibm-finding": {
     "fields": {
       "alert_id": ["providerAlertId"],
+      "severity": ["severity"],
       "start": ["firstActivityDateTime"],
       "end": ["resolvedDateTime"]
     }
