@@ -108,9 +108,7 @@ class RestApiClientAsync:
             else:
                 url = 'https://' + self.server_ip + '/' + endpoint
             
-            print('>>>>>>>>>> url > ' + url)
-            print('>>>>>>>>>> urldata > ' + str(urldata))
-            print('>>>>>>>>>> data > ' + str(data))
+            
             try:
                 client_timeout = ClientTimeout(connect=self.connect_timeout, total=timeout)
                 retry_options = ExponentialRetry(attempts=self.retry_max, statuses=[429, 500, 502, 503, 504])
