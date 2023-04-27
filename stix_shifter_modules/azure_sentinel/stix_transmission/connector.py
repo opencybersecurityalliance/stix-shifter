@@ -10,6 +10,9 @@ class Connector(BaseJsonSyncConnector):
     api_client = None
     max_limit = 1000
     base_uri = 'graph.microsoft.com' # Microsoft Graph API has single endpoint
+    DEFAULT_API_VERSION = 'v1.0'
+    LEGACY_ALERT = 'security/alerts'
+    ALERT_V2 = 'security/alerts_v2'
 
     def __init__(self, connection, configuration):
         """Initialization.
@@ -20,6 +23,18 @@ class Connector(BaseJsonSyncConnector):
         self.connection = connection
         self.configuration = configuration
         self.api_client = APIClient(self.base_uri, self.connection, self.configuration)
+        
+        self.legacy_alert = connection['options'].get('alert')
+        self.alert_v2 = connection['options'].get('alertV2')
+        
+        if self.legacy_alert:
+            self.query_alert_type = 'alert'
+            self.endpoint = '{api_version}/{api_resource}'.format(api_version=self.DEFAULT_API_VERSION, api_resource=self.LEGACY_ALERT)
+        elif self.alert_v2:
+            self.query_alert_type = 'alertV2'
+            self.endpoint = '{api_version}/{api_resource}'.format(api_version=self.DEFAULT_API_VERSION, api_resource=self.ALERT_V2)
+        else:
+            raise Exception('Invalid alert resource type. At least one alert type must be selected.')
 
     async def ping_connection(self):
         """Ping the endpoint."""
@@ -65,22 +80,20 @@ class Connector(BaseJsonSyncConnector):
 
         # total records is the sum of the offset and length(limit) value
         total_records = offset + length
-        print(query)
+        
         if not isinstance(query, dict):
-            query_list = json.loads(query)
-        query_alert_type = list(query_list.keys())[0]
-        print('query_alert_type')
-        print(query_alert_type)
+            queries = json.loads(query)
+            query =  queries.get(self.query_alert_type)
+        else:
+            query =  query.get(self.query_alert_type)
         
         try:
-            query =  query_list.get(self.api_client.query_alert_type)
-            print(query)
             # check for length value against the max limit(1000) of $top param in data source
             if length <= self.max_limit:
                 # $skip(offset) param not included as data source provides incorrect results for some of the queries
-                response = await self.api_client.run_search(query, total_records)
+                response = await self.api_client.run_search(query, total_records, self.endpoint)
             elif length > self.max_limit:
-                response = await self.api_client.run_search(query, self.max_limit)
+                response = await self.api_client.run_search(query, self.max_limit, self.endpoint)
             response_code = response.code
             response_dict = json.loads(response.read())
             if 199 < response_code < 300:
@@ -89,7 +102,7 @@ class Connector(BaseJsonSyncConnector):
                 while len(return_obj['data']) < total_records:
                     try:
                         next_page_link = response_dict['@odata.nextLink']
-                        response = await self.api_client.next_page_run_search(next_page_link)
+                        response = await self.api_client.next_page_run_search(next_page_link, self.endpoint)
                         response_code = response.code
                         response_dict = json.loads(response.read())
                         if 199 < response_code < 300:

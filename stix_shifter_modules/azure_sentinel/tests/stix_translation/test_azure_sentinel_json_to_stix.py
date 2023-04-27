@@ -2,6 +2,7 @@ import json
 import unittest
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.azure_sentinel.entry_point import EntryPoint
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 
 MODULE = "azure_sentinel"
@@ -145,7 +146,8 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
 
         assert x_msazure_sentinel_alert.keys() == {'type', 'recommendedactions', 'status', 'userStates'}
         assert type(x_msazure_sentinel_alert['recommendedactions']) is list
-        assert x_ibm_finding.keys() == {'type', 'createddatetime', 'description', 'time_observed', 'severity', 'name', 'src_os_ref'}
+        print(x_ibm_finding.keys())
+        assert x_ibm_finding.keys() == {'type', 'description', 'time_observed', 'severity', 'name', 'src_os_ref'}
         assert x_ibm_finding['name'] == 'Rare SVCHOST service group executed'
         assert x_oca_event.keys() == {'type', 'code', 'category', 'created', 'action'}
         assert x_oca_event['category'] == 'SuspiciousSVCHOSTRareGroup'
@@ -250,5 +252,27 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         objects = observed_data['objects']
         assert objects == {}
 
-    def test_alert_v2_tranlsation():
-        
+    def test_alert_v2_tranlsation(self):
+        entry_point = EntryPoint()
+        result_file = open('stix_shifter_modules/azure_sentinel/tests/jsons/alertV2_respons.json', 'r').read()
+        data = json.loads(result_file)
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
+
+        result_bundle_objects = result_bundle['objects']
+
+        result_bundle_identity = result_bundle_objects[0]
+        assert result_bundle_identity['type'] == data_source['type']
+        assert result_bundle_identity['id'] == data_source['id']
+        assert result_bundle_identity['name'] == data_source['name']
+        assert result_bundle_identity['identity_class'] == data_source['identity_class']
+
+        observed_data = result_bundle_objects[1]
+        assert observed_data['id'] is not None
+        assert observed_data['type'] == "observed-data"
+        assert observed_data['created_by_ref'] == result_bundle_identity['id']
+
+        assert observed_data['modified'] is not None
+        assert observed_data['created'] is not None
+        assert observed_data['first_observed'] is not None
+        assert observed_data['last_observed'] is not None
+        assert observed_data['number_observed'] is not None
