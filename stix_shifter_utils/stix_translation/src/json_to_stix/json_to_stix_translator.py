@@ -208,10 +208,12 @@ class DataSourceObjToStixObj:
         """
         Add observable object property and its STIX valid value to the cached `objects` dictionary
         """
+        named_group =  isinstance(group, str)
         parent_key_ind_str = str(parent_key_ind)
         if not parent_key_ind_str in objects:
             if cybox:
-                if group:
+                # Grouped properties go in a list
+                if named_group:
                     value = [value]
                 objects[parent_key_ind_str] = {
                     'type': type_name,
@@ -225,16 +227,28 @@ class DataSourceObjToStixObj:
                 property_key: value
             }
         else:
-            property_value = objects[parent_key_ind_str][property_key]
+            # if property_key in objects[parent_key_ind_str]:
+            #     property_value = objects[parent_key_ind_str][property_key]
+            # else:
+            #     property_value = value
+            # # Add grouped value in existing list element
+            # if isinstance(value, dict) and group and isinstance(property_value, list):
+            #     property_value[0] = dict_merge(property_value[0], value)
+            # elif isinstance(value, dict):
+            #     property_value = dict_merge(property_value, value)
+            # elif isinstance(property_value, list) and group:
+            #     property_value.extend(value)
+
+
             if not property_key in objects[parent_key_ind_str]:
-                property_value = value
-            # Add grouped value in existing list element
-            elif isinstance(value, dict) and group and isinstance(property_value, list):
-                property_value[0] = dict_merge(property_value[0], value)
+                objects[parent_key_ind_str][property_key] = value
+            # # Add grouped value in existing list element
+            if isinstance(value, dict) and named_group and isinstance(objects[parent_key_ind_str][property_key], list):
+                objects[parent_key_ind_str][property_key][0] = dict_merge(objects[parent_key_ind_str][property_key][0], value)
             elif isinstance(value, dict):
-                property_value = dict_merge(property_value, value)
-            elif isinstance(property_value, list) and group:
-                property_value.extend(value)
+                objects[parent_key_ind_str][property_key] = dict_merge(objects[parent_key_ind_str][property_key], value)
+            elif isinstance(objects[parent_key_ind_str][property_key], list) and group:
+                objects[parent_key_ind_str][property_key].extend(value)
 
             
     def _handle_properties(self, to_stix_config_prop, data, objects, object_tag_ref_map, parent_data=None, ds_sub_key=None, object_key_ind=None):
