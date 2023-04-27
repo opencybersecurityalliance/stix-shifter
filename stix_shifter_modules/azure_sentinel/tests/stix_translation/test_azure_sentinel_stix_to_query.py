@@ -41,9 +41,6 @@ class TestQueryTranslator(unittest.TestCase):
         queries = [
             {
                 "alert": "(fileStates/any(query1:tolower(query1/name) eq 'services.exe')) and (eventDateTime ge 2023-04-26T14:05:28.029Z and eventDateTime le 2023-04-26T14:10:28.029Z)"
-            },
-            {
-                "alertV2": "(fileEvidence/any(query1:tolower(query1/fileDetails/fileName) eq 'services.exe')) and (createdDateTime ge 2023-04-26T14:05:28.029Z and createdDateTime le 2023-04-26T14:10:28.029Z)"
             }
         ]
 
@@ -76,10 +73,6 @@ class TestQueryTranslator(unittest.TestCase):
                 "networkConnections/any(query1:tolower(query1/natSourceAddress) eq '172.16.2.22') or "
                 "networkConnections/any(query1:tolower(query1/natDestinationAddress) eq '172.16.2.22'))) and "
                 "(eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"
-            },
-            {
-                "alertV2": "(ipEvidence/any(query1:tolower(query1/ipAddress) eq '172.16.2.22')) and "
-                "(createdDateTime ge 2019-09-10T08:43:10.003Z and createdDateTime le 2019-09-23T10:43:10.453Z)"
             }
         ]
 
@@ -95,9 +88,6 @@ class TestQueryTranslator(unittest.TestCase):
         queries = [
             {
                 "alert": "(fileStates/any(query1:contains(tolower(query1/path), 'system32'))) and (eventDateTime ge 2019-10-01T08:43:10.003Z and eventDateTime le 2019-10-30T10:43:10.003Z)"
-            },
-            {
-                "alertV2": "(fileEvidence/any(query1:tolower(query1/fileDetails/filePath) eq 'system32')) and (createdDateTime ge 2019-10-01T08:43:10.003Z and createdDateTime le 2019-10-30T10:43:10.003Z)"
             }
         ]
 
@@ -112,9 +102,6 @@ class TestQueryTranslator(unittest.TestCase):
         queries = [
             {
                 "alert": "((fileStates/any(query1:contains(tolower(query1/path), 'windows')) or process/any(query1:tolower(query1/path) eq 'windows'))) and (eventDateTime ge 2023-04-26T14:39:07.023Z and eventDateTime le 2023-04-26T14:44:07.023Z)"
-            },
-            {
-                "alertV2": "((fileEvidence/any(query1:tolower(query1/fileDetails/filePath) eq 'windows') or processEvidence/any(query1:tolower(query1/imageFile/filePath) eq 'windows') or processEvidence/any(query1:tolower(query1/parentProcessImageFile/filePath) eq 'windows'))) and (createdDateTime ge 2023-04-26T14:39:07.024Z and createdDateTime le 2023-04-26T14:44:07.024Z)"
             }
         ]
 
@@ -144,9 +131,6 @@ class TestQueryTranslator(unittest.TestCase):
         queries = [
             {
                 "alert": "(fileStates/any(query1:contains(tolower(query1/name), 'svc'))) and (eventDateTime ge 2023-04-26T14:40:18.624Z and eventDateTime le 2023-04-26T14:45:18.624Z)"
-            },
-            {
-                "alertV2": "(fileEvidence/any(query1:contains(tolower(query1/fileDetails/fileName), 'svc'))) and (createdDateTime ge 2023-04-26T14:40:18.624Z and createdDateTime le 2023-04-26T14:45:18.624Z)"
             }
         ]
         queries = _remove_timestamp_from_query(queries)
@@ -160,9 +144,6 @@ class TestQueryTranslator(unittest.TestCase):
         queries = [
             {
                 "alert": "(fileStates/any(query1:contains(tolower(query1/name), 'serv'))) and (eventDateTime ge 2023-04-26T14:40:47.144Z and eventDateTime le 2023-04-26T14:45:47.144Z)"
-            },
-            {
-                "alertV2": "(fileEvidence/any(query1:contains(tolower(query1/fileDetails/fileName), 'serv'))) and (createdDateTime ge 2023-04-26T14:40:47.144Z and createdDateTime le 2023-04-26T14:45:47.144Z)"
             }
         ]
         queries = _remove_timestamp_from_query(queries)
@@ -207,9 +188,6 @@ class TestQueryTranslator(unittest.TestCase):
         queries = [
             {
                 "alert": "(fileStates/any(query1:tolower(query1/name) eq 'notepad.exe') or (processes/any(query2:tolower(query2/name) eq 'services.exe') or processes/any(query2:tolower(query2/name) eq 'svchost.exe') or processes/any(query2:tolower(query2/parentProcessName) eq 'services.exe') or processes/any(query2:tolower(query2/parentProcessName) eq 'svchost.exe'))) and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"
-            },
-            {
-                "alertV2": "(fileEvidence/any(query1:tolower(query1/fileDetails/fileName) eq 'notepad.exe')) and (createdDateTime ge 2019-09-10T08:43:10.003Z and createdDateTime le 2019-09-23T10:43:10.453Z)"
             }
         ]
 
@@ -261,9 +239,6 @@ class TestQueryTranslator(unittest.TestCase):
             },
             {
                 "alert": "(userStates/any(query2:query2/logonDateTime eq 2019-09-23T10:43:10.453Z) and networkConnections/any(query3:contains(tolower(query3/sourceAddress), '52.94.233.129'))) and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"
-            },
-            {
-                "alertV2": "((processEvidence/any(query1:query1/processId eq 110) or processEvidence/any(query1:query1/processId eq 220) or processEvidence/any(query1:query1/parentProcessId eq 110) or processEvidence/any(query1:query1/parentProcessId eq 220))) and (createdDateTime ge 2019-09-10T08:43:10.003Z and createdDateTime le 2019-09-23T10:43:10.453Z)"
             }
         ]
 
@@ -289,18 +264,6 @@ class TestQueryTranslator(unittest.TestCase):
             },
             {
                 "alert": "((networkConnections/any(query4:contains(tolower(query4/sourceAddress), '2.1.1.1')) or networkConnections/any(query4:contains(tolower(query4/destinationAddress), '2.1.1.1')) or networkConnections/any(query4:tolower(query4/natSourceAddress) eq '2.1.1.1') or networkConnections/any(query4:tolower(query4/natDestinationAddress) eq '2.1.1.1'))) and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"
-            },
-            {
-                "alertV2": "(fileEvidence/any(query1:contains(tolower(query1/fileDetails/sha1), 'daf67'))) and (createdDateTime ge 2023-04-27T13:45:31.262Z and createdDateTime le 2023-04-27T13:50:31.262Z)"
-            },
-            {
-                "alertV2": "(fileEvidence/any(query2:tolower(query2/fileDetails/sha1) eq 'b6d237154f2e528f0b503b58b025862d66b02b73')) and (createdDateTime ge 2023-04-27T13:45:31.263Z and createdDateTime le 2023-04-27T13:50:31.263Z)"
-            },
-            {
-                "alertV2": "(ipEvidence/any(query3:tolower(query3/ipAddress) eq '1.1.1.1')) and (createdDateTime ge 2023-04-27T13:45:31.263Z and createdDateTime le 2023-04-27T13:50:31.263Z)"
-            },
-            {
-                "alertV2": "(ipEvidence/any(query4:tolower(query4/ipAddress) eq '2.1.1.1')) and (createdDateTime ge 2019-09-10T08:43:10.003Z and createdDateTime le 2019-09-23T10:43:10.453Z)"
             }
         ]
 
@@ -334,6 +297,9 @@ class TestQueryTranslator(unittest.TestCase):
             },
             {
                 "alert": "(networkConnections/any(query6:tolower(query6/destinationLocation) eq 'us')) and (eventDateTime ge 2023-04-27T13:49:25.393Z and eventDateTime le 2023-04-27T13:54:25.393Z)"
+            },
+            {
+                "alertV2": "(tolower(severity) eq 'test severity') and (createdDateTime ge 2023-04-27T18:54:53.833Z and createdDateTime le 2023-04-27T18:59:53.833Z)"
             }
         ]
         queries = _remove_timestamp_from_query(queries)
