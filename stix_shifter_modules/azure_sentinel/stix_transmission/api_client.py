@@ -57,7 +57,7 @@ class APIClient:
         await self.init_async_client()
         return await self.client.call_api(endpoint, 'GET', headers, urldata=params, timeout=self.timeout)
 
-    async def next_page_run_search(self, next_page_url):
+    async def next_page_run_search(self, next_page_url, endpoint):
         """get the response from azure_sentinel endpoints
         :param next_page_url: str, search_id
         :return: response, json object"""
