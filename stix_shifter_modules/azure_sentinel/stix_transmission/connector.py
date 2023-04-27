@@ -81,13 +81,17 @@ class Connector(BaseJsonSyncConnector):
         # total records is the sum of the offset and length(limit) value
         total_records = offset + length
         
-        if not isinstance(query, dict):
-            queries = json.loads(query)
-            query =  queries.get(self.query_alert_type)
-        else:
-            query =  query.get(self.query_alert_type)
-        
         try:
+            if not isinstance(query, dict):
+                query = json.loads(query)
+
+            query_service_type = list(query.keys())[0]
+            query = query[query_service_type]
+            
+            if self.query_alert_type != query_service_type:
+                return_obj = {'success': True, "data": []}
+                return return_obj
+            
             # check for length value against the max limit(1000) of $top param in data source
             if length <= self.max_limit:
                 # $skip(offset) param not included as data source provides incorrect results for some of the queries

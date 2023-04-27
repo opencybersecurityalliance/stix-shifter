@@ -14,7 +14,7 @@ Graph Security API offers two types of alerts:
 
 By default connector can be used to search Legacy Alerts. User can search newer version of alerts by setting `{"alertV2": True}` in `/azure_sentinel/configuration/config.json`
 
-**Note:** New Alert V2 can be used to search limited properties because $filter parameter can be used on limited properties, See [List Alert](https://learn.microsoft.com/en-us/graph/api/security-list-alerts_v2?view=graph-rest-1.0&tabs=http) for more details.
+**Note:** New Alert V2 can be used to search limited properties because $filter parameter can be used on limited properties: ***assignedTo, classification, determination, createdDateTime, lastUpdateDateTime, severity, serviceSource and status***. See [List Alert](https://learn.microsoft.com/en-us/graph/api/security-list-alerts_v2?view=graph-rest-1.0&tabs=http) for more details
 
 #### Microsoft Graph API (v1.0)
 List security alerts (GET call) https://graph.microsoft.com/v1.0/security/ <br/>

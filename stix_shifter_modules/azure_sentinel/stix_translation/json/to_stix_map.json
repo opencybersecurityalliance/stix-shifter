@@ -23,7 +23,7 @@
       "object": "alert"
     },
     "assignedTo": {
-      "key": "x-msazure-sentinel-alert.assignedTo",
+      "key": "x-microsoft-graph-alert.assignedTo",
       "object": "alert"
     },
     "category": {
@@ -497,7 +497,7 @@
       "object": "alert"
     },
     "status": {
-      "key": "x-msazure-sentinel-alert.status",
+      "key": "x-microsoft-graph-alert.status",
       "object": "alert",
       "transformer": "ToString"
     },
