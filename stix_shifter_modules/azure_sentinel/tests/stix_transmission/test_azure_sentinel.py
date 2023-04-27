@@ -250,8 +250,8 @@ class TestAzureSentinalConnection(TestCase):
         } """
         mock_results_response.return_value = get_mock_response(404, mocked_return_value)
 
-        query = "$select=filestates&$filter=fileStates/any(x:x/name eq 'services.exe') and eventDateTime ge \
-                 2019-10-13T08:00Z and eventDateTime le 2019-11-13T08:00Z&$top=1&$skip=1"
+        query = {"alert": "$select=filestates&$filter=fileStates/any(x:x/name eq 'services.exe') and eventDateTime ge \
+                 2019-10-13T08:00Z and eventDateTime le 2019-11-13T08:00Z&$top=1&$skip=1"}
         offset = 0
         length = 1
         transmission = stix_transmission.StixTransmission('azure_sentinel', self.connection(), self.config())
@@ -288,9 +288,8 @@ class TestAzureSentinalConnection(TestCase):
 
     @patch('stix_shifter_modules.azure_sentinel.stix_transmission.api_client.APIClient.run_search',
            autospec=True)
-    def test_alert_v2_results(self, mock_results_response, mock_api_client, mock_generate_token):
+    def test_alert_v2_results(self, mock_results_response, mock_api_client):
         mock_api_client.return_value = None
-        mock_generate_token.return_value = get_adal_mock_response()
 
         mock_return_value = open('stix_shifter_modules/azure_sentinel/tests/jsons/alert_v2.json', 'r').read()
         mock_results_response.return_value = get_mock_response(200, mock_return_value)
