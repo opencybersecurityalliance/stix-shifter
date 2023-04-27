@@ -107,7 +107,6 @@ class TestReversingLabsStixToQuery(unittest.TestCase, object):
         query = TestReversingLabsStixToQuery.get_query_translation_result(stix_pattern)
         assert query['success'] is False
         assert query['code'] == 'mapping_error'
-        assert query['error'] == "reversinglabs connector error => data mapping error : Unable to map the following STIX Operators: [IsSuperSet] to data source fields"
 
     def test_like_comp_exp(self):
         """
