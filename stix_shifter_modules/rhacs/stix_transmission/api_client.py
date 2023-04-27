@@ -1,4 +1,3 @@
-import requests
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 
 
@@ -36,10 +35,9 @@ class APIClient:
            :param query: Data Source Query
            :return: Response Object
         """
-        query = requests.utils.quote(query)
-        endpoint = self.ALERTS_ENDPOINT + "?query=" + query
-        return await self.client.call_api(endpoint, 'GET', headers=self.client.headers,
-                                    timeout=self.timeout)
+        query_params = {'query': query}
+        return await self.client.call_api(self.ALERTS_ENDPOINT, 'GET', urldata=query_params, 
+                                          headers=self.client.headers, timeout=self.timeout)
 
     async def get_inner_results(self, alertid):
         """
