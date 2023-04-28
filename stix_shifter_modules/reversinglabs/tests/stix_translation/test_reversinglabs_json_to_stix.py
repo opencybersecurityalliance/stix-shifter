@@ -5,13 +5,13 @@ from stix_shifter_modules.reversinglabs.entry_point import EntryPoint
 
 MODULE = "reversinglabs"
 DATA_SOURCE = {"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
-               "name": "ReversingLabs_1_0", "identity_class": "system"}
+               "name": "ReversingLabs_Connector", "identity_class": "system"}
 options = {'stix_validator':True}
 entry_point = EntryPoint(options=options)
 translation_options = {}
 domain_name = "google.com"
 extension_types = ['toplevel-property-extension']
-extension_properties = ['x_ibm_original_threat_feed_data','threat_score']
+extension_properties = ['x_ibm_original_threat_feed_data','threat_score', 'threat_attributes']
 domain_query_pattern = "[domain-name:value='"+domain_name+"']"
 hash_value = '16cda323189d8eba4248c0a2f5ad0d8f'
 hash_query_pattern = "[file:hashes.MD5='"+hash_value+"']"
@@ -89,7 +89,7 @@ class TestReversingLabsResultsToStix(unittest.TestCase):
         """
         @wraps(func)
         def wrapper_func(self, *args, **kwargs):
-            self.result_bundle = self.result_translator.translate_results(data_source=DATA_SOURCE, data=transmitQueryDataForDomain['data'])
+            self.result_bundle = self.result_translator.translate_results(data_source=DATA_SOURCE, data=transmitQueryDataForDomain['data'],)
             self.result_bundle_domain_objects = self.result_bundle['objects']
             assert self.result_bundle['type'] == 'bundle'
             return func(self, *args, **kwargs)
@@ -404,4 +404,3 @@ class TestReversingLabsResultsToStix(unittest.TestCase):
         assert 'pattern' in stix_indicator and stix_indicator['pattern'] == "[ipv4-addr:value='194.147.78.155']"
         assert 'x_ibm_original_threat_feed_data' in stix_indicator and stix_indicator['x_ibm_original_threat_feed_data']['full'][0] == {'message': 'IOC not found'}
 
-              
