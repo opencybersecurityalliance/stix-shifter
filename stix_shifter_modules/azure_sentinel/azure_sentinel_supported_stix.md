@@ -1,4 +1,4 @@
-##### Updated on 02/27/23
+##### Updated on 04/28/23
 ## Microsoft Graph Security
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
@@ -54,7 +54,7 @@
 | **software**:name | vendorInformation.provider |
 | **software**:vendor | vendorInformation.vendor |
 | **software**:version | vendorInformation.providerVersion |
-| **url**:name | networkConnections.destinationUrl |
+| **url**:value | networkConnections.destinationUrl |
 | **windows-registry-key**:key | registryKeyStates.key |
 | **windows-registry-key**:extensions.windows-registry-value-type.valueData | registryKeyStates.valueData |
 | **windows-registry-key**:extensions.windows-registry-value-type.name | registryKeyStates.valueName |
