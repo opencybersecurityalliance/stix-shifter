@@ -201,7 +201,13 @@
       "file_ref.name": ["file.name"],
       "host_ref.hostname": ["host.hostname.keyword"],
       "host_ref.name": ["host.name.keyword"],
-      "registry_ref.key": ["registry.key", "registry.path"]
+      "registry_ref.key": ["registry.key", "registry.path"],
+      "container.id": ["container.id"],
+      "container.image.name": ["container.image.name"],
+      "container.image.tag": ["container.image.tag"],
+      "container.labels": ["container.labels"],
+      "container.name": ["container.name"],
+      "container.runtime": ["container.runtime"]
     }
   },
   "x-ecs-cloud": {
@@ -213,16 +219,6 @@
       "machine.type": ["cloud.machine.type"],
       "provider": ["cloud.provider"],
       "region": ["cloud.region"]
-    }
-  },
-  "x-ecs-container": {
-    "fields": {
-      "container_id": ["container.id"],
-      "image.name": ["container.image.name"],
-      "image.tag": ["container.image.tag"],
-      "labels": ["container.labels"],
-      "name": ["container.name"],
-      "runtime": ["container.runtime"]
     }
   },
   "x-ecs-dns": {
