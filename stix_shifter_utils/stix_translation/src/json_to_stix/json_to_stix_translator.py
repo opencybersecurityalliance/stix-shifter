@@ -227,19 +227,6 @@ class DataSourceObjToStixObj:
                 property_key: value
             }
         else:
-            # if property_key in objects[parent_key_ind_str]:
-            #     property_value = objects[parent_key_ind_str][property_key]
-            # else:
-            #     property_value = value
-            # # Add grouped value in existing list element
-            # if isinstance(value, dict) and group and isinstance(property_value, list):
-            #     property_value[0] = dict_merge(property_value[0], value)
-            # elif isinstance(value, dict):
-            #     property_value = dict_merge(property_value, value)
-            # elif isinstance(property_value, list) and group:
-            #     property_value.extend(value)
-
-
             if not property_key in objects[parent_key_ind_str]:
                 objects[parent_key_ind_str][property_key] = value
             # # Add grouped value in existing list element
