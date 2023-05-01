@@ -1,4 +1,4 @@
-##### Updated on 04/18/23
+##### Updated on 04/28/23
 ## Elasticsearch ECS
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
@@ -24,11 +24,11 @@
 ### Searchable STIX objects and properties
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
-| **ipv4-addr**:value | source.ip, destination.ip, client.ip, server.ip, host.ip, dns.resolved_ip |
-| **ipv6-addr**:value | source.ip, destination.ip, client.ip, server.ip, host.ip, dns.resolved_ip |
+| **ipv4-addr**:value | source.ip, destination.ip, client.ip, server.ip, host.ip, dns.resolved_ip, source.nat.ip, destination.nat.ip, client.nat.ip, server.nat.ip |
+| **ipv6-addr**:value | source.ip, destination.ip, client.ip, server.ip, host.ip, dns.resolved_ip, source.nat.ip, destination.nat.ip, client.nat.ip, server.nat.ip |
 | **mac-addr**:value | source.mac, destination.mac, client.mac, server.mac, host.mac |
-| **network-traffic**:src_port | source.port, client.port |
-| **network-traffic**:dst_port | destination.port, server.port |
+| **network-traffic**:src_port | source.port, client.port, source.nat.port, client.nat.port |
+| **network-traffic**:dst_port | destination.port, server.port, destination.nat.port, server.nat.port |
 | **network-traffic**:protocols[*] | network.transport, network.type, network.protocol |
 | **network-traffic**:src_ref.value | source.ip, client.ip |
 | **network-traffic**:dst_ref.value | destination.ip, server.ip |
@@ -46,7 +46,7 @@
 | **network-traffic**:x_forwarded_ip | network.forwarded_ip |
 | **network-traffic**:x_community_id | network.community_id |
 | **artifact**:payload_bin | event.original |
-| **file**:name | file.name, file.path, process.name, process.executable, process.parent.name, process.parent.executable |
+| **file**:name | file.name, dll.name, file.path, process.name, process.executable, process.parent.name, process.parent.executable |
 | **file**:created | file.created, file.ctime |
 | **file**:modified | file.mtime |
 | **file**:accessed | file.accessed |
@@ -59,7 +59,7 @@
 | **file**:parent_directory_ref.path | file.directory |
 | **file**:x_attributes | file.attributes |
 | **file**:x_extension | file.extension |
-| **file**:x_path | file.path |
+| **file**:x_path | file.path, dll.path |
 | **file**:x_target_path | file.target_path |
 | **file**:x_type | file.type |
 | **file**:x_unix.device | file.device |
@@ -70,14 +70,14 @@
 | **file**:x_owner_ref.user_id | file.uid |
 | **file**:x_owner_ref.account_login | file.owner |
 | **file**:x_win_drive_letter | file.drive_letter |
-| **file**:x_software_ref.name | file.pe.original_file_name |
-| **file**:x_software_ref.vendor | file.pe.company |
-| **file**:x_software_ref.version | file.pe.file_version |
-| **file**:x_code_signature.exists | file.code_signature.exists |
-| **file**:x_code_signature.status | file.code_signature.status |
-| **file**:x_code_signature.subject_name | file.code_signature.subject_name |
-| **file**:x_code_signature.trusted | file.code_signature.trusted |
-| **file**:x_code_signature.valid | file.code_signature.valid |
+| **file**:x_software_ref.name | file.pe.original_file_name, dll.pe.original_file_name |
+| **file**:x_software_ref.vendor | file.pe.company, dll.pe.company |
+| **file**:x_software_ref.version | file.pe.file_version, dll.pe.file_version |
+| **file**:x_code_signature.exists | file.code_signature.exists, dll.code_signature.exists |
+| **file**:x_code_signature.status | file.code_signature.status, dll.code_signature.status |
+| **file**:x_code_signature.subject_name | file.code_signature.subject_name, dll.code_signature.subject_name |
+| **file**:x_code_signature.trusted | file.code_signature.trusted, dll.code_signature.trusted |
+| **file**:x_code_signature.valid | file.code_signature.valid, dll.code_signature.valid |
 | **directory**:path | file.directory, file.path |
 | **user-account**:user_id | user.name, user.id |
 | **user-account**:account_login | user.name |
@@ -116,7 +116,7 @@
 | **process**:x_unique_id | process.entity_id, process.parent.entity_id |
 | **process**:x_uptime | process.uptime |
 | **url**:value | url.original |
-| **domain-name**:value | url.domain, dns.question.name, dns.question.registered_domain, host.hostname |
+| **domain-name**:value | url.domain, dns.question.name, dns.question.registered_domain, host.hostname, source.domain, destination.domain, server.domain, client.domain, source.registered_domain, destination.registered_domain, server.registered_domain, client.registered_domain, source.top_level_domain, destination.top_level_domain, server.top_level_domain, client.top_level_domain |
 | **windows-registry-key**:key | registry.key |
 | **software**:name | agent.name, process.pe.original_file_name, file.pe.original_file_name, dll.pe.original_file_name |
 | **software**:vendor | process.pe.company, file.pe.company, dll.pe.company |
@@ -176,18 +176,6 @@
 | **x-ecs-container**:labels | container.labels |
 | **x-ecs-container**:name | container.name |
 | **x-ecs-container**:runtime | container.runtime |
-| **x-ecs-dll**:name | dll.name |
-| **x-ecs-dll**:path | dll.path |
-| **x-ecs-dll**:pe.company | dll.pe.company |
-| **x-ecs-dll**:pe.description | dll.pe.description |
-| **x-ecs-dll**:pe.file_version | dll.pe.file_version |
-| **x-ecs-dll**:pe.original_file_name | dll.pe.original_file_name |
-| **x-ecs-dll**:pe.product | dll.pe.product |
-| **x-ecs-dll**:code_signature.exists | dll.code_signature.exists |
-| **x-ecs-dll**:code_signature.status | dll.code_signature.status |
-| **x-ecs-dll**:code_signature.subject_name | dll.code_signature.subject_name |
-| **x-ecs-dll**:code_signature.trusted | dll.code_signature.trusted |
-| **x-ecs-dll**:code_signature.valid | dll.code_signature.valid |
 | **x-ecs-dns**:answers_class | dns.answers.class |
 | **x-ecs-dns**:answers_data | dns.answers.data |
 | **x-ecs-dns**:answers_name | dns.answers.name |
@@ -216,16 +204,33 @@
 | **x-ecs-group**:name | group.name |
 | **x-oca-asset**:architecture | host.architecture |
 | **x-oca-asset**:domain | host.domain |
-| **x-oca-asset**:hostname | host.hostname |
+| **x-oca-asset**:hostname | host.hostname, observer.hostname |
 | **x-oca-asset**:id | host.id |
-| **x-oca-asset**:ip | host.ip |
-| **x-oca-asset**:mac | host.mac |
-| **x-oca-asset**:name | host.name |
-| **x-oca-asset**:type | host.type |
+| **x-oca-asset**:ip | host.ip, observer.ip |
+| **x-oca-asset**:mac | host.mac, observer.mac |
+| **x-oca-asset**:name | host.name, observer.name |
+| **x-oca-asset**:type | host.type, observer.type |
+| **x-oca-asset**:serial_number | observer.serial_number |
+| **x-oca-asset**:ingress.zone | observer.ingress.zone |
+| **x-oca-asset**:ingress.interface.alias | observer.ingress.interface.alias |
+| **x-oca-asset**:ingress.interface.id | observer.ingress.interface.id |
+| **x-oca-asset**:ingress.interface.name | observer.ingress.interface.name |
+| **x-oca-asset**:egress.zone | observer.egress.zone |
+| **x-oca-asset**:egress.interface.alias | observer.egress.interface.alias |
+| **x-oca-asset**:egress.interface.id | observer.egress.interface.id |
+| **x-oca-asset**:egress.interface.name | observer.egress.interface.name |
 | **x-oca-asset**:uptime | host.uptime |
-| **x-oca-asset**:os.name | host.os.name |
-| **x-oca-asset**:os.platform | host.os.platform |
-| **x-oca-asset**:os.version | host.os.version |
+| **x-oca-asset**:os_ref.name | host.os.name, observer.os.name, observer.product |
+| **x-oca-asset**:os_ref.vendor | host.os.platform, observer.os.platform, observer.vendor |
+| **x-oca-asset**:os_ref.version | host.os.version, observer.os.version, observer.version |
+| **x-oca-geo**:city_name | server.geo.city_name, client.geo.city_name, source.geo.city_name, destination.geo.city_name |
+| **x-oca-geo**:continent_name | server.geo.continent_name, client.geo.continent_name, source.geo.continent_name, destination.geo.continent_name |
+| **x-oca-geo**:country_iso_code | server.geo.country_iso_code, client.geo.country_iso_code, source.geo.country_iso_code, destination.geo.country_iso_code |
+| **x-oca-geo**:country_name | server.geo.country_name, client.geo.country_name, source.geo.country_name, destination.geo.country_name |
+| **x-oca-geo**:location | server.geo.location, client.geo.location, source.geo.location, destination.geo.location |
+| **x-oca-geo**:name | server.geo.name, client.geo.name, source.geo.name, destination.geo.name |
+| **x-oca-geo**:region_iso_code | server.geo.region_iso_code, client.geo.region_iso_code, source.geo.region_iso_code, destination.geo.region_iso_code |
+| **x-oca-geo**:region_name | server.geo.region_name, client.geo.region_name, source.geo.region_name, destination.geo.region_name |
 | **x-ecs-http**:request_body_bytes | http.request.body.bytes |
 | **x-ecs-http**:request_body_content | http.request.body.content |
 | **x-ecs-http**:request_bytes | http.request.bytes |
@@ -247,26 +252,6 @@
 | **x-ecs-log**:syslog_priority | log.syslog.priority |
 | **x-ecs-log**:severity_syslog_code | log.syslog.severity.code |
 | **x-ecs-log**:severity_syslog_name | log.syslog.severity.name |
-| **x-ecs-observer**:egress.zone | observer.egress.zone |
-| **x-ecs-observer**:egress.interface.alias | observer.egress.interface.alias |
-| **x-ecs-observer**:egress.interface.id | observer.egress.interface.id |
-| **x-ecs-observer**:egress.interface.name | observer.egress.interface.name |
-| **x-ecs-observer**:hostname | observer.hostname |
-| **x-ecs-observer**:ingress.zone | observer.ingress.zone |
-| **x-ecs-observer**:ingress.interface.alias | observer.ingress.interface.alias |
-| **x-ecs-observer**:ingress.interface.id | observer.ingress.interface.id |
-| **x-ecs-observer**:ingress.interface.name | observer.ingress.interface.name |
-| **x-ecs-observer**:ip | observer.ip |
-| **x-ecs-observer**:mac | observer.mac |
-| **x-ecs-observer**:name | observer.name |
-| **x-ecs-observer**:product | observer.product |
-| **x-ecs-observer**:serial_number | observer.serial_number |
-| **x-ecs-observer**:type | observer.type |
-| **x-ecs-observer**:vendor | observer.vendor |
-| **x-ecs-observer**:version | observer.version |
-| **x-ecs-observer**:os.name | observer.os.name |
-| **x-ecs-observer**:os.platform | observer.os.platform |
-| **x-ecs-observer**:os.version | observer.os.version |
 | **x-ecs-organization**:id | organization.id |
 | **x-ecs-organization**:name | organization.name |
 | **x-ecs-pe**:company | dll.pe.company, process.pe.company, file.pe.company |
@@ -318,71 +303,15 @@
 | **x-ecs-vulnerability**:score_environmental | vulnerability.score.environmental |
 | **x-ecs-vulnerability**:score_temporal | vulnerability.score.temporal |
 | **x-ecs-vulnerability**:score_version | vulnerability.score.version |
-| **x-ecs-source**:address | source.address |
-| **x-ecs-source**:domain | source.domain |
-| **x-ecs-source**:nat.ip | source.nat.ip |
-| **x-ecs-source**:nat.port | source.nat.port |
-| **x-ecs-source**:registered_domain | source.registered_domain |
-| **x-ecs-source**:top_level_domain | source.top_level_domain |
-| **x-ecs-source**:geo.city_name | source.geo.city_name |
-| **x-ecs-source**:geo.continent_name | source.geo.continent_name |
-| **x-ecs-source**:geo.country_iso_code | source.geo.country_iso_code |
-| **x-ecs-source**:geo.country_name | source.geo.country_name |
-| **x-ecs-source**:geo.location | source.geo.location |
-| **x-ecs-source**:geo.name | source.geo.name |
-| **x-ecs-source**:geo.region_iso_code | source.geo.region_iso_code |
-| **x-ecs-source**:geo.region_name | source.geo.region_name |
-| **x-ecs-destination**:address | destination.address |
-| **x-ecs-destination**:domain | destination.domain |
-| **x-ecs-destination**:nat.ip | destination.nat.ip |
-| **x-ecs-destination**:nat.port | destination.nat.port |
-| **x-ecs-destination**:registered_domain | destination.registered_domain |
-| **x-ecs-destination**:top_level_domain | destination.top_level_domain |
-| **x-ecs-destination**:geo.city_name | destination.geo.city_name |
-| **x-ecs-destination**:geo.continent_name | destination.geo.continent_name |
-| **x-ecs-destination**:geo.country_iso_code | destination.geo.country_iso_code |
-| **x-ecs-destination**:geo.country_name | destination.geo.country_name |
-| **x-ecs-destination**:geo.location | destination.geo.location |
-| **x-ecs-destination**:geo.name | destination.geo.name |
-| **x-ecs-destination**:geo.region_iso_code | destination.geo.region_iso_code |
-| **x-ecs-destination**:geo.region_name | destination.geo.region_name |
-| **x-ecs-client**:address | client.address |
-| **x-ecs-client**:domain | client.domain |
-| **x-ecs-client**:nat.ip | client.nat.ip |
-| **x-ecs-client**:nat.port | client.nat.port |
-| **x-ecs-client**:registered_domain | client.registered_domain |
-| **x-ecs-client**:top_level_domain | client.top_level_domain |
-| **x-ecs-client**:geo.city_name | client.geo.city_name |
-| **x-ecs-client**:geo.continent_name | client.geo.continent_name |
-| **x-ecs-client**:geo.country_iso_code | client.geo.country_iso_code |
-| **x-ecs-client**:geo.country_name | client.geo.country_name |
-| **x-ecs-client**:geo.location | client.geo.location |
-| **x-ecs-client**:geo.name | client.geo.name |
-| **x-ecs-client**:geo.region_iso_code | client.geo.region_iso_code |
-| **x-ecs-client**:geo.region_name | client.geo.region_name |
-| **x-ecs-server**:address | server.address |
-| **x-ecs-server**:domain | server.domain |
-| **x-ecs-server**:nat.ip | server.nat.ip |
-| **x-ecs-server**:nat.port | server.nat.port |
-| **x-ecs-server**:registered_domain | server.registered_domain |
-| **x-ecs-server**:top_level_domain | server.top_level_domain |
-| **x-ecs-server**:geo.city_name | server.geo.city_name |
-| **x-ecs-server**:geo.continent_name | server.geo.continent_name |
-| **x-ecs-server**:geo.country_iso_code | server.geo.country_iso_code |
-| **x-ecs-server**:geo.country_name | server.geo.country_name |
-| **x-ecs-server**:geo.location | server.geo.location |
-| **x-ecs-server**:geo.name | server.geo.name |
-| **x-ecs-server**:geo.region_iso_code | server.geo.region_iso_code |
-| **x-ecs-server**:geo.region_name | server.geo.region_name |
 | <br> | |
 ### Searchable STIX objects and properties for Beats dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
-| **ipv4-addr**:value | source.ip.keyword, destination.ip.keyword, client.ip, server.ip, host.ip.keyword, dns.resolved_ip |
-| **ipv6-addr**:value | source.ip.keyword, destination.ip.keyword, client.ip, server.ip, host.ip.keyword, dns.resolved_ip |
+| **ipv4-addr**:value | source.ip, destination.ip, client.ip, server.ip, host.ip, dns.resolved_ip, source.nat.ip, destination.nat.ip, client.nat.ip, server.nat.ip |
+| **ipv6-addr**:value | source.ip, destination.ip, client.ip, server.ip, host.ip, dns.resolved_ip, source.nat.ip, destination.nat.ip, client.nat.ip, server.nat.ip |
 | **mac-addr**:value | source.mac, destination.mac, client.mac, server.mac, host.mac.keyword |
-| **network-traffic**:src_port | source.port, client.port |
-| **network-traffic**:dst_port | destination.port, server.port |
+| **network-traffic**:src_port | source.port, client.port, source.nat.port, client.nat.port |
+| **network-traffic**:dst_port | destination.port, server.port, destination.nat.port, server.nat.port |
 | **network-traffic**:protocols[*] | network.transport.keyword, network.type.keyword, network.protocol.keyword |
 | **network-traffic**:src_ref.value | source.ip.keyword, client.ip |
 | **network-traffic**:dst_ref.value | destination.ip.keyword, server.ip |
@@ -400,7 +329,7 @@
 | **network-traffic**:x_forwarded_ip | network.forwarded_ip |
 | **network-traffic**:x_community_id | network.community_id.keyword |
 | **artifact**:payload_bin | event.original |
-| **file**:name | file.name, file.path, process.name.keyword, process.executable.keyword, process.parent.name.keyword, process.parent.executable.keyword |
+| **file**:name | file.name, dll.name, file.path, process.name.keyword, process.executable.keyword, process.parent.name.keyword, process.parent.executable.keyword |
 | **file**:created | file.created, file.ctime |
 | **file**:modified | file.mtime |
 | **file**:accessed | file.accessed |
@@ -413,7 +342,7 @@
 | **file**:parent_directory_ref.path | file.directory |
 | **file**:x_attributes | file.attributes |
 | **file**:x_extension | file.extension |
-| **file**:x_path | file.path |
+| **file**:x_path | file.path, dll.path |
 | **file**:x_target_path | file.target_path |
 | **file**:x_type | file.type |
 | **file**:x_unix.device | file.device |
@@ -424,14 +353,14 @@
 | **file**:x_owner_ref.user_id | file.uid |
 | **file**:x_owner_ref.account_login | file.owner |
 | **file**:x_win_drive_letter | file.drive_letter |
-| **file**:x_software_ref.name | file.pe.original_file_name |
-| **file**:x_software_ref.vendor | file.pe.company |
-| **file**:x_software_ref.version | file.pe.file_version |
-| **file**:x_code_signature.exists | file.code_signature.exists |
-| **file**:x_code_signature.status | file.code_signature.status |
-| **file**:x_code_signature.subject_name | file.code_signature.subject_name |
-| **file**:x_code_signature.trusted | file.code_signature.trusted |
-| **file**:x_code_signature.valid | file.code_signature.valid |
+| **file**:x_software_ref.name | file.pe.original_file_name, dll.pe.original_file_name |
+| **file**:x_software_ref.vendor | file.pe.company, dll.pe.company |
+| **file**:x_software_ref.version | file.pe.file_version, dll.pe.file_version |
+| **file**:x_code_signature.exists | file.code_signature.exists, dll.code_signature.exists |
+| **file**:x_code_signature.status | file.code_signature.status, dll.code_signature.status |
+| **file**:x_code_signature.subject_name | file.code_signature.subject_name, dll.code_signature.subject_name |
+| **file**:x_code_signature.trusted | file.code_signature.trusted, dll.code_signature.trusted |
+| **file**:x_code_signature.valid | file.code_signature.valid, dll.code_signature.valid |
 | **directory**:path | file.directory, file.path |
 | **user-account**:user_id | user.name.keyword, user.id.keyword |
 | **user-account**:account_login | user.name.keyword |
@@ -470,7 +399,7 @@
 | **process**:x_unique_id | process.entity_id.keyword, process.parent.entity_id.keyword |
 | **process**:x_uptime | process.uptime |
 | **url**:value | url.original |
-| **domain-name**:value | url.domain, dns.question.name, dns.question.registered_domain, host.hostname.keyword |
+| **domain-name**:value | url.domain, dns.question.name, dns.question.registered_domain, host.hostname, source.domain, destination.domain, server.domain, client.domain, source.registered_domain, destination.registered_domain, server.registered_domain, client.registered_domain, source.top_level_domain, destination.top_level_domain, server.top_level_domain, client.top_level_domain |
 | **windows-registry-key**:key | registry.key |
 | **software**:name | agent.name.keyword, process.pe.original_file_name.keyword, file.pe.original_file_name.keyword, dll.pe.original_file_name.keyword |
 | **software**:vendor | process.pe.company.keyword, file.pe.company.keyword, dll.pe.company.keyword |
@@ -530,18 +459,6 @@
 | **x-ecs-container**:labels | container.labels |
 | **x-ecs-container**:name | container.name |
 | **x-ecs-container**:runtime | container.runtime |
-| **x-ecs-dll**:name | dll.name |
-| **x-ecs-dll**:path | dll.path |
-| **x-ecs-dll**:pe.company | dll.pe.company |
-| **x-ecs-dll**:pe.description | dll.pe.description |
-| **x-ecs-dll**:pe.file_version | dll.pe.file_version |
-| **x-ecs-dll**:pe.original_file_name | dll.pe.original_file_name |
-| **x-ecs-dll**:pe.product | dll.pe.product |
-| **x-ecs-dll**:code_signature.exists | dll.code_signature.exists |
-| **x-ecs-dll**:code_signature.status | dll.code_signature.status |
-| **x-ecs-dll**:code_signature.subject_name | dll.code_signature.subject_name |
-| **x-ecs-dll**:code_signature.trusted | dll.code_signature.trusted |
-| **x-ecs-dll**:code_signature.valid | dll.code_signature.valid |
 | **x-ecs-dns**:answers_class | dns.answers.class |
 | **x-ecs-dns**:answers_data | dns.answers.data |
 | **x-ecs-dns**:answers_name | dns.answers.name |
@@ -568,18 +485,35 @@
 | **x-ecs-group**:domain | group.domain |
 | **x-ecs-group**:id | group.id |
 | **x-ecs-group**:name | group.name |
-| **x-oca-asset**:architecture | host.architecture.keyword |
+| **x-oca-asset**:architecture | host.architecture |
 | **x-oca-asset**:domain | host.domain |
-| **x-oca-asset**:hostname | host.hostname.keyword |
-| **x-oca-asset**:id | host.id.keyword |
-| **x-oca-asset**:ip | host.ip.keyword |
-| **x-oca-asset**:mac | host.mac.keyword |
-| **x-oca-asset**:name | host.name.keyword |
-| **x-oca-asset**:type | host.type |
+| **x-oca-asset**:hostname | host.hostname, observer.hostname |
+| **x-oca-asset**:id | host.id |
+| **x-oca-asset**:ip | host.ip, observer.ip |
+| **x-oca-asset**:mac | host.mac, observer.mac |
+| **x-oca-asset**:name | host.name, observer.name |
+| **x-oca-asset**:type | host.type, observer.type |
+| **x-oca-asset**:serial_number | observer.serial_number |
+| **x-oca-asset**:ingress.zone | observer.ingress.zone |
+| **x-oca-asset**:ingress.interface.alias | observer.ingress.interface.alias |
+| **x-oca-asset**:ingress.interface.id | observer.ingress.interface.id |
+| **x-oca-asset**:ingress.interface.name | observer.ingress.interface.name |
+| **x-oca-asset**:egress.zone | observer.egress.zone |
+| **x-oca-asset**:egress.interface.alias | observer.egress.interface.alias |
+| **x-oca-asset**:egress.interface.id | observer.egress.interface.id |
+| **x-oca-asset**:egress.interface.name | observer.egress.interface.name |
 | **x-oca-asset**:uptime | host.uptime |
-| **x-oca-asset**:os.name | host.os.name.keyword |
-| **x-oca-asset**:os.platform | host.os.platform.keyword |
-| **x-oca-asset**:os.version | host.os.version.keyword |
+| **x-oca-asset**:os_ref.name | host.os.name, observer.os.name, observer.product |
+| **x-oca-asset**:os_ref.vendor | host.os.platform, observer.os.platform, observer.vendor |
+| **x-oca-asset**:os_ref.version | host.os.version, observer.os.version, observer.version |
+| **x-oca-geo**:city_name | server.geo.city_name, client.geo.city_name, source.geo.city_name, destination.geo.city_name |
+| **x-oca-geo**:continent_name | server.geo.continent_name, client.geo.continent_name, source.geo.continent_name, destination.geo.continent_name |
+| **x-oca-geo**:country_iso_code | server.geo.country_iso_code, client.geo.country_iso_code, source.geo.country_iso_code, destination.geo.country_iso_code |
+| **x-oca-geo**:country_name | server.geo.country_name, client.geo.country_name, source.geo.country_name, destination.geo.country_name |
+| **x-oca-geo**:location | server.geo.location, client.geo.location, source.geo.location, destination.geo.location |
+| **x-oca-geo**:name | server.geo.name, client.geo.name, source.geo.name, destination.geo.name |
+| **x-oca-geo**:region_iso_code | server.geo.region_iso_code, client.geo.region_iso_code, source.geo.region_iso_code, destination.geo.region_iso_code |
+| **x-oca-geo**:region_name | server.geo.region_name, client.geo.region_name, source.geo.region_name, destination.geo.region_name |
 | **x-ecs-http**:request_body_bytes | http.request.body.bytes |
 | **x-ecs-http**:request_body_content | http.request.body.content |
 | **x-ecs-http**:request_bytes | http.request.bytes |
@@ -601,26 +535,6 @@
 | **x-ecs-log**:syslog_priority | log.syslog.priority |
 | **x-ecs-log**:severity_syslog_code | log.syslog.severity.code |
 | **x-ecs-log**:severity_syslog_name | log.syslog.severity.name |
-| **x-ecs-observer**:egress.zone | observer.egress.zone |
-| **x-ecs-observer**:egress.interface.alias | observer.egress.interface.alias |
-| **x-ecs-observer**:egress.interface.id | observer.egress.interface.id |
-| **x-ecs-observer**:egress.interface.name | observer.egress.interface.name |
-| **x-ecs-observer**:hostname | observer.hostname |
-| **x-ecs-observer**:ingress.zone | observer.ingress.zone |
-| **x-ecs-observer**:ingress.interface.alias | observer.ingress.interface.alias |
-| **x-ecs-observer**:ingress.interface.id | observer.ingress.interface.id |
-| **x-ecs-observer**:ingress.interface.name | observer.ingress.interface.name |
-| **x-ecs-observer**:ip | observer.ip |
-| **x-ecs-observer**:mac | observer.mac |
-| **x-ecs-observer**:name | observer.name |
-| **x-ecs-observer**:product | observer.product |
-| **x-ecs-observer**:serial_number | observer.serial_number |
-| **x-ecs-observer**:type | observer.type |
-| **x-ecs-observer**:vendor | observer.vendor |
-| **x-ecs-observer**:version | observer.version |
-| **x-ecs-observer**:os.name | observer.os.name |
-| **x-ecs-observer**:os.platform | observer.os.platform |
-| **x-ecs-observer**:os.version | observer.os.version |
 | **x-ecs-organization**:id | organization.id |
 | **x-ecs-organization**:name | organization.name |
 | **x-ecs-pe**:company | dll.pe.company, process.pe.company.keyword, file.pe.company |
@@ -672,62 +586,6 @@
 | **x-ecs-vulnerability**:score_environmental | vulnerability.score.environmental |
 | **x-ecs-vulnerability**:score_temporal | vulnerability.score.temporal |
 | **x-ecs-vulnerability**:score_version | vulnerability.score.version |
-| **x-ecs-source**:address | source.address |
-| **x-ecs-source**:domain | source.domain.keyword |
-| **x-ecs-source**:nat.ip | source.nat.ip |
-| **x-ecs-source**:nat.port | source.nat.port |
-| **x-ecs-source**:registered_domain | source.registered_domain |
-| **x-ecs-source**:top_level_domain | source.top_level_domain |
-| **x-ecs-source**:geo.city_name | source.geo.city_name |
-| **x-ecs-source**:geo.continent_name | source.geo.continent_name |
-| **x-ecs-source**:geo.country_iso_code | source.geo.country_iso_code |
-| **x-ecs-source**:geo.country_name | source.geo.country_name |
-| **x-ecs-source**:geo.location | source.geo.location |
-| **x-ecs-source**:geo.name | source.geo.name |
-| **x-ecs-source**:geo.region_iso_code | source.geo.region_iso_code |
-| **x-ecs-source**:geo.region_name | source.geo.region_name |
-| **x-ecs-destination**:address | destination.address |
-| **x-ecs-destination**:domain | destination.domain.keyword |
-| **x-ecs-destination**:nat.ip | destination.nat.ip |
-| **x-ecs-destination**:nat.port | destination.nat.port |
-| **x-ecs-destination**:registered_domain | destination.registered_domain |
-| **x-ecs-destination**:top_level_domain | destination.top_level_domain |
-| **x-ecs-destination**:geo.city_name | destination.geo.city_name |
-| **x-ecs-destination**:geo.continent_name | destination.geo.continent_name |
-| **x-ecs-destination**:geo.country_iso_code | destination.geo.country_iso_code |
-| **x-ecs-destination**:geo.country_name | destination.geo.country_name |
-| **x-ecs-destination**:geo.location | destination.geo.location |
-| **x-ecs-destination**:geo.name | destination.geo.name |
-| **x-ecs-destination**:geo.region_iso_code | destination.geo.region_iso_code |
-| **x-ecs-destination**:geo.region_name | destination.geo.region_name |
-| **x-ecs-client**:address | client.address |
-| **x-ecs-client**:domain | client.domain |
-| **x-ecs-client**:nat.ip | client.nat.ip |
-| **x-ecs-client**:nat.port | client.nat.port |
-| **x-ecs-client**:registered_domain | client.registered_domain |
-| **x-ecs-client**:top_level_domain | client.top_level_domain |
-| **x-ecs-client**:geo.city_name | client.geo.city_name |
-| **x-ecs-client**:geo.continent_name | client.geo.continent_name |
-| **x-ecs-client**:geo.country_iso_code | client.geo.country_iso_code |
-| **x-ecs-client**:geo.country_name | client.geo.country_name |
-| **x-ecs-client**:geo.location | client.geo.location |
-| **x-ecs-client**:geo.name | client.geo.name |
-| **x-ecs-client**:geo.region_iso_code | client.geo.region_iso_code |
-| **x-ecs-client**:geo.region_name | client.geo.region_name |
-| **x-ecs-server**:address | server.address |
-| **x-ecs-server**:domain | server.domain |
-| **x-ecs-server**:nat.ip | server.nat.ip |
-| **x-ecs-server**:nat.port | server.nat.port |
-| **x-ecs-server**:registered_domain | server.registered_domain |
-| **x-ecs-server**:top_level_domain | server.top_level_domain |
-| **x-ecs-server**:geo.city_name | server.geo.city_name |
-| **x-ecs-server**:geo.continent_name | server.geo.continent_name |
-| **x-ecs-server**:geo.country_iso_code | server.geo.country_iso_code |
-| **x-ecs-server**:geo.country_name | server.geo.country_name |
-| **x-ecs-server**:geo.location | server.geo.location |
-| **x-ecs-server**:geo.name | server.geo.name |
-| **x-ecs-server**:geo.region_iso_code | server.geo.region_iso_code |
-| **x-ecs-server**:geo.region_name | server.geo.region_name |
 | <br> | |
 ### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
@@ -741,10 +599,14 @@
 | directory | path | executable |
 | directory | path | directory |
 | <br> | | |
-| domain-name | value | url |
 | domain-name | value | domain |
-| domain-name | value | name |
+| domain-name | resolves_to_refs | domain |
 | domain-name | value | registered_domain |
+| domain-name | resolves_to_refs | registered_domain |
+| domain-name | value | top_level_domain |
+| domain-name | resolves_to_refs | top_level_domain |
+| domain-name | value | url |
+| domain-name | value | name |
 | <br> | | |
 | email-addr | value | email |
 | email-addr | belongs_to_ref | email |
@@ -759,10 +621,16 @@
 | file | x_owner_ref | name |
 | file | x_owner_ref | id |
 | file | name | name |
+| file | dll_ref | name |
+| file | x_path | path |
+| file | x_software_ref.vendor | company |
+| file | x_software_ref.version | file_version |
+| file | x_software_ref.name | original_file_name |
+| file | x_code_signature.exists | exists |
+| file | x_code_signature.subject_name | subject_name |
 | file | created | created |
 | file | parent_directory_ref | directory |
 | file | size | size |
-| file | x_code_signature.exists | exists |
 | file | x_code_signature_subject_name | subject_name |
 | file | accessed | accessed |
 | file | x_attributes | attributes |
@@ -777,7 +645,6 @@
 | file | x_unix.mode | mode |
 | file | modified | mtime |
 | file | x_owner | owner |
-| file | x_path | path |
 | file | x_target_path | target_path |
 | file | x_type | type |
 | file | x_unix.user_id | uid |
@@ -804,6 +671,15 @@
 | network-traffic | protocols | transport |
 | network-traffic | protocols | type |
 | network-traffic | protocols | protocol |
+| network-traffic | x_vlan.id | id |
+| network-traffic | x_vlan.name | name |
+| network-traffic | x_vlan.inner.id | id |
+| network-traffic | x_vlan.inner.name | name |
+| network-traffic | x_name | name |
+| network-traffic | x_application | application |
+| network-traffic | x_direction | direction |
+| network-traffic | x_forwarded_ip | forwarded_ip |
+| network-traffic | x_community_id | community_id |
 | network-traffic | extensions.dns-ext.answers | answers |
 | network-traffic | extensions.dns-ext.header_flags | header_flags |
 | network-traffic | extensions.dns-ext.dns_id | id |
@@ -817,16 +693,6 @@
 | network-traffic | extensions.dns-ext.resolved_ip_refs | resolved_ip |
 | network-traffic | extensions.dns-ext.response_code | response_code |
 | network-traffic | extensions.dns-ext.type | type |
-| <br> | | |
-| network_traffic | x_vlan.id | id |
-| network_traffic | x_vlan.name | name |
-| network_traffic | x_vlan.inner.id | id |
-| network_traffic | x_vlan.inner.name | name |
-| network_traffic | x_name | name |
-| network_traffic | x_application | application |
-| network_traffic | x_direction | direction |
-| network_traffic | x_forwarded_ip | forwarded_ip |
-| network_traffic | x_community_id | community_id |
 | <br> | | |
 | process | opened_connection_refs | transport |
 | process | opened_connection_refs | type |
@@ -861,6 +727,9 @@
 | software | name | name |
 | software | vendor | type |
 | software | version | version |
+| software | vendor | platform |
+| software | name | product |
+| software | vendor | vendor |
 | <br> | | |
 | url | value | original |
 | <br> | | |
@@ -880,19 +749,6 @@
 | x-ecs | version | version |
 | <br> | | |
 | x-ecs-client | address | address |
-| x-ecs-client | domain | domain |
-| x-ecs-client | nat_ip | ip |
-| x-ecs-client | nat_port | port |
-| x-ecs-client | registered_domain | registered_domain |
-| x-ecs-client | top_level_domain | top_level_domain |
-| x-ecs-client | geo_city_name | city_name |
-| x-ecs-client | geo_continent_name | continent_name |
-| x-ecs-client | geo_country_iso_code | country_iso_code |
-| x-ecs-client | geo_country_name | country_name |
-| x-ecs-client | geo_location | location |
-| x-ecs-client | geo_name | name |
-| x-ecs-client | geo_region_iso_code | region_iso_code |
-| x-ecs-client | geo_region_name | region_name |
 | <br> | | |
 | x-ecs-cloud | account_id | id |
 | x-ecs-cloud | availability_zone | availability_zone |
@@ -910,33 +766,6 @@
 | x-ecs-container | runtime | runtime |
 | <br> | | |
 | x-ecs-destination | address | address |
-| x-ecs-destination | domain | domain |
-| x-ecs-destination | nat_ip | ip |
-| x-ecs-destination | nat_port | port |
-| x-ecs-destination | registered_domain | registered_domain |
-| x-ecs-destination | top_level_domain | top_level_domain |
-| x-ecs-destination | geo_city_name | city_name |
-| x-ecs-destination | geo_continent_name | continent_name |
-| x-ecs-destination | geo_country_iso_code | country_iso_code |
-| x-ecs-destination | geo_country_name | country_name |
-| x-ecs-destination | geo_location | location |
-| x-ecs-destination | geo_name | name |
-| x-ecs-destination | geo_region_iso_code | region_iso_code |
-| x-ecs-destination | geo_region_name | region_name |
-| <br> | | |
-| x-ecs-dll | name | name |
-| x-ecs-dll | path | path |
-| x-ecs-dll | pe_company | company |
-| x-ecs-dll | pe_description | description |
-| x-ecs-dll | pe_file_version | file_version |
-| x-ecs-dll | pe_original_file_name | original_file_name |
-| x-ecs-dll | pe_product | product |
-| x-ecs-dll | code_signature_exists | exists |
-| x-ecs-dll | code_signature_subject_name | subject_name |
-| x-ecs-dll | hashes.SHA-256 | sha256 |
-| x-ecs-dll | hashes.SHA-1 | sha1 |
-| x-ecs-dll | hashes.MD5 | md5 |
-| x-ecs-dll | hashes.SHA-512 | sha512 |
 | <br> | | |
 | x-ecs-error | code | code |
 | x-ecs-error | error_id | id |
@@ -971,38 +800,8 @@
 | x-ecs-log | severity_syslog_code | code |
 | x-ecs-log | severity_syslog_name | name |
 | <br> | | |
-| x-ecs-observer | egress_zone | zone |
-| x-ecs-observer | egress_interface_alias | alias |
-| x-ecs-observer | egress_interface_id | id |
-| x-ecs-observer | egress_interface_name | name |
-| x-ecs-observer | egress_vlan_id | id |
-| x-ecs-observer | egress_vlan_name | name |
-| x-ecs-observer | hostname | hostname |
-| x-ecs-observer | ingress_zone | zone |
-| x-ecs-observer | ingress_interface_alias | alias |
-| x-ecs-observer | ingress_interface_id | id |
-| x-ecs-observer | ingress_interface_name | name |
-| x-ecs-observer | ingress_vlan_id | id |
-| x-ecs-observer | ingress_vlan_name | name |
-| x-ecs-observer | ip | ip |
-| x-ecs-observer | mac | mac |
-| x-ecs-observer | name | name |
-| x-ecs-observer | product | product |
-| x-ecs-observer | serial_number | serial_number |
-| x-ecs-observer | type | type |
-| x-ecs-observer | vendor | vendor |
-| x-ecs-observer | version | version |
-| x-ecs-observer | os_name | name |
-| x-ecs-observer | os_platform | platform |
-| x-ecs-observer | os_version | version |
-| x-ecs-observer | geo_city_name | city_name |
-| x-ecs-observer | geo_continent_name | continent_name |
-| x-ecs-observer | geo_country_iso_code | country_iso_code |
-| x-ecs-observer | geo_country_name | country_name |
-| x-ecs-observer | geo_location | location |
-| x-ecs-observer | geo_name | name |
-| x-ecs-observer | geo_region_iso_code | region_iso_code |
-| x-ecs-observer | geo_region_name | region_name |
+| x-ecs-observer | os_ref | name |
+| x-ecs-observer | geo_ref | city_name |
 | <br> | | |
 | x-ecs-organization | organization_id | id |
 | x-ecs-organization | name | name |
@@ -1031,19 +830,6 @@
 | x-ecs-rule | version | version |
 | <br> | | |
 | x-ecs-server | address | address |
-| x-ecs-server | domain | domain |
-| x-ecs-server | nat_ip | ip |
-| x-ecs-server | nat_port | port |
-| x-ecs-server | registered_domain | registered_domain |
-| x-ecs-server | top_level_domain | top_level_domain |
-| x-ecs-server | geo_city_name | city_name |
-| x-ecs-server | geo_continent_name | continent_name |
-| x-ecs-server | geo_country_iso_code | country_iso_code |
-| x-ecs-server | geo_country_name | country_name |
-| x-ecs-server | geo_location | location |
-| x-ecs-server | geo_name | name |
-| x-ecs-server | geo_region_iso_code | region_iso_code |
-| x-ecs-server | geo_region_name | region_name |
 | <br> | | |
 | x-ecs-service | service_id | id |
 | x-ecs-service | name | name |
@@ -1052,21 +838,6 @@
 | x-ecs-service | version | version |
 | x-ecs-service | ephemeral_id | ephemeral_id |
 | x-ecs-service | node_name | name |
-| <br> | | |
-| x-ecs-source | address | address |
-| x-ecs-source | domain | domain |
-| x-ecs-source | nat_ip | ip |
-| x-ecs-source | nat_port | port |
-| x-ecs-source | registered_domain | registered_domain |
-| x-ecs-source | top_level_domain | top_level_domain |
-| x-ecs-source | geo_city_name | city_name |
-| x-ecs-source | geo_continent_name | continent_name |
-| x-ecs-source | geo_country_iso_code | country_iso_code |
-| x-ecs-source | geo_country_name | country_name |
-| x-ecs-source | geo_location | location |
-| x-ecs-source | geo_name | name |
-| x-ecs-source | geo_region_iso_code | region_iso_code |
-| x-ecs-source | geo_region_name | region_name |
 | <br> | | |
 | x-ecs-threat | framework | framework |
 | x-ecs-threat | tactic_id | id |
@@ -1115,7 +886,7 @@
 | x-ecs-vulnerability | score_version | version |
 | <br> | | |
 | x-oca-asset | architecture | architecture |
-| x-oca-asset | domain | domain |
+| x-oca-asset | domain_ref | domain |
 | x-oca-asset | hostname | hostname |
 | x-oca-asset | host_id | id |
 | x-oca-asset | ip_refs | ip |
@@ -1123,17 +894,8 @@
 | x-oca-asset | name | name |
 | x-oca-asset | host_type | type |
 | x-oca-asset | uptime | uptime |
-| x-oca-asset | geo_city_name | city_name |
-| x-oca-asset | geo_continent_name | continent_name |
-| x-oca-asset | geo_country_iso_code | country_iso_code |
-| x-oca-asset | geo_country_name | country_name |
-| x-oca-asset | geo_location | location |
-| x-oca-asset | geo_name | name |
-| x-oca-asset | geo_region_iso_code | region_iso_code |
-| x-oca-asset | geo_region_name | region_name |
-| x-oca-asset | os_name | name |
-| x-oca-asset | os_platform | platform |
-| x-oca-asset | os_version | version |
+| x-oca-asset | geo_ref | city_name |
+| x-oca-asset | os_ref | name |
 | x-oca-asset | user_domain | domain |
 | x-oca-asset | user_email | email |
 | x-oca-asset | user_full_name | full_name |
@@ -1143,6 +905,23 @@
 | x-oca-asset | user_group_domain | domain |
 | x-oca-asset | user_group_id | id |
 | x-oca-asset | user_group_name | name |
+| x-oca-asset | egress.zone | zone |
+| x-oca-asset | egress.interface.alias | alias |
+| x-oca-asset | egress.interface.id | id |
+| x-oca-asset | egress.interface.name | name |
+| x-oca-asset | egress.vlan.id | id |
+| x-oca-asset | egress.vlan.name | name |
+| x-oca-asset | ingress.zone | zone |
+| x-oca-asset | ingress.interface.alias | alias |
+| x-oca-asset | ingress.interface.id | id |
+| x-oca-asset | ingress.interface.name | name |
+| x-oca-asset | ingress.vlan.id | id |
+| x-oca-asset | ingress.vlan.name | name |
+| x-oca-asset | ip | ip |
+| x-oca-asset | mac | mac |
+| x-oca-asset | observer_software_ref | product |
+| x-oca-asset | serial_number | serial_number |
+| x-oca-asset | type | type |
 | <br> | | |
 | x-oca-event | network_ref | transport |
 | x-oca-event | network_ref | type |
@@ -1190,6 +969,15 @@
 | x-oca-event | host_ref | hostname |
 | x-oca-event | host_ref | name |
 | x-oca-event | registry_ref | registry |
+| <br> | | |
+| x-oca-geo | city_name | city_name |
+| x-oca-geo | continent_name | continent_name |
+| x-oca-geo | country_iso_code | country_iso_code |
+| x-oca-geo | country_name | country_name |
+| x-oca-geo | location | location |
+| x-oca-geo | name | name |
+| x-oca-geo | region_iso_code | region_iso_code |
+| x-oca-geo | region_name | region_name |
 | <br> | | |
 | x509-certificate | issuer | issuer |
 | x509-certificate | hashes.SHA-256 | sha256 |
