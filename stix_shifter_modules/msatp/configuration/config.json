@@ -25,11 +25,29 @@
         "selfSignedCert": {
             "type": "password",
             "optional": true
+        },
+        "options": {
+          "includeAlerts": {
+            "type": "boolean",
+            "default": false
+          },
+          "includeHostOs": {
+            "type": "boolean",
+            "default": false
+          },
+          "includeNetworkInfo": {
+            "type": "boolean",
+            "default": false
+          },
+          "retainOriginal": {
+            "type": "boolean",
+            "default": false
+          }
         }
     },
     "configuration": {
         "auth": {
-            "type" : "fields",
+            "type": "fields",
             "tenant": {
                 "type": "password"
             },

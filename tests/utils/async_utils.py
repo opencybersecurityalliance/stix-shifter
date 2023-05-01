@@ -5,9 +5,6 @@ def get_mock_response(status_code, content=None, return_type='str', response=Non
 def get_aws_mock_response(obj):
     return AWSComposeMockResponse(obj)
 
-def get_adal_mock_response():
-    return AdalMockResponse()
-
 class RequestMockResponse:
     def __init__(self, status_code, content, return_type='str', response=None):
         self.code = status_code
@@ -35,9 +32,3 @@ class AWSComposeMockResponse:
     def get(self, prop, default=None):
         return self.object.get(prop, default)
 
-class AdalMockResponse:
-    @staticmethod
-    def acquire_token_with_client_credentials(resource, client_id, client_secret):
-        context_response = dict()
-        context_response['accessToken'] = 'abc12345'
-        return context_response
