@@ -69,7 +69,7 @@ class APIClient():
 
         data = {
             "_source": {
-                "includes": ["@timestamp", "source.*", "destination.*", "event.*", "client.*", "server.*", "observer.*",
+                "includes": ["@timestamp", "source.*", "destination.*", "event.*", "client.*", "server.*",
                              "host.*", "network.*", "process.*", "user.*", "file.*", "url.*", "registry.*", "dns.*",
                              "tags"]
             },
