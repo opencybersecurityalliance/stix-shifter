@@ -132,22 +132,10 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         assert 'objects' in observed_data
         objects = observed_data['objects']
         
-        x_msazure_sentinel = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'x-msazure-sentinel')
-        x_msazure_sentinel_alert = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'x-msazure-sentinel-alert')
         x_ibm_finding = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
         x_oca_event = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
 
-        assert x_msazure_sentinel is not None, 'Custom object type not found'
-        assert x_msazure_sentinel.keys() == {'type', 'tenant_id', 'subscription_id'}
-        assert x_msazure_sentinel['tenant_id'] == 'b73e5ba8-34d5-495a-9901-06bdb84cf13e'
-        assert x_msazure_sentinel['subscription_id'] == '083de1fb-cd2d-4b7c-895a-2b5af1d091e8'
-
-        assert x_msazure_sentinel_alert is not None, 'Custom object type not found'
-
-        assert x_msazure_sentinel_alert.keys() == {'type', 'recommendedactions', 'status', 'userStates'}
-        assert type(x_msazure_sentinel_alert['recommendedactions']) is list
-        print(x_ibm_finding.keys())
-        assert x_ibm_finding.keys() == {'type', 'description', 'time_observed', 'severity', 'name', 'src_os_ref'}
+        assert x_ibm_finding.keys() == {'type', 'description', 'time_observed', 'x_recommendedactions', 'severity', 'x_status', 'name', 'src_os_ref', 'x_userStates'}
         assert x_ibm_finding['name'] == 'Rare SVCHOST service group executed'
         assert x_oca_event.keys() == {'type', 'code', 'category', 'created', 'action'}
         assert x_oca_event['category'] == 'SuspiciousSVCHOSTRareGroup'
@@ -176,7 +164,7 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         assert file_obj .keys() == {'type', 'name', 'parent_directory_ref'}
         assert file_obj['type'] == 'file'
         assert file_obj['name'] == 'services.exe'
-        assert file_obj['parent_directory_ref'] == '5'
+        assert file_obj['parent_directory_ref'] == '4'
         assert directory_obj['path'] == 'c:\\windows\\system32'
 
     @staticmethod
@@ -204,8 +192,8 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         assert network_obj['src_port'] == 9475
         assert network_obj['dst_port'] == 22
         assert network_obj['protocols'] == ['tcp']
-        assert network_obj['src_ref'] == '7'
-        assert network_obj['dst_ref'] == '5'
+        assert network_obj['src_ref'] == '6'
+        assert network_obj['dst_ref'] == '4'
 
     @staticmethod
     def test_network_json_to_stix_negative():

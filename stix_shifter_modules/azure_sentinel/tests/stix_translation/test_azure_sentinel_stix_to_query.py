@@ -306,7 +306,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
     
     def test_lamda_operator_with_collection(self):
-        stix_pattern = "[x-msazure-sentinel-alert:recommendedActions = 'Enforce' OR x-msazure-sentinel-alert:detectionIds != '111']"
+        stix_pattern = "[x-ibm-finding:x_recommendedActions = 'Enforce' OR x-ibm-finding:x_detectionIds != '111']"
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 

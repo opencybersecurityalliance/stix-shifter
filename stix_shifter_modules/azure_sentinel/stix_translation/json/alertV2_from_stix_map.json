@@ -5,16 +5,12 @@
   },
   "x-ibm-finding": {
     "fields": {
-      "severity": ["severity"]
-    }
-  },
-  "x-microsoft-graph-alert": {
-    "fields": {
-      "assignedTo": ["assignedTo"],
-      "classification": ["classification"],
-      "determination": ["determination"],
-      "lastUpdateDateTime": ["lastUpdateDateTime"],
-      "status": ["status"]
+      "severity": ["severity"],
+      "x_assignedTo": ["assignedTo"],
+      "x_classification": ["classification"],
+      "x_determination": ["determination"],
+      "x_lastUpdateDateTime": ["lastUpdateDateTime"],
+      "x_status": ["status"]
     }
   }
 }
