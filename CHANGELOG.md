@@ -16,6 +16,14 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
+## 5.2.1 (2023-05-01)
+
+### Dependency update:
+
+*  set urllib3 library requirement [#1449](https://github.com/opencybersecurityalliance/stix-shifter/pull/1449)
+
+--------------------------------------
+
 ## 5.2.0 (2023-04-28)
 
 ### Breaking changes:
