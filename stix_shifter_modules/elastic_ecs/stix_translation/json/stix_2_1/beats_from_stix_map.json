@@ -1,13 +1,13 @@
 {
   "ipv4-addr": {
     "fields": {
-      "value": ["source.ip.keyword", "destination.ip.keyword", "client.ip", "server.ip", "host.ip.keyword", "dns.resolved_ip"]
-    }
+      "value": ["source.ip.keyword", "destination.ip.keyword", "client.ip", "server.ip", "host.ip.keyword", "dns.resolved_ip", "source.nat.ip", "destination.nat.ip", "client.nat.ip", "server.nat.ip"]
+       }
   },
   "ipv6-addr": {
     "fields": {
-      "value": ["source.ip.keyword", "destination.ip.keyword", "client.ip", "server.ip", "host.ip.keyword", "dns.resolved_ip"]
-    }
+      "value": ["source.ip.keyword", "destination.ip.keyword", "client.ip", "server.ip", "host.ip.keyword", "dns.resolved_ip", "source.nat.ip", "destination.nat.ip", "client.nat.ip", "server.nat.ip"]
+     }
   },
   "mac-addr": {
     "fields": {
@@ -16,8 +16,8 @@
   },
   "network-traffic": {
     "fields": {
-      "src_port": ["source.port", "client.port"],
-      "dst_port": ["destination.port", "server.port"],
+      "src_port": ["source.port", "client.port", "source.nat.port", "client.nat.port"],
+      "dst_port": ["destination.port", "server.port", "destination.nat.port", "server.nat.port"],
       "protocols[*]": ["network.transport.keyword", "network.type.keyword", "network.protocol.keyword"],
       "src_ref.value": ["source.ip.keyword", "client.ip"],
       "dst_ref.value": ["destination.ip.keyword", "server.ip"],
@@ -48,7 +48,7 @@
   },
   "file": {
     "fields": {
-      "name": ["file.name", "file.path", "process.name.keyword", "process.executable.keyword", "process.parent.name.keyword", "process.parent.executable.keyword"],
+      "name": ["file.name", "dll.name", "file.path", "process.name.keyword", "process.executable.keyword", "process.parent.name.keyword", "process.parent.executable.keyword"],
       "ctime": ["file.created"],
       "size": ["file.size"],
       "atime": ["file.accessed"],
@@ -61,7 +61,7 @@
       "parent_directory_ref.path": ["file.directory"],
       "x_attributes": ["file.attributes"],
       "x_extension": ["file.extension"],
-      "x_path": ["file.path"],
+      "x_path": ["file.path", "dll.path"],
       "x_target_path": ["file.target_path"],
       "x_type": ["file.type"],
       "x_unix.device": ["file.device"],
@@ -72,14 +72,14 @@
       "x_owner_ref.user_id": ["file.uid"],
       "x_owner_ref.account_login": ["file.owner"],
       "x_win_drive_letter": ["file.drive_letter"],
-      "x_software_ref.name": ["file.pe.original_file_name"],
-      "x_software_ref.vendor": ["file.pe.company"],
-      "x_software_ref.version": ["file.pe.file_version"],
-      "x_code_signature.exists": ["file.code_signature.exists"],
-      "x_code_signature.status": ["file.code_signature.status"],
-      "x_code_signature.subject_name": ["file.code_signature.subject_name"],
-      "x_code_signature.trusted": ["file.code_signature.trusted"],
-      "x_code_signature.valid": ["file.code_signature.valid"]
+      "x_software_ref.name": ["file.pe.original_file_name", "dll.pe.original_file_name"],
+      "x_software_ref.vendor": ["file.pe.company", "dll.pe.company"],
+      "x_software_ref.version": ["file.pe.file_version", "dll.pe.file_version"],
+      "x_code_signature.exists": ["file.code_signature.exists", "dll.code_signature.exists"],
+      "x_code_signature.status": ["file.code_signature.status", "dll.code_signature.status"],
+      "x_code_signature.subject_name": ["file.code_signature.subject_name", "dll.code_signature.subject_name"],
+      "x_code_signature.trusted": ["file.code_signature.trusted", "dll.code_signature.trusted"],
+      "x_code_signature.valid": ["file.code_signature.valid", "dll.code_signature.valid"]
     }
   },
   "directory": {
@@ -135,7 +135,7 @@
   },
   "domain-name": {
     "fields": {
-      "value": ["url.domain", "dns.question.name", "dns.question.registered_domain", "host.hostname.keyword"]
+      "value": ["url.domain", "dns.question.name", "dns.question.registered_domain", "host.hostname", "source.domain", "destination.domain","server.domain","client.domain", "source.registered_domain", "destination.registered_domain","server.registered_domain","client.registered_domain", "source.top_level_domain", "destination.top_level_domain", "server.top_level_domain", "client.top_level_domain"]
     }
   },
   "windows-registry-key": {
@@ -225,22 +225,6 @@
       "runtime": ["container.runtime"]
     }
   },
-  "x-ecs-dll": {
-    "fields": {
-      "name": ["dll.name"],
-      "path": ["dll.path"],
-      "pe.company": ["dll.pe.company"],
-      "pe.description": ["dll.pe.description"],
-      "pe.file_version": ["dll.pe.file_version"],
-      "pe.original_file_name": ["dll.pe.original_file_name"],
-      "pe.product": ["dll.pe.product"],
-      "code_signature.exists": ["dll.code_signature.exists"],
-      "code_signature.status": ["dll.code_signature.status"],
-      "code_signature.subject_name": ["dll.code_signature.subject_name"],
-      "code_signature.trusted": ["dll.code_signature.trusted"],
-      "code_signature.valid": ["dll.code_signature.valid"]
-    }
-  },
   "x-ecs-dns": {
     "fields": {
       "answers_class": ["dns.answers.class"],
@@ -285,20 +269,41 @@
   },
   "x-oca-asset": {
     "fields": {
-      "architecture": ["host.architecture.keyword"],
+      "architecture": ["host.architecture"],
       "domain": ["host.domain"],
-      "hostname": ["host.hostname.keyword"],
-      "asset_id": ["host.id.keyword"],
-      "ip": ["host.ip.keyword"],
-      "mac": ["host.mac.keyword"],
-      "name": ["host.name.keyword"],
-      "type": ["host.type"],
+      "hostname": ["host.hostname", "observer.hostname"],
+      "id": ["host.id"],
+      "ip": ["host.ip", "observer.ip"],
+      "mac": ["host.mac", "observer.mac"],
+      "name": ["host.name", "observer.name"],
+      "type": ["host.type", "observer.type"],
+      "serial_number": ["observer.serial_number"],
+      "ingress.zone": ["observer.ingress.zone"],
+      "ingress.interface.alias": ["observer.ingress.interface.alias"],
+      "ingress.interface.id": ["observer.ingress.interface.id"],
+      "ingress.interface.name": ["observer.ingress.interface.name"],
+      "egress.zone": ["observer.egress.zone"],
+      "egress.interface.alias": ["observer.egress.interface.alias"],
+      "egress.interface.id": ["observer.egress.interface.id"],
+      "egress.interface.name": ["observer.egress.interface.name"],
       "uptime": ["host.uptime"],
-      "os.name": ["host.os.name.keyword"],
-      "os.platform": ["host.os.platform.keyword"],
-      "os.version": ["host.os.version.keyword"]
+      "os_ref.name": ["host.os.name", "observer.os.name", "observer.product"],
+      "os_ref.vendor": ["host.os.platform", "observer.os.platform", "observer.vendor"],
+      "os_ref.version": ["host.os.version", "observer.os.version", "observer.version"]
     }
   },
+  "x-oca-geo": {
+    "fields":{
+      "city_name": ["server.geo.city_name", "client.geo.city_name", "source.geo.city_name", "destination.geo.city_name"],
+      "continent_name": ["server.geo.continent_name", "client.geo.continent_name", "source.geo.continent_name", "destination.geo.continent_name"],
+      "country_iso_code": ["server.geo.country_iso_code", "client.geo.country_iso_code", "source.geo.country_iso_code", "destination.geo.country_iso_code"],
+      "country_name": ["server.geo.country_name", "client.geo.country_name", "source.geo.country_name", "destination.geo.country_name"],
+      "location": ["server.geo.location", "client.geo.location", "source.geo.location", "destination.geo.location"],
+      "name": ["server.geo.name", "client.geo.name", "source.geo.name", "destination.geo.name"],
+      "region_iso_code": ["server.geo.region_iso_code", "client.geo.region_iso_code", "source.geo.region_iso_code", "destination.geo.region_iso_code"],
+      "region_name": ["server.geo.region_name", "client.geo.region_name", "source.geo.region_name", "destination.geo.region_name"]  
+    }
+  },  
   "x-ecs-http": {
     "fields": {
       "request_body_bytes": ["http.request.body.bytes"],
@@ -326,30 +331,6 @@
       "syslog_priority": ["log.syslog.priority"],
       "severity_syslog_code": ["log.syslog.severity.code"],
       "severity_syslog_name": ["log.syslog.severity.name"]
-    }
-  },
-  "x-ecs-observer": {
-    "fields": {
-      "egress.zone": ["observer.egress.zone"],
-      "egress.interface.alias": ["observer.egress.interface.alias"],
-      "egress.interface.id": ["observer.egress.interface.id"],
-      "egress.interface.name": ["observer.egress.interface.name"],
-      "hostname": ["observer.hostname"],
-      "ingress.zone": ["observer.ingress.zone"],
-      "ingress.interface.alias": ["observer.ingress.interface.alias"],
-      "ingress.interface.id": ["observer.ingress.interface.id"],
-      "ingress.interface.name": ["observer.ingress.interface.name"],
-      "ip": ["observer.ip"],
-      "mac": ["observer.mac"],
-      "name": ["observer.name"],
-      "product": ["observer.product"],
-      "serial_number": ["observer.serial_number"],
-      "type": ["observer.type"],
-      "vendor": ["observer.vendor"],
-      "version": ["observer.version"],
-      "os.name": ["observer.os.name"],
-      "os.platform": ["observer.os.platform"],
-      "os.version": ["observer.os.version"]
     }
   },
   "x-ecs-organization": {
@@ -441,78 +422,6 @@
       "score_environmental": ["vulnerability.score.environmental"],
       "score_temporal": ["vulnerability.score.temporal"],
       "score_version": ["vulnerability.score.version"]
-    }
-  },
-  "x-ecs-source": {
-    "fields": {
-      "address": ["source.address"],
-      "domain": ["source.domain.keyword"],
-      "nat.ip": ["source.nat.ip"],
-      "nat.port": ["source.nat.port"],
-      "registered_domain": ["source.registered_domain"],
-      "top_level_domain": ["source.top_level_domain"],
-      "geo.city_name": ["source.geo.city_name"],
-      "geo.continent_name": ["source.geo.continent_name"],
-      "geo.country_iso_code": ["source.geo.country_iso_code"],
-      "geo.country_name": ["source.geo.country_name"],
-      "geo.location": ["source.geo.location"],
-      "geo.name": ["source.geo.name"],
-      "geo.region_iso_code": ["source.geo.region_iso_code"],
-      "geo.region_name": ["source.geo.region_name"]
-    }
-  },
-  "x-ecs-destination": {
-    "fields": {
-      "address": ["destination.address"],
-      "domain": ["destination.domain.keyword"],
-      "nat.ip": ["destination.nat.ip"],
-      "nat.port": ["destination.nat.port"],
-      "registered_domain": ["destination.registered_domain"],
-      "top_level_domain": ["destination.top_level_domain"],
-      "geo.city_name": ["destination.geo.city_name"],
-      "geo.continent_name": ["destination.geo.continent_name"],
-      "geo.country_iso_code": ["destination.geo.country_iso_code"],
-      "geo.country_name": ["destination.geo.country_name"],
-      "geo.location": ["destination.geo.location"],
-      "geo.name": ["destination.geo.name"],
-      "geo.region_iso_code": ["destination.geo.region_iso_code"],
-      "geo.region_name": ["destination.geo.region_name"]
-    }
-  },
-  "x-ecs-client": {
-    "fields": {
-      "address": ["client.address"],
-      "domain": ["client.domain"],
-      "nat.ip": ["client.nat.ip"],
-      "nat.port": ["client.nat.port"],
-      "registered_domain": ["client.registered_domain"],
-      "top_level_domain": ["client.top_level_domain"],
-      "geo.city_name": ["client.geo.city_name"],
-      "geo.continent_name": ["client.geo.continent_name"],
-      "geo.country_iso_code": ["client.geo.country_iso_code"],
-      "geo.country_name": ["client.geo.country_name"],
-      "geo.location": ["client.geo.location"],
-      "geo.name": ["client.geo.name"],
-      "geo.region_iso_code": ["client.geo.region_iso_code"],
-      "geo.region_name": ["client.geo.region_name"]
-    }
-  },
-  "x-ecs-server": {
-    "fields": {
-      "address": ["server.address"],
-      "domain": ["server.domain"],
-      "nat.ip": ["server.nat.ip"],
-      "nat.port": ["server.nat.port"],
-      "registered_domain": ["server.registered_domain"],
-      "top_level_domain": ["server.top_level_domain"],
-      "geo.city_name": ["server.geo.city_name"],
-      "geo.continent_name": ["server.geo.continent_name"],
-      "geo.country_iso_code": ["server.geo.country_iso_code"],
-      "geo.country_name": ["server.geo.country_name"],
-      "geo.location": ["server.geo.location"],
-      "geo.name": ["server.geo.name"],
-      "geo.region_iso_code": ["server.geo.region_iso_code"],
-      "geo.region_name": ["server.geo.region_name"]
     }
   }
 }

@@ -76,60 +76,87 @@
       "key": "x-ecs-source.address",
       "object": "source"
     },
-    "domain": {
-      "key": "x-ecs-source.domain",
-      "object": "source"
-    },
-    "nat": {
-      "ip": {
-        "key": "x-ecs-source.nat_ip",
-        "object": "source"
+    "domain": [
+      {
+        "key": "domain-name.value",
+        "object": "source_host_domain"
       },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_domain",
+        "references": ["src_ip", "source_nat"]
+      }
+    ],
+    "nat": {
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "source_nat"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "source_nat"
+        }
+      ],
       "port": {
-        "key": "x-ecs-source.nat_port",
-        "object": "source"
+        "key": "network-traffic.src_port",
+        "object": "source_nat_port"
       }
     },
-    "registered_domain": {
-      "key": "x-ecs-source.registered_domain",
-      "object": "source"
-    },
-    "top_level_domain": {
-      "key": "x-ecs-source.top_level_domain",
-      "object": "source"
-    },
+    "registered_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "source_host_registered_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_registered_domain",
+        "references": ["src_ip", "source_nat"]
+      }
+    ],
+    "top_level_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "source_host_top_level_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_top_level_domain",
+        "references": ["src_ip", "source_nat"]
+      }
+    ],
     "geo": {
       "city_name": {
-        "key": "x-ecs-source.geo_city_name",
-        "object": "source"
+        "key": "x-oca-geo.city_name",
+        "object": "source_geo"
       },
       "continent_name": {
-        "key": "x-ecs-source.geo_continent_name",
-        "object": "source"
+        "key": "x-oca-geo.continent_name",
+        "object": "source_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-source.geo_country_iso_code",
-        "object": "source"
+        "key": "x-oca-geo.country_iso_code",
+        "object": "source_geo"
       },
       "country_name": {
-        "key": "x-ecs-source.geo_country_name",
-        "object": "source"
+        "key": "x-oca-geo.country_name",
+        "object": "source_geo"
       },
       "location": {
-        "key": "x-ecs-source.geo_location",
-        "object": "source"
+        "key": "x-oca-geo.location",
+        "object": "source_geo"
       },
       "name": {
-        "key": "x-ecs-source.geo_name",
-        "object": "source"
+        "key": "x-oca-geo.name",
+        "object": "source_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-source.geo_region_iso_code",
-        "object": "source"
+        "key": "x-oca-geo.region_iso_code",
+        "object": "source_geo"
       },
       "region_name": {
-        "key": "x-ecs-source.geo_region_name",
-        "object": "source"
+        "key": "x-oca-geo.region_name",
+        "object": "source_geo"
       }
     }
   },
@@ -201,60 +228,87 @@
       "key": "x-ecs-client.address",
       "object": "client"
     },
-    "domain": {
-      "key": "x-ecs-client.domain",
-      "object": "client"
-    },
-    "nat": {
-      "ip": {
-        "key": "x-ecs-client.nat_ip",
-        "object": "client"
+    "domain": [
+      {
+        "key": "domain-name.value",
+        "object": "client_host_domain"
       },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_domain",
+        "references": ["src_ip", "client_nat"]
+      }
+    ],
+    "nat": {
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "client_nat"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "client_nat"
+        }
+      ],
       "port": {
-        "key": "x-ecs-client.nat_port",
-        "object": "client"
+        "key": "network-traffic.src_port",
+        "object": "client_nat_port"
       }
     },
-    "registered_domain": {
-      "key": "x-ecs-client.registered_domain",
-      "object": "client"
-    },
-    "top_level_domain": {
-      "key": "x-ecs-client.top_level_domain",
-      "object": "client"
-    },
+    "registered_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "client_host_registered_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_registered_domain",
+        "references": ["src_ip", "client_nat"]
+      }
+    ],
+    "top_level_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "client_host_top_level_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_top_level_domain",
+        "references": ["src_ip", "client_nat"]
+      }
+    ],
     "geo": {
       "city_name": {
-        "key": "x-ecs-client.geo_city_name",
-        "object": "client"
+        "key": "x-oca-geo.city_name",
+        "object": "client_geo"
       },
       "continent_name": {
-        "key": "x-ecs-client.geo_continent_name",
-        "object": "client"
+        "key": "x-oca-geo.continent_name",
+        "object": "client_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-client.geo_country_iso_code",
-        "object": "client"
+        "key": "x-oca-geo.country_iso_code",
+        "object": "client_geo"
       },
       "country_name": {
-        "key": "x-ecs-client.geo_country_name",
-        "object": "client"
+        "key": "x-oca-geo.country_name",
+        "object": "client_geo"
       },
       "location": {
-        "key": "x-ecs-client.geo_location",
-        "object": "client"
+        "key": "x-oca-geo.location",
+        "object": "client_geo"
       },
       "name": {
-        "key": "x-ecs-client.geo_name",
-        "object": "client"
+        "key": "x-oca-geo.name",
+        "object": "client_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-client.geo_region_iso_code",
-        "object": "client"
+        "key": "x-oca-geo.region_iso_code",
+        "object": "client_geo"
       },
       "region_name": {
-        "key": "x-ecs-client.geo_region_name",
-        "object": "client"
+        "key": "x-oca-geo.region_name",
+        "object": "client_geo"
       }
     }
   },
@@ -325,60 +379,87 @@
       "key": "x-ecs-destination.address",
       "object": "destination"
     },
-    "domain": {
-      "key": "x-ecs-destination.domain",
-      "object": "destination"
-    },
-    "nat": {
-      "ip": {
-        "key": "x-ecs-destination.nat_ip",
-        "object": "destination"
+    "domain": [
+      {
+        "key": "domain-name.value",
+        "object": "destination_host_domain"
       },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "destination_host_domain",
+        "references": ["dst_ip", "destination_nat"]
+      }
+  ],
+    "nat": {
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "destination_nat"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "destination_nat"
+        }
+      ],
       "port": {
-        "key": "x-ecs-destination.nat_port",
-        "object": "destination"
+        "key": "network-traffic.dst_port",
+        "object": "destination_nat_port"
       }
     },
-    "registered_domain": {
-      "key": "x-ecs-destination.registered_domain",
-      "object": "destination"
-    },
-    "top_level_domain": {
-      "key": "x-ecs-destination.top_level_domain",
-      "object": "destination"
-    },
+    "registered_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "destination_host_registered_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "destination_host_registered_domain",
+        "references": ["dst_ip", "destination_nat"]
+      }
+    ],
+    "top_level_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "destination_host_top_level_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "destination_host_top_level_domain",
+        "references": ["dst_ip", "destination_nat"]
+      }
+    ],
     "geo": {
       "city_name": {
-        "key": "x-ecs-destination.geo_city_name",
-        "object": "destination"
+        "key": "x-oca-geo.city_name",
+        "object": "destination_geo"
       },
       "continent_name": {
-        "key": "x-ecs-destination.geo_continent_name",
-        "object": "destination"
+        "key": "x-oca-geo.continent_name",
+        "object": "destination_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-destination.geo_country_iso_code",
-        "object": "destination"
+        "key": "x-oca-geo.country_iso_code",
+        "object": "destination_geo"
       },
       "country_name": {
-        "key": "x-ecs-destination.geo_country_name",
-        "object": "destination"
+        "key": "x-oca-geo.country_name",
+        "object": "destination_geo"
       },
       "location": {
-        "key": "x-ecs-destination.geo_location",
-        "object": "destination"
+        "key": "x-oca-geo.location",
+        "object": "destination_geo"
       },
       "name": {
-        "key": "x-ecs-destination.geo_name",
-        "object": "destination"
+        "key": "x-oca-geo.name",
+        "object": "destination_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-destination.geo_region_iso_code",
-        "object": "destination"
+        "key": "x-oca-geo.region_iso_code",
+        "object": "destination_geo"
       },
       "region_name": {
-        "key": "x-ecs-destination.geo_region_name",
-        "object": "destination"
+        "key": "x-oca-geo.region_name",
+        "object": "destination_geo"
       }
     }
   },
@@ -449,60 +530,87 @@
       "key": "x-ecs-server.address",
       "object": "server"
     },
-    "domain": {
-      "key": "x-ecs-server.domain",
-      "object": "server"
-    },
-    "nat": {
-      "ip": {
-        "key": "x-ecs-server.nat_ip",
-        "object": "server"
+    "domain": [
+      {
+        "key": "domain-name.value",
+        "object": "server_host_domain"
       },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "server_host_domain",
+        "references": ["dst_ip", "server_nat"]
+      }
+    ],
+    "nat": {
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "server_nat"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "server_nat"
+        }
+      ],
       "port": {
-        "key": "x-ecs-server.nat_port",
-        "object": "server"
+        "key": "network-traffic.dst_port",
+        "object": "server_nat_port"
       }
     },
-    "registered_domain": {
-      "key": "x-ecs-server.registered_domain",
-      "object": "server"
-    },
-    "top_level_domain": {
-      "key": "x-ecs-server.top_level_domain",
-      "object": "server"
-    },
+    "registered_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "server_host_registered_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "server_host_registered_domain",
+        "references": ["dst_ip", "server_nat"]
+      }
+    ],
+    "top_level_domain": [
+      {
+        "key": "domain-name.value",
+        "object": "server_host_top_level_domain"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "server_host_top_level_domain",
+        "references": ["dst_ip", "server_nat"]
+      }
+    ],
     "geo": {
       "city_name": {
-        "key": "x-ecs-server.geo_city_name",
-        "object": "server"
+        "key": "x-oca-geo.city_name",
+        "object": "server_geo"
       },
       "continent_name": {
-        "key": "x-ecs-server.geo_continent_name",
-        "object": "server"
+        "key": "x-oca-geo.continent_name",
+        "object": "server_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-server.geo_country_iso_code",
-        "object": "server"
+        "key": "x-oca-geo.country_iso_code",
+        "object": "server_geo"
       },
       "country_name": {
-        "key": "x-ecs-server.geo_country_name",
-        "object": "server"
+        "key": "x-oca-geo.country_name",
+        "object": "server_geo"
       },
       "location": {
-        "key": "x-ecs-server.geo_location",
-        "object": "server"
+        "key": "x-oca-geo.location",
+        "object": "server_geo"
       },
       "name": {
-        "key": "x-ecs-server.geo_name",
-        "object": "server"
+        "key": "x-oca-geo.name",
+        "object": "server_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-server.geo_region_iso_code",
-        "object": "server"
+        "key": "x-oca-geo.region_iso_code",
+        "object": "server_geo"
       },
       "region_name": {
-        "key": "x-ecs-server.geo_region_name",
-        "object": "server"
+        "key": "x-oca-geo.region_name",
+        "object": "server_geo"
       }
     }
   },
@@ -1091,62 +1199,61 @@
     }
   },
   "dll":{
-    "name": {
-      "key": "x-ecs-dll.name",
-      "object": "dll"
-    },
+    "name": [
+      {
+        "key": "file.name",
+        "object": "file_dll"
+      },
+      {
+        "key": "file.dll_ref",
+        "object": "file",
+        "references": "file_dll"
+      }
+    ],
     "path": {
-      "key": "x-ecs-dll.path",
-      "object": "dll"
+      "key": "file.x_path",
+      "object": "file_dll"
     },
     "pe": {
       "company": {
-        "key": "x-ecs-dll.pe_company",
-        "object": "dll"
-      },
-      "description": {
-        "key": "x-ecs-dll.pe_description",
-        "object": "dll"
+        "key": "file.x_software_ref.vendor",
+        "object": "file_dll"
       },
       "file_version": {
-        "key": "x-ecs-dll.pe_file_version",
-        "object": "dll"
+        "key": "file.x_software_ref.version",
+        "object": "file_dll"
       },
       "original_file_name": {
-        "key": "x-ecs-dll.pe_original_file_name",
-        "object": "dll"
-      },
-      "product": {
-        "key": "x-ecs-dll.pe_product",
-        "object": "dll"
+        "key": "file.x_software_ref.name",
+        "object": "file_dll"
       }
     },
     "code_signature": {
       "exists": {
-        "key": "x-ecs-dll.code_signature_exists",
-        "object": "dll"
+        "key": "file.x_code_signature.exists",
+        "object": "file_dll"
       },
       "subject_name": {
-        "key": "x-ecs-dll.code_signature_subject_name",
-        "object": "dll"
+        "key": "file.x_code_signature.subject_name",
+        "object": "file_dll"
       }
     },
     "hash": {
       "sha256": {
-        "key": "x-ecs-dll.hashes.SHA-256",
-        "object": "dll"
+        "key": "file.hashes.SHA-256",
+        "object": "file_dll"
       },
       "sha1": {
-        "key": "x-ecs-dll.hashes.SHA-1",
-        "object": "dll"
+        "key": "file.hashes.SHA-1",
+        "object": "file_dll"
       },
       "md5": {
-        "key": "x-ecs-dll.hashes.MD5",
-        "object": "dll"
+        "key": "file.hashes.MD5",
+        "object": "file_dll"
       },
       "sha512": {
-        "key": "x-ecs-dll.hashes.SHA-512",
-        "object": "dll"
+        "key": "file.hashes.SHA-512",
+        "object": "file_dll"
       }
     }
   },
@@ -1451,10 +1558,17 @@
       "key": "x-oca-asset.architecture",
       "object": "host"
     },
-    "domain": {
-      "key": "x-oca-asset.domain",
-      "object": "host"
-    },
+    "domain": [
+      {
+        "key": "domain-name.value",
+        "object": "host_domain"
+      },
+      {
+        "key": "x-oca-asset.domain_ref",
+        "object": "host",
+        "references": "host_domain"
+      }
+    ],
     "hostname": [
       {
         "key": "x-oca-asset.hostname",
@@ -1523,51 +1637,65 @@
       "object": "host"
     },
     "geo": {
-      "city_name": {
-        "key": "x-oca-asset.geo_city_name",
-        "object": "host"
-      },
+      "city_name": [
+        {
+          "key": "x-oca-geo.city_name",
+          "object": "host_geo"
+        },
+        {
+          "key": "x-oca-asset.geo_ref",
+          "object": "host",
+          "references": ["host_geo", "source_geo", "destination_geo", "client_geo", "server_geo"]
+        }
+      ],
       "continent_name": {
-        "key": "x-oca-asset.geo_continent_name",
-        "object": "host"
+        "key": "x-oca-geo.continent_name",
+        "object": "host_geo"
       },
       "country_iso_code": {
-        "key": "x-oca-asset.geo_country_iso_code",
-        "object": "host"
+        "key": "x-oca-geo.country_iso_code",
+        "object": "host_geo"
       },
       "country_name": {
-        "key": "x-oca-asset.geo_country_name",
-        "object": "host"
+        "key": "x-oca-geo.country_name",
+        "object": "host_geo"
       },
       "location": {
-        "key": "x-oca-asset.geo_location",
-        "object": "host"
+        "key": "x-oca-geo.location",
+        "object": "host_geo"
       },
       "name": {
-        "key": "x-oca-asset.geo_name",
-        "object": "host"
+        "key": "x-oca-geo.name",
+        "object": "host_geo"
       },
       "region_iso_code": {
-        "key": "x-oca-asset.geo_region_iso_code",
-        "object": "host"
+        "key": "x-oca-geo.region_iso_code",
+        "object": "host_geo"
       },
       "region_name": {
-        "key": "x-oca-asset.geo_region_name",
-        "object": "host"
+        "key": "x-oca-geo.region_name",
+        "object": "host_geo"
       }
     },
     "os": {
-      "name": {
-        "key": "x-oca-asset.os_name",
-        "object": "host"
-      },
+      "name": [
+        {
+        "key": "software.name",
+        "object": "host_software"
+        },
+        {
+          "key": "x-oca-asset.os_ref",
+          "object": "host",
+          "references": "host_software"
+        }
+      ],
       "platform": {
-        "key": "x-oca-asset.os_platform",
-        "object": "host"
+        "key": "software.vendor",
+        "object": "host_software"
       },
       "version": {
-        "key": "x-oca-asset.os_version",
-        "object": "host"
+        "key": "software.version",
+        "object": "host_software"
       }
     },
     "user": {
@@ -1720,146 +1848,167 @@
   "observer": {
     "egress": {
       "zone": {
-        "key": "x-ecs-observer.egress_zone",
+        "key": "x-oca-asset.egress.zone",
         "object": "observer"
       },
       "interface": {
         "alias": {
-          "key": "x-ecs-observer.egress_interface_alias",
+          "key": "x-oca-asset.egress.interface.alias",
           "object": "observer"
         },
         "id": {
-          "key": "x-ecs-observer.egress_interface_id",
+          "key": "x-oca-asset.egress.interface.id",
           "object": "observer"
         },
         "name": {
-          "key": "x-ecs-observer.egress_interface_name",
+          "key": "x-oca-asset.egress.interface.name",
           "object": "observer"
         }
       },
       "vlan": {
         "id": {
-          "key": "x-ecs-observer.egress_vlan_id",
+          "key": "x-oca-asset.egress.vlan.id",
           "object": "observer"
         },
         "name": {
-          "key": "x-ecs-observer.egress_vlan_name",
+          "key": "x-oca-asset.egress.vlan.name",
           "object": "observer"
         }
       }
     },
     "hostname": {
-      "key": "x-ecs-observer.hostname",
+      "key": "x-oca-asset.hostname",
       "object": "observer"
     },
     "ingress": {
       "zone": {
-        "key": "x-ecs-observer.ingress_zone",
+        "key": "x-oca-asset.ingress.zone",
         "object": "observer"
       },
       "interface": {
         "alias": {
-          "key": "x-ecs-observer.ingress_interface_alias",
+          "key": "x-oca-asset.ingress.interface.alias",
           "object": "observer"
         },
         "id": {
-          "key": "x-ecs-observer.ingress_interface_id",
+          "key": "x-oca-asset.ingress.interface.id",
           "object": "observer"
         },
         "name": {
-          "key": "x-ecs-observer.ingress_interface_name",
+          "key": "x-oca-asset.ingress.interface.name",
           "object": "observer"
         }
       },
       "vlan": {
         "id": {
-          "key": "x-ecs-observer.ingress_vlan_id",
+          "key": "x-oca-asset.ingress.vlan.id",
           "object": "observer"
         },
         "name": {
-          "key": "x-ecs-observer.ingress_vlan_name",
+          "key": "x-oca-asset.ingress.vlan.name",
           "object": "observer"
         }
       }
     },
     "ip": {
-      "key": "x-ecs-observer.ip",
+      "key": "x-oca-asset.ip",
       "object": "observer"
     },
     "mac": {
-      "key": "x-ecs-observer.mac",
+      "key": "x-oca-asset.mac",
       "object": "observer"
     },
     "name": {
-      "key": "x-ecs-observer.name",
+      "key": "x-oca-asset.name",
       "object": "observer"
     },
-    "product": {
-      "key": "x-ecs-observer.product",
-      "object": "observer"
-    },
+    "product": [
+      {
+        "key": "software.name",
+        "object": "observer_sw"
+      },
+      {
+        "key": "x-oca-asset.observer_software_ref",
+        "object": "observer",
+        "references": "observer_sw"
+      }
+    ],
     "serial_number": {
-      "key": "x-ecs-observer.serial_number",
+      "key": "x-oca-asset.serial_number",
       "object": "observer"
     },
     "type": {
-      "key": "x-ecs-observer.type",
+      "key": "x-oca-asset.type",
       "object": "observer"
     },
     "vendor": {
-      "key": "x-ecs-observer.vendor",
-      "object": "observer"
+      "key": "software.vendor",
+      "object": "observer_sw"
     },
     "version": {
-      "key": "x-ecs-observer.version",
-      "object": "observer"
+      "key": "software.version",
+      "object": "observer_sw"
     },
     "os": {
-      "name": {
-        "key": "x-ecs-observer.os_name",
-        "object": "observer"
-      },
+      "name": [
+        {
+        "key": "software.name",
+        "object": "observer_software"
+        },
+        {
+          "key": "x-ecs-observer.os_ref",
+          "object": "observer",
+          "references": "observer_software"
+        }
+      ],
       "platform": {
-        "key": "x-ecs-observer.os_platform",
-        "object": "observer"
+        "key": "software.vendor",
+        "object": "observer_software"
       },
       "version": {
-        "key": "x-ecs-observer.os_version",
-        "object": "observer"
+        "key": "software.version",
+        "object": "observer_software"
       }
     },
     "geo": {
-      "city_name": {
-        "key": "x-ecs-observer.geo_city_name",
-        "object": "observer"
-      },
+      "city_name": [
+        {
+          "key": "x-oca-geo.city_name",
+          "object": "observer_geo"
+        },
+        {
+          "key": "x-ecs-observer.geo_ref",
+          "object": "observer",
+          "references": "observer_geo"
+        }
+      ],
       "continent_name": {
-        "key": "x-ecs-observer.geo_continent_name",
-        "object": "observer"
+        "key": "x-oca-geo.continent_name",
+        "object": "observer_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-observer.geo_country_iso_code",
-        "object": "observer"
+        "key": "x-oca-geo.country_iso_code",
+        "object": "observer_geo"
       },
       "country_name": {
-        "key": "x-ecs-observer.geo_country_name",
-        "object": "observer"
+        "key": "x-oca-geo.country_name",
+        "object": "observer_geo"
       },
       "location": {
-        "key": "x-ecs-observer.geo_location",
-        "object": "observer"
+        "key": "x-oca-geo.location",
+        "object": "observer_geo"
       },
       "name": {
-        "key": "x-ecs-observer.geo_name",
-        "object": "observer"
+        "key": "x-oca-geo.name",
+        "object": "observer_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-observer.geo_region_iso_code",
-        "object": "observer"
+        "key": "x-oca-geo.region_iso_code",
+        "object": "observer_geo"
       },
       "region_name": {
-        "key": "x-ecs-observer.geo_region_name",
-        "object": "observer"
+        "key": "x-oca-geo.region_name",
+        "object": "observer_geo"
       }
     }
   },
