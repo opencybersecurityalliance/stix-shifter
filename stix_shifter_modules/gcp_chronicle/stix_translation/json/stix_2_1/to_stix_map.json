@@ -1173,7 +1173,7 @@
         "questions": {
           "key": "network-traffic.extensions.dns-ext.questions",
           "object": "nt",
-          "group": "true"
+          "group": true
         }
       },
       "dhcp": {

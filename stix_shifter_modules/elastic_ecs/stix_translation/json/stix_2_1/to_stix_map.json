@@ -619,7 +619,7 @@
       {
         "key": "network-traffic.protocols",
         "object": "nt",
-        "group": "True",
+        "group": true,
         "transformer": "ToLowercaseArray"
       },
       {
@@ -639,7 +639,7 @@
       {
         "key": "network-traffic.protocols",
         "object": "nt",
-        "group": "True",
+        "group": true,
         "transformer": "ToLowercaseArray"
       },
       {
@@ -659,7 +659,7 @@
       {
         "key": "network-traffic.protocols",
         "object": "nt",
-        "group": "True",
+        "group": true,
         "transformer": "ToLowercaseArray"
       },
       {

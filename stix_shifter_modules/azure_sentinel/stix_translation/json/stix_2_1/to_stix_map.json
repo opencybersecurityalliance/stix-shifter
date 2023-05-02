@@ -281,7 +281,7 @@
       "protocol": {
         "key": "network-traffic.protocols",
         "object": "nt",
-        "group": "True",
+        "group": true,
         "transformer": "ToLowercaseArray"
       },
       "riskScore": {
