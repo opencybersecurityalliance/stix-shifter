@@ -51,7 +51,7 @@
       "pid": ["processes.processId", "processes.parentProcessId", "registryKeyStates.processId"],
       "created": ["processes.createdDateTime"],
       "parent_ref.pid": ["processes.parentProcessId"],
-      "binary_ref.parent_directory.path": ["processes.path"]
+      "binary_ref.parent_directory_ref.path": ["processes.path"]
     }
   },
   "domain-name": {

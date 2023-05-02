@@ -45,7 +45,7 @@
 | **process**:pid | processes.processId, processes.parentProcessId, registryKeyStates.processId |
 | **process**:created | processes.createdDateTime |
 | **process**:parent_ref.pid | processes.parentProcessId |
-| **process**:binary_ref.parent_directory.path | processes.path |
+| **process**:binary_ref.parent_directory_ref.path | processes.path |
 | **domain-name**:value | hostStates.fqdn, hostStates.netBiosName, networkConnections.destinationDomain, userStates.domainName |
 | **user-account**:user_id | userStates.accountName, processes.accountName, userStates.aadUserId |
 | **user-account**:account_login | userStates.logonId |
