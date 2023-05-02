@@ -27,7 +27,7 @@ class APIClient():
     async def get_search_results(self, query_expression, offset=None, length=None):
         endpoint = self.endpoint_start + '/search'
         data = {'query': query_expression}
-        result = await self.client.call_api(endpoint, 'GET', urldata=data)
+        result = await self.client.call_api(endpoint, 'GET', urldata=data, timeout=self.timeout)
         return result
 
     async def delete_search(self, search_id):
