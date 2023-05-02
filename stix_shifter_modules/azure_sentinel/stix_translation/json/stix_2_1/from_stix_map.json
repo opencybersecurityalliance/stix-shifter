@@ -71,7 +71,7 @@
   },
   "url": {
     "fields": {
-      "name": ["networkConnections.destinationUrl"]
+      "value": ["networkConnections.destinationUrl"]
     }
   },
   "windows-registry-key": {
