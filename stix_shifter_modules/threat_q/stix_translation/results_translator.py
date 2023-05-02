@@ -294,7 +294,7 @@ class ResultsTranslator(BaseResultTranslator):
       # Add ttp
       ttp_report = full_report.get('relationships', {}).get('ttp')
       if ttp_report:
-        threat_attribute_report.extend(self.get_pattern_attributes(ttp, 'Attack TTPs'))
+        threat_attribute_report.extend(self.get_pattern_attributes(ttp_report, 'Attack TTPs'))
 
       # Add tool
       tool_report = full_report.get('relationships', {}).get('tool')
