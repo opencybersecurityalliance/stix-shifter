@@ -56,9 +56,9 @@
 | **software**:version | vendorInformation.providerVersion |
 | **url**:value | networkConnections.destinationUrl |
 | **windows-registry-key**:key | registryKeyStates.key |
-| **windows-registry-key**:windows-registry-value-type.valueData | registryKeyStates.valueData |
-| **windows-registry-key**:windows-registry-value-type.name | registryKeyStates.valueName |
-| **windows-registry-key**:windows-registry-value-type.valueType | registryKeyStates.valueType |
+| **windows-registry-key**:values[*].data | registryKeyStates.valueData |
+| **windows-registry-key**:values[*].name | registryKeyStates.valueName |
+| **windows-registry-key**:values[*].data_type | registryKeyStates.valueType |
 | **x-msazure-sentinel**:tenant_id | azureTenantId |
 | **x-msazure-sentinel**:subscription_id | azureSubscriptionId |
 | **x-msazure-sentinel-alert**:activityGroupName | activityGroupName |
