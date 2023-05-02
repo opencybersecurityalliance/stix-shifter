@@ -208,7 +208,7 @@ class DataSourceObjToStixObj:
         """
         Add observable object property and its STIX valid value to the cached `objects` dictionary
         """
-        named_group =  isinstance(group, str)
+        named_group =  isinstance(group, str) and group.lower() != "true"
         parent_key_ind_str = str(parent_key_ind)
         if not parent_key_ind_str in objects:
             if cybox:
@@ -229,8 +229,8 @@ class DataSourceObjToStixObj:
         else:
             if not property_key in objects[parent_key_ind_str]:
                 objects[parent_key_ind_str][property_key] = value
-            # # Add grouped value in existing list element
-            if isinstance(value, dict) and named_group and isinstance(objects[parent_key_ind_str][property_key], list):
+            # Add grouped value in existing list element
+            elif isinstance(value, dict) and named_group and isinstance(objects[parent_key_ind_str][property_key], list):
                 objects[parent_key_ind_str][property_key][0] = dict_merge(objects[parent_key_ind_str][property_key][0], value)
             elif isinstance(value, dict):
                 objects[parent_key_ind_str][property_key] = dict_merge(objects[parent_key_ind_str][property_key], value)
