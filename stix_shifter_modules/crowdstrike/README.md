@@ -1,4 +1,8 @@
-# CrowdStrike
+# CrowdStrike Falcon
+
+## Supported STIX Mappings
+
+See the [table of mappings](crowdstrike_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 ## Incident and detection monitoring APIs
 
