@@ -1913,11 +1913,15 @@
     "ip": [
       {
         "key": "ipv4-addr.value",
-        "object": "observer_ip"
+        "object": "observer_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "observer_ipv6"
+        "object": "observer_ipv6",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
       },
       {
         "key": "x-oca-asset.ip_refs",
