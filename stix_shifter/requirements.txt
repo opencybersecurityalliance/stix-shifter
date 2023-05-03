@@ -1,7 +1,7 @@
 adal==1.2.7
 antlr4-python3-runtime==4.8
-boto3==1.26.84
-flask==2.2.3
+boto3==1.26.125
+flask==2.3.2
 flatten_json==0.1.13
 json-fix==0.5.2
 jsonmerge==1.9.0
