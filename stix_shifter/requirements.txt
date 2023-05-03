@@ -13,3 +13,4 @@ stix2-validator==3.0.2
 xmltodict==0.13.0
 colorlog==6.7.0
 stix2-matcher==3.0.0
+urllib3==1.26.15
