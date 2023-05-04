@@ -61,7 +61,7 @@
       "object": "finding"
     },
     "confidence": {
-      "key": "x-ibm-finding.x_confidence",
+      "key": "x-ibm-finding.confidence",
       "object": "finding"
     },
     "createdDateTime": [
@@ -166,8 +166,9 @@
       },
       "os": [
         {
-          "key": "x-ibm-finding.src_os_ref.name",
-          "object": "finding"
+          "key": "x-ibm-finding.src_os_ref",
+          "object": "finding",
+          "references": "application"
         },
         {
           "key": "software.name",
@@ -186,8 +187,8 @@
       }
     },
     "id": {
-      "key": "x-oca-event.code",
-      "object": "event"
+      "key": "x-ibm-finding.alert_id",
+      "object": "finding"
     },
     "incidentIds": {
       "key": "x-ibm-finding.x_incidentIds",
@@ -226,10 +227,17 @@
       }
     },
     "networkConnections": {
-      "applicationName": {
-        "key": "software.name",
-        "object": "application"
-      },
+      "applicationName": [
+        {
+          "key": "software.name",
+          "object": "application"
+        },
+        {
+          "key": "x-ibm-finding.src_application_ref",
+          "object": "finding",
+          "references": "application"
+        }
+      ],
       "destinationAddress": [
         {
           "key": "ipv4-addr.value",
@@ -247,6 +255,7 @@
       },
       "destinationDomain": {
         "key": "domain-name.value",
+        "object": "nt_domain_name",
         "transformer": "ToDomainName"
       },
       "destinationPort": {
@@ -259,32 +268,48 @@
         "object": "url"
       },
       "direction": {
-        "key": "x-ibm-finding.x_networkConnections.direction",
-        "object": "finding"
+        "key": "network-traffic.x_direction",
+        "object": "nt"
       },
       "domainRegisteredDateTime": {
-        "key": "x-ibm-finding.x_networkConnections.domainRegisteredDateTime",
-        "object": "finding"
+        "key": "network-traffic.x_domainRegisteredDateTime",
+        "object": "nt"
       },
       "localDnsName": {
-        "key": "x-ibm-finding.x_networkConnections.localDnsName",
-        "object": "finding"
+        "key": "network-traffic.x_localDnsName",
+        "object": "nt"
       },
-      "natDestinationAddress": {
-        "key": "x-ibm-finding.dst_ip_ref.value",
-        "object": "finding"
-      },
+      "natDestinationAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "nat_dst_ip"
+        },
+        {
+          "key": "network-traffic.x_nat_destination_address",
+          "object": "nt",
+          "references": "nat_dst_ip"
+        }
+      ],
       "natDestinationPort": {
-        "key": "x-ibm-finding.x_networkConnections.natDestinationPort",
-        "object": "finding"
+        "key": "network-traffic.x_nat_destination_port",
+        "object": "nt",
+        "transformer": "ToInteger"
       },
-      "natSourceAddress": {
-        "key": "x-ibm-finding.src_ip_ref.value",
-        "object": "finding"
-      },
+      "natSourceAddress": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "nat_src_ip"
+        },
+        {
+          "key": "network-traffic.x_nat_src_ref",
+          "object": "nt",
+          "references": "nat_src_ip"
+        }
+      ],
       "natSourcePort": {
-        "key": "x-ibm-finding.x_networkConnections.natSourcePort",
-        "object": "finding"
+        "key": "network-traffic.x_nat_source_port",
+        "object": "nt",
+        "transformer": "ToInteger"
       },
       "protocol": {
         "key": "network-traffic.protocols",
@@ -293,8 +318,8 @@
         "transformer": "ToLowercaseArray"
       },
       "riskScore": {
-        "key": "x-ibm-finding.x_networkConnections.riskScore",
-        "object": "finding"
+        "key": "network-traffic.x_riskScore",
+        "object": "nt"
       },
       "sourceAddress": [
         {
@@ -317,19 +342,13 @@
         "transformer": "ToInteger"
       },
       "status": {
-        "key": "x-ibm-finding.x_networkConnections.status",
-        "object": "finding"
+        "key": "network-traffic.x_status",
+        "object": "nt"
       },
-      "urlParameters": [
-        {
-        "key": "x-oca-event.domain_ref.value",
-        "object": "event"
-        },
-        {
-        "key": "x-oca-event.url_ref.value",
-        "object": "event"
-        }
-      ]
+      "urlParameters": {
+        "key": "network-traffic.x_url_parameters",
+        "object": "nt"
+      }
     },
     "processes": {
       "accountName": [
@@ -390,12 +409,12 @@
         }
       },
       "integrityLevel": {
-        "key": "x-ibm-finding.x_processes.integrityLevel",
-        "object": "finding"
+        "key": "processes.x_integrityLevel",
+        "object": "process"
       },
       "isElevated": {
-        "key": "x-ibm-finding.x_processes.isElevated",
-        "object": "finding"
+        "key": "processes.x_isElevated",
+        "object": "process"
       },
       "name": {
         "key": "process.name",
@@ -531,23 +550,24 @@
     },
     "userStates": {
       "aadUserId": {
-        "key": "x-ibm-finding.src_application_user_ref.user_id",
-        "object": "finding"
+        "key": "user-account.x_aad_user_id",
+        "object": "user"
       },
       "accountName": {
         "key": "user-account.user_id",
         "object": "user"
       },
       "domainName": {
-        "key": "domain-name.value"
+        "key": "domain-name.value",
+        "object": "domain-name"
       },
       "emailRole": {
-        "key": "x-ibm-finding.x_userStates.emailrole",
-        "object": "finding"
+        "key": "user-account.x_email_role",
+        "object": "user"
       },
       "isVpn": {
-        "key": "x-ibm-finding.x_userStates.isvpn",
-        "object": "finding"
+        "key": "user-account.x_isvpn",
+        "object": "user"
       },
       "logonDateTime": {
         "key": "user-account.account_last_login",
@@ -561,28 +581,28 @@
         "key": "ipv4-addr.value"
       },
       "logonLocation": {
-        "key": "x-ibm-finding.x_userStates.logonLocation",
-        "object": "finding"
+        "key": "user-account.x_logon_location",
+        "object": "user"
       },
       "logonType": {
-        "key": "x-ibm-finding.src_application_user_ref.type",
-        "object": "finding"
+        "key": "user-account.x_logon_type",
+        "object": "user"
       },
       "onPremisesSecurityIdentifier": {
-        "key": "x-ibm-finding.x_userStates.onpremisessecurityidentifier",
-        "object": "finding"
+        "key": "user-account.x_on_premises_security_identifier",
+        "object": "user"
       },
       "riskScore": {
-        "key": "x-ibm-finding.x_userStates.riskScore",
-        "object": "finding"
+        "key": "user-account.x_riskScore",
+        "object": "user"
       },
       "userAccountType": {
-        "key": "x-ibm-finding.x_userStates.useraccounttype",
-        "object": "finding"
+        "key": "user-account.x_user_account_type",
+        "object": "user"
       },
       "userPrincipalName": {
-        "key": "x-ibm-finding.x_userStates.userPrincipalName",
-        "object": "finding"
+        "key": "user-account.x_user_principal_name",
+        "object": "user"
       }
     },
     "vendorInformation": {
@@ -1276,11 +1296,11 @@
                 "object": "user-account"
             },
             "userSid": {
-                "key": "user-account.x_userSid",
+                "key": "user-account.x_user_sid",
                 "object": "user-account"
             },
             "azureAdUserId": {
-                "key": "user-account.x_azureAdUserId",
+                "key": "user-account.x_azure_ad_userid",
                 "object": "user-account"
             },
             "userPrincipalName": {

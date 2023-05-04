@@ -135,11 +135,11 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         x_ibm_finding = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
         x_oca_event = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
 
-        assert x_ibm_finding.keys() == {'type', 'description', 'time_observed', 'x_recommendedactions', 'severity', 'x_status', 'name', 'src_os_ref', 'x_userStates'}
+        assert x_ibm_finding.keys() == {'type', 'alert_id', 'description', 'time_observed', 'x_recommendedactions', 'severity', 'x_status', 'name'}
         assert x_ibm_finding['name'] == 'Rare SVCHOST service group executed'
-        assert x_oca_event.keys() == {'type', 'code', 'category', 'created', 'action'}
+        assert x_oca_event.keys() == {'type', 'category', 'created', 'action'}
         assert x_oca_event['category'] == 'SuspiciousSVCHOSTRareGroup'
-        # assert False
+
 
     @staticmethod
     def test_file_process_json_to_stix():

@@ -16,11 +16,18 @@
   },
   "network-traffic": {
     "fields": {
-      "src_port": ["networkConnections.sourcePort", "networkConnections.natSourcePort"],
+      "src_port": ["networkConnections.sourcePort", "networkConnections.natSourcePort", "networkConnections.natDestinationPort"],
       "dst_port": ["networkConnections.destinationPort", "networkConnections.natDestinationPort"],
       "protocols[*]": ["networkConnections.protocol"],
       "src_ref.value": ["networkConnections.sourceAddress"],
-      "dst_ref.value": ["networkConnections.destinationAddress"]
+      "dst_ref.value": ["networkConnections.destinationAddress"],
+      "x_applicationName": ["networkConnections.applicationName"],
+      "x_direction": ["networkConnections.direction"],
+      "x_domainRegisteredDateTime": ["networkConnections.domainRegisteredDateTime"],
+      "x_localDnsName": ["networkConnections.localDnsName"],
+      "x_riskScore": ["networkConnections.riskScore"],
+      "x_status": ["networkConnections.status"],
+      "x_urlParameters": ["networkConnections.urlParameters"]
     }
   },
   "directory": {
@@ -51,7 +58,9 @@
       "pid": ["processes.processId", "processes.parentProcessId", "registryKeyStates.processId"],
       "created": ["processes.createdDateTime"],
       "parent_ref.pid": ["processes.parentProcessId"],
-      "binary_ref.path": ["processes.path"]
+      "binary_ref.path": ["processes.path"],
+      "x_integrityLevel": ["processes.integrityLevel"],
+      "x_isElevated": ["processes.isElevated"]
     }
   },
   "domain-name": {
@@ -64,12 +73,21 @@
       "user_id": ["userStates.accountName", "processes.accountName", "userStates.aadUserId"],
       "account_login": ["userStates.logonId"],
       "account_type": ["userStates.userAccountType"],
-      "account_last_login": ["userStates.logonDateTime"]
+      "account_last_login": ["userStates.logonDateTime"],
+      "x_aadUserId": ["userStates.aadUserId"],
+      "x_emailRole": ["userStates.emailRole"],
+      "x_isVpn": ["userStates.isVpn"],
+      "x_logonLocation": ["userStates.logonLocation"],
+      "x_logonType": ["userStates.logonType"],
+      "x_onPremisesSecurityIdentifier": ["userStates.onPremisesSecurityIdentifier"],
+      "x_riskScore": ["userStates.riskScore"],
+      "x_userAccountType": ["userStates.userAccountType"],
+      "x_userPrincipalName": ["userStates.userPrincipalName"]
     }
   },
   "software": {
     "fields": {
-      "name": ["vendorInformation.provider"],
+      "name": ["vendorInformation.provider", "networkConnections.applicationName"],
       "vendor": ["vendorInformation.vendor"],
       "version": ["vendorInformation.providerVersion"]
     }
@@ -96,6 +114,7 @@
   "x-ibm-finding": {
     "fields": {
       "name": ["title"],
+      "alert_id": ["id"],
       "description": ["description"],
       "severity": ["severity"],
       "start": ["createdDateTime"],
@@ -107,16 +126,16 @@
       "dst_application_ref.name": ["cloudAppStates.destinationServiceName"],
       "src_geolocation": ["networkConnections.sourceLocation"],
       "dst_geolocation": ["networkConnections.destinationLocation"],
+      "src_application_ref": ["networkConnections.applicationName"],
       "src_application_user_ref.user_id":["userStates.aadUserId"],
       "src_application_user_ref.type":["userStates.logonType"],
       "time_observed": ["lastModifiedDateTime"],
       "x_activityGroupName": ["activityGroupName"],
       "x_assignedTo": ["assignedTo"],
       "x_comments": ["comments"],
-      "x_confidence": ["confidence"],
+      "confidence": ["confidence"],
       "x_detectionIds": ["detectionIds"],
       "x_feedback": ["feedback"],
-      "x_id": ["id"],
       "x_incidentIds": ["incidentIds"],
       "x_recommendedActions": ["recommendedActions"],
       "x_sourceMaterials": ["sourceMaterials"],
@@ -137,31 +156,11 @@
       "x_malwareStates.name": ["malwareStates.family"],
       "x_malwareStates.severity": ["malwareStates.family"],
       "x_malwareStates.wasRunning": ["malwareStates.family"],
-      "x_networkConnections.applicationName": ["networkConnections.applicationName"],
-      "x_networkConnections.direction": ["networkConnections.direction"],
-      "x_networkConnections.domainRegisteredDateTime": ["networkConnections.domainRegisteredDateTime"],
-      "x_networkConnections.localDnsName": ["networkConnections.localDnsName"],
-      "x_networkConnections.natDestinationPort": ["networkConnections.natDestinationPort"],
-      "x_networkConnections.natSourcePort": ["networkConnections.natSourcePort"],
-      "x_networkConnections.riskScore": ["networkConnections.riskScore"],
-      "x_networkConnections.status": ["networkConnections.status"],
-      "x_processes.integrityLevel": ["processes.integrityLevel"],
-      "x_processes.isElevated": ["processes.isElevated"],
       "x_securityResources.resource": ["securityResources.resource"],
       "x_securityResources.resourceType": ["securityResources.resourceType"],
       "x_triggers.name": ["triggers.name"],
       "x_triggers.type": ["triggers.type"],
       "x_triggers.value": ["triggers.value"],
-      "x_userStates.logonIp": ["userStates.logonIp"],
-      "x_userStates.aadUserId": ["userStates.aadUserId"],
-      "x_userStates.emailRole": ["userStates.emailRole"],
-      "x_userStates.isVpn": ["userStates.isVpn"],
-      "x_userStates.logonLocation": ["userStates.logonLocation"],
-      "x_userStates.logonType": ["userStates.logonType"],
-      "x_userStates.onPremisesSecurityIdentifier": ["userStates.onPremisesSecurityIdentifier"],
-      "x_userStates.riskScore": ["userStates.riskScore"],
-      "x_userStates.userAccountType": ["userStates.userAccountType"],
-      "x_userStates.userPrincipalName": ["userStates.userPrincipalName"],
       "x_vulnerabilityStates.cve": ["vulnerabilityStates.cve"],
       "x_vulnerabilityStates.severity": ["vulnerabilityStates.severity"],
       "x_vulnerabilityStates.wasRunning": ["vulnerabilityStates.wasRunning"]
@@ -170,12 +169,9 @@
   "x-oca-event": {
     "fields": {
       "action": ["title"],
-      "code": ["id"],
       "category": ["category"],
       "created": ["createdDateTime"],
-      "provider": ["vendorInformation.subProvider"],
-      "domain_ref.value": ["networkConnections.urlParameters"],
-      "url_ref.value": ["networkConnections.urlParameters"]
+      "provider": ["vendorInformation.subProvider"]
     }
   }
 }

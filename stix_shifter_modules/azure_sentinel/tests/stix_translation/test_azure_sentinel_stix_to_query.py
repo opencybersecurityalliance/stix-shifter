@@ -202,7 +202,7 @@ class TestQueryTranslator(unittest.TestCase):
 
         queries = [
             {
-                "alert": "((processes/any(query1:tolower(query1/name) ne 'powershell.exe') and processes/any(query1:tolower(query1/parentProcessName) ne 'powershell.exe')) or (networkConnections/any(query2:tolower(query2/sourcePort) eq '454') or networkConnections/any(query2:tolower(query2/natSourcePort) eq '454'))) and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"
+                "alert": "((processes/any(query1:tolower(query1/name) ne 'powershell.exe') and processes/any(query1:tolower(query1/parentProcessName) ne 'powershell.exe')) or (networkConnections/any(query2:tolower(query2/sourcePort) eq '454') or networkConnections/any(query2:tolower(query2/natSourcePort) eq '454') or networkConnections/any(query2:tolower(query2/natDestinationPort) eq '454'))) and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"
             }
         ]
 
