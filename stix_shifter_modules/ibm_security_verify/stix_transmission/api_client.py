@@ -47,7 +47,7 @@ class APIClient:
                 f'&grant_type=client_credentials'
                 f'&scope=openid'
             )
-            response = await self.client.call_api(self.token_endpoint, 'POST', headers=headers, data=data)
+            response = await self.client.call_api(self.token_endpoint, 'POST', headers=headers, data=data, timeout=self.timeout)
             response_txt = response.read().decode('utf-8')
 
             try: 
@@ -86,7 +86,7 @@ class APIClient:
         self.headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {0}'.format(token)}
         if query_expr is None:
             data=None
-        return await self.client.call_api(self.endpoint_start,'GET',self.headers,urldata= query_expr)
+        return await self.client.call_api(self.endpoint_start,'GET',self.headers,urldata= query_expr, timeout=self.timeout)
 
     def response_handler(self, data=None, query_expr=None):
         if data is None:
