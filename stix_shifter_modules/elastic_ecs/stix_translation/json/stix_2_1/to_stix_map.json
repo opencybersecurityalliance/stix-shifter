@@ -1910,14 +1910,46 @@
         }
       }
     },
-    "ip": {
-      "key": "x-oca-asset.ip",
-      "object": "observer"
-    },
-    "mac": {
-      "key": "x-oca-asset.mac",
-      "object": "observer"
-    },
+    "ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "observer_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "observer_ipv6",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "observer",
+        "references": ["observer_ip", "observer_ipv6"]
+      }
+  ],
+    "mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "observer_mac"
+      },
+      {
+        "key": "ipv4-addr.resolves_to_refs",
+        "object": "observer_ip",
+        "references": ["observer_mac"]
+      },
+      {
+        "key": "ipv6-addr.resolves_to_refs",
+        "object": "observer_ipv6",
+        "references": ["observer_mac"]
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "observer",
+        "references": ["observer_mac"]
+      }
+  ],
     "name": {
       "key": "x-oca-asset.name",
       "object": "observer"
@@ -1928,9 +1960,9 @@
         "object": "observer_sw"
       },
       {
-        "key": "x-oca-asset.observer_software_ref",
+        "key": "x-oca-asset.os_ref",
         "object": "observer",
-        "references": "observer_sw"
+        "references": ["observer_software", "observer_sw"]
       }
     ],
     "serial_number": {
@@ -1938,13 +1970,20 @@
       "object": "observer"
     },
     "type": {
-      "key": "x-oca-asset.type",
+      "key": "x-oca-asset.host_type",
       "object": "observer"
     },
-    "vendor": {
-      "key": "software.vendor",
-      "object": "observer_sw"
-    },
+    "vendor": [
+      {
+        "key": "software.vendor",
+        "object": "observer_sw"
+      },
+      {
+        "key": "x-oca-asset.os_ref",
+        "object": "observer",
+        "references": "observer_sw"
+      }
+    ],
     "version": {
       "key": "software.version",
       "object": "observer_sw"
@@ -1956,7 +1995,7 @@
         "object": "observer_software"
         },
         {
-          "key": "x-ecs-observer.os_ref",
+          "key": "x-oca-asset.os_ref",
           "object": "observer",
           "references": "observer_software"
         }
@@ -1977,7 +2016,7 @@
           "object": "observer_geo"
         },
         {
-          "key": "x-ecs-observer.geo_ref",
+          "key": "x-oca-asset.geo_ref",
           "object": "observer",
           "references": "observer_geo"
         }
