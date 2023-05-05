@@ -1,14 +1,13 @@
+from aiohttp import BasicAuth
 import json
 import time
-from aiohttp import BasicAuth
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix2matcher.matcher import Pattern
 from stix2matcher.matcher import MatchListener
 from stix2validator import validate_instance, ValidationOptions
-
-from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
-from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
-from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 
 ERROR_TYPE_TIMEOUT = 'timeout'
 ERROR_TYPE_BAD_CONNECTION = 'bad_connection'
@@ -35,9 +34,9 @@ class Connector(BaseJsonSyncConnector):
 
     # We re-implement this method so we can fetch all the "bindings", as their method only
     # returns the first for some reason
-    def match(self, pattern, observed_data_sdos, verbose=False):
-        compiled_pattern = Pattern(pattern)
-        matcher = MatchListener(observed_data_sdos, verbose)
+    def match(self, pattern, observed_data_sdos, verbose=False, stix_version='2.0'):
+        compiled_pattern = Pattern(pattern, stix_version=stix_version)
+        matcher = MatchListener(observed_data_sdos, verbose, stix_version=stix_version)
         compiled_pattern.walk(matcher)
 
         found_bindings = matcher.matched()
@@ -125,7 +124,7 @@ class Connector(BaseJsonSyncConnector):
 
                 # Pattern match
                 try:
-                    results = self.match(search_id, observations, False)
+                    results = self.match(search_id, observations, False, stix_version)
 
                     if len(results) != 0:
                         return_obj['success'] = True
