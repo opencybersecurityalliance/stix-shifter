@@ -21,6 +21,16 @@
         "selfSignedCert": {
             "type": "password",
             "optional": true
+        },
+        "options": {
+            "alert": {
+                "type": "boolean",
+                "default": true
+            },
+            "alertV2": {
+                "type": "boolean",
+                "default": false
+            }
         }
     },
     "configuration": {
