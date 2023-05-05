@@ -8,6 +8,7 @@ class APIClient():
     def __init__(self, connection, configuration):
         # Uncomment when implementing data source API client.
         auth = configuration.get('auth')
+        self.timeout = connection['options'].get('timeout')
         headers = dict()
         if auth and 'principal' in auth and 'secret' in auth:
             token_decoded = auth['principal'] + ':' + auth['secret']
@@ -21,7 +22,7 @@ class APIClient():
     async def ping_data_source(self):
         # Pings the data source
         endpoint = ENDPOINT_ALL + "?format=json&sinceSeconds=3600"
-        pingresult = await self.client.call_api(endpoint=endpoint, method='GET')
+        pingresult = await self.client.call_api(endpoint=endpoint, method='GET', timeout=self.timeout)
         return pingresult
 
     async def create_search(self, query_expression):
@@ -36,7 +37,7 @@ class APIClient():
         # Return the search results. Results must be in JSON format before being translated into STIX
         #resultdata = self.client.call_api(endpoint=ENDPOINT_ALL+search_id, method='GET')#working
         endpoint = ENDPOINT_ALL+"?format=json"
-        resultdata = await self.client.call_api(endpoint=endpoint, method='GET', urldata=search_id)
+        resultdata = await self.client.call_api(endpoint=endpoint, method='GET', urldata=search_id, timeout=self.timeout)
         # Check the current status of the search
         return resultdata
 
