@@ -46,7 +46,7 @@
       "pid": ["processes.processId", "processes.parentProcessId", "registryKeyStates.processId"],
       "created_time": ["processes.createdDateTime"],
       "parent_ref.pid": ["processes.parentProcessId"],
-      "image_ref.path": ["processes.path"]
+      "image_ref.parent_directory_ref.path": ["processes.path"]
     }
   },
   "domain-name": {
@@ -77,9 +77,9 @@
   "windows-registry-key": {
     "fields": {
       "key": ["registryKeyStates.key"],
-      "extensions.windows-registry-value-type.valueData": [ "registryKeyStates.valueData" ],
-      "extensions.windows-registry-value-type.name": [ "registryKeyStates.valueName" ],
-      "extensions.windows-registry-value-type.valueType": [ "registryKeyStates.valueType" ]
+      "values[*].data": ["registryKeyStates.valueData"],
+      "values[*].name": ["registryKeyStates.valueName"],
+      "values[*].data_type": ["registryKeyStates.valueType"]
     }
   },
   "x-msazure-sentinel": {
