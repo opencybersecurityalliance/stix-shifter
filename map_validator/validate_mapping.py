@@ -62,6 +62,10 @@ KNOWN_KEYS = {
 }
 
 
+def ip_types(*args):
+    return all(arg in ('ipv4-addr', 'ipv6-addr') for arg in args)
+
+
 def main():
     parser = argparse.ArgumentParser('Generate a bundle of STIX observed-data')
     parser.add_argument('-l', '--level', metavar='LEVEL', default='warning', type=str)
@@ -70,7 +74,6 @@ def main():
 
     logger.setLevel(args.level.upper())
 
-    #with open(sys.argv[1], 'r') as fp:
     with open(args.filename, 'r') as fp:
         to_stix_map = json.load(fp)
 
@@ -96,7 +99,14 @@ def main():
             continue  # This is "fatal" for this mapping
         otype, _, rest = key.partition('.')
         if otype and obj:
-            objects[obj] = otype
+            prev_otype = objects.get(obj)
+            if (prev_otype and
+                prev_otype != otype and
+                not ip_types(prev_otype, otype) and
+                '_ref.' not in rest):
+                log_error(mapping, f'conflicting types for {objects[obj]} {obj}')
+            else:
+                objects[obj] = otype
         if not otype and cybox != False:
             log_error(mapping, 'No type in "key" and "cybox" != False')
         if cybox is False and otype:
