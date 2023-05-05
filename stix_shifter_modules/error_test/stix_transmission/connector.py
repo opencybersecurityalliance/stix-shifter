@@ -1,6 +1,7 @@
 from aiohttp import BasicAuth
 import json
 import time
+import re
 from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix2matcher.matcher import Pattern
@@ -88,6 +89,10 @@ class Connector(BaseJsonSyncConnector):
         is_stix_21 = self.connection['options'].get("stix_2.1")
         stix_version = '2.1' if is_stix_21 else '2.0'
 
+        if not is_stix_21 and self.test_START_STOP_format(search_id):
+            # Remove leading 't' before timestamps from search_id. search_id is the stix pattern
+            search_id = re.sub("(?<=START\s)t|(?<=STOP\s)t", "", search_id)
+
         response = None
         if self.connection['options'].get('error_type') == ERROR_TYPE_TIMEOUT:
             # httpstat.us/200?sleep=60000 for slow connection that is valid
@@ -142,3 +147,9 @@ class Connector(BaseJsonSyncConnector):
         return_obj = dict()
         return_obj['success'] = True
         return return_obj
+    
+    def test_START_STOP_format(self, query_string) -> bool:
+        # Matches START t'1234-56-78T00:00:00.123Z' STOP t'1234-56-78T00:00:00.123Z'
+        pattern = "START\s(t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')\sSTOP"
+        match = re.search(pattern, query_string)
+        return bool(match)
