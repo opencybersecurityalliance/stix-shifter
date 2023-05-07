@@ -68,7 +68,8 @@
       ],
       "organization": {
         "name" : {
-          "key": "autonomous-system.name"
+          "key": "autonomous-system.name",
+          "object": "autonomous-system"
         }
       }
     },
@@ -225,8 +226,7 @@
       }
     },
     "address": {
-      "key": "x-ecs-client.address",
-      "object": "client"
+      "key": "x-oca-asset.address"
     },
     "domain": [
       {
@@ -371,7 +371,8 @@
       ],
       "organization": {
         "name" : {
-          "key": "autonomous-system.name"
+          "key": "autonomous-system.name",
+          "object": "autonomous-system"
         }
       }
     },
@@ -522,13 +523,13 @@
       ],
       "organization": {
         "name" : {
-          "key": "autonomous-system.name"
+          "key": "autonomous-system.name",
+          "object": "autonomous-system"
         }
       }
     },
     "address": {
-      "key": "x-ecs-server.address",
-      "object": "server"
+      "key": "x-oca-asset.address"
     },
     "domain": [
       {
@@ -945,12 +946,12 @@
         "object": "process_parent"
       },
       "exit_code": {
-        "key": "process.parent_ref.x_exit_code",
-        "object": "process"
+        "key": "process.x_exit_code",
+        "object": "process_parent"
       },
       "pgid": {
-        "key": "process.parent_ref.x_pgid",
-        "object": "process"
+        "key": "process.x_pgid",
+        "object": "process_parent"
       },
       "pid": [
         {
@@ -975,21 +976,21 @@
       },
       "thread": {
         "id": {
-          "key": "process.parent_ref.x_thread_id",
-          "object": "process"
+          "key": "process.x_thread_id",
+          "object": "process_parent"
         }
       },
       "title": {
-        "key": "process.parent_ref.x_window_title",
-        "object": "process"
+        "key": "process.x_window_title",
+        "object": "process_parent"
       },
       "uptime": {
-        "key": "process.parent_ref.x_uptime",
-        "object": "process"
+        "key": "process.x_uptime",
+        "object": "process_parent"
       },
       "working_directory": {
-        "key": "process.parent_ref.cwd",
-        "object": "process"
+        "key": "process.cwd",
+        "object": "process_parent"
       },
       "executable": [
         {
@@ -1120,18 +1121,22 @@
   "agent": {
     "name": [
       {
-        "key": "software.name"
+        "key": "software.name",
+        "object": "event-agent-software"
       },
       {
         "key": "x-oca-event.agent",
-        "object": "event"
+        "object": "event",
+        "references": "event-agent-software"
       }
     ],
     "type": {
-      "key": "software.vendor"
+      "key": "software.vendor",
+      "object": "event-agent-software"
     },
     "version": {
-      "key": "software.version"
+      "key": "software.version",
+      "object": "event-agent-software"
     }
   },
   "cloud": {
@@ -1215,17 +1220,24 @@
       "object": "file_dll"
     },
     "pe": {
-      "company": {
-        "key": "file.x_software_ref.vendor",
-        "object": "file_dll"
-      },
+      "company": [
+        {
+          "key": "software.vendor",
+          "object": "file_dll_software"
+        },
+        {
+          "key": "file.x_software_ref",
+          "object": "file_dll",
+          "references": "file_dll_software"
+        }
+      ],
       "file_version": {
-        "key": "file.x_software_ref.version",
-        "object": "file_dll"
+        "key": "software.version",
+        "object": "file_dll_software"
       },
       "original_file_name": {
-        "key": "file.x_software_ref.name",
-        "object": "file_dll"
+        "key": "software.name",
+        "object": "file_dll_software"
       }
     },
     "code_signature": {
@@ -1518,10 +1530,17 @@
       "key": "file.mtime",
       "object": "file"
     },
-    "owner": {
-      "key": "file.x_owner_ref.account_login",
-      "object": "file"
-    },
+    "owner": [
+      {
+        "key": "user-account.account_login",
+        "object": "file_owner"
+      },
+      {
+        "key": "file.x_owner_ref",
+        "object": "file",
+        "references": "file_owner"
+      }
+    ],
     "path": {
       "key": "file.x_path",
       "object": "file"
@@ -1535,8 +1554,8 @@
       "object": "file"
     },
     "uid": {
-      "key": "file.x_owner_ref.user_id",
-      "object": "file"
+      "key": "user-account.user_id",
+      "object": "file_owner"
     }
   },
   "group": {
@@ -2244,33 +2263,33 @@
     "client": {
       "issuer": {
         "key": "x509-certificate.issuer",
-        "object": "client"
+        "object": "client-cert"
       },
       "hash": {
         "sha256": {
           "key": "x509-certificate.hashes.SHA-256",
-          "object": "client"
+          "object": "client-cert"
         },
         "sha1": {
           "key": "x509-certificate.hashes.SHA-1",
-          "object": "client"
+          "object": "client-cert"
         },
         "md5": {
           "key": "x509-certificate.hashes.MD5",
-          "object": "client"
+          "object": "client-cert"
         }
       },
       "not_after": {
         "key": "x509-certificate.validity_not_after",
-        "object": "client"
+        "object": "client-cert"
       },
       "not_before": {
         "key": "x509-certificate.validity_not_before",
-        "object": "client"
+        "object": "client-cert"
       },
       "subject": {
         "key": "x509-certificate.subject",
-        "object": "client"
+        "object": "client-cert"
       },
       "certificate": {
         "key": "x-ecs-tls.client_certificate",
@@ -2292,33 +2311,33 @@
     "server": {
       "issuer": {
         "key": "x509-certificate.issuer",
-        "object": "server"
+        "object": "server-cert"
       },
       "hash": {
         "sha256": {
           "key": "x509-certificate.hashes.SHA-256",
-          "object": "server"
+          "object": "server-cert"
         },
         "sha1": {
           "key": "x509-certificate.hashes.SHA-1",
-          "object": "server"
+          "object": "server-cert"
         },
         "md5": {
           "key": "x509-certificate.hashes.MD5",
-          "object": "server"
+          "object": "server-cert"
         }
       },
       "not_after": {
         "key": "x509-certificate.validity_not_after",
-        "object": "server"
+        "object": "server-cert"
       },
       "not_before": {
         "key": "x509-certificate.validity_not_before",
-        "object": "server"
+        "object": "server-cert"
       },
       "subject": {
         "key": "x509-certificate.subject",
-        "object": "server"
+        "object": "server-cert"
       },
       "certificate": {
         "key": "x-ecs-tls.server_certificate",
