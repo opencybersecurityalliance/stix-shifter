@@ -11,7 +11,7 @@
   },
   "mac-addr": {
     "fields": {
-      "value": ["source.mac", "destination.mac", "client.mac", "server.mac", "host.mac.keyword"]
+      "value": ["source.mac.keyword", "destination.mac.keyword", "client.mac.keyword", "server.mac.keyword", "host.mac.keyword"]
     }
   },
   "network-traffic": {
