@@ -56,7 +56,7 @@
       "parent_ref.name": ["processes.parentProcessName"],
       "command_line": ["processes.commandLine"],
       "pid": ["processes.processId", "processes.parentProcessId", "registryKeyStates.processId"],
-      "created": ["processes.createdDateTime"],
+      "created_time": ["processes.createdDateTime"],
       "parent_ref.pid": ["processes.parentProcessId"],
       "image_ref.parent_directory_ref.path": ["processes.path"],
       "x_integrityLevel": ["processes.integrityLevel"],

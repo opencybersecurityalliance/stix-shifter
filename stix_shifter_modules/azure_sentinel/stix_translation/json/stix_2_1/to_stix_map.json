@@ -367,7 +367,7 @@
       "object": "process"
     },
     "createdDateTime": {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "process"
     },
     "fileHash": {
@@ -421,7 +421,7 @@
       "object": "process"
     },
     "parentProcessCreatedDateTime": {
-      "key": "process.created",
+      "key": "process.created_time",
       "object": "process_parent"
     },
     "parentProcessId": [
@@ -963,11 +963,11 @@
           "object": "process"
       },
       "processCreationDateTime": {
-          "key": "process.created",
+          "key": "process.created_time",
           "object": "process"
       },
       "parentProcessCreationDateTime": {
-          "key": "process.created",
+          "key": "process.created_time",
           "object": "parent_process"
       },
       "detectionStatus": {
