@@ -1787,10 +1787,16 @@
         "key": "x-reaqta-event.start_type",
         "object": "x-reaqta"
       },
-      "tactics": {
-        "key": "x-reaqta-event.tactics",
-        "object": "x-reaqta"
-      },
+      "tactics": [
+        {
+          "key": "x-reaqta-event.tactics",
+          "object": "x-reaqta"
+        },
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "ibm_finding"
+        }
+      ],
       "tags": {
         "key": "x-reaqta-event.tags",
         "object": "x-reaqta"
@@ -1971,10 +1977,16 @@
         "key": "x-reaqta-event.task_name",
         "object": "x-reaqta"
       },
-      "technique": {
+      "technique": [
+        {
         "key": "x-reaqta-event.technique",
         "object": "x-reaqta"
-      },
+        },
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "ibm_finding"
+        }
+      ],
       "url": {
         "key": "url.value",
         "object": "url"
