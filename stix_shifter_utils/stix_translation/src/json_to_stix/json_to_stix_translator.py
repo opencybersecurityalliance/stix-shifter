@@ -208,9 +208,13 @@ class DataSourceObjToStixObj:
         """
         Add observable object property and its STIX valid value to the cached `objects` dictionary
         """
+        named_group =  isinstance(group, str) and group.lower() != "true"
         parent_key_ind_str = str(parent_key_ind)
         if not parent_key_ind_str in objects:
             if cybox:
+                # Grouped properties go in a list
+                if named_group:
+                    value = [value]
                 objects[parent_key_ind_str] = {
                     'type': type_name,
                     property_key: value
@@ -225,6 +229,9 @@ class DataSourceObjToStixObj:
         else:
             if not property_key in objects[parent_key_ind_str]:
                 objects[parent_key_ind_str][property_key] = value
+            # Add grouped value in existing list element
+            elif isinstance(value, dict) and named_group and isinstance(objects[parent_key_ind_str][property_key], list):
+                objects[parent_key_ind_str][property_key][0] = dict_merge(objects[parent_key_ind_str][property_key][0], value)
             elif isinstance(value, dict):
                 objects[parent_key_ind_str][property_key] = dict_merge(objects[parent_key_ind_str][property_key], value)
             elif isinstance(objects[parent_key_ind_str][property_key], list) and group:
@@ -312,8 +319,10 @@ class DataSourceObjToStixObj:
                 else:
                     type_name = config_keys[0]
                     property_key = config_keys[1]
+                    # set the object to combine properties from same SCO
                     parent_key = prop['object'] if 'object' in prop else type_name
 
+                    # set the group to combine properties in a list
                     group = prop['group'] if 'group' in prop else False
                     substitute_key = prop['ds_key'] if 'ds_key' in prop else None
 
