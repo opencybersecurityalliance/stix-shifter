@@ -18,15 +18,19 @@ consoleHandler.setFormatter(logFormatter)
 logger.addHandler(consoleHandler)
 
 
-msg_fmt = '%s in mapping %s'
+def _log(level, mapping, msg):
+    if mapping:
+        logger.log(level, '%s in mapping %s', msg, mapping)
+    else:
+        logger.log(level, '%s', msg)
 
 
 def log_warning(mapping, msg):
-    logger.warning(msg_fmt, msg, mapping)
+    _log(logging.WARNING, mapping, msg)
 
 
 def log_error(mapping, msg):
-    logger.error(msg_fmt, msg, mapping)
+    _log(logging.ERROR, mapping, msg)
 
 
 def get_mapping(to_stix_map):
@@ -62,6 +66,16 @@ KNOWN_KEYS = {
 }
 
 
+REQD_PROPS = {
+    'first_observed',
+    'last_observed',
+}
+
+RECD_PROPS = {
+    'number_observed',
+}
+
+
 def ip_types(*args):
     return all(arg in ('ipv4-addr', 'ipv6-addr') for arg in args)
 
@@ -81,6 +95,9 @@ def main():
     objects = {}
     reffed = {}
 
+    # Track observed-data properties
+    obs_props = set()
+
     for mapping in get_mapping(to_stix_map):
         #TODO: make each "check" a function?
 
@@ -98,6 +115,8 @@ def main():
             log_error(mapping, '"key" is not a string')
             continue  # This is "fatal" for this mapping
         otype, _, rest = key.partition('.')
+        if not rest:
+            rest, otype = otype, rest
         if otype and obj:
             prev_otype = objects.get(obj)
             if (prev_otype and
@@ -107,8 +126,10 @@ def main():
                 log_error(mapping, f'conflicting types for {objects[obj]} {obj}')
             else:
                 objects[obj] = otype
-        if not otype and cybox != False:
-            log_error(mapping, 'No type in "key" and "cybox" != False')
+        if not otype:
+            if cybox is not False:
+                log_error(mapping, 'No type in "key" and "cybox" is not False')
+            obs_props.add(rest)
         if cybox is False and otype:
             if '-' in otype:
                 log_error(mapping, f'"key" type is {otype} but "cybox" is False')
@@ -138,6 +159,12 @@ def main():
     for ref_obj, mapping in reffed.items():
         if ref_obj not in objects:
             log_error(mapping, 'unknown "references" object')
+
+    for prop in REQD_PROPS - obs_props:
+        log_error({}, f'nothing mapped to {prop}')
+
+    for prop in RECD_PROPS - obs_props:
+        log_warning({}, f'nothing mapped to {prop}')
 
 
 if __name__ == '__main__':
