@@ -13,11 +13,15 @@
     "ip": [
       {
         "key": "ipv4-addr.value",
-        "object": "src_ip"
+        "object": "src_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "src_ip"
+        "object": "src_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
       },
       {
         "key": "network-traffic.src_ref",
@@ -165,11 +169,15 @@
     "ip": [
       {
         "key": "ipv4-addr.value",
-        "object": "src_ip"
+        "object": "src_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "src_ip"
+        "object": "src_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
       },
       {
         "key": "network-traffic.src_ref",
@@ -317,11 +325,15 @@
     "ip": [
       {
         "key": "ipv4-addr.value",
-        "object": "dst_ip"
+        "object": "dst_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "dst_ip"
+        "object": "dst_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
       },
       {
         "key": "network-traffic.dst_ref",
@@ -469,11 +481,15 @@
     "ip": [
       {
         "key": "ipv4-addr.value",
-        "object": "dst_ip"
+        "object": "dst_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "dst_ip"
+        "object": "dst_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
       },
       {
         "key": "network-traffic.dst_ref",
