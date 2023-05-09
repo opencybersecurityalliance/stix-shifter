@@ -17,6 +17,7 @@ class APIClient():
         # Placeholder client to allow transmission calls.
         # Remove when implementing data source API client.
         self.client = "data source API client"
+        self.timeout = connection['options'].get('timeout')
 
     async def ping_data_source(self):
         # Pings the data source
