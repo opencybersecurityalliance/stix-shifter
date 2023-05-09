@@ -58,18 +58,18 @@
       "number": [
         {
           "key": "autonomous-system.number",
-          "object": "autonomous-system"
+          "object": "source-autonomous-system"
         },
         {
           "key": "ipv4-addr.belongs_to_refs",
           "object": "src_ip",
-          "references": ["autonomous-system"]
+          "references": ["source-autonomous-system", "client-autonomous-system"]
         }
       ],
       "organization": {
         "name" : {
           "key": "autonomous-system.name",
-          "object": "autonomous-system"
+          "object": "source-autonomous-system"
         }
       }
     },
@@ -210,18 +210,18 @@
       "number": [
         {
           "key": "autonomous-system.number",
-          "object": "autonomous-system"
+          "object": "client-autonomous-system"
         },
         {
           "key": "ipv4-addr.belongs_to_refs",
           "object": "src_ip",
-          "references": ["autonomous-system"]
+          "references": ["source-autonomous-system", "client-autonomous-system"]
         }
       ],
       "organization": {
         "name" : {
           "key": "autonomous-system.name",
-          "object": "autonomous-system"
+          "object": "client-autonomous-system"
         }
       }
     },
@@ -361,18 +361,18 @@
       "number": [
         {
           "key": "autonomous-system.number",
-          "object": "autonomous-system"
+          "object": "dst-autonomous-system"
         },
         {
           "key": "ipv4-addr.belongs_to_refs",
           "object": "src_ip",
-          "references": ["autonomous-system"]
+          "references": ["dst-autonomous-system", "server-autonomous-system"]
         }
       ],
       "organization": {
         "name" : {
           "key": "autonomous-system.name",
-          "object": "autonomous-system"
+          "object": "dst-autonomous-system"
         }
       }
     },
@@ -513,18 +513,18 @@
       "number": [
         {
           "key": "autonomous-system.number",
-          "object": "autonomous-system"
+          "object": "server-autonomous-system"
         },
         {
           "key": "ipv4-addr.belongs_to_refs",
           "object": "dst_ip",
-          "references": ["autonomous-system"]
+          "references": ["server-autonomous-system"]
         }
       ],
       "organization": {
         "name" : {
           "key": "autonomous-system.name",
-          "object": "autonomous-system"
+          "object": "server-autonomous-system"
         }
       }
     },
