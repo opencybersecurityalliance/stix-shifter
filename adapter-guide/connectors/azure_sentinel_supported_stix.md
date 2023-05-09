@@ -1,4 +1,4 @@
-##### Updated on 02/27/23
+##### Updated on 05/02/23
 ## Microsoft Graph Security
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
@@ -45,7 +45,7 @@
 | **process**:pid | processes.processId, processes.parentProcessId, registryKeyStates.processId |
 | **process**:created | processes.createdDateTime |
 | **process**:parent_ref.pid | processes.parentProcessId |
-| **process**:binary_ref.path | processes.path |
+| **process**:binary_ref.parent_directory_ref.path | processes.path |
 | **domain-name**:value | hostStates.fqdn, hostStates.netBiosName, networkConnections.destinationDomain, userStates.domainName |
 | **user-account**:user_id | userStates.accountName, processes.accountName, userStates.aadUserId |
 | **user-account**:account_login | userStates.logonId |
@@ -54,11 +54,11 @@
 | **software**:name | vendorInformation.provider |
 | **software**:vendor | vendorInformation.vendor |
 | **software**:version | vendorInformation.providerVersion |
-| **url**:name | networkConnections.destinationUrl |
+| **url**:value | networkConnections.destinationUrl |
 | **windows-registry-key**:key | registryKeyStates.key |
-| **windows-registry-key**:extensions.windows-registry-value-type.valueData | registryKeyStates.valueData |
-| **windows-registry-key**:extensions.windows-registry-value-type.name | registryKeyStates.valueName |
-| **windows-registry-key**:extensions.windows-registry-value-type.valueType | registryKeyStates.valueType |
+| **windows-registry-key**:values[*].data | registryKeyStates.valueData |
+| **windows-registry-key**:values[*].name | registryKeyStates.valueName |
+| **windows-registry-key**:values[*].data_type | registryKeyStates.valueType |
 | **x-msazure-sentinel**:tenant_id | azureTenantId |
 | **x-msazure-sentinel**:subscription_id | azureSubscriptionId |
 | **x-msazure-sentinel-alert**:activityGroupName | activityGroupName |
@@ -148,10 +148,6 @@
 | domain-name | value | destinationDomain |
 | domain-name | value | domainName |
 | <br> | | |
-| extensions | windows-registry-value-type.valueData | registryKeyStates |
-| extensions | windows-registry-value-type.name | registryKeyStates |
-| extensions | windows-registry-value-type.valuetype | registryKeyStates |
-| <br> | | |
 | file | hashes.SHA-256 | sha256 |
 | file | hashes.SHA-1 | sha1 |
 | file | hashes.MD5 | md5 |
@@ -201,6 +197,9 @@
 | user-account | account_login | logonId |
 | <br> | | |
 | windows-registry-key | key | registryKeyStates |
+| windows-registry-key | values.data | registryKeyStates |
+| windows-registry-key | values.name | registryKeyStates |
+| windows-registry-key | values.data_type | registryKeyStates |
 | <br> | | |
 | x-ibm-finding | dst_application_ref | destinationServiceName |
 | x-ibm-finding | createddatetime | createdDateTime |
