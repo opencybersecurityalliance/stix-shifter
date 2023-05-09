@@ -222,7 +222,8 @@
       }
     },
     "address": {
-      "key": "x-oca-asset.address"
+      "key": "x-oca-asset.address",
+      "object": "client"
     },
     "domain": [
       {
@@ -373,7 +374,7 @@
       }
     },
     "address": {
-      "key": "x-ecs-destination.address",
+      "key": "x-oca-asset.address",
       "object": "destination"
     },
     "domain": [
@@ -525,7 +526,8 @@
       }
     },
     "address": {
-      "key": "x-oca-asset.address"
+      "key": "x-oca-asset.address",
+      "object": "server"
     },
     "domain": [
       {
