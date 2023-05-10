@@ -121,7 +121,7 @@
       "x_window_title": ["process.title"],
       "x_exit_code": ["process.exit_code"],
       "x_thread_id": ["process.thread.id"],
-      "x_ttp_tags": ["tags"],
+      "x_tags": ["tags"],
       "x_unique_id": ["process.entity_id.keyword", "process.parent.entity_id.keyword"],
       "x_uptime": ["process.uptime"]
     }
