@@ -240,6 +240,27 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         objects = observed_data['objects']
         assert objects == {}
 
+    @staticmethod
+    def test_registry_key_state():
+        """
+        test windows-registry-key
+        """
+        data = { "registryKeyStates": [ { "valueData": "Test Value Data", "valueName": "Test Value Name", "valueType": "Test Value Type" } ] }
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        assert 'objects' in observed_data
+        objects = observed_data['objects']
+        windows_reg_key_object = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'windows-registry-key')
+        assert windows_reg_key_object is not None, 'windows-registry-key object type not found'
+        windows_reg_key_values = windows_reg_key_object.get("values")
+        key_values_obj = windows_reg_key_values[0]
+        assert key_values_obj.get('data') ==  "Test Value Data"
+        assert key_values_obj.get('data_type') ==  "Test Value Type"
+        assert key_values_obj.get('name') ==  "Test Value Name"
+
+
     def test_alert_v2_tranlsation(self):
         entry_point = EntryPoint()
         result_file = open('stix_shifter_modules/azure_sentinel/tests/jsons/alertV2_respons.json', 'r').read()

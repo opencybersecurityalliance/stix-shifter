@@ -314,7 +314,7 @@
       "protocol": {
         "key": "network-traffic.protocols",
         "object": "nt",
-        "group": "True",
+        "group": true,
         "transformer": "ToLowercaseArray"
       },
       "riskScore": {
@@ -483,17 +483,20 @@
         "key": "process.pid"
       },
       "valueData": {
-        "key": "extensions.windows-registry-value-type.valueData",
-        "object": "registry"
+        "key": "windows-registry-key.values.data",
+        "object": "registry",
+        "group": "windows-registry-value-type"
       },
       "valueName": {
-        "key": "extensions.windows-registry-value-type.name",
-        "object": "registry"
+        "key": "windows-registry-key.values.name",
+        "object": "registry",
+        "group": "windows-registry-value-type"
       },
       "valueType": {
-        "key": "extensions.windows-registry-value-type.valuetype",
+        "key": "windows-registry-key.values.data_type",
         "object": "registry",
-        "transformer": "ToString"
+        "transformer": "ToString",
+        "group": "windows-registry-value-type"
       }
     },
     "securityResources": {

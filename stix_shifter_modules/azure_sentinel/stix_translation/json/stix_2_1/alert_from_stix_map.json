@@ -52,13 +52,13 @@
   },
    "process" : {
     "fields": {
-      "name": ["processes.name", "processes.parentProcessName"],
+      "x_name": ["processes.name", "processes.parentProcessName"],
       "parent_ref.name": ["processes.parentProcessName"],
       "command_line": ["processes.commandLine"],
       "pid": ["processes.processId", "processes.parentProcessId", "registryKeyStates.processId"],
-      "created": ["processes.createdDateTime"],
+      "created_time": ["processes.createdDateTime"],
       "parent_ref.pid": ["processes.parentProcessId"],
-      "binary_ref.parent_directory_ref.path": ["processes.path"],
+      "image_ref.parent_directory_ref.path": ["processes.path"],
       "x_integrityLevel": ["processes.integrityLevel"],
       "x_isElevated": ["processes.isElevated"]
     }
