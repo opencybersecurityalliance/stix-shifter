@@ -1689,7 +1689,7 @@
       }
     ],
     "id": {
-      "key": "x-oca-asset.host_id",
+      "key": "x-oca-asset.device_id",
       "object": "host"
     },
     "ip": [
@@ -2074,7 +2074,7 @@
       }
     ],
     "serial_number": {
-      "key": "x-oca-asset.serial_number",
+      "key": "x-oca-asset.device_id",
       "object": "observer"
     },
     "type": {
