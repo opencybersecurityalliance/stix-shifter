@@ -73,7 +73,8 @@
       "extensions.'x-reaqta-avdetection'.av_threat_info_array": ["antimalware.threatInfo"],
       "finding_type": ["antimalware.threatType"],
       "name": ["antimalware.objectStatus"],
-      "src_ip_ref.value": ["ip"]
+      "src_ip_ref.value": ["ip"],
+      "ttp_tagging_refs": ["mitre.tactic", "mitre.technique"]
     }
   },
   "x-oca-asset": {
@@ -109,7 +110,8 @@
       "network_ref.src_ref.value": ["ip"],
       "parent_process_ref.pid": ["service.ppid"],
       "process_ref.pid": ["wmi.clientPid"],
-      "user_ref.user_id": []
+      "user_ref.user_id": [],
+
     }
   },
   "x-reaqta-amsi": {

@@ -73,7 +73,8 @@
       "extensions.'x-reaqta-avdetection'.av_threat_info_array": ["antimalware.threatInfo"],
       "finding_type": ["antimalware.threatType", "eventType"],
       "name": ["antimalware.objectStatus"],
-      "src_ip_ref.value": ["ip"]
+      "src_ip_ref.value": ["ip"],
+      "ttp_tagging_refs": ["mitre.tactic", "mitre.technique"]
     }
   },
   "x-oca-asset": {
