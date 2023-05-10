@@ -2627,7 +2627,7 @@
     }
   },
   "tags": {
-    "key": "process.x_ttp_tags",
+    "key": "process.x_tags",
     "object": "process"
   }
 }
