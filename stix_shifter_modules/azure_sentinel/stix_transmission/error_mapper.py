@@ -43,7 +43,6 @@ class ErrorMapper:
          :param json_data: dict, error response of api_call
          :param return_obj: dict, returns error and error code"""
         error_type = ''
-        
         if isinstance(json_data, tuple):
             error_type = 'HTTPSConnectionError'
         elif 'code' in json_data.get('error', {}):

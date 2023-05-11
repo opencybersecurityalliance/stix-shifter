@@ -15,6 +15,7 @@ class APIClient:
     def __init__(self, connection, configuration):
         self.connector = __name__.split('.')[1]
         self.auth = configuration.get('auth')
+        self.timeout = connection['options'].get('timeout')
         headers = {'Accept': 'application/json'}
         self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port'),
@@ -30,7 +31,7 @@ class APIClient:
         data['end_time'] = self.get_current_time()['end_time']
         headers['Content-Type'] = 'application/json'
         headers['Accept-Charset'] = 'utf-8'
-        return await self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers, data=json.dumps(data))
+        return await self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers, data=json.dumps(data), timeout=self.timeout)
 
     async def create_search(self, query_expression):
         return_obj = dict()
@@ -41,7 +42,7 @@ class APIClient:
             query = json.loads(query_expression)
             query.update(auth)
             headers = {'Content-Type': 'application/json', 'Accept-Charset': 'utf-8'}
-            response = await self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers, data=json.dumps(query))
+            response = await self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers, data=json.dumps(query), timeout=self.timeout)
             raw_response = response.read()
             response_code = response.code
 
@@ -71,7 +72,7 @@ class APIClient:
         params['user_session_id'] = user_session_id
         headers['Content-Type'] = 'application/json'
         headers['Accept-Charset'] = 'utf-8'
-        return await self.client.call_api(self.STATUS_ENDPOINT, 'POST', headers, data=json.dumps(params))
+        return await self.client.call_api(self.STATUS_ENDPOINT, 'POST', headers, data=json.dumps(params), timeout=self.timeout)
 
     async def get_search_results(self, search_session_id, user_session_id, range_start=None, range_end=None):
         headers, params = dict(), dict()
@@ -81,7 +82,7 @@ class APIClient:
         params['length'] = int(range_end)
         headers['Content-Type'] = 'application/json'
         headers['Accept-Charset'] = 'utf-8'
-        return await self.client.call_api(self.RESULT_ENDPOINT, 'POST', headers, data=json.dumps(params))
+        return await self.client.call_api(self.RESULT_ENDPOINT, 'POST', headers, data=json.dumps(params), timeout=self.timeout)
 
     async def delete_search(self, search_session_id, user_session_id):
         headers, params = dict(), dict()
@@ -89,11 +90,11 @@ class APIClient:
         params['user_session_id'] = user_session_id
         headers['Content-Type'] = 'application/json'
         headers['Accept-Charset'] = 'utf-8'
-        return await self.client.call_api(self.DELETE_ENDPOINT, 'POST', headers, data=json.dumps(params))
+        return await self.client.call_api(self.DELETE_ENDPOINT, 'POST', headers, data=json.dumps(params), timeout=self.timeout)
 
     async def get_user_session_id(self):
         try:
-            response = await self.client.call_api(self.TOKEN_ENDPOINT, 'POST', data=self.auth)
+            response = await self.client.call_api(self.TOKEN_ENDPOINT, 'POST', data=self.auth, timeout=self.timeout)
             if response.code == 200:
                 response_text = json.loads(response.read())
                 token = response_text['log.loginResponse']['log.return']

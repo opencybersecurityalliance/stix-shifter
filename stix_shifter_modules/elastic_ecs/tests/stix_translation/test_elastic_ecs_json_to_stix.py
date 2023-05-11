@@ -332,6 +332,54 @@ ecs_event_data = {
     }
 }
 
+observer_data = {
+    "process": {
+      "args": [
+        "C:\\Users\\Administrator\\Desktop\\abc\\abc.exe"
+      ],
+      "parent": {
+        "name": "explorer.exe",
+        "entity_id": "485466882194"
+      },
+      "start": "2023-04-01T21:21:53.540Z",
+      "pid": 9989,
+      "args_count": 1,
+      "entity_id": "485541455428",
+      "command_line": "\"C:\\Users\\Administrator\\Desktop\\abc\\abc.exe\" ",
+      "executable": "\\Device\\HarddiskVolume3\\Users\\Administrator\\Desktop\\abc\\abc.exe",
+      "hash": {
+        "sha256": "d438e472cd374d76776c2f23f654e28c6eba57081f322be7777a0d2356732fea",
+        "md5": "642e934263d1316ed0d30c7336414a89"
+      }
+    },
+    "os": {
+      "type": "windows"
+    },
+    "url": {
+      "scheme": "http"
+    },
+    "observer": {
+      "geo": {
+        "continent_name": "North America",
+        "region_iso_code": "US-TX",
+        "city_name": "Austin",
+        "country_iso_code": "US",
+        "country_name": "United States",
+        "region_name": "Texas",
+        "location": {
+          "lon": -97.7419,
+          "lat": 30.2732
+        }
+      },
+      "address": "10.0.0.101",
+      "vendor": "crowdstrike",
+      "ip": "10.0.0.101",
+      "serial_number": "6484b65c806520073f0337894bc0cd24",
+      "type": "agent",
+      "version": "1007.3.0016411.1",
+    }
+}
+
 class TestElasticEcsTransform(unittest.TestCase, object):
     @staticmethod
     def get_first(itr, constraint):
@@ -760,4 +808,44 @@ class TestElasticEcsTransform(unittest.TestCase, object):
           exec_file_software.get("version") == "10.0.17763.2145 (WinBuild.160101.0800)" and
           exec_file_software.get("x_product") == "Microsoft® Windows® Operating System" and
           exec_file_software.get("x_description") == "DSREG commandline tool" 
+        )
+
+    def test_observer(self):
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [observer_data])
+        assert (result_bundle['type'] == 'bundle')
+        translation_objects = result_bundle.get('objects')
+        assert (translation_objects and len(translation_objects) == 2)
+        observed_data = translation_objects[1]
+        stix_objects = observed_data.get("objects")
+        assert (stix_objects and (stix_objects.__class__ is dict) and (len(stix_objects) > 5))
+        observer_asset = stix_objects.get("6")
+        assert (
+            observer_asset and observer_asset.get("type") == "x-oca-asset" and
+            observer_asset.get("device_id") == "6484b65c806520073f0337894bc0cd24" and
+            observer_asset.get("host_type") == "agent"
+        )
+        observer_geo_key = observer_asset.get("geo_ref")
+        observer_geolocation = stix_objects.get(observer_geo_key)
+        assert (
+          observer_geolocation and
+          observer_geolocation.get("type") == "x-oca-geo" and
+          observer_geolocation.get("continent_name") == "North America" and
+          observer_geolocation.get("region_iso_code") == "US-TX" and
+          observer_geolocation.get("city_name") == "Austin" and
+          observer_geolocation.get("country_iso_code") == "US" and
+          observer_geolocation.get("country_name") == "United States" and
+          observer_geolocation.get("region_name") == "Texas" 
+        )
+        observer_location = observer_geolocation.get("location")
+        assert ( 
+            observer_location and
+            observer_location.get("lon") == -97.7419 and
+            observer_location.get("lat") == 30.2732
+        )
+        observer_ip_key = observer_asset.get("ip_refs")[0]
+        observer_ip = stix_objects.get(observer_ip_key)
+        assert (
+          observer_ip and 
+          observer_ip.get("type") == "ipv4-addr" and
+          observer_ip.get("value") == "10.0.0.101" 
         )
