@@ -821,7 +821,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         observer_asset = stix_objects.get("6")
         assert (
             observer_asset and observer_asset.get("type") == "x-oca-asset" and
-            observer_asset.get("serial_number") == "6484b65c806520073f0337894bc0cd24" and
+            observer_asset.get("device_id") == "6484b65c806520073f0337894bc0cd24" and
             observer_asset.get("host_type") == "agent"
         )
         observer_geo_key = observer_asset.get("geo_ref")
