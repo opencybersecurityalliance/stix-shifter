@@ -634,3 +634,35 @@ class TestTransform(object):
 
         assert(finding['start'] == START_TIMESTAMP)
         assert(finding['end'] == END_TIMESTAMP)
+
+    def test_zero_value_filtering(self):
+
+        data = [{
+            "qidname": "Information Message",
+            "sourceip": "0.0.0.0",
+            "destinationip": "0.0.0.0",
+            "sourcemac": "00-00-00-00-00-00",
+            "destinationmac": "00-00-00-00-00-00",
+            "identityip": "0.0.0.0",
+            "sourcev6": "0:0:0:0:0:0:0:0",
+            "destinationv6": "0:0:0:0:0:0:0:0",
+            "sourceport": "1234",
+            "destinationport": "1234"
+        }]
+
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
+        observed_data = result_bundle['objects'][1]
+        objects = observed_data['objects']
+
+        ipv4_addr = TestTransform.get_first_of_type(objects.values(), 'ipv4-addr')
+        assert(ipv4_addr is None) 
+        ipv6_addr = TestTransform.get_first_of_type(objects.values(), 'ipv6-addr')
+        assert(ipv6_addr is None)
+        mac_addr = TestTransform.get_first_of_type(objects.values(), 'mac-addr')
+        assert(mac_addr is None)
+        x_oca_event = TestTransform.get_first_of_type(objects.values(), 'x-oca-event')
+        assert(x_oca_event['action'] == "Information Message")
+        network_traffic = TestTransform.get_first_of_type(objects.values(), 'network-traffic')
+        assert(network_traffic is not None)
+        assert('src_ref' not in network_traffic)
+        assert('dst_ref' not in network_traffic)

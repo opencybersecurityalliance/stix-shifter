@@ -1,8 +1,9 @@
 from stix_shifter_utils.modules.base.stix_translation.empty_query_translator import EmptyQueryTranslator
 import re
 from time import sleep
+from datetime import datetime, timedelta
 
-START_STOP_PATTERN = r"\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T(\d{2}:){2}\d{2}.\d{1,3}Z'\s?"
+START_STOP_PATTERN = r"\s?START\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d{1,3})?Z'\sSTOP\s?t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d{1,3})?Z'\s?"
 
 ERROR_TYPE_PARSE_EXCEPTION = 'parse_exception'
 ERROR_TYPE_TRANSFORM_EXCEPTION = 'transform_exception'
@@ -22,8 +23,15 @@ class QueryTranslator(EmptyQueryTranslator):
         if error_type.startswith(ERROR_TYPE_TRANSFORM_DELAY_SEC):
             delay = int(error_type[len(ERROR_TYPE_TRANSFORM_DELAY_SEC):])
             sleep(delay)
+        time_range = self.options['time_range'] # Passed from global config
+
         # Data is a STIX pattern.
-        # stix2-matcher will break on START STOP qualifiers so remove before returning pattern.
-        # Remove this when ever stix2-matcher supports proper qualifier timestamps
-        data = re.sub(START_STOP_PATTERN, " ", data)
+        if not re.search(START_STOP_PATTERN, data):
+            # add START STOP qualifier for last x minutes if none present
+            now = datetime.now()
+            timerange_delta = timedelta(minutes=time_range)
+            some_minutes_ago = now - timerange_delta
+            start_time = some_minutes_ago.strftime("START t'%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z'"
+            stop_time = now.strftime("STOP t'%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z'"
+            data = data + " " + start_time + " " + stop_time
         return {'queries': [data]}

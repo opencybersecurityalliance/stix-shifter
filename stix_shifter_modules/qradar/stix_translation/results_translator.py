@@ -22,4 +22,32 @@ class ResultsTranslator(JSONToStix):
       if result.get('flowdestinationpayload'):
         result['mime_type_flowdestinationpayload'] = 'application/octet-stream'
 
+      if result.get('sourceip'):
+        if result['sourceip'] == '0.0.0.0':
+          result['sourceip'] = None
+
+      if result.get('destinationip'):
+        if result['destinationip'] == '0.0.0.0':
+          result['destinationip'] = None
+
+      if result.get('sourcemac'):
+        if result['sourcemac'] == '00:00:00:00:00:00' or result['sourcemac'] == '00-00-00-00-00-00':
+          result['sourcemac'] = None
+
+      if result.get('destinationmac'):
+        if result['destinationmac'] == '00:00:00:00:00:00' or result['destinationmac'] == '00-00-00-00-00-00':
+          result['destinationmac'] = None
+
+      if result.get('identityip'):
+        if result['identityip'] == '0.0.0.0':
+          result['identityip'] = None
+
+      if result.get('sourcev6'):
+        if result['sourcev6'] == '0:0:0:0:0:0:0:0':
+          result['sourcev6'] = None
+
+      if result.get('destinationv6'):
+        if result['destinationv6'] == '0:0:0:0:0:0:0:0':
+          result['destinationv6'] = None
+
     return super().translate_results(data_source, results)

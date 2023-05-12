@@ -615,7 +615,7 @@
       {
         "key": "network-traffic.protocols",
         "object": "nt",
-        "group": "True",
+        "group": true,
         "transformer": "ToLowercaseArray"
       },
       {
@@ -635,7 +635,7 @@
       {
         "key": "network-traffic.protocols",
         "object": "nt",
-        "group": "True",
+        "group": true,
         "transformer": "ToLowercaseArray"
       },
       {
@@ -655,7 +655,7 @@
       {
         "key": "network-traffic.protocols",
         "object": "nt",
-        "group": "True",
+        "group": true,
         "transformer": "ToLowercaseArray"
       },
       {
@@ -1250,30 +1250,30 @@
   },
   "container": {
     "id": {
-      "key": "x-ecs-container.container_id",
-      "object": "container"
+      "key": "x-oca-asset.extensions.x-oca-container-ext.id",
+      "object": "host"
     },
     "image": {
       "name": {
-        "key": "x-ecs-container.image_name",
-        "object": "container"
+        "key": "x-oca-asset.extensions.x-oca-container-ext.image.name",
+        "object": "host"
       },
       "tag": {
-        "key": "x-ecs-container.image_tag",
-        "object": "container"
+        "key": "x-oca-asset.extensions.x-oca-container-ext.image.tag",
+        "object": "host"
       }
     },
     "labels": {
-      "key": "x-ecs-container.labels",
-      "object": "container"
+      "key": "x-oca-asset.extensions.x-oca-container-ext.labels",
+      "object": "host"
     },
     "name": {
-      "key": "x-ecs-container.name",
-      "object": "container"
+      "key": "x-oca-asset.extensions.x-oca-container-ext.name",
+      "object": "host"
     },
     "runtime": {
-      "key": "x-ecs-container.runtime",
-      "object": "container"
+      "key": "x-oca-asset.extensions.x-oca-container-ext.container_type",
+      "object": "host"
     }
   },
   "dll":{
@@ -1659,7 +1659,7 @@
       }
     ],
     "id": {
-      "key": "x-oca-asset.host_id",
+      "key": "x-oca-asset.device_id",
       "object": "host"
     },
     "ip": [
@@ -2044,7 +2044,7 @@
       }
     ],
     "serial_number": {
-      "key": "x-oca-asset.serial_number",
+      "key": "x-oca-asset.device_id",
       "object": "observer"
     },
     "type": {
