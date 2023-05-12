@@ -303,7 +303,7 @@ class TestQueryTranslator(unittest.TestCase):
             }
         ]
         queries = _remove_timestamp_from_query(queries)
-        self._test_query_assertions(query, queries)
+        self.assertSetEqual(set(query['queries']), set(queries))
     
     def test_lamda_operator_with_collection(self):
         stix_pattern = "[x-ibm-finding:x_recommendedActions = 'Enforce' OR x-ibm-finding:x_detectionIds != '111']"
