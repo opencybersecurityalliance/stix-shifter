@@ -1,0 +1,117 @@
+{
+    "connection": {
+        "type": {
+            "id": "OTXQuery_Connector",
+            "displayName": "AlienVault OTX",
+            "description": "Query AlienVault OTX for IPs, domains, URLs, or file hashes"
+        },
+        "help": {
+            "default": "www.ibm.com",
+            "type": "link"
+        },
+        "options": {
+            "type": "fields",
+            "concurrent": {
+                "default": 4,
+                "min": 1,
+                "max": 100,
+                "type": "number",
+                "previous": "connection.maxConcurrentSearches"
+            },
+            "result_limit": {
+                "default": 10000,
+                "min": 1,
+                "max": 500000,
+                "type": "number",
+                "previous": "connection.resultSizeLimit",
+                "hidden": true
+            },
+            "time_range": {
+                "default": 5,
+                "min": 1,
+                "max": 10000,
+                "type": "number",
+                "previous": "connection.timerange",
+                "nullable": true,
+                "hidden": true
+            },
+            "timeout": {
+                "default": 30,
+                "min": 1,
+                "max": 60,
+                "type": "number",
+                "previous": "connection.timeoutLimit"
+            }
+        },
+        "namespace":{
+            "type": "text",
+            "default": "9d4bedaf-d351-4f50-930f-f8eb121e5bae",
+            "hidden": true
+        },
+        "host": {
+            "type": "text",
+            "default": "",
+            "hidden": true
+        },
+        "port": {
+            "default": 443,
+            "type": "number",
+            "min": 1,
+            "max": 65535,
+            "hidden": true
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type": "fields",
+            "key": {
+                "type": "password"
+            }
+        },
+        "rateLimit": {
+            "type": "fields",
+            "rateLimit": {
+                "default": 10000,
+                "type": "number",
+                "hidden": true
+            },
+            "rateUnit": {
+                "type": "text",
+                "default": "Hour",
+                "hidden": true
+            }
+        },
+        "cacheDuration": {
+            "type": "fields",
+            "cacheDuration": {
+                "default": 10,
+                "type": "number",
+                "hidden": true
+            },
+            "unit": {
+                "default": "Minute",
+                "type": "text",
+                "hidden": true
+            }
+        },
+        "dataTypeList": {
+            "type": "fields",
+            "ip": {
+                "type": "checkbox",
+                "default": true
+            },
+            "domain": {
+                "type": "checkbox",
+                "default": true
+            },
+            "url": {
+                "type": "checkbox",
+                "default": true
+            },
+            "hash": {
+                "type": "checkbox",
+                "default": true
+            }
+        }
+    }
+}
