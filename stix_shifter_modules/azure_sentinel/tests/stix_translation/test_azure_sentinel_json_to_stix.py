@@ -2,6 +2,7 @@ import json
 import unittest
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.azure_sentinel.entry_point import EntryPoint
+from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 
 MODULE = "azure_sentinel"
@@ -131,25 +132,14 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         assert 'objects' in observed_data
         objects = observed_data['objects']
         
-        x_msazure_sentinel = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'x-msazure-sentinel')
-        x_msazure_sentinel_alert = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'x-msazure-sentinel-alert')
         x_ibm_finding = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
         x_oca_event = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
 
-        assert x_msazure_sentinel is not None, 'Custom object type not found'
-        assert x_msazure_sentinel.keys() == {'type', 'tenant_id', 'subscription_id'}
-        assert x_msazure_sentinel['tenant_id'] == 'b73e5ba8-34d5-495a-9901-06bdb84cf13e'
-        assert x_msazure_sentinel['subscription_id'] == '083de1fb-cd2d-4b7c-895a-2b5af1d091e8'
-
-        assert x_msazure_sentinel_alert is not None, 'Custom object type not found'
-
-        assert x_msazure_sentinel_alert.keys() == {'type', 'recommendedactions', 'status', 'userStates'}
-        assert type(x_msazure_sentinel_alert['recommendedactions']) is list
-        assert x_ibm_finding.keys() == {'type', 'createddatetime', 'description', 'time_observed', 'severity', 'name', 'src_os_ref'}
+        assert x_ibm_finding.keys() == {'type', 'alert_id', 'description', 'time_observed', 'x_recommendedactions', 'severity', 'x_status', 'name'}
         assert x_ibm_finding['name'] == 'Rare SVCHOST service group executed'
-        assert x_oca_event.keys() == {'type', 'code', 'category', 'created', 'action'}
+        assert x_oca_event.keys() == {'type', 'category', 'created', 'action'}
         assert x_oca_event['category'] == 'SuspiciousSVCHOSTRareGroup'
-        # assert False
+
 
     @staticmethod
     def test_file_process_json_to_stix():
@@ -174,7 +164,7 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         assert file_obj .keys() == {'type', 'name', 'parent_directory_ref'}
         assert file_obj['type'] == 'file'
         assert file_obj['name'] == 'services.exe'
-        assert file_obj['parent_directory_ref'] == '5'
+        assert file_obj['parent_directory_ref'] == '4'
         assert directory_obj['path'] == 'c:\\windows\\system32'
 
     @staticmethod
@@ -202,8 +192,8 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         assert network_obj['src_port'] == 9475
         assert network_obj['dst_port'] == 22
         assert network_obj['protocols'] == ['tcp']
-        assert network_obj['src_ref'] == '7'
-        assert network_obj['dst_ref'] == '5'
+        assert network_obj['src_ref'] == '6'
+        assert network_obj['dst_ref'] == '4'
 
     @staticmethod
     def test_network_json_to_stix_negative():
@@ -249,3 +239,49 @@ class TestAzureSentinelResultsToStix(unittest.TestCase):
         assert 'objects' in observed_data
         objects = observed_data['objects']
         assert objects == {}
+
+    @staticmethod
+    def test_registry_key_state():
+        """
+        test windows-registry-key
+        """
+        data = { "registryKeyStates": [ { "valueData": "Test Value Data", "valueName": "Test Value Name", "valueType": "Test Value Type" } ] }
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [data], get_module_transformers(MODULE), options)
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        assert 'objects' in observed_data
+        objects = observed_data['objects']
+        windows_reg_key_object = TestAzureSentinelResultsToStix.get_first_of_type(objects.values(), 'windows-registry-key')
+        assert windows_reg_key_object is not None, 'windows-registry-key object type not found'
+        windows_reg_key_values = windows_reg_key_object.get("values")
+        key_values_obj = windows_reg_key_values[0]
+        assert key_values_obj.get('data') ==  "Test Value Data"
+        assert key_values_obj.get('data_type') ==  "Test Value Type"
+        assert key_values_obj.get('name') ==  "Test Value Name"
+
+
+    def test_alert_v2_tranlsation(self):
+        entry_point = EntryPoint()
+        result_file = open('stix_shifter_modules/azure_sentinel/tests/jsons/alertV2_respons.json', 'r').read()
+        data = json.loads(result_file)
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
+
+        result_bundle_objects = result_bundle['objects']
+
+        result_bundle_identity = result_bundle_objects[0]
+        assert result_bundle_identity['type'] == data_source['type']
+        assert result_bundle_identity['id'] == data_source['id']
+        assert result_bundle_identity['name'] == data_source['name']
+        assert result_bundle_identity['identity_class'] == data_source['identity_class']
+
+        observed_data = result_bundle_objects[1]
+        assert observed_data['id'] is not None
+        assert observed_data['type'] == "observed-data"
+        assert observed_data['created_by_ref'] == result_bundle_identity['id']
+
+        assert observed_data['modified'] is not None
+        assert observed_data['created'] is not None
+        assert observed_data['first_observed'] is not None
+        assert observed_data['last_observed'] is not None
+        assert observed_data['number_observed'] is not None

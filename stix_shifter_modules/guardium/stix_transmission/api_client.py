@@ -30,6 +30,7 @@ class APIClient():
         params["client_id"] = connection["client_id"]
         params["url"] = url
         params["client_secret"] = connection["client_secret"]
+        params["timeout"] = connection['options'].get('timeout')
         params["config_uname"] = configuration["auth"]["username"]
         params["config_pass"] = configuration["auth"]["password"]
         self.client_aux = GuardApiClient(params,

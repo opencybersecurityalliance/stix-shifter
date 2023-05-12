@@ -1,14 +1,14 @@
+from aiohttp import BasicAuth
 import json
 import time
-from aiohttp import BasicAuth
+import re
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix2matcher.matcher import Pattern
 from stix2matcher.matcher import MatchListener
 from stix2validator import validate_instance, ValidationOptions
-
-from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
-from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
-from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import Status
 
 ERROR_TYPE_TIMEOUT = 'timeout'
 ERROR_TYPE_BAD_CONNECTION = 'bad_connection'
@@ -35,9 +35,9 @@ class Connector(BaseJsonSyncConnector):
 
     # We re-implement this method so we can fetch all the "bindings", as their method only
     # returns the first for some reason
-    def match(self, pattern, observed_data_sdos, verbose=False):
-        compiled_pattern = Pattern(pattern)
-        matcher = MatchListener(observed_data_sdos, verbose)
+    def match(self, pattern, observed_data_sdos, verbose=False, stix_version='2.0'):
+        compiled_pattern = Pattern(pattern, stix_version=stix_version)
+        matcher = MatchListener(observed_data_sdos, verbose, stix_version=stix_version)
         compiled_pattern.walk(matcher)
 
         found_bindings = matcher.matched()
@@ -89,6 +89,10 @@ class Connector(BaseJsonSyncConnector):
         is_stix_21 = self.connection['options'].get("stix_2.1")
         stix_version = '2.1' if is_stix_21 else '2.0'
 
+        if not is_stix_21 and self.test_START_STOP_format(search_id):
+            # Remove leading 't' before timestamps from search_id. search_id is the stix pattern
+            search_id = re.sub("(?<=START\s)t|(?<=STOP\s)t", "", search_id)
+
         response = None
         if self.connection['options'].get('error_type') == ERROR_TYPE_TIMEOUT:
             # httpstat.us/200?sleep=60000 for slow connection that is valid
@@ -125,7 +129,7 @@ class Connector(BaseJsonSyncConnector):
 
                 # Pattern match
                 try:
-                    results = self.match(search_id, observations, False)
+                    results = self.match(search_id, observations, False, stix_version)
 
                     if len(results) != 0:
                         return_obj['success'] = True
@@ -143,3 +147,9 @@ class Connector(BaseJsonSyncConnector):
         return_obj = dict()
         return_obj['success'] = True
         return return_obj
+    
+    def test_START_STOP_format(self, query_string) -> bool:
+        # Matches START t'1234-56-78T00:00:00.123Z' STOP t'1234-56-78T00:00:00.123Z'
+        pattern = "START\s(t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')\sSTOP"
+        match = re.search(pattern, query_string)
+        return bool(match)

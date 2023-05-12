@@ -22,6 +22,7 @@ class APIClient:
                                     headers=headers, cert_verify=False,
                                     url_modifier_function=url_modifier_function
                                     )
+        self.timeout = connection['options'].get('timeout')
 
     async def ping_box(self):
         """
@@ -30,7 +31,7 @@ class APIClient:
         """
         encoded_query = self._encode_query("")
         headers = self.get_header(self.PING_ENDPOINT, encoded_query)
-        return await self.client.call_api(self.PING_ENDPOINT, 'GET', headers=headers, data=None)
+        return await self.client.call_api(self.PING_ENDPOINT, 'GET', headers=headers, data=None, timeout=self.timeout)
 
     async def get_search_results(self, query):
         """
@@ -41,7 +42,7 @@ class APIClient:
         self.logger.debug("query: %s", query)
         encoded_query = self._encode_query(query)
         headers = self.get_header(self.QUERY_ENDPOINT, encoded_query)
-        return await self.client.call_api(self.QUERY_ENDPOINT + encoded_query, 'GET', headers=headers, data=None)
+        return await self.client.call_api(self.QUERY_ENDPOINT + encoded_query, 'GET', headers=headers, data=None, timeout=self.timeout)
 
     def get_header(self, endpoint,  query):
         query_url = "/" + endpoint + query
