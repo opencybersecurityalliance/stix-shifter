@@ -277,6 +277,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "[x-ibm-finding:src_geolocation = 'canada'] AND" \
                        "[x-ibm-finding:dst_geolocation = 'us']"
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        print(json.dumps(query,indent=4))
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
