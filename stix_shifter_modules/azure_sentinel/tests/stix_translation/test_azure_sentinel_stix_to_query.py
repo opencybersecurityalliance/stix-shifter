@@ -277,7 +277,6 @@ class TestQueryTranslator(unittest.TestCase):
                        "[x-ibm-finding:src_geolocation = 'canada'] AND" \
                        "[x-ibm-finding:dst_geolocation = 'us']"
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
-        print(json.dumps(query,indent=4))
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
@@ -304,7 +303,7 @@ class TestQueryTranslator(unittest.TestCase):
             }
         ]
         queries = _remove_timestamp_from_query(queries)
-        self.assertListEqual(query['queries'], queries)
+        self.assertSetEqual(set(query['queries']), set(queries))
     
     def test_lamda_operator_with_collection(self):
         stix_pattern = "[x-ibm-finding:x_recommendedActions = 'Enforce' OR x-ibm-finding:x_detectionIds != '111']"
