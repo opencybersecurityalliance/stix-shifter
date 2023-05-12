@@ -11,18 +11,17 @@
 		"help": {
 			"type": "link",
 			"default": "data-sources.html"
-		},
-		"selfSignedCert": {
-			"type": "password"
 		}
 	},
 	"configuration": {
 		"auth": {
 			"type": "fields",
 			"client_email": {
+				"type": "text"
+			},
+			"private_key": {
 				"type": "password"
 			}
-
 		}
 	}
 }

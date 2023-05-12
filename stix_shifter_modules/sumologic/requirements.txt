@@ -1,1 +1,2 @@
 sumologic-sdk==0.1.13
+urllib3==1.26.15

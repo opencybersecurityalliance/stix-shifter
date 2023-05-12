@@ -89,6 +89,7 @@ class Connector(BaseJsonSyncConnector):
             query = query[query_service_type]
             
             if self.query_alert_type != query_service_type:
+                self.logger.debug('Query type {} does not match the alert resource type {}'.format(query_service_type, self.query_alert_type))
                 return_obj = {'success': True, "data": []}
                 return return_obj
             
