@@ -210,16 +210,6 @@
       "region": ["cloud.region"]
     }
   },
-  "x-ecs-container": {
-    "fields": {
-      "container_id": ["container.id"],
-      "image.name": ["container.image.name"],
-      "image.tag": ["container.image.tag"],
-      "labels": ["container.labels"],
-      "name": ["container.name"],
-      "runtime": ["container.runtime"]
-    }
-  },
   "x-ecs-dns": {
     "fields": {
       "answers_class": ["dns.answers.class"],
@@ -267,12 +257,11 @@
       "architecture": ["host.architecture"],
       "domain": ["host.domain"],
       "hostname": ["host.hostname", "observer.hostname"],
-      "id": ["host.id"],
+      "id": ["host.id", "observer.serial_number"],
       "ip": ["host.ip", "observer.ip"],
       "mac": ["host.mac", "observer.mac"],
       "name": ["host.name", "observer.name"],
       "type": ["host.type", "observer.type"],
-      "serial_number": ["observer.serial_number"],
       "ingress.zone": ["observer.ingress.zone"],
       "ingress.interface.alias": ["observer.ingress.interface.alias"],
       "ingress.interface.id": ["observer.ingress.interface.id"],
@@ -284,7 +273,13 @@
       "uptime": ["host.uptime"],
       "os_ref.name": ["host.os.name", "observer.os.name", "observer.product"],
       "os_ref.vendor": ["host.os.platform", "observer.os.platform", "observer.vendor"],
-      "os_ref.version": ["host.os.version", "observer.os.version", "observer.version"]
+      "os_ref.version": ["host.os.version", "observer.os.version", "observer.version"],
+      "container.id": ["container.id"],
+      "container.image.name": ["container.image.name"],
+      "container.image.tag": ["container.image.tag"],
+      "container.labels": ["container.labels"],
+      "container.name": ["container.name"],
+      "container.runtime": ["container.runtime"]
     }
   },
   "x-oca-geo": {

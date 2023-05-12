@@ -27,7 +27,7 @@ class APIClient:
               Ping the Data Source
               :return: Response object
         """
-        return await self.client.call_api(self.PING_ENDPOINT, 'GET')
+        return await self.client.call_api(self.PING_ENDPOINT, 'GET', timeout=self.timeout)
 
     async def get_search_results(self, query):
         """

@@ -1,0 +1,20 @@
+{
+  "url": {
+    "fields": {
+        "value": ["Url"]
+    }
+  },
+  "domain-name":{
+    "fields":{
+      "value":["Url"]
+    }
+  },
+  "file":{
+    "fields":{
+      "hashes.'SHA-256'": ["sha256hash"],
+      "hashes.MD5": ["md5hash"],
+      "hashes.'MD5'": ["md5hash"],
+      "hashes.'SHA-1'": ["sha1hash"]
+    }
+  }
+}

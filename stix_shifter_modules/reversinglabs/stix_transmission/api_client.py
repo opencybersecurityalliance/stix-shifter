@@ -18,6 +18,7 @@ class APIClient():
                                     url_modifier_function=url_modifier_function)
         self.connection = connection
         self.namespace = connection.get('namespace')
+        self.timeout = connection['options'].get('timeout')
 
 
     async def ping_reversinglabs(self):
@@ -35,7 +36,7 @@ class APIClient():
 
         if data_type == 'ip' or data_type == 'domain':
             endpoint_uri_state = f'api/uri/statistics/uri_state/sha1/{uri}?format=json'
-            uri_state = await self.client.call_api(endpoint_uri_state, 'GET')
+            uri_state = await self.client.call_api(endpoint_uri_state, 'GET', timeout=self.timeout)
             json_data_uri_state = json.loads(uri_state.read().decode('utf-8')) if uri_state.code == 200 else {}
 
             if uri_state.code == 200:
@@ -61,7 +62,7 @@ class APIClient():
             })
 
             endpoint_url = 'api/networking/url/v1/report/query/json'
-            url_response = await self.client.call_api(endpoint_url, 'POST', data = post_body)
+            url_response = await self.client.call_api(endpoint_url, 'POST', data = post_body, timeout=self.timeout)
             json_data_url = json.loads(url_response.read().decode('utf-8')) if url_response.code == 200 else {}
 
             if url_response.code == 200:
@@ -83,7 +84,7 @@ class APIClient():
             hash_type = HASH_LENGTH.get(str(len(data)), '')
 
             endpoint_malware_presence = f'api/databrowser/malware_presence/query/{hash_type}/{data}?format=json&extended=true'
-            malware_presence = await self.client.call_api(endpoint_malware_presence, 'GET')
+            malware_presence = await self.client.call_api(endpoint_malware_presence, 'GET', timeout=self.timeout)
             json_data_malware_presence = json.loads(malware_presence.read().decode('utf-8')) if malware_presence.code == 200 else {}
 
             if malware_presence.code == 200:
