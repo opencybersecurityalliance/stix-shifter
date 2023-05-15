@@ -14,34 +14,33 @@
       {
         "key": "ipv4-addr.value",
         "object": "src_ip",
-        "unwrap": true,
-        "transformer": "FilterIPv4List"
+        "transformer": "CheckIPv4"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "src_ip_v6",
-        "unwrap": true,
-        "transformer": "FilterIPv6List"
+        "object": "src_ip",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "network-traffic.src_ref",
         "object": "nt",
-        "references": ["src_ip", "src_ip_v6"]
+        "references": "src_ip",
+        "transformer": "ListToValue"
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "source_host_domain",
-        "references": ["src_ip", "src_ip_v6"]
+        "references": ["src_ip"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "source_host_registered_domain",
-        "references": ["src_ip", "src_ip_v6"]
+        "references": ["src_ip"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "source_host_top_level_domain",
-        "references": ["src_ip", "src_ip_v6"]
+        "references": ["src_ip"]
       }
     ],
     "port": {
@@ -61,7 +60,7 @@
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
-        "object": "src_ip_v6",
+        "object": "src_ip",
         "references": ["src_mac"]
       }
     ],
@@ -86,7 +85,7 @@
         },
         {
           "key": "ipv6-addr.belongs_to_refs",
-          "object": "src_ip_v6",
+          "object": "src_ip",
           "references": ["source-autonomous-system"]
         }
       ],
@@ -105,29 +104,27 @@
       {
         "key": "ipv4-addr.value",
         "object": "source_nat",
-        "unwrap": true,
-        "transformer": "FilterIPv4List"
+        "transformer": "CheckIPv4"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "source_nat_v6",
-        "unwrap": true,
-        "transformer": "FilterIPv6List"
+        "object": "source_nat",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "source_host_domain",
-        "references": ["source_nat", "source_nat_v6"]
+        "references": ["source_nat"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "source_host_registered_domain",
-        "references": ["source_nat", "source_nat_v6"]
+        "references": ["source_nat"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "source_host_top_level_domain",
-        "references": ["source_nat", "source_nat_v6"]
+        "references": ["source_nat"]
       }
     ],
       "port": {
@@ -183,34 +180,32 @@
       {
         "key": "ipv4-addr.value",
         "object": "client_ip",
-        "unwrap": true,
-        "transformer": "FilterIPv4List"
+        "transformer": "CheckIPv4"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "client_ip_v6",
-        "unwrap": true,
-        "transformer": "FilterIPv6List"
+        "object": "client_ip",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "network-traffic.src_ref",
         "object": "nt",
-        "references": ["client_ip", "client_ip_v6"]
+        "references": "client_ip"
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "client_host_domain",
-        "references": ["client_ip", "client_ip_v6"]
+        "references": ["client_ip"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "client_host_registered_domain",
-        "references": ["client_ip", "client_ip_v6"]
+        "references": ["client_ip"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "client_host_top_level_domain",
-        "references": ["client_ip", "client_ip_v6"]
+        "references": ["client_ip"]
       }
     ],
     "port": {
@@ -238,7 +233,7 @@
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
-        "object": "client_ip_v6",
+        "object": "client_ip",
         "references": ["client_mac"]
       }
     ],
@@ -252,6 +247,11 @@
           "key": "ipv4-addr.belongs_to_refs",
           "object": "client_ip",
           "references": ["client-autonomous-system"]
+        },
+        {
+          "key": "ipv6-addr.belongs_to_refs",
+          "object": "client_ip",
+          "references": ["client-autonomous-system"]
         }
       ],
       "organization": {
@@ -262,7 +262,7 @@
       }
     },
     "address": {
-      "key": "x-ecs-client.address",
+      "key": "x-oca-asset.address",
       "object": "client"
     },
     "domain": {
@@ -274,29 +274,27 @@
       {
         "key": "ipv4-addr.value",
         "object": "client_nat",
-        "unwrap": true,
-        "transformer": "FilterIPv4List"
+        "transformer": "CheckIPv4"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "client_nat_v6",
-        "unwrap": true,
-        "transformer": "FilterIPv6List"
+        "object": "client_nat",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "client_host_domain",
-        "references": ["client_nat", "client_nat_v6"]
+        "references": ["client_nat"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "client_host_registered_domain",
-        "references": ["client_nat", "client_nat_v6"]
+        "references": ["client_nat"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "client_host_top_level_domain",
-        "references": ["client_nat", "client_nat_v6"]
+        "references": ["client_nat"]
       }
     ],
     "port": {
@@ -352,34 +350,32 @@
       {
         "key": "ipv4-addr.value",
         "object": "dst_ip",
-        "unwrap": true,
-        "transformer": "FilterIPv4List"
+        "transformer": "CheckIPv4"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "dst_ip_v6",
-        "unwrap": true,
-        "transformer": "FilterIPv6List"
+        "object": "dst_ip",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "network-traffic.dst_ref",
         "object": "nt",
-        "references": ["dst_ip", "dst_ip_v6"]
+        "references": "dst_ip"
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "dst_host_domain",
-        "references": ["dst_ip", "dst_ip_v6"]
+        "references": ["dst_ip"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "dst_host_registered_domain",
-        "references": ["dst_ip", "dst_ip_v6"]
+        "references": ["dst_ip"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "dst_host_top_level_domain",
-        "references": ["dst_ip", "dst_ip_v6"]
+        "references": ["dst_ip"]
       }
     ],
     "port": {
@@ -399,7 +395,7 @@
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
-        "object": "dst_ip_v6",
+        "object": "dst_ip",
         "references": ["dst_mac"]
       }
     ],
@@ -424,7 +420,7 @@
         },
         {
           "key": "ipv6-addr.belongs_to_refs",
-          "object": "dst_ip_v6",
+          "object": "dst_ip",
           "references": ["dst-autonomous-system"]
         }
       ],
@@ -436,7 +432,7 @@
       }
     },
     "address": {
-      "key": "x-ecs-destination.address",
+      "key": "x-oca-asset.address",
       "object": "destination"
     },
     "domain": {
@@ -448,29 +444,27 @@
         {
           "key": "ipv4-addr.value",
           "object": "dst_nat",
-          "unwrap": true,
-          "transformer": "FilterIPv4List"
+          "transformer": "CheckIPv4"
         },
         {
           "key": "ipv6-addr.value",
-          "object": "dst_nat_v6",
-          "unwrap": true,
-          "transformer": "FilterIPv6List"
+          "object": "dst_nat",
+          "transformer": "CheckIPv6"
         },
         {
           "key": "domain-name.resolves_to_refs",
           "object": "dst_host_domain",
-          "references": ["dst_nat", "dst_nat_v6"]
+          "references": ["dst_nat"]
         },
         {
           "key": "domain-name.resolves_to_refs",
           "object": "dst_host_registered_domain",
-          "references": ["dst_nat", "dst_nat_v6"]
+          "references": ["dst_nat"]
         },
         {
           "key": "domain-name.resolves_to_refs",
           "object": "dst_host_top_level_domain",
-          "references": ["dst_nat", "dst_nat_v6"]
+          "references": ["dst_nat"]
         }
       ],
       "port": {
@@ -526,34 +520,32 @@
       {
         "key": "ipv4-addr.value",
         "object": "server_ip",
-        "unwrap": true,
-        "transformer": "FilterIPv4List"
+        "transformer": "CheckIPv4"
       },
       {
         "key": "ipv6-addr.value",
         "object": "server_ip_v6",
-        "unwrap": true,
-        "transformer": "FilterIPv6List"
+        "transformer": "CheckIPv6"
       },
       {
         "key": "network-traffic.dst_ref",
         "object": "nt",
-        "references": ["server_ip", "server_ip_v6"]
+        "references": "server_ip"
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "server_host_domain",
-        "references": ["server_ip", "server_ip_v6"]
+        "references": ["server_ip"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "server_host_registered_domain",
-        "references": ["server_ip", "server_ip_v6"]
+        "references": ["server_ip"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "server_host_top_level_domain",
-        "references": ["server_ip", "server_ip_v6"]
+        "references": ["server_ip"]
       }
     ],
     "port": {
@@ -581,7 +573,7 @@
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
-        "object": "server_ip_v6",
+        "object": "server_ip",
         "references": ["server_mac"]
       }
     ],
@@ -598,7 +590,7 @@
         },
         {
           "key": "ipv6-addr.belongs_to_refs",
-          "object": "server_ip_v6",
+          "object": "server_ip",
           "references": ["server-autonomous-system"]
         }
       ],
@@ -610,7 +602,7 @@
       }
     },
     "address": {
-      "key": "x-ecs-server.address",
+      "key": "x-oca-asset.address",
       "object": "server"
     },
     "domain": {
@@ -622,29 +614,27 @@
         {
           "key": "ipv4-addr.value",
           "object": "server_nat",
-          "unwrap": true,
-          "transformer": "FilterIPv4List"
+          "transformer": "CheckIPv4"
         },
         {
           "key": "ipv6-addr.value",
-          "object": "server_nat_v6",
-          "unwrap": true,
-          "transformer": "FilterIPv6List"
+          "object": "server_nat",
+          "transformer": "CheckIPv6"
         },
         {
           "key": "domain-name.resolves_to_refs",
           "object": "server_host_domain",
-          "references": ["server_nat", "server_nat_v6"]
+          "references": ["server_nat"]
         },
         {
           "key": "domain-name.resolves_to_refs",
           "object": "server_host_registered_domain",
-          "references": ["server_nat", "server_nat_v6"]
+          "references": ["server_nat"]
         },
         {
           "key": "domain-name.resolves_to_refs",
           "object": "server_host_top_level_domain",
-          "references": ["server_nat", "server_nat_v6"]
+          "references": ["server_nat"]
         }
       ],
       "port": {
