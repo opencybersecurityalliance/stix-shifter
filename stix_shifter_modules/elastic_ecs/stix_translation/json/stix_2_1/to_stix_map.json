@@ -24,8 +24,7 @@
       {
         "key": "network-traffic.src_ref",
         "object": "nt",
-        "references": "src_ip",
-        "transformer": "ListToValue"
+        "references": "src_ip"
       },
       {
         "key": "domain-name.resolves_to_refs",
