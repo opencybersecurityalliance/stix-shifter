@@ -1,5 +1,9 @@
-##### Updated on 04/28/23
+##### Updated on 05/15/23
 ## Elasticsearch ECS
+### Results STIX Domain Objects
+* Identity
+* Observed Data
+<br>
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
 
@@ -170,12 +174,6 @@
 | **x-ecs-cloud**:machine.type | cloud.machine.type |
 | **x-ecs-cloud**:provider | cloud.provider |
 | **x-ecs-cloud**:region | cloud.region |
-| **x-ecs-container**:id | container.id |
-| **x-ecs-container**:image.name | container.image.name |
-| **x-ecs-container**:image.tag | container.image.tag |
-| **x-ecs-container**:labels | container.labels |
-| **x-ecs-container**:name | container.name |
-| **x-ecs-container**:runtime | container.runtime |
 | **x-ecs-dns**:answers_class | dns.answers.class |
 | **x-ecs-dns**:answers_data | dns.answers.data |
 | **x-ecs-dns**:answers_name | dns.answers.name |
@@ -205,12 +203,11 @@
 | **x-oca-asset**:architecture | host.architecture |
 | **x-oca-asset**:domain | host.domain |
 | **x-oca-asset**:hostname | host.hostname, observer.hostname |
-| **x-oca-asset**:id | host.id |
+| **x-oca-asset**:id | host.id, observer.serial_number |
 | **x-oca-asset**:ip | host.ip, observer.ip |
 | **x-oca-asset**:mac | host.mac, observer.mac |
 | **x-oca-asset**:name | host.name, observer.name |
 | **x-oca-asset**:type | host.type, observer.type |
-| **x-oca-asset**:serial_number | observer.serial_number |
 | **x-oca-asset**:ingress.zone | observer.ingress.zone |
 | **x-oca-asset**:ingress.interface.alias | observer.ingress.interface.alias |
 | **x-oca-asset**:ingress.interface.id | observer.ingress.interface.id |
@@ -223,6 +220,12 @@
 | **x-oca-asset**:os_ref.name | host.os.name, observer.os.name, observer.product |
 | **x-oca-asset**:os_ref.vendor | host.os.platform, observer.os.platform, observer.vendor |
 | **x-oca-asset**:os_ref.version | host.os.version, observer.os.version, observer.version |
+| **x-oca-asset**:container.id | container.id |
+| **x-oca-asset**:container.image.name | container.image.name |
+| **x-oca-asset**:container.image.tag | container.image.tag |
+| **x-oca-asset**:container.labels | container.labels |
+| **x-oca-asset**:container.name | container.name |
+| **x-oca-asset**:container.runtime | container.runtime |
 | **x-oca-geo**:city_name | server.geo.city_name, client.geo.city_name, source.geo.city_name, destination.geo.city_name |
 | **x-oca-geo**:continent_name | server.geo.continent_name, client.geo.continent_name, source.geo.continent_name, destination.geo.continent_name |
 | **x-oca-geo**:country_iso_code | server.geo.country_iso_code, client.geo.country_iso_code, source.geo.country_iso_code, destination.geo.country_iso_code |
@@ -307,9 +310,9 @@
 ### Searchable STIX objects and properties for Beats dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
-| **ipv4-addr**:value | source.ip, destination.ip, client.ip, server.ip, host.ip, dns.resolved_ip, source.nat.ip, destination.nat.ip, client.nat.ip, server.nat.ip |
-| **ipv6-addr**:value | source.ip, destination.ip, client.ip, server.ip, host.ip, dns.resolved_ip, source.nat.ip, destination.nat.ip, client.nat.ip, server.nat.ip |
-| **mac-addr**:value | source.mac, destination.mac, client.mac, server.mac, host.mac.keyword |
+| **ipv4-addr**:value | source.ip.keyword, destination.ip.keyword, client.ip.keyword, server.ip.keyword, host.ip.keyword, dns.resolved_ip.keyword, source.nat.ip.keyword, destination.nat.ip.keyword, client.nat.ip.keyword, server.nat.ip.keyword |
+| **ipv6-addr**:value | source.ip.keyword, destination.ip.keyword, client.ip.keyword, server.ip.keyword, host.ip.keyword, dns.resolved_ip.keyword, source.nat.ip.keyword, destination.nat.ip.keyword, client.nat.ip.keyword, server.nat.ip.keyword |
+| **mac-addr**:value | source.mac.keyword, destination.mac.keyword, client.mac.keyword, server.mac.keyword, host.mac.keyword |
 | **network-traffic**:src_port | source.port, client.port, source.nat.port, client.nat.port |
 | **network-traffic**:dst_port | destination.port, server.port, destination.nat.port, server.nat.port |
 | **network-traffic**:protocols[*] | network.transport.keyword, network.type.keyword, network.protocol.keyword |
@@ -326,7 +329,7 @@
 | **network-traffic**:x_name | network.name |
 | **network-traffic**:x_application | network.application |
 | **network-traffic**:x_direction | network.direction.keyword |
-| **network-traffic**:x_forwarded_ip | network.forwarded_ip |
+| **network-traffic**:x_forwarded_ip | network.forwarded_ip.keyword |
 | **network-traffic**:x_community_id | network.community_id.keyword |
 | **artifact**:payload_bin | event.original |
 | **file**:name | file.name, dll.name, file.path, process.name.keyword, process.executable.keyword, process.parent.name.keyword, process.parent.executable.keyword |
@@ -364,7 +367,7 @@
 | **directory**:path | file.directory, file.path |
 | **user-account**:user_id | user.name.keyword, user.id.keyword |
 | **user-account**:account_login | user.name.keyword |
-| **user-account**:display_name | user.full_name |
+| **user-account**:display_name | user.full_name.keyword |
 | **user-account**:x_domain | user.domain.keyword |
 | **user-account**:x_hash | user.hash |
 | **user-account**:x_group.domain | user.group.domain |
@@ -399,7 +402,7 @@
 | **process**:x_unique_id | process.entity_id.keyword, process.parent.entity_id.keyword |
 | **process**:x_uptime | process.uptime |
 | **url**:value | url.original |
-| **domain-name**:value | url.domain, dns.question.name, dns.question.registered_domain, host.hostname, source.domain, destination.domain, server.domain, client.domain, source.registered_domain, destination.registered_domain, server.registered_domain, client.registered_domain, source.top_level_domain, destination.top_level_domain, server.top_level_domain, client.top_level_domain |
+| **domain-name**:value | url.domain, dns.question.name, dns.question.registered_domain, host.hostname.keyword, source.domain, destination.domain, server.domain, client.domain, source.registered_domain, destination.registered_domain, server.registered_domain, client.registered_domain, source.top_level_domain, destination.top_level_domain, server.top_level_domain, client.top_level_domain |
 | **windows-registry-key**:key | registry.key |
 | **software**:name | agent.name.keyword, process.pe.original_file_name.keyword, file.pe.original_file_name.keyword, dll.pe.original_file_name.keyword |
 | **software**:vendor | process.pe.company.keyword, file.pe.company.keyword, dll.pe.company.keyword |
@@ -453,12 +456,6 @@
 | **x-ecs-cloud**:machine.type | cloud.machine.type |
 | **x-ecs-cloud**:provider | cloud.provider |
 | **x-ecs-cloud**:region | cloud.region |
-| **x-ecs-container**:id | container.id |
-| **x-ecs-container**:image.name | container.image.name |
-| **x-ecs-container**:image.tag | container.image.tag |
-| **x-ecs-container**:labels | container.labels |
-| **x-ecs-container**:name | container.name |
-| **x-ecs-container**:runtime | container.runtime |
 | **x-ecs-dns**:answers_class | dns.answers.class |
 | **x-ecs-dns**:answers_data | dns.answers.data |
 | **x-ecs-dns**:answers_name | dns.answers.name |
@@ -485,15 +482,14 @@
 | **x-ecs-group**:domain | group.domain |
 | **x-ecs-group**:id | group.id |
 | **x-ecs-group**:name | group.name |
-| **x-oca-asset**:architecture | host.architecture |
+| **x-oca-asset**:architecture | host.architecture.keyword |
 | **x-oca-asset**:domain | host.domain |
-| **x-oca-asset**:hostname | host.hostname, observer.hostname |
-| **x-oca-asset**:id | host.id |
-| **x-oca-asset**:ip | host.ip, observer.ip |
-| **x-oca-asset**:mac | host.mac, observer.mac |
-| **x-oca-asset**:name | host.name, observer.name |
+| **x-oca-asset**:hostname | host.hostname.keyword, observer.hostname.keyword |
+| **x-oca-asset**:id | host.id.keyword, observer.serial_number.keyword |
+| **x-oca-asset**:ip | host.ip.keyword, observer.ip.keyword |
+| **x-oca-asset**:mac | host.mac.keyword, observer.mac.keyword |
+| **x-oca-asset**:name | host.name.keyword, observer.name.keyword |
 | **x-oca-asset**:type | host.type, observer.type |
-| **x-oca-asset**:serial_number | observer.serial_number |
 | **x-oca-asset**:ingress.zone | observer.ingress.zone |
 | **x-oca-asset**:ingress.interface.alias | observer.ingress.interface.alias |
 | **x-oca-asset**:ingress.interface.id | observer.ingress.interface.id |
@@ -503,9 +499,15 @@
 | **x-oca-asset**:egress.interface.id | observer.egress.interface.id |
 | **x-oca-asset**:egress.interface.name | observer.egress.interface.name |
 | **x-oca-asset**:uptime | host.uptime |
-| **x-oca-asset**:os_ref.name | host.os.name, observer.os.name, observer.product |
-| **x-oca-asset**:os_ref.vendor | host.os.platform, observer.os.platform, observer.vendor |
-| **x-oca-asset**:os_ref.version | host.os.version, observer.os.version, observer.version |
+| **x-oca-asset**:os_ref.name | host.os.name.keyword, observer.os.name.keyword, observer.product.keyword |
+| **x-oca-asset**:os_ref.vendor | host.os.platform.keyword, observer.os.platform.keyword, observer.vendor.keyword |
+| **x-oca-asset**:os_ref.version | host.os.version.keyword, observer.os.version.keyword, observer.version.keyword |
+| **x-oca-asset**:container.id | container.id |
+| **x-oca-asset**:container.image.name | container.image.name |
+| **x-oca-asset**:container.image.tag | container.image.tag |
+| **x-oca-asset**:container.labels | container.labels |
+| **x-oca-asset**:container.name | container.name |
+| **x-oca-asset**:container.runtime | container.runtime |
 | **x-oca-geo**:city_name | server.geo.city_name, client.geo.city_name, source.geo.city_name, destination.geo.city_name |
 | **x-oca-geo**:continent_name | server.geo.continent_name, client.geo.continent_name, source.geo.continent_name, destination.geo.continent_name |
 | **x-oca-geo**:country_iso_code | server.geo.country_iso_code, client.geo.country_iso_code, source.geo.country_iso_code, destination.geo.country_iso_code |
@@ -758,13 +760,6 @@
 | x-ecs-cloud | provider | provider |
 | x-ecs-cloud | region | region |
 | <br> | | |
-| x-ecs-container | container_id | id |
-| x-ecs-container | image_name | name |
-| x-ecs-container | image_tag | tag |
-| x-ecs-container | labels | labels |
-| x-ecs-container | name | name |
-| x-ecs-container | runtime | runtime |
-| <br> | | |
 | x-ecs-destination | address | address |
 | <br> | | |
 | x-ecs-error | code | code |
@@ -799,9 +794,6 @@
 | x-ecs-log | syslog_priority | priority |
 | x-ecs-log | severity_syslog_code | code |
 | x-ecs-log | severity_syslog_name | name |
-| <br> | | |
-| x-ecs-observer | os_ref | name |
-| x-ecs-observer | geo_ref | city_name |
 | <br> | | |
 | x-ecs-organization | organization_id | id |
 | x-ecs-organization | name | name |
@@ -885,10 +877,16 @@
 | x-ecs-vulnerability | score_temporal | temporal |
 | x-ecs-vulnerability | score_version | version |
 | <br> | | |
+| x-oca-asset | extensions.x-oca-container-ext.id | id |
+| x-oca-asset | extensions.x-oca-container-ext.image.name | name |
+| x-oca-asset | extensions.x-oca-container-ext.image.tag | tag |
+| x-oca-asset | extensions.x-oca-container-ext.labels | labels |
+| x-oca-asset | extensions.x-oca-container-ext.name | name |
+| x-oca-asset | extensions.x-oca-container-ext.container_type | runtime |
 | x-oca-asset | architecture | architecture |
 | x-oca-asset | domain_ref | domain |
 | x-oca-asset | hostname | hostname |
-| x-oca-asset | host_id | id |
+| x-oca-asset | device_id | id |
 | x-oca-asset | ip_refs | ip |
 | x-oca-asset | mac_refs | mac |
 | x-oca-asset | name | name |
@@ -917,11 +915,9 @@
 | x-oca-asset | ingress.interface.name | name |
 | x-oca-asset | ingress.vlan.id | id |
 | x-oca-asset | ingress.vlan.name | name |
-| x-oca-asset | ip | ip |
-| x-oca-asset | mac | mac |
-| x-oca-asset | observer_software_ref | product |
-| x-oca-asset | serial_number | serial_number |
-| x-oca-asset | type | type |
+| x-oca-asset | os_ref | product |
+| x-oca-asset | device_id | serial_number |
+| x-oca-asset | os_ref | vendor |
 | <br> | | |
 | x-oca-event | network_ref | transport |
 | x-oca-event | network_ref | type |

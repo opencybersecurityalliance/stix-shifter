@@ -1,5 +1,9 @@
-##### Updated on 03/08/23
+##### Updated on 05/15/23
 ## Trend Micro Vision One
+### Results STIX Domain Objects
+* Identity
+* Observed Data
+<br>
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
 
