@@ -109,9 +109,7 @@
       "network_ref.dst_ref.value": ["ip"],
       "network_ref.src_ref.value": ["ip"],
       "parent_process_ref.pid": ["service.ppid"],
-      "process_ref.pid": ["wmi.clientPid"],
-      "user_ref.user_id": [],
-
+      "process_ref.pid": ["wmi.clientPid"]
     }
   },
   "x-reaqta-amsi": {
