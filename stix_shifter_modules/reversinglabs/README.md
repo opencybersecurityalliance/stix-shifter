@@ -1,5 +1,11 @@
 # ReversingLabs
 
+Enrich IP addresses, domains, hashes and URLs with the ReversingLabs threat intelligence service.
+
+## Supported STIX Mappings
+
+See the [table of mappings](reversinglabs_supported_stix.md) for the STIX objects and operators supported by this connector.
+
 ## ReversingLabs Supported STIX Pattern values (Querying):
 
 The following STIX Patterns are supported by ReversingLabs:
