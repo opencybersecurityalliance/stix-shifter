@@ -143,12 +143,23 @@ class BaseEntryPoint:
             return self.__dialect_to_query_translator[self.__dialect_default[self.__options.get(OPTION_LANGUAGE, "stix")]]
         except KeyError as ex:
             raise UnsupportedDialectException(dialect)
+        
+    @translation
+    def __combine_default_results_translator_to_stix_maps(self):
+        combined_map_data = {}
+        for _translator_index in self.__dialect_to_results_translator:
+            combined_map_data = {**combined_map_data, **self.__dialect_to_results_translator[_translator_index].map_data}
+
+        results_translator:BaseResultTranslator = self.__dialect_to_results_translator[self.__dialect_default[self.__options.get(OPTION_LANGUAGE, "stix")]]
+        results_translator.map_data = combined_map_data
+        return results_translator
+
 
     @translation
     def get_results_translator(self, dialect=None):
         if dialect:
             return self.__dialect_to_results_translator[dialect]
-        return self.__dialect_to_results_translator[self.__dialect_default[self.__options.get(OPTION_LANGUAGE, "stix")]]
+        return self.__combine_default_results_translator_to_stix_maps()
 
     @translation
     async def parse_query(self, data):

@@ -197,10 +197,10 @@ class ResultsConnector(BaseJsonResultsConnector):
         formatted_result = []
         transmit_basepath = os.path.abspath(__file__)
         translate_basepath = transmit_basepath.split(os.sep)[:-2]
-        filepath = os.sep.join([*translate_basepath, "stix_translation", "json", 'to_stix_map.json'])
+        filepath = os.sep.join([*translate_basepath, "stix_translation", "json", service_type + '_to_stix_map.json'])
         map_file = open(filepath).read()
         map_data = json.loads(map_file)
-        map_data_keys = list(map_data[service_type].keys())
+        map_data_keys = list(map_data.keys())
         ds_key_values = self.gen_dict_extract(key_to_search='ds_key', var=map_data)
         map_data_keys.extend(ds_key_values)
         flattened_obj = dict()
