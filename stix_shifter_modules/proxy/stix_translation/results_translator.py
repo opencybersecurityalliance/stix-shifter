@@ -6,7 +6,7 @@ from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestAp
 
 class ResultsTranslator(BaseResultTranslator):
 
-    def read_json(self, filepath, options, key_subsitute=None):
+    def read_json(self, filepath, options):
         return '{}'
 
     async def translate_results(self, data_source, data):

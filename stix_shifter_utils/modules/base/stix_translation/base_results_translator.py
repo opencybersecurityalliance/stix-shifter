@@ -16,8 +16,8 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
         self.map_data = self.fetch_mapping(base_file_path, dialect, options)
         self.transformers = get_module_transformers(self.module_name)
 
-    def read_json(self, filepath, options, key_subsitute=None):
-        return helper_read_json(filepath, options, key_subsitute=key_subsitute)
+    def read_json(self, filepath, options):
+        return helper_read_json(filepath, options)
 
     def fetch_mapping(self, basepath, dialect, options):
         """
@@ -40,7 +40,7 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
         if os.path.isdir(stix_2_0_mapping_directory_path) and not os.path.isfile(to_stix_path):
             raise Exception('BaseResultTranslator Error: ' + to_stix_path + ' is not found for dialect ' + dialect)
 
-        return self.read_json(to_stix_path, options, key_subsitute='to_stix_map')
+        return self.read_json(to_stix_path, options)
 
     @abstractmethod
     def translate_results(self, data_source, data):

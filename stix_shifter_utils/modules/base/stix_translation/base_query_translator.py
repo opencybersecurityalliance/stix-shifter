@@ -26,8 +26,8 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         self.map_data = self.fetch_mapping(basepath, dialect, options)
         self.map_operator = self.fetch_operators(basepath, dialect, options)
 
-    def read_json(self, filepath, options, key_subsitute=None):
-        return helper_read_json(filepath, options, key_subsitute=None)
+    def read_json(self, filepath, options):
+        return helper_read_json(filepath, options)
     
     def fetch_operators(self, basepath, dialect, options):
         operator_directory_path = path.join(basepath, 'json')
