@@ -116,7 +116,7 @@ class ErrorResponder():
                     error_code = ErrorCode.TRANSMISSION_FORBIDDEN
                 elif 'too_many_requests' in message or 'Too Many Requests' in message:
                     error_code = ErrorCode.TRANSMISSION_TOO_MANY_REQUESTS
-                elif 'client_connector_error' in message:
+                elif any(m in message for m in ['client_connector_error', 'server timeout_error', 'ailed to establish']):
                     error_code = ErrorCode.TRANSMISSION_CONNECT
             message = '{} connector error => {}'.format(connector, str(message))
             return_object['error'] = str(message)
