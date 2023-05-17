@@ -11,8 +11,8 @@ class Connector(BaseJsonSyncConnector):
     max_limit = 1000
     base_uri = 'graph.microsoft.com' # Microsoft Graph API has single endpoint
     DEFAULT_API_VERSION = 'v1.0'
-    LEGACY_ALERT = 'security/alerts'
-    ALERT_V2 = 'security/alerts_v2'
+    LEGACY_ALERT = 'alerts'
+    ALERT_V2 = 'alerts_v2'
 
     def __init__(self, connection, configuration):
         """Initialization.
@@ -24,17 +24,31 @@ class Connector(BaseJsonSyncConnector):
         self.configuration = configuration
         self.api_client = APIClient(self.base_uri, self.connection, self.configuration)
         
-        self.legacy_alert = connection['options'].get('alert')
-        self.alert_v2 = connection['options'].get('alertV2')
-        
-        if self.legacy_alert:
+        # self.legacy_alert = connection['options'].get('alert')
+        # self.alert_v2 = connection['options'].get('alertV2')
+        self.alert_resource = connection['options'].get('alert_resources')
+
+        if self.alert_resource == self.LEGACY_ALERT:
             self.query_alert_type = 'alert'
-            self.endpoint = '{api_version}/{api_resource}'.format(api_version=self.DEFAULT_API_VERSION, api_resource=self.LEGACY_ALERT)
-        elif self.alert_v2:
+            self.endpoint = '{api_version}/security/{api_resource}'.format(api_version=self.DEFAULT_API_VERSION, api_resource=self.LEGACY_ALERT)
+        elif self.alert_resource == self.ALERT_V2:
             self.query_alert_type = 'alertV2'
-            self.endpoint = '{api_version}/{api_resource}'.format(api_version=self.DEFAULT_API_VERSION, api_resource=self.ALERT_V2)
+            self.endpoint = '{api_version}/security/{api_resource}'.format(api_version=self.DEFAULT_API_VERSION, api_resource=self.ALERT_V2)
         else:
             raise Exception('Invalid alert resource type. At least one alert type must be selected.')
+        
+        #remove below block before creating PR
+        # if self.legacy_alert:
+        #     self.query_alert_type = 'alert'
+        #     self.endpoint = '{api_version}/{api_resource}'.format(api_version=self.DEFAULT_API_VERSION, api_resource=self.LEGACY_ALERT)
+        # elif self.alert_v2:
+        #     self.query_alert_type = 'alertV2'
+        #     self.endpoint = '{api_version}/{api_resource}'.format(api_version=self.DEFAULT_API_VERSION, api_resource=self.ALERT_V2)
+        # else:
+        #     raise Exception('Invalid alert resource type. At least one alert type must be selected.')
+    
+        
+        self.logger.warning('Alert Resource selected::: {}'.format(self.alert_resource))
 
     async def ping_connection(self):
         """Ping the endpoint."""

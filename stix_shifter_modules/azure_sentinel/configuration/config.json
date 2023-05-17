@@ -30,6 +30,11 @@
             "alertV2": {
                 "type": "boolean",
                 "default": false
+            },
+            "alert_resources": {
+                "type": "dropdown",
+                "default": "alerts",
+                "options": ["alerts", "alerts_v2" ]
             }
         }
     },

@@ -28,6 +28,14 @@
             "alertV2": {
                 "label": "Alert",
                 "description": "Latest Generation of alerts in the Microsoft Graph security API"
+            },
+            "alert_resources": {
+                "label": "Alert resources",
+                "optionLabels": {
+                    "alerts": "Legacy alert",
+                    "alerts_v2": "Alert V2"
+                },
+                "description": "Select an alert resource version for the Microsoft Graph security API"
             }
         }
     },
