@@ -119,7 +119,8 @@ class ErrorResponder():
                 elif any(m in message for m in ['client_connector_error', 'server timeout_error', 'ailed to establish']):
                     error_code = ErrorCode.TRANSMISSION_CONNECT
             message = '{} connector error => {}'.format(connector, str(message))
-            return_object['error'] = str(message)
+            message = message.replace('[Errno 61] ','')
+            return_object['error'] = message
         ErrorMapperBase.set_error_code(return_object, error_code.value, connector=connector)
         if error_code == ErrorCode.TRANSMISSION_UNKNOWN:
             ErrorResponder.call_module_error_mapper(message_struct, return_object, connector)
