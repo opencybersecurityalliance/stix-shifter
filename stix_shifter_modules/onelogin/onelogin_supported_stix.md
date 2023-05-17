@@ -1,5 +1,9 @@
-##### Updated on 02/27/23
+##### Updated on 05/15/23
 ## OneLogin
+### Results STIX Domain Objects
+* Identity
+* Observed Data
+<br>
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
 
