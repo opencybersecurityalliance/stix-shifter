@@ -1,3 +1,4 @@
+import copy
 import importlib
 import traceback
 import os
@@ -5,6 +6,7 @@ import functools
 import json
 import glob
 from inspect import isawaitable
+from typing import Union
 
 from stix_shifter_utils.utils.module_discovery import dialect_list
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
@@ -145,21 +147,28 @@ class BaseEntryPoint:
             raise UnsupportedDialectException(dialect)
         
     @translation
-    def __combine_default_results_translator_to_stix_maps(self):
-        combined_map_data = {}
-        for _translator_index in self.__dialect_to_results_translator:
-            combined_map_data = {**combined_map_data, **self.__dialect_to_results_translator[_translator_index].map_data}
+    def __combine_default_results_translator_to_stix_maps(self, dialects:list=None):
+        """
+        Returns default or dialect specific ResultTranslator. 
+        If there are multiple dialects in the module and 'dialects' list argument is specified, the return combines
+        the corresponding ResultTranslators' map_data into a copy of the default ResultTranslator and returns it.
+        """
+        default_results_translator:BaseResultTranslator = self.__dialect_to_results_translator[self.__dialect_default[self.__options.get(OPTION_LANGUAGE, "stix")]]
+        results_translator = copy.deepcopy(default_results_translator)
 
-        results_translator:BaseResultTranslator = self.__dialect_to_results_translator[self.__dialect_default[self.__options.get(OPTION_LANGUAGE, "stix")]]
-        results_translator.map_data = combined_map_data
+        for dialect, translator in self.__dialect_to_results_translator.items():
+            if dialects and dialect not in dialects:
+                continue
+            results_translator.map_data = {**results_translator.map_data, **translator.map_data}
+
         return results_translator
 
 
     @translation
-    def get_results_translator(self, dialect=None):
-        if dialect:
+    def get_results_translator(self, dialect:Union[str,list]=None):
+        if dialect and isinstance(dialect, str):
             return self.__dialect_to_results_translator[dialect]
-        return self.__combine_default_results_translator_to_stix_maps()
+        return self.__combine_default_results_translator_to_stix_maps(dialect)
 
     @translation
     async def parse_query(self, data):
@@ -179,7 +188,11 @@ class BaseEntryPoint:
 
     @translation
     async def translate_results(self, data_source, data):
-        translator = self.get_results_translator()
+        dialects = None
+        if 'dialects' in self.__options:
+            dialects = self.__options['dialects']
+
+        translator = self.get_results_translator(dialects)
         try:
             result = translator.translate_results(data_source, data)
             if isawaitable(result):
