@@ -120,7 +120,8 @@
       "x_exit_code": ["process.exit_code"],
       "x_thread_id": ["process.thread.id"],
       "x_window_title": ["process.title"],
-      "x_uptime": ["process.uptime"]
+      "x_uptime": ["process.uptime"],
+      "x_pgid": ["process.pgid"]
     }
   },
   "url": {

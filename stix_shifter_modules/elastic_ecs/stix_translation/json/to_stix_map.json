@@ -1067,10 +1067,17 @@
           "references": "process_parent"
         }
       ],
-      "pgid": {
-        "key": "process.pgid",
-        "object": "process_parent"
-      },
+      "pgid": [
+        {
+          "key": "process.pid",
+          "object": "process_parent_group_leader"
+        },
+        {
+          "key": "process.group_leader_ref",
+          "object": "process_parent",
+          "references": "process_parent_group_leader"
+        }
+      ],
       "pid": [
         {
           "key": "process.pid",
@@ -1088,11 +1095,6 @@
           "references": "process_parent"
         }
       ],
-      "ppid": {
-        "key": "process.ppid",
-        "object": "process_parent",
-        "transformer": "ToInteger"
-      },
       "start": {
         "key": "process.created",
         "object": "process_parent"
@@ -1143,10 +1145,17 @@
         }
       ]
     },
-    "pgid": {
-      "key": "process.x_exit_code",
-      "object": "process"
-    },
+    "pgid": [
+      {
+        "key": "process.pid",
+        "object": "process_group_leader"
+      },
+      {
+        "key": "process.group_leader_ref",
+        "object": "process",
+        "references": "process_group_leader"
+      }
+    ],
     "thread": {
       "id": {
         "key": "process.x_thread_id",

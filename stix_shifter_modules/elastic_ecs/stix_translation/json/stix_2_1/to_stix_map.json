@@ -1018,10 +1018,17 @@
         "key": "process.x_exit_code",
         "object": "process_parent"
       },
-      "pgid": {
-        "key": "process.x_pgid",
-        "object": "process_parent"
-      },
+      "pgid": [
+        {
+          "key": "process.pid",
+          "object": "process_parent_group_leader"
+        },
+        {
+          "key": "process.group_leader_ref",
+          "object": "process_parent",
+          "references": "process_parent_group_leader"
+        }
+      ],
       "pid": [
         {
           "key": "process.pid",
@@ -1089,10 +1096,17 @@
         }
       ]
     },
-    "pgid": {
-      "key": "process.x_exit_code",
-      "object": "x_process"
-    },
+    "pgid": [
+      {
+        "key": "process.pid",
+        "object": "process_group_leader"
+      },
+      {
+        "key": "process.group_leader_ref",
+        "object": "process",
+        "references": "process_group_leader"
+      }
+    ],
     "thread": {
       "id": {
         "key": "process.x_thread_id",
