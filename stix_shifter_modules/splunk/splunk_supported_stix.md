@@ -1,5 +1,8 @@
-##### Updated on 05/09/23
-## Splunk
+##### Updated on 05/18/23
+## Splunk Enterprise Security
+* Identity
+* Observed Data
+<br>
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
 
