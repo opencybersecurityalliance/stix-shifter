@@ -1,5 +1,6 @@
 ##### Updated on 05/18/23
 ## Splunk Enterprise Security
+### Results STIX Domain Objects
 * Identity
 * Observed Data
 <br>
