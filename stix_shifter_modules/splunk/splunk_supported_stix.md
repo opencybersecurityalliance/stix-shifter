@@ -1,5 +1,9 @@
-##### Updated on 02/27/23
+##### Updated on 05/15/23
 ## Splunk Enterprise Security
+### Results STIX Domain Objects
+* Identity
+* Observed Data
+<br>
 ### Supported STIX Operators
 *Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
 
@@ -89,6 +93,7 @@
 | **process**:creator_user_ref.user_login | user |
 | **process**:binary_ref.parent_directory_ref.path | process_path |
 | **process**:binary_ref.name | process_exec |
+| **process**:x_unique_id | process_guid |
 | **url**:value | url |
 | **user-account**:user_id | user |
 | **user-account**:account_login | user |
@@ -182,6 +187,7 @@
 | process | name | process_name |
 | process | command_line | process |
 | process | binary_ref | process_exec |
+| process | x_unique_id | process_guid |
 | process | pid | parent_process_id |
 | process | parent_ref | parent_process_id |
 | process | name | parent_process_name |
