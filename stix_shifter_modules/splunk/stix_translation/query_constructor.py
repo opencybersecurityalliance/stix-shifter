@@ -196,15 +196,15 @@ class _ObservationExpressionTranslator:
         """
         value = int(value)
         if 1 <= value <= 20:
-            value = str("informational")
+            value = "informational"
         elif 21 <= value <= 40:
-            value = str("low")
+            value = "low"
         elif 41 <= value <= 60:
-            value = str("medium")
+            value = "medium"
         elif 61 <= value <= 80:
-            value = str("high")
+            value = "high"
         elif 81 <= value <= 100:
-            value = str("critical")
+            value = "critical"
         else:
             raise NotImplementedError('only 1-100 integer values are supported with severity field')
         return value
