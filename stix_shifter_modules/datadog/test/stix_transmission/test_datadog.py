@@ -33,7 +33,7 @@ class TestDatadogConnection(unittest.TestCase, object):
 
     @patch('stix_shifter_modules.datadog.stix_transmission.api_client.APIClient.ping_data_source')
     def test_ping(self, mock_generate_token):
-        mocked_return_value = {"code": 200}
+        mocked_return_value = {"success": True}
         mock_generate_token.return_value = mocked_return_value
         entry_point = EntryPoint(self.connection(), self.configuration())
         ping_result = run_in_thread(entry_point.ping_connection)
@@ -41,12 +41,12 @@ class TestDatadogConnection(unittest.TestCase, object):
 
     @patch('stix_shifter_modules.datadog.stix_transmission.api_client.APIClient.ping_data_source')
     def test_ping_endpoint_exception(self, mock_generate_token):
-        mocked_return_value = {"code": 403, "message": "forbidden"}
+        mocked_return_value = {"status": 403, "reason": "forbidden"}
         mock_generate_token.return_value = mocked_return_value
 
         entry_point = EntryPoint(self.connection(), self.configuration())
         ping_response = run_in_thread(entry_point.ping_connection)
-
+        print(ping_response)
         assert ping_response['success'] is False
         assert ping_response['error'] == "datadog connector error => forbidden"
         assert ping_response['code'] == ErrorCode.TRANSMISSION_FORBIDDEN.value
