@@ -21,7 +21,7 @@ DATA = json.loads(RESULT_FILE)
 
 DATA_RECEIVED_AR_TIMESTAMP = find('receivedAt', DATA)
 DATA_HAPPENED_AT_TIMESTAMP = find('happenedAt', DATA)
-DATA_EVENT_ID = int(find('eventId', DATA))
+DATA_EVENT_ID = find('eventId', DATA)
 DATA_EVENT_TYPE = find('payload.eventType', DATA)
 DATA_LOCAL_ID = find('payload.localId', DATA)
 DATA_PROCESS_GUID = find('payload.process.id', DATA)
