@@ -232,10 +232,8 @@
       "service_name": ["service.name"],
       "service_type": ["service.type"],
       "start_type": ["service.startType"],
-      "tactics": ["mitre.tactic"],
       "tags": ["eventdata.tag"],
       "task_name": ["task.name"],
-      "technique": ["mitre.technique"],
       "version": ["eventdata.version"]
     }
   },
