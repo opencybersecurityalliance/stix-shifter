@@ -77,6 +77,19 @@
       "ttp_tagging_refs": ["mitre.tactic", "mitre.technique"]
     }
   },
+  "x-ibm-ttp-tagging": {
+    "fields": {
+      "name": [
+        "mitre.technique"
+      ],
+      "extensions.'mitre-attack-ext'.tactic_name": [
+        "mitre.tactic"
+      ],
+      "extensions.'mitre-attack-ext'.technique_name": [
+        "mitre.technique"
+      ]
+    }
+  },
   "x-oca-asset": {
     "fields": {
       "extensions.'x-reaqta-consumer'.command_line_template_tokens": ["consumer.cmdline"],
