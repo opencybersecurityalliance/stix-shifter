@@ -32,8 +32,55 @@ class ResultsConnector(BaseJsonResultsConnector):
         
         if 200 <= response_code <= 299 and error is None:
             return_obj['success'] = True
-            return_obj['data'] = response_dict.get('events', response_dict.get('flows'))
+            data = response_dict.get('events', response_dict.get('flows'))
+            ResultsConnector.modify_result(data)
+            return_obj['data'] = data
         else:
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=error, connector=self.connector)
 
         return return_obj
+    
+    @classmethod
+    def modify_result(cls, data):
+        for type, results in data.items():
+            for result in results:
+                print(result)
+                if result.get('eventpayload') or result.get('Message'):
+                    result['mime_type_eventpayload'] = 'text/plain'
+                
+                if result.get('Message'):
+                    result['mime_type_message'] = 'text/plain'
+                
+                if result.get('flowsourcepayload'):
+                    result['mime_type_flowsourcepayload'] = 'application/octet-stream'
+                
+                if result.get('flowdestinationpayload'):
+                    result['mime_type_flowdestinationpayload'] = 'application/octet-stream'
+
+                if result.get('sourceip'):
+                    if result['sourceip'] == '0.0.0.0':
+                        result['sourceip'] = None
+
+                if result.get('destinationip'):
+                    if result['destinationip'] == '0.0.0.0':
+                        result['destinationip'] = None
+
+                if result.get('sourcemac'):
+                    if result['sourcemac'] == '00:00:00:00:00:00' or result['sourcemac'] == '00-00-00-00-00-00':
+                        result['sourcemac'] = None
+
+                if result.get('destinationmac'):
+                    if result['destinationmac'] == '00:00:00:00:00:00' or result['destinationmac'] == '00-00-00-00-00-00':
+                        result['destinationmac'] = None
+
+                if result.get('identityip'):
+                    if result['identityip'] == '0.0.0.0':
+                        result['identityip'] = None
+
+                if result.get('sourcev6'):
+                    if result['sourcev6'] == '0:0:0:0:0:0:0:0':
+                        result['sourcev6'] = None
+
+                if result.get('destinationv6'):
+                    if result['destinationv6'] == '0:0:0:0:0:0:0:0':
+                        result['destinationv6'] = None
