@@ -1787,10 +1787,16 @@
         "key": "x-reaqta-event.start_type",
         "object": "x-reaqta"
       },
-      "tactics": {
-        "key": "x-ibm-finding.ttp_tagging_refs",
-        "object": "ibm_finding"
-      },
+      "tactics": [
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "x-ibm-finding"
+        },
+        {
+          "key": "x-ibm-ttp-tagging.extensions.'mitre-attack-ext'.tactic_name",
+          "object": "x-ibm-ttp-tagging"
+        }
+      ],
       "tags": {
         "key": "x-reaqta-event.tags",
         "object": "x-reaqta"
@@ -1971,10 +1977,20 @@
         "key": "x-reaqta-event.task_name",
         "object": "x-reaqta"
       },
-      "technique": {
-        "key": "x-ibm-finding.ttp_tagging_refs",
-        "object": "ibm_finding"
-      },
+      "technique": [
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "x-ibm-finding"
+        },
+        {
+          "key": "x-ibm-ttp-tagging.extensions.'mitre-attack-ext'.technique_name",
+          "object": "x-ibm-ttp-tagging"
+        },
+        {
+          "key": "x-ibm-ttp-tagging.extensions.name",
+          "object": "x-ibm-ttp-tagging"
+        }
+      ],
       "url": {
         "key": "url.value",
         "object": "url"
