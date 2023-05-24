@@ -104,10 +104,7 @@ class TestTransform(object):
                 "dnsdomainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac, "Image": process_image, "ParentImage": process_parent_image, 
                 "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, "LoadedImage": process_loaded_image }]
 
-        result_data = {
-            'events': data
-        }
-        ResultsConnector.modify_result(result_data)
+        ResultsConnector.modify_result(data)
 
         result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
 
@@ -656,10 +653,7 @@ class TestTransform(object):
             "destinationport": "1234"
         }]
 
-        result_data = {
-            'events': data
-        }
-        ResultsConnector.modify_result(result_data)
+        ResultsConnector.modify_result(data)
 
         result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
         observed_data = result_bundle['objects'][1]
