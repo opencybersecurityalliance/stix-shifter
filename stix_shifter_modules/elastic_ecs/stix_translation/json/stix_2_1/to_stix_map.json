@@ -260,10 +260,6 @@
         }
       }
     },
-    "address": {
-      "key": "x-oca-asset.address",
-      "object": "client"
-    },
     "domain": {
       "key": "domain-name.value",
       "object": "client_host_domain"
@@ -430,10 +426,6 @@
         }
       }
     },
-    "address": {
-      "key": "x-oca-asset.address",
-      "object": "destination"
-    },
     "domain": {
       "key": "domain-name.value",
       "object": "dst_host_domain"
@@ -599,10 +591,6 @@
           "object": "server-autonomous-system"
         }
       }
-    },
-    "address": {
-      "key": "x-oca-asset.address",
-      "object": "server"
     },
     "domain": {
       "key": "domain-name.value",
