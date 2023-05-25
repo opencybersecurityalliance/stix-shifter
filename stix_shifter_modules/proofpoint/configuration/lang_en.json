@@ -16,7 +16,7 @@
     },
     "configuration": {
         "auth": {
-            "principal": {
+            "principle": {
                 "label": "Principle",
                 "description": "Principle with access to the SIEM API"
             },
