@@ -17,8 +17,8 @@
     "configuration": {
         "auth": {
             "principal": {
-                "label": "Principal",
-                "description": "Principal with access to the SIEM API"
+                "label": "Principle",
+                "description": "Principle with access to the SIEM API"
             },
             "secret": {
                 "label": "Secret",
