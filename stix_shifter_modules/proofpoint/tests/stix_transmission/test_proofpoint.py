@@ -19,7 +19,7 @@ CONNECTION= {
 
 CONFIG = {
         "auth": {
-            "principal": "principal",
+            "principle": "principle",
             "secret": "secret"
         }
     }
