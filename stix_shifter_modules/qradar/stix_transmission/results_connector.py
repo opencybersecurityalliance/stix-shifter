@@ -27,9 +27,6 @@ class ResultsConnector(BaseJsonResultsConnector):
 
         try:
             response_dict = json.loads(response_text)
-            print('---------- RESPONSE ----------------')
-            print(json.dumps(response_dict, indent=4))
-            print('------------------------------------')
         except ValueError as ex:
             self.logger.debug(response_text)
             error = Exception(f'Can not parse response from Qradar server. The response is not a valid json: {response_text} : {ex}')
