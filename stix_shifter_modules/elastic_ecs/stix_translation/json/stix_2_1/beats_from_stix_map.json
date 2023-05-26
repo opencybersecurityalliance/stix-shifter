@@ -120,12 +120,13 @@
       "image_ref.hashes.'SHA-1'": ["process.hash.sha1"],
       "image_ref.hashes.'SHA-256'": ["process.hash.sha256"],
       "image_ref.hashes.'SHA-512'": ["process.hash.sha512"],
-      "x_ttp_tags": ["tags"],
+      "x_tags": ["tags"],
       "x_unique_id": ["process.entity_id.keyword", "process.parent.entity_id.keyword"],
       "x_exit_code": ["process.exit_code"],
       "x_thread_id": ["process.thread.id"],
       "x_window_title": ["process.title.keyword"],
-      "x_uptime": ["process.uptime"]
+      "x_uptime": ["process.uptime"],
+      "x_pgid": ["process.pgid"]
     }
   },
   "url": {

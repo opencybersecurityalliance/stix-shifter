@@ -105,7 +105,7 @@
       "parent_ref.pid": ["process.ppid", "process.parent.ppid"],
       "parent_ref.name": ["process.parent.name"],
       "parent_ref.x_exit_code": ["process.parent.exit_code"],
-      "parent_ref.pgid": ["process.parent.pgid"],
+      "parent_ref.x_pgid": ["process.parent.pgid"],
       "parent_ref.x_window_title": ["process.parent.title"],
       "parent_ref.x_thread_id": ["process.parent.thread.id"],
       "parent_ref.x_uptime": ["process.parent.uptime"],
@@ -121,9 +121,10 @@
       "x_window_title": ["process.title"],
       "x_exit_code": ["process.exit_code"],
       "x_thread_id": ["process.thread.id"],
-      "x_ttp_tags": ["tags"],
+      "x_tags": ["tags"],
       "x_unique_id": ["process.entity_id", "process.parent.entity_id"],
-      "x_uptime": ["process.uptime"]
+      "x_uptime": ["process.uptime"],
+      "x_pgid": ["process.pgid"]
     }
   },
   "url": {
