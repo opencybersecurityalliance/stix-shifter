@@ -62,10 +62,6 @@ class APIClient():
     async def search_pagination(self, query_expression, lastsortvalue=None, length=DEFAULT_LIMIT):
         headers = dict()
         headers['Content-Type'] = 'application/json'
-        endpoint = self.endpoint
-        # add size value
-        if length is not None:
-            endpoint = "{}?size={}".format(endpoint, length)
 
         data = {
             "_source": {
@@ -73,6 +69,7 @@ class APIClient():
                              "host.*", "network.*", "process.*", "user.*", "file.*", "url.*", "registry.*", "dns.*",
                              "tags"]
             },
+            "size": length,
             "query": {
                 "query_string": {
                     "query": query_expression
@@ -83,16 +80,13 @@ class APIClient():
             ]
         }
 
-        if not (lastsortvalue is None):
-            extra_data = {
-                "search_after": lastsortvalue
-            }
-            data.update(extra_data)
+        if lastsortvalue:
+            data["search_after"] = lastsortvalue
 
-        self.logger.debug("URL endpoint: " + endpoint)
+        self.logger.debug("URL endpoint: " + self.endpoint)
         self.logger.debug("URL data: " + json.dumps(data))
 
-        return await self.client.call_api(endpoint, 'GET', headers, data=json.dumps(data), timeout=self.timeout)
+        return await self.client.call_api(self.endpoint, 'GET', headers, data=json.dumps(data), timeout=self.timeout)
 
     async def get_max_result_window(self):
         max_result_window_url = self.setting_endpoint + "/index.max_result_window?include_defaults=true"
