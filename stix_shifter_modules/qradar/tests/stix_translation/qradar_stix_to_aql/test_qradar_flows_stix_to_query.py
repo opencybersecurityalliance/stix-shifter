@@ -226,6 +226,12 @@ class TestStixToAql(unittest.TestCase, object):
         where_statement = "WHERE suspectcontentdescriptions = 'nonstandard port' {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
+    def test_tlssni_query(self):
+        stix_pattern = "[x-qradar:tls_server_name_indication = 'example.com' ]"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE tlsservernameindication = 'example.com' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
     def test_url_query(self):
         stix_pattern = "[url:value = 'example.com' ]"
         query = _translate_query(stix_pattern)
