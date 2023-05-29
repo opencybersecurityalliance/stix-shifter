@@ -19,10 +19,6 @@
             "type": "link",
             "default": "data-sources-sentinel.html"
         },
-        "sni": {
-            "type": "text",
-            "optional": true
-        },
         "workspaceId": {
             "type": "text",
             "optional": true
