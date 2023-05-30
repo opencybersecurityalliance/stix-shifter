@@ -1790,7 +1790,8 @@
       "tactics": [
         {
           "key": "x-ibm-finding.ttp_tagging_refs",
-          "object": "x-ibm-finding"
+          "object": "x-ibm-finding",
+          "references": ["x-ibm-ttp-tagging"]
         },
         {
           "key": "x-ibm-ttp-tagging.extensions.'mitre-attack-ext'.tactic_name",
@@ -1980,7 +1981,8 @@
       "technique": [
         {
           "key": "x-ibm-finding.ttp_tagging_refs",
-          "object": "x-ibm-finding"
+          "object": "x-ibm-finding",
+          "references": ["x-ibm-ttp-tagging"]
         },
         {
           "key": "x-ibm-ttp-tagging.extensions.'mitre-attack-ext'.technique_name",
