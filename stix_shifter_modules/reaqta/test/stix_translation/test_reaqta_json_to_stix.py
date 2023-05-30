@@ -315,7 +315,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         event = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
 
         assert(event is not None), "x-ibm-finding not found"
-        assert(event.keys() == {'type', 'extensions', 'src_ip_ref', 'dst_ip_ref'})
+        assert(event.keys() == {'type', 'extensions', 'ttp_tagging_refs', 'src_ip_ref', 'dst_ip_ref'})
         assert(event['type'] == "x-ibm-finding")
 
         ip_ref = event['src_ip_ref']
