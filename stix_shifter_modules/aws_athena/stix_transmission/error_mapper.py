@@ -3,6 +3,8 @@ from stix_shifter_utils.utils.error_response import ErrorCode
 from stix_shifter_utils.utils import logger
 
 ERROR_MAPPING = {
+    "InvalidRegionError": ErrorCode.TRANSMISSION_CONNECT,
+    "EndpointConnectionError": ErrorCode.TRANSMISSION_REMOTE_SYSTEM_IS_UNAVAILABLE,
     "InvalidRequestException": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
     "ParamValidationError": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
     "InternalServerException": ErrorCode.TRANSMISSION_CONNECT,
