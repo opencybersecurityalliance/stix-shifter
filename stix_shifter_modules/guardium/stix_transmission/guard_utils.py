@@ -7,8 +7,8 @@ from stix_shifter_utils.utils import logger
 class GuardApiClient(RestApiClientAsync):
 
     def __init__(self, params, host, port, headers,
-                 url_modifier_function, cert_verify, sni, auth):
-        self.client = RestApiClientAsync(host, port, headers, url_modifier_function, cert_verify, sni, auth)
+                 url_modifier_function, cert_verify, auth):
+        self.client = RestApiClientAsync(host, port, headers, url_modifier_function, cert_verify, auth)
         self.logger = logger.set_logger(__name__)
         self.url = params["url"]
         self.secret = params["client_secret"]

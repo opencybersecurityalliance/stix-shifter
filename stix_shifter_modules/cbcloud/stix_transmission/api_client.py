@@ -26,8 +26,7 @@ class APIClient():
             connection.get('host'),
             connection.get('port'),
             headers,
-            cert_verify=connection.get('selfSignedCert', True),
-            sni=connection.get('sni', None)
+            cert_verify=connection.get('selfSignedCert', True)
         )
         self.timeout = connection['options'].get('timeout')
         self.result_limit = connection['options'].get('result_limit')

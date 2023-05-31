@@ -16,11 +16,6 @@
         "selfSignedCert": {
             "label": "ReaQta certificate",
             "placeholder": "Paste your certificate"
-        },
-        "sni": {
-            "label": "Server Name Indicator",
-            "placeholder": "Add a Server Name Indicator",
-            "description": "If your hostname or IP address does not match the common name you will need to supply a Server Name Indicator (SNI). This is used to allow a separate hostname to be provided to the TLS handshake of the resource connection."
         }
     },
     "configuration": {
