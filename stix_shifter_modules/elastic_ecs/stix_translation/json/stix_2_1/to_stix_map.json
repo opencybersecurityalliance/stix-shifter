@@ -13,16 +13,33 @@
     "ip": [
       {
         "key": "ipv4-addr.value",
-        "object": "src_ip"
+        "object": "src_ip",
+        "transformer": "CheckIPv4"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "src_ip"
+        "object": "src_ip",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "network-traffic.src_ref",
         "object": "nt",
         "references": "src_ip"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_domain",
+        "references": ["src_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_registered_domain",
+        "references": ["src_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_top_level_domain",
+        "references": ["src_ip"]
       }
     ],
     "port": {
@@ -58,73 +75,70 @@
       "number": [
         {
           "key": "autonomous-system.number",
-          "object": "autonomous-system"
+          "object": "source-autonomous-system"
         },
         {
           "key": "ipv4-addr.belongs_to_refs",
           "object": "src_ip",
-          "references": ["autonomous-system"]
+          "references": ["source-autonomous-system"]
+        },
+        {
+          "key": "ipv6-addr.belongs_to_refs",
+          "object": "src_ip",
+          "references": ["source-autonomous-system"]
         }
       ],
       "organization": {
         "name" : {
-          "key": "autonomous-system.name"
+          "key": "source-autonomous-system.name"
         }
       }
     },
-    "address": {
-      "key": "x-ecs-source.address",
-      "object": "source"
-    },
-    "domain": [
+    "domain": {
+      "key": "domain-name.value",
+      "object": "source_host_domain"
+  },
+  "nat": {
+    "ip": [
       {
-        "key": "domain-name.value",
-        "object": "source_host_domain"
+        "key": "ipv4-addr.value",
+        "object": "source_nat",
+        "transformer": "CheckIPv4"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "source_nat",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "source_host_domain",
-        "references": ["src_ip", "source_nat"]
-      }
-    ],
-    "nat": {
-      "ip": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "source_nat"
-        },
-        {
-          "key": "ipv6-addr.value",
-          "object": "source_nat"
-        }
-      ],
-      "port": {
-        "key": "network-traffic.src_port",
-        "object": "source_nat_port"
-      }
-    },
-    "registered_domain": [
-      {
-        "key": "domain-name.value",
-        "object": "source_host_registered_domain"
+        "references": ["source_nat"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "source_host_registered_domain",
-        "references": ["src_ip", "source_nat"]
-      }
-    ],
-    "top_level_domain": [
-      {
-        "key": "domain-name.value",
-        "object": "source_host_top_level_domain"
+        "references": ["source_nat"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "source_host_top_level_domain",
-        "references": ["src_ip", "source_nat"]
+        "references": ["source_nat"]
       }
     ],
+      "port": {
+          "key": "network-traffic.src_port",
+          "object": "source_nat_port"
+      }
+    },
+    "registered_domain": {
+      "key": "domain-name.value",
+      "object": "source_host_registered_domain"
+    },
+    "top_level_domain": {
+        "key": "domain-name.value",
+        "object": "source_host_top_level_domain"
+    },
     "geo": {
       "city_name": {
         "key": "x-oca-geo.city_name",
@@ -164,16 +178,33 @@
     "ip": [
       {
         "key": "ipv4-addr.value",
-        "object": "src_ip"
+        "object": "client_ip",
+        "transformer": "CheckIPv4"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "src_ip"
+        "object": "client_ip",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "network-traffic.src_ref",
         "object": "nt",
-        "references": "src_ip"
+        "references": "client_ip"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_domain",
+        "references": ["client_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_registered_domain",
+        "references": ["client_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_top_level_domain",
+        "references": ["client_ip"]
       }
     ],
     "port": {
@@ -192,91 +223,88 @@
     "mac": [
       {
         "key": "mac-addr.value",
-        "object": "src_mac"
+        "object": "client_mac"
       },
       {
         "key": "ipv4-addr.resolves_to_refs",
-        "object": "src_ip",
-        "references": ["src_mac"]
+        "object": "client_ip",
+        "references": ["client_mac"]
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
-        "object": "src_ip",
-        "references": ["src_mac"]
+        "object": "client_ip",
+        "references": ["client_mac"]
       }
     ],
     "as": {
       "number": [
         {
           "key": "autonomous-system.number",
-          "object": "autonomous-system"
+          "object": "client-autonomous-system"
         },
         {
           "key": "ipv4-addr.belongs_to_refs",
-          "object": "src_ip",
-          "references": ["autonomous-system"]
+          "object": "client_ip",
+          "references": ["client-autonomous-system"]
+        },
+        {
+          "key": "ipv6-addr.belongs_to_refs",
+          "object": "client_ip",
+          "references": ["client-autonomous-system"]
         }
       ],
       "organization": {
         "name" : {
           "key": "autonomous-system.name",
-          "object": "autonomous-system"
+          "object": "client-autonomous-system"
         }
       }
     },
-    "address": {
-      "key": "x-ecs-client.address",
-      "object": "client"
-    },
-    "domain": [
+    "domain": {
+      "key": "domain-name.value",
+      "object": "client_host_domain"
+  },
+  "nat": {
+    "ip": [
       {
-        "key": "domain-name.value",
-        "object": "client_host_domain"
+        "key": "ipv4-addr.value",
+        "object": "client_nat",
+        "transformer": "CheckIPv4"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "client_nat",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "client_host_domain",
-        "references": ["src_ip", "client_nat"]
-      }
-    ],
-    "nat": {
-      "ip": [
-        {
-          "key": "ipv4-addr.value",
-          "object": "client_nat"
-        },
-        {
-          "key": "ipv6-addr.value",
-          "object": "client_nat"
-        }
-      ],
-      "port": {
-        "key": "network-traffic.src_port",
-        "object": "client_nat_port"
-      }
-    },
-    "registered_domain": [
-      {
-        "key": "domain-name.value",
-        "object": "client_host_registered_domain"
+        "references": ["client_nat"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "client_host_registered_domain",
-        "references": ["src_ip", "client_nat"]
-      }
-    ],
-    "top_level_domain": [
-      {
-        "key": "domain-name.value",
-        "object": "client_host_top_level_domain"
+        "references": ["client_nat"]
       },
       {
         "key": "domain-name.resolves_to_refs",
         "object": "client_host_top_level_domain",
-        "references": ["src_ip", "client_nat"]
+        "references": ["client_nat"]
       }
     ],
+    "port": {
+      "key": "network-traffic.src_port",
+      "object": "cl_nat_port"
+      }
+    },
+    "registered_domain": {
+      "key": "domain-name.value",
+      "object": "client_host_registered_domain"
+    },
+    "top_level_domain": {
+      "key": "domain-name.value",
+      "object": "client_host_top_level_domain"
+    },
     "geo": {
       "city_name": {
         "key": "x-oca-geo.city_name",
@@ -316,16 +344,33 @@
     "ip": [
       {
         "key": "ipv4-addr.value",
-        "object": "dst_ip"
+        "object": "dst_ip",
+        "transformer": "CheckIPv4"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "dst_ip"
+        "object": "dst_ip",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "network-traffic.dst_ref",
         "object": "nt",
         "references": "dst_ip"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "dst_host_domain",
+        "references": ["dst_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "dst_host_registered_domain",
+        "references": ["dst_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "dst_host_top_level_domain",
+        "references": ["dst_ip"]
       }
     ],
     "port": {
@@ -361,73 +406,71 @@
       "number": [
         {
           "key": "autonomous-system.number",
-          "object": "autonomous-system"
+          "object": "dst-autonomous-system"
         },
         {
           "key": "ipv4-addr.belongs_to_refs",
-          "object": "src_ip",
-          "references": ["autonomous-system"]
+          "object": "dst_ip",
+          "references": ["dst-autonomous-system"]
+        },
+        {
+          "key": "ipv6-addr.belongs_to_refs",
+          "object": "dst_ip",
+          "references": ["dst-autonomous-system"]
         }
       ],
       "organization": {
         "name" : {
-          "key": "autonomous-system.name"
+          "key": "autonomous-system.name",
+          "object": "dst-autonomous-system"
         }
       }
     },
-    "address": {
-      "key": "x-ecs-destination.address",
-      "object": "destination"
+    "domain": {
+      "key": "domain-name.value",
+      "object": "dst_host_domain"
     },
-    "domain": [
-      {
-        "key": "domain-name.value",
-        "object": "destination_host_domain"
-      },
-      {
-        "key": "domain-name.resolves_to_refs",
-        "object": "destination_host_domain",
-        "references": ["dst_ip", "destination_nat"]
-      }
-  ],
     "nat": {
       "ip": [
         {
           "key": "ipv4-addr.value",
-          "object": "destination_nat"
+          "object": "dst_nat",
+          "transformer": "CheckIPv4"
         },
         {
           "key": "ipv6-addr.value",
-          "object": "destination_nat"
+          "object": "dst_nat",
+          "transformer": "CheckIPv6"
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "dst_host_domain",
+          "references": ["dst_nat"]
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "dst_host_registered_domain",
+          "references": ["dst_nat"]
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "dst_host_top_level_domain",
+          "references": ["dst_nat"]
         }
       ],
       "port": {
         "key": "network-traffic.dst_port",
-        "object": "destination_nat_port"
+        "object": "dst_nat_port"
       }
     },
-    "registered_domain": [
-      {
-        "key": "domain-name.value",
-        "object": "destination_host_registered_domain"
-      },
-      {
-        "key": "domain-name.resolves_to_refs",
-        "object": "destination_host_registered_domain",
-        "references": ["dst_ip", "destination_nat"]
-      }
-    ],
-    "top_level_domain": [
-      {
-        "key": "domain-name.value",
-        "object": "destination_host_top_level_domain"
-      },
-      {
-        "key": "domain-name.resolves_to_refs",
-        "object": "destination_host_top_level_domain",
-        "references": ["dst_ip", "destination_nat"]
-      }
-    ],
+    "registered_domain": {
+      "key": "domain-name.value",
+      "object": "dst_host_registered_domain"
+    },
+    "top_level_domain": {
+      "key": "domain-name.value",
+      "object": "destination_host_top_level_domain"
+    },
     "geo": {
       "city_name": {
         "key": "x-oca-geo.city_name",
@@ -467,16 +510,33 @@
     "ip": [
       {
         "key": "ipv4-addr.value",
-        "object": "dst_ip"
+        "object": "server_ip",
+        "transformer": "CheckIPv4"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "dst_ip"
+        "object": "server_ip_v6",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "network-traffic.dst_ref",
         "object": "nt",
-        "references": "dst_ip"
+        "references": "server_ip"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "server_host_domain",
+        "references": ["server_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "server_host_registered_domain",
+        "references": ["server_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "server_host_top_level_domain",
+        "references": ["server_ip"]
       }
     ],
     "port": {
@@ -485,71 +545,83 @@
       "transformer": "ToInteger"
     },
     "bytes": {
-      "key": "network-traffic.src_byte_count",
+      "key": "network-traffic.dst_byte_count",
       "object": "nt"
     },
     "packets": {
-      "key": "network-traffic.src_packets",
+      "key": "network-traffic.dst_packets",
       "object": "nt"
     },
     "mac": [
       {
         "key": "mac-addr.value",
-        "object": "dst_mac"
+        "object": "server_mac"
       },
       {
         "key": "ipv4-addr.resolves_to_refs",
-        "object": "dst_ip",
-        "references": ["dst_mac"]
+        "object": "server_ip",
+        "references": ["server_mac"]
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
-        "object": "dst_ip",
-        "references": ["dst_mac"]
+        "object": "server_ip",
+        "references": ["server_mac"]
       }
     ],
     "as": {
       "number": [
         {
           "key": "autonomous-system.number",
-          "object": "autonomous-system"
+          "object": "server-autonomous-system"
         },
         {
           "key": "ipv4-addr.belongs_to_refs",
-          "object": "dst_ip",
-          "references": ["autonomous-system"]
+          "object": "server_ip",
+          "references": ["server-autonomous-system"]
+        },
+        {
+          "key": "ipv6-addr.belongs_to_refs",
+          "object": "server_ip",
+          "references": ["server-autonomous-system"]
         }
       ],
       "organization": {
         "name" : {
-          "key": "autonomous-system.name"
+          "key": "autonomous-system.name",
+          "object": "server-autonomous-system"
         }
       }
     },
-    "address": {
-      "key": "x-ecs-server.address",
-      "object": "server"
+    "domain": {
+      "key": "domain-name.value",
+      "object": "server_host_domain"
     },
-    "domain": [
-      {
-        "key": "domain-name.value",
-        "object": "server_host_domain"
-      },
-      {
-        "key": "domain-name.resolves_to_refs",
-        "object": "server_host_domain",
-        "references": ["dst_ip", "server_nat"]
-      }
-    ],
     "nat": {
       "ip": [
         {
           "key": "ipv4-addr.value",
-          "object": "server_nat"
+          "object": "server_nat",
+          "transformer": "CheckIPv4"
         },
         {
           "key": "ipv6-addr.value",
-          "object": "server_nat"
+          "object": "server_nat",
+          "transformer": "CheckIPv6"
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "server_host_domain",
+          "references": ["server_nat"]
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "server_host_registered_domain",
+          "references": ["server_nat"]
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "server_host_top_level_domain",
+          "references": ["server_nat"]
         }
       ],
       "port": {
@@ -557,28 +629,14 @@
         "object": "server_nat_port"
       }
     },
-    "registered_domain": [
-      {
-        "key": "domain-name.value",
-        "object": "server_host_registered_domain"
-      },
-      {
-        "key": "domain-name.resolves_to_refs",
-        "object": "server_host_registered_domain",
-        "references": ["dst_ip", "server_nat"]
-      }
-    ],
-    "top_level_domain": [
-      {
-        "key": "domain-name.value",
-        "object": "server_host_top_level_domain"
-      },
-      {
-        "key": "domain-name.resolves_to_refs",
-        "object": "server_host_top_level_domain",
-        "references": ["dst_ip", "server_nat"]
-      }
-    ],
+    "registered_domain": {
+      "key": "domain-name.value",
+      "object": "server_host_registered_domain"
+    },
+    "top_level_domain": {
+      "key": "domain-name.value",
+      "object": "server_host_top_level_domain"
+    },
     "geo": {
       "city_name": {
         "key": "x-oca-geo.city_name",
@@ -945,13 +1003,20 @@
         "object": "process_parent"
       },
       "exit_code": {
-        "key": "process.parent_ref.x_exit_code",
-        "object": "process"
+        "key": "process.x_exit_code",
+        "object": "process_parent"
       },
-      "pgid": {
-        "key": "process.parent_ref.x_pgid",
-        "object": "process"
-      },
+      "pgid": [
+        {
+          "key": "process.pid",
+          "object": "process_parent_group_leader"
+        },
+        {
+          "key": "process.group_leader_ref",
+          "object": "process_parent",
+          "references": "process_parent_group_leader"
+        }
+      ],
       "pid": [
         {
           "key": "process.pid",
@@ -975,21 +1040,21 @@
       },
       "thread": {
         "id": {
-          "key": "process.parent_ref.x_thread_id",
-          "object": "process"
+          "key": "process.x_thread_id",
+          "object": "process_parent"
         }
       },
       "title": {
-        "key": "process.parent_ref.x_window_title",
-        "object": "process"
+        "key": "process.x_window_title",
+        "object": "process_parent"
       },
       "uptime": {
-        "key": "process.parent_ref.x_uptime",
-        "object": "process"
+        "key": "process.x_uptime",
+        "object": "process_parent"
       },
       "working_directory": {
-        "key": "process.parent_ref.cwd",
-        "object": "process"
+        "key": "process.cwd",
+        "object": "process_parent"
       },
       "executable": [
         {
@@ -1019,10 +1084,17 @@
         }
       ]
     },
-    "pgid": {
-      "key": "process.x_exit_code",
-      "object": "x_process"
-    },
+    "pgid": [
+      {
+        "key": "process.pid",
+        "object": "process_group_leader"
+      },
+      {
+        "key": "process.group_leader_ref",
+        "object": "process",
+        "references": "process_group_leader"
+      }
+    ],
     "thread": {
       "id": {
         "key": "process.x_thread_id",
@@ -1120,18 +1192,22 @@
   "agent": {
     "name": [
       {
-        "key": "software.name"
+        "key": "software.name",
+        "object": "event-agent-software"
       },
       {
         "key": "x-oca-event.agent",
-        "object": "event"
+        "object": "event",
+        "references": "event-agent-software"
       }
     ],
     "type": {
-      "key": "software.vendor"
+      "key": "software.vendor",
+      "object": "event-agent-software"
     },
     "version": {
-      "key": "software.version"
+      "key": "software.version",
+      "object": "event-agent-software"
     }
   },
   "cloud": {
@@ -1215,17 +1291,24 @@
       "object": "file_dll"
     },
     "pe": {
-      "company": {
-        "key": "file.x_software_ref.vendor",
-        "object": "file_dll"
-      },
+      "company": [
+        {
+          "key": "software.vendor",
+          "object": "file_dll_software"
+        },
+        {
+          "key": "file.x_software_ref",
+          "object": "file_dll",
+          "references": "file_dll_software"
+        }
+      ],
       "file_version": {
-        "key": "file.x_software_ref.version",
-        "object": "file_dll"
+        "key": "software.version",
+        "object": "file_dll_software"
       },
       "original_file_name": {
-        "key": "file.x_software_ref.name",
-        "object": "file_dll"
+        "key": "software.name",
+        "object": "file_dll_software"
       }
     },
     "code_signature": {
@@ -1518,10 +1601,17 @@
       "key": "file.mtime",
       "object": "file"
     },
-    "owner": {
-      "key": "file.x_owner_ref.account_login",
-      "object": "file"
-    },
+    "owner": [
+      {
+        "key": "user-account.account_login",
+        "object": "file_owner"
+      },
+      {
+        "key": "file.x_owner_ref",
+        "object": "file",
+        "references": "file_owner"
+      }
+    ],
     "path": {
       "key": "file.x_path",
       "object": "file"
@@ -1535,8 +1625,8 @@
       "object": "file"
     },
     "uid": {
-      "key": "file.x_owner_ref.user_id",
-      "object": "file"
+      "key": "user-account.user_id",
+      "object": "file_owner"
     }
   },
   "group": {
@@ -2244,33 +2334,33 @@
     "client": {
       "issuer": {
         "key": "x509-certificate.issuer",
-        "object": "client"
+        "object": "client-cert"
       },
       "hash": {
         "sha256": {
           "key": "x509-certificate.hashes.SHA-256",
-          "object": "client"
+          "object": "client-cert"
         },
         "sha1": {
           "key": "x509-certificate.hashes.SHA-1",
-          "object": "client"
+          "object": "client-cert"
         },
         "md5": {
           "key": "x509-certificate.hashes.MD5",
-          "object": "client"
+          "object": "client-cert"
         }
       },
       "not_after": {
         "key": "x509-certificate.validity_not_after",
-        "object": "client"
+        "object": "client-cert"
       },
       "not_before": {
         "key": "x509-certificate.validity_not_before",
-        "object": "client"
+        "object": "client-cert"
       },
       "subject": {
         "key": "x509-certificate.subject",
-        "object": "client"
+        "object": "client-cert"
       },
       "certificate": {
         "key": "x-ecs-tls.client_certificate",
@@ -2292,33 +2382,33 @@
     "server": {
       "issuer": {
         "key": "x509-certificate.issuer",
-        "object": "server"
+        "object": "server-cert"
       },
       "hash": {
         "sha256": {
           "key": "x509-certificate.hashes.SHA-256",
-          "object": "server"
+          "object": "server-cert"
         },
         "sha1": {
           "key": "x509-certificate.hashes.SHA-1",
-          "object": "server"
+          "object": "server-cert"
         },
         "md5": {
           "key": "x509-certificate.hashes.MD5",
-          "object": "server"
+          "object": "server-cert"
         }
       },
       "not_after": {
         "key": "x509-certificate.validity_not_after",
-        "object": "server"
+        "object": "server-cert"
       },
       "not_before": {
         "key": "x509-certificate.validity_not_before",
-        "object": "server"
+        "object": "server-cert"
       },
       "subject": {
         "key": "x509-certificate.subject",
-        "object": "server"
+        "object": "server-cert"
       },
       "certificate": {
         "key": "x-ecs-tls.server_certificate",
@@ -2453,7 +2543,7 @@
     }
   },
   "tags": {
-    "key": "process.x_ttp_tags",
+    "key": "process.x_tags",
     "object": "process"
   }
 }
