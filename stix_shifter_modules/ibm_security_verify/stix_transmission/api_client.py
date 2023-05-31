@@ -20,8 +20,7 @@ class APIClient:
         self.host = connection.get('host')
         self.client = RestApiClientAsync(connection.get('host'), connection.get('port', None),
             headers,url_modifier_function=url_modifier_function,
-            cert_verify=connection.get('selfSignedCert', False),
-            sni=connection.get('sni', None)
+            cert_verify=connection.get('selfSignedCert', False)
             )
         self.timeout = connection['options'].get('timeout')
         self._client_id = auth['clientId']

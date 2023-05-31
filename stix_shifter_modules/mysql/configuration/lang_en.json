@@ -22,10 +22,6 @@
             "label": "Connection certificate",
             "description": "Use self-signed SSL certificate and CA content(root and intermediate) of data source"
         },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
-        },
         "options": {
             "table": {
                 "label": "Table name",
