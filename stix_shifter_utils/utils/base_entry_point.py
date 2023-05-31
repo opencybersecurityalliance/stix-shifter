@@ -18,6 +18,7 @@ from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connect
 from stix_shifter_utils.utils.param_validator import param_validator, modernize_objects, get_merged_config
 from stix_shifter_utils.stix_translation.src.utils.exceptions import UnsupportedDialectException
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 
 OPTION_LANGUAGE = 'language'
 
@@ -121,11 +122,18 @@ class BaseEntryPoint:
 
     def create_default_results_translator(self, dialect):
         module_name = self.__connector_module
-        module = importlib.import_module(
-                    "stix_shifter_modules." + module_name + ".stix_translation.results_translator")
-        basepath = os.path.dirname(module.__file__)
-        mapping_filepath = os.path.abspath(basepath)
-        results_translator = module.ResultsTranslator(self.__options, dialect, mapping_filepath)
+        dir_path = "stix_shifter_modules." + module_name + ".stix_translation"
+        file_path = dir_path + ".results_translator"
+        try:
+            module = importlib.import_module(file_path)
+            basepath = os.path.dirname(module.__file__)
+            mapping_filepath = os.path.abspath(basepath)
+            results_translator = module.ResultsTranslator(self.__options, dialect, mapping_filepath)
+        except:
+            module = importlib.import_module(dir_path)
+            basepath = os.path.dirname(module.__file__)
+            mapping_filepath = os.path.abspath(basepath)
+            results_translator = JSONToStix(self.__options, dialect, mapping_filepath)
         return results_translator
 
     @translation
