@@ -41,11 +41,15 @@ def exception_catcher(func, *args, **kwargs):
 
 
 class RestApiClient:
+    """
+    Deprecated RestApiClient, 
+    consider using RestApiClientAsync
+    """
     # cert_verify can be
     #  True -- do proper signed cert check that is in trust store,
     #  False -- skip all cert checks,
     #  or The String content of your self signed cert required for TLS communication
-    def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  sni=None, auth=None):
+    def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  auth=None):
         self.retry_max = os.getenv('STIXSHIFTER_RETRY_MAX', RETRY_MAX_DEFAULT)
         self.retry_max = int(self.retry_max)
         self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
@@ -58,8 +62,6 @@ class RestApiClient:
         if port is not None:
             server_ip += ":" + str(port)
         self.server_ip = server_ip
-        # sni is none unless we are using a server cert
-        self.sni = None
 
         self.server_cert_file_content_exists = False
         self.server_cert_content = False
@@ -72,12 +74,12 @@ class RestApiClient:
             self.server_cert_content = self.server_cert_name
             self.server_cert_file_content_exists = True
             self.server_cert_file_content = cert_verify
-            if sni is not None:
-                self.sni = sni
 
         self.headers = headers
         self.url_modifier_function = url_modifier_function
         self.auth = auth
+
+        self.logger.warning('Deprecated RestApiClient, consider using RestApiClientAsync')
 
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
@@ -106,13 +108,6 @@ class RestApiClient:
                 retry_strategy = Retry(total=self.retry_max, backoff_factor=0, status_forcelist=[429, 500, 502, 503, 504],
                                        allowed_methods=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE"])
                 session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
-
-                if self.sni is not None:
-                    # only use the tool belt session in case of SNI for safety
-                    session.mount('https://', host_header_ssl.HostHeaderSSLAdapter(max_retries=self.retry_max))
-                    actual_headers["Host"] = self.sni
-                else:
-                    session.mount("https://", TimeoutHTTPAdapter(max_retries=retry_strategy))
                 call = getattr(session, method.lower())
                 it = InterruptableThread(exception_catcher, call, url, headers=actual_headers, params=urldata, data=data,
                                          verify=self.server_cert_content,

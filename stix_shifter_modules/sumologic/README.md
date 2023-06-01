@@ -1,6 +1,10 @@
-# Sumologic Connector
+# Sumologic
 
 Connector to load events from SumoLogic
+
+## Supported STIX Mappings
+
+See the [table of mappings](sumologic_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 ### SumoLogic API endpoints
 

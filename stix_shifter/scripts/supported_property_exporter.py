@@ -1,15 +1,21 @@
 import json
+import argparse
 from os import path
 import re
 from datetime import datetime
 
+## Script for generating a table of mappings for each connector based on the operator, from-stix, and to-stix mapping files
+## Add --sdo SDO argument for connectors that use SDO mappings instead of a to-stix SCO mapping file
+## python supported_property_exporter.py --sdo SDO
+
 current_dir = path.abspath(path.dirname(__file__))
 
-TRANSLATION_MODULE_PATH = path.abspath(path.join(current_dir, "../../stix_shifter_modules"))
+CONNECTOR_MODULE_PATH = path.abspath(path.join(current_dir, "../../stix_shifter_modules"))
 ADAPTER_GUIDE_PATH = path.abspath(path.join(current_dir, '../../adapter-guide'))
 
 # Add new connectors to this dictionary as they become available. The key must match the name of the translation module.
-CONNECTORS = {
+# Comment out any connectors you wish to ommit.
+SCO_CONNECTORS = {
     "qradar": "IBM QRadar", 
     "splunk": "Splunk Enterprise Security", 
     "bigfix": "HCL BigFix", 
@@ -20,7 +26,7 @@ CONNECTORS = {
     # "security_advisor": "IBM Cloud Security Advisor",
     "guardium": "IBM Guardium Data Protection",
     "aws_cloud_watch_logs": "Amazon CloudWatch Logs",
-    "azure_sentinel": "Microsoft Graph Security",
+    # "azure_sentinel": "Microsoft Graph Security",
     "alertflex": "Alertflex",
     "arcsight": "Micro Focus ArcSight",
     "aws_athena": "Amazon Athena",
@@ -40,8 +46,23 @@ CONNECTORS = {
     "rhacs": "Red Hat Advanced Cluster Security for Kubernetes (StackRox)",
     "ibm_security_verify": "IBM Security Verify",
     "gcp_chronicle": "GCP Chronicle",
-    "azure_log_analytics": "Azure Log Analytics"
+    "azure_log_analytics": "Azure Log Analytics",
+    "okta": "Okta"
 }
+
+SDO_CONNECTORS = {
+    "abuseipdb": "AbuseIPDB",
+    "alienvault_otx": "AlienVault OTX",
+    "dshield": "SANS ISC DShield",
+    "intezer": "Intezer",
+    "recorded_future": "Recorded Future",
+    "reversinglabs": "ReversingLabs",
+    "threat_grid": "Cisco Threat Grid",
+    "threat_q": "ThreatQ",
+    "virus_total": "VirusTotal"
+}
+
+DEFAULT_DIALECT = "default"
 
 DIALECTS = {
     "qradar": ["events", "flows"],
@@ -53,14 +74,13 @@ DIALECTS = {
     "paloalto": ["xdr_data"],
     "secretserver": ["event"],
     "trendmicro_vision_one": ["endpointActivityData", "messageActivityData"],
-    "azure_log_analytics": ["SecurityAlert", "SecurityEvent", "SecurityIncident"]
+    "azure_log_analytics": ["SecurityAlert", "SecurityEvent", "SecurityIncident"],
+    "elastic_ecs": [DEFAULT_DIALECT, "beats"]
 }
 
-DEFAULT_DIALECT = "default"
-
 STIX_OPERATORS = {
-    "ComparisonExpressionOperators.And": "AND",
-    "ComparisonExpressionOperators.Or": "OR",
+    "ComparisonExpressionOperators.And": "AND (Comparision)",
+    "ComparisonExpressionOperators.Or": "OR (Comparision)",
     "ComparisonComparators.GreaterThan": ">",
     "ComparisonComparators.GreaterThanOrEqual": ">=",
     "ComparisonComparators.LessThan": "<",
@@ -73,8 +93,8 @@ STIX_OPERATORS = {
     "ComparisonComparators.IsSubSet": "ISSUBSET",
     "ComparisonComparators.IsSuperSet": "ISSUPERSET",
     "ComparisonComparators.Exists": "EXISTS",
-    "ObservationOperators.Or": "OR",
-    "ObservationOperators.And": "AND",
+    "ObservationOperators.Or": "OR (Observation)",
+    "ObservationOperators.And": "AND (Observation)",
     "ObservationOperators.FollowedBy": "FOLLOWEDBY"
 }
 
@@ -83,35 +103,37 @@ UPDATED_AT = now.strftime("%D")
 
 def __main__():
 
-    table_of_contents = "# Currently supported STIX objects and properties\n"
+    # process arguments
+    parent_parser = argparse.ArgumentParser(description='mapping_table_generator')
+    parent_parser.add_argument('--sdo',help='Generate tables for connectors that use SDO mapping')
+
+    args = parent_parser.parse_args()
+
+    if args.sdo:
+        CONNECTORS = SDO_CONNECTORS
+    else:
+        CONNECTORS = SCO_CONNECTORS
+
+    table_of_contents = "# Currently supported STIX objects and properties\n\n"
     table_of_contents += "Each connector supports a set of STIX objects and properties as defined in the connector's mapping files. There is also a set of common STIX properties that all cyber observable objects must contain. See [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for more information on STIX objects.\n"
-    table_of_contents += "## Common cyber observable properties\n"
+    table_of_contents += "## Common cyber observable properties\n\n"
     table_of_contents += "- created\n"
     table_of_contents += "- modified\n"
     table_of_contents += "- first_observed\n"
     table_of_contents += "- last_observed\n"
     table_of_contents += "- number_observed\n\n"
-    table_of_contents += "## Supported data sources\n"
+    table_of_contents += "## Supported data sources\n\n"
     table_of_contents += "Stix-shifter currently offers connector support for the following cybersecurity products. Click on a data source to see a list of STIX attributes and properties it supports.\n\n"
 
     table_of_contents_file_path = path.abspath(path.join(ADAPTER_GUIDE_PATH, "supported-mappings.md"))
     table_of_contents_file = open(table_of_contents_file_path, "w")
 
-    for index, (key, module) in enumerate(CONNECTORS.items()):
-        try:
-            filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "to_stix_map.json"))    
-            to_stix_json_file = open(filepath)
-            loaded_to_stix_json = json.loads(to_stix_json_file.read())
-            
-
-        except(Exception):
-            print("Error for {} module".format(key))
-            continue
+    for _, (key, module) in enumerate(CONNECTORS.items()):
 
         data_field_alias_mapping = []
         if key == 'qradar':
             try:
-                fields_filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "aql_events_fields.json"))    
+                fields_filepath = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "stix_translation/json", "aql_events_fields.json"))    
                 fields_json_file = open(fields_filepath)
                 loaded_fields_json = json.loads(fields_json_file.read())
                 data_field_alias_mapping = loaded_fields_json.get('default') # array of fields
@@ -119,27 +141,24 @@ def __main__():
             except(Exception):
                 print("Error for {} module".format(key))
                 continue
-        
-        stix_attribute_collection = _parse_attributes(loaded_to_stix_json, key, {})
-        
+
         output_string = ""
         output_string += "##### Updated on " + UPDATED_AT + "\n"
         output_string += "## " + module + "\n"
-        table_of_contents += "- [{}]({})\n".format(module, "connectors/{}_supported_stix.md".format(key))
+        table_of_contents += "- [{}]({})\n".format(module, "../stix_shifter_modules/{}/{}_supported_stix.md".format(key, key))
 
+        # SDOs
+        try:
+           output_string = _generate_sdo_list(output_string, args)
+        except Exception as e:
+            print("Error constructing SDO list for {} module: {}".format(key, e))
+            continue
 
         # OPERATORS
         try:
-            filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "operators.json")) 
+            filepath = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "stix_translation/json", "operators.json")) 
             operators_json_file = open(filepath)   
-            loaded_operators_json = json.loads(operators_json_file.read())
-            stix_operator_collection = _parse_operators(loaded_operators_json, {})
-            output_string += "### Supported STIX Operators\n"
-            output_string += "| STIX Operator | Data Source Operator |\n"
-            output_string += "|--|--|\n"
-            for stix_operator, ds_operator in stix_operator_collection.items():
-                output_string += "| {} | {} |\n".format(stix_operator, ds_operator)
-            output_string += "| <br> | |\n"
+            output_string = _generate_operators_table(operators_json_file, output_string)
             operators_json_file.close()
         except Exception as e:
             print("Error constructing STIX operator mapping table for {} module: {}".format(key, e))
@@ -155,66 +174,100 @@ def __main__():
                 if dialect == DEFAULT_DIALECT:
                     dialect = ""
                     output_string += "### Searchable STIX objects and properties\n"
-                    filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "from_stix_map.json"))    
+                    filepath = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "stix_translation/json", "from_stix_map.json"))    
                 else:
-                    output_string += "### Searchable STIX objects and properties for {}\n".format(dialect.capitalize())
-                    filepath = path.abspath(path.join(TRANSLATION_MODULE_PATH, key, "stix_translation/json", "{}from_stix_map.json".format(dialect + "_")))    
+                    output_string += "### Searchable STIX objects and properties for {} dialect\n".format(dialect.capitalize())
+                    filepath = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "stix_translation/json", "{}from_stix_map.json".format(dialect + "_")))    
                 from_stix_json_file = open(filepath)
-                loaded_from_stix_json = json.loads(from_stix_json_file.read())
-                # sorted_from_stix_objects = json.dumps(loaded_from_stix_json, sort_keys=True)
-                # sorted_attribute_objects = json.loads(sorted_attribute_objects)
-                output_string += "| STIX Object and Property | Mapped Data Source Fields |\n"
-                output_string += "|--|--|\n"
-                for stix_object_key, value in loaded_from_stix_json.items():
-                    property_dictionary = value["fields"]
-                    for s_property, fields_list in property_dictionary.items():
-                        if not isinstance(fields_list, list):
-                            fields_list = [fields_list]
-                        orig_fields_list = []
-                        if data_field_alias_mapping:
-                            # TODO: Get real field name for QRadar
-                            for aliased_field in fields_list:
-                                orig_data_field = _get_data_field(aliased_field, data_field_alias_mapping)
-                                orig_fields_list.append(orig_data_field)
-                        else:
-                            orig_fields_list = fields_list
-
-                        # output_string += "| {} | {} | {} |\n".format(stix_object_key, s_property, fields_list)
-                        # fields_string = ', '.join(map(str, fields_list))
-
-                        output_string += "| **{}**:{} | {} |\n".format(stix_object_key, s_property, ', '.join(map(str, orig_fields_list)))
-                output_string += "| <br> | |\n"
+                output_string = _generate_from_stix_table(from_stix_json_file, key, data_field_alias_mapping, output_string)
                 from_stix_json_file.close()
         except Exception as e:
             print("Error constructing from-STIX mapping table for {} module: {}".format(key, e))
             continue
-
         
         # TO-STIX 
+        if not args.sdo:
+            try:
+                filepath = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "stix_translation/json", "to_stix_map.json"))    
+                to_stix_json_file = open(filepath) 
+                output_string = _generate_to_stix_table(key, to_stix_json_file, data_field_alias_mapping, output_string)
+                to_stix_json_file.close()
+            except Exception as e:
+                print("Error constructing to-STIX mapping table for {} module: {}".format(key, e))
+                continue
+
         try:
-            supported_stix_file_path = path.abspath(path.join(ADAPTER_GUIDE_PATH, "connectors", "{}_supported_stix.md".format(key)))
+            supported_stix_file_path = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "{}_supported_stix.md".format(key)))
             supported_stix_file = open(supported_stix_file_path, "w")   
-            sorted_attribute_objects = json.dumps(stix_attribute_collection, sort_keys=True)
-            sorted_attribute_objects = json.loads(sorted_attribute_objects)
-            output_string += "### Supported STIX Objects and Properties for Query Results\n"
-            output_string += "| STIX Object | STIX Property | Data Source Field |\n"
-            output_string += "|--|--|--|\n"
-            for stix_object, property_list in sorted_attribute_objects.items():
-                for index, prop in enumerate(property_list):
-                    stix_property, data_field = prop.split(":")
-                    if data_field_alias_mapping:
-                        data_field = _get_data_field(data_field, data_field_alias_mapping)
-                    output_string += "| {} | {} | {} |\n".format(stix_object, stix_property, data_field)
-                output_string += "| <br> | | |\n"
-            to_stix_json_file.close()
             supported_stix_file.write(output_string)
             supported_stix_file.close()
         except Exception as e:
-            print("Error constructing to-STIX mapping table for {} module: {}".format(key, e))
-            continue
+                print("Error writing mapping tables for {} module: {}".format(key, e))
+                continue
         
     table_of_contents_file.write(table_of_contents)
     table_of_contents_file.close()
+
+def _generate_sdo_list(output_string, args):
+    output_string += "### Results STIX Domain Objects\n"
+    if args.sdo:
+        output_string += "* Identity\n* Sighting\n* Infrastructure\n* Malware\n* Extension\n* Indicator\n"
+    else:
+        output_string += "* Identity\n* Observed Data\n"
+    output_string += "<br>\n"
+    return output_string
+
+def _generate_operators_table(operators_json_file, output_string):
+    loaded_operators_json = json.loads(operators_json_file.read())
+    stix_operator_collection = _parse_operators(loaded_operators_json, {})
+    output_string += "### Supported STIX Operators\n"
+    output_string += "*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*\n\n"
+    output_string += "| STIX Operator | Data Source Operator |\n"
+    output_string += "|--|--|\n"
+    for stix_operator, ds_operator in stix_operator_collection.items():
+        output_string += "| {} | {} |\n".format(stix_operator, ds_operator)
+    output_string += "| <br> | |\n"
+    return output_string
+
+def _generate_from_stix_table(from_stix_json_file, key, data_field_alias_mapping, output_string):
+    loaded_from_stix_json = json.loads(from_stix_json_file.read())
+    if key == 'cybereason':
+        output_string += "*The Cybereason connector can only join specific linked fields with the AND operator as defined in its [configmap](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_modules/aws_athena/stix_translation/json/operators.json).*\n\n"
+    output_string += "| STIX Object and Property | Mapped Data Source Fields |\n"
+    output_string += "|--|--|\n"
+    for stix_object_key, value in loaded_from_stix_json.items():
+        property_dictionary = value["fields"]
+        for s_property, fields_list in property_dictionary.items():
+            if not isinstance(fields_list, list):
+                fields_list = [fields_list]
+            orig_fields_list = []
+            if data_field_alias_mapping:
+                # TODO: Get real field name for QRadar
+                for aliased_field in fields_list:
+                    orig_data_field = _get_data_field(aliased_field, data_field_alias_mapping)
+                    orig_fields_list.append(orig_data_field)
+            else:
+                orig_fields_list = fields_list
+            output_string += "| **{}**:{} | {} |\n".format(stix_object_key, s_property, ', '.join(map(str, orig_fields_list)))
+    output_string += "| <br> | |\n"
+    return output_string
+
+def _generate_to_stix_table(key, to_stix_json_file, data_field_alias_mapping, output_string):
+    loaded_to_stix_json = json.loads(to_stix_json_file.read())
+    stix_attribute_collection = _parse_attributes(loaded_to_stix_json, key, {})
+    sorted_attribute_objects = json.dumps(stix_attribute_collection, sort_keys=True)
+    sorted_attribute_objects = json.loads(sorted_attribute_objects)
+    output_string += "### Supported STIX Objects and Properties for Query Results\n"
+    output_string += "| STIX Object | STIX Property | Data Source Field |\n"
+    output_string += "|--|--|--|\n"
+    for stix_object, property_list in sorted_attribute_objects.items():
+        for index, prop in enumerate(property_list):
+            stix_property, data_field = prop.split(":")
+            if data_field_alias_mapping:
+                data_field = _get_data_field(data_field, data_field_alias_mapping)
+            output_string += "| {} | {} | {} |\n".format(stix_object, stix_property, data_field)
+        output_string += "| <br> | | |\n"
+    return output_string
 
 
 def _get_data_field(data_field, data_field_alias_mapping):

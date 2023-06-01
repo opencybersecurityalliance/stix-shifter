@@ -1,17 +1,19 @@
-##### Updated on 01/24/23
+##### Updated on 03/08/23
 ## Azure Log Analytics
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | and |
-| OR | or |
+| AND (Comparision) | and |
+| OR (Comparision) | or |
 | = | == |
 | != | != |
 | IN | in |
 | MATCHES | contains |
 | LIKE | startswith, endswith |
 | <br> | |
-### Searchable STIX objects and properties for Securityalert
+### Searchable STIX objects and properties for Securityalert dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **x-ibm-finding**:start | StartTime, TimeGenerated |
@@ -37,7 +39,7 @@
 | **x-azure-security-alert**:workspace_resource_group | WorkspaceResourceGroup |
 | **x-azure-security-alert**:compromised_entity | CompromisedEntity |
 | <br> | |
-### Searchable STIX objects and properties for Securityevent
+### Searchable STIX objects and properties for Securityevent dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | IpAddress |
@@ -84,7 +86,7 @@
 | **x-azure-security-event**:member_name | MemberName |
 | **x-azure-security-event**:requester | Requester |
 | <br> | |
-### Searchable STIX objects and properties for Securityincident
+### Searchable STIX objects and properties for Securityincident dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **url**:value | IncidentUrl |

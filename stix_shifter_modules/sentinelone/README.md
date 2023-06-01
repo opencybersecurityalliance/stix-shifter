@@ -1,4 +1,8 @@
-# SentinelOne Connector
+# SentinelOne
+
+## Supported STIX Mappings
+
+See the [table of mappings](sentinelone_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 **Table of Contents**
 

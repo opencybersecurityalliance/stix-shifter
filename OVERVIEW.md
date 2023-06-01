@@ -47,9 +47,7 @@ STIX 2 Patterning is a part of STIX that deals with the "matching things" part o
 
 `[url:value = 'http://www.testaddress.com'] OR [ipv4-addr:value = '192.168.122.84']`
 
-This library takes in STIX 2 Patterns as input, and "finds" data that matches the patterns inside various products that house repositories of cybersecurity data. Examples of such products include SIEM systems, endpoint management systems, threat intelligence platforms, orchestration platforms, network control points, data lakes, and more.
-
-In addition to "finding" the data by using these patterns, STIX-Shifter uniquely also _transforms the output_ into STIX 2 Observations. Why would we do that you ask? To put it simply - so that all of the security data, regardless of the source, mostly looks and behaves the same.
+A STIX Observation is the `observed-data` STIX Domain Object (SDO). You can think of this as a row of data that is returned from a search triggered by the STIX pattern, and can represent an indicator of compromise. Each observation contains one or more STIX Cyber observable Objects (SCO) which in turn has one or more properties associated to the data returned from the search. 
 
 ##### An example of a STIX Observation:
 
@@ -110,58 +108,7 @@ You might want to use this library and contribute to development, if any of the 
 - You are a vendor or project owner who has data that can be made available, and you want to contribute a connector
 - You just want to help make the world a safer place!
 
-## Available Connectors
-
-Each connector supports a set of STIX objects and properties as defined in the connector's mapping files. There is also a set of common STIX properties that all cyber observable objects must contain. See [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) for more information on STIX objects.
-
-### Common cyber observable properties
-- created
-- modified
-- first_observed
-- last_observed
-- number_observed
-
-Stix-shifter currently offers connector support for the following cybersecurity products. Click on a connector name in the following table to see a list of STIX attributes and properties it supports.
-
-List updated: October 29, 2021
-
-|         Connector          |      Module Name     | Data Model |  Developer   | Translation | Transmission | Availability |
-| :------------------------: | :------------------: | :--------: | :----------: | :---------: | :----------: | :----------: |
-|         [IBM QRadar](adapter-guide/connectors/qradar_supported_stix.md)         |        qradar        |  QRadar AQL   | IBM Security |     Yes     |     Yes      |   Released    |
-|    [IBM QRadar on Cloud](adapter-guide/connectors/qradar_supported_stix.md)     |        qradar        | QRadar AQL | IBM Security |     Yes     |     Yes      |   Released    |
-|         [HCL BigFix](adapter-guide/connectors/bigfix_supported_stix.md)         |        bigfix        |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|  [Carbon Black CB Response](adapter-guide/connectors/carbonblack_supported_stix.md)  |      carbonblack     |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|  [Carbon Black Cloud](adapter-guide/connectors/cbcloud_supported_stix.md)  |      cbcloud     |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|       Elasticsearch       |       elastic        | MITRE CAR  |    MITRE     |     Yes     |      No      |   Released    |
-|       [Elasticsearch (ECS)](adapter-guide/connectors/elastic_ecs_supported_stix.md)       |     elastic_ecs      |    ECS     | IBM Security |     Yes     |     Yes      |   Released    |
-| [IBM Cloud Security Advisor](adapter-guide/connectors/security_advisor_supported_stix.md) |   security_advisor   |  Default   |  IBM Cloud   |     Yes     |     Yes      |   Released    |
-|           [Splunk Enterprise Security](adapter-guide/connectors/splunk_supported_stix.md)           |        splunk        | Splunk CIM | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Microsoft Defender for Endpoint](adapter-guide/connectors/msatp_supported_stix.md)        |        msatp         |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Microsoft Graph Security](adapter-guide/connectors/azure_sentinel_supported_stix.md)       |    azure_sentinel    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|        [IBM Guardium Data Protection](adapter-guide/connectors/guardium_supported_stix.md)       |       guardium       |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|    [AWS CloudWatch Logs](adapter-guide/connectors/aws_cloud_watch_logs_supported_stix.md)     | aws_cloud_watch_logs |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Amazon Athena](adapter-guide/connectors/aws_athena_supported_stix.md)       |   aws_athena   |  SQL   | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Alertflex](adapter-guide/connectors/alertflex_supported_stix.md)       |    alertflex    |  Default   | Alertflex |     Yes     |     Yes      |   Released    |
-|       [Micro Focus ArcSight](adapter-guide/connectors/arcsight_supported_stix.md)       |    arcsight    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|       [CrowdStrike Falcon](adapter-guide/connectors/crowdstrike_supported_stix.md)       |    crowdstrike    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Trend Micro Vision One](adapter-guide/connectors/trendmicro_vision_one_supported_stix.md)       |    trendmicro_vision_one    |  Default   | Trend Micro |     Yes     |     Yes      |   Released    |
-|       [IBM Security Verify Privilege Vault](adapter-guide/connectors/secretserver_supported_stix.md)       |    secretserver    |  Default   | IBM |     Yes     |     Yes      |   Released    |
-|       [One Login](adapter-guide/connectors/onelogin_supported_stix.md)       |    onelogin    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
-|       MySQL                                                                  |    mysql    |  Default   | IBM |     Yes     |     Yes      |   Released    |
-|       [Sumo Logic](adapter-guide/connectors/sumologic_supported_stix.md)       |    sumologic    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
-|       [Datadog](adapter-guide/connectors/datadog_supported_stix.md)       |    datadog    |  Default   | GS Lab |     Yes     |     Yes      |   Released    |
-|       [Infoblox BloxOne Threat Defense](adapter-guide/connectors/infoblox_supported_stix.md)       |    infoblox    |  Default   | Infoblox |     Yes     |     Yes      |   Released    |
-|       [Proofpoint (SIEM API)](adapter-guide/connectors/proofpoint_supported_stix.md)       |    proofpoint    |  Default   | IBM Security |     Yes     |     Yes      |   Released    |
-|       [Cybereason](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/cybereason_supported_stix.md)                        | cybereason              | Default    | IBM Security | Yes         | Yes          | Released     |
-|       [Palo Alto Cortex XDR](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/paloalto_supported_stix.md)                        | paloalto              | Default    | IBM Security | Yes         | Yes          | Released     |
-|       [SentinelOne](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/sentinelone_supported_stix.md)                        | sentinelone              | Default    | IBM Security | Yes         | Yes          | Released     |
-|       [Darktrace](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/darktrace_supported_stix.md)                           | darktrace              | Default    | IBM Security | Yes         | Yes          | Released     |
-|       [IBM Security ReaQta](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/reaqta_supported_stix.md)                           | reaqta             | Default    | IBM Security | Yes         | Yes          | Released     |
-|       [IBM Security Verify](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/ibm_security_verify_supported_stix.md)                           | ibm_security_verify             | Default    | IBM Security | Yes         | Yes          | Released     |
-|       [Red Hat Advanced Cluster Security for Kubernetes (StackRox)](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/rhacs_supported_stix.md)                           | rhacs             | Default    | IBM Security | Yes         | Yes          | Released     |
-|      [GCP Chronicle](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/gcp_chronicle_supported_stix.md)                   | gcp_chronicle              | Default    | IBM Security | Yes         | Yes          | Released     |
-|      [Azure Log Analytics](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/connectors/azure_log_analytics_supported_stix.md)                   | azure_log_analytics              | Default    | IBM Security | Yes         | Yes          | Released     |
-
+Take a look at the [**currently available connectors**](CONNECTORS.md).
 
 
 ## How to use
@@ -186,6 +133,32 @@ Stix-shifter provides several functions: `translate` and `transmit` are the prim
 
 ## Translate
 
+### CLI Arguments
+
+| Argument | Description | Accepted Input |
+| -------- | ------------ | --------------- |
+| TRANSLATION KEYWORD | The keyword specifiying a function will be used to translate queries and results. | `translate` |
+| MODULE NAME | The name of the connector being used. This is the module directory name as it appears in [stix_shifter_modules](stix_shifter_modules/). If the connector supports multiple dialects, then by default a query will be generated for each one. You may specifiy a specific dialect by adding `:<DIALECT>` directly after the module name | The connector module name with an optional `:<DIALECT>` |
+| TRANSLATION DATA TYPE | The type of data you wish to translate. This will be `query` for translating STIX patterns to native queries and `results` for translating data source results to STIX.  | `query` or `results` |
+| STIX IDENTITY OBJECT | This is an object that represents the data source being queried and is inserted into the results bundle of STIX objects. An empty object `"{}"` may be used for the query translation. This must be wrapped in quotes to use with the CLI. | A stringified STIX identity object |
+| TRANSLATION DATA | This is the STIX pattern for query translation and a list of JSON results for results translation. This must be wrapped in quote to use with the CLI. | A stringified STIX pattern or list of JSON data |
+| OPTIONS | An object of optional parameters. This must be wrapped in quotes to use with the CLI. | A stringified object of options |
+
+#### CLI Options
+
+These are general translation options defined in [`config.json`](stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules.
+
+| Option | Translation Data Type | Description | Accepted Values |
+| ------ | --------------------- | ----------- | -------------- |
+| result_limit | query | The max number of results that can be returned from a query. This value is generally included in translated queries before getting sent to the data source's API query call. The default is `10000` | A number between `1` and `500000` |
+| time_range | query | A default time range, in minutes, applied to the translated query when no `START STOP` qualifier is present in the STIX pattern. As an example, this would be the `last x minutes` in a SQL query. The default is `5` | A number between `1` and `10000` |
+| dialects | query | Dialects to be used for pattern translation. This will determine what `from_stix_map.json` files will be used. | A list of one or more dialect strings supported by the connector |
+| validate_pattern | query | Specifies if pattern validation is run during the query translation call. This can catch errors in the submitted STIX pattern that would otherwise raise exceptions during translation. | `true` or `false` |
+| stix_validator | results | Specifies if validation is run on the bundle of STIX data returned with results translation. This is performance intensive and should be used on a small result set. The default if `false`. | `true` or `false` |
+| unmapped_fallback | results | If set to `true`, any results data returned, that is not specifired in the to-STIX mapping, will be included in the results in the following STIX object:property format `x-<MODULE NAME>:<NATIVE DATA FIELD>`. The default is `false` | `true` or `false` |
+| stix_2.1 | results | Results are returned as STIX 2.0 objects by default. Setting this option will return results in STIX 2.1 format. The default is `false` | `true` or `false` |
+
+
 ### 1. Translate a STIX pattern to a native data source query
 
 #### INPUT: STIX 2 pattern
@@ -205,6 +178,7 @@ OR
 ```
 
 ### CLI Command
+
 Open a terminal and navigate to your python 3 environment. Translation of a **query** is called in the format of:
 
 `stix-shifter translate <MODULE NAME> query "<STIX IDENTITY OBJECT>" "<STIX PATTERN>" "<OPTIONS>"`
@@ -293,6 +267,7 @@ _pattern.txt_
 ```
 
 ### CLI Command
+
 Open a terminal and navigate to your python 3 environment. Translation of a **results** is called in the format of:
 
 `stix-shifter translate <MODULE NAME> result '<STIX IDENTITY OBJECT>' '<LIST OF JSON RESULTS>'`
@@ -363,9 +338,9 @@ _results.json_
 
 ### Connection and Configuration objects
 
-STIX-shifter expects connection and configuration objects to be passed in during transmission calls. The connection object contains the host address and port of the data source being connected to, as well as an optional server name indicator (SNI) and self signed certificate.
+STIX-shifter expects connection and configuration objects to be passed in during transmission calls. The connection object contains the host address and port of the data source being connected to, as well as an optional self signed certificate.
 
-#### Connection
+### Connection
 
 This object contains information needed to connect to a specific data source. The `host` and `port` keys are required.
 
@@ -373,7 +348,6 @@ This object contains information needed to connect to a specific data source. Th
 {
     "host": <Host URL or IP address>,
     "port": <Port>,
-    "sni": <Server name indicator>,
     "selfSignedCert": <false or Certificate>,
     "cert": <Certificate (if required)>,
     "resultSizeLimit": <Results limit to come back from the data source query>,
@@ -382,9 +356,18 @@ This object contains information needed to connect to a specific data source. Th
 }
 ```
 
-#### Configuration
+### Connection Options
 
-This object contains an `auth` key who's value stores authentication information for the data source. What keys and values get stored in the auth will depend on the authentication requirements of the data source.
+These are general options defined in [`config.json`](stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules.
+
+| Option | Description | Accepted Values |
+| ------ | ----------- | -------------- |
+| timeout | The max amount of time in seconds before the query times out. The default is `30`. | A number between `1` and `60` |
+
+
+### Configuration
+
+This object contains an `auth` key who's value stores authentication information for the data source. What keys and values get stored in the auth will depend on the authentication requirements of the data source (username, password, auth token, etc).
 
 ```
 {
@@ -440,6 +423,29 @@ Any failed transmission function call will return an error in the format of:
 
 `{'success': False, 'error': <Error message reported by API>, 'code': <Error code>}`
 
+
+### CLI Arguments
+
+| Argument | Description | Accepted Input |
+| -------- | ------------ | --------------- |
+| TRANSMISSION KEYWORD | The keyword specifiying a function will be used to transmit API calls to the target data source. | `transmit` |
+| MODULE NAME | The name of the connector being used. This is the module directory name as it appears in [stix_shifter_modules](stix_shifter_modules/). | The connector module name |
+| CONNECTION OBJECT | This contains the information needed to connect to the target data source, such as host and port. This must be wrapped in quotes to use with the CLI. | A stringified connection object |
+| CONFIGURATION OBJECT |  This contains the information needed to authenticate with the target data source, such as username and password. This must be wrapped in quotes to use with the CLI. | A stringified configuration object |
+| TRANSMISSION FUNCTION | The transmission function used to communicate with the target data source. | `is_async`, `ping`, `query`, `status`, `results`, `delete` |
+
+### Transmission Functions and Arguments
+
+| Function | Description | Function Argument | Function Returns |
+| ------ | --------------------- | ----------- | -------------- |
+| is_async | Checks if the connector is asynchronous. | NA | `true` or `false`
+| ping | Calls the data source ping API endpont (or equivalent) to see if a connection can be made.| NA | Object containing `success` of `true` or `false` |
+| query | Sends a native query string, as translated from the STIX pattern, to target data source API. | Tranlated query string | Query string | Object containing `success` of `true` or `false` and the `search_id`. If the connector is synchronous, the search_id will be the original query string. |
+| status | Checks the status of a query. Only used by asynchronous connectors. | The `search_id` returned from the query call | Object continaing `success` of `true` or `false`, `status` of `RUNNING`, `COMPLETED`, `CANCELED`, or `ERROR`, and `progress` with a number indicating the percentage complete. |
+| results | Fetches the native results of a completed query. | The `search_id` returned from the query call followed by OFFSET and LENGTH as numbers | A list of JSON results |
+| delete | Deletes a query from the target data source | The `search_id` returned from the query call | Object continaing `success` of `true` or `false` |
+| results_stix | Fetches the results of a completed query and runs results-to-stix translation. This essentially combines the `results` transmission function with the results translation | The `search_id` returned from the query call, followed by OFFSET and LENGTH as numbers, followed by the stringified STIX identity object. | A bundle of STIX objects. |
+
 ### Ping
 
 Uses the data source API to ping the connection.
@@ -468,11 +474,11 @@ An asynchronous data source will typically return a search ID supplied by the AP
 
 ### Status
 
-Uses the data source API to look up the query status based on the `search_id` that is returned from the query call. This is only used for asynchronous data sources where the results are not returned right after making a query call.
+Uses the data source API to look up the query status based on the `search_id` that is returned from the query call. This is only used for asynchronous data sources where the results are not returned right after making a query call. If the connector supports, you can specify `metadata` parameter which may contain extra information to make the status api call.
 
 #### CLI Command
 
-`stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' status <SEARCH ID>`
+`stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' status <SEARCH ID> <METADATA(optional)>`
 
 #### OUTPUT:
 
@@ -482,17 +488,53 @@ The status can be one of: `COMPLETED`, `ERROR`, `CANCELLED`, `TIMEOUT`, or `RUNN
 
 ### Results
 
-Uses the data source API to fetch the query results based on the search ID, offset, and length.
+Uses the data source API to fetch the query results based on the search ID, offset, and length. 
+
+If the connector supports, you can specify `metadata` parameter which may contain extra information to fetch the next batch of results from the datasource. This is a recomended parameter for the datasource that supports pagination.
 
 #### CLI Command
 
-`stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' results <SEARCH ID> <OFFSET> <LENGTH>`
+`stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' results <SEARCH ID> <OFFSET> <LENGTH> <METADATA(optional)>`
+
+The `OFFSET` and `LENGTH` control what pages/rows of data are returned in the query results. 
 
 #### OUTPUT:
 
 `{'success': True, 'data': [<QUERY RESULTS>]}`
 
-The `OFFSET` and `LENGTH` control what pages/rows of data are returned in the query results.
+#### OUTPUT(with metadata):
+
+`{'success': True, 'data': [<QUERY RESULTS>], 'metadata': <metadata values>}`
+
+#### Example:
+```
+{
+    "success": true,
+    "data": [
+        {
+            "event": {
+                "securityEvent": {
+                    "eventTimestamp": "2022-06-13T14:36:54.216539700Z",
+                    "eventType": "FILE_CREATION",
+                    "vendorName": "Microsoft",
+                    "productEventType": "DeviceFileEvents",
+                    "ingestedTimestamp": "2022-06-13T15:36:26.275010Z"
+                },
+                "securityResult": [
+                    {
+                        "summary": "FileCreated",
+                        "category": "alert"
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "result_count": 2,
+        "next_page_token": "CgwIlqLjoAYQ2NfggwESCwiGl52VBhC0xKB"
+    }
+}
+```
 
 ### Results as STIX
 
@@ -530,9 +572,41 @@ The `execute` command tests all steps of the translation-transmission flow:
 4. A **transmit results** call is made for each query (using the returned query ID in step 2). If data is returned, the resulting JSON objects get added to a list.
 5. The list of JSON results get translated into a bundle of STIX objects with a **translate query** call. This bundle includes the STIX `identity` object and `observed-data` objects.
 
+### CLI Arguments
+
+| Argument | Description | Accepted Input |
+| -------- | ------------ | --------------- |
+| EXECUTE KEYWORD | The keyword specifiying that the execute function will be used. | `execute` |
+| TRANSMISSION MODULE NAME | The name of the connector being used for transmission functions. This is the module directory name as it appears in [stix_shifter_modules](stix_shifter_modules/). | The connector module name |
+| TRANSLATION MODULE NAME | The name of the connector being used for translation functions. This is the module directory name as it appears in [stix_shifter_modules](stix_shifter_modules/). | The connector module name |
+| STIX IDENTITY OBJECT | This is an object that represents the data source being queried and is inserted into the results bundle of STIX objects. An empty object `"{}"` may be used for the query translation. This must be wrapped in quotes to use with the CLI. | A stringified STIX identity object |
+| CONNECTION OBJECT | This contains the information needed to connect to the target data source, such as host and port. This must be wrapped in quotes to use with the CLI. | A stringified connection object |
+| CONFIGURATION OBJECT |  This contains the information needed to authenticate with the target data source, such as username and password. This must be wrapped in quotes to use with the CLI. | A stringified configuration object |
+| STIX PATTERN | This is the STIX pattern to be used for the query. This must be wrapped in quote to use with the CLI. | A stringified STIX pattern |
+
+### Connection Object Options
+
+These are general options defined in [`config.json`](stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules. These should be added as an "options" objects inside the CONNECTION OBJECT.
+
+| Option | Function Type | Description | Accepted Values |
+| ------ | --------------------- | ----------- | -------------- |
+| result_limit | query translation | The max number of results that can be returned from a query. This value is generally included in translated queries before getting sent to the data source's API query call. The default is `10000` | A number between `1` and `500000` |
+| time_range | query translation | A default time range, in minutes, applied to the translated query when no `START STOP` qualifier is present in the STIX pattern. As an example, this would be the `last x minutes` in a SQL query. The default is `5` | A number between `1` and `10000` |
+| dialects | query translation | Dialects to be used for pattern translation. This will determine what `from_stix_map.json` files will be used. | A list of one or more dialect strings supported by the connector |
+| validate_pattern | query translation | Specifies if pattern validation is run during the query translation call. This can catch errors in the submitted STIX pattern that would otherwise raise exceptions during translation. | `true` or `false` |
+| stix_validator | results translation | Specifies if validation is run on the bundle of STIX data returned with results translation. This is performance intensive and should be used on a small result set. The default if `false`. | `true` or `false` |
+| unmapped_fallback | results translation | If set to `true`, any results data returned, that is not specifired in the to-STIX mapping, will be included in the results in the following STIX object:property format `x-<MODULE NAME>:<NATIVE DATA FIELD>`. The default is `false` | `true` or `false` |
+| stix_2.1 | results translation | Results are returned as STIX 2.0 objects by default. Setting this option will return results in STIX 2.1 format. The default is `false` | `true` or `false` |
+| timeout | transmission | The max amount of time in seconds before the query times out. The default is `30`. | A number between `1` and `60` |
+
+
 ### CLI Command
 
 `stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>'`
+
+### CLI Example
+
+`stix-shifter execute mysql mysql '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "mysql","identity_class": "system"}' '{"host": "localhost", "database":"demo_db", "options":{"table":"demo_table", "validate_pattern": true}}' '{"auth": {"username":"root", "password":"MyPassword"}}' "[ipv4-addr:value = '213.213.142.5'] START t'2019-01-28T12:24:01.009Z' STOP t'2019-01-28T12:54:01.009Z'"`
 
 ### Debug
 
@@ -552,6 +626,10 @@ You can redirect the output of your CLI command to a file to save the STIX resul
 
 `stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' > results.json`
 
+### OUTPUT:
+
+A bundle of STIX objects
+
 ## Modules
 
 The `modules` command will return a JSON of the existing connectors along with their dialects and supported languages that are used in query translation. 
@@ -560,7 +638,7 @@ The `modules` command will return a JSON of the existing connectors along with t
 
 `python main.py modules`
 
-returns
+#### output
 ```
 {
     "qradar": {
@@ -587,12 +665,200 @@ returns
 }
 ```
 
+This command can also be used to get the dialects of a specific connector.
+
+`python main.py modules <module name>`
+
+### CLI Command
+
+`python main.py modules qradar`
+
+#### output
+```
+{
+    "qradar": {
+        "flows": {
+            "language": "stix",
+            "default": true
+        },
+        "events": {
+            "language": "stix",
+            "default": true
+        },
+        "aql": {
+            "language": "aql",
+            "default": true
+        }
+    }
+}
+```
+
 In the above example, the QRadar connector can use three dialects: `flows`, `events`, and `aql`. When a connector only has a `default` dialect, such as with Security Advisor, only one dialect is used by the connector. Most dialects will use the `stix` language since they translate STIX patterns into native queries. QRadar's `aql` dialect uses the `aql` language since it is meant to accept an AQL query rather than a STIX pattern. See the [QRadar connector README](stix_shifter_modules/qradar/README.md) for more information on AQL passthrough.
 
-### OUTPUT:
+## configs
 
-A bundle of STIX objects
+The `configs` command returns the configuration pararmetes of the existing connectors. It basically returns a JSON of the existing connectors along with their connections and configuation objects that are specified in config.json.
 
+### CLI Command
+
+`python main.py configs`
+#### output
+```
+{
+    "alertflex": {
+        "connection": {
+            "type": {
+                "type": "connectorType",
+                "displayName": "Alertflex"
+            },
+            "options": {
+                "type": "fields",
+                "async_call": {
+                    "type": "text",
+                    "hidden": true,
+                    "optional": true
+                },
+                "result_limit": {
+                    "default": 10000,
+                    "min": 1,
+                    "max": 500000,
+                    "type": "number",
+                    "previous": "connection.resultSizeLimit"
+                },
+                "time_range": {
+                    "default": 5,
+                    "min": 1,
+                    "max": 10000,
+                    "type": "number",
+                    "previous": "connection.timerange",
+                    "nullable": true
+                },
+                .....
+            }
+        }
+    }
+}
+```
+
+Specifying the connector module name will return the configuration parameters of a specific connector.
+
+### CLI Command
+
+`python main.py configs `
+#### output
+```
+{
+    "qradar": {
+        "connection": {
+            "type": {
+                "type": "connectorType",
+                "displayName": "IBM\u00ae QRadar and QRadar On Cloud",
+                "group": "qradar"
+            },
+            "options": {
+                "type": "fields",
+                "async_call": {
+                    "type": "text",
+                    "hidden": true,
+                    "optional": true
+                },
+                "result_limit": {
+                    "default": 10000,
+                    "min": 1,
+                    "max": 500000,
+                    "type": "number",
+                    "previous": "connection.resultSizeLimit"
+                },
+                "time_range": {
+                    "default": 5,
+                    "min": 1,
+                    "max": 10000,
+                    "type": "number",
+                    "previous": "connection.timerange",
+                    "nullable": true
+                },
+                "timeout": {
+                    "default": 30,
+                    "min": 1,
+                    "max": 60,
+                    "hidden": true,
+                    "type": "number",
+                    "previous": "connection.timeoutLimit"
+                },
+                "dialects": {
+                    "type": "array",
+                    "hidden": true,
+                    "optional": true
+                },
+                "language": {
+                    "type": "string",
+                    "default": "stix",
+                    "optional": true,
+                    "hidden": true
+                },
+                "validate_pattern": {
+                    "type": "boolean",
+                    "optional": true,
+                    "hidden": true,
+                    "previous": "connection.validate_pattern",
+                    "default": false
+                },
+                "stix_validator": {
+                    "type": "boolean",
+                    "default": false,
+                    "optional": true,
+                    "hidden": true,
+                    "previous": "connection.stix_validator"
+                },
+                "mapping": {
+                    "type": "json",
+                    "optional": true,
+                    "previous": "connection.mapping"
+                },
+                "unmapped_fallback": {
+                    "type": "boolean",
+                    "default": true,
+                    "optional": true,
+                    "hidden": true
+                },
+                "stix_2.1": {
+                    "type": "boolean",
+                    "default": false,
+                    "optional": true,
+                    "hidden": true
+                }
+            },
+            "host": {
+                "type": "text",
+                "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$"
+            },
+            "port": {
+                "type": "number",
+                "default": 443,
+                "min": 1,
+                "max": 65535
+            },
+            "help": {
+                "default": "data-sources-qradar.html",
+                "type": "link"
+            },
+            "selfSignedCert": {
+                "type": "password",
+                "optional": true
+            }
+        },
+        "configuration": {
+            "auth": {
+                "type": "fields",
+                "sec": {
+                    "type": "password",
+                    "previous": "configuration.auth.SEC"
+                }
+            }
+        }
+    }
+}
+```
 ## Limitations
 
 STIX-Shifter has limitations on the length of a pattern that can be translated into a native query. As the pattern length increases, the translation time increases exponentially due to how ANTLR 4 parses the pattern. See [STIX-Shifter Limitations](adapter-guide/stix-shifter-limitations.md) for more details.  

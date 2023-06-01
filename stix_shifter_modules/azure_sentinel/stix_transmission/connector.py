@@ -1,16 +1,18 @@
 import json
-import adal
-import re
-from flatten_json import flatten
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from azure.core.exceptions import ClientAuthenticationError
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from .api_client import APIClient
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 
 
-class Connector(BaseSyncConnector):
-    init_error = None
+class Connector(BaseJsonSyncConnector):
+    api_client = None
     max_limit = 1000
+    base_uri = 'graph.microsoft.com' # Microsoft Graph API has single endpoint
+    DEFAULT_API_VERSION = 'v1.0'
+    LEGACY_ALERT = 'security/alerts'
+    ALERT_V2 = 'security/alerts_v2'
 
     def __init__(self, connection, configuration):
         """Initialization.
@@ -18,35 +20,54 @@ class Connector(BaseSyncConnector):
         :param configuration: dict,config dict"""
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
-        self.adal_response = Connector.generate_token(self, connection, configuration)
-        if self.adal_response['success']:
-            configuration['auth']['access_token'] = self.adal_response['access_token']
-            self.api_client = APIClient(connection, configuration)
+        self.connection = connection
+        self.configuration = configuration
+        self.api_client = APIClient(self.base_uri, self.connection, self.configuration)
+        
+        self.legacy_alert = connection['options'].get('alert')
+        self.alert_v2 = connection['options'].get('alertV2')
+        
+        if self.legacy_alert:
+            self.query_alert_type = 'alert'
+            self.endpoint = '{api_version}/{api_resource}'.format(api_version=self.DEFAULT_API_VERSION, api_resource=self.LEGACY_ALERT)
+        elif self.alert_v2:
+            self.query_alert_type = 'alertV2'
+            self.endpoint = '{api_version}/{api_resource}'.format(api_version=self.DEFAULT_API_VERSION, api_resource=self.ALERT_V2)
         else:
-            self.init_error = True
+            raise Exception('Invalid alert resource type. At least one alert type must be selected.')
 
-
-    def ping_connection(self):
+    async def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
-        if self.init_error:
-            self.logger.error("Token Generation Failed:")
-            return self.adal_response
-        response = self.api_client.ping_box()
-        response_code = response.code
-        response_dict = json.loads(response.read())
-        if 200 <= response_code < 300:
-            return_obj['success'] = True
-        else:
+        response_dict = dict()
+        try:
+            response = await self.api_client.ping_box(self.endpoint)
+            response_code = response.code
+            response_dict = json.loads(response.read())
+            if 200 <= response_code < 300:
+                return_obj['success'] = True
+            else:
+                ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
+        except ClientAuthenticationError as ex:
+            response_dict['code'] = 'unauthorized_client'
+            response_dict['message'] = str(ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
+        except Exception as ex:
+            if "server timeout_error" in str(ex) or "timeout_error" in str(ex):
+                response_dict['code'] = 'HTTPSConnectionError'
+            else:
+                response_dict['code'] = 'invalid_client'
+            response_dict['error'] = str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
+
         return return_obj
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         """"delete_query_connection response
         :param search_id: str, search_id"""
         return {"success": True, "search_id": search_id}
 
-    def create_results_connection(self, query, offset, length):
+    async def create_results_connection(self, query, offset, length):
         """"built the response object
         :param query: str, search_id
         :param offset: int,offset value
@@ -59,17 +80,25 @@ class Connector(BaseSyncConnector):
 
         # total records is the sum of the offset and length(limit) value
         total_records = offset + length
-
+        
         try:
-            if self.init_error:
-                self.logger.error("Token Generation Failed:")
-                return self.adal_response
+            if not isinstance(query, dict):
+                query = json.loads(query)
+
+            query_service_type = list(query.keys())[0]
+            query = query[query_service_type]
+            
+            if self.query_alert_type != query_service_type:
+                self.logger.debug('Query type {} does not match the alert resource type {}'.format(query_service_type, self.query_alert_type))
+                return_obj = {'success': True, "data": []}
+                return return_obj
+            
             # check for length value against the max limit(1000) of $top param in data source
             if length <= self.max_limit:
                 # $skip(offset) param not included as data source provides incorrect results for some of the queries
-                response = self.api_client.run_search(query, total_records)
+                response = await self.api_client.run_search(query, total_records, self.endpoint)
             elif length > self.max_limit:
-                response = self.api_client.run_search(query, self.max_limit)
+                response = await self.api_client.run_search(query, self.max_limit, self.endpoint)
             response_code = response.code
             response_dict = json.loads(response.read())
             if 199 < response_code < 300:
@@ -78,7 +107,7 @@ class Connector(BaseSyncConnector):
                 while len(return_obj['data']) < total_records:
                     try:
                         next_page_link = response_dict['@odata.nextLink']
-                        response = self.api_client.next_page_run_search(next_page_link)
+                        response = await self.api_client.next_page_run_search(next_page_link, self.endpoint)
                         response_code = response.code
                         response_dict = json.loads(response.read())
                         if 199 < response_code < 300:
@@ -108,6 +137,14 @@ class Connector(BaseSyncConnector):
                                 process["fileHash"].pop('hashType')
                                 process["fileHash"].pop('hashValue')
 
+                    if 'evidence' in node:
+                        evidence_list = node['evidence']
+                        
+                        for evidence in evidence_list:
+                            odata_type =  evidence.get('@odata.type').split('.')[3]
+                            node[odata_type] = evidence
+                        node.pop('evidence')  
+                    
                     update_node.append(node)
 
                 return_obj['data'] = update_node
@@ -115,42 +152,17 @@ class Connector(BaseSyncConnector):
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
 
+        except ClientAuthenticationError as ex:
+            response_dict['code'] = 'unauthorized_client'
+            response_dict['message'] = str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
         except Exception as ex:
-            if response_dict is not None:
-                ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
-                self.logger.error('can not parse response: ' + str(response_dict))
+            if "server timeout_error" in str(ex) or "timeout_error" in str(ex):
+                response_dict['code'] = 'HTTPSConnectionError'
             else:
-                raise ex
+                response_dict['code'] = 'invalid_client'
+            response_dict['error'] = str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['error', 'message'], connector=self.connector)
         return return_obj
 
-    @staticmethod
-    def generate_token(self, connection, configuration):
-        """To generate the Token
-        :param connection: dict, connection dict
-        :param configuration: dict,config dict"""
-        return_obj = dict()
-
-        authority_url = ('https://login.microsoftonline.com/' +
-                         configuration['auth']['tenant'])
-        resource = "https://" + str(connection.get('host'))
-
-        try:
-            context = adal.AuthenticationContext(
-                authority_url, validate_authority=configuration['auth']['tenant'] != 'adfs',
-            )
-            response_dict = context.acquire_token_with_client_credentials(
-                resource,
-                configuration['auth']['clientId'],
-                configuration['auth']['clientSecret'])
-
-            return_obj['success'] = True
-            return_obj['access_token'] = response_dict['accessToken']
-
-        except Exception as ex:
-            if ex.__class__.__name__ == 'AdalError':
-                response_dict = ex.error_response
-                ErrorResponder.fill_error(return_obj, response_dict, ['error_description'],  connector=self.connector)
-            else:
-                ErrorResponder.fill_error(return_obj, message=str(ex), connector=self.connector)
-
-        return return_obj
+    

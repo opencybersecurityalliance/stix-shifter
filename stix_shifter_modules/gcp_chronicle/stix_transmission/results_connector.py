@@ -1,14 +1,18 @@
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseJsonResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
-import json
-from httplib2 import ServerNotFoundError
-from google.auth.exceptions import RefreshError
+from aiogoogle.excs import HTTPError
+from aiohttp.client_exceptions import ClientConnectionError
+from asyncio.exceptions import TimeoutError
 import copy
 import re
 
 
-class ResultsConnector(BaseResultsConnector):
+class InvalidMetadataException(Exception):
+    pass
+
+
+class ResultsConnector(BaseJsonResultsConnector):
     EMAIL_PATTERN = re.compile(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
     GCP_MAX_PAGE_SIZE = 1000
 
@@ -17,13 +21,13 @@ class ResultsConnector(BaseResultsConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_results_connection(self, search_id, offset, length, metadata=None):
+    async def create_results_connection(self, search_id, offset, length, metadata=None):
         """
         Fetching the results using search id, offset and length
         :param search_id: str, search id generated in transmit query
         :param offset: str, offset value
         :param length: str, length value
-        :param metadata: str
+        :param metadata: dict, result_count, next_page_token
         :return: dict
         """
         return_obj = {}
@@ -32,14 +36,16 @@ class ResultsConnector(BaseResultsConnector):
         result = []
         result_count = 0
         local_result_count = 0
-
         try:
             if metadata:
-                result_count, next_page_token = metadata.split(':')
-                result_count = int(result_count)
-                total_records = int(length)
-                if abs(self.api_client.result_limit - result_count) < total_records:
-                    total_records = abs(self.api_client.result_limit - result_count)
+                if isinstance(metadata, dict) and metadata.get('result_count') and metadata.get('next_page_token'):
+                    result_count, next_page_token = metadata['result_count'], metadata['next_page_token']
+                    total_records = int(length)
+                    if abs(self.api_client.result_limit - result_count) < total_records:
+                        total_records = abs(self.api_client.result_limit - result_count)
+                else:
+                    # raise exception when metadata doesnt contain result count or next page token
+                    raise InvalidMetadataException(metadata)
             else:
                 result_count, next_page_token = 0, '0'
                 total_records = int(offset) + int(length)
@@ -53,10 +59,10 @@ class ResultsConnector(BaseResultsConnector):
 
             if (result_count == 0 and next_page_token == '0') or (
                     next_page_token != '0' and result_count < self.api_client.result_limit):
-                response_wrapper = self.api_client.get_search_results(search_id, next_page_token, page_size)
-                response_text = json.loads(response_wrapper[1])
-                if response_wrapper[0].status == 200:
-                    if 'detections' in response_text.keys():
+                response_wrapper = await self.api_client.get_search_results(search_id, next_page_token, page_size)
+                response_text = response_wrapper.content
+                if response_wrapper.status_code == 200:
+                    if response_text and 'detections' in response_text.keys():
                         result_count += len(response_text['detections'])
                         local_result_count += len(response_text['detections'])
                         result.append(response_text['detections'])
@@ -76,18 +82,18 @@ class ResultsConnector(BaseResultsConnector):
                                 page_size = remaining_records
 
                             next_page_token = response_text['nextPageToken']
-                            next_response = self.api_client.get_search_results(search_id,
-                                                                               next_page_token,
-                                                                               page_size)
-                            response_text = json.loads(next_response[1])
-                            if next_response[0].status == 200:
+                            next_response = await self.api_client.get_search_results(search_id,
+                                                                                     next_page_token,
+                                                                                     page_size)
+                            response_text = next_response.content
+                            if next_response.status_code == 200:
                                 if 'detections' in response_text.keys():
                                     result_count += len(response_text['detections'])
                                     local_result_count += len(response_text['detections'])
                                     result.append(response_text['detections'])
                             else:
                                 return_obj = self.invalid_response(return_obj, response_dict,
-                                                                   next_response[0].status, response_text)
+                                                                   next_response.status_code, response_text)
                                 result = []
                                 break
 
@@ -98,27 +104,37 @@ class ResultsConnector(BaseResultsConnector):
                             return_obj['data'] = final_result if final_result else []
                         else:
                             return_obj['data'] = final_result[int(offset): total_records] if final_result else []
-                        return_obj['metadata'] = str(result_count) + ':' + response_text.get('nextPageToken', '0')
+                        if response_text.get('nextPageToken') and result_count < self.api_client.result_limit:
+                            return_obj['metadata'] = {"result_count": result_count,
+                                                      "next_page_token": response_text.get('nextPageToken')}
                     else:
                         if not return_obj.get('error') and return_obj.get('success') is not False:
                             return_obj['success'] = True
                             return_obj['data'] = []
 
                 else:
-                    return_obj = self.invalid_response(return_obj, response_dict, response_wrapper[0].status,
+                    return_obj = self.invalid_response(return_obj, response_dict, response_wrapper.status_code,
                                                        response_text)
             else:
                 return_obj['success'] = True
                 return_obj['data'] = []
 
-        except ServerNotFoundError:
+        except InvalidMetadataException as ex:
+            response_dict['code'] = 100
+            response_dict['message'] = f'Invalid metadata: {str(ex)}'
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+
+        except ClientConnectionError:
             response_dict['code'] = 1010
             response_dict['message'] = "Invalid Host"
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
-        except RefreshError:
-            response_dict['code'] = 1015
-            response_dict['message'] = "Invalid Client Email"
+        except HTTPError as ex:
+            if 'invalid_grant' in str(ex):
+                response_dict['code'] = 1015
+                response_dict['message'] = "Invalid Client Email"
+            else:
+                response_dict['message'] = str(ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         except ValueError as r_ex:
@@ -129,12 +145,13 @@ class ResultsConnector(BaseResultsConnector):
                 response_dict['message'] = f'cannot parse {r_ex}'
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
+        except TimeoutError as ex:
+            response_dict['code'] = 120
+            response_dict['message'] = 'TimeoutError ' + str(ex)
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+
         except Exception as exp:
-            if "timed out" in str(exp):
-                response_dict['code'] = 120
-                response_dict['message'] = str(exp)
-            else:
-                response_dict['message'] = exp
+            response_dict['message'] = exp
             self.logger.error('error when getting search results: %s', exp)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
@@ -145,10 +162,10 @@ class ResultsConnector(BaseResultsConnector):
                     if 'code' in response_dict:
                         if response_dict['code'] not in (1010, 1015):
                             self.logger.debug("Deleting the search id in results_connector")
-                            self.api_client.delete_search(search_id)
+                            await self.api_client.delete_search(search_id)
                     else:
                         self.logger.debug("Deleting the search id in results_connector")
-                        self.api_client.delete_search(search_id)
+                        await self.api_client.delete_search(search_id)
 
             except Exception:
                 self.logger.info("User doesn't have permission to delete the search id")

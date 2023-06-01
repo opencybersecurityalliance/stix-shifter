@@ -1,35 +1,76 @@
 {
     "connection": {
+        "options": {
+            "concurrent": {
+                "label": "Concurrent Search Limit",
+                "description": "The number of simultaneous connections that can be made between the host and the data source.  Valid input range is {{min}} to {{max}}."
+            },
+            "search_timeout": {
+                "label": "Query Search Timeout Limit",
+                "description": "The limit on how long the query will run, in minutes, on the data source."
+            }
+        },
         "host": {
-            "label": "Management IP address or hostname",
-            "placeholder": "https://mundy.threatqtie.com",
+            "label": "Management IP address or Hostname",
+            "placeholder": "192.168.1.10",
             "description": "Specify the OCP Cluster hostname or the XForce API host URL"
         },
         "port": {
             "label": "Host Port",
-            "description": "Set the port number that is associated with the hostname or IP address"
+            "description": "Set the port number that is associated with the Host name or IP"
         },
-        "help": {
-            "label": "Need additional help?"
-        },
-        "selfSignedCert": {
-            "label": "X-Force Exchange Connection Certificate",
-            "description": "Paste your certificate"
-        },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
+        "namespace": {
+            "label": "The UUID Namespace to generate unique ",
+            "description": "Supply a UUID to generate deterministic UUIDs for the resulting STIX bundle"
         }
     },
     "configuration": {
         "auth": {
             "username": {
                 "label": "Username",
-                "description": "Username to login to your RL instance"
+                "description": "ReversingLabs Username"
             },
             "password": {
                 "label": "Password",
-                "description": "Password for your RL instance"
+                "description": "ReversingLabs Password"
+            }
+        },
+        "rateLimit": {
+            "rateLimit": {
+                "label": "Rate Limit",
+                "description": "The number of queries allowed by ReversingLabs"
+            },
+            "rateUnit": {
+                "label": "Rate Unit",
+                "description": "The rate unit for rate limit in [seconds, minutes, days, months, years ...]"
+            }
+        },
+        "cacheDuration": {
+            "cacheDuration": {
+                "label": "Cache Duration",
+                "description": "How long should we cache the results of the STIX Bundle execution?"
+            },
+            "unit": {
+                "label": "Rate Unit",
+                "description": "The unit for cache in [seconds, minutes, days, months, years ...]"
+            }
+        },
+        "dataTypeList": {
+            "ip": {
+                "label": "IP Address",
+                "description": "Whether IP Address lookup queries are supported by Reversing Labs based on the User's API Provisioning"
+            },
+            "domain": {
+                "label": "Domain",
+                "description": "Whether Domain queries are supported by Reversing Labs based on the User's API Provisioning"
+            },
+            "url": {
+                "label": "URL",
+                "description": "Whether Domain queries are supported by Reversing Labs based on the User's API Provisioning"
+            },
+            "hash": {
+                "label": "Hash",
+                "description": "Whether Hash queries are supported by Reversing Labs based on the User's API Provisioning"
             }
         }
     }

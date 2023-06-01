@@ -1,4 +1,8 @@
-# Azure Log Analytics Connector
+# Azure Log Analytics
+
+## Supported STIX Mappings
+
+See the [table of mappings](azure_log_analytics_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 ## Data Source 
 Microsoft Azure Log Analytics is a tool to run queries on data collected by different Azure services. A Log Analytics workspace needs to be created to collect logs from Azure services. The connector can run Kusto Query Language (KQL) queries to search logs in the workspace.

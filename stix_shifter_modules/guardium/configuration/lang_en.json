@@ -6,7 +6,7 @@
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
@@ -17,16 +17,12 @@
             "label": "Guardium connection certificate",
             "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate for secure communication between web reports or REST API server and the authorized user"
         },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
-        },
         "client_id": {
             "label": "Client ID",
             "description": "Client ID associated with the data source"
         },
         "client_secret": {
-            "label": "Client Secret",
+            "label": "Client secret",
             "description": "Client Secret associated with the data source"
         }
     },

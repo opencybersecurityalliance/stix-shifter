@@ -19,6 +19,7 @@ EXECUTE = 'execute'
 HOST = 'host'
 MAPPING = 'mapping'
 MODULES = 'modules'
+CONFIGS = 'configs'
 
 
 def main():
@@ -73,8 +74,13 @@ def main():
     # optional arguments
     translate_parser.add_argument('-x', '--stix-validator', action='store_true',
                                   help='Run the STIX 2 validator against the translated results')
+    # configs parser
+    configs_parser = parent_subparsers.add_parser(CONFIGS, help='Get configs list')
+    configs_parser.add_argument('module', nargs='?', type=str, help='Module name')
+
     # modules parser
-    parent_subparsers.add_parser(MODULES, help='Get modules list')
+    modules_parser = parent_subparsers.add_parser(MODULES, help='Get configs list')
+    modules_parser.add_argument('module', nargs='?', type=str, help='Module name')
 
     # mapping parser
     mapping_parser = parent_subparsers.add_parser(
@@ -105,21 +111,30 @@ def main():
     # operation subparser
     operation_subparser = transmit_parser.add_subparsers(title="operation", dest="operation_command")
     operation_subparser.add_parser(stix_transmission.PING, help="Pings the data source")
+    
     query_operation_parser = operation_subparser.add_parser(stix_transmission.QUERY, help="Executes a query on the data source")
     query_operation_parser.add_argument('query_string', help='native datasource query string')
+    
     results_operation_parser = operation_subparser.add_parser(stix_transmission.RESULTS, help="Fetches the results of the data source query")
     results_operation_parser.add_argument('search_id', help='uuid of executed query')
     results_operation_parser.add_argument('offset', help='offset of results')
     results_operation_parser.add_argument('length', help='length of results')
+    results_operation_parser.add_argument('metadata', nargs='?', help='metadata to fetch results')
+    
     resultsstix_operation_parser = operation_subparser.add_parser(stix_transmission.RESULTS_STIX, help="Fetches the results of the data source query, response is translated in STIX")
     resultsstix_operation_parser.add_argument('search_id', help='uuid of executed query')
     resultsstix_operation_parser.add_argument('offset', help='offset of results')
     resultsstix_operation_parser.add_argument('length', help='length of results')
     resultsstix_operation_parser.add_argument('data_source', help='STIX identity object representing a datasource')
+    resultsstix_operation_parser.add_argument('metadata', nargs='?', help='metadata to fetch results')
+
     status_operation_parser = operation_subparser.add_parser(stix_transmission.STATUS, help="Gets the current status of the query")
     status_operation_parser.add_argument('search_id', help='uuid of executed query')
+    status_operation_parser.add_argument('metadata', nargs='?', help='metadata to fetch results')
+
     delete_operation_parser = operation_subparser.add_parser(stix_transmission.DELETE, help="Delete a running query on the data source")
     delete_operation_parser.add_argument('search_id', help='id of query to remove')
+    
     operation_subparser.add_parser(stix_transmission.IS_ASYNC, help='Checks if the query operation is asynchronous')
 
     execute_parser = parent_subparsers.add_parser(EXECUTE, help='Translate and fully execute a query')
@@ -188,7 +203,27 @@ def main():
 
     log = utils_logger.set_logger(__name__)
 
-    if 'module' in args:
+
+    if hasattr(args, 'data') and args.data:
+        if args.command in [TRANSLATE] and args.translate_type == 'query':
+            pass
+        else:
+            try:
+                args.data = json.loads(args.data)
+            except Exception as ex:
+                log.debug(exception_to_string(ex))
+                log.error('Cannot convert supplied data json string to json')
+                help_and_exit = True
+
+    if hasattr(args, 'data_source') and args.data_source:
+        try:
+            args.data_source = json.loads(args.data_source)
+        except Exception as ex:
+            log.debug(exception_to_string(ex))
+            log.error('Cannot convert supplied data_source json string to json')
+            help_and_exit = True
+
+    if 'module' in args and args.module:
         args_module_dialects = args.module
 
         options = {}
@@ -302,7 +337,7 @@ def main():
         # Translate results to STIX
         translation_options = copy.deepcopy(connection_dict.get('options', {}))
         options['validate_pattern'] = True
-        result = translation.translate(args.module, 'results', args.data_source, json.dumps(results), translation_options)
+        result = translation.translate(args.module, 'results', args.data_source, results, translation_options)
         log.info('STIX Results (written to stdout):\n')
         print(json.dumps(result, indent=4, sort_keys=False))
         exit(0)
@@ -328,7 +363,15 @@ def main():
         result = {}
         all_modules = modules_list()
         for m in all_modules:
-            result[m] = translation.translate(m, stix_translation.DIALECTS, None, None)
+            if not args.module or args.module == m:
+                result[m] = translation.translate(m, stix_translation.DIALECTS, None, None)
+    elif args.command == CONFIGS:
+        translation = stix_translation.StixTranslation()
+        result = {}
+        all_modules = modules_list()
+        for m in all_modules:
+            if not args.module or args.module == m:
+                result[m] = translation.translate(m, stix_translation.CONFIGS, None, None)
     elif args.command == TRANSMIT:
         result = transmit(args)  # stix_transmission
 
@@ -350,29 +393,38 @@ def transmit(args):
         is_async
     >
     """
+    log = utils_logger.set_logger(__name__)
     connection_dict = json.loads(args.connection)
     configuration_dict = json.loads(args.configuration)
     transmission = stix_transmission.StixTransmission(args.module, connection_dict, configuration_dict)
 
     operation_command = args.operation_command
+    if 'metadata' in args and args.metadata:
+        metadata = args.metadata
+        try:
+            metadata = json.loads(metadata)
+        except Exception as ex:
+            log.debug(exception_to_string(ex))
+            log.error('Cannot convert supplied metadata string to json')
+            pass
 
     if operation_command == stix_transmission.QUERY:
         query = args.query_string
         result = transmission.query(query)
     elif operation_command == stix_transmission.STATUS:
         search_id = args.search_id
-        result = transmission.status(search_id)
+        result = transmission.status(search_id, metadata=None)
     elif operation_command == stix_transmission.RESULTS:
         search_id = args.search_id
         offset = args.offset
         length = args.length
-        result = transmission.results(search_id, offset, length)
+        result = transmission.results(search_id, offset, length, metadata=None)
     elif operation_command == stix_transmission.RESULTS_STIX:
         search_id = args.search_id
         offset = args.offset
         length = args.length
         data_source = args.data_source
-        result = transmission.results_stix(search_id, offset, length, data_source)
+        result = transmission.results_stix(search_id, offset, length, data_source, metadata=None)
     elif operation_command == stix_transmission.DELETE:
         search_id = args.search_id
         result = transmission.delete(search_id)

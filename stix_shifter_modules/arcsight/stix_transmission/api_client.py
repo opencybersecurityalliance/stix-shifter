@@ -1,7 +1,7 @@
 import time
 from datetime import datetime, timedelta
 import json
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
@@ -15,33 +15,34 @@ class APIClient:
     def __init__(self, connection, configuration):
         self.connector = __name__.split('.')[1]
         self.auth = configuration.get('auth')
+        self.timeout = connection['options'].get('timeout')
         headers = {'Accept': 'application/json'}
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port'),
                                     headers,
                                     cert_verify=connection.get('selfSignedCert', True)
                                     )
 
-    def ping_data_source(self):
+    async def ping_data_source(self):
         data, headers = dict(), dict()
         data['search_session_id'] = int(round(time.time() * 1000))
-        data['user_session_id'] = self.get_user_session_id()
+        data['user_session_id'] = await self.get_user_session_id()
         data['start_time'] = self.get_current_time()['start_time']
         data['end_time'] = self.get_current_time()['end_time']
         headers['Content-Type'] = 'application/json'
         headers['Accept-Charset'] = 'utf-8'
-        return self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers, data=json.dumps(data))
+        return await self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers, data=json.dumps(data), timeout=self.timeout)
 
-    def create_search(self, query_expression):
+    async def create_search(self, query_expression):
         return_obj = dict()
         auth = dict()
         auth['search_session_id'] = int(round(time.time() * 1000))
-        auth['user_session_id'] = self.get_user_session_id()
+        auth['user_session_id'] = await self.get_user_session_id()
         try:
             query = json.loads(query_expression)
             query.update(auth)
             headers = {'Content-Type': 'application/json', 'Accept-Charset': 'utf-8'}
-            response = self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers, data=json.dumps(query))
+            response = await self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers, data=json.dumps(query), timeout=self.timeout)
             raw_response = response.read()
             response_code = response.code
 
@@ -65,15 +66,15 @@ class APIClient:
         except Exception as err:
             raise err
 
-    def get_search_status(self, search_session_id, user_session_id):
+    async def get_search_status(self, search_session_id, user_session_id):
         headers, params = dict(), dict()
         params['search_session_id'] = int(search_session_id)
         params['user_session_id'] = user_session_id
         headers['Content-Type'] = 'application/json'
         headers['Accept-Charset'] = 'utf-8'
-        return self.client.call_api(self.STATUS_ENDPOINT, 'POST', headers, data=json.dumps(params))
+        return await self.client.call_api(self.STATUS_ENDPOINT, 'POST', headers, data=json.dumps(params), timeout=self.timeout)
 
-    def get_search_results(self, search_session_id, user_session_id, range_start=None, range_end=None):
+    async def get_search_results(self, search_session_id, user_session_id, range_start=None, range_end=None):
         headers, params = dict(), dict()
         params['search_session_id'] = int(search_session_id)
         params['user_session_id'] = user_session_id
@@ -81,19 +82,19 @@ class APIClient:
         params['length'] = int(range_end)
         headers['Content-Type'] = 'application/json'
         headers['Accept-Charset'] = 'utf-8'
-        return self.client.call_api(self.RESULT_ENDPOINT, 'POST', headers, data=json.dumps(params))
+        return await self.client.call_api(self.RESULT_ENDPOINT, 'POST', headers, data=json.dumps(params), timeout=self.timeout)
 
-    def delete_search(self, search_session_id, user_session_id):
+    async def delete_search(self, search_session_id, user_session_id):
         headers, params = dict(), dict()
         params['search_session_id'] = int(search_session_id)
         params['user_session_id'] = user_session_id
         headers['Content-Type'] = 'application/json'
         headers['Accept-Charset'] = 'utf-8'
-        return self.client.call_api(self.DELETE_ENDPOINT, 'POST', headers, data=json.dumps(params))
+        return await self.client.call_api(self.DELETE_ENDPOINT, 'POST', headers, data=json.dumps(params), timeout=self.timeout)
 
-    def get_user_session_id(self):
+    async def get_user_session_id(self):
         try:
-            response = self.client.call_api(self.TOKEN_ENDPOINT, 'POST', data=self.auth)
+            response = await self.client.call_api(self.TOKEN_ENDPOINT, 'POST', data=self.auth, timeout=self.timeout)
             if response.code == 200:
                 response_text = json.loads(response.read())
                 token = response_text['log.loginResponse']['log.return']

@@ -1,10 +1,12 @@
-##### Updated on 11/04/22
+##### Updated on 03/08/23
 ## Amazon CloudWatch Logs
 ### Supported STIX Operators
+*Comparison AND/OR operators are inside the observation while observation AND/OR operators are between observations (square brackets).*
+
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND | OR |
-| OR | OR |
+| AND (Comparision) | AND |
+| OR (Comparision) | OR |
 | > | > |
 | >= | >= |
 | < | < |
@@ -14,8 +16,10 @@
 | LIKE | LIKE |
 | IN | IN |
 | MATCHES | LIKE |
+| OR (Observation) | OR |
+| AND (Observation) | OR |
 | <br> | |
-### Searchable STIX objects and properties for Guardduty
+### Searchable STIX objects and properties for Guardduty dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | eth0_private_ip, eth1_private_ip, public_ip, remote_ip |
@@ -47,7 +51,7 @@
 | **x-ibm-finding**:finding_id | finding_id |
 | **x-ibm-finding**:finding_type | finding_type |
 | <br> | |
-### Searchable STIX objects and properties for Vpcflow
+### Searchable STIX objects and properties for Vpcflow dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | srcAddr, dstAddr |

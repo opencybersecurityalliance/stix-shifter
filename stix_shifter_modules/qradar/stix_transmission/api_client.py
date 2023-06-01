@@ -1,4 +1,4 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils import logger
 
 class APIClient():
@@ -43,12 +43,11 @@ class APIClient():
 
         self.timeout = connection['options'].get('timeout')
 
-        self.client = RestApiClient(host_port,
+        self.client = RestApiClientAsync(host_port,
                                     None,
                                     headers,
                                     url_modifier_function,
-                                    cert_verify=connection.get('selfSignedCert', True),
-                                    sni=connection.get('sni', None)
+                                    cert_verify=connection.get('selfSignedCert', True)
                                     )
 
     def add_endpoint_to_url_header(self, url, endpoint, headers):
@@ -58,47 +57,47 @@ class APIClient():
         # url is returned since it points to the proxy for initial call
         return url
 
-    def ping_box(self):
+    async def ping_box(self):
         # Sends a GET request
         # to https://<server_ip>/api/help/resources
         endpoint = 'api/help/resources'  # no 'ariel' in the path
-        return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', timeout=self.timeout)
 
-    def get_databases(self):
+    async def get_databases(self):
         # Sends a GET request
         # to  https://<server_ip>/api/ariel/databases
         endpoint = self.endpoint_start + 'databases'
-        return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', timeout=self.timeout)
 
-    def get_database(self, database_name):
+    async def get_database(self, database_name):
         # Sends a GET request
         # to https://<server_ip>/api/ariel/databases/<database_name>
         endpoint = self.endpoint_start + 'databases' + '/' + database_name
-        return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', timeout=self.timeout)
 
-    def get_searches(self):
+    async def get_searches(self):
         # Sends a GET request
         # to https://<server_ip>/api/ariel/searches
         endpoint = self.endpoint_start + "searches"
 
-        return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', timeout=self.timeout)
 
-    def create_search(self, query_expression):
+    async def create_search(self, query_expression):
         # Sends a POST request
         # to https://<server_ip>/api/ariel/searches
         endpoint = self.endpoint_start + "searches"
         data = {'query_expression': query_expression}
 
-        return self.client.call_api(endpoint, 'POST', data=data, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'POST', data=data, timeout=self.timeout)
 
-    def get_search(self, search_id):
+    async def get_search(self, search_id):
         # Sends a GET request to
         # https://<server_ip>/api/ariel/searches/<search_id>
         endpoint = self.endpoint_start + "searches/" + search_id
 
-        return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', timeout=self.timeout)
 
-    def get_search_results(self, search_id, response_type, range_start=None, range_end=None):
+    async def get_search_results(self, search_id, response_type, range_start=None, range_end=None):
         # Sends a GET request to
         # https://<server_ip>/api/ariel/searches/<search_id>
         # response object body should contain information pertaining to search.
@@ -109,9 +108,9 @@ class APIClient():
                                 str(range_start) + '-' + str(range_end))
         endpoint = self.endpoint_start + "searches/" + search_id + '/results'
 
-        return self.client.call_api(endpoint, 'GET', headers, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', headers, timeout=self.timeout)
 
-    def update_search(self, search_id, save_results=None, status=None):
+    async def update_search(self, search_id, save_results=None, status=None):
         # Sends a POST request to
         # https://<server_ip>/api/ariel/searches/<search_id>
         # posts search result to site
@@ -122,12 +121,12 @@ class APIClient():
         if status:
             data['status'] = status
 
-        return self.client.call_api(endpoint, 'POST', data=data, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'POST', data=data, timeout=self.timeout)
 
-    def delete_search(self, search_id):
+    async def delete_search(self, search_id):
         # Sends a DELETE request to
         # https://<server_ip>/api/ariel/searches/<search_id>
         # deletes search created earlier.
         endpoint = self.endpoint_start + "searches" + '/' + search_id
 
-        return self.client.call_api(endpoint, 'DELETE', timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'DELETE', timeout=self.timeout)

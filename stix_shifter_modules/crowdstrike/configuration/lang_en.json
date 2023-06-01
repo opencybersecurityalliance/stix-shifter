@@ -6,7 +6,7 @@
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
@@ -18,11 +18,11 @@
         "auth": {
             "type" : "fields",
             "client_id": {
-                "label": "Client Id",
+                "label": "Client ID",
                 "description": "Unique identifier of CrowdStrike API. It can be found in the API client table in the Falcon console"
             },
             "client_secret": {
-                "label": "Client Secret",
+                "label": "Client secret",
                 "description": "Secret code of CrowdStrike API client. It can be found while creating a API client in Falcon console"
             }
         }

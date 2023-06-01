@@ -247,7 +247,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_domainname_query(self):
         stix_pattern = "[domain-name:value = 'example.com']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (domainname LIKE '%example.com%' OR UrlHost LIKE '%example.com%') {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (dnsdomainname LIKE '%example.com%' OR UrlHost LIKE '%example.com%') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_generic_filehash_query(self):
@@ -334,7 +334,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         # Stix pattern requires backslash to be double escaped to pass pattern validation.
         # Not sure yet how we will make this work for an AQL query.
         # See https://github.com/oasis-open/cti-stix2-json-schemas/issues/51
-        search_string = '^.*http://graphics8\\\.nytimes\\\.com/bcvideo.*$'
+        search_string = '^.*http://graphics8\\\\.nytimes\\\\.com/bcvideo.*$'
         stix_pattern = "[artifact:payload_bin MATCHES '{}']".format(search_string)
         query = _translate_query(stix_pattern)
         translated_value = '^.*http://graphics8\\.nytimes\\.com/bcvideo.*$'

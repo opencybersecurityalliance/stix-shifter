@@ -1,5 +1,6 @@
 import unittest
-import json
+
+from stix_shifter_utils.utils.async_utils import run_in_thread
 from stix_shifter_modules.elastic_ecs.entry_point import EntryPoint
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
@@ -172,6 +173,213 @@ event_data = {
     }
   }
 
+ecs_event_data = {
+    "event" : {
+      "category" : [
+        "process"
+      ],
+      "type" : [
+        "start",
+        "process_start"
+      ],
+      "provider" : "Microsoft-Windows-Sysmon",
+      "code" : 1,
+      "action" : "Process Create (rule: ProcessCreate)",
+      "created" : "2021-10-24T23:58:21.586Z",
+      "kind" : "event",
+      "module" : "sysmon"
+    },
+    "winlog" : {
+      "task" : "Process Create (rule: ProcessCreate)",
+      "provider_name" : "Microsoft-Windows-Sysmon",
+      "event_id" : 1,
+      "channel" : "Microsoft-Windows-Sysmon/Operational",
+      "event_data" : {
+        "FileVersion" : "10.0.17763.2145 (WinBuild.160101.0800)",
+        "Company" : "Microsoft Corporation",
+        "Product" : "Microsoft® Windows® Operating System",
+        "Description" : "DSREG commandline tool",
+        "RuleName" : "-",
+        "TerminalSessionId" : "0",
+        "LogonId" : "0x3e7",
+        "LogonGuid" : "{8dfc401c-1ef5-6175-e703-000000000000}",
+        "IntegrityLevel" : "System"
+      },
+      "api" : "wineventlog",
+      "user" : {
+        "domain" : "NT AUTHORITY",
+        "name" : "SYSTEM",
+        "type" : "User",
+        "identifier" : "S-1-5-18"
+      },
+      "provider_guid" : "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+      "opcode" : "Info",
+      "computer_name" : "win-server1.example.com",
+      "process" : {
+        "pid" : 3684,
+        "thread" : {
+          "id" : 4616
+        }
+      },
+      "record_id" : 1778428,
+      "version" : 5
+    },
+    "message" : "Process Create:\nRuleName: -\nUtcTime: 2021-10-24 23:58:20.569\nProcessGuid: {8dfc401c-f31c-6175-5715-000000001b00}\nProcessId: 5244\nImage: C:\\Windows\\System32\\dsregcmd.exe\nFileVersion: 10.0.17763.2145 (WinBuild.160101.0800)\nDescription: DSREG commandline tool\nProduct: Microsoft® Windows® Operating System\nCompany: Microsoft Corporation\nOriginalFileName: dsregcmd.exe\nCommandLine: C:\\Windows\\System32\\dsregcmd.exe $(Arg0) $(Arg1) $(Arg2)\nCurrentDirectory: C:\\Windows\\system32\\\nUser: NT AUTHORITY\\SYSTEM\nLogonGuid: {8dfc401c-1ef5-6175-e703-000000000000}\nLogonId: 0x3E7\nTerminalSessionId: 0\nIntegrityLevel: System\nHashes: MD5=D6957ACEDA86DE523AF0157800AA3C73,SHA256=BA79462455B6E216D0E7CD6FE36BF0EFF8A0D9DD06358D1C97B1014016256618,IMPHASH=382C77BFA0EEE2BA2BA8671D108AD9A3\nParentProcessGuid: {8dfc401c-1ef7-6175-2900-000000001b00}\nParentProcessId: 2244\nParentImage: C:\\Windows\\System32\\svchost.exe\nParentCommandLine: C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Schedule",
+    "tags" : [
+      "beats_input_codec_plain_applied"
+    ],
+    "hash" : {
+      "imphash" : "382c77bfa0eee2ba2ba8671d108ad9a3",
+      "sha256" : "ba79462455b6e216d0e7cd6fe36bf0eff8a0d9dd06358d1c97b1014016256618",
+      "md5" : "d6957aceda86de523af0157800aa3c73"
+    },
+    "host" : {
+      "architecture" : "x86_64",
+      "hostname" : "win-server1",
+      "os" : {
+        "kernel" : "10.0.17763.2237 (WinBuild.160101.0800)",
+        "build" : "17763.2237",
+        "family" : "windows",
+        "name" : "Windows Server 2019 Standard",
+        "version" : "10.0",
+        "platform" : "windows"
+      },
+      "id" : "8dfc401c-b042-4f41-b427-91a9dc0b61ac",
+      "name" : "win-server1.example.com",
+      "mac" : [
+        "06:07:08:09:0a:0b"
+      ],
+      "ip" : [
+        "fedc::ba98:7654:3210:1234",
+        "9.10.11.12",
+        "10.11.12.13"
+      ]
+    },
+    "log" : {
+      "level" : "information"
+    },
+    "user" : {
+      "domain" : "NT AUTHORITY",
+      "name" : "SYSTEM"
+    },
+    "@timestamp" : "2021-10-24T23:58:20.569Z",
+    "ecs" : {
+      "version" : "1.7.0"
+    },
+    "agent" : {
+      "type" : "winlogbeat",
+      "ephemeral_id" : "c5c31d91-f913-4f23-9609-3f92e83e4cb7",
+      "hostname" : "win-server1",
+      "id" : "50a12d7e-a002-4a69-a5e8-f3b07afbfeb7",
+      "name" : "win-server1",
+      "version" : "7.11.2"
+    },
+    "process" : {
+      "pid" : 5244,
+      "parent" : {
+        "pid" : 2244,
+        "entity_id" : "{8dfc401c-1ef7-6175-2900-000000001b00}",
+        "executable" : "C:\\Windows\\System32\\svchost.exe",
+        "command_line" : "C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Schedule",
+        "name" : "svchost.exe",
+        "args" : [
+          "C:\\Windows\\system32\\svchost.exe",
+          "-k",
+          "netsvcs",
+          "-p",
+          "-s",
+          "Schedule"
+        ],
+        "exit_code": 0,
+        "title": "Just for testing",
+        "thread": {
+          "id": 3333
+        },
+        "uptime": 100
+      },
+      "pe" : {
+        "company" : "Microsoft Corporation",
+        "file_version" : "10.0.17763.2145 (WinBuild.160101.0800)",
+        "description" : "DSREG commandline tool",
+        "imphash" : "382c77bfa0eee2ba2ba8671d108ad9a3",
+        "original_file_name" : "dsregcmd.exe",
+        "product" : "Microsoft® Windows® Operating System"
+      },
+      "entity_id" : "{8dfc401c-f31c-6175-5715-000000001b00}",
+      "executable" : "C:\\Windows\\System32\\dsregcmd.exe",
+      "working_directory" : "C:\\Windows\\system32\\",
+      "command_line" : "C:\\Windows\\System32\\dsregcmd.exe $(Arg0) $(Arg1) $(Arg2)",
+      "args" : [
+        "C:\\Windows\\System32\\dsregcmd.exe",
+        "$(Arg0)",
+        "$(Arg1)",
+        "$(Arg2)"
+      ],
+      "hash" : {
+        "md5" : "d6957aceda86de523af0157800aa3c73",
+        "sha256" : "ba79462455b6e216d0e7cd6fe36bf0eff8a0d9dd06358d1c97b1014016256618"
+      },
+      "name" : "dsregcmd.exe"
+    },
+    "@version" : "1",
+    "related" : {
+      "hash" : [
+        "d6957aceda86de523af0157800aa3c73",
+        "ba79462455b6e216d0e7cd6fe36bf0eff8a0d9dd06358d1c97b1014016256618",
+        "382c77bfa0eee2ba2ba8671d108ad9a3"
+      ],
+      "user" : "SYSTEM"
+    }
+}
+
+observer_data = {
+    "process": {
+      "args": [
+        "C:\\Users\\Administrator\\Desktop\\abc\\abc.exe"
+      ],
+      "parent": {
+        "name": "explorer.exe",
+        "entity_id": "485466882194"
+      },
+      "start": "2023-04-01T21:21:53.540Z",
+      "pid": 9989,
+      "args_count": 1,
+      "entity_id": "485541455428",
+      "command_line": "\"C:\\Users\\Administrator\\Desktop\\abc\\abc.exe\" ",
+      "executable": "\\Device\\HarddiskVolume3\\Users\\Administrator\\Desktop\\abc\\abc.exe",
+      "hash": {
+        "sha256": "d438e472cd374d76776c2f23f654e28c6eba57081f322be7777a0d2356732fea",
+        "md5": "642e934263d1316ed0d30c7336414a89"
+      }
+    },
+    "os": {
+      "type": "windows"
+    },
+    "url": {
+      "scheme": "http"
+    },
+    "observer": {
+      "geo": {
+        "continent_name": "North America",
+        "region_iso_code": "US-TX",
+        "city_name": "Austin",
+        "country_iso_code": "US",
+        "country_name": "United States",
+        "region_name": "Texas",
+        "location": {
+          "lon": -97.7419,
+          "lat": 30.2732
+        }
+      },
+      "address": "10.0.0.101",
+      "vendor": "crowdstrike",
+      "ip": "10.0.0.101",
+      "serial_number": "6484b65c806520073f0337894bc0cd24",
+      "type": "agent",
+      "version": "1007.3.0016411.1",
+    }
+}
+
 class TestElasticEcsTransform(unittest.TestCase, object):
     @staticmethod
     def get_first(itr, constraint):
@@ -185,7 +393,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         return TestElasticEcsTransform.get_first(itr, lambda o: type(o) == dict and o.get('type') == typ)
 
     def test_common_prop(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         assert (result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
 
@@ -206,15 +414,11 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert (observed_data['number_observed'] == 1)
 
     def test_stix_2_1(self):
-        test_source = json.dumps(data_source)
-        test_data = json.dumps([data])
         test_options = {
             "stix_2.1": True
         }
-
-        translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate('elastic_ecs', 'results', test_source, test_data, test_options)
-        print(result_bundle)
+        entry_point = EntryPoint(options=test_options)
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
 
@@ -229,14 +433,14 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         #TODO: check other objects
 
     def test_custom_mapping(self):
-        data_source_string = json.dumps(data_source)
+        data_source_string = data_source
         data = [{
             "custompayload": "SomeBase64Payload",
             "url": "www.example.com",
             "filename": "somefile.exe",
             "username": "someuserid2018"
         }]
-        data_string = json.dumps(data)
+        data_string = data
 
         options = {
             "mapping": {
@@ -292,7 +496,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
 
     def test_network_traffic_prop(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -304,7 +508,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         nt_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'network-traffic')
         assert (nt_object is not None), 'network-traffic object type not found'
         assert (nt_object.keys() ==
-                {'type', 'src_port', 'src_byte_count', 'src_packets', 'dst_port', 'dst_byte_count', 'dst_packets', 'src_ref', 'dst_ref', 'protocols', 'extensions'})
+                {'type', 'src_port', 'src_byte_count', 'src_packets', 'dst_port', 'dst_byte_count', 'dst_packets', 'src_ref', 'dst_ref', 'protocols', 'extensions', 'x_community_id'})
         assert (nt_object['type'] == 'network-traffic')
         assert (nt_object['src_port'] == 49745)
         assert (nt_object['dst_port'] == 443)
@@ -343,7 +547,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
 
     def test_process_prop(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -355,7 +559,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         proc_object = TestElasticEcsTransform.get_first_of_type(objects.values(), 'process')
         assert (proc_object is not None), 'process object type not found'
         assert (proc_object.keys() ==
-                {'type', 'pid', 'name', 'created', 'opened_connection_refs', 'creator_user_ref', 'binary_ref', 'parent_ref', 'x_unique_id'})
+                {'type', 'pid', 'name', 'created', 'opened_connection_refs', 'creator_user_ref', 'binary_ref', 'parent_ref', 'x_unique_id', 'cwd'})
         assert (proc_object['type'] == 'process')
         assert (proc_object['pid'] == 609)
         assert (proc_object['created'] == '2019-04-10T11:33:57.571Z')
@@ -375,7 +579,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert (process_parent['pid'] == 1)
 
     def test_x_ibm_event(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([event_data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [event_data])
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -408,7 +612,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert(process_obj['command_line'] == "C:\\WINDOWS\\system32\\wbem\\unsecapp.exe -Embedding")
         binary_obj = objects[process_obj['binary_ref']]
         assert(binary_obj is not None), "process binary ref not found"
-        assert(binary_obj.keys() == {'type', 'name', 'parent_directory_ref'})
+        assert(binary_obj.keys() == {'type', 'name', 'parent_directory_ref', 'hashes', 'x_owner_ref'})
         assert(binary_obj['type'] == "file")
         assert(binary_obj['name'] == "unsecapp.exe")
         binary_parent_dir_obj = objects[binary_obj['parent_directory_ref']]
@@ -472,7 +676,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
 
     def test_artifact_prop(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -490,7 +694,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert (artifact_object['mime_type'] == 'text/plain')
 
     def test_url_prop(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -507,7 +711,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         assert (url_object['value'] == '/blog')
 
     def test_file_prop(self):
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         assert (result_bundle['type'] == 'bundle')
 
         result_bundle_objects = result_bundle['objects']
@@ -531,7 +735,7 @@ class TestElasticEcsTransform(unittest.TestCase, object):
     def test_unmapped_attribute_with_mapped_attribute(self):
         message = "\"GET /blog HTTP/1.1\" 200 2571"
         data = {"message": message, "unmapped": "nothing to see here"}
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert('objects' in observed_data)
@@ -543,10 +747,105 @@ class TestElasticEcsTransform(unittest.TestCase, object):
 
     def test_unmapped_attribute_alone(self):
         data = {"unmapped": "nothing to see here"}
-        result_bundle = entry_point.translate_results(json.dumps(data_source), json.dumps([data]))
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [data])
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         assert('objects' in observed_data)
         objects = observed_data['objects']
         assert(objects == {})
-    
+
+
+    def test_x_ecs_event(self):
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [ecs_event_data])
+        assert (result_bundle['type'] == 'bundle')
+        translation_objects = result_bundle.get('objects')
+        assert (translation_objects and len(translation_objects) == 2)
+        observed_data = translation_objects[1]
+        stix_objects = observed_data.get("objects")
+        assert (stix_objects and (stix_objects.__class__ is dict) and (len(stix_objects) > 10))
+        x_oca_event = stix_objects.get("0")
+        assert (x_oca_event and x_oca_event.get("type") == "x-oca-event")
+        main_process = stix_objects.get("1")
+        assert (
+          main_process and
+          main_process.get("type") == "process"
+          and main_process.get("x_unique_id") == "{8dfc401c-f31c-6175-5715-000000001b00}"
+        )
+        parent_process_key = main_process.get("parent_ref")
+        executable_file_key = main_process.get("binary_ref")
+        parent_process = stix_objects.get(parent_process_key)
+        assert (
+          parent_process and
+          parent_process.get("type") == "process" and
+          parent_process.get("pid") == 2244 and
+          parent_process.get("x_unique_id") == "{8dfc401c-1ef7-6175-2900-000000001b00}" and
+          parent_process.get("command_line") == "C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Schedule" and
+          parent_process.get("name") == "svchost.exe" and
+          parent_process.get("x_exit_code") == 0 and
+          parent_process.get("x_window_title") == "Just for testing" and
+          parent_process.get("x_thread_id") == 3333 and
+          parent_process.get("x_uptime") == 100
+        )
+        executable_file = stix_objects.get(executable_file_key)
+        assert (
+          executable_file and
+          executable_file.get("type") == "file" and
+          executable_file.get("name") == "dsregcmd.exe"
+        )
+        exec_file_hashes = executable_file.get("hashes")
+        assert (
+          exec_file_hashes and
+          exec_file_hashes.get("MD5") == "d6957aceda86de523af0157800aa3c73" and
+          exec_file_hashes.get("SHA-256") == "ba79462455b6e216d0e7cd6fe36bf0eff8a0d9dd06358d1c97b1014016256618"
+        )
+        exec_file_software_key = executable_file.get("x_software_ref")
+        exec_file_software = stix_objects.get(exec_file_software_key)
+        assert (
+          exec_file_software and
+          exec_file_software.get("type") == "software" and
+          exec_file_software.get("name") == "dsregcmd.exe" and 
+          exec_file_software.get("vendor") == "Microsoft Corporation" and
+          exec_file_software.get("version") == "10.0.17763.2145 (WinBuild.160101.0800)" and
+          exec_file_software.get("x_product") == "Microsoft® Windows® Operating System" and
+          exec_file_software.get("x_description") == "DSREG commandline tool" 
+        )
+
+    def test_observer(self):
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [observer_data])
+        assert (result_bundle['type'] == 'bundle')
+        translation_objects = result_bundle.get('objects')
+        assert (translation_objects and len(translation_objects) == 2)
+        observed_data = translation_objects[1]
+        stix_objects = observed_data.get("objects")
+        assert (stix_objects and (stix_objects.__class__ is dict) and (len(stix_objects) > 5))
+        observer_asset = stix_objects.get("6")
+        assert (
+            observer_asset and observer_asset.get("type") == "x-oca-asset" and
+            observer_asset.get("device_id") == "6484b65c806520073f0337894bc0cd24" and
+            observer_asset.get("host_type") == "agent"
+        )
+        observer_geo_key = observer_asset.get("geo_ref")
+        observer_geolocation = stix_objects.get(observer_geo_key)
+        assert (
+          observer_geolocation and
+          observer_geolocation.get("type") == "x-oca-geo" and
+          observer_geolocation.get("continent_name") == "North America" and
+          observer_geolocation.get("region_iso_code") == "US-TX" and
+          observer_geolocation.get("city_name") == "Austin" and
+          observer_geolocation.get("country_iso_code") == "US" and
+          observer_geolocation.get("country_name") == "United States" and
+          observer_geolocation.get("region_name") == "Texas" 
+        )
+        observer_location = observer_geolocation.get("location")
+        assert ( 
+            observer_location and
+            observer_location.get("lon") == -97.7419 and
+            observer_location.get("lat") == 30.2732
+        )
+        observer_ip_key = observer_asset.get("ip_refs")[0]
+        observer_ip = stix_objects.get(observer_ip_key)
+        assert (
+          observer_ip and 
+          observer_ip.get("type") == "ipv4-addr" and
+          observer_ip.get("value") == "10.0.0.101" 
+        )

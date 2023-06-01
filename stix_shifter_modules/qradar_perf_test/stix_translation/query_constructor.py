@@ -18,9 +18,9 @@ REFERENCE_DATA_TYPES = {"sourceip": ["ipv4", "ipv6", "ipv4_cidr", "ipv6_cidr"],
 
 FILTERING_DATA_TYPES = {"x-qradar:INOFFENSE": "INOFFENSE"}
 
-START_STOP_STIX_QUALIFIER = "START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
-TIMESTAMP = "^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
-TIMESTAMP_MILLISECONDS = "\.\d+Z$"
+START_STOP_STIX_QUALIFIER = r"START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
+TIMESTAMP = r"^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
+TIMESTAMP_MILLISECONDS = r"\.\d+Z$"
 
 
 class AqlQueryStringPatternTranslator:

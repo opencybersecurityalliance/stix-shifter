@@ -1,5 +1,5 @@
 import base64
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils import logger
 import json
 import re
@@ -25,82 +25,81 @@ class APIClient():
             self.indices = ",".join(self.indices)
 
         if self.indices:
-            self.endpoint = self.indices + '/' +'_search'
+            self.endpoint = self.indices + '/' + '_search'
+            self.pit_endpoint = self.indices + '/' + '_pit'
+            self.setting_endpoint = self.indices + '/' + '_settings'
         else:
             self.endpoint = '_search'
+            self.pit_endpoint = '_pit'
+            self.setting_endpoint = '_settings'
 
         if auth:
             if 'username' in auth and 'password' in auth:
-                headers['Authorization'] = b"Basic " + base64.b64encode(
-                    (auth['username'] + ':' + auth['password']).encode('ascii'))
+                token_decoded = auth['username'] + ':' + auth['password']
+                token = base64.b64encode(token_decoded.encode('ascii'))
+                headers['Authorization'] = "Basic %s" % token.decode('ascii')
+
             elif 'api_key' in auth and 'id' in auth:
-                headers['Authorization'] = b"ApiKey " + base64.b64encode(
-                    (auth['id'] + ':' + auth['api_key']).encode('ascii'))
+                token_decoded = auth['id'] + ':' + auth['api_key']
+                token = base64.b64encode(token_decoded.encode('ascii'))
+                headers['Authorization'] = "ApiKey %s" % token.decode('ascii')
             elif 'access_token' in auth:
                 headers['Authorization'] = "Bearer " + auth['access_token']
 
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port'),
                                     headers,
                                     url_modifier_function=url_modifier_function,
-                                    cert_verify=connection.get('selfSignedCert', True),
-                                    sni=connection.get('sni', None)
+                                    cert_verify=connection.get('selfSignedCert', True)
                                     )
-        
+
         self.timeout = connection['options'].get('timeout')
 
-    def ping_box(self):
-        return self.client.call_api(self.PING_ENDPOINT, 'GET',timeout=self.timeout)
+    async def ping_box(self):
+        return await self.client.call_api(self.PING_ENDPOINT, 'GET', timeout=self.timeout)
 
-    def run_search(self, query_expression, offset=None, length=DEFAULT_LIMIT):
+    async def search_pagination(self, query_expression, lastsortvalue=None, length=DEFAULT_LIMIT):
         headers = dict()
         headers['Content-Type'] = 'application/json'
 
-        endpoint = self.endpoint
-
-        uri_search = False  # For testing and debugging two ways of _search API methods
-
-        # URI Search
-        if uri_search:
-            if query_expression is not None:
-                # update/add size value
-                if length is not None:
-                    if re.search(r"&size=\d+", query_expression):
-                        query_expression = re.sub(r"(?<=&size=)\d+", str(length), query_expression)
-                    else:
-                        query_expression = '{}&size={}'.format(query_expression, length)
-
-                # add offset to query expression
-                if offset is not None:
-                    query_expression = '{}&from={}'.format(query_expression, offset)
-
-            # addition of QueryString to API END point
-            endpoint = endpoint + '?q=' + query_expression
-
-            return self.client.call_api(endpoint, 'GET', headers, timeout=self.timeout)
-        # Request body search
-        else:
-            # add size value
-            if length is not None:
-                endpoint = "{}?size={}".format(endpoint, length)
-
-            # add offset value
-            if offset is not None:
-                endpoint = "{}&from={}".format(endpoint, offset)
-
-            data = {
-                "_source": {
-                    "includes": ["@timestamp", "source.*", "destination.*", "event.*", "client.*", "server.*",
-                                 "host.*","network.*", "process.*", "user.*", "file.*", "url.*", "registry.*", "dns.*", "tags"]
-                },
-                "query": {
-                    "query_string": {
-                      "query": query_expression
-                    }
+        data = {
+            "_source": {
+                "includes": ["@timestamp", "source.*", "destination.*", "event.*", "client.*", "server.*", "observer.*",
+                             "host.*", "network.*", "process.*", "user.*", "file.*", "url.*", "registry.*", "dns.*",
+                             "tags"]
+            },
+            "size": length,
+            "query": {
+                "query_string": {
+                    "query": query_expression
                 }
-            }
+            },
+            "sort": [
+                {"@timestamp": "asc"},
+            ]
+        }
 
-            self.logger.debug("URL endpoint: " + endpoint)
-            self.logger.debug("URL data: " + json.dumps(data))
+        if lastsortvalue:
+            data["search_after"] = lastsortvalue
 
-            return self.client.call_api(endpoint, 'GET', headers, data=json.dumps(data), timeout=self.timeout)
+        self.logger.debug("URL endpoint: " + self.endpoint)
+        self.logger.debug("URL data: " + json.dumps(data))
+
+        return await self.client.call_api(self.endpoint, 'GET', headers, data=json.dumps(data), timeout=self.timeout)
+
+    async def get_max_result_window(self):
+        max_result_window_url = self.setting_endpoint + "/index.max_result_window?include_defaults=true"
+        return await self.client.call_api(max_result_window_url, 'GET', timeout=self.timeout)
+
+    async def set_pit(self):
+        headers = dict()
+        headers['Content-Type'] = 'application/json'
+
+        # GET PIT
+        # POST /my-index-000001/_pit?keep_alive=1m
+        endpoint = "{}?keep_alive=1m&pretty".format(self.pit_endpoint)
+
+        return await self.client.call_api(endpoint, 'POST', headers, timeout=self.timeout)
+
+
+

@@ -244,10 +244,6 @@ Results from unmapped data source fields are ignored during translation and are 
    {
        "DataSourceField": {
            "key": "stix-object.stix_object_property"
-       },
-       "DataSourceField": {
-           "key": "x_custom_object.property",
-           "cybox": false
        }
    }
    ```
@@ -255,8 +251,6 @@ Results from unmapped data source fields are ignored during translation and are 
 4. Each JSON object in the mapping has a "key" element with a value that represents a STIX object and its property. Define the mapping based on the specified format.
    - `stix-object` refer to a STIX cyber observable object type name
    - `stix_object_property` refers to a STIX cyber observable object property name
-   - `x_custom_object.property` refers to a custom object and its property that you can use for fields that don't map to any STIX objects
-   - Mappings for custom properties must have a `cybox` key set to false. This setting identifies custom objects during the translation process.
 
 **Example mapping**
 Using the same data source as in step 3, the following example shows a to-STIX mapping:
@@ -303,9 +297,8 @@ Using the same data source as in step 3, the following example shows a to-STIX m
         "object": "nt",
         "transformer": "ToLowercaseArray"
     },
-    "LogSourceId": {
-        "key": "x_my_data_source.log_source",
-        "cybox": false
+    "EventAction": {
+        "key": "x-oca-event.action"
     },
     "EventTime": [
         {

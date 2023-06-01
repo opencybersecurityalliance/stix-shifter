@@ -120,7 +120,7 @@
             "object": "certInfo"
           }
         },
-        "filename": [
+        "fsName": [
           {
             "key": "file.name",
             "object": "file"
@@ -136,9 +136,9 @@
             "references": "file"
           }
         ],
-        "fsName": {
-          "key": "file.extensions.x-reaqta-program.fsname",
-          "object": "file"
+        "filename": {
+          "key": "process.name",
+          "object": "process"
         },
         "md5": {
           "key": "file.hashes.MD5",
@@ -281,7 +281,7 @@
               "object": "certInfo"
             }
           },
-          "filename": [
+          "fsName": [
             {
               "key": "file.name",
               "object": "accessorProcess_file"
@@ -297,8 +297,8 @@
               "references": "accessorProcess_file"
             }
           ],
-          "fsName": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+          "filename": {
+            "key": "file.extensions.x-reaqta-program.filename",
             "object": "accessorProcess_file"
           },
           "md5": {
@@ -449,7 +449,7 @@
               "object": "certInfo"
             }
           },
-          "filename": [
+          "fsName": [
             {
               "key": "file.name",
               "object": "allocatorProc_file"
@@ -465,8 +465,8 @@
               "references": "allocatorProc_file"
             }
           ],
-          "fsName": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+          "filename": {
+            "key": "file.extensions.x-reaqta-program.filename",
             "object": "allocatorProc_file"
           },
           "md5": {
@@ -651,7 +651,7 @@
               "object": "certInfo"
             }
           },
-          "filename": [
+          "fsName": [
             {
               "key": "file.name",
               "object": "childProcess_file"
@@ -667,8 +667,8 @@
               "references": "childProcess_file"
             }
           ],
-          "fsName": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+          "filename": {
+            "key": "file.extensions.x-reaqta-program.filename",
             "object": "childProcess_file"
           },
           "md5": {
@@ -912,7 +912,7 @@
               "object": "certInfo"
             }
           },
-          "filename": [
+          "fsName": [
             {
               "key": "file.name",
               "object": "engineProcess_file"
@@ -928,8 +928,8 @@
               "references": "engineProcess_file"
             }
           ],
-          "fsName": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+          "filename": {
+            "key": "file.extensions.x-reaqta-program.filename",
             "object": "engineProcess_file"
           },
           "md5": {
@@ -1366,7 +1366,7 @@
         "key": "file.extensions.x-reaqta-data.file_type",
         "object": "file_data"
       },
-      "filename": [
+      "fsName": [
         {
           "key": "file.name",
           "object": "file_data"
@@ -1682,7 +1682,7 @@
               "object": "certInfo"
             }
           },
-          "filename": [
+          "fsName": [
             {
               "key": "file.name",
               "object": "serviceProcess_file"
@@ -1698,8 +1698,8 @@
               "references": "serviceProcess_file"
             }
           ],
-          "fsName": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+          "filename": {
+            "key": "file.extensions.x-reaqta-program.filename",
             "object": "serviceProcess_file"
           },
           "md5": {
@@ -1785,10 +1785,17 @@
         "key": "x-reaqta-event.start_type",
         "object": "x-reaqta"
       },
-      "tactics": {
-        "key": "x-reaqta-event.tactics",
-        "object": "x-reaqta"
-      },
+      "tactics": [
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "x-ibm-finding",
+          "references": ["x-ibm-ttp-tagging"]
+        },
+        {
+          "key": "x-ibm-ttp-tagging.extensions.'mitre-attack-ext'.tactic_name",
+          "object": "x-ibm-ttp-tagging"
+        }
+      ],
       "tags": {
         "key": "x-reaqta-event.tags",
         "object": "x-reaqta"
@@ -1870,7 +1877,7 @@
               "object": "certInfo"
             }
           },
-          "filename": [
+          "fsName": [
             {
               "key": "file.name",
               "object": "targetProcess_file"
@@ -1886,8 +1893,8 @@
               "references": "targetProcess_file"
             }
           ],
-          "fsName": {
-            "key": "file.extensions.x-reaqta-program.fsname",
+          "filename": {
+            "key": "file.extensions.x-reaqta-program.filename",
             "object": "targetProcess_file"
           },
           "md5": {
@@ -1969,10 +1976,21 @@
         "key": "x-reaqta-event.task_name",
         "object": "x-reaqta"
       },
-      "technique": {
-        "key": "x-reaqta-event.technique",
-        "object": "x-reaqta"
-      },
+      "technique": [
+        {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "x-ibm-finding",
+          "references": ["x-ibm-ttp-tagging"]
+        },
+        {
+          "key": "x-ibm-ttp-tagging.extensions.'mitre-attack-ext'.technique_name",
+          "object": "x-ibm-ttp-tagging"
+        },
+        {
+          "key": "x-ibm-ttp-tagging.extensions.name",
+          "object": "x-ibm-ttp-tagging"
+        }
+      ],
       "url": {
         "key": "url.value",
         "object": "url"

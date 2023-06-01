@@ -171,15 +171,8 @@ class QueryStringPatternTranslator:
             # for In operator, loop the format comparision string for each values in the list.
             if expression.comparator == ComparisonComparators.In:
                 if isinstance(values, list):
-                    values_count = len(values)
-                    for value in values:
-                        comparison_string = format_comparision_string(comparison_string, mapped_field, lambda_func)
-                        if values_count > 1:
-                            if expression.negated:
-                                comparison_string += " and "
-                            else:
-                                comparison_string += " or "
-                            values_count -= 1
+                    comparison_string += "{mapped_field} in ({value})".format(
+                        mapped_field=mapped_field, value=', '.join(value))
             # to form queries other than IN operator
             else:
                 comparison_string = format_comparision_string(comparison_string, mapped_field, lambda_func)

@@ -13,16 +13,33 @@
     "ip": [
       {
         "key": "ipv4-addr.value",
-        "object": "src_ip"
+        "object": "src_ip",
+        "transformer": "CheckIPv4"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "src_ip"
+        "object": "src_ip",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "network-traffic.src_ref",
         "object": "nt",
         "references": "src_ip"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_domain",
+        "references": ["src_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_registered_domain",
+        "references": ["src_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_top_level_domain",
+        "references": ["src_ip"]
       }
     ],
     "port": {
@@ -58,78 +75,102 @@
       "number": [
         {
           "key": "autonomous-system.number",
-          "object": "autonomous-system"
+          "object": "source-autonomous-system"
         },
         {
           "key": "ipv4-addr.belongs_to_refs",
           "object": "src_ip",
-          "references": ["autonomous-system"]
+          "references": ["source-autonomous-system"]
+        },
+        {
+          "key": "ipv6-addr.belongs_to_refs",
+          "object": "src_ip",
+          "references": ["source-autonomous-system"]
         }
       ],
       "organization": {
         "name" : {
-          "key": "autonomous-system.name"
+          "key": "source-autonomous-system.name"
         }
       }
     },
-    "address": {
-      "key": "x-ecs-source.address",
-      "object": "source"
-    },
     "domain": {
-      "key": "x-ecs-source.domain",
-      "object": "source"
-    },
-    "nat": {
-      "ip": {
-        "key": "x-ecs-source.nat_ip",
-        "object": "source"
+      "key": "domain-name.value",
+      "object": "source_host_domain"
+  },
+  "nat": {
+    "ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "source_nat",
+        "transformer": "CheckIPv4"
       },
+      {
+        "key": "ipv6-addr.value",
+        "object": "source_nat",
+        "transformer": "CheckIPv6"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_domain",
+        "references": ["source_nat"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_registered_domain",
+        "references": ["source_nat"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "source_host_top_level_domain",
+        "references": ["source_nat"]
+      }
+    ],
       "port": {
-        "key": "x-ecs-source.nat_port",
-        "object": "source"
+          "key": "network-traffic.src_port",
+          "object": "source_nat_port"
       }
     },
     "registered_domain": {
-      "key": "x-ecs-source.registered_domain",
-      "object": "source"
+      "key": "domain-name.value",
+      "object": "source_host_registered_domain"
     },
     "top_level_domain": {
-      "key": "x-ecs-source.top_level_domain",
-      "object": "source"
+        "key": "domain-name.value",
+        "object": "source_host_top_level_domain"
     },
     "geo": {
       "city_name": {
-        "key": "x-ecs-source.geo_city_name",
-        "object": "source"
+        "key": "x-oca-geo.city_name",
+        "object": "source_geo"
       },
       "continent_name": {
-        "key": "x-ecs-source.geo_continent_name",
-        "object": "source"
+        "key": "x-oca-geo.continent_name",
+        "object": "source_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-source.geo_country_iso_code",
-        "object": "source"
+        "key": "x-oca-geo.country_iso_code",
+        "object": "source_geo"
       },
       "country_name": {
-        "key": "x-ecs-source.geo_country_name",
-        "object": "source"
+        "key": "x-oca-geo.country_name",
+        "object": "source_geo"
       },
       "location": {
-        "key": "x-ecs-source.geo_location",
-        "object": "source"
+        "key": "x-oca-geo.location",
+        "object": "source_geo"
       },
       "name": {
-        "key": "x-ecs-source.geo_name",
-        "object": "source"
+        "key": "x-oca-geo.name",
+        "object": "source_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-source.geo_region_iso_code",
-        "object": "source"
+        "key": "x-oca-geo.region_iso_code",
+        "object": "source_geo"
       },
       "region_name": {
-        "key": "x-ecs-source.geo_region_name",
-        "object": "source"
+        "key": "x-oca-geo.region_name",
+        "object": "source_geo"
       }
     }
   },
@@ -137,16 +178,33 @@
     "ip": [
       {
         "key": "ipv4-addr.value",
-        "object": "src_ip"
+        "object": "client_ip",
+        "transformer": "CheckIPv4"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "src_ip"
+        "object": "client_ip",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "network-traffic.src_ref",
         "object": "nt",
-        "references": "src_ip"
+        "references": "client_ip"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_domain",
+        "references": ["client_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_registered_domain",
+        "references": ["client_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_top_level_domain",
+        "references": ["client_ip"]
       }
     ],
     "port": {
@@ -165,96 +223,120 @@
     "mac": [
       {
         "key": "mac-addr.value",
-        "object": "src_mac"
+        "object": "client_mac"
       },
       {
         "key": "ipv4-addr.resolves_to_refs",
-        "object": "src_ip",
-        "references": ["src_mac"]
+        "object": "client_ip",
+        "references": ["client_mac"]
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
-        "object": "src_ip",
-        "references": ["src_mac"]
+        "object": "client_ip",
+        "references": ["client_mac"]
       }
     ],
     "as": {
       "number": [
         {
           "key": "autonomous-system.number",
-          "object": "autonomous-system"
+          "object": "client-autonomous-system"
         },
         {
           "key": "ipv4-addr.belongs_to_refs",
-          "object": "src_ip",
-          "references": ["autonomous-system"]
+          "object": "client_ip",
+          "references": ["client-autonomous-system"]
+        },
+        {
+          "key": "ipv6-addr.belongs_to_refs",
+          "object": "client_ip",
+          "references": ["client-autonomous-system"]
         }
       ],
       "organization": {
         "name" : {
           "key": "autonomous-system.name",
-          "object": "autonomous-system"
+          "object": "client-autonomous-system"
         }
       }
     },
-    "address": {
-      "key": "x-ecs-client.address",
-      "object": "client"
-    },
     "domain": {
-      "key": "x-ecs-client.domain",
-      "object": "client"
-    },
-    "nat": {
-      "ip": {
-        "key": "x-ecs-client.nat_ip",
-        "object": "client"
+      "key": "domain-name.value",
+      "object": "client_host_domain"
+  },
+  "nat": {
+    "ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "client_nat",
+        "transformer": "CheckIPv4"
       },
-      "port": {
-        "key": "x-ecs-client.nat_port",
-        "object": "client"
+      {
+        "key": "ipv6-addr.value",
+        "object": "client_nat",
+        "transformer": "CheckIPv6"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_domain",
+        "references": ["client_nat"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_registered_domain",
+        "references": ["client_nat"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "client_host_top_level_domain",
+        "references": ["client_nat"]
+      }
+    ],
+    "port": {
+      "key": "network-traffic.src_port",
+      "object": "cl_nat_port"
       }
     },
     "registered_domain": {
-      "key": "x-ecs-client.registered_domain",
-      "object": "client"
+      "key": "domain-name.value",
+      "object": "client_host_registered_domain"
     },
     "top_level_domain": {
-      "key": "x-ecs-client.top_level_domain",
-      "object": "client"
+      "key": "domain-name.value",
+      "object": "client_host_top_level_domain"
     },
     "geo": {
       "city_name": {
-        "key": "x-ecs-client.geo_city_name",
-        "object": "client"
+        "key": "x-oca-geo.city_name",
+        "object": "client_geo"
       },
       "continent_name": {
-        "key": "x-ecs-client.geo_continent_name",
-        "object": "client"
+        "key": "x-oca-geo.continent_name",
+        "object": "client_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-client.geo_country_iso_code",
-        "object": "client"
+        "key": "x-oca-geo.country_iso_code",
+        "object": "client_geo"
       },
       "country_name": {
-        "key": "x-ecs-client.geo_country_name",
-        "object": "client"
+        "key": "x-oca-geo.country_name",
+        "object": "client_geo"
       },
       "location": {
-        "key": "x-ecs-client.geo_location",
-        "object": "client"
+        "key": "x-oca-geo.location",
+        "object": "client_geo"
       },
       "name": {
-        "key": "x-ecs-client.geo_name",
-        "object": "client"
+        "key": "x-oca-geo.name",
+        "object": "client_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-client.geo_region_iso_code",
-        "object": "client"
+        "key": "x-oca-geo.region_iso_code",
+        "object": "client_geo"
       },
       "region_name": {
-        "key": "x-ecs-client.geo_region_name",
-        "object": "client"
+        "key": "x-oca-geo.region_name",
+        "object": "client_geo"
       }
     }
   },
@@ -262,16 +344,33 @@
     "ip": [
       {
         "key": "ipv4-addr.value",
-        "object": "dst_ip"
+        "object": "dst_ip",
+        "transformer": "CheckIPv4"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "dst_ip"
+        "object": "dst_ip",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "network-traffic.dst_ref",
         "object": "nt",
         "references": "dst_ip"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "dst_host_domain",
+        "references": ["dst_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "dst_host_registered_domain",
+        "references": ["dst_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "dst_host_top_level_domain",
+        "references": ["dst_ip"]
       }
     ],
     "port": {
@@ -307,78 +406,103 @@
       "number": [
         {
           "key": "autonomous-system.number",
-          "object": "autonomous-system"
+          "object": "dst-autonomous-system"
         },
         {
           "key": "ipv4-addr.belongs_to_refs",
-          "object": "src_ip",
-          "references": ["autonomous-system"]
+          "object": "dst_ip",
+          "references": ["dst-autonomous-system"]
+        },
+        {
+          "key": "ipv6-addr.belongs_to_refs",
+          "object": "dst_ip",
+          "references": ["dst-autonomous-system"]
         }
       ],
       "organization": {
         "name" : {
-          "key": "autonomous-system.name"
+          "key": "autonomous-system.name",
+          "object": "dst-autonomous-system"
         }
       }
     },
-    "address": {
-      "key": "x-ecs-destination.address",
-      "object": "destination"
-    },
     "domain": {
-      "key": "x-ecs-destination.domain",
-      "object": "destination"
+      "key": "domain-name.value",
+      "object": "dst_host_domain"
     },
     "nat": {
-      "ip": {
-        "key": "x-ecs-destination.nat_ip",
-        "object": "destination"
-      },
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_nat",
+          "transformer": "CheckIPv4"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_nat",
+          "transformer": "CheckIPv6"
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "dst_host_domain",
+          "references": ["dst_nat"]
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "dst_host_registered_domain",
+          "references": ["dst_nat"]
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "dst_host_top_level_domain",
+          "references": ["dst_nat"]
+        }
+      ],
       "port": {
-        "key": "x-ecs-destination.nat_port",
-        "object": "destination"
+        "key": "network-traffic.dst_port",
+        "object": "dst_nat_port"
       }
     },
     "registered_domain": {
-      "key": "x-ecs-destination.registered_domain",
-      "object": "destination"
+      "key": "domain-name.value",
+      "object": "dst_host_registered_domain"
     },
     "top_level_domain": {
-      "key": "x-ecs-destination.top_level_domain",
-      "object": "destination"
+      "key": "domain-name.value",
+      "object": "destination_host_top_level_domain"
     },
     "geo": {
       "city_name": {
-        "key": "x-ecs-destination.geo_city_name",
-        "object": "destination"
+        "key": "x-oca-geo.city_name",
+        "object": "destination_geo"
       },
       "continent_name": {
-        "key": "x-ecs-destination.geo_continent_name",
-        "object": "destination"
+        "key": "x-oca-geo.continent_name",
+        "object": "destination_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-destination.geo_country_iso_code",
-        "object": "destination"
+        "key": "x-oca-geo.country_iso_code",
+        "object": "destination_geo"
       },
       "country_name": {
-        "key": "x-ecs-destination.geo_country_name",
-        "object": "destination"
+        "key": "x-oca-geo.country_name",
+        "object": "destination_geo"
       },
       "location": {
-        "key": "x-ecs-destination.geo_location",
-        "object": "destination"
+        "key": "x-oca-geo.location",
+        "object": "destination_geo"
       },
       "name": {
-        "key": "x-ecs-destination.geo_name",
-        "object": "destination"
+        "key": "x-oca-geo.name",
+        "object": "destination_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-destination.geo_region_iso_code",
-        "object": "destination"
+        "key": "x-oca-geo.region_iso_code",
+        "object": "destination_geo"
       },
       "region_name": {
-        "key": "x-ecs-destination.geo_region_name",
-        "object": "destination"
+        "key": "x-oca-geo.region_name",
+        "object": "destination_geo"
       }
     }
   },
@@ -386,16 +510,33 @@
     "ip": [
       {
         "key": "ipv4-addr.value",
-        "object": "dst_ip"
+        "object": "server_ip",
+        "transformer": "CheckIPv4"
       },
       {
         "key": "ipv6-addr.value",
-        "object": "dst_ip"
+        "object": "server_ip_v6",
+        "transformer": "CheckIPv6"
       },
       {
         "key": "network-traffic.dst_ref",
         "object": "nt",
-        "references": "dst_ip"
+        "references": "server_ip"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "server_host_domain",
+        "references": ["server_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "server_host_registered_domain",
+        "references": ["server_ip"]
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "server_host_top_level_domain",
+        "references": ["server_ip"]
       }
     ],
     "port": {
@@ -404,105 +545,130 @@
       "transformer": "ToInteger"
     },
     "bytes": {
-      "key": "network-traffic.src_byte_count",
+      "key": "network-traffic.dst_byte_count",
       "object": "nt"
     },
     "packets": {
-      "key": "network-traffic.src_packets",
+      "key": "network-traffic.dst_packets",
       "object": "nt"
     },
     "mac": [
       {
         "key": "mac-addr.value",
-        "object": "dst_mac"
+        "object": "server_mac"
       },
       {
         "key": "ipv4-addr.resolves_to_refs",
-        "object": "dst_ip",
-        "references": ["dst_mac"]
+        "object": "server_ip",
+        "references": ["server_mac"]
       },
       {
         "key": "ipv6-addr.resolves_to_refs",
-        "object": "dst_ip",
-        "references": ["dst_mac"]
+        "object": "server_ip",
+        "references": ["server_mac"]
       }
     ],
     "as": {
       "number": [
         {
           "key": "autonomous-system.number",
-          "object": "autonomous-system"
+          "object": "server-autonomous-system"
         },
         {
           "key": "ipv4-addr.belongs_to_refs",
-          "object": "dst_ip",
-          "references": ["autonomous-system"]
+          "object": "server_ip",
+          "references": ["server-autonomous-system"]
+        },
+        {
+          "key": "ipv6-addr.belongs_to_refs",
+          "object": "server_ip",
+          "references": ["server-autonomous-system"]
         }
       ],
       "organization": {
         "name" : {
-          "key": "autonomous-system.name"
+          "key": "autonomous-system.name",
+          "object": "server-autonomous-system"
         }
       }
     },
-    "address": {
-      "key": "x-ecs-server.address",
-      "object": "server"
-    },
     "domain": {
-      "key": "x-ecs-server.domain",
-      "object": "server"
+      "key": "domain-name.value",
+      "object": "server_host_domain"
     },
     "nat": {
-      "ip": {
-        "key": "x-ecs-server.nat_ip",
-        "object": "server"
-      },
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "server_nat",
+          "transformer": "CheckIPv4"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "server_nat",
+          "transformer": "CheckIPv6"
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "server_host_domain",
+          "references": ["server_nat"]
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "server_host_registered_domain",
+          "references": ["server_nat"]
+        },
+        {
+          "key": "domain-name.resolves_to_refs",
+          "object": "server_host_top_level_domain",
+          "references": ["server_nat"]
+        }
+      ],
       "port": {
-        "key": "x-ecs-server.nat_port",
-        "object": "server"
+        "key": "network-traffic.dst_port",
+        "object": "server_nat_port"
       }
     },
     "registered_domain": {
-      "key": "x-ecs-server.registered_domain",
-      "object": "server"
+      "key": "domain-name.value",
+      "object": "server_host_registered_domain"
     },
     "top_level_domain": {
-      "key": "x-ecs-server.top_level_domain",
-      "object": "server"
+      "key": "domain-name.value",
+      "object": "server_host_top_level_domain"
     },
     "geo": {
       "city_name": {
-        "key": "x-ecs-server.geo_city_name",
-        "object": "server"
+        "key": "x-oca-geo.city_name",
+        "object": "server_geo"
       },
       "continent_name": {
-        "key": "x-ecs-server.geo_continent_name",
-        "object": "server"
+        "key": "x-oca-geo.continent_name",
+        "object": "server_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-server.geo_country_iso_code",
-        "object": "server"
+        "key": "x-oca-geo.country_iso_code",
+        "object": "server_geo"
       },
       "country_name": {
-        "key": "x-ecs-server.geo_country_name",
-        "object": "server"
+        "key": "x-oca-geo.country_name",
+        "object": "server_geo"
       },
       "location": {
-        "key": "x-ecs-server.geo_location",
-        "object": "server"
+        "key": "x-oca-geo.location",
+        "object": "server_geo"
       },
       "name": {
-        "key": "x-ecs-server.geo_name",
-        "object": "server"
+        "key": "x-oca-geo.name",
+        "object": "server_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-server.geo_region_iso_code",
-        "object": "server"
+        "key": "x-oca-geo.region_iso_code",
+        "object": "server_geo"
       },
       "region_name": {
-        "key": "x-ecs-server.geo_region_name",
-        "object": "server"
+        "key": "x-oca-geo.region_name",
+        "object": "server_geo"
       }
     }
   },
@@ -511,7 +677,7 @@
       {
         "key": "network-traffic.protocols",
         "object": "nt",
-        "group": "True",
+        "group": true,
         "transformer": "ToLowercaseArray"
       },
       {
@@ -531,7 +697,7 @@
       {
         "key": "network-traffic.protocols",
         "object": "nt",
-        "group": "True",
+        "group": true,
         "transformer": "ToLowercaseArray"
       },
       {
@@ -551,7 +717,7 @@
       {
         "key": "network-traffic.protocols",
         "object": "nt",
-        "group": "True",
+        "group": true,
         "transformer": "ToLowercaseArray"
       },
       {
@@ -569,45 +735,45 @@
     ],
     "vlan": {
       "id": {
-        "key": "x-ecs-network.vlan_id",
-        "object": "network"
+        "key": "network-traffic.x_vlan.id",
+        "object": "nt"
       },
       "name": {
-        "key": "x-ecs-network.vlan_name",
-        "object": "network"
+        "key": "network-traffic.x_vlan.name",
+        "object": "nt"
       }
     },
     "inner": {
       "vlan": {
         "id": {
-          "key": "x-ecs-network.inner_vlan_id",
-          "object": "network"
+          "key": "network-traffic.x_vlan.inner.id",
+          "object": "nt"
         },
         "name": {
-          "key": "x-ecs-network.inner_vlan_name",
-          "object": "network"
+          "key": "network-traffic.x_vlan.inner.name",
+          "object": "nt"
         }
       }
     },
     "name": {
-      "key": "x-ecs-network.name",
-      "object": "network"
+      "key": "network-traffic.x_name",
+      "object": "nt"
     },
     "application": {
-      "key": "x-ecs-network.application",
-      "object": "network"
+      "key": "network-traffic.x_application",
+      "object": "nt"
     },
     "direction": {
-      "key": "x-ecs-network.direction",
-      "object": "network"
+      "key": "network-traffic.x_direction",
+      "object": "nt"
     },
     "forwarded_ip": {
-      "key": "x-ecs-network.forwarded_ip",
-      "object": "network"
+      "key": "network-traffic.x_forwarded_ip",
+      "object": "nt"
     },
     "community_id": {
-      "key": "x-ecs-network.community_id",
-      "object": "network"
+      "key": "network-traffic.x_community_id",
+      "object": "nt"
     }
   },
   "event": {
@@ -772,16 +938,6 @@
         "references": "process"
       }
     ],
-    "code_signature": {
-      "exists": {
-        "key": "x-ecs-process.code_signature_exists",
-        "object": "x_process"
-      },
-      "subject_name": {
-        "key": "x-ecs-process.code_signature_subject_name",
-        "object": "x_process"
-      }
-    },
     "ppid": [
       {
         "key": "process.pid",
@@ -794,36 +950,6 @@
         "references": "process_parent"
       }
     ],
-    "pe": {
-      "company": {
-        "key": "x-ecs-process.pe_company",
-        "object": "x_process"
-      },
-      "description": {
-        "key": "x-ecs-process.pe_description",
-        "object": "x_process"
-      },
-      "file_version": {
-        "key": "x-ecs-process.pe_file_version",
-        "object": "x_process"
-      },
-      "original_file_name": {
-        "key": "x-ecs-process.pe_original_file_name",
-        "object": "x_process"
-      },
-      "product": {
-        "key": "x-ecs-process.pe_product",
-        "object": "x_process"
-      }
-    },
-    "args": {
-      "key": "x-ecs-process.args",
-      "object": "x_process"
-    },
-    "args_count": {
-      "key": "x-ecs-process.args_count",
-      "object": "x_process"
-    },
     "command_line": {
       "key": "process.command_line",
       "object": "process"
@@ -850,6 +976,11 @@
         "references": "process_executable_dir"
       },
       {
+        "key": "file.x_software_ref",
+        "object": "process_executable",
+        "references": "process_file_software"
+      },
+      {
         "key": "x-oca-event.process_ref",
         "object": "event",
         "references": "process"
@@ -860,18 +991,10 @@
       "object": "process"
     },
     "exit_code": {
-      "key": "x-ecs-process.exit_code",
-      "object": "x_process"
+      "key": "process.x_exit_code",
+      "object": "process"
     },
     "parent": {
-      "args": {
-        "key": "x-ecs-process.parent_args",
-        "object": "x_process"
-      },
-      "args_count": {
-        "key": "x-ecs-process.parent_args_count",
-        "object": "x_process"
-      },
       "command_line": {
         "key": "process.command_line",
         "object": "process_parent"
@@ -881,13 +1004,20 @@
         "object": "process_parent"
       },
       "exit_code": {
-        "key": "x-ecs-process.parent_exit_code",
-        "object": "x_process"
+        "key": "process.x_exit_code",
+        "object": "process_parent"
       },
-      "pgid": {
-        "key": "x-ecs-process.parent_pgid",
-        "object": "x_process"
-      },
+      "pgid": [
+        {
+          "key": "process.pid",
+          "object": "process_parent_group_leader"
+        },
+        {
+          "key": "process.group_leader_ref",
+          "object": "process_parent",
+          "references": "process_parent_group_leader"
+        }
+      ],
       "pid": [
         {
           "key": "process.pid",
@@ -905,36 +1035,27 @@
           "references": "process_parent"
         }
       ],
-      "ppid": {
-        "key": "x-ecs-process.parent_ppid",
-        "object": "x_process",
-        "transformer": "ToInteger"
-      },
       "start": {
         "key": "process.created_time",
         "object": "process_parent"
       },
       "thread": {
         "id": {
-          "key": "x-ecs-process.parent_thread_id",
-          "object": "x_process"
-        },
-        "name": {
-          "key": "x-ecs-process.parent_thread_name",
-          "object": "x_process"
+          "key": "process.x_thread_id",
+          "object": "process_parent"
         }
       },
       "title": {
-        "key": "x-ecs-process.parent_title",
-        "object": "x_process"
+        "key": "process.x_window_title",
+        "object": "process_parent"
       },
       "uptime": {
-        "key": "x-ecs-process.parent_uptime",
-        "object": "x_process"
+        "key": "process.x_uptime",
+        "object": "process_parent"
       },
       "working_directory": {
-        "key": "x-ecs-process.parent_working_directory",
-        "object": "x_process"
+        "key": "process.cwd",
+        "object": "process_parent"
       },
       "executable": [
         {
@@ -964,31 +1085,34 @@
         }
       ]
     },
-    "pgid": {
-      "key": "x-ecs-process.exit_code",
-      "object": "x_process"
-    },
+    "pgid": [
+      {
+        "key": "process.pid",
+        "object": "process_group_leader"
+      },
+      {
+        "key": "process.group_leader_ref",
+        "object": "process",
+        "references": "process_group_leader"
+      }
+    ],
     "thread": {
       "id": {
-        "key": "x-ecs-process.thread_id",
-        "object": "x_process"
-      },
-      "name": {
-        "key": "x-ecs-process.thread_name",
-        "object": "x_process"
+        "key": "process.x_thread_id",
+        "object": "process"
       }
     },
     "title": {
-      "key": "x-ecs-process.title",
-      "object": "x_process"
+      "key": "process.x_window_title",
+      "object": "process"
     },
     "uptime": {
-      "key": "x-ecs-process.uptime",
+      "key": "process.x_uptime",
       "object": "x_process"
     },
     "working_directory": {
-      "key": "x-ecs-process.working_directory",
-      "object": "x_process"
+      "key": "process.cwd",
+      "object": "process"
     }
   },
   "user": {
@@ -1024,22 +1148,18 @@
       }
     ],
     "domain": {
-      "key": "x-ecs-user.domain",
-      "object": "x_user"
+      "key": "user-account.x_domain",
+      "object": "user"
     },
     "full_name": {
-      "key": "x-ecs-user.full_name",
-      "object": "x_user"
+      "key": "user-account.display_name",
+      "object": "user"
     },
     "hash": {
-      "key": "x-ecs-user.hash",
-      "object": "x_user"
+      "key": "user-account.x_hash",
+      "object": "user"
     },
     "id": [
-      {
-        "key": "x-ecs-user.user_id",
-        "object": "x_user"
-      },
       {
         "key": "user-account.user_id",
         "object": "user"
@@ -1073,18 +1193,22 @@
   "agent": {
     "name": [
       {
-        "key": "software.name"
+        "key": "software.name",
+        "object": "event-agent-software"
       },
       {
         "key": "x-oca-event.agent",
-        "object": "event"
+        "object": "event",
+        "references": "event-agent-software"
       }
     ],
     "type": {
-      "key": "software.vendor"
+      "key": "software.vendor",
+      "object": "event-agent-software"
     },
     "version": {
-      "key": "software.version"
+      "key": "software.version",
+      "object": "event-agent-software"
     }
   },
   "cloud": {
@@ -1125,89 +1249,95 @@
   },
   "container": {
     "id": {
-      "key": "x-ecs-container.container_id",
-      "object": "container"
+      "key": "x-oca-asset.extensions.x-oca-container-ext.id",
+      "object": "host"
     },
     "image": {
       "name": {
-        "key": "x-ecs-container.image_name",
-        "object": "container"
+        "key": "x-oca-asset.extensions.x-oca-container-ext.image.name",
+        "object": "host"
       },
       "tag": {
-        "key": "x-ecs-container.image_tag",
-        "object": "container"
+        "key": "x-oca-asset.extensions.x-oca-container-ext.image.tag",
+        "object": "host"
       }
     },
     "labels": {
-      "key": "x-ecs-container.labels",
-      "object": "container"
+      "key": "x-oca-asset.extensions.x-oca-container-ext.labels",
+      "object": "host"
     },
     "name": {
-      "key": "x-ecs-container.name",
-      "object": "container"
+      "key": "x-oca-asset.extensions.x-oca-container-ext.name",
+      "object": "host"
     },
     "runtime": {
-      "key": "x-ecs-container.runtime",
-      "object": "container"
+      "key": "x-oca-asset.extensions.x-oca-container-ext.container_type",
+      "object": "host"
     }
   },
   "dll":{
-    "name": {
-      "key": "x-ecs-dll.name",
-      "object": "dll"
-    },
+    "name": [
+      {
+        "key": "file.name",
+        "object": "file_dll"
+      },
+      {
+        "key": "file.dll_ref",
+        "object": "file",
+        "references": "file_dll"
+      }
+    ],
     "path": {
-      "key": "x-ecs-dll.path",
-      "object": "dll"
+      "key": "file.x_path",
+      "object": "file_dll"
     },
     "pe": {
-      "company": {
-        "key": "x-ecs-dll.pe_company",
-        "object": "dll"
-      },
-      "description": {
-        "key": "x-ecs-dll.pe_description",
-        "object": "dll"
-      },
+      "company": [
+        {
+          "key": "software.vendor",
+          "object": "file_dll_software"
+        },
+        {
+          "key": "file.x_software_ref",
+          "object": "file_dll",
+          "references": "file_dll_software"
+        }
+      ],
       "file_version": {
-        "key": "x-ecs-dll.pe_file_version",
-        "object": "dll"
+        "key": "software.version",
+        "object": "file_dll_software"
       },
       "original_file_name": {
-        "key": "x-ecs-dll.pe_original_file_name",
-        "object": "dll"
-      },
-      "product": {
-        "key": "x-ecs-dll.pe_product",
-        "object": "dll"
+        "key": "software.name",
+        "object": "file_dll_software"
       }
     },
     "code_signature": {
       "exists": {
-        "key": "x-ecs-dll.code_signature_exists",
-        "object": "dll"
+        "key": "file.x_code_signature.exists",
+        "object": "file_dll"
       },
       "subject_name": {
-        "key": "x-ecs-dll.code_signature_subject_name",
-        "object": "dll"
+        "key": "file.x_code_signature.subject_name",
+        "object": "file_dll"
       }
     },
     "hash": {
       "sha256": {
-        "key": "x-ecs-dll.hashes.SHA-256",
-        "object": "dll"
+        "key": "file.hashes.SHA-256",
+        "object": "file_dll"
       },
       "sha1": {
-        "key": "x-ecs-dll.hashes.SHA-1",
-        "object": "dll"
+        "key": "file.hashes.SHA-1",
+        "object": "file_dll"
       },
       "md5": {
-        "key": "x-ecs-dll.hashes.MD5",
-        "object": "dll"
+        "key": "file.hashes.MD5",
+        "object": "file_dll"
       },
       "sha512": {
-        "key": "x-ecs-dll.hashes.SHA-512",
-        "object": "dll"
+        "key": "file.hashes.SHA-512",
+        "object": "file_dll"
       }
     }
   },
@@ -1394,103 +1524,110 @@
     },
     "pe": {
       "company": {
-        "key": "x-ecs-file.pe_company",
-        "object": "x_file"
-      },
-      "description": {
-        "key": "x-ecs-file.pe_description",
-        "object": "x_file"
+        "key": "software.vendor",
+        "object": "process_file_software"
       },
       "file_version": {
-        "key": "x-ecs-file.pe_file_version",
-        "object": "x_file"
+        "key": "software.version",
+        "object": "process_file_software"
       },
       "original_file_name": {
-        "key": "x-ecs-file.pe_original_file_name",
-        "object": "x_file"
+        "key": "software.name",
+        "object": "process_file_software"
       },
       "product": {
-        "key": "x-ecs-file.pe_product",
-        "object": "x_file"
+        "key": "software.x_product",
+        "object": "process_file_software"
+      },
+      "description": {
+        "key": "software.x_description",
+        "object": "process_file_software"
       }
     },
     "code_signature": {
       "exists": {
-        "key": "x-ecs-file.code_signature_exists",
-        "object": "x_file"
+        "key": "file.x_code_signature.exists",
+        "object": "file"
       },
       "subject_name": {
-        "key": "x-ecs-file.code_signature_subject_name",
-        "object": "x_file"
+        "key": "file.x_code_signature.subject_name",
+        "object": "file"
       }
     },
     "accessed": {
-      "key": "x-ecs-file.accessed",
-      "object": "x_file"
+      "key": "file.atime",
+      "object": "file"
     },
     "attributes": {
-      "key": "x-ecs-file.attributes",
-      "object": "x_file"
+      "key": "file.x_attributes",
+      "object": "file"
     },
     "ctime": {
-      "key": "x-ecs-file.ctime",
-      "object": "x_file"
+      "key": "file.ctime",
+      "object": "file"
     },
     "device": {
-      "key": "x-ecs-file.device",
-      "object": "x_file"
+      "key": "file.x_unix.device",
+      "object": "file"
     },
     "drive_letter": {
-      "key": "x-ecs-file.drive_letter",
-      "object": "x_file"
+      "key": "file.x_win_drive_letter",
+      "object": "file"
     },
     "extension": {
-      "key": "x-ecs-file.extension",
-      "object": "x_file"
+      "key": "file.x_extension",
+      "object": "file"
     },
     "gid": {
-      "key": "x-ecs-file.gid",
-      "object": "x_file"
+      "key": "file.x_unix.gid",
+      "object": "file"
     },
     "group": {
-      "key": "x-ecs-file.group",
-      "object": "x_file"
+      "key": "file.x_unix.group",
+      "object": "file"
     },
     "inode": {
-      "key": "x-ecs-file.inode",
-      "object": "x_file"
+      "key": "file.x_unix.inode",
+      "object": "file"
     },
     "mime_type": {
-      "key": "x-ecs-file.mime_type",
-      "object": "x_file"
+      "key": "file.mime_type",
+      "object": "file"
     },
     "mode": {
-      "key": "x-ecs-file.mode",
-      "object": "x_file"
+      "key": "file.x_unix.mode",
+      "object": "file"
     },
     "mtime": {
-      "key": "x-ecs-file.mtime",
-      "object": "x_file"
+      "key": "file.mtime",
+      "object": "file"
     },
-    "owner": {
-      "key": "x-ecs-file.owner",
-      "object": "x_file"
-    },
+    "owner": [
+      {
+        "key": "user-account.account_login",
+        "object": "file_owner"
+      },
+      {
+        "key": "file.x_owner_ref",
+        "object": "file",
+        "references": "file_owner"
+      }
+    ],
     "path": {
-      "key": "x-ecs-file.path",
-      "object": "x_file"
+      "key": "file.x_path",
+      "object": "file"
     },
     "target_path": {
-      "key": "x-ecs-file.target_path",
-      "object": "x_file"
+      "key": "file.x_target_path",
+      "object": "file"
     },
     "type": {
-      "key": "x-ecs-file.type",
-      "object": "x_file"
+      "key": "file.x_type",
+      "object": "file"
     },
     "uid": {
-      "key": "x-ecs-file.uid",
-      "object": "x_file"
+      "key": "user-account.user_id",
+      "object": "file_owner"
     }
   },
   "group": {
@@ -1512,10 +1649,17 @@
       "key": "x-oca-asset.architecture",
       "object": "host"
     },
-    "domain": {
-      "key": "x-oca-asset.domain",
-      "object": "host"
-    },
+    "domain": [
+      {
+        "key": "domain-name.value",
+        "object": "host_domain"
+      },
+      {
+        "key": "x-oca-asset.domain_ref",
+        "object": "host",
+        "references": "host_domain"
+      }
+    ],
     "hostname": [
       {
         "key": "x-oca-asset.hostname",
@@ -1528,7 +1672,7 @@
       }
     ],
     "id": {
-      "key": "x-oca-asset.asset_id",
+      "key": "x-oca-asset.device_id",
       "object": "host"
     },
     "ip": [
@@ -1584,51 +1728,65 @@
       "object": "host"
     },
     "geo": {
-      "city_name": {
-        "key": "x-oca-asset.geo_city_name",
-        "object": "host"
-      },
+      "city_name": [
+        {
+          "key": "x-oca-geo.city_name",
+          "object": "host_geo"
+        },
+        {
+          "key": "x-oca-asset.geo_ref",
+          "object": "host",
+          "references": ["host_geo", "source_geo", "destination_geo", "client_geo", "server_geo"]
+        }
+      ],
       "continent_name": {
-        "key": "x-oca-asset.geo_continent_name",
-        "object": "host"
+        "key": "x-oca-geo.continent_name",
+        "object": "host_geo"
       },
       "country_iso_code": {
-        "key": "x-oca-asset.geo_country_iso_code",
-        "object": "host"
+        "key": "x-oca-geo.country_iso_code",
+        "object": "host_geo"
       },
       "country_name": {
-        "key": "x-oca-asset.geo_country_name",
-        "object": "host"
+        "key": "x-oca-geo.country_name",
+        "object": "host_geo"
       },
       "location": {
-        "key": "x-oca-asset.geo_location",
-        "object": "host"
+        "key": "x-oca-geo.location",
+        "object": "host_geo"
       },
       "name": {
-        "key": "x-oca-asset.geo_name",
-        "object": "host"
+        "key": "x-oca-geo.name",
+        "object": "host_geo"
       },
       "region_iso_code": {
-        "key": "x-oca-asset.geo_region_iso_code",
-        "object": "host"
+        "key": "x-oca-geo.region_iso_code",
+        "object": "host_geo"
       },
       "region_name": {
-        "key": "x-oca-asset.geo_region_name",
-        "object": "host"
+        "key": "x-oca-geo.region_name",
+        "object": "host_geo"
       }
     },
     "os": {
-      "name": {
-        "key": "x-oca-asset.os_name",
-        "object": "host"
-      },
+      "name": [
+        {
+        "key": "software.name",
+        "object": "host_software"
+        },
+        {
+          "key": "x-oca-asset.os_ref",
+          "object": "host",
+          "references": "host_software"
+        }
+      ],
       "platform": {
-        "key": "x-oca-asset.os_platform",
-        "object": "host"
+        "key": "software.vendor",
+        "object": "host_software"
       },
       "version": {
-        "key": "x-oca-asset.os_version",
-        "object": "host"
+        "key": "software.version",
+        "object": "host_software"
       }
     },
     "user": {
@@ -1781,146 +1939,206 @@
   "observer": {
     "egress": {
       "zone": {
-        "key": "x-ecs-observer.egress_zone",
+        "key": "x-oca-asset.egress.zone",
         "object": "observer"
       },
       "interface": {
         "alias": {
-          "key": "x-ecs-observer.egress_interface_alias",
+          "key": "x-oca-asset.egress.interface.alias",
           "object": "observer"
         },
         "id": {
-          "key": "x-ecs-observer.egress_interface_id",
+          "key": "x-oca-asset.egress.interface.id",
           "object": "observer"
         },
         "name": {
-          "key": "x-ecs-observer.egress_interface_name",
+          "key": "x-oca-asset.egress.interface.name",
           "object": "observer"
         }
       },
       "vlan": {
         "id": {
-          "key": "x-ecs-observer.egress_vlan_id",
+          "key": "x-oca-asset.egress.vlan.id",
           "object": "observer"
         },
         "name": {
-          "key": "x-ecs-observer.egress_vlan_name",
+          "key": "x-oca-asset.egress.vlan.name",
           "object": "observer"
         }
       }
     },
     "hostname": {
-      "key": "x-ecs-observer.hostname",
+      "key": "x-oca-asset.hostname",
       "object": "observer"
     },
     "ingress": {
       "zone": {
-        "key": "x-ecs-observer.ingress_zone",
+        "key": "x-oca-asset.ingress.zone",
         "object": "observer"
       },
       "interface": {
         "alias": {
-          "key": "x-ecs-observer.ingress_interface_alias",
+          "key": "x-oca-asset.ingress.interface.alias",
           "object": "observer"
         },
         "id": {
-          "key": "x-ecs-observer.ingress_interface_id",
+          "key": "x-oca-asset.ingress.interface.id",
           "object": "observer"
         },
         "name": {
-          "key": "x-ecs-observer.ingress_interface_name",
+          "key": "x-oca-asset.ingress.interface.name",
           "object": "observer"
         }
       },
       "vlan": {
         "id": {
-          "key": "x-ecs-observer.ingress_vlan_id",
+          "key": "x-oca-asset.ingress.vlan.id",
           "object": "observer"
         },
         "name": {
-          "key": "x-ecs-observer.ingress_vlan_name",
+          "key": "x-oca-asset.ingress.vlan.name",
           "object": "observer"
         }
       }
     },
-    "ip": {
-      "key": "x-ecs-observer.ip",
-      "object": "observer"
-    },
-    "mac": {
-      "key": "x-ecs-observer.mac",
-      "object": "observer"
-    },
+    "ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "observer_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "observer_ipv6",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "observer",
+        "references": ["observer_ip", "observer_ipv6"]
+      }
+  ],
+    "mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "observer_mac"
+      },
+      {
+        "key": "ipv4-addr.resolves_to_refs",
+        "object": "observer_ip",
+        "references": ["observer_mac"]
+      },
+      {
+        "key": "ipv6-addr.resolves_to_refs",
+        "object": "observer_ipv6",
+        "references": ["observer_mac"]
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "observer",
+        "references": ["observer_mac"]
+      }
+  ],
     "name": {
-      "key": "x-ecs-observer.name",
+      "key": "x-oca-asset.name",
       "object": "observer"
     },
-    "product": {
-      "key": "x-ecs-observer.product",
-      "object": "observer"
-    },
+    "product": [
+      {
+        "key": "software.name",
+        "object": "observer_sw"
+      },
+      {
+        "key": "x-oca-asset.os_ref",
+        "object": "observer",
+        "references": ["observer_software", "observer_sw"]
+      }
+    ],
     "serial_number": {
-      "key": "x-ecs-observer.serial_number",
+      "key": "x-oca-asset.device_id",
       "object": "observer"
     },
     "type": {
-      "key": "x-ecs-observer.type",
+      "key": "x-oca-asset.host_type",
       "object": "observer"
     },
-    "vendor": {
-      "key": "x-ecs-observer.vendor",
-      "object": "observer"
-    },
+    "vendor": [
+      {
+        "key": "software.vendor",
+        "object": "observer_sw"
+      },
+      {
+        "key": "x-oca-asset.os_ref",
+        "object": "observer",
+        "references": "observer_sw"
+      }
+    ],
     "version": {
-      "key": "x-ecs-observer.version",
-      "object": "observer"
+      "key": "software.version",
+      "object": "observer_sw"
     },
     "os": {
-      "name": {
-        "key": "x-ecs-observer.os_name",
-        "object": "observer"
-      },
+      "name": [
+        {
+        "key": "software.name",
+        "object": "observer_software"
+        },
+        {
+          "key": "x-oca-asset.os_ref",
+          "object": "observer",
+          "references": "observer_software"
+        }
+      ],
       "platform": {
-        "key": "x-ecs-observer.os_platform",
-        "object": "observer"
+        "key": "software.vendor",
+        "object": "observer_software"
       },
       "version": {
-        "key": "x-ecs-observer.os_version",
-        "object": "observer"
+        "key": "software.version",
+        "object": "observer_software"
       }
     },
     "geo": {
-      "city_name": {
-        "key": "x-ecs-observer.geo_city_name",
-        "object": "observer"
-      },
+      "city_name": [
+        {
+          "key": "x-oca-geo.city_name",
+          "object": "observer_geo"
+        },
+        {
+          "key": "x-oca-asset.geo_ref",
+          "object": "observer",
+          "references": "observer_geo"
+        }
+      ],
       "continent_name": {
-        "key": "x-ecs-observer.geo_continent_name",
-        "object": "observer"
+        "key": "x-oca-geo.continent_name",
+        "object": "observer_geo"
       },
       "country_iso_code": {
-        "key": "x-ecs-observer.geo_country_iso_code",
-        "object": "observer"
+        "key": "x-oca-geo.country_iso_code",
+        "object": "observer_geo"
       },
       "country_name": {
-        "key": "x-ecs-observer.geo_country_name",
-        "object": "observer"
+        "key": "x-oca-geo.country_name",
+        "object": "observer_geo"
       },
       "location": {
-        "key": "x-ecs-observer.geo_location",
-        "object": "observer"
+        "key": "x-oca-geo.location",
+        "object": "observer_geo"
       },
       "name": {
-        "key": "x-ecs-observer.geo_name",
-        "object": "observer"
+        "key": "x-oca-geo.name",
+        "object": "observer_geo"
       },
       "region_iso_code": {
-        "key": "x-ecs-observer.geo_region_iso_code",
-        "object": "observer"
+        "key": "x-oca-geo.region_iso_code",
+        "object": "observer_geo"
       },
       "region_name": {
-        "key": "x-ecs-observer.geo_region_name",
-        "object": "observer"
+        "key": "x-oca-geo.region_name",
+        "object": "observer_geo"
       }
     }
   },
@@ -2117,33 +2335,33 @@
     "client": {
       "issuer": {
         "key": "x509-certificate.issuer",
-        "object": "client"
+        "object": "client-cert"
       },
       "hash": {
         "sha256": {
           "key": "x509-certificate.hashes.SHA-256",
-          "object": "client"
+          "object": "client-cert"
         },
         "sha1": {
           "key": "x509-certificate.hashes.SHA-1",
-          "object": "client"
+          "object": "client-cert"
         },
         "md5": {
           "key": "x509-certificate.hashes.MD5",
-          "object": "client"
+          "object": "client-cert"
         }
       },
       "not_after": {
         "key": "x509-certificate.validity_not_after",
-        "object": "client"
+        "object": "client-cert"
       },
       "not_before": {
         "key": "x509-certificate.validity_not_before",
-        "object": "client"
+        "object": "client-cert"
       },
       "subject": {
         "key": "x509-certificate.subject",
-        "object": "client"
+        "object": "client-cert"
       },
       "certificate": {
         "key": "x-ecs-tls.client_certificate",
@@ -2165,33 +2383,33 @@
     "server": {
       "issuer": {
         "key": "x509-certificate.issuer",
-        "object": "server"
+        "object": "server-cert"
       },
       "hash": {
         "sha256": {
           "key": "x509-certificate.hashes.SHA-256",
-          "object": "server"
+          "object": "server-cert"
         },
         "sha1": {
           "key": "x509-certificate.hashes.SHA-1",
-          "object": "server"
+          "object": "server-cert"
         },
         "md5": {
           "key": "x509-certificate.hashes.MD5",
-          "object": "server"
+          "object": "server-cert"
         }
       },
       "not_after": {
         "key": "x509-certificate.validity_not_after",
-        "object": "server"
+        "object": "server-cert"
       },
       "not_before": {
         "key": "x509-certificate.validity_not_before",
-        "object": "server"
+        "object": "server-cert"
       },
       "subject": {
         "key": "x509-certificate.subject",
-        "object": "server"
+        "object": "server-cert"
       },
       "certificate": {
         "key": "x-ecs-tls.server_certificate",
@@ -2326,7 +2544,7 @@
     }
   },
   "tags": {
-    "key": "process.x_ttp_tags",
+    "key": "process.x_tags",
     "object": "process"
   }
 }

@@ -1,5 +1,4 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
-import requests
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from datetime import datetime, timedelta
 import json
 
@@ -13,12 +12,11 @@ class APIClient():
         url_modifier_function = None
         auth = configuration.get('auth')
 
-        self.client = RestApiClient(connection.get('host'),
+        self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port'),
                                     self.headers,
                                     url_modifier_function=url_modifier_function,
-                                    cert_verify=connection.get('selfSignedCert', True),
-                                    sni=connection.get('sni', None)
+                                    cert_verify=connection.get('selfSignedCert', True)
                                     )
         self.timeout = connection['options'].get('timeout')
         self.app_id = auth['app_id']
@@ -26,15 +24,15 @@ class APIClient():
         self.token = None
         self.token_expiresat = None
 
-    def ping_data_source(self):
+    async def ping_data_source(self):
         # Pings the data source
-        return self.get_token()
+        return await self.get_token()
 
-    def get_search_results(self, search_id, length):
+    async def get_search_results(self, search_id, length):
         # Return the search results. Results must be in JSON format before being translated into STIX
         params = dict()
         params['count'] = length
-        token_response = self.get_token()
+        token_response = await self.get_token()
         response_code = token_response['code']
         if response_code == 200:
             self.headers['Authorization'] = 'Bearer {}'.format(token_response['token'])
@@ -43,13 +41,13 @@ class APIClient():
 
         body_data = {'query': search_id}
         
-        return self.client.call_api(self.EVENT_ENDPOINT, 'POST', urldata=params, headers=self.headers, data=body_data)
+        return await self.client.call_api(self.EVENT_ENDPOINT, 'POST', urldata=params, headers=self.headers, data=body_data, timeout=self.timeout)
     
-    def page_search(self, search_id, next_page_url, length):
+    async def page_search(self, search_id, next_page_url, length):
         params = dict()
         params['count'] = length
         if not self.token_expired():
-            token_response = self.get_token()
+            token_response = await self.get_token()
             response_code = token_response['code']
             if response_code == 200:
                 self.headers['Authorization'] = 'Bearer {}'.format(token_response['token'])
@@ -58,16 +56,16 @@ class APIClient():
         page = next_page_url.split('?', maxsplit=1)[1]
         next_page_endpoint = self.EVENT_ENDPOINT + '?' + page
         
-        return self.client.call_api(next_page_endpoint, 'POST', headers=self.headers, data=body_data)
+        return await self.client.call_api(next_page_endpoint, 'POST', headers=self.headers, data=body_data, timeout=self.timeout)
 
-    def get_token(self):
+    async def get_token(self):
         auth_data = dict()
         response_dict= dict()
         auth_data['id'] = self.app_id
         auth_data['secret'] = self.secret_key
 
         try:
-            response = self.client.call_api(self.AUTH_ENDPOINT, 'POST', headers=self.headers, data=auth_data)
+            response = await self.client.call_api(self.AUTH_ENDPOINT, 'POST', headers=self.headers, data=auth_data, timeout=self.timeout)
             
             response_dict['code'] = response.code
             response_text = json.loads(response.read())

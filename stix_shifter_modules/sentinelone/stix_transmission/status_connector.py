@@ -1,6 +1,6 @@
 import json
 import time
-from requests.exceptions import ConnectionError
+from aiohttp.client_exceptions import ClientConnectionError
 from stix_shifter_utils.modules.base.stix_transmission.\
     base_status_connector import BaseStatusConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
@@ -25,7 +25,7 @@ class StatusConnector(BaseStatusConnector):
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         """
         get query status
         :param queryId
@@ -35,7 +35,7 @@ class StatusConnector(BaseStatusConnector):
             response_dict = {}
             return_obj = {}
 
-            response = self.api_client.get_search_status(search_id)
+            response = await self.api_client.get_search_status(search_id)
 
             response_code = response.code
             response_txt = response.read()

@@ -1,1 +1,2 @@
-datadog_api_client==1.2.0
+datadog_api_client[async]==2.12.0
+urllib3==1.26.15

@@ -20,10 +20,10 @@ class Connector(BaseSyncConnector):
         self.connector = __name__.split('.')[1]
         self.api_client = APIClient(connection, configuration)
 
-    def ping_connection(self):
+    async def ping_connection(self):
         """Ping the endpoint."""
         return_obj = dict()
-        response = self.api_client.ping_box()
+        response = await self.api_client.ping_box()
         response_code = response.code
         try:
             response_dict = json.loads(response.read())
@@ -40,21 +40,22 @@ class Connector(BaseSyncConnector):
 
         return return_obj
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
         """"delete_query_connection response
         :param search_id: str, search_id"""
         return {"success": True, "search_id": search_id}
 
-    def create_results_connection(self, query, offset, length):
+    async def create_results_connection(self, query, offset, length):
         """"built the response object
         :param query: str, search_id
         :param offset: int,offset value
         :param length: int,length value"""
         length = int(length)
         offset = int(offset)
-        total_record = length + offset
         return_obj = dict()
-        query = """{query} | limit {len}""".format(query=query, len=length)
+        query = """{query} | serialize rn = row_number() | where rn >= {offset} | limit {len}""".format(query=query,
+                                                                                                        offset=offset,
+                                                                                                        len=length)
         matches = re.findall(r'(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+?Z)', query)
         if matches:
             stop_time = datetime.strptime(matches[1].replace('Z', ""), "%Y-%m-%dT%H:%M:%S.%f")
@@ -63,8 +64,7 @@ class Connector(BaseSyncConnector):
             stop_time = datetime.utcnow()
             start_time = stop_time - timedelta(hours=24)
 
-        response = self.api_client.run_search(query, start_time, stop_time,
-                                              total_record)
+        response = await self.api_client.run_search(query, start_time, stop_time)
 
         if response["success"]:
             if response["response"].status == LogsQueryStatus.PARTIAL:
@@ -77,7 +77,7 @@ class Connector(BaseSyncConnector):
             for table in data:
                 df = pd.DataFrame(data=table.rows, columns=table.columns)
                 return_obj = {"success": True, "data": df.astype(str).to_dict(orient='records')}
-                return_obj['data'] = return_obj['data'][offset:total_record]
+                return_obj['data'] = return_obj['data']
 
         else:
             if isinstance(response["error"], ODataV4Format):

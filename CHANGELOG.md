@@ -16,6 +16,184 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
+## 5.3.0 (2023-05-15)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+*  SDO connector cleanup and table of mappings [#1484](https://github.com/opencybersecurityalliance/stix-shifter/pull/1484)
+*  error_test 2queries [#1483](https://github.com/opencybersecurityalliance/stix-shifter/pull/1483)
+*  DShield connector [#1443](https://github.com/opencybersecurityalliance/stix-shifter/pull/1443)
+*  RecordedFuture connector [#1462](https://github.com/opencybersecurityalliance/stix-shifter/pull/1462)
+*  Cisco Secure Malware Analytics (formerly Threat Grid) Connector [#1460](https://github.com/opencybersecurityalliance/stix-shifter/pull/1460)
+*  Virus total connector [#1458](https://github.com/opencybersecurityalliance/stix-shifter/pull/1458)
+*  ThreatQ connector [#1461](https://github.com/opencybersecurityalliance/stix-shifter/pull/1461)
+*  Add Intezer connector [#1457](https://github.com/opencybersecurityalliance/stix-shifter/pull/1457)
+*  to_stix_map validator [#1469](https://github.com/opencybersecurityalliance/stix-shifter/pull/1469)
+*  Alienvault OpenThreatExchange connector [#1442](https://github.com/opencybersecurityalliance/stix-shifter/pull/1442)
+*  Adding new graph alert resource support in Graph security module [#1439](https://github.com/opencybersecurityalliance/stix-shifter/pull/1439)
+opencybersecurityalliance/stix-shifter/pull/1448)
+*  Add AbuseIPDB Connector [#1441](https://github.com/opencybersecurityalliance/stix-shifter/pull/1441)
+
+### Fixes:
+
+*  set alert options default value to false [#1481](https://github.com/opencybersecurityalliance/stix-shifter/pull/1481)
+*  Updated Config changes for GCP Chronicle for develop branch [#1476](https://github.com/opencybersecurityalliance/stix-shifter/pull/1476)
+*  QRadar - Remove Zero Values from IP and Mac Results [#1468](https://github.com/opencybersecurityalliance/stix-shifter/pull/1468)
+*  Update stix2.1 mapping files in azure sentinel module [#1472](https://github.com/opencybersecurityalliance/stix-shifter/pull/1472)
+*  Elastic-ecs: update dialect attributes with `.keyword` [#1474](https://github.com/opencybersecurityalliance/stix-shifter/pull/1474)
+*  fix error_test transform_query [#1470](https://github.com/opencybersecurityalliance/stix-shifter/pull/1470)
+*  mapping fixes for Microsoft Graph Security [#1420](https://github.com/opencybersecurityalliance/stix-shifter/pull/1420)
+*  Added timeout for API client calls [#1459](https://github.com/opencybersecurityalliance/stix-shifter/pull/1459)
+*  Elastic-ecs mapping: consolidate `x-ecs-container` attributes into the `x-oca-asset` object [#1448](https://github.com/
+*  Elastic-ecs: Patch observer mapping to `x-oca-asset` object [#1464](https://github.com/opencybersecurityalliance/stix-shifter/pull/1464)
+*  enable observer data in transmit [#1453](https://github.com/opencybersecurityalliance/stix-shifter/pull/1453)
+*  Fix proxy create_results_connection method [#1463](https://github.com/opencybersecurityalliance/stix-shifter/pull/1463)
+*  Elastic-ecs: consolidate asset identifier [#1477](https://github.com/opencybersecurityalliance/stix-shifter/pull/1477)
+
+### Dependency update:
+
+*  Added urllib3 1.26.15 to connector requirements [#1482](https://github.com/opencybersecurityalliance/stix-shifter/pull/1482)
+*  Bump flask from 2.3.1 to 2.3.2 in /stix_shifter [#1454](https://github.com/opencybersecurityalliance/stix-shifter/pull/1454)
+
+--------------------------------------
+
+## 5.2.1 (2023-05-01)
+
+### Dependency update:
+
+*  set urllib3 library requirement [#1449](https://github.com/opencybersecurityalliance/stix-shifter/pull/1449)
+
+--------------------------------------
+
+## 5.2.0 (2023-04-28)
+
+### Breaking changes:
+
+*  Change QRadar domain name mapping [#1342](https://github.com/opencybersecurityalliance/stix-shifter/pull/1342)
+
+### Deprecations:
+
+### Changes:
+
+*  update table of mappings for MS Graph, Elastic ECS, Microsoft Defender [#1445](https://github.com/opencybersecurityalliance/stix-shifter/pull/1445)
+*  Elastic-ecs mapping improvements for network traffic attributes [#1410](https://github.com/opencybersecurityalliance/stix-shifter/pull/1410)
+*  Update Reversinglabs connector [#1436](https://github.com/opencybersecurityalliance/stix-shifter/pull/1436)
+*  Documentation updates [#1435](https://github.com/opencybersecurityalliance/stix-shifter/pull/1435)
+*  Correct network-traffic mappings for elastic_ecs [#1430](https://github.com/opencybersecurityalliance/stix-shifter/pull/1430)
+*  Msatp with alerts refactor [#1404](https://github.com/opencybersecurityalliance/stix-shifter/pull/1404)
+*  MSATP async token, removed ADAL lib [#1428](https://github.com/opencybersecurityalliance/stix-shifter/pull/1428)
+*  Cleaning up from requests lib [#1429](https://github.com/opencybersecurityalliance/stix-shifter/pull/1429)
+*  IBM Verify Privilege Vault api path changes [#1424](https://github.com/opencybersecurityalliance/stix-shifter/pull/1424)
+*  Added async to Azure sentinal [#1419](https://github.com/opencybersecurityalliance/stix-shifter/pull/1419)
+*  Change config labels to sentence case [#1417](https://github.com/opencybersecurityalliance/stix-shifter/pull/1417)
+*  Update README for IBM Verify Privilege Vault (Secret Server) connector  [#1402](https://github.com/opencybersecurityalliance/stix-shifter/pull/1402)
+*  hard coded base uri in microsoft graph security connector [#1406](https://github.com/opencybersecurityalliance/stix-shifter/pull/1406)
+*  Add metadata CLI and documenations [#1396](https://github.com/opencybersecurityalliance/stix-shifter/pull/1396)
+*  Pagination handled for azure_log_analytics [#1398](https://github.com/opencybersecurityalliance/stix-shifter/pull/1398)
+*  Elastic ecs module readme [#1400](https://github.com/opencybersecurityalliance/stix-shifter/pull/1400)
+
+### Fixes:
+
+*  fix url value property in azure mapping [#1444](https://github.com/opencybersecurityalliance/stix-shifter/pull/1444)
+*  Okta Error Code Mapping Changes for develop Branch [#1434](https://github.com/opencybersecurityalliance/stix-shifter/pull/1434)
+*  Fix: Graph API fails if used without lamda operators on collection type properties [#1421](https://github.com/opencybersecurityalliance/stix-shifter/pull/1421)
+*  Fix for Athena error handling, error log printing in tranlsation [#1415](https://github.com/opencybersecurityalliance/stix-shifter/pull/1415)
+*  Fixed error handling for darktrace on raw html response [#1416](https://github.com/opencybersecurityalliance/stix-shifter/pull/1416)
+
+### Dependency update:
+
+*  Bump flask from 2.2.3 to 2.3.1 in /stix_shifter [#1440](https://github.com/opencybersecurityalliance/stix-shifter/pull/1440)
+*  Bump json-fix from 0.5.1 to 0.5.2 in /stix_shifter [#1426](https://github.com/opencybersecurityalliance/stix-shifter/pull/1426)
+*  Bump aioboto3 from 11.0.1 to 11.1.0 in /stix_shifter [#1411](https://github.com/opencybersecurityalliance/stix-shifter/pull/1411)
+*  Bump pyopenssl from 23.1.0 to 23.1.1 in /stix_shifter [#1405](https://github.com/opencybersecurityalliance/stix-shifter/pull/1405)
+*  Bump pyopenssl from 23.0.0 to 23.1.0 in /stix_shifter [#1401](https://github.com/opencybersecurityalliance/stix-shifter/pull/1401)
+
+--------------------------------------
+
+## 5.1.1 (2023-03-21)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+* Added process:x_unique_id property to Splunk [#1389](https://github.com/opencybersecurityalliance/stix-shifter/pull/1389)
+* get configs [#1392](https://github.com/opencybersecurityalliance/stix-shifter/pull/1392)
+* GitHub action update [#1385](https://github.com/opencybersecurityalliance/stix-shifter/pull/1385)
+
+### Fixes:
+
+* Added metadata changes for GCP Chronicle [#1393](https://github.com/opencybersecurityalliance/stix-shifter/pull/1393)
+* Splunk: Fix MAC address to display in proper STIX format [#1386](https://github.com/opencybersecurityalliance/stix-shifter/pull/1386)
+* Updated custom properties mapping in Okta with 'x_' prefix [#1387](https://github.com/opencybersecurityalliance/stix-shifter/pull/1387)
+* Await async fixes [#1391](https://github.com/opencybersecurityalliance/stix-shifter/pull/1391)
+* fix json loads of data arg in stix-shifter CLI [#1394](https://github.com/opencybersecurityalliance/stix-shifter/pull/1394)
+
+### Dependency update:
+
+* Bump aiohttp-retry from 2.4.0 to 2.8.3 in /stix_shifter [#1374](https://github.com/opencybersecurityalliance/stix-shifter/pull/1374)
+* Consolidate `network-traffic`, `user-account`, `file` objects in the elastic_ecs connector mapping [#1378](https://github.com/opencybersecurityalliance/stix-shifter/pull/1378)
+* Fix #1375, optimize get_pagesize() function call, and add testcases  [#1384](https://github.com/opencybersecurityalliance/stix-shifter/pull/1384)
+* Async changes for Okta UDI connector [#1383](https://github.com/opencybersecurityalliance/stix-shifter/pull/1383)
+
+--------------------------------------
+
+## 5.1.0 (2023-03-08)
+
+### Breaking changes:
+
+* Support for asynchronous API calls in transmission modules [#1038](https://github.com/opencybersecurityalliance/stix-shifter/pull/1038)
+
+### Deprecations:
+
+* Removed boto3 dependency in favor of aioboto3
+
+### Changes:
+
+* Add Okta table of mappings and update elastic ECS [#1372](https://github.com/opencybersecurityalliance/stix-shifter/pull/1372)
+* Okta connector [#1323](https://github.com/opencybersecurityalliance/stix-shifter/pull/1323)
+* support large query with elastic search_after pagination [#1299](https://github.com/opencybersecurityalliance/stix-shifter/pull/1299)
+* cybereason quick ping [#1350](https://github.com/opencybersecurityalliance/stix-shifter/pull/1350)
+* aiogoogle module used for async changes in gcp_chronicle [#1331](https://github.com/opencybersecurityalliance/stix-shifter/pull/1331)
+* base release5.0.x - Cookies are handled for cybereason asynchronous c… [#1313](https://github.com/opencybersecurityalliance/stix-shifter/pull/1313)
+* Paloalto - changes done to map process.x_unique_id with data source field actor_process_instance_id [#1318](https://github.com/opencybersecurityalliance/stix-shifter/pull/1318)
+* Added cookie support [#1310](https://github.com/opencybersecurityalliance/stix-shifter/pull/1310)
+* Removed language common fields [#984](https://github.com/opencybersecurityalliance/stix-shifter/pull/984)
+* Updated RHACS connector to support self signed certificate authentication [#1174](https://github.com/opencybersecurityalliance/stix-shifter/pull/1174)
+
+### Fixes:
+
+* QRadarEpochToTimestamp for exponential notation [#1352](https://github.com/opencybersecurityalliance/stix-shifter/pull/1352)
+* Remove the x-ecs-process and x-ecs-file entities from elastic_ecs mapping [#1335](https://github.com/opencybersecurityalliance/stix-shifter/pull/1335)
+* azure_log_analytics: fix translation of IN operator [#1355](https://github.com/opencybersecurityalliance/stix-shifter/pull/1355)
+* Build warnings fix [#1347](https://github.com/opencybersecurityalliance/stix-shifter/pull/1347)
+* Updating file hash mapping for Athena OCSF support [#1345](https://github.com/opencybersecurityalliance/stix-shifter/pull/1345)
+* upddate mapping for Reaqta [#1326](https://github.com/opencybersecurityalliance/stix-shifter/pull/1326)
+* update mapping tables to show both comparision and observation AND OR operators [#1348](https://github.com/opencybersecurityalliance/stix-shifter/pull/1348)
+* Update OCSF network traffic mappings [#1332](https://github.com/opencybersecurityalliance/stix-shifter/pull/1332)
+* fix mapping error [#1320](https://github.com/opencybersecurityalliance/stix-shifter/pull/1320)
+* Fix Reqata SITX 2.1 mappings for image_ref [#1291](https://github.com/opencybersecurityalliance/stix-shifter/pull/1291)
+* elastic_ecs: remove unneeded ValueToList transformer from event.category mapping [#1305](https://github.com/opencybersecurityalliance/stix-shifter/pull/1305)
+* elastic_ecs: fix STIX 2.1 results translation [#1306](https://github.com/opencybersecurityalliance/stix-shifter/pull/1306)
+* Added aiohttp ssl certificate proper handling [#1308](https://github.com/opencybersecurityalliance/stix-shifter/pull/1308)
+* Auth header serialize fix, response wraper fixes [#1298](https://github.com/opencybersecurityalliance/stix-shifter/pull/1298)
+
+### Dependency update:
+
+* Bump aioboto3 from 10.4.0 to 11.0.1 in /stix_shifter [#1368](https://github.com/opencybersecurityalliance/stix-shifter/pull/1368)
+* Bump aiomysql from 0.0.21 to 0.1.1 in /stix_shifter [#1369](https://github.com/opencybersecurityalliance/stix-shifter/pull/1369)
+* Bump boto3 from 1.26.78 to 1.26.84 in /stix_shifter [#1363](https://github.com/opencybersecurityalliance/stix-shifter/pull/1363)
+* Bump boto3 from 1.26.74 to 1.26.78 in /stix_shifter [#1344](https://github.com/opencybersecurityalliance/stix-shifter/pull/1344)
+* Bump boto3 from 1.26.64 to 1.26.74 in /stix_shifter [#1337](https://github.com/opencybersecurityalliance/stix-shifter/pull/1337)
+* Bump boto3 from 1.26.55 to 1.26.64 in /stix_shifter [#1317](https://github.com/opencybersecurityalliance/stix-shifter/pull/1317)
+
+--------------------------------------
+
 ## 4.6.0 (2023-01-24)
 
 ### Breaking changes:

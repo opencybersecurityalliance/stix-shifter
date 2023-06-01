@@ -1,38 +1,27 @@
 import json
 from stix_shifter_modules.datadog.stix_transmission.api_client import APIClient
-from stix_shifter_utils.modules.base.stix_transmission.base_sync_connector import BaseSyncConnector
+from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 
 
-class Connector(BaseSyncConnector):
+class Connector(BaseJsonSyncConnector):
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
 
-    def ping_connection(self):
-        try:
-            response = self.api_client.ping_data_source()
-            # Construct a response object
-            return_obj = dict()
-            if response["code"] == 200:
-                return_obj['success'] = True
-            else:
-                ErrorResponder.fill_error(return_obj, response, ['message'], connector=self.connector)
-            return return_obj
-        except Exception as err:
-            self.logger.error('error when pinging datasource {}:'.format(err))
-            raise
+    async def ping_connection(self):
+        return await self.api_client.ping_data_source()
 
-    def create_results_connection(self, query_expr, offset, length):
+    async def create_results_connection(self, query_expr, offset, length):
         payload = json.loads(query_expr)
         if payload['source'] == 'events':
-            return self.get_events(payload, offset, length)
+            return await self.get_events(payload, offset, length)
         else:
-            return self.get_processes(payload, offset, length)
+            return await self.get_processes(payload, offset, length)
 
-    def get_events(self, query_expr, offset, length):
+    async def get_events(self, query_expr, offset, length):
         length = int(length)
         offset = int(offset)
 
@@ -42,7 +31,7 @@ class Connector(BaseSyncConnector):
             # Separate out api supported url params
             query_expr, filter_attr = Connector.modify_query_expr(query_expr['query'])
             # Grab the response, extract the response code, and convert it to readable json
-            response_dict = self.api_client.get_search_results(query_expr)
+            response_dict = await self.api_client.get_search_results(query_expr)
             event_list = []
             return_obj = dict()
             if response_dict["code"] == 200:
@@ -50,7 +39,7 @@ class Connector(BaseSyncConnector):
                 response_list = response
                 page = 1
                 while len(response) == 1000 and total_records > len(response_list):
-                    response = self.api_client.get_search_results(query_expr, page=page)
+                    response = await self.api_client.get_search_results(query_expr, page=page)
                     response = response["data"]["events"]
                     response_list = response_list + response
                     page = page + 1
@@ -73,7 +62,7 @@ class Connector(BaseSyncConnector):
             self.logger.error(traceback.print_stack())
             raise
 
-    def get_processes(self, query_expr, offset, length):
+    async def get_processes(self, query_expr, offset, length):
         length = int(length)
         offset = int(offset)
 
@@ -83,7 +72,7 @@ class Connector(BaseSyncConnector):
             # Separate out api supported url params
             query_expr, filter_attr = Connector.modify_query_expr(query_expr['query'])
             # Grab the response, extract the response code, and convert it to readable json
-            response_dict = self.api_client.get_processes_results()
+            response_dict = await self.api_client.get_processes_results()
             process_list = []
             return_obj = dict()
             if response_dict["code"] == 200:
@@ -91,7 +80,7 @@ class Connector(BaseSyncConnector):
                 response_list = response
                 page = 1
                 while len(response) == 1000 and total_records > len(response_list):
-                    response = self.api_client.get_processes_results()
+                    response = await self.api_client.get_processes_results()
                     response = response["data"]["data"]
                     response_list = response_list + response
                     page = page + 1

@@ -1,10 +1,14 @@
 from .guard_utils import GuardApiClient
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import ResponseWrapper
-from stix_shifter_utils.utils import logger
-from requests.models import Response
 import json
 import base64
 
+class ClientResponse:
+    message = None
+    def read(self):
+        return self._content
+
+    def __repr__(self):
+        return self.message
 
 class APIClient():
 
@@ -19,13 +23,13 @@ class APIClient():
         # TODO switch on cert_verify
         # cert_verify = connection.get('selfSignedCert', True)
         cert_verify = connection.get(False)
-        sni = connection.get('sni', None)
         auth = connection.get('auth', None)
         url = "https://" + host + ":" + str(port)
         params = dict()
         params["client_id"] = connection["client_id"]
         params["url"] = url
         params["client_secret"] = connection["client_secret"]
+        params["timeout"] = connection['options'].get('timeout')
         params["config_uname"] = configuration["auth"]["username"]
         params["config_pass"] = configuration["auth"]["password"]
         self.client_aux = GuardApiClient(params,
@@ -34,13 +38,17 @@ class APIClient():
                                          headers,
                                          url_modifier_function,
                                          cert_verify,
-                                         sni,
                                          auth
                                          )
 
-    def ping_data_source(self):
+    async def get_token(self):
+        await self.client_aux.get_token()
+
+
+    async def ping_data_source(self):
         # Pings the data source
-        if self.client_aux.validate_response(self.client_aux.request_token(), "", False):
+        token = await self.client_aux.request_token()
+        if self.client_aux.validate_response(token, "", False):
             return {"code": 200, "success": True}
         else:
             return {"success": False}
@@ -52,7 +60,7 @@ class APIClient():
     def get_status(self, search_id):
         # It is a synchronous connector.
         # return {"code": 200, "status": "COMPLETED"}
-        respObj = Response()
+        respObj = ClientResponse()
         respObj.code = "200"
         respObj.error_type = ""
         respObj.status_code = 200
@@ -60,15 +68,15 @@ class APIClient():
                   '", "progress":"Completed", "status":"COMPLETED", "data": {"message":"Completed for the search id ' \
                   'provided."}} '
         respObj._content = bytes(content, 'utf-8')
-        return ResponseWrapper(respObj)
+        return respObj
 
-    def delete_search(self, search_id):
+    async def delete_search(self, search_id):
         # Optional since this may not be supported by the data source API
         # Delete the search
         return {"code": 200, "success": True}
 
     def create_search(self, query_expression):
-        respObj = Response()
+        respObj = ClientResponse()
         respObj.code = "401"
         respObj.error_type = ""
         respObj.status_code = 401
@@ -93,7 +101,7 @@ class APIClient():
             respObj.error_type = "Unauthorized: Access token could not be generated."
             respObj.message = "Unauthorized: Access token could not be generated."
         #
-        return ResponseWrapper(respObj)
+        return respObj
 
     def build_searchId(self):
         # It should be called only ONCE when transmit query is called
@@ -117,7 +125,7 @@ class APIClient():
         # print(s_id)
         return s_id
 
-    def get_search_results(self, search_id, index_from=None, fetch_size=None):
+    async def get_search_results(self, search_id, index_from=None, fetch_size=None):
         # Sends a GET request from guardium
         # This function calls Guardium to get data
 
@@ -127,10 +135,10 @@ class APIClient():
             indx = int(index_from) + 1
             fsize = int(fetch_size) + 1
             if "reportName" in self.query:
-                response = self.client_aux.handle_report(self.query, indx, fsize)
+                response = await self.client_aux.handle_report(self.query, indx, fsize)
             if "category" in self.query:
                 # print("TADA")
-                response = self.client_aux.handle_qs(self.query, indx, fsize)
+                response = await self.client_aux.handle_qs(self.query, indx, fsize)
             status_code = response.code
             # Though the connector gets the authorization token just before fetching the actual result there is a
             # possibility that the token returned is only valid for a second and response_code = 401 is returned.
@@ -140,9 +148,10 @@ class APIClient():
                 error_code = error_msg.get('error', None)
                 if status_code == 401 and error_code == "invalid_token":
                     self.authorization = None
-                    if self.client_aux.get_token():
-                        response = self.client_aux.handle_report(self.query, indx, fetch_size)
-                        status_code = response.response.status_code
+                    token = await self.client_aux.get_token()
+                    if token:
+                        response = await self.client_aux.handle_report(self.query, indx, fetch_size)
+                        status_code = response.code
                     else:
                         raise ValueError(3002, "Authorization Token not received ")
 

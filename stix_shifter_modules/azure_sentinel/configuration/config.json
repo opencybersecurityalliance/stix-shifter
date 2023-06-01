@@ -2,12 +2,7 @@
     "connection": {
         "type": {
             "displayName": "Microsoft Graph Security",
-            "group": "azure"
-        },
-        "host": {
-            "type": "text",
-            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$",
-            "default": "graph.microsoft.com"
+            "group": "microsoft"
         },
         "port": {
             "type": "number",
@@ -19,13 +14,19 @@
             "type": "link",
             "default": "data-sources-sentinel.html"
         },
-        "sni": {
-            "type": "text",
-            "optional": true
-        },
         "selfSignedCert": {
             "type": "password",
             "optional": true
+        },
+        "options": {
+            "alert": {
+                "type": "boolean",
+                "default": false
+            },
+            "alertV2": {
+                "type": "boolean",
+                "default": false
+            }
         }
     },
     "configuration": {

@@ -1,9 +1,11 @@
-import json
 import base64
-from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
+
 from stix_shifter_modules.qradar.entry_point import EntryPoint
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
+from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
+from stix_shifter_utils.utils.async_utils import run_in_thread
+from stix_shifter_modules.qradar.stix_transmission.results_connector import ResultsConnector
 
 MODULE = 'qradar'
 RESULTS = 'results'
@@ -48,7 +50,7 @@ class TestTransform(object):
     def test_common_prop(self):
         data = [{"starttime": EPOCH_START, "endtime": EPOCH_END, "eventcount": 5}]
 
-        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps(data))
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
 
         assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
@@ -99,10 +101,12 @@ class TestTransform(object):
         
         data = [{"sourceip": source_ip, "destinationip": destination_ip, "url": url, "eventpayload": payload, "username": user_id, "protocol": 'TCP',
                 "sourceport": "3000", "destinationport": 2000, "filename": file_name, "filehash": filehash, "md5hash": md5hash, "sha1hash": sha1hash, "sha256hash": sha256hash,
-                "domainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac, "Image": process_image, "ParentImage": process_parent_image, 
+                "dnsdomainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac, "Image": process_image, "ParentImage": process_parent_image, 
                 "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, "LoadedImage": process_loaded_image }]
 
-        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps(data))
+        ResultsConnector.modify_result(data)
+
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
 
         assert(result_bundle['type'] == 'bundle')
 
@@ -228,7 +232,7 @@ class TestTransform(object):
                 "high_level_category_name": high_level_category_name, "eventpayload": payload, "logsourcename": logsourcename, "username": username,
                 "UrlHost": domain, "ObjectName": object_name, "RegistryKey": registry_key, "RegistryValueName": registry_value_name }]
 
-        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps(data))
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
 
         observed_data = result_bundle['objects'][1]
         objects = observed_data['objects']
@@ -380,7 +384,7 @@ class TestTransform(object):
                 "eventseverity": 4, "magnitude": 8, "devicetypename": "device type name", "devicetype": 15, 
                 "rulenames": ["one", "two"], "eventcount": 25, "starttime": EPOCH_START, "endtime": EPOCH_END}]
 
-        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps(data))
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
 
         observed_data = result_bundle['objects'][1]
         objects = observed_data['objects']
@@ -406,7 +410,7 @@ class TestTransform(object):
         data = [{"logsourceid": 126, "qid": None,
                 "identityip": "0.0.0.0", "logsourcename": "someLogSourceName"}]
 
-        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps(data))
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
 
         observed_data = result_bundle['objects'][1]
         objects = observed_data['objects']
@@ -417,21 +421,21 @@ class TestTransform(object):
         assert 'qid' not in custom_object.keys()
 
     def test_custom_mapping(self):
-        data_source_string = json.dumps(DATA_SOURCE)
+        data_source_string = DATA_SOURCE
         data = [{
             "custompayload": "SomeBase64Payload",
             "url": "www.example.com",
             "filename": "somefile.exe",
             "username": "someuserid2018"
         }]
-        data_string = json.dumps(data)
+        data_string = data
 
         options = {
             "mapping": {
                 "to_stix_map": {
                     "username": {"key": "user-account.user_id"},
-                    "identityip": {"key": "x_ibm_ariel.identity_ip", "cybox": False},
-                    "qidname": {"key": "x_ibm_ariel.qid_name", "cybox": False},
+                    "identityip": {"key": "x_ibm_ariel.identity_ip"},
+                    "qidname": {"key": "x_ibm_ariel.qid_name"},
                     "url": {"key": "url.value"},
                     "custompayload": {"key": "artifact.payload_bin"}
                 }
@@ -481,7 +485,7 @@ class TestTransform(object):
         assert(objects == {})
 
     def test_file_hash_mapping_with_type(self):
-        data_source_string = json.dumps(DATA_SOURCE)
+        data_source_string = DATA_SOURCE
 
         data = [{
             "filename": "somefile.exe",
@@ -491,7 +495,7 @@ class TestTransform(object):
             "logsourceid": 65
         }]
 
-        data_string = json.dumps(data)
+        data_string = data
 
         translation = stix_translation.StixTranslation()
         result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
@@ -527,9 +531,9 @@ class TestTransform(object):
         source_mac = "00-00-5E-00-53-00"
         destination_mac = "00-00-5A-00-55-01"
         data = [{"sourceip": source_ip, "destinationip": destination_ip, "url": url, "base64_payload": payload, "username": user_id, "protocol": 'TCP',
-                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "domainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}]
+                "sourceport": "3000", "destinationport": 2000, "filename": file_name, "dnsdomainname": url, "sourcemac": source_mac, "destinationmac": destination_mac}]
         
-        result_bundle = entry_point.translate_results(json.dumps(DATA_SOURCE), json.dumps(data))
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
         
         assert(result_bundle['type'] == 'bundle')
 
@@ -549,7 +553,7 @@ class TestTransform(object):
         assert('file' not in obj_keys)
 
     def test_filepath_with_directory_transformer(self):
-        data_source_string = json.dumps(DATA_SOURCE)
+        data_source_string = DATA_SOURCE
 
         data = [{
             "filehash": "unknownTypeHash",
@@ -559,7 +563,7 @@ class TestTransform(object):
             "filepath": "/unix/files/system/testfile.txt"
         }]
 
-        data_string = json.dumps(data)
+        data_string = data
         options = {}
 
         translation = stix_translation.StixTranslation()
@@ -576,7 +580,7 @@ class TestTransform(object):
         assert directory_object_path == "/unix/files/system"
     
     def test_unmapped_fallback(self):
-        data_source_string = json.dumps(DATA_SOURCE)
+        data_source_string = DATA_SOURCE
 
         data = [{
             "sourceip": "127.0.0.1",
@@ -591,7 +595,7 @@ class TestTransform(object):
             "unmapped4": ""
         }]
 
-        data_string = json.dumps(data)
+        data_string = data
         options = {}
 
         translation = stix_translation.StixTranslation()
@@ -612,3 +616,58 @@ class TestTransform(object):
         assert(custom_objects['unmapped2'] == "value2")
         assert 'unmapped3' not in custom_objects.keys()
         assert 'unmapped4' not in custom_objects.keys()
+
+    def test_epoch_exponent_notation(self):
+
+        data = [{
+            "qidname": "Information Message",
+            "eventcount": "12912.0",
+            "starttime": "0.001531169112E12",
+            "endtime": "0.001531169254E12"
+        }]
+
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
+        observed_data = result_bundle['objects'][1]
+
+        assert(observed_data['first_observed'] == START_TIMESTAMP)
+        assert(observed_data['last_observed'] == END_TIMESTAMP)
+
+        objects = observed_data['objects']
+        finding = TestTransform.get_first_of_type(objects.values(), 'x-ibm-finding')
+
+        assert(finding['start'] == START_TIMESTAMP)
+        assert(finding['end'] == END_TIMESTAMP)
+
+    def test_zero_value_filtering(self):
+
+        data = [{
+            "qidname": "Information Message",
+            "sourceip": "0.0.0.0",
+            "destinationip": "0.0.0.0",
+            "sourcemac": "00-00-00-00-00-00",
+            "destinationmac": "00-00-00-00-00-00",
+            "identityip": "0.0.0.0",
+            "sourcev6": "0:0:0:0:0:0:0:0",
+            "destinationv6": "0:0:0:0:0:0:0:0",
+            "sourceport": "1234",
+            "destinationport": "1234"
+        }]
+
+        ResultsConnector.modify_result(data)
+
+        result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
+        observed_data = result_bundle['objects'][1]
+        objects = observed_data['objects']
+
+        ipv4_addr = TestTransform.get_first_of_type(objects.values(), 'ipv4-addr')
+        assert(ipv4_addr is None) 
+        ipv6_addr = TestTransform.get_first_of_type(objects.values(), 'ipv6-addr')
+        assert(ipv6_addr is None)
+        mac_addr = TestTransform.get_first_of_type(objects.values(), 'mac-addr')
+        assert(mac_addr is None)
+        x_oca_event = TestTransform.get_first_of_type(objects.values(), 'x-oca-event')
+        assert(x_oca_event['action'] == "Information Message")
+        network_traffic = TestTransform.get_first_of_type(objects.values(), 'network-traffic')
+        assert(network_traffic is not None)
+        assert('src_ref' not in network_traffic)
+        assert('dst_ref' not in network_traffic)

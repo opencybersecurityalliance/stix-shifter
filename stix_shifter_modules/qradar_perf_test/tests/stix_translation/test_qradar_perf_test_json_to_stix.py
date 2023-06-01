@@ -1,4 +1,3 @@
-import json
 import base64
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_modules.qradar_perf_test.entry_point import EntryPoint
@@ -380,21 +379,21 @@ class TestTransform(object):
         assert 'qid' not in custom_object.keys()
 
     def test_custom_mapping(self):
-        data_source_string = json.dumps(DATA_SOURCE)
+        data_source_string = DATA_SOURCE
         data = [{
             "custompayload": "SomeBase64Payload",
             "url": "www.example.com",
             "filename": "somefile.exe",
             "username": "someuserid2018"
         }]
-        data_string = json.dumps(data)
+        data_string = data
 
         options = {
             "mapping": {
                 "to_stix_map": {
                     "username": {"key": "user-account.user_id"},
-                    "identityip": {"key": "x_ibm_ariel.identity_ip", "cybox": False},
-                    "qidname": {"key": "x_ibm_ariel.qid_name", "cybox": False},
+                    "identityip": {"key": "x_ibm_ariel.identity_ip"},
+                    "qidname": {"key": "x_ibm_ariel.qid_name"},
                     "url": {"key": "url.value"},
                     "custompayload": {"key": "artifact.payload_bin"}
                 }
@@ -444,7 +443,7 @@ class TestTransform(object):
         assert(objects == {})
 
     def test_file_hash_mapping_with_type(self):
-        data_source_string = json.dumps(DATA_SOURCE)
+        data_source_string = DATA_SOURCE
 
         data = [{
             "filename": "somefile.exe",
@@ -454,7 +453,7 @@ class TestTransform(object):
             "logsourceid": 65
         }]
 
-        data_string = json.dumps(data)
+        data_string = data
 
         translation = stix_translation.StixTranslation()
         result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
@@ -480,48 +479,8 @@ class TestTransform(object):
         assert(hashes['SHA-1'] == 'someSHA-1hash')
         assert(hashes['MD5'] == 'someMD5hash')
 
-    def test_hashtype_lookup_with_matching_logsource_id(self):
-        data_source_string = json.dumps(DATA_SOURCE)
-
-        data = [{
-            "sha256hash": "someSHA-256hash",
-            "filehash": "unknownTypeHash",
-            "logsourceid": 65
-        }]
-
-        data_string = json.dumps(data)
-
-        options = {
-            "hash_options": {
-                "generic_name": "filehash",
-                "log_source_id_map": {"2345": "sha-256", "65": "md5"}
-            }
-        }
-
-        translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
-
-        result_bundle_objects = result_bundle['objects']
-        observed_data = result_bundle_objects[1]
-
-        assert('objects' in observed_data)
-        objects = observed_data['objects']
-
-        file_object = TestTransform.get_first_of_type(objects.values(), 'file')
-        assert(file_object is not None), 'file object not found'
-        assert('hashes' in file_object), 'file object did not contain hashes'
-        assert('type' in file_object), 'file object did not contain type'
-        assert(file_object['type'] == 'file'), 'file object had the wrong type'
-        hashes = file_object['hashes']
-        assert('SHA-256' in hashes), 'SHA-256 hash not included'
-        assert('MD5' in hashes), 'MD5 hash not included'
-        assert('SHA-1' not in hashes), 'SHA-1 hash included'
-        assert(hashes['SHA-256'] == 'someSHA-256hash')
-        assert(hashes['MD5'] == 'unknownTypeHash')
-        assert('UNKNOWN' not in hashes), 'UNKNOWN hash included'
-
     def test_hashtype_lookup_without_matching_logsource_id(self):
-        data_source_string = json.dumps(DATA_SOURCE)
+        data_source_string = DATA_SOURCE
 
         data = [{
             "sha256hash": "someSHA-256hash",
@@ -529,7 +488,7 @@ class TestTransform(object):
             "logsourceid": 123
         }]
 
-        data_string = json.dumps(data)
+        data_string = data
 
         options = {
             "hash_options": {
@@ -561,7 +520,7 @@ class TestTransform(object):
         assert(hashes['UNKNOWN'] == 'unknownTypeHash')
 
     def test_hashtype_lookup_without_matching_generic_hash_name(self):
-        data_source_string = json.dumps(DATA_SOURCE)
+        data_source_string = DATA_SOURCE
 
         data = [{
             "filehash": "unknownTypeHash",
@@ -570,7 +529,7 @@ class TestTransform(object):
             "filename": "someFile.exe"
         }]
 
-        data_string = json.dumps(data)
+        data_string = data
         options = {
             "hash_options": {
                 "generic_name": "someUnknownHashName",
@@ -594,7 +553,7 @@ class TestTransform(object):
         assert(hashes['UNKNOWN'] == 'unknownTypeHash')
 
     def test_hashtype_lookup_without_hash_options(self):
-        data_source_string = json.dumps(DATA_SOURCE)
+        data_source_string = DATA_SOURCE
 
         data = [{
             "filehash": "unknownTypeHash",
@@ -604,7 +563,7 @@ class TestTransform(object):
             "filepath": "C:/my/file/path/someFile.exe"
         }]
 
-        data_string = json.dumps(data)
+        data_string = data
         options = {}
 
         translation = stix_translation.StixTranslation()
@@ -623,28 +582,6 @@ class TestTransform(object):
         directory_object = TestTransform.get_first_of_type(objects.values(), 'directory')
         directory_object_path = directory_object.get('path', '')
         assert directory_object_path == "C:/my/file/path"
-
-    def test_hashtype_lookup_by_length(self):
-        data_source_string = json.dumps(DATA_SOURCE)
-        hashes = {'SHA-256': '05503abea7b8ac0a01db3cb35179242c0c1d43c7002c51e5982318244bdcaba9',
-                  'SHA-1': '05503abea7b8ac0a01db3cb35179242c0c1d43c7',
-                  'MD5': '05503abea7b8ac0a01db3cb35179242c',
-                  'UNKNOWN': '05503abea'}
-        for key, value in hashes.items():
-            data = [{'filehash': value}]
-            data_string = json.dumps(data)
-            options = {}
-            translation = stix_translation.StixTranslation()
-            result_bundle = translation.translate(MODULE, RESULTS, data_source_string, data_string, options)
-
-            result_bundle_objects = result_bundle['objects']
-            observed_data = result_bundle_objects[1]
-            objects = observed_data['objects']
-
-            file_object = TestTransform.get_first_of_type(objects.values(), 'file')
-            hashes = file_object['hashes']
-            assert(key in hashes), "{} hash not included".format(key)
-            assert(hashes[key] == value)
 
     def test_none_empty_values_in_results(self):
         payload = "Payload"
@@ -679,7 +616,7 @@ class TestTransform(object):
         assert('file' not in obj_keys)
 
     def test_filepath_with_directory_transformer(self):
-        data_source_string = json.dumps(DATA_SOURCE)
+        data_source_string = DATA_SOURCE
 
         data = [{
             "filehash": "unknownTypeHash",
@@ -689,7 +626,7 @@ class TestTransform(object):
             "filepath": "/unix/files/system/testfile.txt"
         }]
 
-        data_string = json.dumps(data)
+        data_string = data
         options = {}
 
         translation = stix_translation.StixTranslation()
@@ -706,7 +643,7 @@ class TestTransform(object):
         assert directory_object_path == "/unix/files/system"
     
     def test_unmapped_fallback(self):
-        data_source_string = json.dumps(DATA_SOURCE)
+        data_source_string = DATA_SOURCE
 
         data = [{
             "sourceip": "127.0.0.1",
@@ -721,11 +658,10 @@ class TestTransform(object):
             "unmapped4": ""
         }]
 
-        data_string = json.dumps(data)
         options = {}
 
         translation = stix_translation.StixTranslation()
-        result_bundle = translation.translate('qradar', 'results', data_source_string, data_string, options)
+        result_bundle = translation.translate('qradar', 'results', data_source_string, data, options)
 
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]

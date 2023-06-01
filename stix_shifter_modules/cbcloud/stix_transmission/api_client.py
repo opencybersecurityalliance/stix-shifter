@@ -1,6 +1,6 @@
 import json
 
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 
 DEFAULT_FIELDS = [
     "*",
@@ -22,17 +22,16 @@ class APIClient():
         headers['Accept'] = 'application/json'
         headers['Content-Type'] = 'application/json'
         self.org_key = auth.get('org_key')
-        self.client = RestApiClient(
+        self.client = RestApiClientAsync(
             connection.get('host'),
             connection.get('port'),
             headers,
-            cert_verify=connection.get('selfSignedCert', True),
-            sni=connection.get('sni', None)
+            cert_verify=connection.get('selfSignedCert', True)
         )
         self.timeout = connection['options'].get('timeout')
         self.result_limit = connection['options'].get('result_limit')
 
-    def ping_data_source(self):
+    async def ping_data_source(self):
         """Verifies the data source API is working by sending a GET request to
         https://<server_ip>/api/investigate/v1/orgs/{org_key}/processes/limits
 
@@ -43,9 +42,9 @@ class APIClient():
         500: internal server error
         """
         endpoint = f'api/investigate/v1/orgs/{self.org_key}/processes/limits'
-        return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', timeout=self.timeout)
 
-    def create_search(self, query_expression):
+    async def create_search(self, query_expression):
         """Queries the data source by sending a POST request to
         https://<server_ip>/api/investigate/v2/orgs/{org_key}/processes/search_jobs
 
@@ -65,9 +64,9 @@ class APIClient():
                 'order': 'asc'
             }]
         }
-        return self.client.call_api(endpoint, 'POST', data=json.dumps(data), timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'POST', data=json.dumps(data), timeout=self.timeout)
 
-    def get_search_status(self, job_id):
+    async def get_search_status(self, job_id):
         """ Check the status of the search by sending a GET request to
         https://<server_ip>/api/investigate/v1/orgs/{org_key}/processes/search_jobs/{job_id}
 
@@ -77,9 +76,9 @@ class APIClient():
         500: internal server error
         """
         endpoint = f'api/investigate/v1/orgs/{self.org_key}/processes/search_jobs/{job_id}'
-        return self.client.call_api(endpoint, 'GET', timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', timeout=self.timeout)
 
-    def get_search_results(self, job_id, start=0, rows=100):
+    async def get_search_results(self, job_id, start=0, rows=100):
         """Return the JSON-formatted search results by sending a GET request to
         https://<server_ip>/api/investigate/v2/orgs/{org_key}/processes/search_jobs/{job_id}/results
 
@@ -90,9 +89,9 @@ class APIClient():
         """
         urldata = [("start", start), ("rows", rows)]
         endpoint = f'api/investigate/v2/orgs/{self.org_key}/processes/search_jobs/{job_id}/results'
-        return self.client.call_api(endpoint, 'GET', urldata=urldata, timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'GET', urldata=urldata, timeout=self.timeout)
 
-    def delete_search(self, job_id):
+    async def delete_search(self, job_id):
         """Delete the search by sending a DELETE request to
         https://<server_ip>/api/investigate/v1/orgs/{orgkey}/processes/search_jobs/{job_id}
 
@@ -102,4 +101,4 @@ class APIClient():
         500: internal server error
         """
         endpoint = f'api/investigate/v1/orgs/{self.org_key}/processes/search_jobs/{job_id}'
-        return self.client.call_api(endpoint, 'DELETE', timeout=self.timeout)
+        return await self.client.call_api(endpoint, 'DELETE', timeout=self.timeout)

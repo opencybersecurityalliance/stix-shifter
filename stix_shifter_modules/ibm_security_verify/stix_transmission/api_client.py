@@ -1,18 +1,14 @@
 import json
 from datetime import datetime, timedelta
-from urllib.parse import urlencode
-
-import requests
-from requests.adapters import Response
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import \
-    RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils import logger
+from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
 class APIClient:
 
-    endpoint_start = '/v1.0/events'
-    toeken_endpoint = '/v1.0/endpoint/default/token'
+    endpoint_start = 'v1.0/events'
+    token_endpoint = 'v1.0/endpoint/default/token'
 
     def __init__(self, connection, configuration):
         self.logger = logger.set_logger(__name__)
@@ -22,10 +18,9 @@ class APIClient:
         auth = configuration.get('auth')
         # self.endpoint_start = 'incidents/'
         self.host = connection.get('host')
-        self.client = RestApiClient(connection.get('host'), connection.get('port', None),
+        self.client = RestApiClientAsync(connection.get('host'), connection.get('port', None),
             headers,url_modifier_function=url_modifier_function,
-            cert_verify=connection.get('selfSignedCert', False),
-            sni=connection.get('sni', None)
+            cert_verify=connection.get('selfSignedCert', False)
             )
         self.timeout = connection['options'].get('timeout')
         self._client_id = auth['clientId']
@@ -33,33 +28,35 @@ class APIClient:
         self._token = None
         self._token_time = None
          
-    def get_token(self):
+    async def get_token(self):
         """get the token and if expired re-generate and store in token variable"""
-        tokenResponse = self.generate_token()
-        return tokenResponse.json().get('access_token')
+        tokenResponse = await self.generate_token()
+        return tokenResponse
 
-    def generate_token(self):
+    async def generate_token(self):
         """To generate the Token"""
         if self.token_expired():
-            resp = requests.request(
-                'POST',
-                'https://'+self.host+self.toeken_endpoint,
-                headers={
-                    'accept': 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                data=(
-                    f'client_id={self._client_id}'
-                    f'&client_secret={self._client_secret}'
-                    f'&grant_type=client_credentials'
-                    f'&scope=openid'
-                )
+            headers={
+                'accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+            data=(
+                f'client_id={self._client_id}'
+                f'&client_secret={self._client_secret}'
+                f'&grant_type=client_credentials'
+                f'&scope=openid'
             )
-            token = resp.json().get('access_token')
-            self._token = token
-            self._token_time = datetime.now()
-            self.resp =resp
-        return self.resp
+            response = await self.client.call_api(self.token_endpoint, 'POST', headers=headers, data=data, timeout=self.timeout)
+            response_txt = response.read().decode('utf-8')
+
+            try: 
+                response_dict = json.loads(response_txt)
+                self._token = response_dict.get('access_token')
+                self._token_time = datetime.now()
+            except Exception as e:
+                pass
+
+        return response
 
     def token_expired(self) -> bool:
         """Check if the verify token is expired.
@@ -72,24 +69,25 @@ class APIClient:
         return expired
 
 
-    def run_search(self, query_expr, range_end=None):
+    async def run_search(self, query_expr, range_end=None):
         """get the response from verify endpoints
         :param quary_expr: dict, filter parameters
         :param range_end: int,length value
         :return: response, json object"""
         events = []
         # if self._token :
-        events = self.get_events(query_expr)
-        return self.response_handler(events,query_expr)
+        events = await self.get_events(query_expr)
+        return self.response_handler(events, query_expr)
 
 
-    def get_events(self,query_expr):
-        self.headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {0}'.format(self.get_token())}
+    async def get_events(self,query_expr):
+        token = await self.get_token()
+        self.headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {0}'.format(token)}
         if query_expr is None:
             data=None
-        return self.client.call_api(self.endpoint_start,'GET',self.headers,urldata= query_expr)
+        return await self.client.call_api(self.endpoint_start,'GET',self.headers,urldata= query_expr, timeout=self.timeout)
 
-    def response_handler(self, data=None,query_expr=None):
+    def response_handler(self, data=None, query_expr=None):
         if data is None:
             data = []
         response = dict()
@@ -99,7 +97,6 @@ class APIClient:
         response['error_msg'] = data.response.reason
         response['success'] =data.code
         if response['code'] ==200:
-           
             response['search_after'] = response.get("data")['response']['events']['search_after']
 
             try:
@@ -161,7 +158,7 @@ class APIClient:
                 return False
         return True
 
-    def get_search_results(self, search_id, response_type, range_start=None, range_end=None):
+    async def get_search_results(self, search_id, response_type, range_start=None, range_end=None):
         # Sends a GET request to
         # https://<server_ip>//<search_id>
         # response object body should contain information pertaining to search.
@@ -175,13 +172,13 @@ class APIClient:
         request_param = search_id+"& size="+str(size)
         endpoint = self.endpoint_start+ request_param
 
-        return self.run_search(search_id)   
+        return await self.run_search(search_id)   
 
-    def get_search(self, search_id):
+    async def get_search(self, search_id):
         # Sends a GET request to
         # https://<server_ip>/api/ariel/searches/<search_id>
-        response = self.run_search(search_id)
+        response = await self.run_search(search_id)
         return response
         
-    def delete_search(self,search_id):
-        return self.run_search(search_id)
+    async def delete_search(self,search_id):
+        return await self.run_search(search_id)

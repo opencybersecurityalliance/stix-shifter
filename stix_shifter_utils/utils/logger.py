@@ -39,3 +39,8 @@ def exception_to_string(excp):
     stack = traceback.extract_stack()[:-3] + traceback.extract_tb(excp.__traceback__)
     pretty = traceback.format_list(stack)
     return ''.join(pretty) + '\n  {} {}'.format(excp.__class__, excp)
+
+def last_tb_to_string(excp):
+    stack_summary = traceback.extract_tb(excp.__traceback__)
+    last_frame = stack_summary[-1]
+    return '{}:{} {} {}'.format(last_frame.filename, last_frame.lineno, excp.__class__, excp)

@@ -1,4 +1,8 @@
-# GCP Chronicle Connector
+# Google Cloud Platform (GCP) Chronicle
+
+## Supported STIX Mappings
+
+See the [table of mappings](gcp_chronicle_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 **Table of Contents**
 
@@ -23,7 +27,7 @@
 
 ### Format for calling stix-shifter from the command line
 ```
-$ stix-shifter translate <MODULE NAME> <query "<STIX IDENTITY OBJECT>" "<STIX PATTERN>" "<OPTIONS>"
+python main.py `<translator_module>` `<query or result>` `<STIX identity object>` `<data>`
 ```
 ### Pattern expression with STIX attributes
 
@@ -52,8 +56,8 @@ translate gcp_chronicle query '{}' "[process:name = 'powershell.exe' AND file:ha
 ```shell
 transmit
 gcp_chronicle
-"{\"host\":\"xx.xx.xx\",\"selfSignedCert\": \"-----BEGIN PRIVATE KEY-----\nxxx\n-----END PRIVATE KEY-----\n\"}"
-"{\"auth\":{ \"client_email\": \"xyz.com\"}}"
+"{\"host\":\"xx.xx.xx\"}"
+"{\"auth\":{ \"client_email\": \"xyz.com\",\"private_key\": \"-----BEGIN PRIVATE KEY-----\nxxx\n-----END PRIVATE KEY-----\n\"}}"
 query
 " { \"ruleText\": \"rule cp4s_gcp_udi_rule_1659699862 { meta: author = \\"ibm cp4s user\\" description = \\"Create event rule that should generate detections\\" events: ($udm.src.file.sha1 = \\"ded8fd7f36417f66eb6ada10e0c0d7c0022986e9\\" nocase or $udm.target.file.sha1 = \\"ded8fd7f36417f66eb6ada10e0c0d7c0022986e9\\" nocase or $udm.src.process.file.sha1 = \\"ded8fd7f36417f66eb6ada10e0c0d7c0022986e9\\" nocase or $udm.target.process.file.sha1 = \\"ded8fd7f36417f66eb6ada10e0c0d7c0022986e9\\" nocase or $udm.principal.process.file.sha1 = \\"ded8fd7f36417f66eb6ada10e0c0d7c0022986e9\\" nocase or $udm.about.file.sha1 = \\"ded8fd7f36417f66eb6ada10e0c0d7c0022986e9\\" nocase) and ($udm.src.process.file.full_path = /(?s)powershell\\.exe/ nocase or $udm.target.process.file.full_path = /(?s)powershell\\.exe/ nocase or $udm.principal.process.file.full_path = /(?s)powershell\\.exe/ nocase or $udm.target.process.parent_process.file.full_path = /(?s)powershell\\.exe/ nocase or $udm.principal.process.parent_process.file.full_path = /(?s)powershell\\.exe/ nocase) condition: $udm}\", \"startTime\": \"2022-06-05T16:43:26.000Z\", \"endTime\": \"2022-06-10T16:43:26.003Z\" }"
 ```
@@ -70,8 +74,8 @@ query
 ```shell
 transmit
 gcp_chronicle
-"{\"host\":\"xx.xx.xx\",\"selfSignedCert\": \"-----BEGIN PRIVATE KEY-----\nxxx\n-----END PRIVATE KEY-----\n\"}"
-"{\"auth\":{ \"client_email\": \"xyz.com\"}}"
+"{\"host\":\"xx.xx.xx\"}"
+"{\"auth\":{ \"client_email\": \"xyz.com\",\"private_key\": \"-----BEGIN PRIVATE KEY-----\nxxx\n-----END PRIVATE KEY-----\n\"}}"
 status
 "oh_cda1ea4f-87d8-4f21-b80c-9eb3c5e8bf6d:ru_2fec7add-f727-41e1-a839-9de344d2a98d"
 ```
@@ -89,8 +93,8 @@ status
 ```shell
 transmit
 gcp_chronicle
-"{\"host\":\"xx.xx.xx\",\"selfSignedCert\": \"-----BEGIN PRIVATE KEY-----\nxxx\n-----END PRIVATE KEY-----\n\"}"
-"{\"auth\":{ \"client_email\": \"xyz.com\"}}"
+"{\"host\":\"xx.xx.xx\"}"
+"{\"auth\":{ \"client_email\": \"xyz.com\",\"private_key\": \"-----BEGIN PRIVATE KEY-----\nxxx\n-----END PRIVATE KEY-----\n\"}}"
 results
 "oh_cda1ea4f-87d8-4f21-b80c-9eb3c5e8bf6d:ru_2fec7add-f727-41e1-a839-9de344d2a98d" 0 1
 ```
@@ -202,7 +206,10 @@ results
             }
         }
     ],
-   "metadata": "1:abc"
+   "metadata": {
+      "result_count": 1,
+      "next_page_token": "abc"
+   }
 }
 ```
 
@@ -362,8 +369,8 @@ translate gcp_chronicle query '{}' "[x-ibm-finding:finding_type = 'threat' AND x
 ```shell
 transmit
 gcp_chronicle
-"{\"host\":\"xx.xx.xx\",\"selfSignedCert\": \"-----BEGIN PRIVATE KEY-----\nxxx\n-----END PRIVATE KEY-----\n\"}"
-"{\"auth\":{ \"client_email\": \"xyz.com\"}}"
+"{\"host\":\"xx.xx.xx\"}"
+"{\"auth\":{ \"client_email\": \"xyz.com\",\"private_key\": \"-----BEGIN PRIVATE KEY-----\nxxx\n-----END PRIVATE KEY-----\n\"}}"
 query
 "{ \"ruleText\": \"rule cp4s_gcp_udi_rule_1659715234 { meta: author = \\"ibm cp4s user\\" description = \\"Create event rule that should generate detections\\" events: $udm.metadata.event_type = \\"EMAIL_TRANSACTION\\" and (any $udm.security_result.category = \\"SOFTWARE_MALICIOUS\\" or any $udm.security_result.category = \\"SOFTWARE_PUA\\" or any $udm.security_result.category = \\"NETWORK_MALICIOUS\\" or any $udm.security_result.category = \\"MAIL_SPAM\\" or any $udm.security_result.category = \\"MAIL_PHISHING\\" or any $udm.security_result.category = \\"MAIL_SPOOFING\\") condition: $udm}\", \"startTime\": \"2022-06-21T16:43:26.000Z\", \"endTime\": \"2022-06-24T16:43:26.003Z\" }"
 ```
@@ -381,8 +388,8 @@ query
 ```shell
 transmit
 gcp_chronicle
-"{\"host\":\"xx.xx.xx\",\"selfSignedCert\": \"-----BEGIN PRIVATE KEY-----\nxxx\n-----END PRIVATE KEY-----\n\"}"
-"{\"auth\":{ \"client_email\": \"xyz.com\"}}"
+"{\"host\":\"xx.xx.xx\"}"
+"{\"auth\":{ \"client_email\": \"xyz.com\",\"private_key\": \"-----BEGIN PRIVATE KEY-----\nxxx\n-----END PRIVATE KEY-----\n\"}}"
 status
 "oh_7111ae97-b1bc-4393-a305-ec88dd13fbb2:ru_d9341b46-4cea-4cbc-9890-5dabe1d2b62f"
 ```
@@ -401,8 +408,8 @@ status
 ```shell
 transmit
 gcp_chronicle
-"{\"host\":\"xx.xx.xx\",\"selfSignedCert\": \"-----BEGIN PRIVATE KEY-----\nxxx\n-----END PRIVATE KEY-----\n\"}"
-"{\"auth\":{ \"client_email\": \"xyz.com\"}}"
+"{\"host\":\"xx.xx.xx\"}"
+"{\"auth\":{ \"client_email\": \"xyz.com\",\"private_key\": \"-----BEGIN PRIVATE KEY-----\nxxx\n-----END PRIVATE KEY-----\n\"}}"
 results
 "oh_7111ae97-b1bc-4393-a305-ec88dd13fbb2:ru_d9341b46-4cea-4cbc-9890-5dabe1d2b62f" 0 1
 ```
@@ -523,7 +530,10 @@ results
             }
         }
     ],
-   "metadata": "1:abc"
+   "metadata": {
+	"result_count": 1,
+	"next_page_token": "abc"
+   }
 }
 ```
 
@@ -651,8 +661,8 @@ execute
 gcp_chronicle
 gcp_chronicle
 "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"gcp_chronicle\",\"identity_class\":\"events\",\"created\":\"2022-08-05T13:22:50.336Z\",\"modified\":\"2022-08-05T13:22:50.336Z\"}"
-"{\"host\":\"xx.xx.xx\",\"selfSignedCert\": \"-----BEGIN PRIVATE KEY-----\nxxx\n-----END PRIVATE KEY-----\n\"}"
-"{\"auth\":{ \"client_email\": \"xyz.com\"}}"
+"{\"host\":\"xx.xx.xx\"}"
+"{\"auth\":{ \"client_email\": \"xyz.com\",\"private_key\": \"-----BEGIN PRIVATE KEY-----\nxxx\n-----END PRIVATE KEY-----\n\"}}"
 "[ipv4-addr:value = '1.0.0.1' AND network-traffic:src_port = '52221'] START t'2022-06-06T00:00:00.000000Z' STOP t'2022-06-15T00:00:00.000000Z'"
 ```
 #### STIX Execute query - output
@@ -831,7 +841,7 @@ translate gcp_chronicle query '{}' "([file:hashes.'SHA-1' = '6cbce4a295c163791b6
 Reference: [Managing rules using the Rules Editor](#https://cloud.google.com/chronicle/docs/detection/manage-all-rules)
 
 ### Observations
-- The private_key value which is used for authentication should be passed in selfSignedCert field
+
 - It is recommended to use LIKE operator for substring match and MATCHES operator for regular expression match.
 - Supported values for the stix attribute x-ibm-finding:severity is 16,32,48,64,80,100. This has been mapped with chronicle severity value 'INFORMATIONAL','ERROR',LOW','MEDIUM','HIGH','CRITICAL' correspondingly.
 

@@ -17,10 +17,6 @@
             "default": "https://alertflex.github.io/doc/pages/integration.html",
             "type": "link"
         },
-        "sni": {
-            "type": "text",
-            "optional": true
-        },
         "selfSignedCert": {
             "type": "password",
             "optional": true

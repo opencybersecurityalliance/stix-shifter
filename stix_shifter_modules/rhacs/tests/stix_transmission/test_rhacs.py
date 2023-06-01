@@ -2,39 +2,10 @@
 import json
 import unittest
 from unittest.mock import patch
+
 from stix_shifter_modules.rhacs.entry_point import EntryPoint
 from stix_shifter.stix_transmission import stix_transmission
-from requests.exceptions import ConnectionError, RetryError
-
-
-class RhacsMockResponse:
-    """ class for capturing response"""
-
-    def __init__(self, st_code, obj_alert_list):
-        self.status_code = st_code
-        self.text = obj_alert_list
-
-    def read(self):
-        """ to read contents of results returned by api"""
-        return bytearray(self.text, 'utf-8')
-
-
-class RhacsMockResponseAlertDetail:
-    """ class for capturing response"""
-
-    def __init__(self, obj_alert_details):
-        self.text = obj_alert_details
-
-    def read(self):
-        """ to read contents of results returned by api"""
-        return bytearray(self.text, 'utf-8')
-
-
-class ResponseMock:
-    """ class for ping response"""
-
-    def __init__(self, responseobject):
-        self.response = responseobject
+from tests.utils.async_utils import get_mock_response
 
 
 class TestRhacsConnection(unittest.TestCase):
@@ -54,7 +25,6 @@ class TestRhacsConnection(unittest.TestCase):
         """format for connection"""
         return {
             "host": "testhost",
-            "sni":"testsni",
             "selfSignedCert":"-----BEGIN CERTIFICATE-----XXXX123-----END CERTIFICATE-----",
             "port": 443,
             "options": {"result_limit": 10}
@@ -77,9 +47,8 @@ class TestRhacsConnection(unittest.TestCase):
         """ test to check ping_data_source function"""
 
         obj_alert_list = """{"status":"ok"}"""
-        resp = RhacsMockResponse(200, obj_alert_list)
-        mock_resp = ResponseMock(resp)
-        mock_ping_source.return_value = mock_resp
+        resp = get_mock_response(200, obj_alert_list)
+        mock_ping_source.return_value = resp
 
         mock_api_client.return_value = None
 
@@ -309,12 +278,10 @@ class TestRhacsConnection(unittest.TestCase):
         }]
         }
         }"""
-        resp = RhacsMockResponse(200, obj_alert_list)
-        mock_resp = ResponseMock(resp)
-        mock_results_response.return_value = mock_resp
-        resp_detail = RhacsMockResponseAlertDetail(obj_alert_details)
-        mock_resp_detail = ResponseMock(resp_detail)
-        mock_final_response.return_value = mock_resp_detail
+        resp = get_mock_response(200, obj_alert_list)
+        mock_results_response.return_value = resp
+        resp_detail = get_mock_response(200, obj_alert_details)
+        mock_final_response.return_value = resp_detail
 
         mock_api_client.return_value = None
         mock_result_limit.return_value = 10
@@ -494,12 +461,10 @@ class TestRhacsConnection(unittest.TestCase):
         "snoozeTill": null,
         "tags": []
         }"""
-        resp = RhacsMockResponse(200, obj_alert_list)
-        mock_resp = ResponseMock(resp)
-        mock_results_response.return_value = mock_resp
-        resp_detail = RhacsMockResponseAlertDetail(obj_alert_details)
-        mock_resp_detail = ResponseMock(resp_detail)
-        mock_final_response.return_value = mock_resp_detail
+        resp = get_mock_response(200, obj_alert_list)
+        mock_results_response.return_value = resp
+        resp_detail = get_mock_response(200, obj_alert_details)
+        mock_final_response.return_value = resp_detail
 
         mock_api_client.return_value = None
         mock_result_limit.return_value = 10
@@ -678,12 +643,10 @@ class TestRhacsConnection(unittest.TestCase):
         "tags": []
         }"""
 
-        resp = RhacsMockResponse(200, obj_alert_list)
-        mock_resp = ResponseMock(resp)
-        mock_results_response.return_value = mock_resp
-        resp_detail = RhacsMockResponseAlertDetail(obj_alert_details)
-        mock_resp_detail = ResponseMock(resp_detail)
-        mock_final_response.return_value = mock_resp_detail
+        resp = get_mock_response(200, obj_alert_list)
+        mock_results_response.return_value = resp
+        resp_detail = get_mock_response(200, obj_alert_details)
+        mock_final_response.return_value = resp_detail
 
         mock_api_client.return_value = None
         mock_result_limit.return_value = 10
@@ -701,20 +664,20 @@ class TestRhacsConnection(unittest.TestCase):
         assert 'data' in results_response
         assert results_response['data'] is not None
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_host_ping(self, mock_ping):
         """Test Invalid host"""
-        mock_ping.side_effect = ConnectionError("Invalid Host")
+        mock_ping.side_effect = Exception("Invalid Host")
         transmission = stix_transmission.StixTransmission('rhacs', self.connection(), self.config())
         ping_response = transmission.ping()
         assert ping_response is not None
         assert ping_response['success'] is False
-        assert 'rhacs connector error => Invalid Host/Port' in ping_response['error']
+        assert 'rhacs connector error => Invalid Host' in ping_response['error']
 
-    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClient.RestApiClient.call_api')
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_url_parameter_ping(self, mock_ping):
         """Test Invalid host"""
-        mock_ping.side_effect = RetryError("Invalid parameter or Url")
+        mock_ping.side_effect = Exception("Invalid parameter or Url")
         transmission = stix_transmission.StixTransmission('rhacs', self.connection(), self.config())
         ping_response = transmission.ping()
         assert ping_response is not None
@@ -783,8 +746,7 @@ class TestRhacsConnection(unittest.TestCase):
         """ test to check translate result authentication error """
         obj = '{"error":"credentials not found:token validation failed","code":16,"message":' \
               '"credentials not found:token validation failed","details": []}'
-        searchresponse = RhacsMockResponse(401, obj)
-        mock_resp = ResponseMock(searchresponse)
+        mock_resp = get_mock_response(401, obj)
         mock_results_response.return_value = mock_resp
         mock_api_client.return_value = None
         mock_result_limit.return_value = 10

@@ -1,1 +1,2 @@
-google-api-python-client==2.52.0
+aiogoogle==5.1.0
+urllib3==1.26.15
