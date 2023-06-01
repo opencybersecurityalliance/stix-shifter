@@ -11,7 +11,11 @@ ERROR_MAPPING = {
     "TooManyRequestsException": ErrorCode.TRANSMISSION_QUERY_LOGICAL_ERROR,
     "ClientError": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
     "AccessDeniedException": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
-    "InvalidParameterException": ErrorCode.TRANSMISSION_INVALID_PARAMETER
+    "InvalidParameterException": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
+    "InvalidClientTokenId": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
+    "SignatureDoesNotMatch": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
+    "ValidationError": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
+    "KeyError": ErrorCode.TRANSMISSION_INVALID_PARAMETER
     }
 
 
