@@ -1709,7 +1709,7 @@
     ],
     "name": [
       {
-        "key": "x-oca-asset.name",
+        "key": "x-oca-asset.hostname",
         "object": "host"
       },
       {
@@ -2041,7 +2041,7 @@
       }
   ],
     "name": {
-      "key": "x-oca-asset.name",
+      "key": "x-oca-asset.hostname",
       "object": "observer"
     },
     "product": [
