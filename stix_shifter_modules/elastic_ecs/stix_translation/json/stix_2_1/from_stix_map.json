@@ -181,7 +181,7 @@
       "severity": ["event.severity"],
       "start": ["event.start"],
       "timezone": ["event.timezone"],
-      "type": ["event.type"],
+      "event_type": ["event.type"],
       "url": ["event.url"],
       "original": ["message", "powershell.file.script_block_text"],
       "process_ref.pid": ["process.pid"],
@@ -229,7 +229,7 @@
       "question_type": ["dns.question.type"],
       "resolved_ip": ["dns.resolved_ip"],
       "response_code": ["dns.response_code"],
-      "type": ["dns.type"]
+      "dns_type": ["dns.type"]
     }
   },
   "x-ecs": {
@@ -243,7 +243,7 @@
       "error_id": ["error.id"],
       "message": ["error.message"],
       "stack_trace": ["error.stack_trace"],
-      "type": ["error.type"]
+      "error_type": ["error.type"]
     }
   },
   "x-ecs-group": {
@@ -364,7 +364,7 @@
       "service_id": ["service.id"],
       "name": ["service.name"],
       "state": ["service.state"],
-      "type": ["service.type"],
+      "service_type": ["service.type"],
       "version": ["service.version"]
     }
   },
