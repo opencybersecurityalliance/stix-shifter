@@ -302,20 +302,16 @@ Using the same data source as in step 3, the following example shows a to-STIX m
     },
     "EventTime": [
         {
-            "key": "created",
-            "cybox": false
+            "key": "created"
         },
         {
-            "key": "modified",
-            "cybox": false
+            "key": "modified"
         },
         {
-            "key": "first_observed",
-            "cybox": false
+            "key": "first_observed"
         },
         {
-            "key": "last_observed",
-            "cybox": false
+            "key": "last_observed"
         }
     ]
 }

@@ -3,12 +3,10 @@
     "_time": [
       {
         "key": "first_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       },
       {
         "key": "last_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       },
       {
@@ -211,7 +209,6 @@
     "count": [
       {
         "key": "number_observed",
-        "cybox": false,
         "transformer": "ToInteger"
       },
       {
@@ -237,7 +234,6 @@
       },
       {
         "key": "last_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       }
     ],
@@ -2408,7 +2404,6 @@
     },
     "start_time": {
       "key": "first_observed",
-      "cybox": false,
       "transformer": "EpochToTimestamp"
     },
     "status": {
@@ -2628,14 +2623,12 @@
       {
         "key": "ipv4-addr.x_aws_interface_id",
         "object": "src_ip",
-        "ds_key": "interfaceid",
-        "cybox": false
+        "ds_key": "interfaceid"
       },
       {
         "key": "ipv6-addr.x_aws_interface_id",
         "object": "src_ip",
-        "ds_key": "interfaceid",
-        "cybox": false
+        "ds_key": "interfaceid"
       }
     ],
     "destinationaddress": [
@@ -2692,7 +2685,6 @@
       },
       {
         "key": "first_observed",
-        "cybox": false,
         "transformer": "EpochSecondsToTimestamp"
       }
     ],
@@ -2709,7 +2701,6 @@
       },
       {
         "key": "last_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       }
     ],
@@ -2754,14 +2745,12 @@
       {
         "key": "ipv4-addr.x_aws_interface_id",
         "object": "nc_private_ip1",
-        "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid",
-        "cybox": false
+        "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid"
       },
       {
         "key": "ipv4-addr.x_aws_ip_type",
         "object": "nc_private_ip1",
-        "value": "private",
-        "cybox": false
+        "value": "private"
       }
     ],
     "resource_instancedetails_networkinterfaces_0_ipv6addresses_0": [
@@ -2772,8 +2761,7 @@
       {
         "key": "ipv6-addr.x_aws_interface_id",
         "object": "nc_ipv6_ip",
-        "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid",
-        "cybox": false
+        "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid"
       }
     ],
     "resource_instancedetails_networkinterfaces_0_publicip": [
@@ -2791,14 +2779,12 @@
       {
         "key": "ipv4-addr.x_aws_interface_id",
         "object": "nc_public_ip",
-        "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid",
-        "cybox": false
+        "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid"
       },
       {
         "key": "ipv4-addr.x_aws_ip_type",
         "object": "nc_public_ip",
-        "value": "public",
-        "cybox": false
+        "value": "public"
       }
     ],
     "resource_instancedetails_networkinterfaces_0_privatednsname": [
@@ -2828,14 +2814,12 @@
       {
         "key": "ipv4-addr.x_aws_interface_id",
         "object": "nc_private_ip2",
-        "ds_key": "resource_instancedetails_networkinterfaces_1_networkinterfaceid",
-        "cybox": false
+        "ds_key": "resource_instancedetails_networkinterfaces_1_networkinterfaceid"
       },
       {
         "key": "ipv4-addr.x_aws_ip_type",
         "object": "nc_private_ip2",
-        "value": "private",
-        "cybox": false
+        "value": "private"
       }
     ],
     "resource_instancedetails_networkinterfaces_1_privatednsname": [
@@ -2862,20 +2846,17 @@
       {
         "key": "x-ibm-finding.dst_geolocation",
         "object": "ibm_finding",
-        "ds_key": "service_action_networkconnectionaction_remoteipdetails_country_countryname",
-        "cybox": false
+        "ds_key": "service_action_networkconnectionaction_remoteipdetails_country_countryname"
       },
       {
         "key": "ipv4-addr.x_aws_remote_city_name",
         "object": "nc_remote_ip",
-        "ds_key": "service_action_networkconnectionaction_remoteipdetails_city_cityname",
-        "cybox": false
+        "ds_key": "service_action_networkconnectionaction_remoteipdetails_city_cityname"
       },
       {
         "key": "ipv4-addr.x_aws_remote_country_name",
         "object": "nc_remote_ip",
-        "ds_key": "service_action_networkconnectionaction_remoteipdetails_country_countryname",
-        "cybox": false
+        "ds_key": "service_action_networkconnectionaction_remoteipdetails_country_countryname"
       }
     ],
     "service_action_networkconnectionaction_localportdetails_port": [
@@ -2947,14 +2928,12 @@
       {
         "key": "ipv4-addr.x_aws_interface_id",
         "object": "pp_private_ip1",
-        "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid",
-        "cybox": false
+        "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid"
       },
       {
         "key": "ipv4-addr.x_aws_ip_type",
         "object": "pp_private_ip1",
-        "value": "private",
-        "cybox": false
+        "value": "private"
       }
     ],
     "service_action_portprobeaction_portprobedetails_0_remoteipdetails_ipaddressv4": [
@@ -2970,20 +2949,17 @@
       {
         "key": "x-ibm-finding.dst_geolocation",
         "object": "ibm_finding",
-        "ds_key": "service_action_portprobeaction_portprobedetails_0_remoteipdetails_country_countryname",
-        "cybox": false
+        "ds_key": "service_action_portprobeaction_portprobedetails_0_remoteipdetails_country_countryname"
       },
       {
         "key": "ipv4-addr.x_aws_remote_city_name",
         "object": "pp_remote_ip",
-        "ds_key": "service_action_portprobeaction_portprobedetails_0_remoteipdetails_city_cityname",
-        "cybox": false
+        "ds_key": "service_action_portprobeaction_portprobedetails_0_remoteipdetails_city_cityname"
       },
       {
         "key": "ipv4-addr.x_aws_remote_country_name",
         "object": "pp_remote_ip",
-        "ds_key": "service_action_portprobeaction_portprobedetails_0_remoteipdetails_country_countryname",
-        "cybox": false
+        "ds_key": "service_action_portprobeaction_portprobedetails_0_remoteipdetails_country_countryname"
       }
     ],
     "service_action_portprobeaction_portprobedetails_0_localportdetails_port": [
@@ -3005,20 +2981,17 @@
       {
         "key": "x-ibm-finding.dst_geolocation",
         "object": "ibm_finding",
-        "ds_key": "service_action_awsapicallaction_remoteipdetails_country_countryname",
-        "cybox": false
+        "ds_key": "service_action_awsapicallaction_remoteipdetails_country_countryname"
       },
       {
         "key": "ipv4-addr.x_aws_remote_city_name",
         "object": "api_remote_ip",
-        "ds_key": "service_action_awsapicallaction_remoteipdetails_city_cityname",
-        "cybox": false
+        "ds_key": "service_action_awsapicallaction_remoteipdetails_city_cityname"
       },
       {
         "key": "ipv4-addr.x_aws_remote_country_name",
         "object": "api_remote_ip",
-        "ds_key": "service_action_awsapicallaction_remoteipdetails_country_countryname",
-        "cybox": false
+        "ds_key": "service_action_awsapicallaction_remoteipdetails_country_countryname"
       }
     ],
     "resource_accesskeydetails_principalid": {
@@ -3061,14 +3034,12 @@
       {
         "key": "ipv4-addr.x_aws_interface_id",
         "object": "dns_private_ip1",
-        "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid",
-        "cybox": false
+        "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid"
       },
       {
         "key": "ipv4-addr.x_aws_ip_type",
         "object": "dns_private_ip1",
-        "value": "private",
-        "cybox": false
+        "value": "private"
       }
     ],
     "service_action_dnsrequestaction_domain": [
@@ -3114,8 +3085,7 @@
     ],
     "service_eventfirstseen": [
       {
-        "key": "first_observed",
-        "cybox": false
+        "key": "first_observed"
       },
       {
         "key": "x-ibm-finding.start",
@@ -3124,8 +3094,7 @@
     ],
     "service_eventlastseen": [
       {
-        "key": "last_observed",
-        "cybox": false
+        "key": "last_observed"
       },
       {
         "key": "x-ibm-finding.end",
