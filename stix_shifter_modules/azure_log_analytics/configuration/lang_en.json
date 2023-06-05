@@ -16,10 +16,6 @@
       "label": "Microsoft Azure Sentinel certificate",
       "description": "Use SSL certificate for Microsoft Azure Sentinel."
     },
-    "sni": {
-      "label": "Server Name Indicator",
-      "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication."
-    },
     "workpaceId": {
       "label": "Log Analytics workspace ID",
       "description": "ID of the Azure Log Analytics workspace"

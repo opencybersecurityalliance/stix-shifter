@@ -16,10 +16,6 @@
             "type": "link",
             "default": "data-sources.html"
         },
-        "sni": {
-            "type": "text",
-            "optional": true
-        },
         "selfSignedCert": {
             "type": "password",
             "optional": true

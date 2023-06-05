@@ -37,8 +37,7 @@ class APIClient:
                                          headers,
                                          url_modifier_function=url_modifier_function,
                                          cert_verify=self.connection.get(
-                                             'selfSignedCert', True),
-                                         sni=self.connection.get('sni', None)
+                                             'selfSignedCert', True)
                                          )
         return self.client
 
