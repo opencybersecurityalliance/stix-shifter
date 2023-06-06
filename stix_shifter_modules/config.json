@@ -13,7 +13,7 @@
             "result_limit": {
                 "default": 10000,
                 "min": 1,
-                "max": 500000,
+                "max": 10000000,
                 "type": "number",
                 "previous": "connection.resultSizeLimit"
             },
@@ -28,7 +28,7 @@
             "timeout": {
                 "default": 30,
                 "min": 1,
-                "max": 60,
+                "max": 3600,
                 "hidden": true,
                 "type": "number",
                 "previous": "connection.timeoutLimit"

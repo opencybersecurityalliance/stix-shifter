@@ -53,10 +53,6 @@ The following example JSON contains the appropriate parameters that each module 
             "type": "password",
             "optional": true
         },
-        "sni": {
-            "type": "text",
-            "optional": true
-        },
         "selfSignedCert": {
             "type": "password",
             "optional": true
@@ -148,10 +144,6 @@ Below example json is the language translation file of the above QRadar config j
         "cert": {
             "label": "IBM QRadar Certificate",
             "description": "Use self-signed SSL certificate for QRadar V7.3.1 and CA content(root and intermediate) for QRadar V7.3.2"
-        },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
         }
     },
     "configuration": {

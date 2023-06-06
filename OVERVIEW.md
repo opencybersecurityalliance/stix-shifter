@@ -338,7 +338,7 @@ _results.json_
 
 ### Connection and Configuration objects
 
-STIX-shifter expects connection and configuration objects to be passed in during transmission calls. The connection object contains the host address and port of the data source being connected to, as well as an optional server name indicator (SNI) and self signed certificate.
+STIX-shifter expects connection and configuration objects to be passed in during transmission calls. The connection object contains the host address and port of the data source being connected to, as well as an optional self signed certificate.
 
 ### Connection
 
@@ -348,7 +348,6 @@ This object contains information needed to connect to a specific data source. Th
 {
     "host": <Host URL or IP address>,
     "port": <Port>,
-    "sni": <Server name indicator>,
     "selfSignedCert": <false or Certificate>,
     "cert": <Certificate (if required)>,
     "resultSizeLimit": <Results limit to come back from the data source query>,
@@ -842,10 +841,6 @@ Specifying the connector module name will return the configuration parameters of
             "help": {
                 "default": "data-sources-qradar.html",
                 "type": "link"
-            },
-            "sni": {
-                "type": "text",
-                "optional": true
             },
             "selfSignedCert": {
                 "type": "password",
