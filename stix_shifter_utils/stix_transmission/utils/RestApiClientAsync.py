@@ -47,7 +47,7 @@ class RestApiClientAsync:
     #  True -- do proper signed cert check that is in trust store,
     #  False -- skip all cert checks,
     #  or The String content of your self signed cert required for TLS communication
-    def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  sni=None, auth=None):
+    def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  auth=None):
         self.retry_max = os.getenv('STIXSHIFTER_RETRY_MAX', RETRY_MAX_DEFAULT)
         self.retry_max = int(self.retry_max)
         self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
@@ -60,8 +60,6 @@ class RestApiClientAsync:
         if port is not None:
             server_ip += ":" + str(port)
         self.server_ip = server_ip
-        # sni is none unless we are using a server cert
-        self.sni = None
 
         self.server_cert_file_content = None
         self.ssl_context = False
@@ -73,8 +71,6 @@ class RestApiClientAsync:
         # self signed cert provided
         elif isinstance(cert_verify, str):
             self.server_cert_file_content = cert_verify
-            if sni is not None:
-                self.sni = sni
 
         self.headers = headers
         self.url_modifier_function = url_modifier_function
@@ -114,10 +110,6 @@ class RestApiClientAsync:
                 retry_options = ExponentialRetry(attempts=self.retry_max, statuses=[429, 500, 502, 503, 504])
                 async with RetryClient(retry_options=retry_options) as client:
                     call = getattr(client, method.lower()) 
-
-                    if self.sni is not None:
-                        # only use the tool belt session in case of SNI for safety
-                        actual_headers["Host"] = self.sni
 
                     async with call(url, headers=actual_headers, params=urldata, data=data,
                                             ssl=self.ssl_context,

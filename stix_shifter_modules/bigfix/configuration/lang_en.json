@@ -16,10 +16,6 @@
         "selfSignedCert": {
             "label": "BigFix certificate",
             "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate for secure communication between web reports or REST API server and the authorized user"
-        },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
         }
     },
     "configuration": {

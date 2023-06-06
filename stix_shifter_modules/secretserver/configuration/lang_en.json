@@ -16,10 +16,6 @@
         "selfSignedCert": {
             "label": "IBM Security Verify Privilege Vault connection certificate",
             "description": "Use self-signed Security Sockets Layer (SSL)"
-        },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
         }
     },
     "configuration": {

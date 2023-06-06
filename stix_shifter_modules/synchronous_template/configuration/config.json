@@ -21,10 +21,6 @@
             "type": "password",
             "optional": true
         },
-        "sni": {
-            "type": "text",
-            "optional": true
-        },
         "selfSignedCert": {
             "type": "password",
             "optional": true

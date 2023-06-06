@@ -29,7 +29,6 @@ class APIClient():
         self.connect_timeout = int(self.connect_timeout)
         self.server_cert_content = False
         self.auth = None
-        self.sni = None
         self.retry_max = 1
         self.logger = logger.set_logger(__name__)
         self.server_cert_file_content_exists = False
