@@ -9,11 +9,9 @@
   },
   "happenedAt": [
     {
-      "cybox": false,
       "key": "first_observed"
     },
     {
-      "cybox": false,
       "key": "last_observed"
     }
   ],

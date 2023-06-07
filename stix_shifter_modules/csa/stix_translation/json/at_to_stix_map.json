@@ -43,29 +43,24 @@
   ],
   "eventcount": {
     "key": "number_observed",
-    "cybox": false,
     "transformer": "ToInteger"
   },
   "starttime": [
 	{
 	  "key": "created",
-	  "transformer": "EpochSecondsToTimestamp",
-	  "cybox": false
+	  "transformer": "EpochSecondsToTimestamp"
 	},
 	{
 	  "key": "modified",
-	  "transformer": "EpochSecondsToTimestamp",
-	  "cybox": false
+	  "transformer": "EpochSecondsToTimestamp"
 	},
 	{
 	  "key": "first_observed",
-	  "transformer": "EpochSecondsToTimestamp",
-	  "cybox": false
+	  "transformer": "EpochSecondsToTimestamp"
 	},
 	{
 	  "key": "last_observed",
-	  "transformer": "EpochSecondsToTimestamp",
-	  "cybox": false
+	  "transformer": "EpochSecondsToTimestamp"
 	}
   ],
   "url": {
