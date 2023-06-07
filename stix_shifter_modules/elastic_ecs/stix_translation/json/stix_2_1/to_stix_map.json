@@ -1,12 +1,10 @@
 {
   "@timestamp": [
     {
-      "key": "first_observed",
-      "cybox": false
+      "key": "first_observed"
     },
     {
-      "key": "last_observed",
-      "cybox": false
+      "key": "last_observed"
     }
   ],
   "source": {
@@ -807,7 +805,8 @@
     },
     "code": {
       "key": "x-oca-event.code",
-      "object": "event"
+      "object": "event",
+      "transformer": "ToString"
     },
     "created": {
       "key": "x-oca-event.created",

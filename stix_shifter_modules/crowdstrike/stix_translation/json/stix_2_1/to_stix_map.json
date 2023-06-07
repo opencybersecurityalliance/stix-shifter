@@ -1,12 +1,10 @@
 {
   "timestamp": [
     {
-      "key": "first_observed",
-      "cybox": false
+      "key": "first_observed"
     },
     {
-      "key": "last_observed",
-      "cybox": false
+      "key": "last_observed"
     },
     {
       "key": "x-oca-event.created",
