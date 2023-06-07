@@ -66,7 +66,6 @@ class DataSourceObjToStixObj:
         self.callback = callback
 
         # parse through options
-        # self.cybox_default = options.get('cybox_default', True)
 
         self.properties = observable.properties
 
