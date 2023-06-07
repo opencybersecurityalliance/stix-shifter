@@ -807,7 +807,8 @@
     },
     "code": {
       "key": "x-oca-event.code",
-      "object": "event"
+      "object": "event",
+      "transformer": "ToString"
     },
     "created": {
       "key": "x-oca-event.created",

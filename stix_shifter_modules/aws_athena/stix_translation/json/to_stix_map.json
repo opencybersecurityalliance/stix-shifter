@@ -24,7 +24,7 @@
     "activity_id": {
       "key": "x-oca-event.code",
       "object": "x_oca_event",
-      "transformer": "ToInteger"
+      "transformer": "ToString"
     },
     "activity_name": {
       "key": "x-oca-event.action",
@@ -140,7 +140,7 @@
     "category_uid": {
       "key": "x-oca-event.code",
       "object": "x_oca_event",
-      "transformer": "ToInteger"
+      "transformer": "ToString"
     },
     "class_name": {
       "key": "x-oca-event.module",
