@@ -206,7 +206,6 @@ class ResultsConnector(BaseJsonResultsConnector):
         flattened_obj = dict()
         obj_to_unflatten = dict()
         singular_obj = dict()
-        service_log_dict = dict()
         for obj in flatten_result_cleansed:
             for key, value in obj.items():
                 if key.replace('#', '_') in map_data_keys:
@@ -217,10 +216,8 @@ class ResultsConnector(BaseJsonResultsConnector):
             unflatten_obj = self.unflatten(obj_to_unflatten, '#')
             flattened_obj.update(unflatten_obj)
             flattened_obj.update(singular_obj)
-            service_log_dict = service_log_dict.copy()
             if flattened_obj:
-                service_log_dict[service_type] = flattened_obj
-                formatted_result.append(service_log_dict)
+                formatted_result.append(flattened_obj)
             flattened_obj = dict()
             obj_to_unflatten = dict()
         return formatted_result
