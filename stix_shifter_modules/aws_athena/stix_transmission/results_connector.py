@@ -234,7 +234,7 @@ class ResultsConnector(BaseJsonResultsConnector):
                     json_obj[k] = json.loads(v)
                 except Exception:
                     json_obj[k] = v
-            formatted_result.append({'ocsf': json_obj} )
+            formatted_result.append(json_obj)
         return formatted_result
 
     def gen_dict_extract(self, key_to_search, var):
