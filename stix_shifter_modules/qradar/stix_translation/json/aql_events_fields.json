@@ -39,10 +39,13 @@
     "relevance",
     "sourcegeographiclocation as sourcegeographic", 
     "destinationgeographiclocation as destinationgeographic",
+    "isCREEvent as iscreevent",
     "\"CRE Name\" as crename",
     "\"CRE Description\" as credescription",
     "creeventlist",
     "rulename(creeventlist) as rulenames",
+    "partialmatchlist",
+    "rulename(partialmatchlist) as partialmatchrulename"
     "domainid",
     "DOMAINNAME(domainid) as qradardomain",
     "\"DNS Request Domain\" as dnsdomainname",
