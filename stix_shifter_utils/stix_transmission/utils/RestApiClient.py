@@ -9,6 +9,7 @@ import errno
 import uuid
 from stix_shifter_utils.utils import logger
 import threading
+import shutil
 
 # This is a simple HTTP client that can be used to access the REST API
 
@@ -82,13 +83,16 @@ class RestApiClient:
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
         try:
-            # covnert server cert to file
+            # convert server cert to file
             if self.server_cert_file_content_exists is True:
-                with open(self.server_cert_name, 'w') as f:
-                    try:
+                cert_bundle = os.environ.get('REQUESTS_CA_BUNDLE')
+                try:
+                    if cert_bundle:
+                        shutil.copy(cert_bundle, self.server_cert_name)
+                    with open(self.server_cert_name, 'a') as f:
                         f.write(self.server_cert_file_content)
-                    except IOError:
-                        self.logger.error('Failed to setup certificate')
+                except IOError:
+                    self.logger.error('Failed to setup certificate')
 
             url = None
             actual_headers = self.headers.copy()
