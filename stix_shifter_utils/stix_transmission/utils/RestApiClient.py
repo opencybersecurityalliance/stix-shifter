@@ -83,14 +83,14 @@ class RestApiClient:
     # This method is used to set up an HTTP request and send it to the server
     def call_api(self, endpoint, method, headers=None, data=None, urldata=None, timeout=None):
         try:
-            # covnert server cert to file
+            # convert server cert to file
             if self.server_cert_file_content_exists is True:
                 cert_bundle = os.environ.get('REQUESTS_CA_BUNDLE')
                 try:
                     if cert_bundle:
                         shutil.copy(cert_bundle, self.server_cert_name)
-                    with open(self.server_cert_name, 'w') as f:
-                            f.write(self.server_cert_file_content)
+                    with open(self.server_cert_name, 'a') as f:
+                        f.write(self.server_cert_file_content)
                 except IOError:
                     self.logger.error('Failed to setup certificate')
 
