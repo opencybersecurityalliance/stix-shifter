@@ -1,7 +1,6 @@
 {
   "event_count": {
     "key": "number_observed",
-    "cybox": false,
     "transformer": "ToInteger"
   },
   "_raw": [
@@ -150,13 +149,11 @@
   "_time": [
     {
       "key": "first_observed",
-      "transformer": "SplunkToTimestamp",
-      "cybox": false
+      "transformer": "SplunkToTimestamp"
     },
     {
       "key": "last_observed",
-      "transformer": "SplunkToTimestamp",
-      "cybox": false
+      "transformer": "SplunkToTimestamp"
     },
     {
       "key": "x-oca-event.created",
@@ -168,10 +165,6 @@
     {
       "key": "user-account.account_login",
       "object": "authentication"
-    },
-    {
-      "key": "x_splunk_spl.user",
-      "cybox": false
     },
     {
       "key": "user-account.user_id",
@@ -190,10 +183,6 @@
       "references": "authentication"
     }
   ],
-  "bytes": {
-    "key": "x_splunk_spl.bytes",
-    "cybox": false
-  },
   "ssl_hash": [
     {
       "key": "x509-certificate.hashes.SHA-256",

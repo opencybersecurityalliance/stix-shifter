@@ -439,9 +439,11 @@ class TestAwsResultsToStix(unittest.TestCase):
         objects = observed_data['objects']
         custom_object = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-aws-athena')
 
-        assert custom_object.keys() == {'type', 'service_action_networkconnectionaction_remoteipdetails_country_countryname', 
+        expected_keys = {'type', 'service_action_networkconnectionaction_remoteipdetails_country_countryname', 
                                         'finding_id', 'arn', 'createdat', 'partition', 'resource',
                                         'schemaversion', 'service', 'updatedat'}
+        
+        assert custom_object.keys() >= expected_keys
         assert custom_object['arn'] == 'arn:aws:guardduty:us-east-1:979326520502:detector/6ab6e6ee780ed' \
                                        '494f3b7ca56acdc74df/finding/7ab9d1cb6248e05a0e419a79528761cb'
         assert custom_object['finding_id'] == '7ab9d1cb6248e05a0e419a79528761cb'

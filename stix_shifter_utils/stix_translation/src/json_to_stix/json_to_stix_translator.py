@@ -66,7 +66,6 @@ class DataSourceObjToStixObj:
         self.callback = callback
 
         # parse through options
-        self.cybox_default = options.get('cybox_default', True)
 
         self.properties = observable.properties
 
@@ -301,7 +300,12 @@ class DataSourceObjToStixObj:
                 references = references = prop['references'] if 'references' in prop else None
                 # unwrap array of stix values to separate stix objects
                 unwrap = True if 'unwrap' in prop and isinstance(data, list) else False
-                cybox = prop.get('cybox', self.cybox_default)
+                if "." in key:
+                    cybox = True
+                else:
+                    cybox = False
+                
+                # cybox = prop.get('cybox', self.cybox_default)
 
                 if self.callback:
                     try:
@@ -313,7 +317,8 @@ class DataSourceObjToStixObj:
 
                 config_keys = key.split('.')
                 if len(config_keys) < 2:
-                    if False is prop.get('cybox', self.cybox_default): 
+                    # if False is prop.get('cybox', self.cybox_default):
+                    if not cybox:
                         object_tag_ref_map['out_cybox'][key] = self._compose_value_object(data, [], observable_key=key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap)
                     pass
                 else:

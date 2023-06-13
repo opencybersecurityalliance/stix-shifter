@@ -143,7 +143,6 @@
   "eventcount": [
     {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     },
     {
@@ -160,8 +159,7 @@
   "starttime": [
     {
       "key": "first_observed",
-      "transformer": "QRadarEpochToTimestamp",
-      "cybox": false
+      "transformer": "QRadarEpochToTimestamp"
     },
     {
       "key": "x-ibm-finding.start",
@@ -172,8 +170,7 @@
   "endtime": [
     {
       "key": "last_observed",
-      "transformer": "QRadarEpochToTimestamp",
-      "cybox": false
+      "transformer": "QRadarEpochToTimestamp"
     },
     {
       "key": "x-ibm-finding.end",
@@ -747,7 +744,7 @@
   "EventID": {
     "key": "x-oca-event.code",
     "object": "event",
-    "transformer": "ToInteger"
+    "transformer": "ToString"
   },
   "ParentProcessId": [
     {

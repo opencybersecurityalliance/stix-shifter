@@ -68,13 +68,11 @@
     "timestamp": [
         {
             "key": "first_observed",
-            "transformer": "EpochSecondsToTimestamp",
-            "cybox": false
+            "transformer": "EpochSecondsToTimestamp"
         },
         {
             "key": "last_observed",
-            "transformer": "EpochSecondsToTimestamp",
-            "cybox": false
+            "transformer": "EpochSecondsToTimestamp"
         }
     ],
     "computer_identity": {
@@ -82,7 +80,6 @@
     },
     "event_count": {
         "key": "number_observed",
-        "cybox": false,
         "transformer": "ToInteger"
     },
     "local_address":

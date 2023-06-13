@@ -2,12 +2,10 @@
   "_time": [
     {
       "key": "first_observed",
-      "cybox": false,
       "transformer": "EpochToTimestamp"
     },
     {
       "key": "last_observed",
-      "cybox": false,
       "transformer": "EpochToTimestamp"
     },
     {
@@ -23,7 +21,7 @@
   "activity_id": {
     "key": "x-oca-event.code",
     "object": "x_oca_event",
-    "transformer": "ToInteger"
+    "transformer": "ToString"
   },
   "activity_name": {
     "key": "x-oca-event.action",
@@ -139,7 +137,7 @@
   "category_uid": {
     "key": "x-oca-event.code",
     "object": "x_oca_event",
-    "transformer": "ToInteger"
+    "transformer": "ToString"
   },
   "class_name": {
     "key": "x-oca-event.module",
@@ -210,7 +208,6 @@
   "count": [
     {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     },
     {
@@ -236,7 +233,6 @@
     },
     {
       "key": "last_observed",
-      "cybox": false,
       "transformer": "EpochToTimestamp"
     }
   ],
@@ -2407,7 +2403,6 @@
   },
   "start_time": {
     "key": "first_observed",
-    "cybox": false,
     "transformer": "EpochToTimestamp"
   },
   "status": {
