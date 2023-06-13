@@ -159,7 +159,7 @@
   },
   "email-addr": {
     "fields": {
-      "name": ["user.email"]
+      "value": ["user.email"]
     }
   },
   "x-oca-event": {
