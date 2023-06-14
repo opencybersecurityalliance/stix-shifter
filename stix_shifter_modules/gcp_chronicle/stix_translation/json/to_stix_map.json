@@ -1596,12 +1596,10 @@
           "object": "event"
         },
         {
-          "key": "first_observed",
-          "cybox": false
+          "key": "first_observed"
         },
         {
-          "key": "last_observed",
-          "cybox": false
+          "key": "last_observed"
         }
       ],
       "description": {

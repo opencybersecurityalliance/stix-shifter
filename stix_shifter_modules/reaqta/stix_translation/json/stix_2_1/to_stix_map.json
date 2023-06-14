@@ -5,16 +5,13 @@
   },
   "eventId": {
     "key": "x-oca-event.code",
-    "object": "event",
-    "transformer": "ToInteger"
+    "object": "event"
   },
   "happenedAt": [
     {
-      "cybox": false,
       "key": "first_observed"
     },
     {
-      "cybox": false,
       "key": "last_observed"
     }
   ],
@@ -1060,8 +1057,7 @@
       },
       "etwEventId": {
         "key": "x-oca-event.code",
-        "object": "etw_event",
-        "transformer": "ToInteger"
+        "object": "etw_event"
       },
       "etwEventRecordId": {
         "key": "x-oca-event.extensions.x-reaqta-etw.etw_event_record_id",

@@ -165,7 +165,7 @@ class TestTransform(unittest.TestCase, object):
         assert (dir_obj['created'] == "2018-08-15T15:11:55.676Z")
         assert (dir_obj['modified'] == "2018-08-15T18:10:30.456Z")
 
-        assert(objects.keys() == set(map(str, range(0, 5))))
+        assert (objects.keys() == set(map(str, range(0, 5))))
 
     def test_certificate_cim_to_stix(self):
         count = 1
@@ -399,7 +399,6 @@ class TestTransform(unittest.TestCase, object):
                         },
                         "event_count": {
                             "key": "number_observed",
-                            "cybox": False,
                             "transformer": "ToInteger"
                         },
                         "src_ip": [

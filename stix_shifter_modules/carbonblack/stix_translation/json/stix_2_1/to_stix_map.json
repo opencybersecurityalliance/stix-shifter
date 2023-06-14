@@ -16,8 +16,7 @@
       "object": "process"
     },
     {
-      "key": "first_observed",
-      "cybox": false
+      "key": "first_observed"
     }
   ],
   "process_name": [
@@ -204,8 +203,7 @@
     "object": "cb"
   },
   "last_update": {
-    "key": "last_observed",
-    "cybox": false
+    "key": "last_observed"
   },
   "last_server_update": {
     "key": "x-cb-response.last_server_update",

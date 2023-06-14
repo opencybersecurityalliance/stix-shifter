@@ -131,40 +131,34 @@
   ],
   "EventCount": {
     "key": "number_observed",
-    "cybox": false,
     "transformer": "ToInteger"
   },
   "timestamp": [
     {
       "key": "first_observed",
-      "transformer": "GuardiumToTimestamp",
-      "cybox": false
+      "transformer": "GuardiumToTimestamp"
      },
     {
       "key": "last_observed",
-      "transformer": "GuardiumToTimestamp",
-      "cybox": false
+      "transformer": "GuardiumToTimestamp"
     }
   ],
   "Create Date": [
     {
       "key": "first_observed",
-      "transformer": "GuardiumToTimestamp",
-      "cybox": false
+      "transformer": "GuardiumToTimestamp"
     }
   ],
   "Timestamp": [
     {
       "key": "last_observed",
-      "transformer": "GuardiumToTimestamp",
-      "cybox": false
+      "transformer": "GuardiumToTimestamp"
     }
   ],
   "Last updated": [
     {
       "key": "last_observed",
-      "transformer": "GuardiumToTimestamp",
-      "cybox": false
+      "transformer": "GuardiumToTimestamp"
     }
   ],
   "Url": {
