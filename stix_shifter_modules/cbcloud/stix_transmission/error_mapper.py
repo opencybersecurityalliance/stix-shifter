@@ -9,7 +9,7 @@ class ErrorMapper():
     logger = logger.set_logger(__name__)
 
     @classmethod
-    def set_error_code(cls, json_data, return_obj):
+    def set_error_code(cls, json_data, return_obj, connector=None):
         error_code = cls.DEFAULT_ERROR
 
         try:
@@ -21,4 +21,4 @@ class ErrorMapper():
         if error_code == ErrorMapper.DEFAULT_ERROR:
             cls.logger.error(f'failed to map: {str(json_data)}')
 
-        ErrorMapperBase.set_error_code(return_obj, error_code)
+        ErrorMapperBase.set_error_code(return_obj, error_code, connector=connector)

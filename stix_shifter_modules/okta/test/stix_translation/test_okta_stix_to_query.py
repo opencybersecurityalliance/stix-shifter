@@ -322,7 +322,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "START t'2023-01-19T11:00:00.000Z' STOP t'2024-02-07T11:00:00.003Z'"
         result = translation.translate('okta', 'query', '{}', stix_pattern)
         assert result['success'] is False
-        assert "invalid_parameter" == result['code']
+        assert "translation_error" == result['code']
         assert 'Start/Stop time should not be in the future UTC timestamp' in result['error']
 
     def test_invalid_operator_for_integer_type_field(self):
