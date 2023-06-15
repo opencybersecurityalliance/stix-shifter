@@ -41,7 +41,9 @@ def modules_list():
 
 def dialect_list(module, options):
     dialects = []
+    # print('IN OPTIONSDSS', options )
     if 'dialects' in options and options['dialects']:
+        print('IN OPTIONSDSS', options['dialects'] )
         dialects = options['dialects']
     else:
         modules = import_module('stix_shifter_modules')

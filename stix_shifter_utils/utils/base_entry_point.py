@@ -37,6 +37,7 @@ class BaseEntryPoint:
         self.__dialects_active_default = []
         self.__dialect_default = {}
         self.__options = options
+        print('self.__options>>>>> ', self.__options)
 
         self.__results_connector = None
         self.__status_connector = None
@@ -97,7 +98,8 @@ class BaseEntryPoint:
 
     def setup_translation_simple(self, dialect_default, query_translator=None, results_translator=None):
         module_name = self.__connector_module
-        dialects = dialect_list(module_name, []) # get list of dialects from configuration
+        dialects = dialect_list(module_name, self.__options) # get list of dialects from configuration
+        print('BASE ENTRY POINT-dialect_list: ', dialects)
         for dialect in dialects:
             self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator,
                              default=(dialect == dialect_default))
@@ -174,6 +176,7 @@ class BaseEntryPoint:
 
     @translation
     def get_results_translator(self, dialect:Union[str,list]=None):
+        print('BASE ENTRY POINT-get_results_translator: ', dialect)
         if dialect and isinstance(dialect, str):
             return self.__dialect_to_results_translator[dialect]
         return self.__combine_default_results_translator_to_stix_maps(dialect)
@@ -198,6 +201,7 @@ class BaseEntryPoint:
     async def translate_results(self, data_source, data):
         dialects = None
         if 'dialects' in self.__options:
+            print('BASE ENTRY POINT-translate_results: ', self.__options)
             dialects = self.__options['dialects']
 
         translator = self.get_results_translator(dialects)
