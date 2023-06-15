@@ -1,362 +1,1266 @@
 {
-    "EventSourceName": {
-        "key": "x-ibm-finding.name",
-        "object": "finding"
+  "AlertLink": {
+    "key": "x-ibm-finding.x_alert_link",
+    "object": "finding"
+  },
+  "AlertName": [
+    {
+      "key": "x-ibm-finding.name",
+      "object": "finding"
     },
-    "AlertName": [
-        {
-            "key": "x-ibm-finding.name",
-            "object": "finding"
-        },
-        {
-            "key": "x-azure-security-event.alert_type",
-            "object": "msevent"
-        }
-    ],
-    "IncidentName": [
-        {
-            "key": "x-ibm-finding.name",
-            "object": "finding"
-        },
-        {
-            "key": "x-azure-security-incident.incident_name",
-            "object": "incident"
-        }
-    ],
-    "TimeGenerated": [
-        {
-            "key": "x-ibm-finding.start",
-            "object": "finding"
-        },
-        {
-            "key": "x-oca-event.created",
-            "object": "event"
-        },
-        {
-            "key": "x-ibm-finding.time_observed",
-            "object": "finding"
-        }
-    ],
-    "EventTime": {
-        "key": "x-ibm-finding.time_observed",
-        "object": "finding"
+    {
+      "key": "x-ibm-ttp-tagging.name",
+      "object": "ttp_finding"
     },
-    "PreviousTime": {
-        "key": "x-ibm-finding.start",
-        "object": "finding"
-    },
-    "ProviderName": {
-        "key": "x-oca-event.provider",
-        "object": "event"
-    },
-    "EventID": {
-        "key": "x-oca-event.code",
-        "object": "event"
-    },
-    "IpAddress": [
-        {
-            "key": "x-ibm-finding.src_ip_ref",
-            "object": "finding"
-        },
-        {
-            "key": "ipv4-addr.value",
-            "object": "ipv4-addr"
-        },
-        {
-            "key": "x-oca-event.ip_refs",
-            "object": "event"
-        }
-    ],
-    "ClientIPAddress": [
-        {
-            "key": "x-ibm-finding.dst_ip_ref",
-            "object": "finding"
-        },
-        {
-            "key": "x-oca-event.ip_refs.clientIp",
-            "object": "event"
-        }
-    ],
-    "StartTime": {
-        "key": "x-ibm-finding.start",
-        "object": "finding"
-    },
-    "EndTime": {
-        "key": "x-ibm-finding.end",
-        "object": "finding"
-    },
-    "ProcessingEndTime": {
-        "key": "x-ibm-finding.end",
-        "object": "finding"
-    },
-    "FirstActivityTime": {
-        "key": "x-ibm-finding.start",
-        "object": "finding"
-    },
-    "FirstModifiedTime": {
-        "key": "x-ibm-finding.start",
-        "object": "finding"
-    },
-    "ClosedTime": {
-        "key": "x-ibm-finding.end",
-        "object": "finding"
-    },
-    "LastActivityTime": {
-        "key": "x-ibm-finding.end",
-        "object": "finding"
-    },
-    "LastModifiedTime": {
-        "key": "x-ibm-finding.end",
-        "object": "finding"
-    },
-    "CreatedTime": {
-        "key": "x-oca-event.created",
-        "object": "event"
-    },
-    "Account": {
-        "key": "x-oca-event.provider",
-        "object": "event"
-    },
-    "QuarantineHelpURL": [
-        {
-            "key": "x-oca-event.url_ref",
-            "object": "event"
-        },
-        {
-            "key": "url.name",
-            "object": "url"
-        }
-    ],
-    "IncidentUrl": [
-        {
-            "key": "x-oca-event.url_ref",
-            "object": "event"
-        },
-        {
-            "key": "url.name",
-            "object": "url"
-        }
-    ],
-    "ProcessName": [
-        {
-            "key": "process.name",
-            "object": "process"
-        },
-        {
-            "key": "x-oca-event.process_ref",
-            "object": "event"
-        }
-    ],
-    "CommandLine": {
-        "key": "process.command_line",
-        "object": "process"
-    },
-    "ProcessId": {
-        "key": "process.pid",
-        "object": "process"
-    },
-    "ParentProcessName": [
-        {
-            "key": "process.parent_ref",
-            "object": "process"
-        },
-        {
-            "key": "x-oca-event.parent_process_ref",
-            "object": "event"
-        }
-    ],
-    "FilePath": [
-        {
-            "key": "file.path",
-            "object": "file"
-        },
-        {
-            "key": "x-oca-event.file_ref.path",
-            "object": "file"
-        }
-    ],
-    "FileHash": [
-        {
-            "key": "file.hashes",
-            "object": "event"
-        },
-        {
-            "key": "x-oca-event.file_ref.path",
-            "object": "event"
-        }
-    ],
-    "ServiceFileName": {
-        "key": "x-oca-event.file_ref.service",
-        "object": "event"
-    },
-    "HomeDirectory": {
-        "key": "directory.path",
-        "object": "directory"
-    },
-    "HomePath": {
-        "key": "directory.path",
-        "object": "directory"
-    },
-    "TargetDomainName": {
-        "key": "domain-name.value",
-        "object": "domain-name"
-    },
-    "TargetUserName": {
-        "key": "user-account.account_login",
-        "object": "user-account"
-    },
-    "TenantId": {
-        "key": "x-azure-security-alert.tenant_id",
-        "object": "alert"
-    },
-    "WorkspaceSubscriptionId": {
-        "key": "x-azure-security-alert.subscription_id",
-        "object": "alert"
-    },
-    "_ResourceId": {
-        "key": "x-azure-security-alert.resourceId",
-        "object": "alert"
-    },
-    "AlertSeverity": {
-        "key": "x-azure-security-alert.alert_severity",
-        "object": "alert"
-    },
-    "Description": [
-        {
-            "key": "x-azure-security-alert.description",
-            "object": "alert"
-        },
-        {
-            "key": "x-azure-security-event.description",
-            "object": "msevent"
-        }
-    ],
-    "ProductName": {
-        "key": "x-azure-security-alert.product_name",
-        "object": "alert"
-    },
-    "VendorName": {
-        "key": "x-azure-security-alert.vendor_name",
-        "object": "alert"
-    },
-    "SystemAlertId": {
-        "key": "x-azure-security-alert.cloudAppStates.system_alertid",
-        "object": "alert"
-    },
-    "Status": {
-        "key": "x-azure-security-alert.status",
-        "object": "alert"
-    },
-    "ExtentedProperties": {
-        "key": "x-azure-security-alert.extented_properties",
-        "object": "alert"
-    },
-    "ConfidenceLevel": {
-        "key": "x-azure-security-alert.confidence_level",
-        "object": "alert"
-    },
-    "Entities": {
-        "key": "x-azure-security-alert.entities",
-        "object": "alert"
-    },
-    "DisplayName": {
-        "key": "x-azure-security-alert.display_name",
-        "object": "alert"
-    },
-    "WorkspaceResourceGroup": {
-        "key": "x-azure-security-alert.workspace_resource_group",
-        "object": "alert"
-    },
-    "CompromisedEntity": {
-        "key": "x-azure-security-alert.compromised_entity",
-        "object": "alert"
-    },
-    "eventId": {
-        "key": "x-azure-security-event.event_id",
-        "object": "msevent"
-    },
-    "Title": {
-        "key": "x-azure-security-event.title",
-        "object": "msevent"
-    },
-    "DeviceDescription": {
-        "key": "x-azure-security-event.text",
-        "object": "msevent"
-    },
-    "DeviceId": {
-        "key": "x-oca-asset.device_id",
-        "object": "asset"
-    },
-    "SourceSystem": {
-        "key": "x-azure-security-event.source",
-        "object": "msevent"
-    },
-    "Activity": {
-        "key": "x-azure-security-event.activity",
-        "object": "msevent"
-    },
-    "Computer": {
-        "key": "x-azure-security-event.computer",
-        "object": "msevent"
-    },
-    "EventData": {
-        "key": "x-azure-security-event.event_data",
-        "object": "msevent"
-    },
-    "LogonProcessName": {
-        "key": "process.name",
-        "object": "process"
-    },
-    "ServiceName": {
-        "key": "x-azure-security-event.service_name",
-        "object": "msevent"
-    },
-    "Task": {
-        "key": "x-azure-security-event.task",
-        "object": "msevent"
-    },
-    "UserParameter": {
-        "key": "x-azure-security-event.user_parameter",
-        "object": "msevent"
-    },
-    "MemberName": {
-        "key": "x-azure-security-event.member_name",
-        "object": "msevent"
-    },
-    "Requester": {
-        "key": "x-azure-security-event.requester",
-        "object": "msevent"
-    },
-    "Severity": {
-        "key": "x-azure-security-incident.severity",
-        "object": "incident"
-    },
-    "Owner": {
-        "key": "x-azure-security-incident.owner",
-        "object": "incident"
-    },
-    "AdditionalData": {
-        "key": "x-azure-security-incident.additional_data",
-        "object": "incident"
-    },
-    "AlertIds": {
-        "key": "x-azure-security-incident.alertids",
-        "object": "incident"
-    },
-    "Comments": {
-        "key": "x-azure-security-incident.comments",
-        "object": "incident"
-    },
-    "Description__incident": {
-        "key": "x-azure-security-incident.description",
-        "object": "incident"
-    },
-    "Labels": {
-        "key": "x-azure-security-incident.labels",
-        "object": "incident"
-    },
-    "ModifiedBy": {
-        "key": "x-azure-security-incident.modified_by",
-        "object": "incident"
+    {
+      "key": "x-ibm-finding.ttp_tagging_refs",
+      "object": "finding",
+      "references": ["ttp_finding"]
     }
+  ],
+  "AlertSeverity": {
+    "key": "x-ibm-finding.severity",
+    "object": "finding",
+    "transformer": "ConvertSeverityToScore"
+  },
+  "AlertType": {
+    "key": "x-ibm-finding.x_alert_type",
+    "object": "finding"
+  },
+  "CompromisedEntity": {
+    "key": "x-ibm-finding.x_compromised_entity",
+    "object": "finding"
+  },
+  "ConfidenceLevel": {
+    "key": "x-ibm-finding.x_confidence_level",
+    "object": "alert_info"
+  },
+  "ConfidenceScore": [
+    {
+      "key": "x-ibm-finding.confidence",
+      "object": "finding",
+      "transformer": "RealToNumber"
+    },
+    {
+      "key": "x-ibm-ttp-tagging.confidence",
+      "object": "ttp_finding",
+      "transformer": "ConvertToReal"
+    }
+  ],
+  "Description": {
+    "key": "x-ibm-finding.description",
+    "object": "finding"
+  },
+  "EndTime": {
+    "key": "x-ibm-finding.end",
+    "object": "finding"
+  },
+  "ExtendedProperties": {
+    "resourceType": {
+      "key": "x-cloud-resource.resource_type",
+      "object": "cloud_resource"
+    }
+  },
+  "ProcessingEndTime": {
+    "key": "x-ibm-finding.x_processing_endtime",
+    "object": "finding"
+  },
+  "ProductComponentName": {
+    "key": "software.x_product_component_name",
+    "object": "product_info"
+  },
+  "ProductName": [
+    {
+      "key": "software.name",
+      "object": "product_info"
+    },
+    {
+      "key": "x-ibm-finding.dst_application_ref",
+      "object": "finding",
+      "references": "product_info"
+    }
+  ],
+  "ProviderName": {
+    "key": "software.x_provider_name",
+    "object": "product_info"
+  },
+  "RemediationSteps": {
+    "key": "x-ibm-finding.x_remediationsteps",
+    "object": "finding"
+  },
+  "ResourceId": {
+    "key": "x-cloud-resource.resource_id",
+    "object": "cloud_resource"
+  },
+  "StartTime": {
+    "key": "x-ibm-finding.start",
+    "object": "finding"
+  },
+  "Status": {
+    "key": "x-ibm-finding.x_status",
+    "object": "finding"
+  },
+  "SystemAlertId": {
+    "key": "x-ibm-finding.x_system_alert_id",
+    "object": "finding"
+  },
+  "VendorOriginalId": {
+    "key": "x-ibm-finding.alert_id",
+    "object": "finding"
+  },
+  "Tactics": {
+      "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+      "object": "ttp_finding"
+    },
+  "Techniques": {
+    "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+    "object": "ttp_finding"
+  },
+  "TenantId": {
+    "key": "x-cloud-provider.tenant_id",
+    "object": "cloud_info"
+  },
+  "TimeGenerated": {
+      "key": "x-ibm-finding.time_observed",
+      "object": "finding"
+    },
+  "Type": {
+    "key": "x-ibm-finding.finding_type",
+    "object": "finding",
+    "transformer": "ConvertToFindingType"
+  },
+  "VendorName": {
+    "key": "software.vendor",
+    "object": "product_info"
+  },
+  "AdditionalData": {
+    "alertsCount": {
+      "key": "x-alerts-info.alert_count",
+      "object": "alert_info"
+    },
+    "alertProductNames": {
+      "key": "x-alerts-info.alert_product_names",
+      "object": "alert_info"
+    },
+    "tactics": {
+      "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+      "object": "ttp_finding"
+    },
+    "techniques": {
+      "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+      "object": "ttp_finding"
+    }
+  },
+  "AlertIds": [
+    {
+      "key": "x-alerts-info.alert_ids",
+      "object": "alert_info"
+    },
+    {
+      "key": "x-ibm-finding.alerts_info_ref",
+      "object": "finding",
+      "references": "alert_info"
+    }
+  ],
+  "Classification": {
+    "key": "x-incident-info.classification",
+    "object": "incident"
+  },
+  "ClassificationComment": {
+    "key": "x-incident-info.classification_comment",
+    "object": "incident"
+  },
+  "ClassificationReason": {
+    "key": "x-incident-info.classification_reason",
+    "object": "incident"
+  },
+  "ClosedTime": {
+    "key": "x-incident-info.closed_time",
+    "object": "incident"
+  },
+  "Comments": {
+    "key": "x-incident-info.comments",
+    "object": "incident"
+  },
+  "CreatedTime": {
+    "key": "x-ibm-finding.start",
+    "object": "finding"
+  },
+  "Description": {
+    "key": "x-ibm-finding.description",
+    "object": "finding"
+  },
+  "FirstActivityTime": {
+    "key": "x-incident-info.first_activity",
+    "object": "incident"
+  },
+  "FirstModifiedTime": {
+    "key": "x-incident-info.first_modified",
+    "object": "incident"
+  },
+  "IncidentName": {
+    "key": "x-ibm-finding.x_incident_name",
+    "object": "finding"
+  },
+  "ProviderIncidentId": {
+    "key": "x-ibm-finding.x_provider_incident_id",
+    "object": "finding"
+  },
+  "ProviderNameIncident": {
+    "key": "x-ibm-finding.x_provider_name",
+    "object": "finding"
+  },
+  "IncidentUrl": [
+    {
+      "key": "url.value",
+      "object": "url"
+    },
+    {
+      "key": "x-incident-info.incident_url_ref",
+      "object": "incident",
+      "references": "url"
+    }
+  ],
+  "Labels": {
+    "key": "x-incident-info.labels",
+    "object": "incident"
+  },
+  "LastActivityTime": {
+    "key": "x-incident-info.last_active",
+    "object": "incident"
+  },
+  "LastModifiedTime": {
+    "key": "x-ibm-finding.end",
+    "object": "finding"
+  },
+  "ModifiedBy": {
+    "key": "x-ibm-finding.x_modified_by",
+    "object": "finding"
+  },
+  "Owner": {
+    "email": {
+      "key": "email-addr.value",
+      "object": "owner"
+    },
+    "userPrincipalName": [
+      {
+        "key": "email-addr.value",
+        "object": "owner"
+      },
+      {
+        "key": "x-ibm-finding.x_owner_ref",
+        "object": "finding",
+        "references": "owner"
+      }
+    ],
+    "assignedTo": {
+      "key": "email-addr.display_name",
+      "object": "owner"
+    }
+  },
+  "RelatedAnalyticRuleIds": {
+    "key": "x-ibm-finding.rule_names",
+    "object": "finding"
+  },
+  "Severity": {
+    "key": "x-ibm-finding.severity",
+    "object": "finding",
+    "transformer": "ConvertSeverityToScore"
+  },
+  "Tasks": {
+      "key": "x-incident-info.tasks",
+      "object": "incident"
+    },
+  "Title": [
+    {
+      "key": "x-ibm-finding.name",
+      "object": "finding"
+    },
+    {
+      "key": "x-ibm-ttp-tagging.name",
+      "object": "ttp_finding"
+    },
+    {
+      "key": "x-ibm-finding.ttp_tagging_refs",
+      "object": "finding",
+      "references": ["ttp_finding"],
+      "group": true
+    }
+  ],
+  "EventOriginId": {
+    "key": "x-ibm-finding.alert_id",
+    "object": "finding"
+  },
+  "PreviousTime": {
+    "key": "x-ibm-finding.start",
+    "object": "finding"
+  },
+  "EventID": {
+    "key": "x-oca-event.code",
+    "object": "event"
+  },
+  "IpAddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "ipv4-addr"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "ipv4-addr"
+    },
+    {
+      "key": "x-ibm-finding.src_ip_ref",
+      "object": "finding",
+      "references": "ipv4-addr"
+    },
+    {
+      "key": "x-ibm-finding.ioc_refs",
+      "object": "finding",
+      "references": ["ipv4-addr"],
+      "group": true
+    },
+    {
+      "key": "x-oca-event.ip_refs",
+      "object": "event",
+      "references": ["ipv4-addr"],
+      "group" : true
+    }
+  ],
+  "ClientIPAddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "client"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "client"
+    },
+    {
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "finding",
+      "references": "client"
+    },
+    {
+      "key": "x-ibm-finding.ioc_refs",
+      "object": "finding",
+      "references": ["client"],
+      "group": true
+    },
+    {
+      "key": "x-oca-event.ip_refs",
+      "object": "event",
+      "references": ["client"],
+      "group": true
+    }
+  ],
+  "Channel": {
+    "key": "x-oca-event.module",
+    "object": "event"
+  },
+  "QuarantineHelpURL": [
+    {
+      "key": "url.value",
+      "object": "help_url"
+    },
+    {
+      "key": "x-oca-event.url_ref",
+      "object": "event",
+      "references": "help_url"
+    }
+  ],
+  "NewProcessId": [
+    {
+      "key": "process.pid",
+      "object": "process",
+      "transformer": "HexToInteger"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "NewProcessName": [
+    {
+      "key": "directory.path",
+      "object": "file_dir",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.name",
+      "object": "file",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file",
+      "references": "file_dir"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "file"
+    }
+  ],
+  "CommandLine": {
+    "key": "process.command_line",
+    "object": "process"
+  },
+  "ParentProcessName": [
+    {
+      "key": "directory.path",
+      "object": "file_dir1",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.name",
+      "object": "file1",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file1",
+      "references": "file_dir1"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent1",
+      "references": "file1"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent1"
+    },
+    {
+      "key": "x-oca-event.parent_process_ref",
+      "object": "event",
+      "references": "parent1"
+    }
+  ],
+  "ProcessId": {
+    "key": "process.pid",
+    "object": "parent1",
+    "transformer": "HexToInteger"
+  },
+  "ProcessName": [
+    {
+      "key": "directory.path",
+      "object": "file_dir1",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.name",
+      "object": "file1",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file1",
+      "references": "file_dir1"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent1",
+      "references": "file1"
+    }
+  ],
+  "TokenElevationType": {
+    "key": "process.x_token_elevation_type",
+    "object": "process"
+  },
+  "MandatoryLabel": {
+    "key": "process.x_mandatory_label",
+    "object": "process"
+  },
+  "FilePath": [
+    {
+      "key": "file.path",
+      "object": "file"
+    },
+    {
+      "key": "x-oca-event.file_ref",
+      "object": "event",
+      "references": "file"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "file"
+    },
+    {
+      "key": "file.name",
+      "object": "file",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "x-ibm-finding.ioc_refs",
+      "object": "finding",
+      "references": ["file"],
+      "group": true
+    }
+  ],
+  "Fqbn": {
+    "key": "file.x_fqbn",
+    "object": "file"
+  },
+  "SHA256": {
+    "key": "file.hashes.SHA-256",
+    "object": "file"
+  },
+  "SHA1": {
+    "key": "file.hashes.SHA-1",
+    "object": "file"
+  },
+  "MD5": {
+    "key": "file.hashes.MD5",
+    "object": "file"
+  },
+  "ServiceFileName": {
+    "key": "x-oca-event.x_service_file_ref",
+    "object": "event"
+  },
+  "ServiceName": {
+    "key": "x-oca-event.x_service_name",
+    "object": "event"
+  },
+  "HomeDirectory": {
+    "key": "directory.path",
+    "object": "directory"
+  },
+  "HomePath": {
+    "key": "directory.path",
+    "object": "directory"
+  },
+  "TargetAccount": {
+    "key": "user-account.account_login",
+    "object": "target-account"
+  },
+  "TargetDomainName": {
+    "key": "user-account.x_domain_name",
+    "object": "target-account"
+  },
+  "TargetLogonId": {
+    "key": "user-account.x_login_id",
+    "object": "target-account",
+    "transformer": "HexToInteger"
+  },
+  "TargetUserName": [
+    {
+      "key": "user-account.user_id",
+      "object": "target-account"
+    },
+    {
+      "key": "user-account.display_name",
+      "object": "target-account"
+    },
+    {
+      "key": "x-ibm-finding.src_application_user_ref",
+      "object": "finding",
+      "references": "target-account"
+    },
+    {
+      "key": "x-oca-event.user_ref",
+      "object": "event",
+      "references": "target-account"
+    }
+  ],
+  "TargetUserSid": {
+    "key": "user-account.x_user_sid",
+    "object": "target-account"
+  },
+  "TargetSid": {
+    "key": "x-oca-event.x_modified_account_sid",
+    "object": "event"
+  },
+  "_ResourceId": {
+    "key": "x-cloud-resource.resource_id",
+    "object": "cloud_resource"
+  },
+  "EventSourceName": {
+    "key": "x-oca-event.provider",
+    "object": "event"
+  },
+  "DeviceDescription": {
+    "key": "x-oca-asset.x_description",
+    "object": "asset"
+  },
+  "DeviceId": {
+    "key": "x-oca-asset.device_id",
+    "object": "asset"
+  },
+  "Activity": [
+    {
+      "key": "x-oca-event.action",
+      "object": "event"
+    },
+    {
+      "key": "x-ibm-finding.name",
+      "object": "finding"
+    }
+  ],
+  "Computer": [
+    {
+      "key": "x-oca-asset.hostname",
+      "object": "asset"
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "asset"
+    }
+  ],
+  "EventData": {
+    "key": "x-oca-event.dataset",
+    "object": "event"
+  },
+  "LogonGuid": {
+    "key": "x-logon-info.guid",
+    "object": "logon_info"
+  },
+  "LogonProcessName": {
+    "key": "x-logon-info.logon_process",
+    "object": "logon_info"
+  },
+  "LogonType": {
+    "key": "x-logon-info.logon_type",
+    "object": "logon_info"
+  },
+  "LogonTypeName": {
+    "key": "x-logon-info.logon_type_name",
+    "object": "logon_info"
+  },
+  "AuthenticationPackageName": {
+    "key": "x-logon-info.authentication_package_name",
+    "object": "logon_info"
+  },
+  "Task": {
+    "key": "x-oca-event.x_task",
+    "object": "event"
+  },
+  "UserParameters": {
+    "key": "x-oca-event.x_user_parameter",
+    "object": "event"
+  },
+  "MemberName": {
+    "key": "x-oca-event.x_member_name",
+    "object": "event"
+  },
+  "Requester": {
+    "key": "x-oca-event.x_requester",
+    "object": "event"
+  },
+  "SourceComputerId": {
+    "key": "x-oca-asset.device_id",
+    "object": "asset"
+  },
+  "SubjectAccount": {
+    "key": "user-account.account_login",
+    "object": "subject"
+  },
+  "SubjectDomainName": {
+    "key": "user-account.x_domain_name",
+    "object": "subject"
+  },
+  "SubjectLogonId": {
+    "key": "user-account.x_login_id",
+    "object": "subject",
+    "transformer": "HexToInteger"
+  },
+  "SubjectUserName": [
+    {
+      "key": "user-account.user_id",
+      "object": "subject"
+    },
+    {
+      "key": "user-account.display_name",
+      "object": "subject"
+    },
+    {
+      "key": "x-ibm-finding.dst_application_user_ref",
+      "object": "finding",
+      "references": "subject"
+    }
+  ],
+  "SubjectUserSid": {
+    "key": "user-account.x_user_sid",
+    "object": "subject"
+  },
+  "TimeCollected": [
+    {
+      "key": "x-oca-event.created",
+      "object": "event",
+      "transformer": "TimestampConversion"
+    },
+    {
+      "key": "x-oca-event.modified",
+      "object": "event",
+      "transformer": "TimestampConversion"
+    }
+  ],
+  "WorkstationName": {
+    "key": "x-ibm-finding.dst_device",
+    "object": "finding"
+  },
+  "TargetServerName": {
+    "key": "x-ibm-finding.dst_device",
+    "object": "finding"
+  },
+  "Entities": {
+    "process": {
+      "ProcessId": {
+        "key": "process.pid",
+        "object": "process1",
+        "transformer": "HexToInteger"
+      },
+      "CommandLine": {
+        "key": "process.command_line",
+        "object": "process1"
+      },
+      "CreationTimeUtc": {
+        "key": "process.created",
+        "object": "process1"
+      },
+      "ElevationToken": {
+        "key": "process.x_elevation_token",
+        "object": "process1"
+      },
+      "ParentProcess": {
+        "ProcessId": [
+          {
+            "key": "process.pid",
+            "object": "parent_process",
+            "transformer": "HexToInteger"
+          },
+          {
+            "key": "process.parent_ref",
+            "object": "process1",
+            "references": "parent_process"
+          }
+        ],
+        "CommandLine": {
+          "key": "process.command_line",
+          "object": "parent_process"
+        },
+        "CreationTimeUtc": {
+          "key": "process.created",
+          "object": "parent_process"
+        },
+        "ElevationToken": {
+          "key": "process.x_elevation_token",
+          "object": "parent_process"
+        },
+        "ImageFile": {
+          "Name": [
+            {
+              "key": "file.name",
+              "object": "image_file_obj1"
+            },
+            {
+              "key": "process.binary_ref",
+              "object": "parent_process",
+              "references": "image_file_obj1"
+            },
+            {
+              "key": "x-ibm-finding.ioc_refs",
+              "object": "finding",
+              "references": [
+                "image_file_obj1"
+              ],
+              "group": true
+            }
+          ],
+          "Directory": [
+            {
+              "key": "directory.path",
+              "object": "dir_obj1"
+            },
+            {
+              "key": "file.parent_directory_ref",
+              "object": "image_file_obj1",
+              "references": "dir_obj1"
+            }
+          ],
+          "FileHashes": {
+            "SHA256": {
+              "key": "file.hashes.SHA-256",
+              "object": "image_file_obj1"
+            },
+            "SHA1": {
+              "key": "file.hashes.SHA-1",
+              "object": "image_file_obj1"
+            },
+            "MD5": {
+              "key": "file.hashes.MD5",
+              "object": "image_file_obj1"
+            }
+          }
+        }
+      },
+      "ImageFile": {
+        "Name": [
+          {
+            "key": "file.name",
+            "object": "image_file_obj"
+          },
+          {
+            "key": "process.binary_ref",
+            "object": "process1",
+            "references": "image_file_obj"
+          },
+          {
+            "key": "x-ibm-finding.ioc_refs",
+            "object": "finding",
+            "references": [
+              "image_file_obj"
+            ],
+            "group": true
+          }
+        ],
+        "Directory": [
+          {
+            "key": "directory.path",
+            "object": "dir_obj"
+          },
+          {
+            "key": "file.parent_directory_ref",
+            "object": "image_file_obj",
+            "references": "dir_obj"
+          }
+        ],
+        "FileHashes": {
+          "SHA256": {
+            "key": "file.hashes.SHA-256",
+            "object": "image_file_obj"
+          },
+          "SHA1": {
+            "key": "file.hashes.SHA-1",
+            "object": "image_file_obj"
+          },
+          "MD5": {
+            "key": "file.hashes.MD5",
+            "object": "image_file_obj"
+          }
+        }
+      }
+    },
+    "host": {
+      "HostName": [
+        {
+          "key": "x-oca-asset.hostname",
+          "object": "host"
+        },
+        {
+          "key": "x-host-logon-session.host_ref",
+          "object": "logon_session",
+          "references": "host"
+        }
+      ],
+      "NTDomain": {
+        "key": "x-oca-asset.x_nt_domain",
+        "object": "host"
+      },
+      "DnsDomain": {
+        "key": "x-oca-asset.x_dns_domain",
+        "object": "host"
+      },
+      "NetBiosName": {
+        "key": "x-oca-asset.x_netbios_name",
+        "object": "host"
+      },
+      "OMSAgentID": {
+        "key": "x-oca-asset.x_oms_agent_id",
+        "object": "host"
+      },
+      "OSFamily": [
+        {
+          "key": "software.name",
+          "object": "host_software"
+        },
+        {
+          "key": "x-oca-asset.os_ref",
+          "object": "host",
+          "references": "host_software"
+        },
+        {
+          "key": "x-ibm-finding.dst_os_ref",
+          "object": "finding",
+          "references": "host_software"
+        }
+      ],
+      "OSVersion": {
+        "key": "software.version",
+        "object": "host_software"
+      },
+      "IsDomainJoined": {
+        "key": "x-oca-asset.x_is_domain_host",
+        "object": "host"
+      }
+    },
+    "account": {
+      "Name": [
+        {
+          "key": "user-account.user_id",
+          "object": "account"
+        },
+        {
+          "key": "process.creator_user_ref",
+          "object": "process1",
+          "references": "account"
+        },
+        {
+          "key": "process.creator_user_ref",
+          "object": "parent_process",
+          "references": "account"
+        },
+        {
+          "key": "x-host-logon-session.account_ref",
+          "object": "logon_session",
+          "references": "account"
+        },
+        {
+          "key": "x-ibm-finding.dst_os_user_ref",
+          "object": "finding",
+          "references": "account"
+        }
+      ],
+      "AadUserId": {
+        "key": "user-account.x_aad_user_id",
+        "object": "account"
+      },
+      "DisplayName": {
+        "key": "user-account.display_name",
+        "object": "account"
+      },
+      "NTDomain": {
+        "key": "use-account.x_nt_domain",
+        "object": "account"
+      },
+      "DnsDomain": {
+        "key": "use-account.x_dns_domain",
+        "object": "account"
+      },
+      "UPNSuffix": {
+        "key": "user-account.x_upn_suffix",
+        "object": "account"
+      },
+      "PUID": {
+        "key": "user-account.x_passport_userid",
+        "object": "account"
+      },
+      "Sid": {
+        "key": "user-account.x_account_sid",
+        "object": "account"
+      },
+      "IsDomainJoined": {
+        "key": "user-account.is_service_account",
+        "object": "account"
+      },
+      "AccountType": {
+        "key": "user-account.account_type",
+        "object": "account"
+      }
+    },
+    "host-logon-session": {
+      "SessionId": {
+        "key": "x-host-logon-session.session_id",
+        "object": "logon_session",
+        "transformer": "HexToInteger"
+      },
+      "StartTimeUtc": {
+        "key": "x-host-logon-session.start_time",
+        "object": "logon_session"
+      },
+      "EndTimeUtc": {
+        "key": "x-host-logon-session.end_time",
+        "object": "logon_session"
+      }
+    },
+    "file": {
+      "Name": [
+        {
+          "key": "file.name",
+          "object": "file_obj"
+        },
+        {
+          "key": "process.binary_ref",
+          "object": "process1",
+          "references": "file_obj"
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": ["file_obj"],
+          "group": true
+        }
+      ],
+      "Directory": [
+        {
+          "key": "directory.path",
+          "object": "dir_obj"
+        },
+        {
+          "key": "file.parent_directory_ref",
+          "object": "file_obj",
+          "references": "dir_obj"
+        }
+      ],
+      "FileHashes": {
+        "SHA256": {
+          "key": "file.hashes.SHA-256",
+          "object": "file_obj"
+        },
+        "SHA1": {
+          "key": "file.hashes.SHA-1",
+          "object": "file_obj"
+        },
+        "MD5": {
+          "key": "file.hashes.MD5",
+          "object": "file_obj"
+        }
+      }
+    },
+    "network-connection": {
+      "SourceAddress": {
+        "Address": [
+          {
+            "key": "ipv4-addr.value",
+            "object": "ipaddress"
+          },
+          {
+            "key": "ipv6-addr.value",
+            "object": "ipaddress"
+          },
+          {
+            "key": "network-traffic.src_ref",
+            "object": "nt",
+            "references": "ipaddress",
+            "unwrap": true
+          }
+        ],
+        "Location": {
+          "CountryName": [
+            {
+              "key": "x-geo-location.country",
+              "object": "location"
+            },
+            {
+              "key": "ipv4-addr.x_location_ref",
+              "object": "ipaddress",
+              "references": "location"
+            },
+            {
+              "key": "ipv6-addr.x_location_ref",
+              "object": "ipaddress",
+              "references": "location"
+            }
+          ],
+          "City": {
+              "key": "x-geo-location.city",
+              "object": "location"
+            },
+          "Carrier": {
+              "key": "x-geo-location.carrier",
+              "object": "location"
+            },
+          "Longitude": {
+              "key": "x-geo-location.longitude",
+              "object": "location"
+            },
+          "Latitude": {
+              "key": "x-geo-location.latitude",
+              "object": "location"
+            },
+          "Organization": {
+              "key": "x-geo-location.organization",
+              "object": "location"
+            }
+        }
+      },
+      "DestinationPort": {
+        "key": "network-traffic.dst_port",
+        "object": "nt",
+        "transformer": "ToInteger"
+      },
+      "Protocol": {
+        "key": "network-traffic.protocols",
+        "object": "nt",
+        "transformer": "ToLowercaseArray"
+      },
+      "groupIPReference": {
+        "key": "x-ibm-finding.ioc_refs",
+        "object": "finding",
+        "references": [
+          "ipaddress"
+        ],
+        "group_ref": true
+      }
+    },
+    "dns": {
+      "DomainName": {
+        "key": "domain-name.value",
+        "object": "domain_name"
+      },
+      "IpAdresses": {
+        "Address": [
+          {
+            "key": "ipv4-addr.value",
+            "object": "ipaddress1"
+          },
+          {
+            "key": "ipv6-addr.value",
+            "object": "ipaddress1"
+          }
+        ],
+        "groupIpReference": {
+          "key": "domain-name.resolves_to_refs",
+          "object": "domain_name",
+          "references": [
+            "ipaddress1"
+          ],
+          "group_ref": true
+        },
+        "groupIpfindingReference": {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": [
+            "ipaddress1"
+          ],
+          "group_ref": true
+        }
+      }
+    },
+    "url": {
+      "Url": [
+        {
+          "key": "url.value",
+          "object": "url"
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": ["url"],
+          "group": true
+        }
+      ]
+    },
+    "blob": {
+      "Name": {
+        "key": "x-azure-blob.name",
+        "object": "blob_storage"
+      },
+      "Url": [
+        {
+          "key": "url.value",
+          "object": "blobUrl"
+        },
+        {
+          "key": "x-azure-blob.url_ref",
+          "object": "blob_storage",
+          "references": "blobUrl"
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": ["blobUrl"],
+          "group": true
+        }
+      ],
+      "Etag": {
+        "key": "x-azure-blob.etag",
+        "object": "blob_storage"
+      },
+      "BlobContainer": {
+        "Name": {
+          "key": "x-azure-blob.blob_container",
+          "object": "blob_storage"
+        }
+      }
+    },
+    "blob-container": {
+      "Name": {
+        "key": "x-azure-blob.blob_container",
+        "object": "blob_storage"
+      }
+    },
+    "malware": {
+      "Name": {
+        "key": "x-azure-malware.name",
+        "object": "malware"
+      },
+      "Category": {
+        "key": "x-azure-malware.category",
+        "object": "malware"
+      },
+      "Files": {
+        "file": {
+          "Name": {
+            "key": "file.name",
+            "object": "malware_file"
+          },
+          "Directory": [
+            {
+              "key": "directory.path",
+              "object": "dir_obj"
+            },
+            {
+              "key": "file.parent_directory_ref",
+              "object": "malware_file",
+              "references": "dir_obj"
+            }
+          ],
+          "FileHashes": {
+            "SHA256": {
+              "key": "file.hashes.SHA-256",
+              "object": "malware_file"
+            },
+            "SHA1": {
+              "key": "file.hashes.SHA-1",
+              "object": "malware_file"
+            },
+            "MD5": {
+              "key": "file.hashes.MD5",
+              "MD5object": "malware_file"
+            }
+          }
+        },
+        "groupMalwareReference": {
+          "key": "x-azure-malware.file_refs",
+          "object": "malware",
+          "references": [
+            "malware_file"
+          ],
+          "group_ref": true
+        },
+        "groupfindingReference": {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": ["malware_file"],
+          "group": true
+        }
+      }
+    },
+    "container": {
+      "ContainerId": {
+        "key": "x-azure-container.container_id",
+        "object": "container"
+      },
+      "Image": {
+        "ImageId": {
+          "key": "x-azure-container.image_id",
+          "object": "container"
+        },
+        "Type": {
+          "key": "x-azure-container.image_type",
+          "object": "container"
+        }
+      }
+    },
+    "K8s-cluster": {
+      "Name": {
+        "key": "x-k8s-cluster.name",
+        "object": "k8s_cluster"
+      }
+    }
+  }
 }

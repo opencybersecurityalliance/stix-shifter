@@ -1,83 +1,208 @@
 {
-    "x-ibm-finding": {
-        "fields": {
-            "start": [
-                "StartTime",
-                "TimeGenerated"
-            ],
-            "end": [
-                "EndTime",
-                "ProcessingEndTime"
-            ],
-            "name": [
-                "AlertName"
-            ],
-            "time_observed": [
-                "TimeGenerated",
-                "EventTime"
-            ]
-        }
-    },
-    "x-oca-event": {
-        "fields": {
-            "created": [
-                "TimeGenerated"
-            ],
-            "provider": [
-                "ProviderName"
-            ],
-            "domain_ref": [
-                "DomainName"
-            ]
-        }
-    },
-    "x-msazure-sentinel-alert": {
-        "fields": {
-            "tenant_id": [
-                "TenantId"
-            ],
-            "subscription_id": [
-                "WorkspaceSubscriptionId"
-            ],
-            "resourceId": [
-                "_ResourceId"
-            ],
-            "alert_severity": [
-                "AlertSeverity"
-            ],
-            "description": [
-                "Description"
-            ],
-            "product_name": [
-                "ProductName"
-            ],
-            "vendor_name": [
-                "VendorName"
-            ],
-            "system_alertid": [
-                "SystemAlertId"
-            ],
-            "status": [
-                "Status"
-            ],
-            "extented_properties": [
-                "ExtentedProperties"
-            ],
-            "confidence_level": [
-                "ConfidenceLevel"
-            ],
-            "entities": [
-                "Entities"
-            ],
-            "display_name": [
-                "DisplayName"
-            ],
-            "workspace_resource_group": [
-                "WorkspaceResourceGroup"
-            ],
-            "compromised_entity": [
-                "CompromisedEntity"
-            ]
-        }
+  "ipv4-addr": {
+    "fields": {
+      "value": ["Entities.Address"],
+      "x_location_ref.country": ["Entities.Location.CountryName"],
+      "x_location_ref.city": ["Entities.Location.City"],
+      "x_location_ref.carrier": ["Entities.Location.Carrier"],
+      "x_location_ref.longitude": ["Entities.Location.Longitude"],
+      "x_location_ref.latitude": ["Entities.Location.Latitude"],
+      "x_location_ref.organization": ["Entities.Location.Organization"]
     }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["Entities.Address"],
+      "x_location_ref.country": ["Entities.Location.CountryName"],
+      "x_location_ref.city": ["Entities.Location.City"],
+      "x_location_ref.carrier": ["Entities.Location.Carrier"],
+      "x_location_ref.longitude": ["Entities.Location.Longitude"],
+      "x_location_ref.latitude": ["Entities.Location.Latitude"],
+      "x_location_ref.organization": ["Entities.Location.Organization"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["Entities.Name"],
+      "x_aad_user_id": ["Entities.AadUserId"],
+      "display_name": ["Entities.DisplayName"],
+      "x_nt_domain": ["Entities.NTDomain"],
+      "x_dns_domain": ["Entities.DnsDomain"],
+      "x_upn_suffix": ["Entities.UPNSuffix"],
+      "x_passport_userid": ["Entities.PUID"],
+      "x_account_sid": ["Entities.Sid"],
+      "x_is_domain_account": ["Entities.IsDomainJoined"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "dst_port": [
+        "Entities.DestinationPort"
+      ],
+      "protocols[*]": [
+        "Entities.Protocol"
+      ],
+      "src_ref.value": [
+        "Entities.Address"
+      ]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["Entities.Name"],
+      "hashes.'SHA-256'": ["Entities.Value"],
+      "hashes.'SHA-1'": ["Entities.Value"],
+      "hashes.MD5": ["Entities.Value"],
+      "parent_directory_ref.path": ["Entities.Directory"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": [
+        "Entities.Directory"
+      ]
+    }
+  },
+  "process": {
+    "fields": {
+      "pid": ["Entities.ProcessId"],
+      "command_line": ["Entities.CommandLine"],
+      "created": ["Entities.CreationTimeUtc"],
+      "x_elevation_token": ["Entities.ElevationToken"],
+      "creator_user_ref.user_id": ["Entities.Name"],
+      "binary_ref.hashes.MD5": ["Entities.Value"],
+      "binary_ref.hashes.'SHA-256'": ["Entities.Value"],
+      "binary_ref.hashes.'SHA1'": ["Entities.Value"],
+      "parent_ref.pid": ["Entities.ProcessId"],
+      "parent_ref.command_line": ["Entities.CommandLine"],
+      "parent_ref.binary_ref.hashes.MD5": ["Entities.Value"],
+      "parent_ref.binary_ref.hashes.'SHA-256'": ["Entities.Value"],
+      "parent_ref.binary_ref.hashes.'SHA1'": ["Entities.Value"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["Entities.DomainName"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": [
+        "Entities.Url"
+      ]
+    }
+  },
+  "software": {
+    "fields": {
+      "name": ["Entities.OSFamily", "ProductName"],
+      "version": ["Entities.OSVersion"],
+      "vendor": ["VendorName"],
+      "x_product_component_name": ["ProductComponentName"],
+      "x_provider_name": ["ProviderName"]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": ["Entities.HostName"],
+      "x_resource_id": ["ResourceId"],
+      "x_nt_domain": ["Entities.NTDomain"],
+      "x_netbios_name": ["Entities.NetBiosName"],
+      "x_oms_agent_id": ["Entities.OMSAgentID"],
+      "os_ref.name": ["Entities.OSFamily"],
+      "os_ref.version": ["Entities.OSVersion"],
+      "x_is_domain_host": ["Entities.IsDomainJoined"]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "x_alert_link": ["AlertLink"],
+      "name": ["AlertName"],
+      "x_severity": ["AlertSeverity"],
+      "x_alert_type": ["AlertType"],
+      "x_compromised_entity": ["CompromisedEntity"],
+      "x_confidence_level": ["ConfidenceLevel"],
+      "confidence": ["ConfidenceScore"],
+      "description": ["Description"],
+      "end": ["EndTime"],
+      "x_processing_endtime": ["ProcessingEndTime"],
+      "x_remediationsteps": ["RemediationSteps"],
+      "start": ["StartTime"],
+      "x_status": ["Status"],
+      "x_system_alert_id": ["SystemAlertId"],
+      "alert_id": ["VendorOriginalId"],
+      "time_observed": ["TimeGenerated"],
+      "finding_type": ["Type"],
+      "ttp_tagging_refs[*].name": ["AlertName"],
+      "ttp_tagging_refs[*].confidence": ["ConfidenceScore"],
+      "ttp_tagging_refs[*].extensions.'mitre-attack-ext'.tactic_name": ["Tactics"],
+      "ttp_tagging_refs[*].extensions.'mitre-attack-ext'.technique_name": ["Techniques"],
+      "ioc_refs[*].value": ["Entities.Name", "Entities.Address", "Entities.Url", "Entities.DomainName"],
+      "dst_application_ref.name": ["ProductName"],
+      "dst_application_ref.vendor": ["VendorName"],
+      "dst_os_ref.name": ["Entities.OSFamily"],
+      "dst_os_ref.version": ["Entities.OSVersion"],
+      "dst_os_user_ref.user_id": ["Entities.Name"]
+    }
+  },
+  "x-ibm-ttp-tagging": {
+    "fields": {
+      "name": ["AlertName"],
+      "confidence": ["ConfidenceScore"],
+      "extensions.'mitre-attack-ext'.tactic_name": ["Tactics"],
+      "extensions.'mitre-attack-ext'.technique_name": ["Techniques"]
+    }
+  },
+  "x-geo-location": {
+    "fields": {
+      "country": ["Entities.Location.CountryName"],
+      "city": ["Entities.Location.City"],
+      "carrier": ["Entities.Location.Carrier"],
+      "longitude": ["Entities.Location.Longitude"],
+      "latitude": ["Entities.Location.Latitude"],
+      "organization": ["Entities.Location.Organization"]
+    }
+  },
+  "x-cloud-provider": {
+    "fields": {
+      "tenant_id": ["TenantId"]
+    }
+  },
+  "x-cloud-resource": {
+    "fields": {
+      "resource_type": ["ExtendedProperties.resourceType"],
+      "resource_id": ["ResourceId"]
+    }
+  },
+  "x-host-logon-session": {
+    "fields": {
+      "session_id": ["Entities.SessionId"],
+      "start_time": ["Entities.StartTimeUtc"],
+      "end_time": ["Entities.EndTimeUtc"]
+    }
+  },
+  "x-azure-blob": {
+    "fields": {
+      "name": ["Entities.Name"],
+      "etag": ["Entities.Etag"],
+      "blob_container": ["Entities.Name"]
+    }
+  },
+  "x-azure-malware": {
+    "fields": {
+      "name": ["Entities.Name"],
+      "category": ["Entities.Category"]
+    }
+  },
+  "x-azure-container": {
+    "fields": {
+      "container_id": ["Entities.ContainerId"],
+      "image_id": ["Entities.ImageId"],
+      "image_type": ["Entities.Type"]
+    }
+  },
+  "x-k8s-cluster": {
+    "fields": {
+      "name": ["Entities.Name"]
+    }
+  }
 }

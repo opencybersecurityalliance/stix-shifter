@@ -1,79 +1,73 @@
 {
     "url": {
         "fields": {
-            "value": [
-                "IncidentUrl"
-            ]
+            "value": ["IncidentUrl"]
+        }
+    },
+    "email-addr": {
+        "fields": {
+            "value": ["Owner.email", "Owner.userPrincipalName"],
+            "display_name": ["Owner.assignedTo"]
         }
     },
     "x-ibm-finding": {
         "fields": {
-            "start": [
-                "FirstActivityTime",
-                "FirstModifiedTime",
-                "TimeGenerated"
-            ],
-            "end": [
-                "ClosedTime",
-                "LastActivityTime",
-                "LastModifiedTime"
-            ],
-            "name": [
-                "IncidentName"
-            ],
-            "time_observed": [
-                "TimeGenerated"
-            ]
+            "description": ["Description"],
+            "name": ["Title"],
+            "start": ["CreatedTime"],
+            "end": ["LastModifiedTime"],
+            "severity": ["Severity"],
+            "time_observed": ["TimeGenerated"],
+            "finding_type": ["Type"],
+            "rule_names[*]": ["RelatedAnalyticRuleIds"],
+            "x_owner_ref": ["Owner.email", "Owner.userPrincipalName", "Owner.assignedTo"],
+            "x_incident_name": ["IncidentName"],
+            "x_provider_incident_id": ["ProviderIncidentId"],
+            "x_modified_by": ["ModifiedBy"],
+            "x_status": ["Status"],
+            "x_provider_name": ["ProviderName"],
+            "alerts_info_ref.alert_count": ["AdditionalData.alertsCount"],
+            "alerts_info_ref.alert_product_names": ["AdditionalData.alertProductNames"],
+            "alerts_info_ref.alert_ids[*]": ["AlertIds"],
+            "ttp_tagging_refs[*].name": ["Title"],
+            "ttp_tagging_refs[*].extensions.'mitre-attack-ext'.tactic_name": ["AdditionalData.tactics"],
+            "ttp_tagging_refs[*].extensions.'mitre-attack-ext'.technique_name": ["AdditionalData.techniques"],
+            "x_owner_ref.value": ["Owner.email", "Owner.userPrincipalName"],
+            "x_owner_ref.display_name": ["Owner.assignedTo"]
         }
     },
-    "x-oca-event": {
+    "x-ibm-ttp-tagging": {
         "fields": {
-            "created": [
-                "CreatedTime"
-            ],
-            "provider": [
-                "ProviderName"
-            ],
-            "url_ref": [
-                "IncidentUrl"
-            ],
-            "domain_ref": [
-                "DomainName"
-            ]
+            "name": ["Title"],
+            "extensions.'mitre-attack-ext'.tactic_name": ["AdditionalData.tactics"],
+            "extensions.'mitre-attack-ext'.technique_name": ["AdditionalData.techniques"]
         }
     },
-    "x-azure-security-incident": {
+    "x-cloud-provider": {
         "fields": {
-            "incident_name": [
-                "IncidentName"
-            ],
-            "severity": [
-                "Severity"
-            ],
-            "owner": [
-                "Owner"
-            ],
-            "additional_data": [
-                "AdditionalData"
-            ],
-            "alertids": [
-                "AlertIds"
-            ],
-            "comments": [
-                "Comments"
-            ],
-            "description": [
-                "Description"
-            ],
-            "labels": [
-                "Labels"
-            ],
-            "modified_by": [
-                "ModifiedBy"
-            ],
-            "classification": [
-                "Classification"
-            ]
+            "tenant_id": ["TenantId"]
+        }
+    },
+    "x-alerts-info": {
+        "fields" : {
+            "alert_count": ["AdditionalData.alertsCount"],
+            "alert_product_names": ["AdditionalData.alertProductNames"],
+            "alert_ids[*]": ["AlertIds"]
+        }
+    },
+    "x-incident-info": {
+        "fields": {
+            "classification": ["Classification"],
+            "classification_comment": ["ClassificationComment"],
+            "classification_reason": ["ClassificationReason"],
+            "closed_time": ["ClosedTime"],
+            "comments": ["Comments"],
+            "first_activity": ["FirstActivityTime"],
+            "first_modified": ["FirstModifiedTime"],
+            "labels": ["Labels"],
+            "last_active": ["LastActivityTime"],
+            "tasks": ["Tasks"],
+            "incident_url_ref.value": ["IncidentUrl"]
         }
     }
 }

@@ -298,6 +298,17 @@ class DataSourceObjToStixObj:
 
                 transformer = self.transformers[prop['transformer']] if 'transformer' in prop else None
                 references = references = prop['references'] if 'references' in prop else None
+                
+                # adding object index in references
+                # referring to the processed records needs an object index to refer
+                # eg: If reference is nt and object_key_index is 1, then reference is nt_1.
+                # eg: If reference is [nt] and object_key_index is 3, then reference is [nt_3]
+                if object_key_ind and references:
+                    if isinstance(references, str):
+                        references = references + '_' + str(object_key_ind)
+                    elif isinstance(references, list):
+                        references = [ref + '_' + str(object_key_ind) for ref in references]
+                        
                 # unwrap array of stix values to separate stix objects
                 unwrap = True if 'unwrap' in prop and isinstance(data, list) else False
                 if "." in key:
