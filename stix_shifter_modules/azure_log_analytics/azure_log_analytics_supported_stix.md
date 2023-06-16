@@ -185,7 +185,7 @@
 | **x-oca-event**:parent_process_ref | ParentProcessName |
 | **x-oca-event**:user_ref | TargetUserName |
 | **x-oca-event**:ip_refs.ip | IpAddress, ClientIPAddress |
-| **x-oca-event**:x_service_file_ref | ServiceFileName |
+| **x-oca-event**:x_service_file | ServiceFileName |
 | **x-oca-event**:x_service_name | ServiceName |
 | **x-oca-event**:x_modified_account_sid | TargetSid |
 | **x-oca-event**:x_description | DeviceDescription |
@@ -222,21 +222,18 @@
 | **x-ibm-finding**:x_modified_by | ModifiedBy |
 | **x-ibm-finding**:x_status | Status |
 | **x-ibm-finding**:x_provider | ProviderName |
-| **x-ibm-finding**:alerts_info_ref.alert_count | AdditionalData.alertsCount |
-| **x-ibm-finding**:alerts_info_ref.alert_product_names | AdditionalData.alertProductNames |
-| **x-ibm-finding**:alerts_info_ref.alert_ids[*] | AlertIds |
 | **x-ibm-finding**:ttp_tagging_refs[*].name | Title |
 | **x-ibm-finding**:ttp_tagging_refs[*].extensions.'mitre-attack-ext'.tactic_name | AdditionalData.tactics |
 | **x-ibm-finding**:ttp_tagging_refs[*].extensions.'mitre-attack-ext'.technique_name | AdditionalData.techniques |
 | **x-ibm-finding**:x_owner_ref.value | Owner.email, Owner.userPrincipalName |
 | **x-ibm-finding**:x_owner_ref.display_name | Owner.assignedTo |
+| **x-ibm-finding**:x_alert_count | AdditionalData.alertsCount |
+| **x-ibm-finding**:x_alert_product_names | AdditionalData.alertProductNames |
+| **x-ibm-finding**:x_alert_ids[*] | AlertIds |
 | **x-ibm-ttp-tagging**:name | Title |
 | **x-ibm-ttp-tagging**:extensions.'mitre-attack-ext'.tactic_name | AdditionalData.tactics |
 | **x-ibm-ttp-tagging**:extensions.'mitre-attack-ext'.technique_name | AdditionalData.techniques |
 | **x-cloud-provider**:tenant_id | TenantId |
-| **x-alerts-info**:alert_count | AdditionalData.alertsCount |
-| **x-alerts-info**:alert_product_names | AdditionalData.alertProductNames |
-| **x-alerts-info**:alert_ids[*] | AlertIds |
 | **x-incident-info**:classification | Classification |
 | **x-incident-info**:classification_comment | ClassificationComment |
 | **x-incident-info**:classification_reason | ClassificationReason |
@@ -465,7 +462,7 @@
 | x-oca-event | user_ref | TargetUserName |
 | x-oca-event | ip_refs.ip | IpAddress |
 | x-oca-event | ip_refs.ip | ClientIPAddress |
-| x-oca-event | x_service_file_ref | ServiceFileName |
+| x-oca-event | x_service_file | ServiceFileName |
 | x-oca-event | x_service_name | ServiceName |
 | x-oca-event | x_modified_account_sid | TargetSid |
 | x-oca-event | x_description | DeviceDescription |
@@ -508,9 +505,9 @@
 | x-ibm-finding | x_modified_by | ModifiedBy |
 | x-ibm-finding | x_status | Status |
 | x-ibm-finding | x_provider | ProviderName |
-| x-ibm-finding | alerts_info_ref.alert_count | AdditionalData.alertsCount |
-| x-ibm-finding | alerts_info_ref.alert_product_names | AdditionalData.alertProductNames |
-| x-ibm-finding | alerts_info_ref.alert_ids | AlertIds |
+| x-ibm-finding | x_alert_count | AdditionalData.alertsCount |
+| x-ibm-finding | x_alert_product_names | AdditionalData.alertProductNames |
+| x-ibm-finding | x_alert_ids | AlertIds |
 | x-ibm-finding | ttp_tagging_refs.name | Title |
 | x-ibm-finding | ttp_tagging_refs.extensions.'mitre-attack-ext'.tactic_name | AdditionalData.tactics |
 | x-ibm-finding | ttp_tagging_refs.extensions.'mitre-attack-ext'.technique_name | AdditionalData.techniques |
@@ -523,10 +520,6 @@
 | x-ibm-ttp-tagging | extensions.'mitre-attack-ext'.technique_name | AdditionalData.techniques |
 | <br> | | |
 | x-cloud-provider | tenant_id | TenantId |
-| <br> | | |
-| x-alerts-info | alert_count | AdditionalData.alertsCount |
-| x-alerts-info | alert_product_names | AdditionalData.alertProductNames |
-| x-alerts-info | alert_ids | AlertIds |
 | <br> | | |
 | x-incident-info | classification | Classification |
 | x-incident-info | classification_comment | ClassificationComment |

@@ -26,14 +26,14 @@
             "x_modified_by": ["ModifiedBy"],
             "x_status": ["Status"],
             "x_provider_name": ["ProviderName"],
-            "alerts_info_ref.alert_count": ["AdditionalData.alertsCount"],
-            "alerts_info_ref.alert_product_names": ["AdditionalData.alertProductNames"],
-            "alerts_info_ref.alert_ids[*]": ["AlertIds"],
             "ttp_tagging_refs[*].name": ["Title"],
             "ttp_tagging_refs[*].extensions.'mitre-attack-ext'.tactic_name": ["AdditionalData.tactics"],
             "ttp_tagging_refs[*].extensions.'mitre-attack-ext'.technique_name": ["AdditionalData.techniques"],
             "x_owner_ref.value": ["Owner.email", "Owner.userPrincipalName"],
-            "x_owner_ref.display_name": ["Owner.assignedTo"]
+            "x_owner_ref.display_name": ["Owner.assignedTo"],
+            "x_alert_count": ["AdditionalData.alertsCount"],
+            "x_alert_product_names": ["AdditionalData.alertProductNames"],
+            "x_alert_ids[*]": ["AlertIds"]
         }
     },
     "x-ibm-ttp-tagging": {
@@ -46,13 +46,6 @@
     "x-cloud-provider": {
         "fields": {
             "tenant_id": ["TenantId"]
-        }
-    },
-    "x-alerts-info": {
-        "fields" : {
-            "alert_count": ["AdditionalData.alertsCount"],
-            "alert_product_names": ["AdditionalData.alertProductNames"],
-            "alert_ids[*]": ["AlertIds"]
         }
     },
     "x-incident-info": {

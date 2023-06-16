@@ -155,6 +155,14 @@ class TestAzureLogAnalyticsConnection(unittest.TestCase, object):
         assert 'success' in status_response
         assert status_response['success'] is True
 
+    def test_run_search_exception(self, mock_generate_token):
+        mock_generate_token.return_value = ClientSecretMockResponse
+        query = "'SecurityEvent | where InvalidField == 'test'"
+        transmission = stix_transmission.StixTransmission('azure_log_analytics', self.connection(), self.config())
+        results_response = transmission.results(query, 0, 1)
+        assert results_response['success'] is False
+        assert results_response['code'] == "invalid_query"
+
     @patch(
         'stix_shifter_modules.azure_log_analytics.stix_transmission.connector.Connector.create_results_connection')
     def test_results_all_response(self, mock_results_response, mock_generate_token):

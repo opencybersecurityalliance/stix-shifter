@@ -181,9 +181,6 @@ class Connector(BaseSyncConnector):
         :param security_alert: dict
         :return: dict """
 
-        if security_alert.get("Techniques") == "":
-            security_alert["Techniques"] = None
-
         if security_alert.get("ExtendedProperties"):
             security_alert["ExtendedProperties"] = json.loads(security_alert["ExtendedProperties"])
 

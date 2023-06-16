@@ -758,10 +758,19 @@ translate azure_log_analytics query '{}' "[x-alerts-info:alert_count >=3] START 
                     "end": "2023-03-09 13:40:51.080319+00:00",
                     "start": "2023-03-09 13:40:51.080319+00:00",
                     "rule_names": "[\"BuiltInFusion\"]",
-                    "alerts_info_ref": "6",
                     "x_modified_by": "Fusion",
                     "finding_type": "violation",
-                    "x_provider": "Azure Sentinel"
+                    "x_provider": "Azure Sentinel",
+                    "x_alert_ids": [
+                        "ba4cee8e-d872-0138-9ca8-c019315c083d",
+                        "245d6d27-3a27-b072-493e-1f8e2acc4be4",
+                        "bbdef8ba-0ba6-5fe1-b8ae-700cd770a00c",
+                        "03d4afbf-aa96-d6d1-5168-f165ed66d8e5"
+                    ],
+                    "x_alert_count": 4,
+                    "x_alert_product_names": [
+                        "Azure Defender"
+                    ]
                 },
                 "2": {
                     "type": "x-ibm-ttp-tagging",
@@ -790,22 +799,9 @@ translate azure_log_analytics query '{}' "[x-alerts-info:alert_count >=3] START 
                     "comments": "[]",
                     "tasks": "[]",
                     "labels": "[]",
-                    "incident_url_ref": "7"
+                    "incident_url_ref": "6"
                 },
                 "6": {
-                    "type": "x-alerts-info",
-                    "alert_ids": [
-                        "ba4cee8e-d872-0138-9ca8-c019315c083d",
-                        "245d6d27-3a27-b072-493e-1f8e2acc4be4",
-                        "bbdef8ba-0ba6-5fe1-b8ae-700cd770a00c",
-                        "03d4afbf-aa96-d6d1-5168-f165ed66d8e5"
-                    ],
-                    "alert_count": 4,
-                    "alert_product_names": [
-                        "Azure Defender"
-                    ]
-                },
-                "7": {
                     "type": "url",
                     "value": "https://portal.azure.com/#asset/Microsoft_Azure_Security_Insights/Incident/subscriptions/083de1fb-cd2d-4b7c-895a-2b5af1d091e8/resourceGroups/eastus/providers/Microsoft.OperationalInsights/workspaces/sentinelwseastus/providers/Microsoft.SecurityInsights/Incidents/d5c17060-b17b-490b-8895-0aa12da7db0c"
                 }

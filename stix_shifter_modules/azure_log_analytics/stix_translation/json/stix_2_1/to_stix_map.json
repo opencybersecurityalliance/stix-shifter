@@ -20,7 +20,8 @@
   ],
   "AlertSeverity": {
     "key": "x-ibm-finding.x_severity",
-    "object": "finding"
+    "object": "finding",
+    "transformer": "ConvertSeverityToScore"
   },
   "AlertType": {
     "key": "x-ibm-finding.x_alert_type",
@@ -32,7 +33,7 @@
   },
   "ConfidenceLevel": {
     "key": "x-ibm-finding.x_confidence_level",
-    "object": "alert_info"
+    "object": "finding"
   },
   "ConfidenceScore": [
     {
@@ -46,10 +47,6 @@
       "transformer": "ConvertToReal"
     }
   ],
-  "Description": {
-    "key": "x-ibm-finding.description",
-    "object": "finding"
-  },
   "EndTime": {
     "key": "x-ibm-finding.end",
     "object": "finding"
@@ -134,12 +131,12 @@
   },
   "AdditionalData": {
     "alertsCount": {
-      "key": "x-alerts-info.alert_count",
-      "object": "alert_info"
+      "key": "x-ibm-finding.x_alert_count",
+      "object": "finding"
     },
     "alertProductNames": {
-      "key": "x-alerts-info.alert_product_names",
-      "object": "alert_info"
+      "key": "x-ibm-finding.x_alert_product_names",
+      "object": "finding"
     },
     "tactics": {
       "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
@@ -150,17 +147,10 @@
       "object": "ttp_finding"
     }
   },
-  "AlertIds": [
-    {
-      "key": "x-alerts-info.alert_ids",
-      "object": "alert_info"
-    },
-    {
-      "key": "x-ibm-finding.alerts_info_ref",
-      "object": "finding",
-      "references": "alert_info"
-    }
-  ],
+  "AlertIds": {
+    "key": "x-ibm-finding.x_alert_ids",
+    "object": "finding"
+  },
   "Classification": {
     "key": "x-incident-info.classification",
     "object": "incident"
@@ -263,7 +253,8 @@
   },
   "Severity": {
     "key": "x-ibm-finding.x_severity",
-    "object": "finding"
+    "object": "finding",
+    "transformer": "ConvertSeverityToScore"
   },
   "Tasks": {
       "key": "x-incident-info.tasks",
@@ -515,7 +506,7 @@
     "object": "file"
   },
   "ServiceFileName": {
-    "key": "x-oca-event.x_service_file_ref",
+    "key": "x-oca-event.x_service_file",
     "object": "event"
   },
   "ServiceName": {
@@ -931,11 +922,11 @@
         "object": "account"
       },
       "NTDomain": {
-        "key": "use-account.x_nt_domain",
+        "key": "user-account.x_nt_domain",
         "object": "account"
       },
       "DnsDomain": {
-        "key": "use-account.x_dns_domain",
+        "key": "user-account.x_dns_domain",
         "object": "account"
       },
       "UPNSuffix": {
@@ -1218,7 +1209,7 @@
             },
             "MD5": {
               "key": "file.hashes.MD5",
-              "MD5object": "malware_file"
+              "object": "malware_file"
             }
           }
         },
