@@ -933,13 +933,11 @@
   "_time": [
     {
       "key": "first_observed",
-      "transformer": "SplunkToTimestamp",
-      "cybox": false
+      "transformer": "SplunkToTimestamp"
     },
     {
       "key": "last_observed",
-      "transformer": "SplunkToTimestamp",
-      "cybox": false
+      "transformer": "SplunkToTimestamp"
     },
     {
       "key": "x-oca-event.x_created",
