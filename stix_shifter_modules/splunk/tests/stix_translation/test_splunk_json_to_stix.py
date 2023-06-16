@@ -112,9 +112,7 @@ class TestTransform(unittest.TestCase, object):
         file_path = "C:\\Users\\someuser\\sample.dll"
         create_time = "2018-08-15T15:11:55.676+00:00"
         modify_time = "2018-08-15T18:10:30.456+00:00"
-        file_hashes = {
-            "file_md5": "41a26255d16d121dc525a6445144b895",
-        }
+        file_hash = "41a26255d16d121dc525a6445144b895"
         file_name = "sample.dll"
         file_size = 25536
 
@@ -248,7 +246,7 @@ class TestTransform(unittest.TestCase, object):
             data_source, map_data, [data], get_module_transformers(MODULE),
             options)
 
-        assert result_bundle['type'] == 'bundle'
+        assert(result_bundle['type'] == 'bundle')
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
 
@@ -379,7 +377,6 @@ class TestTransform(unittest.TestCase, object):
                         },
                         "event_count": {
                             "key": "number_observed",
-                            "cybox": False,
                             "transformer": "ToInteger"
                         },
                         "src_ip": [
@@ -605,7 +602,6 @@ class TestTransform(unittest.TestCase, object):
         self.assertEqual(x_oca_event['code'], '3')
 
     def test_x_oca_event_network_ref(self):
-        """to test x-oca-event network-ref stix object properties"""
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [sample_splunk_data_x_oca],
             get_module_transformers(MODULE), options)
@@ -676,6 +672,7 @@ class TestTransform(unittest.TestCase, object):
 
         x_oca_asset = TestTransform.get_first_of_type(object_vals, 'x-oca-asset')
         self.assertEqual(x_oca_asset['hostname'], 'WIN01')
+
 
     def test_mac_addr(self):
         """to test mac-address stix object properties"""

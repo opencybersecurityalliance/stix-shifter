@@ -1,7 +1,6 @@
 {
   "event_count": {
     "key": "number_observed",
-    "cybox": false,
     "transformer": "ToInteger"
   },
   "_raw": [
@@ -277,7 +276,7 @@
         "key": "network-traffic.extensions.http-request-ext.request_method",
       "object": "network_traffic"
       }
-    ],   
+    ],
     "http_referrer": [
       {
       "key": "network-traffic.extensions.http-request-ext.request_header.Referer",
@@ -385,7 +384,7 @@
   "ssl_publickey": {
     "key": "x509-certificate.x_ssl_publickey",
     "object": "certificate"
-  },   
+  },
   "ssl_issuer_email_domain": [
     {
       "key": "domain-name.value",
@@ -415,7 +414,7 @@
   "ssl_subject_organization": {
     "key": "x509-certificate.x_ssl_subject_organization",
     "object": "certificate"
-  }, 
+  },
   "process_id": [
     {
       "key": "process.pid",

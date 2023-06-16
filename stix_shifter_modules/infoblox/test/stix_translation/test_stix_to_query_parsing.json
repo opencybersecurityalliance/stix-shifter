@@ -159,7 +159,7 @@
         "expected": {
             "tideDbData": {
                 "success": false,
-                "code": "invalid_parameter",
+                "code": "translation_error",
                 "error": "Error when converting STIX pattern to data source query: Conflicting threat_type found, ['host', 'ip']"
             },
             "dnsEventData": {
@@ -219,7 +219,7 @@
         "expected": {
             "tideDbData": {
                 "success": false,
-                "code": "invalid_parameter",
+                "code": "translation_error",
                 "error": "Error when converting STIX pattern to data source query: Conflicting threat_type found, ['host', 'ip']"
             },
             "dnsEventData": {
@@ -890,7 +890,7 @@
         "pattern": "[x-infoblox-threat:imported = '2021-05-24T20:26:04.000Z']",
         "expected": {
             "tideDbData": {
-                "success": false, "code": "invalid_parameter",
+                "success": false, "code": "translation_error",
                 "error": "Error when converting STIX pattern to data source query: Equal"
             },
             "dnsEventData": {
@@ -1075,7 +1075,7 @@
                 "error": "data mapping error : Unable to map the following STIX objects and properties to data source fields: [['x-infoblox-dossier-event-result-pdns:hostname_ref.value', 'x-infoblox-dossier-event-result-pdns:ip_ref.value']]"
             },
             "dossierData": {
-                "success": false, "code": "invalid_parameter",
+                "success": false, "code": "translation_error",
                 "error": "Error when converting STIX pattern to data source query: Conflicting threat_type found, ['host', 'ip']"
             }
         }

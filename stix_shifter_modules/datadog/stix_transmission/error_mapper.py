@@ -7,7 +7,9 @@ error_mapping = {
     403: ErrorCode.TRANSMISSION_FORBIDDEN,
     # A request parameter is not valid
     400: ErrorCode.TRANSMISSION_INVALID_PARAMETER,
-    1004: ErrorCode.TRANSMISSION_AUTH_SSL
+    1004: ErrorCode.TRANSMISSION_AUTH_SSL,
+    500: ErrorCode.TRANSMISSION_CONNECT,
+    8: ErrorCode.TRANSMISSION_REMOTE_SYSTEM_IS_UNAVAILABLE
 }
 
 
@@ -16,7 +18,7 @@ class ErrorMapper():
     DEFAULT_ERROR = ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR
 
     @staticmethod
-    def set_error_code(json_data, return_obj):
+    def set_error_code(json_data, return_obj, connector=None):
         code = None
         try:
             code = int(json_data['code'])
@@ -31,4 +33,4 @@ class ErrorMapper():
         if error_code == ErrorMapper.DEFAULT_ERROR:
             ErrorMapper.logger.error("failed to map: " + str(json_data))
 
-        ErrorMapperBase.set_error_code(return_obj, error_code)
+        ErrorMapperBase.set_error_code(return_obj, error_code, connector=connector)

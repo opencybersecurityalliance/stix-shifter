@@ -1,7 +1,6 @@
 {
   "event_count": {
     "key": "number_observed",
-    "cybox": false,
     "transformer": "ToInteger"
   },
   "_raw": [
@@ -158,105 +157,8 @@
   },
   "bytes_in": [
     {
-      "key": "network-traffic.dst_byte_count",
-      "object": "network_traffic",
-      "transformer": "ToInteger"
-    }
-  ],
-  "bytes_out": [
-    {
-      "key": "network-traffic.src_byte_count",
-      "object": "network_traffic",
-      "transformer": "ToInteger"
-    }
-  ],
-  "packets_in": [
-    {
-      "key": "network-traffic.dst_packets",
-      "object": "network_traffic"
-    }
-  ],
-  "packets_out": [
-    {
-      "key": "network-traffic.src_packets",
-      "object": "network_traffic"
-    }
-  ],
-  "name": [
-    {
-      "key": "network-traffic.extensions.dns-ext.name",
-      "object": "network_traffic"
-    }
-  ],
-  "message_type": [
-    {
-      "key": "network-traffic.extensions.dns-ext.message_type",
-      "object": "network_traffic"
-    }
-  ],
-  "query_count": [
-    {
-      "key": "network-traffic.extensions.dns-ext.query_count",
-      "object": "network_traffic"
-    }
-  ],
-  "query_type": [
-    {
-      "key": "network-traffic.extensions.dns-ext.query_type",
-      "object": "network_traffic"
-    }
-  ],
-  "record_type": [
-    {
-      "key": "network-traffic.extensions.dns-ext.record_type",
-      "object": "network_traffic"
-    }
-  ],
-  "reply_code": [
-    {
-      "key": "network-traffic.extensions.dns-ext.reply_code",
-      "object": "network_traffic"
-    }
-  ],
-  "reply_code_id": [
-    {
-      "key": "network-traffic.extensions.dns-ext.reply_code_id",
-      "object": "network_traffic"
-    }
-  ],
-  "query": [
-    {
-      "key": "domain-name.value",
-      "object": "dns_domain"
-    },
-    {
-      "key": "network-traffic.extensions.dns-ext.question.name_ref",
-      "object": "network_traffic",
-      "references": "dns_domain"
-    },
-    {
-      "key": "x-oca-event.domain_ref",
-      "object": "event",
-      "references": "dns_domain"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "network_traffic",
-      "references": "dns_domain"
-    }
-  ],
-  "answer": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "resolved_ip",
-      "unwrap": true,
-      "transformer": "FilterIPv4List"
-    },
-    {
-      "key": "ipv6-addr.value",
-      "object": "resolved_ip",
-      "unwrap": true,
-      "transformer": "FilterIPv6List"
+      "key": "last_observed",
+      "transformer": "SplunkToTimestamp"
     },
     {
       "key": "network-traffic.extensions.dns-ext.resolved_ip_refs",
@@ -385,7 +287,7 @@
   "ssl_publickey": {
     "key": "x509-certificate.x_ssl_publickey",
     "object": "certificate"
-  },   
+  },
   "ssl_issuer_email_domain": [
     {
       "key": "domain-name.value",
@@ -415,7 +317,7 @@
   "ssl_subject_organization": {
     "key": "x509-certificate.x_ssl_subject_organization",
     "object": "certificate"
-  }, 
+  },
   "process_id": [
     {
       "key": "process.pid",
@@ -640,11 +542,6 @@
   ],
   "file_size": {
     "key": "file.size",
-    "object": "file",
-    "transformer": "ToInteger"
-  },
-  "file_acl": {
-    "key": "file.x_acl",
     "object": "file"
   },
   "src_mac": [
@@ -685,29 +582,6 @@
       "key": "x-oca-event.registry_ref",
       "object": "event",
       "references": "windows-registry-key"
-    }
-  ],
-  "registry_value": {
-    "key": "windows-registry-key.values",
-    "object": "windows-registry-key",
-    "transformer": "FormatToStixRegistryValue"
-  },
-  "registry_hive": [
-    {
-      "key": "windows-registry-key.x_hive",
-      "object": "windows-registry-key"
-    }
-  ],
-  "registry_path": [
-    {
-      "key": "windows-registry-key.x_path",
-      "object": "windows-registry-key"
-    }
-  ],
-  "registry_value_text": [
-    {
-      "key": "windows-registry-key.x_value_text",
-      "object": "windows-registry-key"
     }
   ],
   "url": [

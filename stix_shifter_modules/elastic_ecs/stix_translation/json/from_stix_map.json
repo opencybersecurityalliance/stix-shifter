@@ -159,14 +159,14 @@
   },
   "email-addr": {
     "fields": {
-      "name": ["user.email"]
+      "value": ["user.email"]
     }
   },
   "x-oca-event": {
     "fields": {
       "action": ["event.action"],
-      "id": ["event.id"],
-      "category": ["event.category"],
+      "event_id": ["event.id"],
+      "category": ["event.category", "event.type", "event.kind"],
       "code": ["event.code"],
       "created": ["event.created"],
       "dataset": ["event.dataset"],
@@ -174,7 +174,6 @@
       "end": ["event.end"],
       "hash": ["event.hash"],
       "ingested": ["event.ingested"],
-      "kind": ["event.kind"],
       "module": ["event.module"],
       "outcome": ["event.outcome"],
       "provider": ["event.provider"],
@@ -184,7 +183,6 @@
       "severity": ["event.severity"],
       "start": ["event.start"],
       "timezone": ["event.timezone"],
-      "type": ["event.type"],
       "url": ["event.url"],
       "original": ["message", "powershell.file.script_block_text"],
       "process_ref.pid": ["process.pid"],
@@ -222,7 +220,7 @@
       "answers_ttl": ["dns.answers.ttl"],
       "answers_type": ["dns.answers.type"],
       "header_flags": ["dns.header_flags"],
-      "id": ["dns.id"],
+      "dns_id": ["dns.id"],
       "op_code": ["dns.op_code"],
       "question_class": ["dns.question.class"],
       "question_name": ["dns.question.name"],
@@ -232,7 +230,7 @@
       "question_type": ["dns.question.type"],
       "resolved_ip": ["dns.resolved_ip"],
       "response_code": ["dns.response_code"],
-      "type": ["dns.type"]
+      "dns_type": ["dns.type"]
     }
   },
   "x-ecs": {
@@ -243,16 +241,16 @@
   "x-ecs-error": {
     "fields": {
       "code": ["error.code"],
-      "id": ["error.id"],
+      "error_id": ["error.id"],
       "message": ["error.message"],
       "stack_trace": ["error.stack_trace"],
-      "type": ["error.type"]
+      "error_type": ["error.type"]
     }
   },
   "x-ecs-group": {
     "fields": {
       "domain": ["group.domain"],
-      "id": ["group.id"],
+      "group_id": ["group.id"],
       "name": ["group.name"]
     }
   },
@@ -260,12 +258,11 @@
     "fields": {
       "architecture": ["host.architecture"],
       "domain": ["host.domain"],
-      "hostname": ["host.hostname", "observer.hostname"],
-      "id": ["host.id", "observer.serial_number"],
+      "hostname": ["host.hostname", "observer.hostname", "host.name", "observer.name"],
+      "device_id": ["host.id", "observer.serial_number"],
       "ip": ["host.ip", "observer.ip"],
       "mac": ["host.mac", "observer.mac"],
-      "name": ["host.name", "observer.name"],
-      "type": ["host.type", "observer.type"],
+      "host_type": ["host.type", "observer.type"],
       "ingress.zone": ["observer.ingress.zone"],
       "ingress.interface.alias": ["observer.ingress.interface.alias"],
       "ingress.interface.id": ["observer.ingress.interface.id"],
@@ -329,7 +326,7 @@
   },
   "x-ecs-organization": {
     "fields": {
-      "id": ["organization.id"],
+      "organization_id": ["organization.id"],
       "name": ["organization.name"]
     }
   },
@@ -354,7 +351,7 @@
       "author": ["rule.author"],
       "category": ["rule.category"],
       "description": ["rule.description"],
-      "id": ["rule.id"],
+      "rule_id": ["rule.id"],
       "license": ["rule.license"],
       "name": ["rule.name"],
       "reference": ["rule.reference"],
@@ -365,10 +362,10 @@
   },
   "x-ecs-service": {
     "fields": {
-      "id": ["service.id"],
+      "service_id": ["service.id"],
       "name": ["service.name"],
       "state": ["service.state"],
-      "type": ["service.type"],
+      "service_type": ["service.type"],
       "version": ["service.version"]
     }
   },
@@ -385,12 +382,12 @@
   },
   "x-ecs-trace": {
     "fields": {
-      "id": ["trace.id"]
+      "trace_id": ["trace.id"]
     }
   },
   "x-ecs-transaction": {
     "fields": {
-      "id": ["transaction.id"]
+      "transaction_id": ["transaction.id"]
     }
   },
   "x-ecs-user-agent": {
@@ -407,7 +404,7 @@
       "classification": ["vulnerability.classification"],
       "description": ["vulnerability.description"],
       "enumeration": ["vulnerability.enumeration"],
-      "id": ["vulnerability.id"],
+      "vulnerability_id": ["vulnerability.id"],
       "reference": ["vulnerability.reference"],
       "report_id": ["vulnerability.report_id"],
       "severity": ["vulnerability.severity"],

@@ -96,16 +96,14 @@ class TestQRadarConnection(unittest.TestCase, object):
         mock_api_client.return_value = None
         mocked_return_value = """{
             "search_id": "108cb8b0-0744-4dd9-8e35-ea8311cd6211",
-            "events": {
-                "events": [
-                    {
-                        "sourceIP":"9.21.122.81"
-                    },
-                    {
-                        "sourceIP":"9.21.122.81"
-                    }
-                ]
-            }
+            "events": [
+                {
+                    "sourceIP":"9.21.122.81"
+                },
+                {
+                    "sourceIP":"9.21.122.81"
+                }
+            ]
         }"""
         mock_results_response.return_value = get_mock_response(200, mocked_return_value)
 
@@ -129,7 +127,7 @@ class TestQRadarConnection(unittest.TestCase, object):
         assert results_response is not None
         assert results_response['success']
         assert 'data' in results_response
-        assert 'events' in results_response['data']
+        # assert 'events' in results_response['data']
         assert len(results_response['data']) > 0
 
     @patch('stix_shifter_modules.qradar.stix_transmission.api_client.APIClient.create_search', autospec=True)
@@ -141,16 +139,14 @@ class TestQRadarConnection(unittest.TestCase, object):
         status_mock = '{"search_id": "108cb8b0-0744-4dd9-8e35-ea8311cd6211", "status": "COMPLETED", "progress": "100"}'
         results_mock = """{
             "search_id": "108cb8b0-0744-4dd9-8e35-ea8311cd6211",
-            "events": {
-                "events": [
-                    {
-                        "sourceIP":"9.21.122.81"
-                    },
-                    {
-                        "sourceIP":"9.21.122.81"
-                    }
-                ]
-            }
+            "events": [
+                {
+                    "sourceIP":"9.21.122.81"
+                },
+                {
+                    "sourceIP":"9.21.122.81"
+                }
+            ]
         }"""
         mock_results_response.return_value = get_mock_response(200, results_mock)
         mock_status_response.return_value = get_mock_response(200, status_mock)
@@ -188,7 +184,7 @@ class TestQRadarConnection(unittest.TestCase, object):
 
         assert results_response is not None
         assert 'data' in results_response
-        assert 'events' in results_response['data']
+        # assert 'events' in results_response['data']
         assert len(results_response['data']) > 0
 
 

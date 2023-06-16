@@ -14,8 +14,7 @@ class APIClient():
         self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port'),
                                     headers,
-                                    cert_verify=connection.get('selfSignedCert', True),
-                                    sni=connection.get('sni', None)
+                                    cert_verify=connection.get('selfSignedCert', True)
                                     )
         self.timeout = connection['options'].get('timeout')
 

@@ -17,10 +17,6 @@
             "label": "Microsoft Defender for Endpoint certificate",
             "description": "Use self-signed Security Sockets Layer (SSL) certificate only if Microsoft Defender for Endpoint is configured with a self-signed SSL certificate"
         },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
-        },
         "options": {
             "includeAlerts": {
                 "label": "Join events with alerts?",

@@ -3,12 +3,10 @@
     "Event Time": [
       {
         "key": "first_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       },
       {
         "key": "last_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       },
       {
@@ -555,12 +553,10 @@
     "Event Time": [
       {
         "key": "first_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       },
       {
         "key": "last_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       },
       {

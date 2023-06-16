@@ -16,6 +16,39 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
+## 5.3.1 (2023-06-15)
+
+### Breaking changes:
+
+### Deprecations:
+
+*  remove SNI from authentication options [#1498](https://github.com/opencybersecurityalliance/stix-shifter/pull/1498)
+
+### Changes:
+
+*  Error messaging update [#1503](https://github.com/opencybersecurityalliance/stix-shifter/pull/1503)
+
+*  Remove cybox checks from map validator [#1504](https://github.com/opencybersecurityalliance/stix-shifter/pull/1504)
+*  remove cybox false flag for observed-data properties [#1502](https://github.com/opencybersecurityalliance/stix-shifter/pull/1502)
+*  Async support in Datadog connector [#1492](https://github.com/opencybersecurityalliance/stix-shifter/pull/1492)
+*  ReaQta Use TTP Custom Object [#1473](https://github.com/opencybersecurityalliance/stix-shifter/pull/1473)
+*  default translator support [#1491](https://github.com/opencybersecurityalliance/stix-shifter/pull/1491)
+*  Add description to stix-bundle connector README [#1497](https://github.com/opencybersecurityalliance/stix-shifter/pull/1497)
+*  minor code cleanup [#1494](https://github.com/opencybersecurityalliance/stix-shifter/pull/1494)
+*  Better error reporting for bad certificate [#1490](https://github.com/opencybersecurityalliance/stix-shifter/pull/1490)
+*  timeout max -> 1 hour; result limit -> 10 million [#1487](https://github.com/opencybersecurityalliance/stix-shifter/pull/1487)
+
+### Fixes:
+
+*  Patch elastic mappings [#1501](https://github.com/opencybersecurityalliance/stix-shifter/pull/1501)
+*  elastic_ecs: fix email-addr:value mappings in 'from' maps [#1508](https://github.com/opencybersecurityalliance/stix-shifter/pull/1508)
+*  x-oca-event.code switch from int to str [#1499](https://github.com/opencybersecurityalliance/stix-shifter/pull/1499)
+*  fix mapping references in elastic-ecs connector [#1471](https://github.com/opencybersecurityalliance/stix-shifter/pull/1471)
+
+### Dependency update:
+
+--------------------------------------
+
 ## 5.3.0 (2023-05-15)
 
 ### Breaking changes:

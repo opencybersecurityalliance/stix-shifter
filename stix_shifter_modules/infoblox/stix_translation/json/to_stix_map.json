@@ -2,12 +2,10 @@
     "dnsEventData": {
         "event_time": [
             {
-                "key": "first_observed",
-                "cybox": false
+                "key": "first_observed"
             },
             {
-                "key": "last_observed",
-                "cybox": false
+                "key": "last_observed"
             }
         ],
         "private_ip": [
@@ -195,12 +193,10 @@
         "job": {
             "create_time": [
                 {
-                    "key": "first_observed",
-                    "cybox": false
+                    "key": "first_observed"
                 },
                 {
-                    "key": "last_observed",
-                    "cybox": false
+                    "key": "last_observed"
                 }
             ]
         },
@@ -275,12 +271,10 @@
         ],
         "detected": [
             {
-                "key": "first_observed",
-                "cybox": false
+                "key": "first_observed"
             },
             {
-                "key": "last_observed",
-                "cybox": false
+                "key": "last_observed"
             }
         ],
         "received": [

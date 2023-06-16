@@ -148,12 +148,10 @@
       },
       {
         "key": "first_observed",
-        "cybox": false,
         "transformer": "MsatpToTimestamp"
       },
       {
         "key": "last_observed",
-        "cybox": false,
         "transformer": "MsatpToTimestamp"
       }
     ],
@@ -215,7 +213,6 @@
     ],
     "event_count": {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     },
     "original_ref": [
@@ -266,12 +263,10 @@
       },
       {
         "key": "first_observed",
-        "cybox": false,
         "transformer": "MsatpToTimestamp"
       },
       {
         "key": "last_observed",
-        "cybox": false,
         "transformer": "MsatpToTimestamp"
       }
     ],
@@ -641,7 +636,6 @@
     },
     "event_count": {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     },
     "original_ref": [
@@ -742,12 +736,10 @@
       },
       {
         "key": "first_observed",
-        "cybox": false,
         "transformer": "MsatpToTimestamp"
       },
       {
         "key": "last_observed",
-        "cybox": false,
         "transformer": "MsatpToTimestamp"
       }
     ],
@@ -1167,7 +1159,6 @@
     },
     "event_count": {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     },
     "ReportId": {
@@ -1195,12 +1186,10 @@
       },
       {
         "key": "first_observed",
-        "cybox": false,
         "transformer": "MsatpToTimestamp"
       },
       {
         "key": "last_observed",
-        "cybox": false,
         "transformer": "MsatpToTimestamp"
       }
     ],
@@ -1606,7 +1595,6 @@
     },
     "event_count": {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     },
     "ReportId": {
@@ -1634,12 +1622,10 @@
       },
       {
         "key": "first_observed",
-        "cybox": false,
         "transformer": "MsatpToTimestamp"
       },
       {
         "key": "last_observed",
-        "cybox": false,
         "transformer": "MsatpToTimestamp"
       }
     ],
@@ -1995,7 +1981,6 @@
     },
     "event_count": {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     },
     "ReportId": {
@@ -2023,12 +2008,10 @@
       },
       {
         "key": "first_observed",
-        "cybox": false,
         "transformer": "MsatpToTimestamp"
       },
       {
         "key": "last_observed",
-        "cybox": false,
         "transformer": "MsatpToTimestamp"
       }
     ],
@@ -2344,7 +2327,6 @@
     },
     "event_count": {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     },
     "ReportId": {
@@ -2372,12 +2354,10 @@
       },
       {
         "key": "first_observed",
-        "cybox": false,
         "transformer": "MsatpToTimestamp"
       },
       {
         "key": "last_observed",
-        "cybox": false,
         "transformer": "MsatpToTimestamp"
       }
     ],
@@ -2927,7 +2907,6 @@
     },
     "event_count": {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     },
     "ReportId": {

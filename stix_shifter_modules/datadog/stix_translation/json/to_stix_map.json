@@ -28,7 +28,8 @@
   },
   "id": {
     "key": "x-oca-event.code",
-    "object": "x-oca-event"
+    "object": "x-oca-event",
+    "transformer": "ToString"
   },
   "id_str": {
     "key": "x-oca-event.code",
@@ -55,13 +56,11 @@
     },
     {
       "key": "first_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
+      "transformer": "EpochToTimestamp"
     },
     {
       "key": "last_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
+      "transformer": "EpochToTimestamp"
     }
   ],
   "start": [

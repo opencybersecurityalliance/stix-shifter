@@ -23,7 +23,7 @@ DATA = json.loads(RESULT_FILE)
 
 DATA_RECEIVED_AR_TIMESTAMP = find('receivedAt', DATA)
 DATA_HAPPENED_AT_TIMESTAMP = find('happenedAt', DATA)
-DATA_EVENT_ID = int(find('eventId', DATA))
+DATA_EVENT_ID = find('eventId', DATA)
 DATA_EVENT_TYPE = find('payload.eventType', DATA)
 DATA_LOCAL_ID = find('payload.localId', DATA)
 DATA_PROCESS_GUID = find('payload.process.id', DATA)
@@ -315,7 +315,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         event = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
 
         assert(event is not None), "x-ibm-finding not found"
-        assert(event.keys() == {'type', 'extensions', 'src_ip_ref', 'dst_ip_ref'})
+        assert(event.keys() == {'type', 'extensions', 'ttp_tagging_refs', 'src_ip_ref', 'dst_ip_ref'})
         assert(event['type'] == "x-ibm-finding")
 
         ip_ref = event['src_ip_ref']
@@ -343,11 +343,9 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         event = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x-reaqta-event')
 
         assert(event is not None), "x-reaqta-event not found"
-        assert(event.keys() == {'type', 'local_id', 'root_object', 'name', 'data', 'version', 'namespace_name', 'operation', 'is_local', 'queryName', 'custom_type', 'custom_name', 'relevance', 'tags', 'region_size', 'pe_type', 'return_code', 'technique', 'tactics', 'task_name', 'action_name', 'service_name', 'start_type', 'service_type'})
+        assert(event.keys() == {'type', 'local_id', 'root_object', 'name', 'data', 'version', 'namespace_name', 'operation', 'is_local', 'queryName', 'custom_type', 'custom_name', 'relevance', 'tags', 'region_size', 'pe_type', 'return_code', 'task_name', 'action_name', 'service_name', 'start_type', 'service_type'})
         assert(event['type'] == "x-reaqta-event")
         assert(event['local_id'] == DATA_LOCAL_ID)
-        assert(event['technique'] == DATA_TECHNIQUE)
-        assert(event['tactics'] == DATA_TACTICS)
         assert(event['tags'] == DATA_TAGS)
         assert(event['relevance'] == DATA_RELEVANCE)
         assert(event['version'] == DATA_VERSION)
@@ -418,11 +416,9 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         event = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'x-reaqta-event')
         assert(event is not None), "x-reaqta-event not found"
-        assert(event.keys() == {'type', 'id', 'spec_version', 'local_id', 'root_object', 'name', 'data', 'version', 'namespace_name', 'operation', 'is_local', 'queryName', 'custom_type', 'custom_name', 'relevance', 'tags', 'region_size', 'pe_type', 'return_code', 'technique', 'tactics', 'task_name', 'action_name', 'service_name', 'start_type', 'service_type'})
+        assert(event.keys() == {'type', 'local_id', 'id', 'spec_version', 'root_object', 'name', 'data', 'version', 'namespace_name', 'operation', 'is_local', 'queryName', 'custom_type', 'custom_name', 'relevance', 'tags', 'region_size', 'pe_type', 'return_code', 'task_name', 'action_name', 'service_name', 'start_type', 'service_type'})
         assert(event['type'] == "x-reaqta-event")
         assert(event['local_id'] == DATA_LOCAL_ID)
-        assert(event['technique'] == DATA_TECHNIQUE)
-        assert(event['tactics'] == DATA_TACTICS)
         assert(event['tags'] == DATA_TAGS)
         assert(event['relevance'] == DATA_RELEVANCE)
         assert(event['version'] == DATA_VERSION)
