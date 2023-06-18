@@ -527,7 +527,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "t'2022-02-01T08:43:10.003Z' STOP t'2022-01-07T10:43:10.005Z' "
         result = translation.translate('paloalto', 'query', '{}', stix_pattern)
         assert result['success'] is False
-        assert "invalid_parameter" == result['code']
+        assert "translation_error" == result['code']
         assert 'Start time should be lesser than Stop time' in result['error']
 
     def test_invalid_dollar_regexp(self):

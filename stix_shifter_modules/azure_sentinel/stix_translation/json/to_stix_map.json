@@ -1,13 +1,11 @@
 {
     "eventDateTime": [
       {
-        "key": "first_observed",
-        "cybox": false
+        "key": "first_observed"
       }
     ],
     "event_count": {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     },
     "azureTenantId": {
@@ -32,8 +30,7 @@
       }
     ,
     "closedDateTime":{
-        "key": "last_observed",
-        "cybox": false
+        "key": "last_observed"
     },
     "cloudAppStates": {
       "destinationServiceName": [
@@ -66,8 +63,7 @@
     },
     "createdDateTime": [
       {
-        "key": "created",
-        "cybox": false
+        "key": "created"
       },
       {
         "key": "x-oca-event.created",
@@ -196,8 +192,7 @@
     },
     "lastModifiedDateTime": [
       {
-        "key": "modified",
-        "cybox": false
+        "key": "modified"
       },
       {
         "key": "x-ibm-finding.time_observed",

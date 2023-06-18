@@ -1,12 +1,10 @@
 {
   "@timestamp": [
     {
-      "key": "first_observed",
-      "cybox": false
+      "key": "first_observed"
     },
     {
-      "key": "last_observed",
-      "cybox": false
+      "key": "last_observed"
     }
   ],
   "source": {
@@ -803,11 +801,13 @@
     },
     "category": {
       "key": "x-oca-event.category",
+      "group": true,
       "object": "event"
     },
     "code": {
       "key": "x-oca-event.code",
-      "object": "event"
+      "object": "event",
+      "transformer": "ToString"
     },
     "created": {
       "key": "x-oca-event.created",
@@ -834,8 +834,10 @@
       "object": "event"
     },
     "kind": {
-      "key": "x-oca-event.kind",
-      "object": "event"
+      "key": "x-oca-event.category",
+      "group": true,
+      "object": "event",
+      "transformer": "ValueToList"
     },
     "module": {
       "key": "x-oca-event.module",
@@ -878,7 +880,8 @@
       "object": "event"
     },
     "type": {
-      "key": "x-oca-event.event_type",
+      "key": "x-oca-event.category",
+      "group": true,
       "object": "event"
     },
     "url": [
@@ -1709,7 +1712,7 @@
     ],
     "name": [
       {
-        "key": "x-oca-asset.name",
+        "key": "x-oca-asset.hostname",
         "object": "host"
       },
       {
@@ -2041,7 +2044,7 @@
       }
   ],
     "name": {
-      "key": "x-oca-asset.name",
+      "key": "x-oca-asset.hostname",
       "object": "observer"
     },
     "product": [
