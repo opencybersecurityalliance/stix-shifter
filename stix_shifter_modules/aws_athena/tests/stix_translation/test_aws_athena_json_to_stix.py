@@ -150,11 +150,11 @@ class TestAwsResultsToStix(unittest.TestCase):
         """to test network stix object properties"""
         data = {
             "account": 979326520502,
-            "interfaceid": "eni-04b762de832716892",
-            "sourceaddress": "89.248.172.85",
-            "destinationaddress": "172.31.62.249",
-            "sourceport": 58387,
-            "destinationport": 51289,
+            "interface_id": "eni-04b762de832716892",
+            "srcaddr": "89.248.172.85",
+            "dstaddr": "172.31.62.249",
+            "srcport": 58387,
+            "dstport": 51289,
             "protocol": "tcp",
             "starttime": 1592547796,
             "endtime": 1592547798,
@@ -194,11 +194,11 @@ class TestAwsResultsToStix(unittest.TestCase):
         """to test network stix object properties"""
         data = {
             "account": 979326520502,
-            "interfaceid": "eni-04b762de832716892",
-            "sourceaddress": "89.248.172.85",
-            "destinationaddress": "172.31.62.249",
-            "sourceport": 58387,
-            "destinationport": 51289,
+            "interface_id": "eni-04b762de832716892",
+            "srcaddr": "89.248.172.85",
+            "dstaddr": "172.31.62.249",
+            "srcport": 58387,
+            "dstport": 51289,
             "protocol": "tcp",
             "starttime": 1592547796,
             "endtime": 1592547798,
@@ -224,7 +224,7 @@ class TestAwsResultsToStix(unittest.TestCase):
         objects = observed_data['objects']
         custom_object = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-aws-athena')
 
-        assert custom_object.keys() == {'type', 'interfaceid', 'date', 'logstatus', 'numbytes', 'region', 'version'}
+        assert custom_object.keys() == {'type', 'interface_id', 'date', 'logstatus', 'numbytes', 'region', 'version'}
         assert custom_object['date'] == '2020-06-19'
         assert custom_object['logstatus'] == 'OK'
         assert custom_object['numbytes'] == 40

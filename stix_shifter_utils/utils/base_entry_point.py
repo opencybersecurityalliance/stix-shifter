@@ -101,8 +101,12 @@ class BaseEntryPoint:
         dialects = dialect_list(module_name, self.__options) # get list of dialects from configuration
         print('BASE ENTRY POINT-dialect_list: ', dialects)
         for dialect in dialects:
+            if self.__options:
+                is_default = True
+            else:
+                is_default = (dialect == dialect_default)
             self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator,
-                             default=(dialect == dialect_default))
+                             default=is_default)
 
     def create_default_query_translator(self, dialect):
         module_name = self.__connector_module

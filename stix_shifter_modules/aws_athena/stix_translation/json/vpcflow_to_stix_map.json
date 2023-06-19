@@ -1,5 +1,5 @@
 {
-  "sourceaddress": [
+  "srcaddr": [
     {
       "key": "ipv4-addr.value",
       "object": "src_ip"
@@ -21,15 +21,15 @@
     {
       "key": "ipv4-addr.x_aws_interface_id",
       "object": "src_ip",
-      "ds_key": "interfaceid"
+      "ds_key": "interface_id"
     },
     {
       "key": "ipv6-addr.x_aws_interface_id",
       "object": "src_ip",
-      "ds_key": "interfaceid"
+      "ds_key": "interface_id"
     }
   ],
-  "destinationaddress": [
+  "dstaddr": [
     {
       "key": "ipv4-addr.value",
       "object": "dst_ip"
@@ -49,14 +49,14 @@
       "references": "dst_ip"
     }
   ],
-  "sourceport": [
+  "srcport": [
     {
       "key": "network-traffic.src_port",
       "object": "nt",
       "transformer": "ToInteger"
     }
   ],
-  "destinationport": [
+  "dstport": [
     {
       "key": "network-traffic.dst_port",
       "object": "nt",
