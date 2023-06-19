@@ -801,6 +801,7 @@
     },
     "category": {
       "key": "x-oca-event.category",
+      "group": true,
       "object": "event"
     },
     "code": {
@@ -833,8 +834,10 @@
       "object": "event"
     },
     "kind": {
-      "key": "x-oca-event.kind",
-      "object": "event"
+      "key": "x-oca-event.category",
+      "group": true,
+      "object": "event",
+      "transformer": "ValueToList"
     },
     "module": {
       "key": "x-oca-event.module",
@@ -877,7 +880,8 @@
       "object": "event"
     },
     "type": {
-      "key": "x-oca-event.event_type",
+      "key": "x-oca-event.category",
+      "group": true,
       "object": "event"
     },
     "url": [
@@ -1708,7 +1712,7 @@
     ],
     "name": [
       {
-        "key": "x-oca-asset.name",
+        "key": "x-oca-asset.hostname",
         "object": "host"
       },
       {
@@ -2040,7 +2044,7 @@
       }
   ],
     "name": {
-      "key": "x-oca-asset.name",
+      "key": "x-oca-asset.hostname",
       "object": "observer"
     },
     "product": [

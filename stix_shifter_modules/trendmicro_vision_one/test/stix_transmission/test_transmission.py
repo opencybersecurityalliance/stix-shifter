@@ -193,6 +193,7 @@ class TestTransmission(unittest.TestCase):
         mock_query.side_effect = [get_mock_response(408, json.dumps(payload))]
         transmission = StixTransmission("trendmicro_vision_one", CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(), 0, 10)
+        print(str(results_response))
         self.assertFalse(results_response["success"])
         self.assertEqual(results_response["code"], "unknown")
         self.assertEqual(results_response["error"], "trendmicro_vision_one connector error => " + payload["error"]["message"])

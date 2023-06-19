@@ -13,11 +13,11 @@ logger = utils_logger.set_logger(__name__)
 
 class ErrorCode(Enum):
     TRANSLATION_NOTIMPLEMENTED_MODE = 'not_implemented'
-    TRANSLATION_MODULE_DEFAULT_ERROR = 'invalid_parameter'
+    TRANSLATION_MODULE_DEFAULT_ERROR = 'translation_error'
     TRANSLATION_MAPPING_ERROR = 'mapping_error'
     TRANSLATION_STIX_VALIDATION = 'invalid_parameter'
     TRANSLATION_NOTSUPPORTED = 'invalid_parameter'
-    TRANSLATION_RESULT = 'mapping_error'
+    TRANSLATION_RESULT = 'results_translation_error'
     TRANSLATION_UNKNOWN_DIALOG = 'invalid_parameter'
     TRANSLATION_UNKNOWN_LANGUAGE = 'invalid_parameter'
 
@@ -140,7 +140,7 @@ class ErrorResponder():
         try:
             module = importlib.import_module(module_path)
             if json_data is not None:
-                module.ErrorMapper.set_error_code(json_data, return_object)
+                module.ErrorMapper.set_error_code(json_data, return_object, connector)
             else:
                 ErrorMapperBase.set_error_code(return_object, module.ErrorMapper.DEFAULT_ERROR, connector=connector)
         except ModuleNotFoundError:

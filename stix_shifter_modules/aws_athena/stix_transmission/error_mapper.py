@@ -3,13 +3,19 @@ from stix_shifter_utils.utils.error_response import ErrorCode
 from stix_shifter_utils.utils import logger
 
 ERROR_MAPPING = {
+    "InvalidRegionError": ErrorCode.TRANSMISSION_CONNECT,
+    "EndpointConnectionError": ErrorCode.TRANSMISSION_REMOTE_SYSTEM_IS_UNAVAILABLE,
     "InvalidRequestException": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
     "ParamValidationError": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
     "InternalServerException": ErrorCode.TRANSMISSION_CONNECT,
     "TooManyRequestsException": ErrorCode.TRANSMISSION_QUERY_LOGICAL_ERROR,
     "ClientError": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
     "AccessDeniedException": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
-    "InvalidParameterException": ErrorCode.TRANSMISSION_INVALID_PARAMETER
+    "InvalidParameterException": ErrorCode.TRANSMISSION_INVALID_PARAMETER,
+    "InvalidClientTokenId": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
+    "SignatureDoesNotMatch": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
+    "ValidationError": ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
+    "KeyError": ErrorCode.TRANSMISSION_INVALID_PARAMETER
     }
 
 
@@ -19,7 +25,7 @@ class ErrorMapper:
     DEFAULT_ERROR = ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR
 
     @staticmethod
-    def set_error_code(json_data, return_obj):
+    def set_error_code(json_data, return_obj, connector=None):
         """aws transmit specified error
          :param json_data: dict, error response of api_call
          :param return_obj: dict, returns error and error code"""
@@ -37,4 +43,4 @@ class ErrorMapper:
         if error_code == ErrorMapper.DEFAULT_ERROR:
             ErrorMapper.logger.debug("failed to map: " + str(json_data))
 
-        ErrorMapperBase.set_error_code(return_obj, error_code)
+        ErrorMapperBase.set_error_code(return_obj, error_code, connector)

@@ -19,7 +19,7 @@ class ErrorMapper(ErrorMapperBase):
     DEFAULT_ERROR = ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR.value
 
     @staticmethod
-    def set_error_code(json_data, return_obj):
+    def set_error_code(json_data, return_obj, connector=None):
         error_code = ErrorMapper.DEFAULT_ERROR
 
         for error_package in error_mapping:
@@ -41,6 +41,6 @@ class ErrorMapper(ErrorMapperBase):
             ErrorMapper.logger.debug('failed to map: ' + str(json_data))
 
         if isinstance(error_code, tuple):
-            ErrorMapperBase.set_error_code(return_obj, error_code[0], error_code[1])
+            ErrorMapperBase.set_error_code(return_obj, error_code[0], error_code[1], connector=connector)
         else:
-            ErrorMapperBase.set_error_code(return_obj, error_code)
+            ErrorMapperBase.set_error_code(return_obj, error_code, connector=connector)

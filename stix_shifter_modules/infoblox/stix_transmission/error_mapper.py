@@ -23,7 +23,7 @@ class ErrorMapper:
     DEFAULT_ERROR = ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR
 
     @staticmethod
-    def set_error_code(json_data, return_obj):
+    def set_error_code(json_data, return_obj, connector=None):
         """
         Parses API error response, maps native error status to STIX error, and saves to response object.
 
@@ -43,4 +43,4 @@ class ErrorMapper:
         if error_code == ErrorMapper.DEFAULT_ERROR:
             ErrorMapper.logger.error("failed to map: %s", json_data)
 
-        ErrorMapperBase.set_error_code(return_obj, error_code)
+        ErrorMapperBase.set_error_code(return_obj, error_code, connector=connector)
