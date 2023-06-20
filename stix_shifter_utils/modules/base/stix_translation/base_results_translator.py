@@ -25,7 +25,6 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
         :param basepath: path of data source translation module
         :type basepath: str
         """
-        print('fetch_mapping>>>>', dialect)
         stix_2_0_mapping_directory_path = os.path.join(basepath, 'json')
         stix_2_1_mapping_directory_path = os.path.join(basepath, 'json/stix_2_1')
         mapping_file = f'{dialect}_to_stix_map.json'
@@ -39,7 +38,6 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
             to_stix_path = os.path.join(stix_2_0_mapping_directory_path, mapping_file)
 
         if os.path.isdir(stix_2_0_mapping_directory_path) and not os.path.isfile(to_stix_path):
-            print('BaseResultTranslator >>>', dialect)
             raise Exception('BaseResultTranslator Error: ' + to_stix_path + ' is not found for dialect ' + dialect)
 
         return self.read_json(to_stix_path, options)

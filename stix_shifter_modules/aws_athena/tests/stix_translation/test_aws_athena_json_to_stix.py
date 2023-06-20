@@ -169,7 +169,6 @@ class TestAwsResultsToStix(unittest.TestCase):
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
-        print(result_bundle)
 
         result_bundle_identity = result_bundle_objects[0]
         assert result_bundle_identity['type'] == data_source['type']
