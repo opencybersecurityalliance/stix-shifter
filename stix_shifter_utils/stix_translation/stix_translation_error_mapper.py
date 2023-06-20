@@ -22,7 +22,7 @@ class ErrorMapper():
     DEFAULT_ERROR = ErrorCode.TRANSLATION_MODULE_DEFAULT_ERROR
 
     @staticmethod
-    def set_error_code(data_dict, return_obj):
+    def set_error_code(data_dict, return_obj, connector):
         exception = None
         exception_str = None
         if 'exception' in data_dict:
@@ -30,7 +30,7 @@ class ErrorMapper():
             exception_str = str(exception)
 
         error_code = ErrorMapper.DEFAULT_ERROR
-        error_message = 'Error when converting STIX pattern to data source query'
+        error_message = 'STIX translation error'
         if exception_str:
             error_message += ': ' + exception_str
 
@@ -46,5 +46,11 @@ class ErrorMapper():
                     if len(error_message) > 0:
                         error_message += ' : '
                     error_message += exception_message
+        if connector:
+            return_obj['error'] = '{} connector error => {}'.format(connector, str(error_message))
+        elif return_obj.get('connector'):
+            return_obj['error'] = '{} connector error => {}'.format(return_obj['connector'], str(error_message))
+        else:
+            return_obj['error'] = error_message
 
         ErrorMapperBase.set_error_code(return_obj, error_code, message=error_message)
