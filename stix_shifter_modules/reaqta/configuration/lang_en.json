@@ -14,7 +14,7 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "Self Signed Certificate",
+            "label": "Self-signed Certificate",
             "placeholder": "Paste your certificate"
         },
         "sni": {
