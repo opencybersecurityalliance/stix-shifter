@@ -299,10 +299,9 @@ class DataSourceObjToStixObj:
                 transformer = self.transformers[prop['transformer']] if 'transformer' in prop else None
                 references = references = prop['references'] if 'references' in prop else None
                 
-                # adding object index in references
-                # referring to the processed records needs an object index to refer
-                # eg: If reference is nt and object_key_index is 1, then reference is nt_1.
-                # eg: If reference is [nt] and object_key_index is 3, then reference is [nt_3]
+                # This check avoid using duplicate reference in the multiple objects of the same type.
+                # For example: If there are multiple source ipv4-addr and network-traffic objects then 
+                # without this reference check the first source ipv4-addr object will be referenced to all network-traffic objects.
                 if object_key_ind and references:
                     if isinstance(references, str):
                         references = references + '_' + str(object_key_ind)
