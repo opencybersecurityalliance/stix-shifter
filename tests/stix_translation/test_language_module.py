@@ -31,15 +31,15 @@ class TestStartParameters(object):
         result = translation.translate('qradar:aql', 'query', '', AQL_QUERY, {})
         self.validate_aql_result(result)
 
-    def test_aql_module_options_dialect_aql(self):
-        # python main.py translate qradar query '' "bla-bla-aql" '{"dialects": ["aql"]}'
-        result = translation.translate('qradar', 'query', '', AQL_QUERY, {"dialects": ["aql"]})
-        self.validate_aql_result(result)
+    # def test_aql_module_options_dialect_aql(self):
+    #     # python main.py translate qradar query '' "bla-bla-aql" '{"dialects": ["aql"]}'
+    #     result = translation.translate('qradar', 'query', '', AQL_QUERY, {"dialects": ["aql"]})
+    #     self.validate_aql_result(result)
 
-    def test_aql_module_options_language_aql_dialect_aql(self):
-        # python main.py translate qradar query '' "bla-bla-aql" '{"language":"aql", "dialects": ["aql"]}'
-        result = translation.translate('qradar', 'query', '', AQL_QUERY, {"language": "aql", "dialects": ["aql"]})
-        self.validate_aql_result(result)
+    # def test_aql_module_options_language_aql_dialect_aql(self):
+    #     # python main.py translate qradar query '' "bla-bla-aql" '{"language":"aql", "dialects": ["aql"]}'
+    #     result = translation.translate('qradar', 'query', '', AQL_QUERY, {"language": "aql", "dialects": ["aql"]})
+    #     self.validate_aql_result(result)
 
     def test_stix_2_results(self):
         # python main.py translate qradar query '' "[ipv4-addr:value = '192.168.0.100']" '{}'

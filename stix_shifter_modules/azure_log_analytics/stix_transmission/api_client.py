@@ -13,7 +13,7 @@ class APIClient:
         :param configuration: dict,config dict"""
         self.connection = connection
         self.configuration = configuration
-        logger = logging.getLogger("azure.core.pipeline.policies.http_logging_policy")
+        logger = logging.getLogger("azure")
         logger.setLevel(logging.WARNING)
 
     async def init_async_client(self):

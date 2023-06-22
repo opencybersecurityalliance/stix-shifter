@@ -7,7 +7,6 @@ import json
 
 MODULE = "aws_athena"
 entry_point = EntryPoint()
-map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
@@ -43,90 +42,89 @@ class TestAwsResultsToStix(unittest.TestCase):
         """
         to test the common stix object properties
         """
+        map_data = entry_point.get_results_translator('guardduty').map_data
         data = {
-            "guardduty": {
-                "accountid": 979326520502,
-                "region": "us-east-1",
-                "type": "UnauthorizedAccess:EC2/SSHBruteForce",
-                "resource_instancedetails_networkinterfaces_0_privatednsname": "ip-172-31-60-104.ec2.internal",
-                "resource_instancedetails_networkinterfaces_0_privateipaddress": "172.31.60.104",
-                "resource_instancedetails_networkinterfaces_0_subnetid": "subnet-ea9d6be4",
-                "resource_instancedetails_networkinterfaces_0_publicdnsname": "ec2-18-210-22-128.compute-1."
-                                                                              "amazonaws.com",
-                "resource_instancedetails_networkinterfaces_0_vpcid": "vpc-10db926a",
-                "resource_instancedetails_networkinterfaces_0_publicip": "18.210.22.128",
-                "resource_instancedetails_networkinterfaces_0_networkinterfaceid": "eni-0203098cca62c3f21",
-                "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupid": "sg-018edb43fcc81525f",
-                "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupname": "launch-wizard-13",
-                "resource_instancedetails_imageid": "ami-0015fcaa5516c75ed",
-                "resource_instancedetails_instanceid": "i-031cb81e1f32a36e1",
-                "resource_instancedetails_availabilityzone": "us-east-1f",
-                "service_eventfirstseen": "2020-07-31T06:19:09Z",
-                "service_action_networkconnectionaction_protocol": "TCP",
-                "service_action_networkconnectionaction_remoteportdetails_port": "38420",
-                "service_action_networkconnectionaction_remoteipdetails_country_countryname": "Sweden",
-                "service_action_networkconnectionaction_remoteipdetails_ipaddressv4": "85.224.242.94",
-                "service_action_networkconnectionaction_remoteipdetails_city_cityname": "\u00d6rebro",
-                "service_action_networkconnectionaction_localportdetails_port": "22",
-                "service_eventlastseen": "2020-09-12T09:19:40Z",
-                "severity": 2,
-                "title": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1.",
-                "arn": "arn:aws:guardduty:us-east-1:979326520502:detector/6ab6e6ee780ed494f3b7ca56acdc74df/finding/"
-                       "7ab9d1cb6248e05a0e419a79528761cb",
-                "createdat": "2020-07-31T06:37:13.745Z",
-                "description": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1. "
-                               "Brute force attacks are used to gain unauthorized access to your instance by "
-                               "guessing the SSH password.",
-                "finding_id": "7ab9d1cb6248e05a0e419a79528761cb",
-                "partition": "aws",
-                "resource": {
-                    "instancedetails": {
-                        "imagedescription": "Provided by Red Hat, Inc.",
-                        "instancestate": "running",
-                        "instancetype": "t2.large",
-                        "launchtime": "2020-09-11T23:16:03Z",
-                        "tags": {
-                            "0": {
-                                "key": "Name",
-                                "value": "ArcSight Logger"
-                            }
+            "accountid": 979326520502,
+            "region": "us-east-1",
+            "type": "UnauthorizedAccess:EC2/SSHBruteForce",
+            "resource_instancedetails_networkinterfaces_0_privatednsname": "ip-172-31-60-104.ec2.internal",
+            "resource_instancedetails_networkinterfaces_0_privateipaddress": "172.31.60.104",
+            "resource_instancedetails_networkinterfaces_0_subnetid": "subnet-ea9d6be4",
+            "resource_instancedetails_networkinterfaces_0_publicdnsname": "ec2-18-210-22-128.compute-1."
+                                                                            "amazonaws.com",
+            "resource_instancedetails_networkinterfaces_0_vpcid": "vpc-10db926a",
+            "resource_instancedetails_networkinterfaces_0_publicip": "18.210.22.128",
+            "resource_instancedetails_networkinterfaces_0_networkinterfaceid": "eni-0203098cca62c3f21",
+            "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupid": "sg-018edb43fcc81525f",
+            "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupname": "launch-wizard-13",
+            "resource_instancedetails_imageid": "ami-0015fcaa5516c75ed",
+            "resource_instancedetails_instanceid": "i-031cb81e1f32a36e1",
+            "resource_instancedetails_availabilityzone": "us-east-1f",
+            "service_eventfirstseen": "2020-07-31T06:19:09Z",
+            "service_action_networkconnectionaction_protocol": "TCP",
+            "service_action_networkconnectionaction_remoteportdetails_port": "38420",
+            "service_action_networkconnectionaction_remoteipdetails_country_countryname": "Sweden",
+            "service_action_networkconnectionaction_remoteipdetails_ipaddressv4": "85.224.242.94",
+            "service_action_networkconnectionaction_remoteipdetails_city_cityname": "\u00d6rebro",
+            "service_action_networkconnectionaction_localportdetails_port": "22",
+            "service_eventlastseen": "2020-09-12T09:19:40Z",
+            "severity": 2,
+            "title": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1.",
+            "arn": "arn:aws:guardduty:us-east-1:979326520502:detector/6ab6e6ee780ed494f3b7ca56acdc74df/finding/"
+                    "7ab9d1cb6248e05a0e419a79528761cb",
+            "createdat": "2020-07-31T06:37:13.745Z",
+            "description": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1. "
+                            "Brute force attacks are used to gain unauthorized access to your instance by "
+                            "guessing the SSH password.",
+            "finding_id": "7ab9d1cb6248e05a0e419a79528761cb",
+            "partition": "aws",
+            "resource": {
+                "instancedetails": {
+                    "imagedescription": "Provided by Red Hat, Inc.",
+                    "instancestate": "running",
+                    "instancetype": "t2.large",
+                    "launchtime": "2020-09-11T23:16:03Z",
+                    "tags": {
+                        "0": {
+                            "key": "Name",
+                            "value": "ArcSight Logger"
                         }
-                    },
-                    "resourcetype": "Instance"
+                    }
                 },
-                "schemaversion": 2.0,
-                "service": {
-                    "action": {
-                        "actiontype": "NETWORK_CONNECTION",
-                        "networkconnectionaction": {
-                            "connectiondirection": "INBOUND",
-                            "localportdetails": {
-                                "portname": "SSH"
+                "resourcetype": "Instance"
+            },
+            "schemaversion": 2.0,
+            "service": {
+                "action": {
+                    "actiontype": "NETWORK_CONNECTION",
+                    "networkconnectionaction": {
+                        "connectiondirection": "INBOUND",
+                        "localportdetails": {
+                            "portname": "SSH"
+                        },
+                        "remoteipdetails": {
+                            "geolocation": {
+                                "lat": "59.2741",
+                                "lon": "15.2066"
                             },
-                            "remoteipdetails": {
-                                "geolocation": {
-                                    "lat": "59.2741",
-                                    "lon": "15.2066"
-                                },
-                                "organization": {
-                                    "asn": "2119",
-                                    "asnorg": "Telenor Norge AS",
-                                    "isp": "Telenor Sverige AB",
-                                    "org": "Telenor Sverige AB"
-                                }
-                            },
-                            "remoteportdetails": {
-                                "portname": "Unknown"
+                            "organization": {
+                                "asn": "2119",
+                                "asnorg": "Telenor Norge AS",
+                                "isp": "Telenor Sverige AB",
+                                "org": "Telenor Sverige AB"
                             }
+                        },
+                        "remoteportdetails": {
+                            "portname": "Unknown"
                         }
-                    },
-                    "count": "20",
-                    "detectorid": "6ab6e6ee780ed494f3b7ca56acdc74df",
-                    "resourcerole": "TARGET",
-                    "servicename": "guardduty"
+                    }
                 },
-                "updatedat": "2020-09-12T09:25:34.086Z"
-            }
+                "count": "20",
+                "detectorid": "6ab6e6ee780ed494f3b7ca56acdc74df",
+                "resourcerole": "TARGET",
+                "servicename": "guardduty"
+            },
+            "updatedat": "2020-09-12T09:25:34.086Z"
         }
 
         result_bundle = json_to_stix_translator.convert_to_stix(
@@ -151,24 +149,23 @@ class TestAwsResultsToStix(unittest.TestCase):
     def test_vpc_flow_network_json_to_stix(self):
         """to test network stix object properties"""
         data = {
-            "vpcflow": {
-                "account": 979326520502,
-                "interfaceid": "eni-04b762de832716892",
-                "sourceaddress": "89.248.172.85",
-                "destinationaddress": "172.31.62.249",
-                "sourceport": 58387,
-                "destinationport": 51289,
-                "protocol": "tcp",
-                "starttime": 1592547796,
-                "endtime": 1592547798,
-                "action": "REJECT",
-                "date": "2020-06-19",
-                "logstatus": "OK",
-                "numbytes": 40,
-                "region": "us-east-1",
-                "version": 2
-            }
+            "account": 979326520502,
+            "interface_id": "eni-04b762de832716892",
+            "srcaddr": "89.248.172.85",
+            "dstaddr": "172.31.62.249",
+            "srcport": 58387,
+            "dstport": 51289,
+            "protocol": "tcp",
+            "starttime": 1592547796,
+            "endtime": 1592547798,
+            "action": "REJECT",
+            "date": "2020-06-19",
+            "logstatus": "OK",
+            "numbytes": 40,
+            "region": "us-east-1",
+            "version": 2
         }
+        map_data = entry_point.get_results_translator('vpcflow').map_data
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
@@ -195,24 +192,23 @@ class TestAwsResultsToStix(unittest.TestCase):
     def test_vpc_flow_custom_attr_json_to_stix(self):
         """to test network stix object properties"""
         data = {
-            "vpcflow": {
-                "account": 979326520502,
-                "interfaceid": "eni-04b762de832716892",
-                "sourceaddress": "89.248.172.85",
-                "destinationaddress": "172.31.62.249",
-                "sourceport": 58387,
-                "destinationport": 51289,
-                "protocol": "tcp",
-                "starttime": 1592547796,
-                "endtime": 1592547798,
-                "action": "REJECT",
-                "date": "2020-06-19",
-                "logstatus": "OK",
-                "numbytes": 40,
-                "region": "us-east-1",
-                "version": 2
-            }
+            "account": 979326520502,
+            "interface_id": "eni-04b762de832716892",
+            "srcaddr": "89.248.172.85",
+            "dstaddr": "172.31.62.249",
+            "srcport": 58387,
+            "dstport": 51289,
+            "protocol": "tcp",
+            "starttime": 1592547796,
+            "endtime": 1592547798,
+            "action": "REJECT",
+            "date": "2020-06-19",
+            "logstatus": "OK",
+            "numbytes": 40,
+            "region": "us-east-1",
+            "version": 2
         }
+        map_data = entry_point.get_results_translator('vpcflow').map_data
         options = {"unmapped_fallback": True}
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
@@ -227,7 +223,7 @@ class TestAwsResultsToStix(unittest.TestCase):
         objects = observed_data['objects']
         custom_object = TestAwsResultsToStix.get_first_of_type(objects.values(), 'x-aws-athena')
 
-        assert custom_object.keys() == {'type', 'interfaceid', 'date', 'logstatus', 'numbytes', 'region', 'version'}
+        assert custom_object.keys() == {'type', 'interface_id', 'date', 'logstatus', 'numbytes', 'region', 'version'}
         assert custom_object['date'] == '2020-06-19'
         assert custom_object['logstatus'] == 'OK'
         assert custom_object['numbytes'] == 40
@@ -237,90 +233,89 @@ class TestAwsResultsToStix(unittest.TestCase):
     def test_guardduty_network_json_to_stix(self):
         """to test network stix object properties"""
         data = {
-            "guardduty": {
-                "accountid": 979326520502,
-                "region": "us-east-1",
-                "type": "UnauthorizedAccess:EC2/SSHBruteForce",
-                "resource_instancedetails_networkinterfaces_0_privatednsname": "ip-172-31-60-104.ec2.internal",
-                "resource_instancedetails_networkinterfaces_0_privateipaddress": "172.31.60.104",
-                "resource_instancedetails_networkinterfaces_0_subnetid": "subnet-ea9d6be4",
-                "resource_instancedetails_networkinterfaces_0_publicdnsname": "ec2-18-210-22-128.compute-1."
-                                                                              "amazonaws.com",
-                "resource_instancedetails_networkinterfaces_0_vpcid": "vpc-10db926a",
-                "resource_instancedetails_networkinterfaces_0_publicip": "18.210.22.128",
-                "resource_instancedetails_networkinterfaces_0_networkinterfaceid": "eni-0203098cca62c3f21",
-                "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupid": "sg-018edb43fcc81525f",
-                "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupname": "launch-wizard-13",
-                "resource_instancedetails_imageid": "ami-0015fcaa5516c75ed",
-                "resource_instancedetails_instanceid": "i-031cb81e1f32a36e1",
-                "resource_instancedetails_availabilityzone": "us-east-1f",
-                "service_eventfirstseen": "2020-07-31T06:19:09Z",
-                "service_action_networkconnectionaction_protocol": "TCP",
-                "service_action_networkconnectionaction_remoteportdetails_port": "38420",
-                "service_action_networkconnectionaction_remoteipdetails_country_countryname": "Sweden",
-                "service_action_networkconnectionaction_remoteipdetails_ipaddressv4": "85.224.242.94",
-                "service_action_networkconnectionaction_remoteipdetails_city_cityname": "rebro",
-                "service_action_networkconnectionaction_localportdetails_port": "22",
-                "service_eventlastseen": "2020-09-12T09:19:40Z",
-                "severity": 2,
-                "title": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1.",
-                "arn": "arn:aws:guardduty:us-east-1:979326520502:detector/6ab6e6ee780ed494f3b7ca56acdc74df/finding"
-                       "/7ab9d1cb6248e05a0e419a79528761cb",
-                "createdat": "2020-07-31T06:37:13.745Z",
-                "description": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1. "
-                               "Brute force attacks are used to gain unauthorized access to your instance by "
-                               "guessing the SSH password.",
-                "finding_id": "7ab9d1cb6248e05a0e419a79528761cb",
-                "partition": "aws",
-                "resource": {
-                    "instancedetails": {
-                        "imagedescription": "Provided by Red Hat, Inc.",
-                        "instancestate": "running",
-                        "instancetype": "t2.large",
-                        "launchtime": "2020-09-11T23:16:03Z",
-                        "tags": {
-                            "0": {
-                                "key": "Name",
-                                "value": "ArcSight Logger"
-                            }
+            "accountid": 979326520502,
+            "region": "us-east-1",
+            "type": "UnauthorizedAccess:EC2/SSHBruteForce",
+            "resource_instancedetails_networkinterfaces_0_privatednsname": "ip-172-31-60-104.ec2.internal",
+            "resource_instancedetails_networkinterfaces_0_privateipaddress": "172.31.60.104",
+            "resource_instancedetails_networkinterfaces_0_subnetid": "subnet-ea9d6be4",
+            "resource_instancedetails_networkinterfaces_0_publicdnsname": "ec2-18-210-22-128.compute-1."
+                                                                            "amazonaws.com",
+            "resource_instancedetails_networkinterfaces_0_vpcid": "vpc-10db926a",
+            "resource_instancedetails_networkinterfaces_0_publicip": "18.210.22.128",
+            "resource_instancedetails_networkinterfaces_0_networkinterfaceid": "eni-0203098cca62c3f21",
+            "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupid": "sg-018edb43fcc81525f",
+            "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupname": "launch-wizard-13",
+            "resource_instancedetails_imageid": "ami-0015fcaa5516c75ed",
+            "resource_instancedetails_instanceid": "i-031cb81e1f32a36e1",
+            "resource_instancedetails_availabilityzone": "us-east-1f",
+            "service_eventfirstseen": "2020-07-31T06:19:09Z",
+            "service_action_networkconnectionaction_protocol": "TCP",
+            "service_action_networkconnectionaction_remoteportdetails_port": "38420",
+            "service_action_networkconnectionaction_remoteipdetails_country_countryname": "Sweden",
+            "service_action_networkconnectionaction_remoteipdetails_ipaddressv4": "85.224.242.94",
+            "service_action_networkconnectionaction_remoteipdetails_city_cityname": "rebro",
+            "service_action_networkconnectionaction_localportdetails_port": "22",
+            "service_eventlastseen": "2020-09-12T09:19:40Z",
+            "severity": 2,
+            "title": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1.",
+            "arn": "arn:aws:guardduty:us-east-1:979326520502:detector/6ab6e6ee780ed494f3b7ca56acdc74df/finding"
+                    "/7ab9d1cb6248e05a0e419a79528761cb",
+            "createdat": "2020-07-31T06:37:13.745Z",
+            "description": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1. "
+                            "Brute force attacks are used to gain unauthorized access to your instance by "
+                            "guessing the SSH password.",
+            "finding_id": "7ab9d1cb6248e05a0e419a79528761cb",
+            "partition": "aws",
+            "resource": {
+                "instancedetails": {
+                    "imagedescription": "Provided by Red Hat, Inc.",
+                    "instancestate": "running",
+                    "instancetype": "t2.large",
+                    "launchtime": "2020-09-11T23:16:03Z",
+                    "tags": {
+                        "0": {
+                            "key": "Name",
+                            "value": "ArcSight Logger"
                         }
-                    },
-                    "resourcetype": "Instance"
+                    }
                 },
-                "schemaversion": 2.0,
-                "service": {
-                    "action": {
-                        "actiontype": "NETWORK_CONNECTION",
-                        "networkconnectionaction": {
-                            "connectiondirection": "INBOUND",
-                            "localportdetails": {
-                                "portname": "SSH"
+                "resourcetype": "Instance"
+            },
+            "schemaversion": 2.0,
+            "service": {
+                "action": {
+                    "actiontype": "NETWORK_CONNECTION",
+                    "networkconnectionaction": {
+                        "connectiondirection": "INBOUND",
+                        "localportdetails": {
+                            "portname": "SSH"
+                        },
+                        "remoteipdetails": {
+                            "geolocation": {
+                                "lat": "59.2741",
+                                "lon": "15.2066"
                             },
-                            "remoteipdetails": {
-                                "geolocation": {
-                                    "lat": "59.2741",
-                                    "lon": "15.2066"
-                                },
-                                "organization": {
-                                    "asn": "2119",
-                                    "asnorg": "Telenor Norge AS",
-                                    "isp": "Telenor Sverige AB",
-                                    "org": "Telenor Sverige AB"
-                                }
-                            },
-                            "remoteportdetails": {
-                                "portname": "Unknown"
+                            "organization": {
+                                "asn": "2119",
+                                "asnorg": "Telenor Norge AS",
+                                "isp": "Telenor Sverige AB",
+                                "org": "Telenor Sverige AB"
                             }
+                        },
+                        "remoteportdetails": {
+                            "portname": "Unknown"
                         }
-                    },
-                    "count": "20",
-                    "detectorid": "6ab6e6ee780ed494f3b7ca56acdc74df",
-                    "resourcerole": "TARGET",
-                    "servicename": "guardduty"
+                    }
                 },
-                "updatedat": "2020-09-12T09:25:34.086Z"
-            }
+                "count": "20",
+                "detectorid": "6ab6e6ee780ed494f3b7ca56acdc74df",
+                "resourcerole": "TARGET",
+                "servicename": "guardduty"
+            },
+            "updatedat": "2020-09-12T09:25:34.086Z"
         }
+        map_data = entry_point.get_results_translator('guardduty').map_data
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
         result_bundle_objects = result_bundle['objects']
@@ -346,90 +341,89 @@ class TestAwsResultsToStix(unittest.TestCase):
     def test_guardduty_custom_attr_json_to_stix(self):
         """to test network stix object properties"""
         data = {
-            "guardduty": {
-                "accountid": 979326520502,
-                "region": "us-east-1",
-                "type": "UnauthorizedAccess:EC2/SSHBruteForce",
-                "resource_instancedetails_networkinterfaces_0_privatednsname": "ip-172-31-60-104.ec2.internal",
-                "resource_instancedetails_networkinterfaces_0_privateipaddress": "172.31.60.104",
-                "resource_instancedetails_networkinterfaces_0_subnetid": "subnet-ea9d6be4",
-                "resource_instancedetails_networkinterfaces_0_publicdnsname": "ec2-18-210-22-128.compute-1."
-                                                                              "amazonaws.com",
-                "resource_instancedetails_networkinterfaces_0_vpcid": "vpc-10db926a",
-                "resource_instancedetails_networkinterfaces_0_publicip": "18.210.22.128",
-                "resource_instancedetails_networkinterfaces_0_networkinterfaceid": "eni-0203098cca62c3f21",
-                "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupid": "sg-018edb43fcc81525f",
-                "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupname": "launch-wizard-13",
-                "resource_instancedetails_imageid": "ami-0015fcaa5516c75ed",
-                "resource_instancedetails_instanceid": "i-031cb81e1f32a36e1",
-                "resource_instancedetails_availabilityzone": "us-east-1f",
-                "service_eventfirstseen": "2020-07-31T06:19:09Z",
-                "service_action_networkconnectionaction_protocol": "TCP",
-                "service_action_networkconnectionaction_remoteportdetails_port": "38420",
-                "service_action_networkconnectionaction_remoteipdetails_country_countryname": "Sweden",
-                "service_action_networkconnectionaction_remoteipdetails_ipaddressv4": "85.224.242.94",
-                "service_action_networkconnectionaction_remoteipdetails_city_cityname": "rebro",
-                "service_action_networkconnectionaction_localportdetails_port": "22",
-                "service_eventlastseen": "2020-09-12T09:19:40Z",
-                "severity": 2,
-                "title": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1.",
-                "arn": "arn:aws:guardduty:us-east-1:979326520502:detector/6ab6e6ee780ed494f3b7ca56acdc74df/finding/"
-                       "7ab9d1cb6248e05a0e419a79528761cb",
-                "createdat": "2020-07-31T06:37:13.745Z",
-                "description": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1."
-                               " Brute force attacks are used to gain unauthorized access to your instance by guessing "
-                               "the SSH password.",
-                "finding_id": "7ab9d1cb6248e05a0e419a79528761cb",
-                "partition": "aws",
-                "resource": {
-                    "instancedetails": {
-                        "imagedescription": "Provided by Red Hat, Inc.",
-                        "instancestate": "running",
-                        "instancetype": "t2.large",
-                        "launchtime": "2020-09-11T23:16:03Z",
-                        "tags": {
-                            "0": {
-                                "key": "Name",
-                                "value": "ArcSight Logger"
-                            }
+            "accountid": 979326520502,
+            "region": "us-east-1",
+            "type": "UnauthorizedAccess:EC2/SSHBruteForce",
+            "resource_instancedetails_networkinterfaces_0_privatednsname": "ip-172-31-60-104.ec2.internal",
+            "resource_instancedetails_networkinterfaces_0_privateipaddress": "172.31.60.104",
+            "resource_instancedetails_networkinterfaces_0_subnetid": "subnet-ea9d6be4",
+            "resource_instancedetails_networkinterfaces_0_publicdnsname": "ec2-18-210-22-128.compute-1."
+                                                                            "amazonaws.com",
+            "resource_instancedetails_networkinterfaces_0_vpcid": "vpc-10db926a",
+            "resource_instancedetails_networkinterfaces_0_publicip": "18.210.22.128",
+            "resource_instancedetails_networkinterfaces_0_networkinterfaceid": "eni-0203098cca62c3f21",
+            "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupid": "sg-018edb43fcc81525f",
+            "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupname": "launch-wizard-13",
+            "resource_instancedetails_imageid": "ami-0015fcaa5516c75ed",
+            "resource_instancedetails_instanceid": "i-031cb81e1f32a36e1",
+            "resource_instancedetails_availabilityzone": "us-east-1f",
+            "service_eventfirstseen": "2020-07-31T06:19:09Z",
+            "service_action_networkconnectionaction_protocol": "TCP",
+            "service_action_networkconnectionaction_remoteportdetails_port": "38420",
+            "service_action_networkconnectionaction_remoteipdetails_country_countryname": "Sweden",
+            "service_action_networkconnectionaction_remoteipdetails_ipaddressv4": "85.224.242.94",
+            "service_action_networkconnectionaction_remoteipdetails_city_cityname": "rebro",
+            "service_action_networkconnectionaction_localportdetails_port": "22",
+            "service_eventlastseen": "2020-09-12T09:19:40Z",
+            "severity": 2,
+            "title": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1.",
+            "arn": "arn:aws:guardduty:us-east-1:979326520502:detector/6ab6e6ee780ed494f3b7ca56acdc74df/finding/"
+                    "7ab9d1cb6248e05a0e419a79528761cb",
+            "createdat": "2020-07-31T06:37:13.745Z",
+            "description": "85.224.242.94 is performing SSH brute force attacks against i-031cb81e1f32a36e1."
+                            " Brute force attacks are used to gain unauthorized access to your instance by guessing "
+                            "the SSH password.",
+            "finding_id": "7ab9d1cb6248e05a0e419a79528761cb",
+            "partition": "aws",
+            "resource": {
+                "instancedetails": {
+                    "imagedescription": "Provided by Red Hat, Inc.",
+                    "instancestate": "running",
+                    "instancetype": "t2.large",
+                    "launchtime": "2020-09-11T23:16:03Z",
+                    "tags": {
+                        "0": {
+                            "key": "Name",
+                            "value": "ArcSight Logger"
                         }
-                    },
-                    "resourcetype": "Instance"
+                    }
                 },
-                "schemaversion": 2.0,
-                "service": {
-                    "action": {
-                        "actiontype": "NETWORK_CONNECTION",
-                        "networkconnectionaction": {
-                            "connectiondirection": "INBOUND",
-                            "localportdetails": {
-                                "portname": "SSH"
+                "resourcetype": "Instance"
+            },
+            "schemaversion": 2.0,
+            "service": {
+                "action": {
+                    "actiontype": "NETWORK_CONNECTION",
+                    "networkconnectionaction": {
+                        "connectiondirection": "INBOUND",
+                        "localportdetails": {
+                            "portname": "SSH"
+                        },
+                        "remoteipdetails": {
+                            "geolocation": {
+                                "lat": "59.2741",
+                                "lon": "15.2066"
                             },
-                            "remoteipdetails": {
-                                "geolocation": {
-                                    "lat": "59.2741",
-                                    "lon": "15.2066"
-                                },
-                                "organization": {
-                                    "asn": "2119",
-                                    "asnorg": "Telenor Norge AS",
-                                    "isp": "Telenor Sverige AB",
-                                    "org": "Telenor Sverige AB"
-                                }
-                            },
-                            "remoteportdetails": {
-                                "portname": "Unknown"
+                            "organization": {
+                                "asn": "2119",
+                                "asnorg": "Telenor Norge AS",
+                                "isp": "Telenor Sverige AB",
+                                "org": "Telenor Sverige AB"
                             }
+                        },
+                        "remoteportdetails": {
+                            "portname": "Unknown"
                         }
-                    },
-                    "count": "20",
-                    "detectorid": "6ab6e6ee780ed494f3b7ca56acdc74df",
-                    "resourcerole": "TARGET",
-                    "servicename": "guardduty"
+                    }
                 },
-                "updatedat": "2020-09-12T09:25:34.086Z"
-            }
+                "count": "20",
+                "detectorid": "6ab6e6ee780ed494f3b7ca56acdc74df",
+                "resourcerole": "TARGET",
+                "servicename": "guardduty"
+            },
+            "updatedat": "2020-09-12T09:25:34.086Z"
         }
+        map_data = entry_point.get_results_translator('guardduty').map_data
         options = {"unmapped_fallback": True}
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
@@ -463,6 +457,7 @@ class TestAwsResultsToStix(unittest.TestCase):
         """
         result_file = open('stix_shifter_modules/aws_athena/tests/stix_translation/json/ocsf_results.json', 'r').read()
         data = json.loads(result_file)
+        map_data = entry_point.get_results_translator('ocsf').map_data
         
         result_bundle = json_to_stix_translator.convert_to_stix(
             data_source, map_data, [data], get_module_transformers(MODULE), options)
