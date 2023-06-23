@@ -39,19 +39,22 @@ def modules_list():
     return mlist
 
 
-def dialect_list(module):
-    modules = import_module('stix_shifter_modules')
-    if '__file__' in dir(modules) and modules.__file__ is not None:
-        modules_path = Path(modules.__file__).parent
-    else:
-        modules_path = choose_module_path(module, modules.__path__._path)
-    dialects_path = os.path.join(modules_path, f'{module}/stix_translation/json')
-    ENDING = '_from_stix_map.json'
+def dialect_list(module, options):
     dialects = []
-    if os.path.isdir(dialects_path):
-        files = [name for name in os.listdir(dialects_path) if (os.path.isfile(os.path.join(dialects_path, name)) and
-                 (name.endswith(ENDING)))]
-        dialects = list(map(lambda f: f[:-len(ENDING)], files))
-    if not dialects:
-        dialects = ['default']
+    if 'dialects' in options and options['dialects']:
+        dialects = options['dialects']
+    else:
+        modules = import_module('stix_shifter_modules')
+        if '__file__' in dir(modules) and modules.__file__ is not None:
+            modules_path = Path(modules.__file__).parent
+        else:
+            modules_path = choose_module_path(module, modules.__path__._path)
+        dialects_path = os.path.join(modules_path, f'{module}/stix_translation/json')
+        ENDING = '_from_stix_map.json'
+        if os.path.isdir(dialects_path):
+            files = [name for name in os.listdir(dialects_path) if (os.path.isfile(os.path.join(dialects_path, name)) and
+                    (name.endswith(ENDING)))]
+            dialects = list(map(lambda f: f[:-len(ENDING)], files))
+        if not dialects:
+            dialects = ['default']
     return dialects

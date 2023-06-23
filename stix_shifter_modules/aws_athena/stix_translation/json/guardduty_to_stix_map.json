@@ -1,0 +1,383 @@
+{
+  "resource_instancedetails_networkinterfaces_0_privateipaddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "nc_private_ip1"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nc_nt",
+      "references": "nc_private_ip1"
+    },
+    {
+      "key": "domain-name.resolves_to_refs",
+      "object": "private_dns_name",
+      "references": [
+        "nc_private_ip1"
+      ]
+    },
+    {
+      "key": "x-ibm-finding.src_ip_ref",
+      "object": "ibm_finding",
+      "references": "nc_private_ip1"
+    },
+    {
+      "key": "ipv4-addr.x_aws_interface_id",
+      "object": "nc_private_ip1",
+      "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid"
+    },
+    {
+      "key": "ipv4-addr.x_aws_ip_type",
+      "object": "nc_private_ip1",
+      "value": "private"
+    }
+  ],
+  "resource_instancedetails_networkinterfaces_0_ipv6addresses_0": [
+    {
+      "key": "ipv6-addr.value",
+      "object": "nc_ipv6_ip"
+    },
+    {
+      "key": "ipv6-addr.x_aws_interface_id",
+      "object": "nc_ipv6_ip",
+      "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid"
+    }
+  ],
+  "resource_instancedetails_networkinterfaces_0_publicip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "nc_public_ip"
+    },
+    {
+      "key": "domain-name.resolves_to_refs",
+      "object": "nc_public_name",
+      "references": [
+        "nc_public_ip"
+      ]
+    },
+    {
+      "key": "ipv4-addr.x_aws_interface_id",
+      "object": "nc_public_ip",
+      "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid"
+    },
+    {
+      "key": "ipv4-addr.x_aws_ip_type",
+      "object": "nc_public_ip",
+      "value": "public"
+    }
+  ],
+  "resource_instancedetails_networkinterfaces_0_privatednsname": [
+    {
+      "key": "domain-name.value",
+      "object": "private_dns_name"
+    }
+  ],
+  "resource_instancedetails_networkinterfaces_0_publicdnsname": [
+    {
+      "key": "domain-name.value",
+      "object": "nc_public_name"
+    }
+  ],
+  "resource_instancedetails_networkinterfaces_1_privateipaddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "nc_private_ip2"
+    },
+    {
+      "key": "domain-name.resolves_to_refs",
+      "object": "nc_private_name2",
+      "references": [
+        "nc_private_ip2"
+      ]
+    },
+    {
+      "key": "ipv4-addr.x_aws_interface_id",
+      "object": "nc_private_ip2",
+      "ds_key": "resource_instancedetails_networkinterfaces_1_networkinterfaceid"
+    },
+    {
+      "key": "ipv4-addr.x_aws_ip_type",
+      "object": "nc_private_ip2",
+      "value": "private"
+    }
+  ],
+  "resource_instancedetails_networkinterfaces_1_privatednsname": [
+    {
+      "key": "domain-name.value",
+      "object": "nc_private_name2"
+    }
+  ],
+  "service_action_networkconnectionaction_remoteipdetails_ipaddressv4": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "nc_remote_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nc_nt",
+      "references": "nc_remote_ip"
+    },
+    {
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "ibm_finding",
+      "references": "nc_remote_ip"
+    },
+    {
+      "key": "x-ibm-finding.dst_geolocation",
+      "object": "ibm_finding",
+      "ds_key": "service_action_networkconnectionaction_remoteipdetails_country_countryname"
+    },
+    {
+      "key": "ipv4-addr.x_aws_remote_city_name",
+      "object": "nc_remote_ip",
+      "ds_key": "service_action_networkconnectionaction_remoteipdetails_city_cityname"
+    },
+    {
+      "key": "ipv4-addr.x_aws_remote_country_name",
+      "object": "nc_remote_ip",
+      "ds_key": "service_action_networkconnectionaction_remoteipdetails_country_countryname"
+    }
+  ],
+  "service_action_networkconnectionaction_localportdetails_port": [
+    {
+      "key": "network-traffic.src_port",
+      "object": "nc_nt",
+      "transformer": "ToInteger"
+    }
+  ],
+  "service_action_networkconnectionaction_remoteportdetails_port": [
+    {
+      "key": "network-traffic.dst_port",
+      "object": "nc_nt",
+      "transformer": "ToInteger"
+    }
+  ],
+  "service_action_networkconnectionaction_protocol": [
+    {
+      "key": "network-traffic.protocols",
+      "object": "nc_nt",
+      "transformer": "ToLowercaseArray"
+    }
+  ],
+  "resource_instancedetails_networkinterfaces_0_subnetid": {
+    "key": "x-aws-vpc.subnet_id",
+    "object": "vpc"
+  },
+  "resource_instancedetails_networkinterfaces_0_vpcid": {
+    "key": "x-aws-vpc.vpc_id",
+    "object": "vpc"
+  },
+  "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupid": {
+    "key": "x-aws-vpc.security_group_id",
+    "object": "vpc"
+  },
+  "resource_instancedetails_networkinterfaces_0_securitygroups_0_groupname": {
+    "key": "x-aws-vpc.security_group_name",
+    "object": "vpc"
+  },
+  "resource_instancedetails_imageid": {
+    "key": "x-aws-instance.image_id",
+    "object": "instance"
+  },
+  "resource_instancedetails_instanceid": {
+    "key": "x-aws-instance.instance_id",
+    "object": "instance"
+  },
+  "resource_instancedetails_availabilityzone": {
+    "key": "x-aws-instance.availability_zone",
+    "object": "instance"
+  },
+  "portprobe_resource_instancedetails_networkinterfaces_0_privateipaddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "pp_private_ip1"
+    },
+    {
+      "key": "domain-name.resolves_to_refs",
+      "object": "private_dns_name",
+      "references": [
+        "pp_private_ip1"
+      ]
+    },
+    {
+      "key": "x-ibm-finding.src_ip_ref",
+      "object": "ibm_finding",
+      "references": "pp_private_ip1"
+    },
+    {
+      "key": "ipv4-addr.x_aws_interface_id",
+      "object": "pp_private_ip1",
+      "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid"
+    },
+    {
+      "key": "ipv4-addr.x_aws_ip_type",
+      "object": "pp_private_ip1",
+      "value": "private"
+    }
+  ],
+  "service_action_portprobeaction_portprobedetails_0_remoteipdetails_ipaddressv4": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "pp_remote_ip"
+    },
+    {
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "ibm_finding",
+      "references": "pp_remote_ip"
+    },
+    {
+      "key": "x-ibm-finding.dst_geolocation",
+      "object": "ibm_finding",
+      "ds_key": "service_action_portprobeaction_portprobedetails_0_remoteipdetails_country_countryname"
+    },
+    {
+      "key": "ipv4-addr.x_aws_remote_city_name",
+      "object": "pp_remote_ip",
+      "ds_key": "service_action_portprobeaction_portprobedetails_0_remoteipdetails_city_cityname"
+    },
+    {
+      "key": "ipv4-addr.x_aws_remote_country_name",
+      "object": "pp_remote_ip",
+      "ds_key": "service_action_portprobeaction_portprobedetails_0_remoteipdetails_country_countryname"
+    }
+  ],
+  "service_action_portprobeaction_portprobedetails_0_localportdetails_port": [
+    {
+      "key": "x-ibm-finding.probe_port",
+      "object": "ibm_finding"
+    }
+  ],
+  "service_action_awsapicallaction_remoteipdetails_ipaddressv4": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "api_remote_ip"
+    },
+    {
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "ibm_finding",
+      "references": "api_remote_ip"
+    },
+    {
+      "key": "x-ibm-finding.dst_geolocation",
+      "object": "ibm_finding",
+      "ds_key": "service_action_awsapicallaction_remoteipdetails_country_countryname"
+    },
+    {
+      "key": "ipv4-addr.x_aws_remote_city_name",
+      "object": "api_remote_ip",
+      "ds_key": "service_action_awsapicallaction_remoteipdetails_city_cityname"
+    },
+    {
+      "key": "ipv4-addr.x_aws_remote_country_name",
+      "object": "api_remote_ip",
+      "ds_key": "service_action_awsapicallaction_remoteipdetails_country_countryname"
+    }
+  ],
+  "resource_accesskeydetails_principalid": {
+    "key": "user-account.user_id",
+    "object": "api_user"
+  },
+  "resource_accesskeydetails_username": {
+    "key": "user-account.account_login",
+    "object": "api_user"
+  },
+  "resource_accesskeydetails_accesskeyid": {
+    "key": "x-aws-api.access_key_id",
+    "object": "api_details"
+  },
+  "service_action_awsapicallaction_api": {
+    "key": "x-aws-api.api",
+    "object": "api_details"
+  },
+  "service_action_awsapicallaction_servicename": {
+    "key": "x-aws-api.service_name",
+    "object": "api_details"
+  },
+  "dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dns_private_ip1"
+    },
+    {
+      "key": "domain-name.resolves_to_refs",
+      "object": "private_dns_name",
+      "references": [
+        "dns_private_ip1"
+      ]
+    },
+    {
+      "key": "x-ibm-finding.src_ip_ref",
+      "object": "ibm_finding",
+      "references": "dns_private_ip1"
+    },
+    {
+      "key": "ipv4-addr.x_aws_interface_id",
+      "object": "dns_private_ip1",
+      "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid"
+    },
+    {
+      "key": "ipv4-addr.x_aws_ip_type",
+      "object": "dns_private_ip1",
+      "value": "private"
+    }
+  ],
+  "service_action_dnsrequestaction_domain": [
+    {
+      "key": "domain-name.value",
+      "object": "dns_domain_name"
+    }
+  ],
+  "accountid": {
+    "key": "x-aws-details.account_id",
+    "object": "aws_details"
+  },
+  "region": {
+    "key": "x-aws-details.region",
+    "object": "aws_details"
+  },
+  "severity": {
+    "key": "x-ibm-finding.severity",
+    "object": "ibm_finding"
+  },
+  "title": {
+    "key": "x-ibm-finding.name",
+    "object": "ibm_finding"
+  },
+  "type": {
+    "key": "x-ibm-finding.finding_type",
+    "object": "ibm_finding"
+  },
+  "description": {
+    "key": "x-ibm-finding.description",
+    "object": "ibm_finding"
+  },
+  "resource_instancedetails_platform": [
+    {
+      "key": "software.name",
+      "object": "software"
+    },
+    {
+      "key": "x-ibm-finding.src_os_ref",
+      "object": "ibm_finding",
+      "references": "software"
+    }
+  ],
+  "service_eventfirstseen": [
+    {
+      "key": "first_observed"
+    },
+    {
+      "key": "x-ibm-finding.start",
+      "object": "ibm_finding"
+    }
+  ],
+  "service_eventlastseen": [
+    {
+      "key": "last_observed"
+    },
+    {
+      "key": "x-ibm-finding.end",
+      "object": "ibm_finding"
+    }
+  ]
+}
