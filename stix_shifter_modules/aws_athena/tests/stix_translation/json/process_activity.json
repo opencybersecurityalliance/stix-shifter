@@ -1,189 +1,186 @@
-
-    {
-    "ocsf": {
-        "activity_id": 4,
-        "activity_name": "Inject",
-        "actor": {
-            "idp": {},
-            "invoked_by": "establishing sap lexington",
-            "user": {
-                "account_type": "AWS IAM User",
-                "account_type_id": 3,
-                "name": "Pole",
-                "uid": "70e087f4-b2e0-11ed-b90e-0242ac110002"
+{
+    "activity_id": 4,
+    "activity_name": "Inject",
+    "actor": {
+        "idp": {},
+        "invoked_by": "establishing sap lexington",
+        "user": {
+            "account_type": "AWS IAM User",
+            "account_type_id": 3,
+            "name": "Pole",
+            "uid": "70e087f4-b2e0-11ed-b90e-0242ac110002"
+        }
+    },
+    "category_name": "System Activity",
+    "category_uid": 1,
+    "class_name": "Process Activity",
+    "class_uid": 1007,
+    "device": {
+        "autoscale_uid": "70e0b58a-b2e0-11ed-bac3-0242ac110002",
+        "desc": "cholesterol marilyn copies",
+        "groups": [
+            {
+                "name": "write sustainable composer",
+                "uid": "70e0a3d8-b2e0-11ed-ad51-0242ac110002"
+            },
+            {
+                "name": "guam rhythm gave",
+                "uid": "70e0a8ec-b2e0-11ed-a67b-0242ac110002"
             }
-        },
-        "category_name": "System Activity",
-        "category_uid": 1,
-        "class_name": "Process Activity",
-        "class_uid": 1007,
-        "device": {
-            "autoscale_uid": "70e0b58a-b2e0-11ed-bac3-0242ac110002",
-            "desc": "cholesterol marilyn copies",
-            "groups": [
-                {
-                    "name": "write sustainable composer",
-                    "uid": "70e0a3d8-b2e0-11ed-ad51-0242ac110002"
-                },
-                {
-                    "name": "guam rhythm gave",
-                    "uid": "70e0a8ec-b2e0-11ed-a67b-0242ac110002"
-                }
-            ],
-            "hostname": "palmer.int",
-            "instance_uid": "70e0bcc4-b2e0-11ed-bfcf-0242ac110002",
-            "interface_name": "recycling tariff choose",
-            "interface_uid": "70e0c08e-b2e0-11ed-b1de-0242ac110002",
-            "ip": "200.246.41.59",
-            "is_compliant": true,
-            "is_managed": false,
-            "name": "wrapped suppose cleaning",
-            "network_interfaces": [
-                {
-                    "hostname": "mpg.com",
-                    "ip": "240.252.208.148",
-                    "mac": "79:32:43:C9:22:5C:B7:F0",
-                    "name": "coming orchestra architecture",
-                    "type": "Wireless",
-                    "type_id": 2
-                },
-                {
-                    "hostname": "killing.mil",
-                    "ip": "154.166.77.210",
-                    "mac": "7C:7F:2B:4B:BF:C2:78:1A",
-                    "name": "princeton optional rh",
-                    "type": "Wireless",
-                    "type_id": 2
-                }
-            ],
-            "region": "weblog justin reconstruction",
-            "type": "Unknown",
-            "type_id": 0,
-            "uid": "70e0b15c-b2e0-11ed-bb16-0242ac110002",
-            "uuid": "70e0acc0-b2e0-11ed-b29c-0242ac110002"
-        },
-        "duration": 50,
-        "end_time": 1677091255453843,
-        "message": "flexible accomplish tower",
-        "metadata": {
-            "original_time": "highlighted icon when",
-            "product": {
-                "feature": {
-                    "name": "chronic knit insurance",
-                    "uid": "70e0908c-b2e0-11ed-baf2-0242ac110002",
-                    "version": "1.0.0-rc.2"
-                },
-                "lang": "en",
-                "name": "zealand wicked described",
-                "uid": "70e0947e-b2e0-11ed-b823-0242ac110002",
-                "vendor_name": "feeding usgs strategic",
+        ],
+        "hostname": "palmer.int",
+        "instance_uid": "70e0bcc4-b2e0-11ed-bfcf-0242ac110002",
+        "interface_name": "recycling tariff choose",
+        "interface_uid": "70e0c08e-b2e0-11ed-b1de-0242ac110002",
+        "ip": "200.246.41.59",
+        "is_compliant": true,
+        "is_managed": false,
+        "name": "wrapped suppose cleaning",
+        "network_interfaces": [
+            {
+                "hostname": "mpg.com",
+                "ip": "240.252.208.148",
+                "mac": "79:32:43:C9:22:5C:B7:F0",
+                "name": "coming orchestra architecture",
+                "type": "Wireless",
+                "type_id": 2
+            },
+            {
+                "hostname": "killing.mil",
+                "ip": "154.166.77.210",
+                "mac": "7C:7F:2B:4B:BF:C2:78:1A",
+                "name": "princeton optional rh",
+                "type": "Wireless",
+                "type_id": 2
+            }
+        ],
+        "region": "weblog justin reconstruction",
+        "type": "Unknown",
+        "type_id": 0,
+        "uid": "70e0b15c-b2e0-11ed-bb16-0242ac110002",
+        "uuid": "70e0acc0-b2e0-11ed-b29c-0242ac110002"
+    },
+    "duration": 50,
+    "end_time": 1677091255453843,
+    "message": "flexible accomplish tower",
+    "metadata": {
+        "original_time": "highlighted icon when",
+        "product": {
+            "feature": {
+                "name": "chronic knit insurance",
+                "uid": "70e0908c-b2e0-11ed-baf2-0242ac110002",
                 "version": "1.0.0-rc.2"
             },
-            "profiles": [],
+            "lang": "en",
+            "name": "zealand wicked described",
+            "uid": "70e0947e-b2e0-11ed-b823-0242ac110002",
+            "vendor_name": "feeding usgs strategic",
             "version": "1.0.0-rc.2"
         },
-        "process": {
-            "cmd_line": "florence cups venture",
-            "created_time": 1677091255455047,
+        "profiles": [],
+        "version": "1.0.0-rc.2"
+    },
+    "process": {
+        "cmd_line": "florence cups venture",
+        "created_time": 1677091255455047,
+        "file": {
+            "fingerprints": [
+                {
+                    "algorithm": "SHA-256",
+                    "algorithm_id": 3,
+                    "value": "401045DC4F861002C2494449EE92A7063F34AA49E4708EA6E3231B14D5D7B579"
+                },
+                {
+                    "algorithm": "SHA-1",
+                    "algorithm_id": 2,
+                    "value": "CD89B1537C0E6664405C383CEE9DB1F2A6D1A5AC"
+                }
+            ],
+            "name": "permit.msg",
+            "parent_folder": "/com/gdp/agent/sega/managed/collectables.heic",
+            "path": "/com/gdp/agent/sega/managed/collectables.heic/permit.msg",
+            "product": {
+                "lang": "en",
+                "name": "logan wrong man",
+                "uid": "70e0d268-b2e0-11ed-87cf-0242ac110002",
+                "vendor_name": "solely picnic wool",
+                "version": "1.0.0-rc.2"
+            },
+            "type": "Symbolic Link",
+            "type_id": 7
+        },
+        "name": "Virginia",
+        "parent_process": {
+            "cmd_line": "peer tears algeria",
+            "created_time": 1677091255455512,
+            "integrity": "Protected",
+            "integrity_id": 6,
+            "name": "Acids",
             "file": {
+                "attributes": 59,
+                "confidentiality": "focus mit montreal",
                 "fingerprints": [
                     {
                         "algorithm": "SHA-256",
                         "algorithm_id": 3,
-                        "value": "401045DC4F861002C2494449EE92A7063F34AA49E4708EA6E3231B14D5D7B579"
+                        "value": "FAF9838AC653B1FE66CD949D9862F251532DDFEFED66B69E45D918413DD7207B"
                     },
                     {
-                        "algorithm": "SHA-1",
-                        "algorithm_id": 2,
-                        "value": "CD89B1537C0E6664405C383CEE9DB1F2A6D1A5AC"
+                        "algorithm": "SHA-512",
+                        "algorithm_id": 4,
+                        "value": "7598F315CC628FB4776924563E0E829B8CCA39B7FAD98FA379FA9BA878C6034D92689E7B48D3931F30765CF0A44922E954240AFB658CF898961C102430072C67"
                     }
                 ],
-                "name": "permit.msg",
-                "parent_folder": "/com/gdp/agent/sega/managed/collectables.heic",
-                "path": "/com/gdp/agent/sega/managed/collectables.heic/permit.msg",
+                "mime_type": "potential/herbs",
+                "name": "powerful.tif",
+                "parent_folder": "/algebra/puerto/raising/died/default/charleston.nes",
+                "path": "/algebra/puerto/raising/died/default/charleston.nes/powerful.tif",
                 "product": {
                     "lang": "en",
-                    "name": "logan wrong man",
-                    "uid": "70e0d268-b2e0-11ed-87cf-0242ac110002",
-                    "vendor_name": "solely picnic wool",
+                    "name": "chief pe writer",
+                    "uid": "70e0e8f2-b2e0-11ed-b2a2-0242ac110002",
+                    "vendor_name": "wesley afraid sunset",
                     "version": "1.0.0-rc.2"
                 },
-                "type": "Symbolic Link",
-                "type_id": 7
+                "type": "Local Socket",
+                "type_id": 5
             },
-            "name": "Virginia",
-            "parent_process": {
-                "cmd_line": "peer tears algeria",
-                "created_time": 1677091255455512,
-                "integrity": "Protected",
-                "integrity_id": 6,
-                "name": "Acids",
-                "file": {
-                    "attributes": 59,
-                    "confidentiality": "focus mit montreal",
-                    "fingerprints": [
-                        {
-                            "algorithm": "SHA-256",
-                            "algorithm_id": 3,
-                            "value": "FAF9838AC653B1FE66CD949D9862F251532DDFEFED66B69E45D918413DD7207B"
-                        },
-                        {
-                            "algorithm": "SHA-512",
-                            "algorithm_id": 4,
-                            "value": "7598F315CC628FB4776924563E0E829B8CCA39B7FAD98FA379FA9BA878C6034D92689E7B48D3931F30765CF0A44922E954240AFB658CF898961C102430072C67"
-                        }
-                    ],
-                    "mime_type": "potential/herbs",
-                    "name": "powerful.tif",
-                    "parent_folder": "/algebra/puerto/raising/died/default/charleston.nes",
-                    "path": "/algebra/puerto/raising/died/default/charleston.nes/powerful.tif",
-                    "product": {
-                        "lang": "en",
-                        "name": "chief pe writer",
-                        "uid": "70e0e8f2-b2e0-11ed-b2a2-0242ac110002",
-                        "vendor_name": "wesley afraid sunset",
-                        "version": "1.0.0-rc.2"
-                    },
-                    "type": "Local Socket",
-                    "type_id": 5
-                },
-                "pid": 33,
-                "sandbox": "nick named fill",
-                "uid": "70e2352c-b2e0-11ed-a5ba-0242ac110002",
-                "user": {
-                    "groups": [
-                        {
-                            "name": "statute praise sporting",
-                            "type": "gmt produces rich",
-                            "uid": "70e23f86-b2e0-11ed-8907-0242ac110002"
-                        }
-                    ],
-                    "type": "advanced clarke opera",
-                    "uid": "70e24378-b2e0-11ed-9c15-0242ac110002"
-                }
-            },
-            "pid": 9,
-            "uid": "70e246d4-b2e0-11ed-8c8d-0242ac110002",
+            "pid": 33,
+            "sandbox": "nick named fill",
+            "uid": "70e2352c-b2e0-11ed-a5ba-0242ac110002",
             "user": {
-                "account_type": "AWS IAM User",
-                "account_type_id": 3,
-                "credential_uid": "70e24e18-b2e0-11ed-97dc-0242ac110002",
-                "email_addr": "Dinah@kentucky.biz",
-                "org_uid": "70e251f6-b2e0-11ed-ab36-0242ac110002",
-                "type": "User",
-                "type_id": 1,
-                "uid": "70e25566-b2e0-11ed-8aad-0242ac110002"
-            },
-            "xattributes": {}
+                "groups": [
+                    {
+                        "name": "statute praise sporting",
+                        "type": "gmt produces rich",
+                        "uid": "70e23f86-b2e0-11ed-8907-0242ac110002"
+                    }
+                ],
+                "type": "advanced clarke opera",
+                "uid": "70e24378-b2e0-11ed-9c15-0242ac110002"
+            }
         },
-        "severity": "Medium",
-        "severity_id": 3,
-        "start_time": 1677091255454950,
-        "status": "Unknown",
-        "status_id": 0,
-        "time": 1677091255453833,
-        "timezone_offset": 57,
-        "type_name": "Process Activity: Inject",
-        "type_uid": 100704
-    }
+        "pid": 9,
+        "uid": "70e246d4-b2e0-11ed-8c8d-0242ac110002",
+        "user": {
+            "account_type": "AWS IAM User",
+            "account_type_id": 3,
+            "credential_uid": "70e24e18-b2e0-11ed-97dc-0242ac110002",
+            "email_addr": "Dinah@kentucky.biz",
+            "org_uid": "70e251f6-b2e0-11ed-ab36-0242ac110002",
+            "type": "User",
+            "type_id": 1,
+            "uid": "70e25566-b2e0-11ed-8aad-0242ac110002"
+        },
+        "xattributes": {}
+    },
+    "severity": "Medium",
+    "severity_id": 3,
+    "start_time": 1677091255454950,
+    "status": "Unknown",
+    "status_id": 0,
+    "time": 1677091255453833,
+    "timezone_offset": 57,
+    "type_name": "Process Activity: Inject",
+    "type_uid": 100704
 }
