@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "displayName": "IBM Security ReaQta",
+            "displayName": "IBM Security QRadar EDR",
             "group": "reaqta"
         },
         "host": {
