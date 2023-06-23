@@ -1480,18 +1480,17 @@
           "object": "security_email",
           "transformer" : "FilterValidEmail"
         },
-        "url": [
-          {
+        "url": {
             "key": "url.value",
             "object": "security_url",
             "transformer": "ValidateUrl"
-          },
-          {
-            "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result-ext.url_ref",
+        },
+        "groupAboutUrlReferences": {
+            "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result.url_refs",
             "object": "security_result",
-            "references": "security_url"
-          }
-        ]
+            "references": ["security_url"],
+            "group_ref": true
+        }
       },
       "findingType": {
         "key": "x-ibm-finding.finding_type",
@@ -1594,11 +1593,6 @@
             "key": "file.parent_directory_ref",
             "object": "about_file",
             "references": "about_directory"
-          },
-          {
-            "key": "email-message.extensions.x-gcp-chronicle-email-message-ext.file_ref",
-            "object": "em",
-            "references": "about_file"
           }
         ],
         "size": {
@@ -1630,6 +1624,14 @@
           "key": "file.extensions.x-gcp-chronicle-file-ext.file_type",
           "object": "about_file"
         }
+      },
+      "GroupAboutFileReferences": {
+        "key": "email-message.extensions.x-gcp-chronicle-email-message.file_refs",
+        "object": "em",
+        "references": [
+          "about_file"
+        ],
+        "group_ref": true
       }
     },
     "additional": {

@@ -343,10 +343,9 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         event = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x-reaqta-event')
 
         assert(event is not None), "x-reaqta-event not found"
-        assert(event.keys() == {'type', 'local_id', 'root_object', 'name', 'data', 'version', 'namespace_name', 'operation', 'is_local', 'queryName', 'custom_type', 'custom_name', 'relevance', 'tags', 'region_size', 'pe_type', 'return_code', 'task_name', 'action_name', 'service_name', 'start_type', 'service_type'})
+        assert(event.keys() == {'type', 'local_id', 'root_object', 'name', 'data', 'version', 'namespace_name', 'operation', 'is_local', 'queryName', 'custom_type', 'custom_name', 'relevance', 'region_size', 'pe_type', 'return_code', 'task_name', 'action_name', 'service_name', 'start_type', 'service_type'})
         assert(event['type'] == "x-reaqta-event")
         assert(event['local_id'] == DATA_LOCAL_ID)
-        assert(event['tags'] == DATA_TAGS)
         assert(event['relevance'] == DATA_RELEVANCE)
         assert(event['version'] == DATA_VERSION)
         assert(event['service_name'] == DATA_SERVICE_NAME)
@@ -416,10 +415,9 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         event = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'x-reaqta-event')
         assert(event is not None), "x-reaqta-event not found"
-        assert(event.keys() == {'type', 'local_id', 'id', 'spec_version', 'root_object', 'name', 'data', 'version', 'namespace_name', 'operation', 'is_local', 'queryName', 'custom_type', 'custom_name', 'relevance', 'tags', 'region_size', 'pe_type', 'return_code', 'task_name', 'action_name', 'service_name', 'start_type', 'service_type'})
+        assert(event.keys() == {'type', 'local_id', 'id', 'spec_version', 'root_object', 'name', 'data', 'version', 'namespace_name', 'operation', 'is_local', 'queryName', 'custom_type', 'custom_name', 'relevance', 'region_size', 'pe_type', 'return_code', 'task_name', 'action_name', 'service_name', 'start_type', 'service_type'})
         assert(event['type'] == "x-reaqta-event")
         assert(event['local_id'] == DATA_LOCAL_ID)
-        assert(event['tags'] == DATA_TAGS)
         assert(event['relevance'] == DATA_RELEVANCE)
         assert(event['version'] == DATA_VERSION)
         assert(event['service_name'] == DATA_SERVICE_NAME)
