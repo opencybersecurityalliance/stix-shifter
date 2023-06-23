@@ -402,6 +402,24 @@ Every STIX observed-data object must include the following properties:
 
 The code for translating data source results to STIX is found in `stix_shifter_utils/stix_translation/src/json_to_stix/json_to_stix_translator.py`. Normally, there is no need to edit this file.
 
+**Using multiple to-STIX map files with dialects**
+
+Query results translation can use dialects to differentiate between multiple to-STIX mapping files. Multiple to-STIX mappings may be needed in cases where datasource returns multiple tables that use different schemas. Any dialects are appended to the module name with the following format: `<module_name>:<dialect_1>:<dialect_2>` Using AWS Athena as an example, datasource can return multiple schemas such as OCSF, VPC Flow and Guardduty. This requires a to-STIX mapping file for each. When the datasource returns query results for a specific schema then the appropriate to-STIX mapping file can be used based on the dialect specified in the query. Dialects can be specified in the CLI as `aws-athena:ocsf` or in the connection object as-
+```
+  {
+    "connection": {
+      options: {
+        dialects: ['ocsf']    
+      }
+    } 
+  }
+```
+
+Each dialect gets extracted from the CLI module name or the connection object and is used throughout the pattern translation and results translation flow. In cases where multiple to-STIX map files are used, the naming convention is `<dialect>_to_stix_map.json`. It is important that the file names follow this structure since the dialect is used to dynamically look up the file path. So in the case of AWS Athena, there would be a `ocsf_to_stix_map.json`, `vpcflow_to_stix_map.json` and `guardduty_to_stix_map.json` file in the json folder. 
+
+If your data source uses multiple dialects, rename the `<DIALECT>_to_stix_map.json` files to include the dialect at the beginning of the file name. Include as many mapping files as needed; one for each dialect. If your data source only uses one dialect, include only one to-STIX mapping file with the name `to_stix_map.json` in the json directory. Alternatively, you can also create one large `to_stix_map.json` that combines all the datasource fields from different schemas instead of multiple to-STIX mapping files.
+
+
 [Back to top](#stix-translation)
 
 ## Step 6. Add custom data transformers (optional)
