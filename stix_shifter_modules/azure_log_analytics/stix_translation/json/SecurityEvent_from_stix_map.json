@@ -1,168 +1,113 @@
 {
     "ipv4-addr": {
         "fields": {
-            "value": [
-                "IpAddress"
-            ]
+            "value": ["IpAddress","ClientIPAddress"]
         }
     },
-    "domain-name": {
+    "ipv6-addr": {
         "fields": {
-            "value": [
-                "TargetDomainName"
-            ]
+            "value": ["IpAddress","ClientIPAddress"]
         }
     },
     "user-account": {
         "fields": {
-            "account_login": [
-                "TargetUserName"
-            ]
+            "account_login": ["TargetAccount","SubjectAccount"],
+            "user_id": ["TargetUserName","SubjectUserName"],
+            "display_name": ["TargetUserName","SubjectUserName"],
+            "x_domain_name": ["TargetDomainName","SubjectDomainName"],
+            "x_login_id": ["TargetLogonId","SubjectLogonId"],
+            "x_user_sid": ["TargetUserSid","SubjectUserSid"]
         }
     },
     "directory": {
         "fields": {
-            "path": [
-                "HomeDirectory",
-                "HomePath"
-            ]
+            "path": ["HomeDirectory","HomePath", "ProcessName", "ParentProcessName", "NewProcessName"]
         }
     },
     "file": {
         "fields": {
-            "path": [
-                "FilePath"
-            ],
+            "name": ["FilePath"],
+            "path": ["FilePath"],
             "hashes.'SHA-256'": ["FileHash"],
             "hashes.MD5": ["FileHash"],
-            "hashes.'SHA-1'": ["FileHash"]
+            "hashes.'SHA-1'": ["FileHash"],
+            "parent_directory_ref": ["ProcessName", "ParentProcessName"],
+            "x_fqbn": ["Fqbn"]
         }
     },
     "process": {
         "fields": {
-            "name": [
-                "ProcessName",
-                "LogonProcessName"
-            ],
-            "parent_ref.name": [
-                "ParentProcessName"
-            ],
-            "command_line": [
-                "CommandLine"
-            ],
-            "pid": [
-                "ProcessId"
-            ]
+            "parent_ref.name": ["ParentProcessName"],
+            "command_line": ["CommandLine"],
+            "pid": ["ProcessId","NewProcessId"],
+            "x_token_elevation_type": ["TokenElevationType"],
+            "x_mandatory_label": ["MandatoryLabel"]
         }
     },
     "url": {
         "fields": {
-            "value": [
-                "QuarantineHelpURL"
-            ]
+            "value": ["QuarantineHelpURL"]
         }
     },
     "x-ibm-finding": {
         "fields": {
-            "start": [
-                "TimeGenerated"
-            ],
-            "end": [
-                "PreviousTime"
-            ],
-            "name": [
-                "EventSourceName"
-            ],
-            "time_observed": [
-                "TimeGenerated"
-            ],
-            "src_ip_ref": [
-                "IpAddress"
-            ],
-            "dst_ip_ref": [
-                "ClientIPAddress"
-            ]
+            "alert_id": ["EventOriginId"],
+            "start": ["PreviousTime"],
+            "name": ["Activity"],
+            "finding_type": ["Type"],
+            "time_observed": ["TimeGenerated"],
+            "src_ip_ref": ["IpAddress"],
+            "dst_device": ["WorkstationName", "TargetServerName"],
+            "src_application_user_ref": ["TargetUserName"],
+            "dst_application_user_ref": ["SubjectUserName"],
+            "ioc_refs": ["FilePath","IpAddress","ClientIPAddress"]
         }
     },
     "x-oca-event": {
         "fields": {
-            "created": [
-                "TimeGenerated"
-            ],
-            "code": [
-                "EventID"
-            ],
-            "provider": [
-                "Account"
-            ],
-            "url_ref": [
-                "QuarantineHelpURL"
-            ],
-            "process_ref": [
-                "ProcessName"
-            ],
-            "file_ref.hash": [
-                "FileHash"
-            ],
-            "file_ref.path": [
-                "FilePath"
-            ],
-            "file_ref.service": [
-                "ServiceFileName"
-            ],
-            "parent_process_ref": [
-                "ParentProcessName"
-            ],
-            "ip_refs.ip": [
-                "IpAddress"
-            ],
-            "ip_refs.clientIp": [
-                "ClientIPAddress"
-            ]
+            "module": ["Channel"],
+            "provider": ["EventSourceName"],
+            "action": ["Activity"],
+            "created": ["TimeCollected"],
+            "modified": ["TimeCollected"],
+            "code": ["EventID"],
+            "dataset": ["EventData"],
+            "host_ref": ["Computer"],
+            "url_ref": ["QuarantineHelpURL"],
+            "process_ref": ["NewProcessName","Process","ProcessName"],
+            "file_ref.hash": ["FileHash"],
+            "file_ref.path": ["FilePath"],
+            "parent_process_ref": ["ParentProcessName"],
+            "user_ref": ["TargetUserName"],
+            "ip_refs.ip": ["IpAddress", "ClientIPAddress"],
+            "x_service_file_ref": ["ServiceFileName"],
+            "x_service_name": ["ServiceName"],
+            "x_modified_account_sid": ["TargetSid"],
+            "x_description": ["DeviceDescription"],
+            "x_task": ["Task"],
+            "x_user_parameter": ["UserParameters"],
+            "x_member_name": ["MemberName"],
+            "x_requester": ["Requester"]
         }
     },
-    "x-azure-security-event": {
+    "x-cloud-resource": {
         "fields": {
-            "title": [
-                "Title"
-            ],
-            "text": [
-                "Description",
-                "DeviceDescription"
-            ],
-            "device_name": [
-                "DeviceId"
-            ],
-            "source": [
-                "SourceSystem"
-            ],
-            "alert_type": [
-                "AlertName"
-            ],
-            "activity": [
-                "Activity"
-            ],
-            "computer": [
-                "Computer"
-            ],
-            "event_data": [
-                "EventData"
-            ],
-            "service_name": [
-                "ServiceName"
-            ],
-            "task": [
-                "Task"
-            ],
-            "user_parameter": [
-                "UserParameter"
-            ],
-            "member_name": [
-                "MemberName"
-            ],
-            "requester": [
-                "Requester"
-            ]
+            "resource_id": ["_ResourceId"]
+        }
+    },
+    "x-oca-asset": {
+        "fields": {
+            "device_id": ["DeviceId", "SourceComputerId"],
+            "hostname": ["Computer"]
+        }
+    },
+    "x-logon-info": {
+        "fields": {
+            "guid": ["LogonGuid"],
+            "logon_process": ["LogonProcessName"],
+            "logon_type": ["LogonType"],
+            "logon_type_name": ["LogonTypeName"],
+            "authentication_package_name": ["AuthenticationPackageName"]
         }
     }
 }
