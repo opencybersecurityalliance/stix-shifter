@@ -37,7 +37,7 @@ Stix-shifter currently offers connector support for the following cybersecurity 
 - [Cybereason](../stix_shifter_modules/cybereason/cybereason_supported_stix.md)
 - [PaloAlto Cortex XDR](../stix_shifter_modules/paloalto/paloalto_supported_stix.md)
 - [SentinelOne](../stix_shifter_modules/sentinelone/sentinelone_supported_stix.md)
-- [IBM Security ReaQta](../stix_shifter_modules/reaqta/reaqta_supported_stix.md)
+- [IBM Security QRadar EDR](../stix_shifter_modules/reaqta/reaqta_supported_stix.md)
 - [Darktrace](../stix_shifter_modules/darktrace/darktrace_supported_stix.md)
 - [Red Hat Advanced Cluster Security for Kubernetes (StackRox)](../stix_shifter_modules/rhacs/rhacs_supported_stix.md)
 - [IBM Security Verify](../stix_shifter_modules/ibm_security_verify/ibm_security_verify_supported_stix.md)
