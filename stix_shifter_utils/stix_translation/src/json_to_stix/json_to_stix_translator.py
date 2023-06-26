@@ -298,6 +298,16 @@ class DataSourceObjToStixObj:
 
                 transformer = self.transformers[prop['transformer']] if 'transformer' in prop else None
                 references = references = prop['references'] if 'references' in prop else None
+                
+                # This check avoid using duplicate reference in the multiple objects of the same type.
+                # For example: If there are multiple source ipv4-addr and network-traffic objects then 
+                # without this reference check the first source ipv4-addr object will be referenced to all network-traffic objects.
+                if object_key_ind and references:
+                    if isinstance(references, str):
+                        references = references + '_' + str(object_key_ind)
+                    elif isinstance(references, list):
+                        references = [ref + '_' + str(object_key_ind) for ref in references]
+                        
                 # unwrap array of stix values to separate stix objects
                 unwrap = True if 'unwrap' in prop and isinstance(data, list) else False
                 if "." in key:
