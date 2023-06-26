@@ -11,8 +11,8 @@ class ResultsTranslator(JSONToStix):
 
     def translate_results(self, data_source, data):
         for result in data:
-            ocsf_payload = result['ocsf']
-            process_obj = ocsf_payload.get('process')
+            # ocsf_payload = result['ocsf']
+            process_obj = result.get('process')
             if process_obj:
                 file_obj = process_obj.get('file')
                 if file_obj:

@@ -1,7 +1,6 @@
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from azure.monitor.query.aio import LogsQueryClient
 from azure.identity.aio import ClientSecretCredential
-from azure.core.exceptions import HttpResponseError
 import logging
 
 
@@ -14,7 +13,7 @@ class APIClient:
         :param configuration: dict,config dict"""
         self.connection = connection
         self.configuration = configuration
-        logger = logging.getLogger("azure.core.pipeline.policies.http_logging_policy")
+        logger = logging.getLogger("azure")
         logger.setLevel(logging.WARNING)
 
     async def init_async_client(self):
@@ -37,17 +36,22 @@ class APIClient:
 
     async def ping_box(self):
         """Ping the endpoint."""
-        await self.init_async_client()
-        resp = await self.client.call_api(self.endpoint, 'GET', timeout=self.timeout)
-        await self.credential.close()
-        return resp
+        try:
+            await self.init_async_client()
+            resp = await self.client.call_api(self.endpoint, 'GET', timeout=self.timeout)
+            return resp
+        except Exception as e:
+            raise e
+        finally:
+            if hasattr(self, 'credential'):
+                await self.credential.close()
 
     async def run_search(self, query_expression, start, stop):
-        """get the response from azure_sentinel endpoints
+        """get the response from log analytics endpoints
         :param query_expression: str, search_id
         :return: response, json object"""
-        await self.init_async_client()
         try:
+            await self.init_async_client()
             client = LogsQueryClient(self.credential)
             async with client:
                 response = await client.query_workspace(
@@ -56,11 +60,9 @@ class APIClient:
                     timespan=(start, stop)
                 )
             return {'success': True, "response": response}
-        except HttpResponseError as er:
-            return {'success': False, "error": er.error}
         except Exception as e:
-            return {'success': False, "error": e}
-        finally: 
-            await self.credential.close()
+            raise e
+        finally:
+            if hasattr(self, 'credential'):
+                await self.credential.close()
 
-    
