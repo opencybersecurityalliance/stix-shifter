@@ -17,7 +17,7 @@
         },
         "help": {
             "type": "link",
-            "default": "data-sources-sentinel.html"
+            "default": "data-sources.html"
         },
         "workspaceId": {
             "type": "text",

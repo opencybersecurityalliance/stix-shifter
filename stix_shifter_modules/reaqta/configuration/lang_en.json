@@ -14,19 +14,19 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "ReaQta certificate",
+            "label": "Self-signed certificate",
             "placeholder": "Paste your certificate"
         }
     },
     "configuration": {
         "auth": {
             "app_id": {
-                "label": "Reaqta app ID",
-                "description": "Reaqta App ID with access to the Hunt API"
+                "label": "App ID",
+                "description": "App ID with access to the Hunt API"
             },
             "secret_key": {
                 "label": "Secret key",
-                "description": "Reaqta App Secret Key with access to the Hunt API"
+                "description": "App Secret Key with access to the Hunt API"
             }
         }
     }

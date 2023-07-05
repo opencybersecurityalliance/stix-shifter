@@ -1,28 +1,28 @@
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, \
-    ComparisonExpression, ComparisonExpressionOperators, ComparisonComparators, Pattern, CombinedComparisonExpression, \
+    ComparisonExpression, ComparisonComparators, Pattern, CombinedComparisonExpression, \
     CombinedObservationExpression
-from stix_shifter_utils.stix_translation.src.patterns.errors import SearchFeatureNotSupportedError
 from datetime import datetime, timedelta
 import re
+from os import path
+import logging
+import json
+from stix_shifter_modules.azure_log_analytics.stix_translation.transformers import HexToInteger
+
 
 START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
+CONFIG_MAP_PATH = "json/config_map.json"
+logger = logging.getLogger(__name__)
+
+
+class FileNotFoundException(Exception):
+    pass
 
 
 class QueryStringPatternTranslator:
-    COUNTER = 0
-
-    # comparator lookup for implementing negation operator
-    negated_comparator_lookup = {
-        ComparisonComparators.GreaterThan: "le",
-        ComparisonComparators.GreaterThanOrEqual: "lt",
-        ComparisonComparators.LessThan: "ge",
-        ComparisonComparators.LessThanOrEqual: "gt",
-        ComparisonComparators.Equal: "ne",
-        ComparisonComparators.NotEqual: "eq",
-        ComparisonComparators.In: "ne"
-    }
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
+        logger.info("Azure Log Analytics")
+        self.config_map = self.load_json(CONFIG_MAP_PATH)
         self.dmm = data_model_mapper
         self.comparator_lookup = self.dmm.map_comparator()
         self._time_range = time_range
@@ -43,7 +43,7 @@ class QueryStringPatternTranslator:
         value_list = value.values
         format_list = []
         for item in value_list:
-            format_list.append('\'{}\''.format(item))
+            format_list.append(f'\'{QueryStringPatternTranslator._escape_value(item)}\'')
         return format_list
 
     @staticmethod
@@ -54,7 +54,9 @@ class QueryStringPatternTranslator:
          :param value: str
          :return: str
          """
-        return '\'{}\''.format(value)
+        if not re.search(r'[()}\]\[{*^$+?|]', value):
+            value = value.replace('\\', '\\\\')
+        return f"'{value}'"
 
     @staticmethod
     def _format_equality(value) -> str:
@@ -63,7 +65,7 @@ class QueryStringPatternTranslator:
           :param value: str
           :return: str
           """
-        return '\'{}\''.format(value)
+        return f'\'{value}\''
 
     @staticmethod
     def _format_like(value) -> str:
@@ -72,7 +74,7 @@ class QueryStringPatternTranslator:
         :param value: str
         :return: str
         """
-        return '\'{}\''.format(value)
+        return f'\'{value}\''
 
     @staticmethod
     def _escape_value(value) -> str:
@@ -82,46 +84,141 @@ class QueryStringPatternTranslator:
         :return: str
         """
         if isinstance(value, str):
-            return '{}'.format(value.replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)'))
-        else:
+            return '{}'.format(value.replace('\\', '\\\\').replace('\"', '\\"'))
+        return value
+
+    @staticmethod
+    def load_json(rel_path_of_file):
+        """ Consumes a json file and returns a dictionary
+        :param rel_path_of_file: str
+        :return: dict """
+        _json_path = path.dirname(path.abspath(__file__)) + "/" + rel_path_of_file
+        try:
+            if path.exists(_json_path):
+                with open(_json_path, encoding='utf-8') as f_obj:
+                    config = json.load(f_obj)
+                    config = json.dumps(config).replace('Entities.', 'parsed_entities.')
+                    return json.loads(config)
+            raise FileNotFoundException
+        except FileNotFoundException as e:
+            raise FileNotFoundError(f'{rel_path_of_file} not found') from e
+
+    @staticmethod
+    def _negate_comparison(comparison_string, mapped_fields_array, comparator):
+        """ Add negate operator in comparison string
+        :param comparison_string: str
+        :param mapped_fields_array: list
+        :param comparator: str
+        :return: str """
+        not_null_expression = ""
+
+        if comparator != ComparisonComparators.NotEqual:
+            comparison_string = f"not ({comparison_string})"
+
+        for index, field in enumerate(mapped_fields_array):
+            if 'Entities' in field or 'ExtendedProperties' in field:
+                field = field.replace('Entities', 'parsed_entities').replace('ExtendedProperties', 'parsed_properties')
+                if index == 0:
+                    logical_operator = ""
+                else:
+                    logical_operator = " and "
+                not_null_expression += logical_operator + f"notnull({field})"
+
+        if not_null_expression:
+            comparison_string = f"{not_null_expression} and {comparison_string}"
+
+        return comparison_string
+
+    @staticmethod
+    def _format_file_hash(stix_field, comparison_string):
+        """ Formatting the file hash
+        :param stix_field, comparison_string: str
+        :return comparison_string: str """
+        file_hash = stix_field.replace("hashes.", "").replace("'", "").replace("-", "")
+        file_statement = f"parsed_entities.Algorithm == '{file_hash}' and "
+        comparison_string = f"({file_statement}{comparison_string})"
+        return comparison_string
+
+    def _convert_enum_values(self, value, mapped_field, comparator):
+        """ Convert enum values
+          :param value: str
+          :param mapped_field: str
+          :param comparator: str
+          :return: str """
+        if comparator not in [ComparisonComparators.Equal, ComparisonComparators.NotEqual, ComparisonComparators.In]:
+            raise NotImplementedError(f'{comparator.name} operator is not supported for Enum type input. Possible '
+                                      f'supported operator are [ =, !=, IN, NOT IN ]')
+
+        if "Severity" in mapped_field:
+            mapped_field = "Severity"
+
+        conversion_json = self.config_map['enum_supported_values'].get(mapped_field, {})
+
+        if isinstance(value, list):
+            converted_list = []
+            for row in value:
+                row = row.replace("\'", "")
+                if row in conversion_json:
+                    conversion_value = conversion_json[row]
+                    converted_list.append(f"\'{conversion_value}\'")
+                else:
+                    raise NotImplementedError(f'Unsupported ENUM values provided. Possible supported'
+                                              f' enum values are {list(conversion_json.keys())}')
+            return converted_list
+
+        elif value.replace("\'", "") in conversion_json:
+            conversion_value = conversion_json[value.replace("\'", "")]
+            value = f'\'{conversion_value}\''
             return value
 
+        raise NotImplementedError(f'Unsupported ENUM values provided. Possible supported'
+                                  f' enum values are {list(conversion_json.keys())}')
+
     @staticmethod
-    def _format_value_without_quotes(value):
-        """
-        Formats and replaces values with escape character into value without quotes
-        :param value: str
-        :return: str
-        """
-        values = []
+    def _convert_score_values(value, comparator):
+        """ Convert 0-100 into 0-1
+          :param value: str or list
+          :param comparator: str
+          :return: str or list"""
         if isinstance(value, list):
-            for each in value:
-                values.append('{}'.format(each.replace('\'', '')))
-            value = values
+            for index, row in enumerate(value):
+                if row.replace("\'", "").isdigit():
+                    conversion_value = float(row.replace("\'", "")) / 10
+                    value[index] = f'\'{conversion_value}\''
         else:
-            value = value.replace('\'', '')
+            if str(value).replace("\'", "").isdigit():
+                conversion_value = float(str(value).replace("\'", "")) / 10
+                if comparator in [ComparisonComparators.Like, ComparisonComparators.Matches]:
+                    value = f'\'{conversion_value}\''
+                else:
+                    value = conversion_value
         return value
 
     @staticmethod
-    def _format_value_to_lower_case(value):
-        """
-        Formats and replaces values with escape character into value without quotes
-        :param value: str
-        :return: str
-        """
-        values = []
+    def _check_int_values(value):
+        """ check the input value contains valid integer
+        :param value
+        :return formatted value """
         if isinstance(value, list):
-            for each in value:
-                values.append('{}'.format(each).lower())
-            value = values
+            for index, row in enumerate(value):
+                if row.replace("\'", "").isdigit():
+                    conversion_value = int(str(row).replace("\'", ""))
+                    value[index] = f'\'{conversion_value}\''
+                else:
+                    raise NotImplementedError(f'string type input - {row} is not supported for'
+                                              f' integer type fields')
         else:
-            value = value.lower()
+            if str(value).replace("\'", "").isdigit():
+                conversion_value = int(str(value).replace("\'", ""))
+                value = conversion_value
+            else:
+                raise NotImplementedError(f'string type input - {value} is not supported for '
+                                          f'integer type fields')
         return value
 
-    @staticmethod
-    def _parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array, counter):
+    def _parse_mapped_fields(self, expression, value, comparator, mapped_fields_array):
         """
-        Mapping the stix object property with their corresponding property in sentinel odata query
+        Mapping the stix object property with their corresponding property in azure log analytics data query
         from_stix_map.json will be used for mapping
         :param expression: expression object, ANTLR parsed expression object
         :param value: str
@@ -133,52 +230,54 @@ class QueryStringPatternTranslator:
         values = value
         mapped_fields_count = len(mapped_fields_array)
 
-        def format_comparision_string(comparison_string, mapped_field, lambda_func):
-            # check for mapped_field that has '.' character -> example [fileStates.name,processes.name]
-            if '.' in mapped_field:
-                collection_attribute_array = mapped_field.split('.')
-                collection_name = collection_attribute_array[0]
-                attribute_nested_level = '/'.join(collection_attribute_array[1:])
-
-                attribute_expression = '({fn}/'.format(fn=lambda_func) + attribute_nested_level + ')'
-                # ip address in data source is like "sourceAddress": "IP: 92.63.194.101 [2]\r"
-                # to get ip address from data source using contains keyword ODATA query
-                if comparator == 'contains':
-                    comparison_string += " and {collection_name}/any({fn}:{comparator}({attribute_expression}, " \
-                                            "{value})))".format(collection_name=collection_name, fn=lambda_func,
-                                                                attribute_expression=attribute_expression,
-                                                                comparator=comparator, value=value)
-                else:
-                    comparison_string += " and {collection_name}/any({fn}:{attribute_expression} {comparator} " \
-                                            "{value}))".format(collection_name=collection_name, fn=lambda_func,
-                                                            attribute_expression=attribute_expression,
-                                                            comparator=comparator,
-                                                            value=value)
-            else:
-                # check for mapped field that does not have '.' character -> example [azureTenantId,title]
-                if comparator == 'contains':
-                    comparison_string += "{comparator}{mapped_field}, {value}".format(
-                        mapped_field=mapped_field, comparator=comparator, value=value)
-                else:
-                    comparison_string += "{mapped_field} {comparator} {value}".format(
-                        mapped_field=mapped_field, comparator=comparator, value=value)
-            return comparison_string
-
         # loop for custom logic to form IN operator related query
         for mapped_field in mapped_fields_array:
-            lambda_func = 'query' + str(counter)
 
-            # for In operator, loop the format comparision string for each values in the list.
+            # security alert Entities field mapped to parsed_entities field
+            if 'Entities.' in mapped_field:
+                mapped_field = mapped_field.replace('Entities', 'parsed_entities')
+
+            # security alert ExtendedProperties field mapped to parsed_entities field
+            if 'ExtendedProperties.' in mapped_field:
+                mapped_field = mapped_field.replace('ExtendedProperties', 'parsed_properties')
+
+            # hexadecimal values conversion
+            if mapped_field in self.config_map['hexadecimal_fields']:
+                if expression.comparator in [ComparisonComparators.Like, ComparisonComparators.Matches,
+                                             ComparisonComparators.In]:
+                    raise NotImplementedError(f'IN/LIKE/MATCHES operator is unsupported for hexadecimal fields in'
+                                              f' AZURE LOG ANALYTICS')
+                conversion_value = HexToInteger.transform(str(value).replace("\'", ""))
+                value = f'\'{conversion_value}\''
+
+            # enum values conversion
+            if mapped_field in self.config_map['enum_supported_fields']:
+                value = self._convert_enum_values(value, mapped_field, expression.comparator)
+
+            # check integer supported values
+            if mapped_field in self.config_map['int_supported_fields'] and \
+                    expression.comparator not in [ComparisonComparators.Like, ComparisonComparators.Matches]:
+                value = self._check_int_values(value)
+
+            # score values conversion
+            if mapped_field in self.config_map['score_fields']:
+                value = self._convert_score_values(value, expression.comparator)
+
+            # for In operator, loop the format comparison string for each values in the list.
             if expression.comparator == ComparisonComparators.In:
                 if isinstance(values, list):
-                    comparison_string += "{mapped_field} in ({value})".format(
-                        mapped_field=mapped_field, value=', '.join(value))
+                    comparison_string += f"{mapped_field} {comparator} ({', '.join(value)})"
             # to form queries other than IN operator
             else:
-                comparison_string = format_comparision_string(comparison_string, mapped_field, lambda_func)
+                if expression.comparator in [ComparisonComparators.Like, ComparisonComparators.Matches]:
+                    if mapped_field in self.config_map['int_supported_fields'] + \
+                            self.config_map['timestamp_supported_fields']:
+                        mapped_field = f"tostring({mapped_field})"
+
+                comparison_string += f"{mapped_field} {comparator} {value}"
 
             if mapped_fields_count > 1:
-                if expression.negated:
+                if expression.negated or expression.comparator == ComparisonComparators.NotEqual:
                     comparison_string += " and "
                 else:
                     comparison_string += " or "
@@ -188,7 +287,7 @@ class QueryStringPatternTranslator:
     def _lookup_comparison_operator(self, expression_operator):
         if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError(
-                "Comparison operator {} unsupported for Azure Sentinel adapter".format(expression_operator.name))
+                f"Comparison operator {expression_operator.name} unsupported for AZURE LOG ANALYTICS")
         return self.comparator_lookup[str(expression_operator)]
 
     @staticmethod
@@ -203,7 +302,13 @@ class QueryStringPatternTranslator:
             mapped_field = "TimeGenerated"
             if qualifier and compile_timestamp_regex.search(qualifier):
                 time_range_iterator = compile_timestamp_regex.finditer(qualifier)
-                time_range_list = [each.group() for each in time_range_iterator]
+                time_range_list = []
+                for each in time_range_iterator:
+                    date_time = each.group()
+                    if re.search(r"\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}Z", str(date_time)):  # without milli seconds
+                        date_time = datetime.strptime(each.group(), '%Y-%m-%dT%H:%M:%SZ'). \
+                                        strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+                    time_range_list.append(date_time)
             else:
                 stop_time = datetime.utcnow()
                 start_time = stop_time - timedelta(hours=24)
@@ -211,10 +316,8 @@ class QueryStringPatternTranslator:
                 converted_stoptime = stop_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
                 time_range_list = [converted_starttime, converted_stoptime]
 
-            value = ('{mapped_field} between (datetime({start_time}) .. datetime({stop_time}))'
-                        ).format(mapped_field=mapped_field, start_time=time_range_list[0],
-                                stop_time=time_range_list[1])
-            format_string = '{value}'.format(value=value)
+            value = f'{mapped_field} between (datetime({time_range_list[0]}) .. datetime({time_range_list[1]}))'
+            format_string = f'{value}'
             return format_string
         except (KeyError, IndexError, TypeError) as e:
             raise e
@@ -237,53 +340,48 @@ class QueryStringPatternTranslator:
             # Some values are formatted differently based on how they're being compared
             if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
                 value = self._format_match(expression.value)
+                value = self._escape_value(value)
             # should be (x, y, z, ...)
             elif expression.comparator == ComparisonComparators.In:
                 value = self._format_set(expression.value)
-            elif expression.comparator == ComparisonComparators.Equal \
-                    or expression.comparator == ComparisonComparators.NotEqual \
-                    or expression.comparator == ComparisonComparators.GreaterThan \
-                    or expression.comparator == ComparisonComparators.LessThan \
-                    or expression.comparator == ComparisonComparators.GreaterThanOrEqual \
-                    or expression.comparator == ComparisonComparators.LessThanOrEqual:
+            elif expression.comparator in [ComparisonComparators.Equal, ComparisonComparators.NotEqual]:
                 # Should be in single-quotes
                 value = self._format_equality(expression.value)
+                value = self._escape_value(value)
+            elif expression.comparator in [ComparisonComparators.GreaterThan, ComparisonComparators.GreaterThanOrEqual,
+                                           ComparisonComparators.LessThan,
+                                           ComparisonComparators.LessThanOrEqual]:
+                for mapped_field in mapped_fields_array:
+                    if mapped_field.replace('Entities', 'parsed_entities') not in \
+                            self.config_map['int_supported_fields']:
+                        raise NotImplementedError(f"Comparison operator {comparator} unsupported for AZURE LOG "
+                                                  f"ANALYTICS attribute {mapped_field}")
+                value = expression.value
+
             # '%' -> '*' wildcard, '_' -> '?' single wildcard
             elif expression.comparator == ComparisonComparators.Like:
                 value = self._format_like(expression.value)
+                value = self._escape_value(value)
             else:
                 value = self._escape_value(expression.value)
 
-            if expression.negated:
-                if expression.comparator in [ComparisonComparators.Like, ComparisonComparators.Matches]:
-                    raise SearchFeatureNotSupportedError("'NOT' Operator is not supported for LIKE and MATCHES")
-                elif stix_object in ['ipv4-addr', 'ipv6-addr'] or stix_field in ['src_ref.value', 'dst_ref.value']:
-                    raise SearchFeatureNotSupportedError("'NOT' Operator is not supported for IPV4 or IPV6 address")
-                comparator = self.negated_comparator_lookup.get(expression.comparator)
-
-            # to remove single quotes in specific field value
-            if stix_field in ['pid', 'parent_ref.pid', 'account_last_login']:
-                if expression.comparator in [ComparisonComparators.Like, ComparisonComparators.Matches]:
-                    raise SearchFeatureNotSupportedError('"{operator}" operator is not supported for '
-                                                         '"{stix_field}" attribute'
-                                                         .format(operator=expression.comparator.name.upper(),
-                                                                 stix_field=stix_field))
-                value = self._format_value_without_quotes(value)
-
-            # COUNTER is used to form sequential lambda function names for OData4 queries per comparison observation
-            ''' eg. processes/any(query1:contains(tolower(query1/path), 'c:\\windows\\system32')) and 
-            processes/any(query2:contains(tolower(query2/name), 'exe')) '''
-            self.COUNTER += 1
-
-            comparison_string = self._parse_mapped_fields(self, expression, value, comparator, stix_field,
-                                                          mapped_fields_array, self.COUNTER)
+            comparison_string = self._parse_mapped_fields(expression, value, comparator, mapped_fields_array)
 
             if len(mapped_fields_array) > 1:
                 # More than one data source field maps to the STIX attribute, so group comparisons together.
                 grouped_comparison_string = "(" + comparison_string + ")"
                 comparison_string = grouped_comparison_string
 
-            return "{}".format(comparison_string)
+            if expression.negated or expression.comparator == ComparisonComparators.NotEqual:
+                comparison_string = self._negate_comparison(comparison_string, mapped_fields_array,
+                                                            expression.comparator)
+
+            # security alert file hash conversion
+            if 'parsed_entities' in comparison_string:
+                if stix_field in self.config_map["file_hash_fields"]:
+                    comparison_string = self._format_file_hash(stix_field, comparison_string)
+
+            return f"{comparison_string}"
 
         elif isinstance(expression, CombinedComparisonExpression):
             operator = self._lookup_comparison_operator(expression.operator)
@@ -292,15 +390,15 @@ class QueryStringPatternTranslator:
             if not expression_01 or not expression_02:
                 return ''
             if isinstance(expression.expr1, CombinedComparisonExpression):
-                expression_01 = "({})".format(expression_01)
+                expression_01 = f"({expression_01})"
             if isinstance(expression.expr2, CombinedComparisonExpression):
-                expression_02 = "({})".format(expression_02)
-            query_string = "{} {} {}".format(expression_01, operator, expression_02)
-            return "{}".format(query_string)
+                expression_02 = f"({expression_02})"
+            query_string = f"{expression_01} {operator} {expression_02}"
+            return f"{query_string}"
         elif isinstance(expression, ObservationExpression):
             parse_string = self._parse_expression(expression.comparison_expression)
             time_string = self._parse_time_range(qualifier, self._time_range)
-            sentinel_query = "({}) and ({})".format(parse_string, time_string)
+            sentinel_query = f"({parse_string}) and ({time_string})"
             self.final_query_list.append(sentinel_query)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
@@ -310,16 +408,16 @@ class QueryStringPatternTranslator:
                 parse_string = self._parse_expression(expression.observation_expression.comparison_expression,
                                                       expression.qualifier)
                 time_string = self._parse_time_range(expression.qualifier, self._time_range)
-                sentinel_query = "({}) and ({})".format(parse_string, time_string)
+                sentinel_query = f"({parse_string}) and ({time_string})"
                 self.final_query_list.append(sentinel_query)
         elif isinstance(expression, CombinedObservationExpression):
             self._parse_expression(expression.expr1, qualifier)
             self._parse_expression(expression.expr2, qualifier)
         elif isinstance(expression, Pattern):
-            return "{expr}".format(expr=self._parse_expression(expression.expression))
+            return f"{self._parse_expression(expression.expression)}"
         else:
-            raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
-                expression, type(expression)))
+            raise RuntimeError(f"Unknown Recursion Case for expression={expression}, "
+                               f"type(expression)={type(expression)}")
 
     def parse_expression(self, pattern: Pattern):
         """
@@ -342,5 +440,18 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the DS
     time_range = options['time_range']
     query = QueryStringPatternTranslator(pattern, data_model_mapping, time_range)
-    translated_query = dialect_name + ' |' + " where " + ','.join(query.final_query_list)
+    query = ' or '.join(query.final_query_list)
+
+    # parsing and expanding the Entities, ExtendedProperties fields for security alert query
+    expand_query_fields = ""
+    if 'parsed_entities' in query:
+        expand_query_fields = "| mv-expand parsed_entities = parse_json(Entities) "
+    if 'parsed_properties' in query:
+        expand_query_fields += "| mv-expand parsed_properties = parse_json(ExtendedProperties) "
+
+    if expand_query_fields:
+        translated_query = f"{dialect_name} {expand_query_fields}" \
+                           f"| where {query} | summarize arg_max(TimeGenerated, *) by TimeGenerated, SystemAlertId"
+    else:
+        translated_query = dialect_name + ' |' + " where " + query
     return translated_query

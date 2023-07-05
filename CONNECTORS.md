@@ -35,7 +35,7 @@ List updated: April 18, 2023
 |   27  |       [Palo Alto Cortex XDR](stix_shifter_modules/paloalto)                        | paloalto              | Default    | IBM Security | Yes         | Yes          | Released     |
 |   28  |       [SentinelOne](stix_shifter_modules/sentinelone)                        | sentinelone              | Default    | IBM Security | Yes         | Yes          | Released     |
 |   29  |       [Darktrace](stix_shifter_modules/darktrace)                           | darktrace              | Default    | IBM Security | Yes         | Yes          | Released     |
-|   30  |       [IBM Security ReaQta](stix_shifter_modules/reaqta)                           | reaqta             | Default    | IBM Security | Yes         | Yes          | Released     |
+|   30  |       [IBM Security QRadar EDR](stix_shifter_modules/reaqta)                           | reaqta             | Default    | IBM Security | Yes         | Yes          | Released     |
 |   31  |       [IBM Security Verify](stix_shifter_modules/ibm_security_verify)                           | ibm_security_verify             | Default    | IBM Security | Yes         | Yes          | Released     |
 |   32  |       [Red Hat Advanced Cluster Security for Kubernetes (StackRox)](stix_shifter_modules/rhacs)                           | rhacs             | Default    | IBM Security | Yes         | Yes          | Released     |
 |   33  |      [GCP Chronicle](stix_shifter_modules/gcp_chronicle)                   | gcp_chronicle              | Default    | IBM Security | Yes         | Yes          | Released     |

@@ -1,9 +1,4 @@
-import os
-import importlib
-from .stix_translation.query_translator import QueryTranslator
 from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
-from stix_shifter_utils.modules.base.stix_transmission.base_connector import BaseConnector
-from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 
 
 class EntryPoint(BaseEntryPoint):

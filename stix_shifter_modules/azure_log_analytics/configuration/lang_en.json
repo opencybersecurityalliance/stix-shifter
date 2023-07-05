@@ -13,8 +13,8 @@
       "description": "More details on the data source setting can be found in the specified link"
     },
     "selfSignedCert": {
-      "label": "Microsoft Azure Sentinel certificate",
-      "description": "Use SSL certificate for Microsoft Azure Sentinel."
+      "label": "Microsoft Azure certificate",
+      "description": "Use SSL certificate for Microsoft Azure."
     },
     "workpaceId": {
       "label": "Log Analytics workspace ID",
