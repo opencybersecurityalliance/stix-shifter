@@ -46,7 +46,7 @@ class TestCbCloudConnection(unittest.TestCase, object):
 
     @patch('stix_shifter_modules.cbcloud.stix_transmission.api_client.APIClient.get_search_results')
     def test_cbcloud_results(self, mock_result_response):
-        mocked_return_value = '{"results": "Results from search"}'
+        mocked_return_value = '{"results": [{ "device_id": 13964}]}'
         mock_result_response.return_value = get_mock_response(200, mocked_return_value)
         entry_point = EntryPoint(self.connection, self.configuration)
         query_id = "uuid_1234567890"
@@ -55,7 +55,7 @@ class TestCbCloudConnection(unittest.TestCase, object):
         success = results_response["success"]
         assert success
         data = results_response["data"]
-        assert data == "Results from search"
+        assert data == [{ 'device_id': 13964}]
 
     def test_is_async(self):
         entry_point = EntryPoint(self.connection, self.configuration)
