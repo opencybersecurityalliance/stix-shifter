@@ -26,7 +26,9 @@ class ResultsConnector(BaseJsonResultsConnector):
             # # Construct a response object
             if response_code == 200:
                 return_obj['success'] = True
-                return_obj['data'] = response_dict['data']['logs']
+                data = response_dict['data']['logs']
+                ResultsConnector.modify_result(data)
+                return_obj['data'] = data
             else:
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
             return return_obj
@@ -35,3 +37,22 @@ class ResultsConnector(BaseJsonResultsConnector):
             return_obj['success'] = False
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], error=err)
             return return_obj
+
+    @classmethod
+    def modify_result(cls, data):
+        for log in data:
+            registry_value = log.get("objectRegistryValue")
+            if registry_value:
+                registry_value_type = {"name": registry_value}
+                registry_data = log.get("objectRegistryData")
+                if registry_data:
+                    registry_value_type["data"] = registry_data
+                log["objectRegistryValueType"] = [registry_value_type]
+            
+            message_id = log.get("mail_message_id")
+            if message_id:
+                headers = log.get("mail_internet_headers")
+                if headers:
+                    headers.append({"HeaderName": "Message-ID", "Value": message_id})
+                else:
+                    log["mail_internet_headers"] = [{"HeaderName": "Message-ID", "Value": message_id}]

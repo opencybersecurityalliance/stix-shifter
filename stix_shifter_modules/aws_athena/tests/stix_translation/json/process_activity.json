@@ -107,7 +107,11 @@
                 "version": "1.0.0-rc.2"
             },
             "type": "Symbolic Link",
-            "type_id": 7
+            "type_id": 7,
+            "hashes": {
+                "SHA-256": "401045DC4F861002C2494449EE92A7063F34AA49E4708EA6E3231B14D5D7B579",
+                "SHA-1": "CD89B1537C0E6664405C383CEE9DB1F2A6D1A5AC"
+            }
         },
         "name": "Virginia",
         "parent_process": {
@@ -143,7 +147,11 @@
                     "version": "1.0.0-rc.2"
                 },
                 "type": "Local Socket",
-                "type_id": 5
+                "type_id": 5,
+                "hashes": {
+                    "SHA-256": "FAF9838AC653B1FE66CD949D9862F251532DDFEFED66B69E45D918413DD7207B",
+                    "SHA-512": "7598F315CC628FB4776924563E0E829B8CCA39B7FAD98FA379FA9BA878C6034D92689E7B48D3931F30765CF0A44922E954240AFB658CF898961C102430072C67"
+                }
             },
             "pid": 33,
             "sandbox": "nick named fill",

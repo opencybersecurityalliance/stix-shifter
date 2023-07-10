@@ -98,6 +98,9 @@ class ResultsConnector(BaseJsonResultsConnector):
             # check email data
             ResultsConnector.email_data_check(item)
 
+            # add mime_type_raw for artifact object
+            ResultsConnector.artifact_data(item)
+
             # if file name is none set file_hash also none
             if item.get("file_name") is None:
                 item["file_hash"] = None
@@ -115,6 +118,11 @@ class ResultsConnector(BaseJsonResultsConnector):
             item["file_hashes"] = ResultsConnector.filehash_check(item)
 
         return res_data
+
+    @staticmethod
+    def artifact_data(item_in):
+        if item_in.get('_raw'):
+            item_in['mime_type_raw'] = 'text/plain'
 
     @staticmethod
     def process_data_check(item_in):
