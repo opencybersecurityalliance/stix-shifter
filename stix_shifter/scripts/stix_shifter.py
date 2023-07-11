@@ -339,8 +339,7 @@ def main():
         options['validate_pattern'] = True
         result = translation.translate(args.module, 'results', args.data_source, results, translation_options)
         log.info('STIX Results (written to stdout):\n')
-        # added default=str to json.dumps inorder to handle serialization failure of datetime.datetime object
-        print(json.dumps(result, indent=4, sort_keys=False, default=str))
+        print(json.dumps(result, indent=4, sort_keys=False))
         exit(0)
 
     elif args.command == TRANSLATE:
@@ -375,8 +374,8 @@ def main():
                 result[m] = translation.translate(m, stix_translation.CONFIGS, None, None)
     elif args.command == TRANSMIT:
         result = transmit(args)  # stix_transmission
-    # added default=str to json.dumps inorder to handle serialization failure of datetime.datetime object
-    print(json.dumps(result, indent=4, sort_keys=False, default=str))
+
+    print(json.dumps(result, indent=4, sort_keys=False))
     exit(0)
 
 

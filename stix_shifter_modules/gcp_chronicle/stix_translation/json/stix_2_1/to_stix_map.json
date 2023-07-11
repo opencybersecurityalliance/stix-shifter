@@ -1485,7 +1485,7 @@
             "object": "security_url",
             "transformer": "ValidateUrl"
         },
-        "groupAboutUrlReferences": {
+        "GroupAboutUrlReferences": {
             "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result.url_refs",
             "object": "security_result",
             "references": ["security_url"],
