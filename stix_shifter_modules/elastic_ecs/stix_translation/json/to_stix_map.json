@@ -785,12 +785,13 @@
         "key": "x-oca-event.original_ref",
         "object": "event",
         "references": "artifact"
+      },
+      {
+        "key": "artifact.mime_type",
+        "object": "artifact",
+        "value" : "text/plain"
       }
     ],
-    "mime_type_event": {
-      "key": "artifact.mime_type",
-      "object": "artifact"
-    },
     "action": {
       "key": "x-oca-event.action",
       "object": "event"
