@@ -590,7 +590,7 @@ results
                     "src_ip_ref": "2",
                     "extensions": {
                         "x-gcp-chronicle-security-result": {
-                            "url_ref": "9",
+                            "url_refs": ["9"],
                             "threat_name": "url",
                             "actions_taken": [
                                 "ALLOW_WITH_MODIFICATION"
@@ -622,7 +622,7 @@ results
                     "type": "email-message",
                     "extensions": {
                         "x-gcp-chronicle-email-message": {
-                            "file_ref": "7"
+                            "file_refs": ["7"]
                         }
                     },
                     "from_ref": "10",

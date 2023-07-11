@@ -1,0 +1,32 @@
+{
+    "connection": {
+        "region": {
+            "label": "AWS GuardDuty Region Name",
+            "description": "Specify the region name of the GuardDuty data source"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        },
+        "detector_ids": {
+            "label": "Detector Ids",
+            "description": "Detector id of the GuardDuty"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "aws_access_key_id": {
+                "label": "AWS access key ID",
+                "description": "AWS Access Key ID is required for both AWS key-based and role-based authentication"
+            },
+            "aws_iam_role": {
+                "label": "AWS IAM role",
+                "description": "AWS IAM Role is required for only AWS role-based authentication"
+            },
+            "aws_secret_access_key": {
+                "label": "AWS secret access key",
+                "description": "AWS Secret Access Key ID is required for both AWS key-based and role-based authentication"
+            }
+        }
+    }
+}
