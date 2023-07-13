@@ -10,7 +10,7 @@
         },
         "detector_ids": {
             "label": "Detector Ids",
-            "description": "Detector id of the GuardDuty"
+            "description": "Specify one or more detectors ids of the GuardDuty separated by comma. Example: DetectorId1,DetectorId2"
         }
     },
     "configuration": {
