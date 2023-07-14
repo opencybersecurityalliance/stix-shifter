@@ -23,8 +23,7 @@
     "object": "finding"
   },
   "CreatedAt": {
-    "key": "first_observed",
-    "cybox": false
+    "key": "first_observed"
   },
   "Description": {
     "key": "x-ibm-finding.description",
@@ -64,8 +63,7 @@
       "object": "finding"
     },
     {
-      "key": "last_observed",
-      "cybox": false
+      "key": "last_observed"
     }
   ],
   "Resource": {
@@ -2037,7 +2035,7 @@
             "object": "runtime_file"
           },
           {
-            "key": "x-aws-runtime-context.module_loaded_into_kernel_ref",
+            "key": "x-aws-runtime-context.module_ref",
             "object": "runtime",
             "references": "runtime_file"
           },

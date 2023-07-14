@@ -20,99 +20,99 @@
 ### Searchable STIX objects and properties
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
-| **ipv4-addr**:value | Resource.InstanceDetails.NetworkInterfaces.privateIpAddresses.privateIpAddress,Resource.InstanceDetails.NetworkInterfaces.publicIp,Service.Action.NetworkConnectionAction.RemoteIpDetails.IpAddressV4,Service.Action.AwsApiCallAction.RemoteIpDetails.IpAddressV4,Service.Action.kubernetesApiCallAction.RemoteIpDetails.IpAddressV4 |
-| **ipv4-addr**:x_geo_ref.country_name |Service.Action.NetworkConnectionAction.RemoteIpDetails.country.countryName, Service.Action.AwsApiCallAction.RemoteIpDetails.country.countryName|
-| **ipv4-addr**:belongs_to_refs[*].number |Service.Action.NetworkConnectionAction.RemoteIpDetails.organization.Asn,Service.Action.AwsApiCallAction.RemoteIpDetails.organization.Asn|
-| **ipv6-addr**:value|Resource.InstanceDetails.NetworkInterfaces.Ipv6Addresses|
-| **autonomous-system**:number | Service.Action.NetworkConnectionAction.RemoteIpDetails.organization.Asn,Service.Action.AwsApiCallAction.RemoteIpDetails.organization.Asn |
-| **autonomous-system**:name | Service.Action.NetworkConnectionAction.RemoteIpDetails.organization.AsnOrg,Service.Action.AwsApiCallAction.RemoteIpDetails.organization.AsnOrg |
-| **x-oca-geo**:country_name | Service.Action.NetworkConnectionAction.RemoteIpDetails.country.countryName,Service.Action.AwsApiCallAction.RemoteIpDetails.country.countryName |
-| **x-oca-geo**:city_name | Service.Action.AwsApiCallAction.RemoteIpDetails.city.cityName,Service.Action.NetworkConnectionAction.RemoteIpDetails.city.cityName |
-| **network-traffic**:src_port | Service.Action.NetworkConnectionAction.localPortDetails.port |
-| **network-traffic**:dst_port | Service.Action.NetworkConnectionAction.remotePortDetails.port |
-| **network-traffic**:protocols[*] | Service.Action.NetworkConnectionAction.protocol |
-| **network-traffic**:src_ref.value | Resource.InstanceDetails.NetworkInterfaces.privateIpAddresses.privateIpAddress |
-| **network-traffic**:dst_ref.value | Service.Action.NetworkConnectionAction.RemoteIpDetails.IpAddressV4,Service.Action.kubernetesApiCallAction.RemoteIpDetails.IpAddressV4|
-| **network-traffic**:x_is_target_port_blocked | Service.Action.NetworkConnectionAction.blocked |
-| **network-traffic**:x_direction | Service.Action.NetworkConnectionAction.connectionDirection |
-| **network-traffic**:extensions.'http-request-ext'.request_value | Service.Action.kubernetesApiCallAction.requestUri |
-| **user-account**:user_id | Resource.accessKeyDetails.principalId |
-| **user-account**:x_access_key_id | Resource.accessKeyDetails.accessKeyId |
-| **user-account**:display_name | Resource.accessKeyDetails.userName,Resource.kubernetesDetails.kubernetesUserDetails.username |
-| **user-account**:x_user_type | Resource.accessKeyDetails.userType |
-| **domain-name**:value | Resource.InstanceDetails.NetworkInterfaces.publicDnsName,Service.Action.dnsRequestAction.domain |
-| **process**:name | Service.runtimeDetails.process.name |
-| **process**:binary_ref.hashes.'SHA-256' | Service.runtimeDetails.process.executableSha256 |
-| **file**:hashes.'SHA-256' | Service.runtimeDetails.process.executableSha256, Service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.filePaths.hash |
-| **file**:x_path | Service.runtimeDetails.process.executablePath |
-| **file**:hashes.'SHA-1' | Service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.filePaths.hash |
-| **file**:hashes.MD5 | Service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.filePaths.hash |
-| **file**:x_unknown_hash | Service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.filePaths.hash |
-| **x-aws-resource**:instance_ref.image_id | Resource.InstanceDetails.imageId |
-| **x-aws-resource**:s3_bucket_refs[*].name | Resource.s3BucketDetails.name |
-| **x-aws-resource**:rds_database_ref.instance_id | Resource.rdsDbInstanceDetails.dbInstanceIdentifier |
-| **x-aws-resource**:rds_database_ref.cluster_id | Resource.rdsDbInstanceDetails.dbClusterIdentifier |
-| **x-aws-resource**:access_key_ref.user_id | Resource.accessKeyDetails.principalId |
-| **x-aws-resource**:lambda_details_ref.function_name | Resource.lambdaDetails.functionName |
-| **x-aws-resource**:ecs_cluster_ref.name | Resource.ecsClusterDetails.name |
-| **x-aws-resource**:eks_cluster_ref.name | Resource.eksClusterDetails.name |
-| **x-aws-resource**:resource_type | Resource.resourceType |
-| **x-aws-resource**:resource_role | Service.resourceRole |
-| **x-aws-instance**:image_id | Resource.InstanceDetails.imageId |
-| **x-aws-instance**:profile_id | Resource.InstanceDetails.iamInstanceProfile.id |
-| **x-aws-instance**:instance | Resource.InstanceDetails.instanceId |
-| **x-aws-instance**:tag_key | Resource.InstanceDetails.tags.key |
-| **x-aws-instance**:tag_value | Resource.InstanceDetails.tags.value |
-| **x-aws-instance**:outpost_arn |Resource.InstanceDetails.outpostArn |
-| **x-aws-network-interface**:security_group_id | Resource.InstanceDetails.NetworkInterfaces.securityGroups.groupId |
-| **x-aws-network-interface**:security_group_name | Resource.InstanceDetails.NetworkInterfaces.securityGroups.groupName |
-| **x-aws-network-interface**:subnet_id | Resource.InstanceDetails.NetworkInterfaces.subnetId |
-| **x-aws-network-interface**:vpc_id  | Resource.InstanceDetails.NetworkInterfaces.vpcId|
-| **x-aws-s3-bucket**:name | Resource.s3BucketDetails.name |
-| **x-aws-s3-bucket**:bucket_permission | Resource.s3BucketDetails.publicAccess.effectivePermission |
-| **x-aws-s3-bucket**:tag_key | Resource.s3BucketDetails.tags.key |
-| **x-aws-s3-bucket**:tag_value | Resource.s3BucketDetails.tags.value |
-| **x-aws-s3-bucket**:bucket_type | Resource.s3BucketDetails.type |
-| **x-aws-rds-db-instance**:cluster_id | Resource.rdsDbInstanceDetails.dbClusterIdentifier |
-| **x-aws-rds-db-instance**:engine | Resource.rdsDbInstanceDetails.engine |
-| **x-aws-rds-db-instance**:instance_id | Resource.rdsDbInstanceDetails.dbInstanceIdentifier |
-| **x-aws-rds-db-instance**:tag_key | Resource.rdsDbInstanceDetails.tags.key |
-| **x-aws-rds-db-instance**:tag_value| Resource.rdsDbInstanceDetails.tags.value |
-| **x-aws-rds-db-instance**:anomalous_login_user_ref.user_name| Resource.rdsDbUserDetails.user |
-| **x-aws-rds-db-user**:user_name | Resource.rdsDbUserDetails.user |
-| **x-aws-lambda**:function_arn | Resource.lambdaDetails.functionArn |
-| **x-aws-lambda**:function_name | Resource.lambdaDetails.functionName |
-| **x-aws-lambda**:tag_key | Resource.lambdaDetails.tags.key |
-| **x-aws-lambda**:tag_value | Resource.lambdaDetails.tags.value |
-| **x-aws-ecs-cluster**:name | Resource.ecsClusterDetails.name |
-| **x-aws-ecs-cluster**:task.definition_arn | Resource.ecsClusterDetails.taskDetails.definitionArn |
-| **x-aws-container**:image | Resource.ecsClusterDetails.taskDetails.containers.image,Resource.kubernetesDetails.kubernetesWorkloadDetails.containers.image,Resource.containerDetails.image|
-| **x-aws-container**:image_prefix | Resource.kubernetesDetails.kubernetesWorkloadDetails.containers.imagePrefix |
-| **x-aws-kubernetes-workload**:workload_name | Resource.kubernetesDetails.kubernetesWorkloadDetails.name |
-| **x-aws-kubernetes-workload**:workload_namespace | Resource.kubernetesDetails.kubernetesWorkloadDetails.namespace |
-| **x-aws-eks-cluster**:name | Resource.eksClusterDetails.name |
-| **x-aws-ebs-volume-malware-scan**:scan_id | Service.ebsVolumeScanDetails.scanId |
+| **ipv4-addr**:value | resource.instanceDetails.networkInterfaces.privateIpAddresses.privateIpAddress, resource.instanceDetails.networkInterfaces.publicIp, service.action.networkConnectionAction.remoteIpDetails.ipAddressV4, service.action.awsApiCallAction.remoteIpDetails.ipAddressV4, service.action.kubernetesApiCallAction.remoteIpDetails.ipAddressV4 |
+| **ipv4-addr**:x_geo_ref.country_name | service.action.networkConnectionAction.remoteIpDetails.country.countryName, service.action.awsApiCallAction.remoteIpDetails.country.countryName |
+| **ipv4-addr**:belongs_to_refs[*].number | service.action.networkConnectionAction.remoteIpDetails.organization.asn, service.action.awsApiCallAction.remoteIpDetails.organization.asn |
+| **ipv6-addr**:value| resource.instanceDetails.networkInterfaces.ipv6Addresses |
+| **autonomous-system**:number | service.action.networkConnectionAction.remoteIpDetails.organization.asn,service.action.awsApiCallAction.remoteIpDetails.organization.asn |
+| **autonomous-system**:name | service.action.networkConnectionAction.remoteIpDetails.organization.asnOrg,service.action.awsApiCallAction.remoteIpDetails.organization.asnOrg |
+| **x-oca-geo**:country_name | service.action.networkConnectionAction.remoteIpDetails.country.countryName, service.action.awsApiCallAction.remoteIpDetails.country.countryName |
+| **x-oca-geo**:city_name | service.action.awsApiCallAction.remoteIpDetails.city.cityName, service.action.networkConnectionAction.remoteIpDetails.city.cityName |
+| **network-traffic**:src_port | service.action.networkConnectionAction.localPortDetails.port |
+| **network-traffic**:dst_port | service.action.networkConnectionAction.remotePortDetails.port |
+| **network-traffic**:protocols[*] | service.action.networkConnectionAction.protocol |
+| **network-traffic**:src_ref.value | resource.instanceDetails.networkInterfaces.privateIpAddresses.privateIpAddress |
+| **network-traffic**:dst_ref.value | service.action.networkConnectionAction.remoteIpDetails.ipAddressV4, service.action.kubernetesApiCallAction.remoteIpDetails.ipAddressV4 |
+| **network-traffic**:x_is_target_port_blocked | service.action.networkConnectionAction.blocked |
+| **network-traffic**:x_direction | service.action.networkConnectionAction.connectionDirection |
+| **network-traffic**:extensions.'http-request-ext'.request_value | service.action.kubernetesApiCallAction.requestUri |
+| **user-account**:user_id | resource.accessKeyDetails.principalId |
+| **user-account**:x_access_key_id | resource.accessKeyDetails.accessKeyId |
+| **user-account**:display_name | resource.accessKeyDetails.userName, resource.kubernetesDetails.kubernetesUserDetails.username |
+| **user-account**:x_user_type | resource.accessKeyDetails.userType |
+| **domain-name**:value | resource.instanceDetails.networkInterfaces.publicDnsName, service.action.dnsRequestAction.domain |
+| **process**:name | service.runtimeDetails.process.name |
+| **process**:binary_ref.hashes.'SHA-256' | service.runtimeDetails.process.executableSha256 |
+| **file**:hashes.'SHA-256' | service.runtimeDetails.process.executableSha256, service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.filePaths.hash |
+| **file**:x_path | service.runtimeDetails.process.executablePath |
+| **file**:hashes.'SHA-1' | service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.filePaths.hash |
+| **file**:hashes.MD5 | service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.filePaths.hash |
+| **file**:x_unknown_hash | service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.filePaths.hash |
+| **x-aws-resource**:instance_ref.image_id | resource.instanceDetails.imageId |
+| **x-aws-resource**:s3_bucket_refs[*].name | resource.s3BucketDetails.name |
+| **x-aws-resource**:rds_database_ref.instance_id | resource.rdsDbInstanceDetails.dbInstanceIdentifier |
+| **x-aws-resource**:rds_database_ref.cluster_id | resource.rdsDbInstanceDetails.dbClusterIdentifier |
+| **x-aws-resource**:access_key_ref.user_id | resource.accessKeyDetails.principalId |
+| **x-aws-resource**:lambda_details_ref.function_name | resource.lambdaDetails.functionName |
+| **x-aws-resource**:ecs_cluster_ref.name | resource.ecsClusterDetails.name |
+| **x-aws-resource**:eks_cluster_ref.name | resource.eksClusterDetails.name |
+| **x-aws-resource**:resource_type | resource.resourceType |
+| **x-aws-resource**:resource_role | service.resourceRole |
+| **x-aws-instance**:image_id | resource.instanceDetails.imageId |
+| **x-aws-instance**:profile_id | resource.instanceDetails.iamInstanceProfile.id |
+| **x-aws-instance**:instance | resource.instanceDetails.instanceId |
+| **x-aws-instance**:tag_key | resource.instanceDetails.tags.key |
+| **x-aws-instance**:tag_value | resource.instanceDetails.tags.value |
+| **x-aws-instance**:outpost_arn | resource.instanceDetails.outpostArn |
+| **x-aws-network-interface**:security_group_id | resource.instanceDetails.networkInterfaces.securityGroups.groupId |
+| **x-aws-network-interface**:security_group_name | resource.instanceDetails.networkInterfaces.securityGroups.groupName |
+| **x-aws-network-interface**:subnet_id | resource.instanceDetails.networkInterfaces.subnetId |
+| **x-aws-network-interface**:vpc_id  | resource.instanceDetails.networkInterfaces.vpcId |
+| **x-aws-s3-bucket**:name | resource.s3BucketDetails.name |
+| **x-aws-s3-bucket**:bucket_permission | resource.s3BucketDetails.publicAccess.effectivePermission |
+| **x-aws-s3-bucket**:tag_key | resource.s3BucketDetails.tags.key |
+| **x-aws-s3-bucket**:tag_value | resource.s3BucketDetails.tags.value |
+| **x-aws-s3-bucket**:bucket_type | resource.s3BucketDetails.type |
+| **x-aws-rds-db-instance**:cluster_id | resource.rdsDbInstanceDetails.dbClusterIdentifier |
+| **x-aws-rds-db-instance**:engine | resource.rdsDbInstanceDetails.engine |
+| **x-aws-rds-db-instance**:instance_id | resource.rdsDbInstanceDetails.dbInstanceIdentifier |
+| **x-aws-rds-db-instance**:tag_key | resource.rdsDbInstanceDetails.tags.key |
+| **x-aws-rds-db-instance**:tag_value| resource.rdsDbInstanceDetails.tags.value |
+| **x-aws-rds-db-instance**:anomalous_login_user_ref.user_name| resource.rdsDbUserDetails.user |
+| **x-aws-rds-db-user**:user_name | resource.rdsDbUserDetails.user |
+| **x-aws-lambda**:function_arn | resource.lambdaDetails.functionArn |
+| **x-aws-lambda**:function_name | resource.lambdaDetails.functionName |
+| **x-aws-lambda**:tag_key | resource.lambdaDetails.tags.key |
+| **x-aws-lambda**:tag_value | resource.lambdaDetails.tags.value |
+| **x-aws-ecs-cluster**:name | resource.ecsClusterDetails.name |
+| **x-aws-ecs-cluster**:task.definition_arn | resource.ecsClusterDetails.taskDetails.definitionArn |
+| **x-aws-container**:image | resource.ecsClusterDetails.taskDetails.containers.image, resource.kubernetesDetails.kubernetesWorkloadDetails.containers.image, resource.containerDetails.image |
+| **x-aws-container**:image_prefix | resource.kubernetesDetails.kubernetesWorkloadDetails.containers.imagePrefix |
+| **x-aws-kubernetes-workload**:workload_name | resource.kubernetesDetails.kubernetesWorkloadDetails.name |
+| **x-aws-kubernetes-workload**:workload_namespace | resource.kubernetesDetails.kubernetesWorkloadDetails.namespace |
+| **x-aws-eks-cluster**:name | resource.eksClusterDetails.name |
+| **x-aws-ebs-volume-malware-scan**:scan_id | service.ebsVolumeScanDetails.scanId |
 | **x-aws**:account_id | accountId |
 | **x-aws**:region | region |
 | **x-ibm-finding**:confidence | confidence |
 | **x-ibm-finding**:alert_id | id |
-| **x-ibm-finding**:x_archived | Service.archived |
+| **x-ibm-finding**:x_archived | service.archived |
 | **x-ibm-finding**:severity | severity |
 | **x-ibm-finding**:name | type |
-| **x-ibm-finding**:x_resource_ref.resource_type | Resource.resourceType |
-| **x-ibm-finding**:src_application_user_ref.display_name | Resource.kubernetesDetails.kubernetesUserDetails.username |
-| **x-aws-finding-service**:action.action_type | Service.Action.actionType |
-| **x-aws-finding-service**:action.api_called | Service.Action.AwsApiCallAction.api |
-| **x-aws-finding-service**:action.caller_account_id | Service.Action.AwsApiCallAction.remoteAccountDetails.accountId |
-| **x-aws-finding-service**:action.caller_type | Service.Action.AwsApiCallAction.callerType |
-| **x-aws-finding-service**:action.service_name | Service.Action.AwsApiCallAction.serviceName |
-| **x-aws-finding-service**:action.remote_ref.value | Service.Action.AwsApiCallAction.RemoteIpDetails.IpAddressV4 |
-| **x-aws-finding-service**:action.error_code | Service.Action.AwsApiCallAction.errorCode |
-| **x-aws-finding-service**:action.is_caller_account_affiliated_to_aws | Service.Action.AwsApiCallAction.RemoteAccountDetails.affiliated |
-| **x-aws-finding-service**:additional_info | Service.additionalInfo.threatListName |
-| **x-aws-threat**:threat_name | Service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.name |
-| **x-aws-threat**:severity | Service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.severity |
-| **x-aws-evidence**:threat_intelligence_list_name | Service.additionalInfo.threatListName |
+| **x-ibm-finding**:x_resource_ref.resource_type | resource.resourceType |
+| **x-ibm-finding**:src_application_user_ref.display_name | resource.kubernetesDetails.kubernetesUserDetails.username |
+| **x-aws-finding-service**:action.action_type | service.action.actionType |
+| **x-aws-finding-service**:action.api_called | service.action.awsApiCallAction.api |
+| **x-aws-finding-service**:action.caller_account_id | service.action.awsApiCallAction.remoteAccountDetails.accountId |
+| **x-aws-finding-service**:action.caller_type | service.action.awsApiCallAction.callerType |
+| **x-aws-finding-service**:action.service_name | service.action.awsApiCallAction.serviceName |
+| **x-aws-finding-service**:action.remote_ref.value | service.action.awsApiCallAction.remoteIpDetails.ipAddressV4 |
+| **x-aws-finding-service**:action.error_code | service.action.awsApiCallAction.errorCode |
+| **x-aws-finding-service**:action.is_caller_account_affiliated_to_aws | service.action.awsApiCallAction.remoteAccountDetails.affiliated |
+| **x-aws-finding-service**:additional_info | service.additionalInfo.threatListName |
+| **x-aws-threat**:threat_name | service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.name |
+| **x-aws-threat**:severity | service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.severity |
+| **x-aws-evidence**:threat_intelligence_list_name | service.additionalInfo.threatListName |
 
 ### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
@@ -137,8 +137,8 @@
 | ipv4-addr | x_geo_ref | Service.Action.NetworkConnectionAction.RemoteIpDetails.Country.CountryName |
 | ipv4-addr | x_geo_ref | Service.Action.KubernetesApiCallAction.RemoteIpDetails.Country.CountryName |
 | ipv4-addr | x_geo_ref | Service.Action.RdsLoginAttemptAction.RemoteIpDetails.Country.CountryName |
-| ipv4-addr | x_geo_ref | Service.Action.RdsLoginAttemptAction.RemoteIpDetails.city.CityName |
-| ipv4-addr | x_geo_ref | Service.Action.KubernetesApiCallAction.RemoteIpDetails.city.CityName |
+| ipv4-addr | x_geo_ref | Service.Action.RdsLoginAttemptAction.RemoteIpDetails.City.CityName |
+| ipv4-addr | x_geo_ref | Service.Action.KubernetesApiCallAction.RemoteIpDetails.City.CityName |
 | <br> | | |
 | ipv6-addr | value | Resource.InstanceDetails.NetworkInterfaces.Ipv6Addresses |
 | <br> | | |
@@ -173,11 +173,11 @@
 | x-oca-geo| country_name | Service.Action.NetworkConnectionAction.RemoteIpDetails.Country.CountryName |
 | x-oca-geo| country_name | Service.Action.KubernetesApiCallAction.RemoteIpDetails.Country.CountryName |
 | x-oca-geo| country_name | Service.Action.RdsLoginAttemptAction.RemoteIpDetails.Country.CountryName |
-| x-oca-geo| city_name | Service.Action.PortProbeAction.PortProbeDetails.RemoteIpDetails.city.CityName |
-| x-oca-geo| city_name | Service.Action.AwsApiCallAction.RemoteIpDetails.city.CityName |
-| x-oca-geo| city_name | Service.Action.NetworkConnectionAction.RemoteIpDetails.city.CityName |
-| x-oca-geo| city_name | Service.Action.KubernetesApiCallAction.RemoteIpDetails.city.CityName |
-| x-oca-geo| city_name | Service.Action.RdsLoginAttemptAction.RemoteIpDetails.city.CityName |
+| x-oca-geo| city_name | Service.Action.PortProbeAction.PortProbeDetails.RemoteIpDetails.City.CityName |
+| x-oca-geo| city_name | Service.Action.AwsApiCallAction.RemoteIpDetails.City.CityName |
+| x-oca-geo| city_name | Service.Action.NetworkConnectionAction.RemoteIpDetails.City.CityName |
+| x-oca-geo| city_name | Service.Action.KubernetesApiCallAction.RemoteIpDetails.City.CityName |
+| x-oca-geo| city_name | Service.Action.RdsLoginAttemptAction.RemoteIpDetails.City.CityName |
 | x-oca-geo| location | Service.Action.PortProbeAction.PortProbeDetails.RemoteIpDetails.GeoLocation |
 | x-oca-geo| location | Service.Action.NetworkConnectionAction.RemoteIpDetails.GeoLocation |
 | x-oca-geo| location | Service.Action.KubernetesApiCallAction.RemoteIpDetails.GeoLocation |
@@ -240,6 +240,9 @@
 | domain-name | resolves_to_refs | Resource.InstanceDetails.NetworkInterfaces.PrivateIpAddresses.PrivateIpAddress |
 | domain-name | resolves_to_refs | Resource.InstanceDetails.NetworkInterfaces.PublicIp |
 | <br> | | |
+| software | name | Resource.InstanceDetails.Platform |
+| software | name | Service.Action.AwsApiCallAction.UserAgent |
+| <br> | | |
 | process | name | Service.RuntimeDetails.Context.ModifyingProcess.Name |
 | process | name | Service.RuntimeDetails.Context.TargetProcess.Lineage.Name |
 | process | name | Service.RuntimeDetails.Context.TargetProcess.Name |
@@ -279,9 +282,9 @@
 | process | x_unique_id | Service.RuntimeDetails.Context.TargetProcess.Uuid |
 | process | x_unique_id | Service.RuntimeDetails.Process.Lineage.Uuid |
 | process | x_unique_id | Service.RuntimeDetails.Process.Uuid |
-| process | cwd | Service.RuntimeDetails.Context.ModifyingProcess.pwd |
-| process | cwd | Service.RuntimeDetails.Context.TargetProcess.pwd |
-| process | cwd |  Service.RuntimeDetails.Process.pwd |
+| process | cwd | Service.RuntimeDetails.Context.ModifyingProcess.Pwd |
+| process | cwd | Service.RuntimeDetails.Context.TargetProcess.Pwd |
+| process | cwd |  Service.RuntimeDetails.Process.Pwd |
 | process | x_absolute_path |  Service.RuntimeDetails.Context.ModifyingProcess.Lineage.ExecutablePath |
 | process | x_absolute_path |  Service.RuntimeDetails.Context.TargetProcess.Lineage.ExecutablePath |
 | process | x_absolute_path |  Service.RuntimeDetails.Process.Lineage.ExecutablePath |
@@ -375,9 +378,9 @@
 | x-aws-s3-bucket | tags | Resource.S3BucketDetails.Tag |
 | x-aws-s3-bucket | bucket_type | Resource.S3BucketDetails.Type |
 | <br> | | |
-| x-aws-rds-db-instance | cluster_id | Resource.RdsDbInstanceDetails.dbClusterIdentifier |
+| x-aws-rds-db-instance | cluster_id | Resource.RdsDbInstanceDetails.DbClusterIdentifier |
 | x-aws-rds-db-instance | instance_arn | Resource.RdsDbInstanceDetails.DbInstanceArn |
-| x-aws-rds-db-instance | instance_id | Resource.RdsDbInstanceDetails.dbInstanceIdentifier |
+| x-aws-rds-db-instance | instance_id | Resource.RdsDbInstanceDetails.DbInstanceIdentifier |
 | x-aws-rds-db-instance | engine | Resource.RdsDbInstanceDetails.Engine |
 | x-aws-rds-db-instance | engine_version | Resource.RdsDbInstanceDetails.EngineVersion |
 | x-aws-rds-db-instance | tags |  Resource.RdsDbInstanceDetails.Tags |
@@ -405,6 +408,11 @@
 | x-aws-lambda | subnet_ids | Resource.LambdaDetails.VpcConfig.SubnetIds |
 | x-aws-lambda | amazon_vpc_id | Resource.LambdaDetails.VpcConfig.VpcId |
 | <br> | | |
+| x-aws-rds-login-attributes | login_application_name | Service.Action.RdsLoginAttemptAction.LoginAttributes.Application |
+| x-aws-rds-login-attributes | failed_login_attempts | Service.Action.RdsLoginAttemptAction.LoginAttributes.FailedLoginAttempts |
+| x-aws-rds-login-attributes | successful_login_attempts | Service.Action.RdsLoginAttemptAction.LoginAttributes.SuccessfulLoginAttempts |
+| x-aws-rds-login-attributes | login_attempted_user_name | Service.Action.RdsLoginAttemptAction.LoginAttributes.User |
+| <br> | | |
 | x-aws-ecs-cluster | active_services_count | Resource.EcsClusterDetails.ActiveServicesCount |
 | x-aws-ecs-cluster | cluster_arn | Resource.EcsClusterDetails.Arn |
 | x-aws-ecs-cluster | name | Resource.EcsClusterDetails.Name |
@@ -421,6 +429,22 @@
 | x-aws-ecs-cluster | task.created_at | Resource.EcsClusterDetails.TaskDetails.CreatedAt |
 | x-aws-ecs-cluster | task.version | Resource.EcsClusterDetails.TaskDetails.Version |
 | x-aws-ecs-cluster | task.volumes | Resource.EcsClusterDetails.TaskDetails.Volumes |
+| <br> | | |
+| x-aws-ebs-volume-scanned | device_name | Resource.EbsVolumeDetails.ScannedVolumeDetails.DeviceName |
+| x-aws-ebs-volume-scanned | encryption_type | Resource.EbsVolumeDetails.ScannedVolumeDetails.EncryptionType |
+| x-aws-ebs-volume-scanned | kms_key_arn | Resource.EbsVolumeDetails.ScannedVolumeDetails.KmsKeyArn |
+| x-aws-ebs-volume-scanned | snapshot_key_arn | Resource.EbsVolumeDetails.ScannedVolumeDetails.SnapshotArn |
+| x-aws-ebs-volume-scanned | volume_arn | Resource.EbsVolumeDetails.ScannedVolumeDetails.VolumeArn |
+| x-aws-ebs-volume-scanned | volume_size | Resource.EbsVolumeDetails.ScannedVolumeDetails.VolumeSizeInGB |
+| x-aws-ebs-volume-scanned | volume_type | Resource.EbsVolumeDetails.ScannedVolumeDetails.VolumeType |
+| <br> | | |
+| x-aws-ebs-volume-skipped | device_name | Resource.EbsVolumeDetails.SkippedVolumeDetails.DeviceName |
+| x-aws-ebs-volume-skipped | encryption_type | Resource.EbsVolumeDetails.SkippedVolumeDetails.EncryptionType |
+| x-aws-ebs-volume-skipped | kms_key_arn | Resource.EbsVolumeDetails.SkippedVolumeDetails.KmsKeyArn |
+| x-aws-ebs-volume-skipped | snapshot_key_arn | Resource.EbsVolumeDetails.SkippedVolumeDetails.SnapshotArn |
+| x-aws-ebs-volume-skipped | volume_arn | Resource.EbsVolumeDetails.SkippedVolumeDetails.VolumeArn |
+| x-aws-ebs-volume-skipped | volume_size | Resource.EbsVolumeDetails.SkippedVolumeDetails.VolumeSizeInGB |
+| x-aws-ebs-volume-skipped | volume_type | Resource.EbsVolumeDetails.SkippedVolumeDetails.VolumeType |
 | <br> | | |
 | x-aws-container | container_runtime | Resource.ContainerDetails.ContainerRuntime |
 | x-aws-container | container_runtime | Resource.EcsClusterDetails.TaskDetails.Containers.ContainerRuntime |
@@ -440,6 +464,13 @@
 | x-aws-container | is_container_privileged | Resource.ContainerDetails.SecurityContext.Privileged |
 | x-aws-container | is_container_privileged | Resource.EcsClusterDetails.TaskDetails.Containers.SecurityContext.Privileged |
 | x-aws-container | is_container_privileged | Resource.KubernetesDetails.KubernetesWorkloadDetails.Containers.SecurityContext.Privileged |
+| <br> | | |
+| x-aws-container-volume-mount | path | Resource.ContainerDetails.VolumeMounts.MountPath |
+| x-aws-container-volume-mount | path | Resource.EcsClusterDetails.TaskDetails.Containers.VolumeMounts.MountPath |
+| x-aws-container-volume-mount | path | Resource.KubernetesDetails.KubernetesWorkloadDetails.Containers.VolumeMounts.MountPath |
+| x-aws-container-volume-mount | name | Resource.ContainerDetails.VolumeMounts.Name |
+| x-aws-container-volume-mount | name | Resource.EcsClusterDetails.TaskDetails.Containers.VolumeMounts.Name |
+| x-aws-container-volume-mount | name | Resource.KubernetesDetails.KubernetesWorkloadDetails.Containers.VolumeMounts.Name |
 | <br> | | |
 | x-aws-kubernetes-workload | is_enabled_host_network_for_pods | Resource.KubernetesDetails.KubernetesWorkloadDetails.HostNetwork |
 | x-aws-kubernetes-workload | workload_name |  Resource.KubernetesDetails.KubernetesWorkloadDetails.Name |
@@ -533,6 +564,25 @@
 | x-aws-finding-service | action.network_ref | Service.Action.NetworkConnectionAction.Protocol |
 | x-aws-finding-service | action.network_ref | Service.Action.KubernetesApiCallAction.Protocol |
 | x-aws-finding-service | ebs_volume_malware_scan_ref | Service.EbsVolumeScanDetails.ScanId |
+| <br> | | |
+| x-aws-runtime-context | address_family | Service.RuntimeDetails.Context.AddressFamily |
+| x-aws-runtime-context | mounted_file_system_type | Service.RuntimeDetails.Context.FileSystemType |
+| x-aws-runtime-context | flags | Service.RuntimeDetails.Context.Flags |
+| x-aws-runtime-context | iana_protocol_number | Service.RuntimeDetails.Context.IanaProtocolNumber |
+| x-aws-runtime-context | environmental_variables.LD_PRELOAD | Service.RuntimeDetails.Context.LdPreloadValue |
+| x-aws-runtime-context | new_library_path | Service.RuntimeDetails.Context.LibraryPath |
+| x-aws-runtime-context | memory_regions | Service.RuntimeDetails.Context.MemoryRegions |
+| x-aws-runtime-context | process_modified_time | Service.RuntimeDetails.Context.ModifiedAt |
+| x-aws-runtime-context | modifying_process_ref | Service.RuntimeDetails.Context.ModifyingProcess.Name |
+| x-aws-runtime-context | module_ref | Service.RuntimeDetails.Context.ModuleFilePath |
+| x-aws-runtime-context | module_ref | Service.RuntimeDetails.Context.ModuleName |
+| x-aws-runtime-context | host_path | Service.RuntimeDetails.Context.MountSource |
+| x-aws-runtime-context | container_path | Service.RuntimeDetails.Context.MountTarget |
+| x-aws-runtime-context | release_agent_path | Service.RuntimeDetails.Context.ReleaseAgentPath |
+| x-aws-runtime-context | runc_implementation_path | Service.RuntimeDetails.Context.RuncBinaryPath |
+| x-aws-runtime-context | script_path | Service.RuntimeDetails.Context.ScriptPath |
+| x-aws-runtime-context | shell_history_file_path | Service.RuntimeDetails.Context.ShellHistoryFilePath |
+| x-aws-runtime-context | socket_path | Service.RuntimeDetails.Context.SocketPath |
 | <br> | | |
 | x-aws-threat | total_files_infected | Service.EbsVolumeScanDetails.ScanDetections.ThreatDetectedByName.ThreatNames.ItemCount |
 | x-aws-threat | threat_name | Service.EbsVolumeScanDetails.ScanDetections.ThreatDetectedByName.ThreatNames.Name |
