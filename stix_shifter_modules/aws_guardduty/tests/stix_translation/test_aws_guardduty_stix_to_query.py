@@ -527,7 +527,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_query_for_multiple_observation_with_and_without_qualifier(self):
-        stix_pattern = "[network-traffic:src_port >= 32794 OR x-aws:account_id='123456789']" \
+        stix_pattern = "[network-traffic:src_port >= 32794 OR x-aws-resource:account_id='123456789']" \
                        "AND [x-ibm-finding:alert_id='0ff5ef449377437b9c9c0892d38d5adf' AND  " \
                        "user-account:user_id = 'user1'] OR [x-aws-s3-bucket:bucket_type='Destination']" \
                        "START t'2023-05-10T11:00:00.000Z'STOP t'2023-06-01T11:00:00.003Z'"
@@ -592,7 +592,7 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_multiple_observation_with_single_qualifier_with_precedence_bracket(self):
         stix_pattern = "([x-aws-s3-bucket:bucket_type = 'Destination' AND network-traffic:protocols[*] = 'UDP'] " \
-                       "OR [x-aws:account_id='123456789' OR x-aws-instance:image_id='ami-99999999'])" \
+                       "OR [x-aws-resource:account_id='123456789' OR x-aws-instance:image_id='ami-99999999'])" \
                        "START t'2023-03-15T11:20:35.000Z'STOP t'2023-05-10T11:00:00.003Z'"
         query = translation.translate('aws_guardduty', 'query', '{}', stix_pattern)
         query = _remove_timestamp_from_query(query)

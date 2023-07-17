@@ -334,6 +334,9 @@
 | x-aws-resource | rds_database_ref | Resource.RdsDbInstanceDetails.DbClusterIdentifier |
 | x-aws-resource | rds_database_ref | Resource.RdsDbInstanceDetails.DbInstanceIdentifier |
 | x-aws-resource | lambda_details_ref | Resource.LambdaDetails.FunctionName |
+| x-aws-resource | account_id | AccountId |
+| x-aws-resource | partition | Partition |
+| x-aws-resource | region | Region |
 | <br> | | |
 | x-aws-instance | availability_zone | Resource.InstanceDetails.AvailabilityZone |
 | x-aws-instance | instance_arn | Resource.InstanceDetails.IamInstanceProfile.Arn |
@@ -514,13 +517,8 @@
 | x-aws-ebs-volume-malware-scan | sources | Service.EbsVolumeScanDetails.Sources |
 | x-aws-ebs-volume-malware-scan | triggered_finding_id | Service.EbsVolumeScanDetails.TriggerFindingId |
 | <br> | | |
-| x-aws | account_id | AccountId |
-| x-aws | partition | Partition |
-| x-aws | region | Region |
-| <br> | | |
 | x-ibm-finding | finding_type | FindingType |
 | x-ibm-finding | x_arn | Arn |
-| x-ibm-finding | x_aws_ref | AccountId |
 | x-ibm-finding | confidence | Confidence |
 | x-ibm-finding | description | Description |
 | x-ibm-finding | alert_id | Id |
@@ -537,6 +535,7 @@
 | x-ibm-finding | src_application_user_ref | Resource.KubernetesDetails.KubernetesUserDetails.Uid |
 | x-ibm-finding | src_application_user_ref | Resource.KubernetesDetails.KubernetesUserDetails.Username |
 | x-ibm-finding | x_resource_ref | Resource.ResourceType |
+| x-ibm-finding | x_resource_ref | AccountId |
 | x-ibm-finding | x_service_ref | Service.Action.ActionType |
 | x-ibm-finding | x_service_ref | Service.Action.AwsApiCallAction.Api |
 | x-ibm-finding | x_service_ref | Service.Action.RdsLoginAttemptAction.LoginAttributes.Application |

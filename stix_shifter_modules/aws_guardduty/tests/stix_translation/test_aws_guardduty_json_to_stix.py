@@ -530,7 +530,7 @@ class TestAwsGuarddutyResultsToStix(unittest.TestCase):
         """
         objects = TestAwsGuarddutyResultsToStix.get_observed_data_objects(aws_guardduty_sample_response)
         ibm_finding_obj = TestAwsGuarddutyResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
-        assert (ibm_finding_obj.keys() == {'type', 'x_aws_ref', 'x_arn', 'description', 'alert_id',
+        assert (ibm_finding_obj.keys() == {'type', 'x_arn', 'description', 'alert_id',
                                            'x_resource_ref', 'x_schema_version', 'x_service_ref',
                                            'x_archived', 'event_count', 'x_detector_id', 'severity', 'x_title',
                                            'name', 'time_observed', 'finding_type'})
@@ -585,11 +585,13 @@ class TestAwsGuarddutyResultsToStix(unittest.TestCase):
         """to test resource-type stix object properties"""
         objects = TestAwsGuarddutyResultsToStix.get_observed_data_objects(aws_guardduty_sample_response)
         resource_type = TestAwsGuarddutyResultsToStix.get_first_of_type(objects.values(), 'x-aws-resource')
-        assert (resource_type.keys() == {'type', 'resource_type', 'resource_role', 'instance_ref'})
+        assert (resource_type.keys() == {'type', 'account_id', 'partition', 'region', 'resource_type',
+                                         'resource_role', 'instance_ref'})
         assert resource_type is not None
         assert resource_type['type'] == 'x-aws-resource'
         assert resource_type['resource_type'] == 'Instance'
         assert resource_type['resource_role'] == 'TARGET'
+        assert resource_type['account_id'] == '12345678910'
 
     def test_domain_name_json_to_stix(self):
         """to test domain-name stix object properties"""
@@ -644,16 +646,6 @@ class TestAwsGuarddutyResultsToStix(unittest.TestCase):
         assert x_aws_s3_bucket['permissions']['bucket_level']['block_public_access_settings']['block_public_policy'] \
                is not True
         assert x_aws_s3_bucket['permissions']['account_level']['block_public_acls'] is not True
-
-    def test_x_aws_json_to_stix(self):
-        """to test x-aws stix object properties"""
-        objects = TestAwsGuarddutyResultsToStix.get_observed_data_objects(aws_guardduty_sample_response_2)
-        x_aws = TestAwsGuarddutyResultsToStix.get_first_of_type(objects.values(), 'x-aws')
-        assert (x_aws.keys() == {'type', 'account_id', 'partition', 'region'})
-        assert x_aws is not None
-        assert x_aws['type'] == 'x-aws'
-        assert x_aws['account_id'] == '12345678910'
-        assert x_aws['region'] == 'us-east-1'
 
     def test_x_aws_finding_service_with_api_call_action_json_to_stix(self):
         """to test x-aws-finding-service stix object properties"""
@@ -1100,14 +1092,16 @@ class TestAwsGuarddutyResultsToStix(unittest.TestCase):
                                             "FilePath": "tmp/eicar.com",
                                             "VolumeArn": "arn:aws:ec2:us-west-2:12345678910:"
                                                          "volume/vol-09d5050dea915943d",
-                                            "FileSha256": "a021bbfb6489e54d471899f7dbaaa9d1663fc345ec2fe2a2c4538aabf651fd0f",
+                                            "FileSha256": "a021bbfb6489e54d471899f7dbaaa9d1663fc345ec2fe2a2c4538aabf65"
+                                                          "1fd0f",
                                             "FileName": "eicar.com"
                                         },
                                         {
                                             "FilePath": "tmp/eicar-2.txt",
                                             "VolumeArn": "arn:aws:ec2:us-west-2:12345678910:volume/"
                                                          "vol-09d5050dea915943d",
-                                            "UnknownHash": "a021bbfb6489e54d471899f7db9d2363fc345ec2fe2a2c4538aabf651ad0x",
+                                            "UnknownHash": "a021bbfb6489e54d471899f7db9d2363fc345ec2fe2a2c4538aabf651"
+                                                           "ad0x",
                                             "FileName": "eicar-2.txt"
                                         }
                                     ]

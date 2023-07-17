@@ -135,6 +135,12 @@
   },
   "x-aws-resource": {
     "fields": {
+      "account_id": [
+        "accountId"
+      ],
+      "region": [
+        "region"
+      ],
       "instance_ref.image_id": [
         "resource.instanceDetails.imageId"
       ],
@@ -312,16 +318,6 @@
     "fields": {
       "scan_id": [
         "service.ebsVolumeScanDetails.scanId"
-      ]
-    }
-  },
-  "x-aws": {
-    "fields": {
-      "account_id": [
-        "accountId"
-      ],
-      "region": [
-        "region"
       ]
     }
   },

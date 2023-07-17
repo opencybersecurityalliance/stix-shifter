@@ -5,13 +5,13 @@
   },
   "AccountId": [
     {
-      "key": "x-aws.account_id",
-      "object": "aws"
+      "key": "x-aws-resource.account_id",
+      "object": "resource"
     },
     {
-      "key": "x-ibm-finding.x_aws_ref",
+      "key": "x-ibm-finding.x_resource_ref",
       "object": "finding",
-      "references": "aws"
+      "references": "resource"
     }
   ],
   "Arn": {
@@ -34,12 +34,12 @@
     "object": "finding"
   },
   "Partition": {
-    "key": "x-aws.partition",
-    "object": "aws"
+    "key": "x-aws-resource.partition",
+    "object": "resource"
   },
   "Region": {
-    "key": "x-aws.region",
-    "object": "aws"
+    "key": "x-aws-resource.region",
+    "object": "resource"
   },
   "SchemaVersion": {
     "key": "x-ibm-finding.x_schema_version",

@@ -270,28 +270,30 @@ results
             "modified": "2023-06-05T10:26:40.410Z",
             "objects": {
                 "0": {
-                    "type": "x-aws",
+                    "type": "x-aws-resource",
                     "account_id": "912345678901",
                     "partition": "aws",
-                    "region": "us-east-1"
+                    "region": "us-east-1",
+                    "instance_ref": "2",
+                    "resource_type": "Instance",
+                    "resource_role": "ACTOR"
                 },
                 "1": {
                     "type": "x-ibm-finding",
-                    "finding_type": "alert",
-                    "x_aws_ref": "0",
+                    "x_resource_ref": "0",
                     "x_arn": "arn:aws:guardduty:us-east-1:912345678901:detector/abcdefghijklmn/finding/12345678910abcdef",
                     "description": "EC2 instance i-0b123456abcdefghi is communicating with an Unusual DNS Resolver 8.8.8.8.",
                     "alert_id": "12345678910abcdef",
-                    "x_resource_ref": "3",
                     "x_schema_version": "2.0",
-                    "x_service_ref": "9",
+                    "x_service_ref": "8",
                     "x_archived": false,
                     "event_count": 1,
                     "x_detector_id": "abcdefghijklmn",
                     "severity": 5,
                     "x_title": "EC2 instance i-0b123456abcdefghi is communicating with an Unusual DNS Resolver 8.8.8.8.",
                     "name": "DefenseEvasion:EC2/UnusualDNSResolver",
-                    "time_observed": "2023-06-05T04:48:34.491Z"
+                    "time_observed": "2023-06-05T04:48:34.491Z",
+                    "finding_type": "alert"
                 },
                 "2": {
                     "type": "x-aws-instance",
@@ -302,9 +304,9 @@ results
                     "instance_type": "t2.medium",
                     "launch_time": "2023-06-05T03:50:36.000Z",
                     "x_network_interface_refs": [
-                        "4"
+                        "3"
                     ],
-                    "os_ref": "8",
+                    "os_ref": "7",
                     "tags": [
                         {
                             "Key": "Name",
@@ -313,18 +315,12 @@ results
                     ]
                 },
                 "3": {
-                    "type": "x-aws-resource",
-                    "instance_ref": "2",
-                    "resource_type": "Instance",
-                    "resource_role": "ACTOR"
-                },
-                "4": {
                     "type": "x-aws-network-interface",
                     "interface_id": "eni-055726ef79287c018",
                     "private_domain_refs": [
-                        "5"
+                        "4"
                     ],
-                    "public_domain_ref": "6",
+                    "public_domain_ref": "5",
                     "security_groups": [
                         {
                             "GroupId": "sg-07a9c2h8f2f18e7a6",
@@ -334,30 +330,30 @@ results
                     "subnet_id": "subnet-58ch16f",
                     "vpc_id": "vpc-10db926a"
                 },
-                "5": {
+                "4": {
                     "type": "domain-name",
                     "value": "ip-1-1-1-1.ec2.internal"
                 },
-                "6": {
+                "5": {
                     "type": "domain-name",
                     "value": "ec2-2-2-2-2.compute-1.amazonaws.com",
                     "resolves_to_refs": [
-                        "7"
+                        "6"
                     ]
                 },
-                "7": {
+                "6": {
                     "type": "ipv4-addr",
                     "value": "2.2.2.2"
                 },
-                "8": {
+                "7": {
                     "type": "software",
                     "name": "windows"
                 },
-                "9": {
+                "8": {
                     "type": "x-aws-finding-service",
                     "action": {
                         "action_type": "NETWORK_CONNECTION",
-                        "network_ref": "10"
+                        "network_ref": "9"
                     },
                     "event_first_seen": "2023-06-05T04:46:40.000Z",
                     "event_last_seen": "2023-06-05T04:47:36.000Z",
@@ -366,7 +362,7 @@ results
                         "Type": "default"
                     }
                 },
-                "10": {
+                "9": {
                     "type": "network-traffic",
                     "x_is_target_port_blocked": false,
                     "x_direction": "OUTBOUND",
@@ -375,16 +371,16 @@ results
                     "protocols": [
                         "udp"
                     ],
-                    "src_ref": "11",
-                    "dst_ref": "13",
+                    "src_ref": "10",
+                    "dst_ref": "12",
                     "dst_port": 53,
                     "x_dst_port_name": "DNS"
                 },
-                "11": {
+                "10": {
                     "type": "ipv4-addr",
                     "value": "1.1.1.1"
                 },
-                "12": {
+                "11": {
                     "type": "x-oca-geo",
                     "city_name": "Los Angeles",
                     "country_name": "United States",
@@ -393,15 +389,15 @@ results
                         "Lon": -118.2441
                     }
                 },
-                "13": {
+                "12": {
                     "type": "ipv4-addr",
-                    "x_geo_ref": "12",
+                    "x_geo_ref": "11",
                     "value": "8.8.8.8",
                     "belongs_to_refs": [
-                        "14"
+                        "13"
                     ]
                 },
-                "14": {
+                "13": {
                     "type": "autonomous-system",
                     "number": 15169,
                     "name": "GOOGLE",
@@ -517,27 +513,32 @@ aws_guardduty
 #### STIX Execute query - Output
 ```json
 {
-    "id": "observed-data--7335d4d1-37a7-42c9-b819-04a29f7dedf8",
+    "id": "observed-data--a618ce27-47e0-48b0-8b7c-b002c9c8bed6",
     "type": "observed-data",
     "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-    "created": "2023-07-07T07:08:56.795Z",
-    "modified": "2023-07-07T07:08:56.795Z",
+    "created": "2023-07-17T09:26:05.008Z",
+    "modified": "2023-07-17T09:26:05.008Z",
     "objects": {
         "0": {
-            "type": "x-aws",
+            "type": "x-aws-resource",
             "account_id": "912345678901",
             "partition": "aws",
-            "region": "us-east-1"
+            "region": "us-east-1",
+            "access_key_ref": "2",
+            "s3_bucket_refs": [
+                "3"
+            ],
+            "resource_type": "S3Bucket",
+            "resource_role": "TARGET"
         },
         "1": {
             "type": "x-ibm-finding",
-            "x_aws_ref": "0",
+            "x_resource_ref": "0",
             "x_arn": "arn:aws:guardduty:us-east-1:912345678901:detector/aabbccdd/finding/xyz",
             "description": "An API was used to access a bucket from an IP address on a custom threat list.",
             "alert_id": "xyz",
-            "x_resource_ref": "3",
             "x_schema_version": "2.0",
-            "x_service_ref": "5",
+            "x_service_ref": "4",
             "x_archived": false,
             "event_count": 2,
             "x_detector_id": "aabbccdd",
@@ -555,15 +556,6 @@ aws_guardduty
             "x_user_type": "IAMUser"
         },
         "3": {
-            "type": "x-aws-resource",
-            "access_key_ref": "2",
-            "s3_bucket_refs": [
-                "4"
-            ],
-            "resource_type": "S3Bucket",
-            "resource_role": "TARGET"
-        },
-        "4": {
             "type": "x-aws-s3-bucket",
             "arn": "arn:aws:s3:::sampleguardtest",
             "name": "sampleguardtest",
@@ -597,18 +589,18 @@ aws_guardduty
             },
             "bucket_permission": "NOT_PUBLIC"
         },
-        "5": {
+        "4": {
             "type": "x-aws-finding-service",
             "action": {
                 "action_type": "AWS_API_CALL",
                 "api_called": "DeleteObjects",
                 "caller_type": "Remote IP",
-                "remote_ref": "7",
+                "remote_ref": "6",
                 "service_name": "s3.amazonaws.com",
                 "affected_resources": {}
             },
             "evidence_refs": [
-                "9"
+                "8"
             ],
             "event_first_seen": "2023-06-08T08:17:05.000Z",
             "event_last_seen": "2023-06-08T08:17:05.000Z",
@@ -617,7 +609,7 @@ aws_guardduty
                 "Type": "default"
             }
         },
-        "6": {
+        "5": {
             "type": "x-oca-geo",
             "city_name": "Ashburn",
             "country_name": "United States",
@@ -626,22 +618,22 @@ aws_guardduty
                 "Lon": -77.4903
             }
         },
-        "7": {
+        "6": {
             "type": "ipv4-addr",
-            "x_geo_ref": "6",
+            "x_geo_ref": "5",
             "value": "4.5.6.7",
             "belongs_to_refs": [
-                "8"
+                "7"
             ]
         },
-        "8": {
+        "7": {
             "type": "autonomous-system",
             "number": 14618,
             "name": "AMAZON-AES",
             "x_isp": "Amazon.com",
             "x_organisation": "Amazon.com"
         },
-        "9": {
+        "8": {
             "type": "x-aws-evidence",
             "threat_intelligence_list_name": "threat-list2",
             "threat_names": [
