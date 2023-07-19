@@ -1,0 +1,394 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "resource.instanceDetails.networkInterfaces.privateIpAddresses.privateIpAddress",
+        "resource.instanceDetails.networkInterfaces.publicIp",
+        "service.action.networkConnectionAction.remoteIpDetails.ipAddressV4",
+        "service.action.awsApiCallAction.remoteIpDetails.ipAddressV4",
+        "service.action.kubernetesApiCallAction.remoteIpDetails.ipAddressV4"
+      ],
+      "x_geo_ref.country_name": [
+        "service.action.networkConnectionAction.remoteIpDetails.country.countryName",
+        "service.action.awsApiCallAction.remoteIpDetails.country.countryName"
+      ],
+      "belongs_to_refs[*].number": [
+        "service.action.networkConnectionAction.remoteIpDetails.organization.asn",
+        "service.action.awsApiCallAction.remoteIpDetails.organization.asn"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": [
+        "resource.instanceDetails.networkInterfaces.ipv6Addresses"
+      ]
+    }
+  },
+  "autonomous-system": {
+    "fields": {
+      "number": [
+        "service.action.networkConnectionAction.remoteIpDetails.organization.asn",
+        "service.action.awsApiCallAction.remoteIpDetails.organization.asn"
+      ],
+      "name": [
+        "service.action.networkConnectionAction.remoteIpDetails.organization.asnOrg",
+        "service.action.awsApiCallAction.remoteIpDetails.organization.asnOrg"
+      ]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": [
+        "service.action.networkConnectionAction.localPortDetails.port"
+      ],
+      "dst_port": [
+        "service.action.networkConnectionAction.remotePortDetails.port"
+      ],
+      "protocols[*]": [
+        "service.action.networkConnectionAction.protocol"
+      ],
+      "src_ref.value": [
+        "resource.instanceDetails.networkInterfaces.privateIpAddresses.privateIpAddress"
+      ],
+      "dst_ref.value": [
+        "service.action.networkConnectionAction.remoteIpDetails.ipAddressV4",
+        "service.action.kubernetesApiCallAction.remoteIpDetails.ipAddressV4"
+      ],
+      "x_is_target_port_blocked": [
+        "service.action.networkConnectionAction.blocked"
+      ],
+      "x_direction": [
+        "service.action.networkConnectionAction.connectionDirection"
+      ],
+      "extensions.'http-request-ext'.request_value": [
+        "service.action.kubernetesApiCallAction.requestUri"
+      ]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": [
+        "resource.accessKeyDetails.principalId"
+      ],
+      "x_access_key_id": [
+        "resource.accessKeyDetails.accessKeyId"
+      ],
+      "display_name": [
+        "resource.accessKeyDetails.userName",
+        "resource.kubernetesDetails.kubernetesUserDetails.username"
+      ],
+      "x_user_type": [
+        "resource.accessKeyDetails.userType"
+      ]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": [
+        "resource.instanceDetails.networkInterfaces.publicDnsName",
+        "service.action.dnsRequestAction.domain"
+      ]
+    }
+  },
+  "process": {
+    "fields": {
+      "binary_ref.hashes.'SHA-256'": [
+        "service.runtimeDetails.process.executableSha256"
+      ]
+    }
+  },
+  "file": {
+    "fields": {
+      "hashes.'SHA-256'": [
+        "service.runtimeDetails.process.executableSha256",
+        "service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.filePaths.hash"
+      ],
+      "x_path": [
+        "service.runtimeDetails.process.executablePath"
+      ],
+      "hashes.'SHA-1'": [
+        "service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.filePaths.hash"
+      ],
+      "hashes.MD5": [
+        "service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.filePaths.hash"
+      ],
+      "x_unknown_hash": [
+        "service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.filePaths.hash"
+      ]
+    }
+  },
+  "x-oca-geo": {
+    "fields": {
+      "country_name": [
+        "service.action.networkConnectionAction.remoteIpDetails.country.countryName",
+        "service.action.awsApiCallAction.remoteIpDetails.country.countryName"
+      ],
+      "city_name": [
+        "service.action.awsApiCallAction.remoteIpDetails.city.cityName",
+        "service.action.networkConnectionAction.remoteIpDetails.city.cityName"
+      ]
+    }
+  },
+  "x-aws-resource": {
+    "fields": {
+      "account_id": [
+        "accountId"
+      ],
+      "region": [
+        "region"
+      ],
+      "instance_ref.image_id": [
+        "resource.instanceDetails.imageId"
+      ],
+      "s3_bucket_refs[*].name": [
+        "resource.s3BucketDetails.name"
+      ],
+      "rds_database_ref.instance_id": [
+        "resource.rdsDbInstanceDetails.dbInstanceIdentifier"
+      ],
+      "rds_database_ref.cluster_id": [
+        "resource.rdsDbInstanceDetails.dbClusterIdentifier"
+      ],
+      "access_key_ref.user_id": [
+        "resource.accessKeyDetails.principalId"
+      ],
+      "lambda_details_ref.function_name": [
+        "resource.lambdaDetails.functionName"
+      ],
+      "ecs_cluster_ref.name": [
+        "resource.ecsClusterDetails.name"
+      ],
+      "eks_cluster_ref.name": [
+        "resource.eksClusterDetails.name"
+      ],
+      "resource_type": [
+        "resource.resourceType"
+      ],
+      "resource_role": [
+        "service.resourceRole"
+      ]
+    }
+  },
+  "x-aws-instance": {
+    "fields": {
+      "image_id": [
+        "resource.instanceDetails.imageId"
+      ],
+      "profile_id": [
+        "resource.instanceDetails.iamInstanceProfile.id"
+      ],
+      "instance": [
+        "resource.instanceDetails.instanceId"
+      ],
+      "tag_key": [
+        "resource.instanceDetails.tags.key"
+      ],
+      "tag_value": [
+        "resource.instanceDetails.tags.value"
+      ],
+      "outpost_arn": [
+        "resource.instanceDetails.outpostArn"
+      ]
+    }
+  },
+  "x-aws-network-interface": {
+    "fields": {
+      "security_group_id": [
+        "resource.instanceDetails.networkInterfaces.securityGroups.groupId"
+      ],
+      "security_group_name": [
+        "resource.instanceDetails.networkInterfaces.securityGroups.groupName"
+      ],
+      "subnet_id": [
+        "resource.instanceDetails.networkInterfaces.subnetId"
+      ],
+      "vpc_id": [
+        "resource.instanceDetails.networkInterfaces.vpcId"
+      ]
+    }
+  },
+  "x-aws-s3-bucket": {
+    "fields": {
+      "name": [
+        "resource.s3BucketDetails.name"
+      ],
+      "bucket_permission": [
+        "resource.s3BucketDetails.publicAccess.effectivePermission"
+      ],
+      "tag_key": [
+        "resource.s3BucketDetails.tags.key"
+      ],
+      "tag_value": [
+        "resource.s3BucketDetails.tags.value"
+      ],
+      "bucket_type": [
+        "resource.s3BucketDetails.type"
+      ]
+    }
+  },
+  "x-aws-rds-db-instance": {
+    "fields": {
+      "cluster_id": [
+        "resource.rdsDbInstanceDetails.dbClusterIdentifier"
+      ],
+      "engine": [
+        "resource.rdsDbInstanceDetails.engine"
+      ],
+      "instance_id": [
+        "resource.rdsDbInstanceDetails.dbInstanceIdentifier"
+      ],
+      "tag_key": [
+        "resource.rdsDbInstanceDetails.tags.key"
+      ],
+      "tag_value": [
+        "resource.rdsDbInstanceDetails.tags.value"
+      ],
+      "anomalous_login_user_ref.user_name": [
+        "resource.rdsDbUserDetails.user"
+      ]
+    }
+  },
+  "x-aws-rds-db-user": {
+    "fields": {
+      "user_name": [
+        "resource.rdsDbUserDetails.user"
+      ]
+    }
+  },
+  "x-aws-lambda": {
+    "fields": {
+      "function_arn": [
+        "resource.lambdaDetails.functionArn"
+      ],
+      "function_name": [
+        "resource.lambdaDetails.functionName"
+      ],
+      "tag_key": [
+        "resource.lambdaDetails.tags.key"
+      ],
+      "tag_value": [
+        "resource.lambdaDetails.tags.value"
+      ]
+    }
+  },
+  "x-aws-ecs-cluster": {
+    "fields": {
+      "name": [
+        "resource.ecsClusterDetails.name"
+      ],
+      "task.definition_arn": [
+        "resource.ecsClusterDetails.taskDetails.definitionArn"
+      ]
+    }
+  },
+  "x-aws-container": {
+    "fields": {
+      "image": [
+        "resource.ecsClusterDetails.taskDetails.containers.image",
+        "resource.kubernetesDetails.kubernetesWorkloadDetails.containers.image",
+        "resource.containerDetails.image"
+      ],
+      "image_prefix": [
+        "resource.kubernetesDetails.kubernetesWorkloadDetails.containers.imagePrefix"
+      ]
+    }
+  },
+  "x-aws-kubernetes-workload": {
+    "fields": {
+      "workload_name": [
+        "resource.kubernetesDetails.kubernetesWorkloadDetails.name"
+      ],
+      "workload_namespace": [
+        "resource.kubernetesDetails.kubernetesWorkloadDetails.namespace"
+      ]
+    }
+  },
+  "x-aws-eks-cluster": {
+    "fields": {
+      "name": [
+        "resource.eksClusterDetails.name"
+      ]
+    }
+  },
+  "x-aws-ebs-volume-malware-scan": {
+    "fields": {
+      "scan_id": [
+        "service.ebsVolumeScanDetails.scanId"
+      ]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "confidence": [
+        "confidence"
+      ],
+      "alert_id": [
+        "id"
+      ],
+      "x_archived": [
+        "service.archived"
+      ],
+      "x_severity": [
+        "severity"
+      ],
+      "name": [
+        "type"
+      ],
+      "x_resource_ref.resource_type": [
+        "resource.resourceType"
+      ],
+      "src_application_user_ref.display_name": [
+        "resource.kubernetesDetails.kubernetesUserDetails.username"
+      ]
+    }
+  },
+  "x-aws-finding-service": {
+    "fields": {
+      "x_action.action_type": [
+        "service.action.actionType"
+      ],
+      "x_action.api_called": [
+        "service.action.awsApiCallAction.api"
+      ],
+      "x_action.caller_account_id": [
+        "service.action.awsApiCallAction.remoteAccountDetails.accountId"
+      ],
+      "x_action.caller_type": [
+        "service.action.awsApiCallAction.callerType"
+      ],
+      "x_action.service_name": [
+        "service.action.awsApiCallAction.serviceName"
+      ],
+      "x_action.remote_ref.value": [
+        "service.action.awsApiCallAction.remoteIpDetails.ipAddressV4"
+      ],
+      "x_action.error_code": [
+        "service.action.awsApiCallAction.errorCode"
+      ],
+      "x_action.is_caller_account_affiliated_to_aws": [
+        "service.action.awsApiCallAction.RemoteAccountDetails.affiliated"
+      ],
+      "additional_info": [
+        "service.additionalInfo.threatListName"
+      ]
+    }
+  },
+  "x-aws-threat": {
+    "fields": {
+      "threat_name": [
+        "service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.name"
+      ],
+      "x_severity": [
+         "service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.severity"
+      ]
+    }
+  },
+  "x-aws-evidence": {
+    "fields": {
+      "threat_intelligence_list_name": [
+        "service.additionalInfo.threatListName"
+      ]
+    }
+  }
+}
