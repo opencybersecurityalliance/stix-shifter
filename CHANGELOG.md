@@ -16,6 +16,36 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
+## 6.0.0 (2023-07-19)
+
+### Breaking changes:
+
+*  Adding to stix dialect feature [#1231](https://github.com/opencybersecurityalliance/stix-shifter/pull/1231)
+
+### Deprecations:
+
+### Changes:
+
+*  AWS GuardDuty UDI Connector [#1525](https://github.com/opencybersecurityalliance/stix-shifter/pull/1525)
+*  Framework Changes for Handling Nested List of Dictionaries [#1516](https://github.com/opencybersecurityalliance/stix-shifter/pull/1516)
+*  Move results processing to transmission results [#1519](https://github.com/opencybersecurityalliance/stix-shifter/pull/1519)
+*  to-STIX dialects documentation added [#1515](https://github.com/opencybersecurityalliance/stix-shifter/pull/1515)
+*  Splunk UDI Connector -Upgrade [#1479](https://github.com/opencybersecurityalliance/stix-shifter/pull/1479)
+*  Azure log analytics mapping improvements [#1496](https://github.com/opencybersecurityalliance/stix-shifter/pull/1496)
+*  Update CLA link in CONTRIBUTING.md [#1517](https://github.com/opencybersecurityalliance/stix-shifter/pull/1517)
+*  Reaqta name change [#1514](https://github.com/opencybersecurityalliance/stix-shifter/pull/1514)
+
+### Fixes:
+
+*  ibm_security_verify: fixes [#1522](https://github.com/opencybersecurityalliance/stix-shifter/pull/1522)
+*  LIKE operator only added for events queries [#1521](https://github.com/opencybersecurityalliance/stix-shifter/pull/1521)
+
+### Dependency update:
+
+*  Remove ancient 'uuid==1.30' from requirements.txt [#1524](https://github.com/opencybersecurityalliance/stix-shifter/pull/1524)
+
+--------------------------------------
+
 ## 5.3.1 (2023-06-15)
 
 ### Breaking changes:
