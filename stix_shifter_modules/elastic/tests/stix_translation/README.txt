@@ -1,1 +1,0 @@
-stix_shifter_modules/splunk/tests
