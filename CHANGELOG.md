@@ -16,13 +16,15 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
-## 6.0.0 (2023-07-19)
+## 6.0.0 (2023-07-21)
 
 ### Breaking changes:
 
 *  Adding to stix dialect feature [#1231](https://github.com/opencybersecurityalliance/stix-shifter/pull/1231)
 
 ### Deprecations:
+
+* Removed various unfinished and abandoned connectors [#1537](https://github.com/opencybersecurityalliance/stix-shifter/pull/1537)
 
 ### Changes:
 
@@ -42,6 +44,8 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 ### Dependency update:
 
+*  Attrs dependency fix and connector cleanup [#1537](https://github.com/opencybersecurityalliance/stix-shifter/pull/1537)
+*  fix #1533 with type import update [#1534](https://github.com/opencybersecurityalliance/stix-shifter/pull/1534)
 *  Remove ancient 'uuid==1.30' from requirements.txt [#1524](https://github.com/opencybersecurityalliance/stix-shifter/pull/1524)
 
 --------------------------------------
