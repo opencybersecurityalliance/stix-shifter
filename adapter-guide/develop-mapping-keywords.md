@@ -1,10 +1,10 @@
 # To STIX mapping Keywords
 
-There are keywords which need to be specified in the to-stix mappings in order to perform specific operations on the datasource fields. There are two types of keywords:
+There are keywords which need to be specified in the `to-stix` mappings in order to perform specific operations on the datasource fields. There are two types of keywords:
 1. Required
 2. Optional 
 
-Below table contains the keywords and their usages:
+The below table contains the keywords and their usages:
 
 ## Required Keywords
 
@@ -12,7 +12,7 @@ Below table contains the keywords and their usages:
 <tr>
 <td> Keywords </td> <td> Type </td> <td> Descriptions </td> <td> Usage </td> <td> Example </td>
 </tr>
-<td> key </td> <td> String </td> <td> The STIX object and properties are defined in path like dotted notations.</td> <td> "key": "stix-object.stix_object_property.sub_property" </td>
+<td><b> key </b></td> <td> String </td> <td> The STIX object and properties whose path is defined in dot notation.</td> <td> "key": "stix-object.stix_object_property.sub_property" </td>
 <td>
 
 ```json
@@ -25,7 +25,7 @@ Below table contains the keywords and their usages:
 ```
 </td>
 </tr>
-<td> object </td> <td> String </td> <td> The name specified in the object is used to add properties of same object. </td> <td> "object": "src_ip" </td>
+<td><b> object </b></td> <td> String </td> <td> The name specified in the object is used to add properties of same the object. </td> <td> "object": "src_ip" </td>
 <td>
 
 ```json
@@ -48,31 +48,31 @@ Below table contains the keywords and their usages:
 <td> Keywords </td> <td> Type </td> <td> Descriptions </td> <td> Usage </td>
 </tr>
 <tr>
-<td> references </td> <td> String/List(string) </td> <td> Specify a named objects to reference in another object. </td> <td> "references": "src_ip" <br>"references": ["dst_mac"] </td>
+<td><b> references </b></td> <td> String/List(string) </td> <td> Specifies named objects to reference in another object. </td> <td> "references": "src_ip" <br>"references": ["dst_mac"] </td>
 </tr>
 <tr>
-<td> transformer </td> <td> String </td> <td> Name of the function to apply on datasource value </td> <td> "transformer": "ToInteger" </td>
+<td><b> transformer </b></td> <td> String </td> <td> The function applied to the datasource value when writting data to STIX.</td> <td> "transformer": "ToInteger" </td>
 </tr>
 <tr>
-<td> value </td> <td> Any </td> <td> Constant (literal) value for property </td> <td> "value": "test" </td>
+<td><b> value </b></td> <td> Any </td> <td> A constant (literal) value to assign to the target STIX property. </td> <td> "value": "test" </td>
 </tr>
 <tr>
-<td> unwrap </td> <td> Boolean </td> <td> Unwrap an array of stix values to separate stix objects if the keyword value is set to True </td> <td> "unwrap": true </td>
+<td><b> unwrap </b></td> <td> Boolean </td> <td> Unwrap an array of STIX values to separate STIX objects if the keyword value is set to True </td> <td> "unwrap": true </td>
 </tr>
 <tr>
-<td> group </td> <td> Boolean </td> <td> Combine the references into a list </td> <td> "group" : true </td>
+<td><b> group </b></td> <td> Boolean </td> <td> Combine the references into a list </td> <td> "group" : true </td>
 </tr>
 <tr>
-<td> group_ref </td> <td> Boolean </td> <td> This keyword needs to be used when there is a nested list of dictionaries and each dictionary item creates an object. This keyword groups together references in a list and set where the object is mapped. </td> <td> "group_ref": true </td>
+<td><b> group_ref </b></td> <td> Boolean </td> <td> This keyword needs to be used when there is a nested list of dictionaries and each dictionary item creates an object. This keyword groups together references in a list and sets where the object is mapped. </td> <td> "group_ref": true </td>
 </tr>
-<td> ds_key </td> <td> String </td> <td> This keyword is used when datasource results are formatted to modify some field names. The value assigned to the keyword determines the mapping of a STIX objects. This keyword is only used in aws_athen and aws_cloud_watch_logs module to resolve nested dictionary mappings. You maynot need this keywrod since nested dictionary mappings are now handled by JSON to STIX translation utility. </td> <td> "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid" </td>
+<td><b> ds_key </b></td> <td> String </td> <td> This keyword is used when datasource results are formatted to modify some field names. The value assigned to the keyword determines the mapping of a STIX object. This keyword is only used in the aws_athena and aws_cloud_watch_logs modules to resolve nested dictionary mappings. <b>This keyword has been deprecated since nested dictionary mappings are now handled by the JSON to STIX translation utility.</b> </td> <td> "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid" </td>
 </tr>
 </table>
 
 
-### Examples of Optional keywords
+## Examples of Optional keywords:
 
-####  unwrap 
+##  unwrap 
 
 **Mapping:**
 
@@ -97,7 +97,7 @@ Below table contains the keywords and their usages:
 ```
 **STIX Translation**
 
-Below stix bundle contains two ipv4-addr objects which are created based on `unwrap` keyword:
+This STIX bundle contains two ipv4-addr objects which are created based on `unwrap` keyword:
 
 ```
 {
@@ -138,7 +138,9 @@ Below stix bundle contains two ipv4-addr objects which are created based on `unw
 }
 ```
 
-####  group 
+<br>
+
+##  group 
 
 **Mapping:**
 
@@ -232,7 +234,9 @@ Below stix bundle contains two ipv4-addr objects which are created based on `unw
 }
 ```
 
-####  group_ref 
+<br>
+
+##  group_ref 
 
 **Mapping:**
 
@@ -331,8 +335,9 @@ List of nested dictionary in datasource results are referenced in `scanned_refs`
 }
 ```
 
+<br>
 
-####  value 
+## value 
 
 **Mapping:**
 
@@ -390,7 +395,9 @@ List of nested dictionary in datasource results are referenced in `scanned_refs`
 }
 ```
 
-####  references 
+<br>
+
+##  references 
 
 **Mapping:**
 
@@ -468,7 +475,9 @@ Source `ipv4-addr` object number is referenced in `network-traffic` object:
 }
 ```
 
-####   transformer  
+<br>
+
+##   transformer  
 
 **Mapping:**
 ```
