@@ -16,6 +16,18 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
+## 6.0.1 (2023-07-24)
+
+### Changes:
+
+*  To-STIX mapping keyword documentation [#1529](https://github.com/opencybersecurityalliance/stix-shifter/pull/1529)
+
+### Fixes:
+
+*  Setup fix for installing libraries from commit hash [#1539](https://github.com/opencybersecurityalliance/stix-shifter/pull/1539)
+
+--------------------------------------
+
 ## 6.0.0 (2023-07-21)
 
 ### Breaking changes:
