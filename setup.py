@@ -131,7 +131,7 @@ for project_name in projects.keys():
             lines = f.readlines()
         lines = [x.strip() for x in lines]
         lines = list(filter(lambda s: (not s.startswith('#')) and len(s) > 0, lines))
-        lines = list(filter(lambda s: (not s.startswith('git+')) and len(s)>0, lines))
+        lines = list(filter(lambda s: (not 'git+' in s) and len(s)>0, lines))
         install_requires.update(lines)
     install_requires = list(install_requires)
     print('install_requires: %s' % install_requires)
