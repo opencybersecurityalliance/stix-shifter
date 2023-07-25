@@ -7,7 +7,10 @@ The steps below assume you have renamed the `async_template` module directory to
 1. [Edit the from_stix_map.json file](#step-2-edit-the-from_stix_map-json-file)
 1. [Edit the operators.json file](#step-3-edit-the-operators-json-file)
 1. [Edit the query_constructor.py file](#step-4-edit-the-query-constructor-file)
-1. [Edit the to_stix_map.json file](#step-5-edit-the-to_stix_map-json-file)
+1. [Edit the to_stix_map.json file](#step-5-edit-the-to_stix_map-json-file) 
+  
+    Refer to the [keywords document](develop-mapping-keywords.md) when creating the to-STIX mappings.
+    
 1. [Add custom data transformers (optional)](#step-6-add-custom-data-transformers-(optional))
 1. [Verify that the translation module was created successfully](#step-7-verify-that-the-translation-module-was-created-successfully)
 
@@ -232,7 +235,7 @@ The example provided in the template connector is based on an SQL language. This
 
 ## Step 5. Edit the to_stix_map JSON file
 
-The `to_stix_map.json` file is where you define HOW to translate data source query results into a bundle of STIX objects. Query results must be in JSON format; otherwise, the data source cannot be supported.
+The `to_stix_map.json` file is where you define HOW to translate data source query results into a bundle of STIX objects. Query results must be in JSON format; otherwise, the data source cannot be supported. There are keywords which need to be specified in the to-stix mappings in order to perform specific operations on the datasource fields. To understand the keywords and their usage, see [To STIX mapping Keywords](develop-mapping-keywords.md)
 
 Results from unmapped data source fields are ignored during translation and are not included in the bundle.
 
