@@ -16,6 +16,6 @@ python-dateutil==2.8.2
 requests_toolbelt==0.10.1
 stix2-matcher==3.0.0
 stix2-patterns==1.3.2
-stix2-validator -e git+https://github.com/oasis-open/cti-stix-validator.git@eafb6096a07d9a9f84f521b3abac54e167148c31#egg=stix2-validator
+git+https://github.com/oasis-open/cti-stix-validator.git@eafb6096a07d9a9f84f521b3abac54e167148c31#egg=stix2-validator
 xmltodict==0.13.0
 urllib3==1.26.15
