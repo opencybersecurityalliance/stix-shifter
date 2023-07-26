@@ -481,12 +481,13 @@
 | x-aws-kubernetes-workload | workload_type |  Resource.KubernetesDetails.KubernetesWorkloadDetails.Type |
 | x-aws-kubernetes-workload | workload_id |  Resource.KubernetesDetails.KubernetesWorkloadDetails.Uid |
 | x-aws-kubernetes-workload | volumes |  Resource.KubernetesDetails.KubernetesWorkloadDetails.Volumes |
-| <br> | | |
-| x-aws-kubernetes | runtime_context_ref | Service.RuntimeDetails.Context.ModifiedAt |
-| x-aws-kubernetes | runtime_context_ref | Service.RuntimeDetails.Context.ModuleName |
-| x-aws-kubernetes | runtime_context_ref | Service.RuntimeDetails.Context.ScriptPath |
-| x-aws-kubernetes | runtime_observed_process_ref | Service.RuntimeDetails.Process.Name |
-| x-aws-kubernetes | runtime_observed_process_ref | Service.RuntimeDetails.Process.Pid |
+| x-aws-kubernetes-workload | runtime_context_ref | Service.RuntimeDetails.Context.ModifiedAt |
+| x-aws-kubernetes-workload | runtime_context_ref | Service.RuntimeDetails.Context.ModuleName |
+| x-aws-kubernetes-workload | runtime_context_ref | Service.RuntimeDetails.Context.ScriptPath |
+| x-aws-kubernetes-workload | runtime_context_ref | Service.RuntimeDetails.Context.ModifyingProcess.Name |
+| x-aws-kubernetes-workload | runtime_context_ref | Service.RuntimeDetails.Context.TargetProcess.Name |
+| x-aws-kubernetes-workload | runtime_observed_process_ref | Service.RuntimeDetails.Process.Name |
+| x-aws-kubernetes-workload | runtime_observed_process_ref | Service.RuntimeDetails.Process.Pid |
 | <br> | | |
 | x-aws-eks-cluster | arn | Resource.EksClusterDetails.Arn |
 | x-aws-eks-cluster | created_at | Resource.EksClusterDetails.CreatedAt |
@@ -497,8 +498,6 @@
 | x-aws-eks-cluster | kubernetes_user_ref | Resource.KubernetesDetails.KubernetesUserDetails.Uid |
 | x-aws-eks-cluster | kubernetes_user_ref | Resource.KubernetesDetails.KubernetesUserDetails.Username |
 | x-aws-eks-cluster | kubernetes_workload_ref | Resource.kubernetesDetails.kubernetesWorkloadDetails.Name |
-| x-aws-eks-cluster | runtime_context_ref | Service.RuntimeDetails.Context.ModifyingProcess.Name |
-| x-aws-eks-cluster | runtime_context_ref | Service.RuntimeDetails.Context.TargetProcess.Name |
 | <br> | | |
 | x-aws-ebs-volume-malware-scan | scan_completed_at | Service.EbsVolumeScanDetails.ScanCompletedAt |
 | x-aws-ebs-volume-malware-scan | highest_severity_threat.total_infected_files | Service.EbsVolumeScanDetails.ScanDetections.HighestSeverityThreatDetails.Count |
@@ -582,6 +581,7 @@
 | x-aws-runtime-context | script_path | Service.RuntimeDetails.Context.ScriptPath |
 | x-aws-runtime-context | shell_history_file_path | Service.RuntimeDetails.Context.ShellHistoryFilePath |
 | x-aws-runtime-context | socket_path | Service.RuntimeDetails.Context.SocketPath |
+| x-aws-runtime-context | target_process_ref | Service.RuntimeDetails.Context.TargetProcess.Name |
 | <br> | | |
 | x-aws-threat | total_files_infected | Service.EbsVolumeScanDetails.ScanDetections.ThreatDetectedByName.ThreatNames.ItemCount |
 | x-aws-threat | threat_name | Service.EbsVolumeScanDetails.ScanDetections.ThreatDetectedByName.ThreatNames.Name |

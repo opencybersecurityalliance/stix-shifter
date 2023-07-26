@@ -1580,7 +1580,8 @@
               },
               {
                 "key": "ipv4-addr.x_geo_ref",
-                "object": "dst_ip"
+                "object": "dst_ip",
+                "references": "remote_geo"
               }
             ]
           },
@@ -1592,7 +1593,8 @@
               },
               {
                 "key": "ipv4-addr.x_geo_ref",
-                "object": "dst_ip"
+                "object": "dst_ip",
+                "references": "remote_geo"
               }
             ]
           },
@@ -1611,10 +1613,15 @@
       "key": "x-ibm-finding.x_archived",
       "object": "finding"
     },
-    "Count": {
-      "key": "x-ibm-finding.event_count",
-      "object": "finding"
-    },
+    "Count": [
+      {
+        "key": "x-ibm-finding.event_count",
+        "object": "finding"
+      },
+      {
+        "key": "number_observed",
+        "transformer": "ToInteger"
+      }],
     "DetectorId": {
       "key": "x-ibm-finding.x_detector_id",
       "object": "finding"
@@ -1844,7 +1851,7 @@
             "transformer": "FormatDateTimeObjectToTimestamp"
           },
           {
-            "key": "x-aws-kubernetes.runtime_context_ref",
+            "key": "x-aws-kubernetes-workload.runtime_context_ref",
             "object": "kubernetes",
             "references": "runtime"
           }
@@ -1903,10 +1910,8 @@
               },
               {
                 "key": "process.child_refs",
-                "object": [
-                  "runtime_modi_process_lineage"
-                ],
-                "references": "runtime_modi_child_process_lineage"
+                "object": "runtime_modi_process_lineage",
+                "references": ["runtime_modi_child_process_lineage"]
               }
             ],
             "ParentUuid": {
@@ -1958,7 +1963,7 @@
               "references": "runtime_modi_process"
             },
             {
-              "key": "x-aws-eks-cluster.runtime_context_ref",
+              "key": "x-aws-kubernetes-workload.runtime_context_ref",
               "object": "kubernetes",
               "references": "runtime"
             }
@@ -1970,10 +1975,8 @@
             },
             {
               "key": "process.child_refs",
-              "object": [
-                "runtime_modi_process"
-              ],
-              "references": "runtime_modi_child_process"
+              "object": "runtime_modi_process",
+              "references": ["runtime_modi_child_process"]
             }
           ],
           "ParentUuid": {
@@ -2036,7 +2039,7 @@
             "references": "runtime_file"
           },
           {
-            "key": "x-aws-kubernetes.runtime_context_ref",
+            "key": "x-aws-kubernetes-workload.runtime_context_ref",
             "object": "kubernetes",
             "references": "runtime_file"
           }
@@ -2067,7 +2070,7 @@
             "object": "runtime"
           },
           {
-            "key": "x-aws-kubernetes.runtime_context_ref",
+            "key": "x-aws-kubernetes-workload.runtime_context_ref",
             "object": "kubernetes",
             "references": "runtime"
           }
@@ -2134,10 +2137,8 @@
               },
               {
                 "key": "process.child_refs",
-                "object": [
-                  "runtime_target_lineage_process"
-                ],
-                "references": "runtime_target_child_lineage_process"
+                "object": "runtime_target_lineage_process",
+                "references": ["runtime_target_child_lineage_process"]
               }
             ],
             "ParentUuid": {
@@ -2184,12 +2185,12 @@
               "object": "runtime_target_process"
             },
             {
-              "key": "x-aws-runtime-details.target_process_ref",
+              "key": "x-aws-runtime-context.target_process_ref",
               "object": "runtime",
               "references": "runtime_target_process"
             },
             {
-              "key": "x-aws-eks-cluster.runtime_context_ref",
+              "key": "x-aws-kubernetes-workload.runtime_context_ref",
               "object": "kubernetes",
               "references": "runtime"
             }
@@ -2201,10 +2202,8 @@
             },
             {
               "key": "process.child_refs",
-              "object": [
-                "runtime_target_process"
-              ],
-              "references": "runtime_target_child_process"
+              "object": "runtime_target_process",
+              "references": ["runtime_target_child_process"]
             }
           ],
           "ParentUuid": {
@@ -2242,7 +2241,7 @@
           ],
           "Uuid": {
             "key": "process.x_unique_id",
-            "object": "runtime_target_user"
+            "object": "runtime_target_process"
           }
         }
       },
@@ -2299,10 +2298,8 @@
             },
             {
               "key": "process.child_refs",
-              "object": [
-                "runtime_obs_lineage_process"
-              ],
-              "references": "runtime_obs_lineage_child_process"
+              "object": "runtime_obs_lineage_process",
+              "references": ["runtime_obs_lineage_child_process"]
             }
           ],
           "ParentUuid": {
@@ -2349,7 +2346,7 @@
             "object": "runtime_obs_process"
           },
           {
-            "key": "x-aws-kubernetes.runtime_observed_process_ref",
+            "key": "x-aws-kubernetes-workload.runtime_observed_process_ref",
             "object": "kubernetes",
             "references": "runtime_obs_process"
           }
@@ -2361,10 +2358,8 @@
           },
           {
             "key": "process.child_refs",
-            "object": [
-              "runtime_obs_process"
-            ],
-            "references": "runtime_obs_child_process"
+            "object": "runtime_obs_process",
+            "references": ["runtime_obs_child_process"]
           }
         ],
         "ParentUuid": {
@@ -2377,7 +2372,7 @@
             "object": "runtime_obs_process"
           },
           {
-            "key": "x-aws-kubernetes.runtime_observed_process_ref",
+            "key": "x-aws-kubernetes-workload.runtime_observed_process_ref",
             "object": "kubernetes",
             "references": "runtime_obs_process"
           }
