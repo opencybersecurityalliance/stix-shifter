@@ -113,14 +113,24 @@
       "transformer": "ConvertToReal"
     }
   ],
-  "first_timestamp": {
-    "key": "x-ibm-finding.start",
-    "object": "detection"
-  },
-  "last_timestamp": {
-    "key": "x-ibm-finding.end",
-    "object": "detection"
-  },
+  "first_timestamp": [
+    {
+      "key": "x-ibm-finding.start",
+      "object": "detection"
+    },
+    {
+      "key": "first_observed"
+    }
+  ],
+  "last_timestamp": [
+    {
+      "key": "x-ibm-finding.end",
+      "object": "detection"
+    },
+    {
+      "key": "last_observed"
+    }
+  ],
   "created_timestamp": {
     "key": "x-ibm-finding.time_observed",
     "object": "detection"
@@ -560,23 +570,23 @@
     "events": {
       "base_object": {
           "key": "x-ldap-event.base_object",
-          "object": "event"
+          "object": "ldap_event"
         },
       "request": {
         "key": "x-ldap-event.request",
-        "object": "event"
+        "object": "ldap_event"
       },
       "response_code": {
         "key": "x-ldap-event.response_code",
-        "object": "event"
+        "object": "ldap_event"
       },
       "num_response_objects": {
         "key": "x-ldap-event.num_response_objects",
-        "object": "event"
+        "object": "ldap_event"
       },
       "last_timestamp": {
         "key": "x-ldap-event.last_timestamp",
-        "object": "event"
+        "object": "ldap_event"
       }
     },
     "targets": {
@@ -616,10 +626,10 @@
       "group_ref": true
     },
     "groupEventReference": {
-      "key": "x-network-traffic.x_ldap_event_refs",
+      "key": "network-traffic.x_ldap_event_refs",
       "object": "nt_session",
       "references": [
-        "event"
+        "ldap_event"
       ],
       "group_ref": true
     },
@@ -944,7 +954,7 @@
           "transformer": "ToLowercaseArray"
         },
         "groupSessionReference": {
-          "key": "x-network-traffic.x_session_refs",
+          "key": "network-traffic.x_session_refs",
           "object": "event",
           "references": [
             "event_session"
