@@ -16,6 +16,18 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
+## 6.0.2 (2023-07-26)
+
+### Fixes:
+
+*  map_validator: make sure 'object' name is a str [#1540](https://github.com/opencybersecurityalliance/stix-shifter/pull/1540)
+
+### Dependency update:
+
+*  update stix2-validator library to 3.1.4 [#1542](https://github.com/opencybersecurityalliance/stix-shifter/pull/1542)
+
+--------------------------------------
+
 ## 6.0.1 (2023-07-24)
 
 ### Changes:
@@ -64,8 +76,6 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 ## 5.3.1 (2023-06-15)
 
-### Breaking changes:
-
 ### Deprecations:
 
 *  remove SNI from authentication options [#1498](https://github.com/opencybersecurityalliance/stix-shifter/pull/1498)
@@ -91,15 +101,9 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 *  x-oca-event.code switch from int to str [#1499](https://github.com/opencybersecurityalliance/stix-shifter/pull/1499)
 *  fix mapping references in elastic-ecs connector [#1471](https://github.com/opencybersecurityalliance/stix-shifter/pull/1471)
 
-### Dependency update:
-
 --------------------------------------
 
 ## 5.3.0 (2023-05-15)
-
-### Breaking changes:
-
-### Deprecations:
 
 ### Changes:
 
@@ -154,8 +158,6 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 
 *  Change QRadar domain name mapping [#1342](https://github.com/opencybersecurityalliance/stix-shifter/pull/1342)
 
-### Deprecations:
-
 ### Changes:
 
 *  update table of mappings for MS Graph, Elastic ECS, Microsoft Defender [#1445](https://github.com/opencybersecurityalliance/stix-shifter/pull/1445)
@@ -194,10 +196,6 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 --------------------------------------
 
 ## 5.1.1 (2023-03-21)
-
-### Breaking changes:
-
-### Deprecations:
 
 ### Changes:
 
@@ -275,10 +273,6 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 
 ## 4.6.0 (2023-01-24)
 
-### Breaking changes:
-
-### Deprecations:
-
 ### Changes:
 
 * Instructions for the usage of custom mappings [#1274](https://github.com/opencybersecurityalliance/stix-shifter/pull/1274)
@@ -319,10 +313,6 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 
 ## 4.5.2 (2022-11-21)
 
-### Breaking changes:
-
-### Deprecations:
-
 ### Changes:
 
 * AWS Athena, added external id support [#1187](https://github.com/opencybersecurityalliance/stix-shifter/pull/1187)
@@ -358,10 +348,6 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 
 ## 4.4.0 (2022-10-06)
 
-### Breaking changes:
-
-### Deprecations:
-
 ### Changes:
 
 * Add optional group parameter to connector configs [#1094](https://github.com/opencybersecurityalliance/stix-shifter/pull/1094)
@@ -385,10 +371,6 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 --------------------------------------
 
 ## 4.3.0 (2022-09-09)
-
-### Breaking changes:
-
-### Deprecations:
 
 ### Changes:
 
@@ -415,16 +397,9 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 * fix configuration in proofpoint and sumologic [#745](https://github.com/opencybersecurityalliance/stix-shifter/pull/745)
 * Validator review code change for Proofpoint [#739](https://github.com/opencybersecurityalliance/stix-shifter/pull/739)
 
-### Dependency update:
-
-
 --------------------------------------
 
-
 ## 4.2.0 (2022-06-29)
-### Breaking changes:
-
-### Deprecations:
 
 ### Changes:
 
@@ -463,14 +438,9 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 * Bump xmltodict from 0.12.0 to 0.13.0 [#934](https://github.com/opencybersecurityalliance/stix-shifter/pull/934)
 * Bump stix2-matcher from 2.0.1 to 2.0.2 [#915](https://github.com/opencybersecurityalliance/stix-shifter/pull/915)
 
-
 --------------------------------------
 
-
 ## 4.1.0 (2022-04-12)
-### Breaking changes:
-
-### Deprecations:
 
 ### Changes:
 
@@ -503,29 +473,26 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 * Secret server 1.9 [#836](https://github.com/opencybersecurityalliance/stix-shifter/pull/836)
 * Fixed calculating and updating deterministic IDs and the… [#826](https://github.com/opencybersecurityalliance/stix-shifter/pull/826)
 
-
 --------------------------------------
 
-
 ## 4.0.1 (2022-03-01)
-### Breaking changes:
-### Deprecations:
+
 ### Changes:
+
 * CrowdStrike connector mapping update [#823](https://github.com/opencybersecurityalliance/stix-shifter/pull/823)
 
-### Fixes:
 ### Dependency update:
+
 * Downgrade pyopenssl from 22.0.0 to 21.0.0
 
 --------------------------------------
 
 ## 4.0.0 (2022-02-23)
+
 ### Breaking changes:
 
 * Handling unmapped operators in stix pattern
 * Optimization of results translation 
-
-### Deprecations:
 
 ### Changes:
 
@@ -541,7 +508,6 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 * Keep both helper description and the link description in [818](https://github.com/opencybersecurityalliance/stix-shifter/pull/818)
 * Optimization of results translation in [#718](https://github.com/opencybersecurityalliance/stix-shifter/pull/718)
 * QRadar mapping update in [#751](https://github.com/opencybersecurityalliance/stix-shifter/pull/751)
-
 
 ### Fixes
 * Datadog ssl cert fix.[#758](https://github.com/opencybersecurityalliance/stix-shifter/pull/758)
