@@ -52,12 +52,9 @@ class Connector(BaseJsonSyncConnector):
             page = 1
 
             # changing offset to page number
-            if offset > length:
+            if offset >= length:
                 pagination_offset = offset % length
-                if pagination_offset < 5:
-                    page = round(offset / length) + 1
-                else:
-                    page = round(offset / length)
+                page = (offset // length) + 1
 
             # set total record count
             if self.api_client.result_limit < total_records:
