@@ -16,6 +16,15 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
+## 6.0.3 (2023-07-27)
+
+### Fixes:
+
+*  Fix stix_bundle connector results translation [#1545](https://github.com/opencybersecurityalliance/stix-shifter/pull/1545)
+
+
+--------------------------------------
+
 ## 6.0.2 (2023-07-26)
 
 ### Fixes:
