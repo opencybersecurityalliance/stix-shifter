@@ -436,4 +436,4 @@ vectra
 - [Vectra REST API Guide v2.4](https://support.vectra.ai/s/article/KB-VS-1626)
 - [Advanced Search Reference Guide](https://support.vectra.ai/s/article/KB-VS-1116)
 - [Understanding Vectra AI](https://support.vectra.ai/s/article/KB-VS-1285)
-- [Detection and Campaign lifespan and retention periods](https://support.vectra.ai/s/article/KB-VS-1099) 
+- [Detection and Campaign lifespan and retention periods](https://support.vectra.ai/s/article/KB-VS-1099)
