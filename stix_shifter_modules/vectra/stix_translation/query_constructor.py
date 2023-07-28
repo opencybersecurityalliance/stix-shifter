@@ -11,7 +11,6 @@ logger = logger.set_logger(__name__)
 
 START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
 STOP_TIME = datetime.utcnow()
-DEFAULT_LIMIT = 10000
 CONFIG_MAP_PATH = "json/config_map.json"
 
 # API query limit is 1024 (MAX_QUERY_LENGTH+TIMESTAMP_LENGTH)
@@ -412,9 +411,6 @@ class QueryStringPatternTranslator:
         :param pattern: expression object, ANTLR parsed expression object
         """
         query = self._parse_expression(pattern)
-        if self.options['result_limit'] > DEFAULT_LIMIT:
-            self.options['result_limit'] = DEFAULT_LIMIT
-
         vectra_queries = []
 
         # Query length exceed the max query limit will split the query
