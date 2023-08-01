@@ -15,8 +15,8 @@ release = '6.0.3'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    "myst_parser",
-    "sphinx_mdinclude"
+    "sphinx_mdinclude",
+    "myst_parser"
     ]
 
 templates_path = ['_templates']
