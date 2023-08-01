@@ -1,5 +1,2 @@
-What is STIX?
-----------
-
-.. mdinclude::
-    OVERVIEW.md
+```{include} OVERVIEW.md
+```

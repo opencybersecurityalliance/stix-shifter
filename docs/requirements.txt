@@ -1,3 +1,2 @@
 Sphinx==7.1.1
 myst-parser==2.0.0
-sphinx_mdinclude==0.5.3 
