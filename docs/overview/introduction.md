@@ -1,6 +1,5 @@
 What is STIX?
 ----------
 
-.. include::
-
+.. mdinclude::
     OVERVIEW.md

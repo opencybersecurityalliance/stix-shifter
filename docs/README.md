@@ -10,11 +10,6 @@ In addition to "finding" the data by using these patterns, STIX-Shifter also _tr
 
 For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Overview](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/OVERVIEW.md)
 
-.. toctree::
-   :maxdepth: 2
-
-/overview/OVERVIEW.md
-
 # Installation
 
 The recommended method for installing stix-shifter is via pip. Two prerequisite packages needs to be installed inlcuding the package of stix-shifter connector module to complete a stix-shifter connector installation. Run the below commands to install all the packages:
