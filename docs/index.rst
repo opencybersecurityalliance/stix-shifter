@@ -17,8 +17,8 @@ In addition to "finding" the data by using these patterns, STIX-Shifter also tra
 .. toctree::
    :maxdepth: 2
    
-   /overview/README.md
-   /overview/OVERVIEW.md
+   README.md
+   /overview/index.rst
 
 Indices and tables
 ==================

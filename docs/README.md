@@ -1,6 +1,3 @@
-[![example workflow](https://github.com/opencybersecurityalliance/stix-shifter/actions/workflows/main.yml/badge.svg)](https://github.com/opencybersecurityalliance/stix-shifter/actions)
-[![codecov](https://codecov.io/gh/opencybersecurityalliance/stix-shifter/branch/develop/graph/badge.svg?token=gQvl14peRj)](https://codecov.io/gh/opencybersecurityalliance/stix-shifter)
-
 # Introduction to STIX-Shifter
 
 STIX-shifter is an open source python library allowing software to connect to products that house data repositories by using STIX Patterning, and return results as STIX Observations.
@@ -13,6 +10,10 @@ In addition to "finding" the data by using these patterns, STIX-Shifter also _tr
 
 For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Overview](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/OVERVIEW.md)
 
+.. toctree::
+   :maxdepth: 2
+
+/overview/OVERVIEW.md
 
 # Installation
 
