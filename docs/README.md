@@ -8,7 +8,10 @@ In addition to "finding" the data by using these patterns, STIX-Shifter also _tr
 
 ## Project Overview and CLI Commands
 
-For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Overview](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/OVERVIEW.md)
+For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Overview]
+
+```{include} OVERVIEW.md
+```
 
 # Installation
 

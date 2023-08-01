@@ -18,7 +18,6 @@ In addition to "finding" the data by using these patterns, STIX-Shifter also tra
    :maxdepth: 2
    
    README.md
-   /overview/index.rst
 
 Indices and tables
 ==================
