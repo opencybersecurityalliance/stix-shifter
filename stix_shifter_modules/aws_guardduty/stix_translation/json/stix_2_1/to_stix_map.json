@@ -1613,10 +1613,16 @@
       "key": "x-ibm-finding.x_archived",
       "object": "finding"
     },
-    "Count": {
-      "key": "x-ibm-finding.event_count",
-      "object": "finding"
-    },
+    "Count": [
+      {
+        "key": "x-ibm-finding.event_count",
+        "object": "finding"
+      },
+      {
+         "key": "number_observed",
+         "transformer": "ToInteger"
+      }
+    ],
     "DetectorId": {
       "key": "x-ibm-finding.x_detector_id",
       "object": "finding"
