@@ -5,7 +5,9 @@ metadata:
   name: 'stix-shifter'
   description: Core open-source library and connectors used by UDI for federated search
   tags:
-    - node
+    - stix
+    - oca
+    - interoperability
   annotations:
     github.com/project-slug: opencybersecurityalliance/stix-shifter
     backstage.io/techdocs-ref: dir:.
