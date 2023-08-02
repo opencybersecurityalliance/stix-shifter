@@ -92,7 +92,9 @@ Refer to [Use of custom mappings](https://github.com/opencybersecurityalliance/s
 We are thrilled you are considering contributing! We welcome all contributors.
 Please read our [guidelines for contributing](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/CONTRIBUTING.md).
 
-## [Connector Developer Guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-stix-adapter.md)
+## Connector Developer Guide
+```{include} /adapter-guide/develop-stix-adapter.md
+```
 
 <!-- If you want to create a new connector for STIX-shifter, see the [developer guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-stix-adapter.md) -->
 
