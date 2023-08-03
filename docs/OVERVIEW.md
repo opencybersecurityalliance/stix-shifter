@@ -9,7 +9,7 @@
   - [This sounds like Sigma, I already have that](#this-sounds-like-sigma-i-already-have-that)
   - [What is a STIX-SHIFTER connector?](#what-is-a-stix-shifter-connector)
   - [Why would I want to use this?](#why-would-i-want-to-use-this)
-- [Available Connectors](#available-connectors)
+- [Available Connectors](CONNECTORS.md)
 - [How to use](#How-to-use)
   - [Translate](#translate)
   - [Transmit](#transmit)
@@ -138,7 +138,7 @@ Stix-shifter provides several functions: `translate` and `transmit` are the prim
 | Argument | Description | Accepted Input |
 | -------- | ------------ | --------------- |
 | TRANSLATION KEYWORD | The keyword specifiying a function will be used to translate queries and results. | `translate` |
-| MODULE NAME | The name of the connector being used. This is the module directory name as it appears in [stix_shifter_modules](stix_shifter_modules/). If the connector supports multiple dialects, then by default a query will be generated for each one. You may specifiy a specific dialect by adding `:<DIALECT>` directly after the module name | The connector module name with an optional `:<DIALECT>` |
+| MODULE NAME | The name of the connector being used. This is the module directory name as it appears in [stix_shifter_modules](../stix_shifter_modules). If the connector supports multiple dialects, then by default a query will be generated for each one. You may specifiy a specific dialect by adding `:<DIALECT>` directly after the module name | The connector module name with an optional `:<DIALECT>` |
 | TRANSLATION DATA TYPE | The type of data you wish to translate. This will be `query` for translating STIX patterns to native queries and `results` for translating data source results to STIX.  | `query` or `results` |
 | STIX IDENTITY OBJECT | This is an object that represents the data source being queried and is inserted into the results bundle of STIX objects. An empty object `"{}"` may be used for the query translation. This must be wrapped in quotes to use with the CLI. | A stringified STIX identity object |
 | TRANSLATION DATA | This is the STIX pattern for query translation and a list of JSON results for results translation. This must be wrapped in quote to use with the CLI. | A stringified STIX pattern or list of JSON data |
@@ -146,7 +146,7 @@ Stix-shifter provides several functions: `translate` and `transmit` are the prim
 
 #### CLI Options
 
-These are general translation options defined in [`config.json`](stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules.
+These are general translation options defined in [`config.json`](../stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules.
 
 | Option | Translation Data Type | Description | Accepted Values |
 | ------ | --------------------- | ----------- | -------------- |
@@ -187,7 +187,7 @@ Alternatively, you can run the CLI commands from the source. Open a terminal and
 
 `python main.py translate <MODULE NAME> query "<STIX IDENTITY OBJECT>" "<STIX PATTERN>" "<OPTIONS>"`
 
-The module name refers to the name of the folder in stix-shifter that contains the connector code. The current module names can be found in the [Available Connectors](#available-connectors) table above. The STIX identity object is only used when translating data source results into STIX, so it can be passed in as an empty object for query translation calls.
+The module name refers to the name of the folder in stix-shifter that contains the connector code. The current module names can be found in the [Available Connectors](CONNECTORS.md) table. The STIX identity object is only used when translating data source results into STIX, so it can be passed in as an empty object for query translation calls.
 
 Using the Qradar connector as an example:
 
@@ -276,7 +276,7 @@ Alternatively, you can run the CLI commands from the source. Open a terminal and
 
 `python main.py translate <MODULE NAME> result '<STIX IDENTITY OBJECT>' '<LIST OF JSON RESULTS>'`
 
-The module name refers to the name of the folder in stix-shifter that contains the connector code. The current module names can be found in the [Available Connectors](#available-connectors) table above. The STIX Identity object represents the data source and is passed in to allow stix-shifter to create a reference between the data source and the generated STIX observed objects.
+The module name refers to the name of the folder in stix-shifter that contains the connector code. The current module names can be found in the [Available Connectors](CONNECTORS.md) table. The STIX Identity object represents the data source and is passed in to allow stix-shifter to create a reference between the data source and the generated STIX observed objects.
 
 Using the QRadar connector as an example:
 
@@ -309,7 +309,7 @@ python main.py translate qradar results \
 
 ### Validating STIX 2.0 and 2.1 bundles with the validator script
 
-Refer to the [STIX validator](bundle_validator/README.md)
+Refer to the [STIX validator](../bundle_validator/)
 
 ### Results translation using an input file
 
@@ -358,7 +358,7 @@ This object contains information needed to connect to a specific data source. Th
 
 ### Connection Options
 
-These are general options defined in [`config.json`](stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules.
+These are general options defined in [`config.json`](../stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules.
 
 | Option | Description | Accepted Values |
 | ------ | ----------- | -------------- |
@@ -417,7 +417,7 @@ This object contains an `auth` key who's value stores authentication information
 
 Transmit offers several functions: `ping`, `query`, `status` (for asynchronous data sources), `results`, `delete` (if supported by the data source), and `is_async`.
 
-Each of the transmit functions takes in common arguments: the module name, the connection object, and the configuration object. The module name refers to the name of the folder in stix-shifter that contains the connector code. The current module names can be found in the [Available Connectors](#available-connectors) table above. Information on the [connection and configuration objects](#transmit) can also be found above. Each of the CLI commands can be run from a terminal in the stix-shifter root director.
+Each of the transmit functions takes in common arguments: the module name, the connection object, and the configuration object. The module name refers to the name of the folder in stix-shifter that contains the connector code. The current module names can be found in the [Available Connectors](CONNECTORS.md) table. Information on the [connection and configuration objects](#transmit) can also be found above. Each of the CLI commands can be run from a terminal in the stix-shifter root director.
 
 Any failed transmission function call will return an error in the format of:
 
@@ -429,7 +429,7 @@ Any failed transmission function call will return an error in the format of:
 | Argument | Description | Accepted Input |
 | -------- | ------------ | --------------- |
 | TRANSMISSION KEYWORD | The keyword specifiying a function will be used to transmit API calls to the target data source. | `transmit` |
-| MODULE NAME | The name of the connector being used. This is the module directory name as it appears in [stix_shifter_modules](stix_shifter_modules/). | The connector module name |
+| MODULE NAME | The name of the connector being used. This is the module directory name as it appears in [stix_shifter_modules](../stix_shifter_modules/). | The connector module name |
 | CONNECTION OBJECT | This contains the information needed to connect to the target data source, such as host and port. This must be wrapped in quotes to use with the CLI. | A stringified connection object |
 | CONFIGURATION OBJECT |  This contains the information needed to authenticate with the target data source, such as username and password. This must be wrapped in quotes to use with the CLI. | A stringified configuration object |
 | TRANSMISSION FUNCTION | The transmission function used to communicate with the target data source. | `is_async`, `ping`, `query`, `status`, `results`, `delete` |
@@ -577,8 +577,8 @@ The `execute` command tests all steps of the translation-transmission flow:
 | Argument | Description | Accepted Input |
 | -------- | ------------ | --------------- |
 | EXECUTE KEYWORD | The keyword specifiying that the execute function will be used. | `execute` |
-| TRANSMISSION MODULE NAME | The name of the connector being used for transmission functions. This is the module directory name as it appears in [stix_shifter_modules](stix_shifter_modules/). | The connector module name |
-| TRANSLATION MODULE NAME | The name of the connector being used for translation functions. This is the module directory name as it appears in [stix_shifter_modules](stix_shifter_modules/). | The connector module name |
+| TRANSMISSION MODULE NAME | The name of the connector being used for transmission functions. This is the module directory name as it appears in [stix_shifter_modules](../stix_shifter_modules/). | The connector module name |
+| TRANSLATION MODULE NAME | The name of the connector being used for translation functions. This is the module directory name as it appears in [stix_shifter_modules](../stix_shifter_modules/). | The connector module name |
 | STIX IDENTITY OBJECT | This is an object that represents the data source being queried and is inserted into the results bundle of STIX objects. An empty object `"{}"` may be used for the query translation. This must be wrapped in quotes to use with the CLI. | A stringified STIX identity object |
 | CONNECTION OBJECT | This contains the information needed to connect to the target data source, such as host and port. This must be wrapped in quotes to use with the CLI. | A stringified connection object |
 | CONFIGURATION OBJECT |  This contains the information needed to authenticate with the target data source, such as username and password. This must be wrapped in quotes to use with the CLI. | A stringified configuration object |
@@ -586,7 +586,7 @@ The `execute` command tests all steps of the translation-transmission flow:
 
 ### Connection Object Options
 
-These are general options defined in [`config.json`](stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules. These should be added as an "options" objects inside the CONNECTION OBJECT.
+These are general options defined in [`config.json`](../stix_shifter_modules/config.json) that can apply to all connectors but may be overwritten by individual modules. These should be added as an "options" objects inside the CONNECTION OBJECT.
 
 | Option | Function Type | Description | Accepted Values |
 | ------ | --------------------- | ----------- | -------------- |
@@ -693,7 +693,7 @@ This command can also be used to get the dialects of a specific connector.
 }
 ```
 
-In the above example, the QRadar connector can use three dialects: `flows`, `events`, and `aql`. When a connector only has a `default` dialect, such as with Security Advisor, only one dialect is used by the connector. Most dialects will use the `stix` language since they translate STIX patterns into native queries. QRadar's `aql` dialect uses the `aql` language since it is meant to accept an AQL query rather than a STIX pattern. See the [QRadar connector README](stix_shifter_modules/qradar/README.md) for more information on AQL passthrough.
+In the above example, the QRadar connector can use three dialects: `flows`, `events`, and `aql`. When a connector only has a `default` dialect, such as with Security Advisor, only one dialect is used by the connector. Most dialects will use the `stix` language since they translate STIX patterns into native queries. QRadar's `aql` dialect uses the `aql` language since it is meant to accept an AQL query rather than a STIX pattern. See the [QRadar connector README](../stix_shifter_modules/qradar/README.md) for more information on AQL passthrough.
 
 ## configs
 
@@ -861,7 +861,7 @@ Specifying the connector module name will return the configuration parameters of
 ```
 ## Limitations
 
-STIX-Shifter has limitations on the length of a pattern that can be translated into a native query. As the pattern length increases, the translation time increases exponentially due to how ANTLR 4 parses the pattern. See [STIX-Shifter Limitations](adapter-guide/stix-shifter-limitations.md) for more details.  
+STIX-Shifter has limitations on the length of a pattern that can be translated into a native query. As the pattern length increases, the translation time increases exponentially due to how ANTLR 4 parses the pattern. See [STIX-Shifter Limitations](stix-shifter-limitations.md) for more details.  
 
 ## Glossary
 
@@ -876,7 +876,7 @@ STIX-Shifter has limitations on the length of a pattern that can be translated i
 
 ## Architecture Context
 
-![STIX SHIFTER CLASS DIAGRAM](./adapter-guide/images/architecture.png)
+![STIX SHIFTER CLASS DIAGRAM](adapter-guide/images/architecture.png)
 
 ## Contributing
 
