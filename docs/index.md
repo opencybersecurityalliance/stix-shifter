@@ -9,7 +9,7 @@ In addition to "finding" the data by using these patterns, STIX-Shifter also _tr
 ::::{grid} 1 2 2 3
 :gutter: 1 1 1 2
 
-:::{grid-item-card} `markdown;1.5em;sd-mr-1` Overview
+:::{grid-item-card}{octicon} `markdown;1.5em;sd-mr-1` Overview
 :link: OVERVIEW.md
 :link-type: ref
 
@@ -19,7 +19,7 @@ For general information about STIX, this project, and the command line utilities
 ::::{grid} 1 2 2 3
 :gutter: 1 1 1 2
 
-:::{grid-item-card} `markdown;1.5em;sd-mr-1` Developer Guide
+:::{grid-item-card} {octicon}`tools;1.5em;sd-mr-1` Developer Guide
 :link: (adapter-guide/develop-stix-adapter.md)
 :link-type: ref
 
