@@ -25,7 +25,7 @@ For general information about STIX, this project, and the command line utilities
 
 :::{grid-item-card} {octicon}`tools;1.5em;sd-mr-1` Developer Guide
 :link: adapter-guide/develop-stix-adapter.md
-:link-type: doc
+:link-type: ref
 
 Follow the developer guide to learn about developing a new STIX-Shifter connector.
 +++
