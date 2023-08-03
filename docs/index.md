@@ -9,21 +9,27 @@ In addition to "finding" the data by using these patterns, STIX-Shifter also _tr
 ::::
 
 ---
+
 ::::{grid} 1 2 2 3
 :gutter: 1 1 1 2
 
-:::{grid-item-card}{octicon} `markdown;1.5em;sd-mr-1` Overview
-:link: OVERVIEW.md
+:::{grid-item-card} {octicon}`markdown;1.5em;sd-mr-1` Overview
+:link:  OVERVIEW.md
 :link-type: ref
 
 For general information about STIX, this project, and the command line utilities, see the STIX-shifter Overview.
+
++++
+[Learn more »](OVERVIEW.md)
 :::
 
 :::{grid-item-card} {octicon}`tools;1.5em;sd-mr-1` Developer Guide
-:link: (adapter-guide/develop-stix-adapter.md)
-:link-type: ref
+:link: adapter-guide/develop-stix-adapter.md
+:link-type: doc
 
 Follow the developer guide to learn about developing a new STIX-Shifter connector.
++++
+[Learn more »](adapter-guide/develop-stix-adapter.md)
 :::
 
 ::::
