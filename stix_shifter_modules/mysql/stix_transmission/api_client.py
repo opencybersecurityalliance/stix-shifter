@@ -60,8 +60,9 @@ class APIClient():
                     # Uncomment to see data on newly populated table
                     # query = "select * from {} limit 1".format(self.table)
 
-            await cursor.execute(query)  
-            result_collection = await cursor.fetchall()
+                    await cursor.execute(query)  
+                    result_collection = await cursor.fetchall()
+
             results_list = []
             row_count = int(rows)
 
