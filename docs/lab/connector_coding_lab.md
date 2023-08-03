@@ -124,7 +124,7 @@ Here's an example of the content of a `lang_en.json` file:
 
 * For this lab, copy the entire content from https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/configuration/lang_en.json.
 
-**Note** For more details about the configuration JSON, go to [Configuration JSON](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-configuration-json.md)
+**Note** For more details about the configuration JSON, go to [Configuration JSON](../adapter-guide/develop-configuration-json.md)
 
 ### 9. Implement stix to query translation
 
@@ -289,7 +289,7 @@ def create_results_connection(self, query, offset, length):
 
 * Define and implement a function named `run_search(self, query, offset, length)`  in the `APIClient()` class.
 
-* Copy the code block for the MySQL connector's `run_search` function https://github.com/opencybersecurityalliance/stix-shifter/blob/8ae2cf2a0196531b8e0daf8f5ff141b4251ec201/stix_shifter_modules/mysql/stix_transmission/api_client.py#L40
+* Copy the code block for the MySQL connector's [`run_search` function](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_modules/mysql/stix_transmission/api_client.py#L43)
 
 **Test the Results command using the CLI tool**
 
@@ -304,7 +304,7 @@ python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db
 * Make sure the data source returns the results in JSON format
 * Go to `stix_shifter_modules/lab_connector/stix_translation`
 * Create a JSON file named `to_stix_map.json` that maps data source fields to STIX objects. 
-* For this lab, update `stix_shifter_modules/lab_connector/stix_translation/json/to_stix_map.json` file with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/json/to_stix_map.json
+* For this lab, update `stix_shifter_modules/lab_connector/stix_translation/json/to_stix_map.json` file with the content of the [`to_stix_map.json` file](https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/json/to_stix_map.json)
 * Implement the `ResultsTranslator(JSONToStix)` class in `results_translator.py`
 
 ```
@@ -324,7 +324,7 @@ python main.py translate mysql results '{ "type":"identity","id":"identity--20a7
 
 ### 12. Implement the `ErrorMapper()` class in `stix_shifter_modules/lab_connector/stix_transmission/error_mapper.py` 
 
-* This is where you map any API specific error code messages for the return object. You can use the same error mapper content that is used in the MySQL connector: https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_transmission/error_mapper.py
+* This is where you map any API specific error code messages for the return object. You can use the same [error mapper content](https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_transmission/error_mapper.py) that is used in the MySQL connector.
 
 ### 13. Add any data source specific dependency to the `stix_shifter_modules/lab_connector/requirements.txt`.  
 * In this case add `mysql-connector-python==8.0.25`
