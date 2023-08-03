@@ -643,7 +643,7 @@ aws_guardduty
     },
     "first_observed": "2023-06-08T08:22:10.062Z",
     "last_observed": "2023-06-08T08:22:11.192Z",
-    "number_observed": 1
+    "number_observed": 2
 }
 ```
 ### Observations
