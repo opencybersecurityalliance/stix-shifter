@@ -6,8 +6,8 @@ The steps below assume you have renamed the `async_template` module directory to
 
 1. [Exploring the stix_transmission directory](#step-1-exploring-the-stix_transmission-directory)
 1. [Edit the apiclient.py file](#step-2-edit-the-apiclient-file)
-1. [Edit the template_connector.py file](#step-3-edit-the-template-connector-file)
-1. [Edit the template_error_mapper.py file](#step-4-edit-the-template-error-mapper-file)
+1. [Edit the template_connector.py file](#step-3-edit-the-connector-class-methods)
+1. [Edit the template_error_mapper.py file](#step-4-edit-the-error-mapper-file)
 1. [Verify the implementation of each transmission method](#step-5-verify-each-transmission-method)
 
 ## Step 1. Exploring the stix_transmission directory

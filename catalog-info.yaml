@@ -1,0 +1,19 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: 'stix-shifter'
+  description: Core open-source library and connectors used by UDI for federated search
+  tags:
+    - stix
+    - python
+    - oca
+    - interoperability
+  annotations:
+    github.com/project-slug: opencybersecurityalliance/stix-shifter
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: library
+  lifecycle: production
+  owner: connectorfactory
+---

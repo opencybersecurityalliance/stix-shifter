@@ -45,4 +45,4 @@ Data should not be repeated in the same observed-data object. That is, if a data
 
 Ensure blank data values are not written to the STIX results. This should happen automatically via the json-to-STIX flow but this may need to be improved to prevent bad data from slipping through (ie. certain IP values and mac addresses that we wish to strip out).
 
-When a connector is close to completion, generate a sample STIX bundle with the [execute command](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/OVERVIEW.md#execute) and run it through the [validator script](https://github.com/opencybersecurityalliance/stix-shifter/tree/develop/bundle_validator) to catch errors.
+When a connector is close to completion, generate a sample STIX bundle with the [execute command](../OVERVIEW.md#execute) and run it through the [validator script](../../bundle_validator/) to catch errors.
