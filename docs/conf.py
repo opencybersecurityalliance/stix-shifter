@@ -15,8 +15,29 @@ release = '6.0.3'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    "myst_parser"
+    "myst_parser",
+    "sphinx_design",
     ]
+
+# -- MyST settings ---------------------------------------------------
+
+myst_enable_extensions = [
+    "dollarmath",
+    "amsmath",
+    "deflist",
+    "fieldlist",
+    "html_admonition",
+    "html_image",
+    "colon_fence",
+    "smartquotes",
+    "replacements",
+    "linkify",
+    "strikethrough",
+    "substitution",
+    "tasklist",
+    "attrs_inline",
+    "attrs_block",
+]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']

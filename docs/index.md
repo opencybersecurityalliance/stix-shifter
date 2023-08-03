@@ -1,5 +1,4 @@
-```{rubric} STIX-Shifter
-```
+# Introduction to STIX-Shifter
 
 STIX-shifter is an open source python library allowing software to connect to products that house data repositories by using STIX Patterning, and return results as STIX Observations.
 
@@ -7,10 +6,10 @@ This library takes in STIX 2 Patterns as input, and "finds" data that matches th
 
 In addition to "finding" the data by using these patterns, STIX-Shifter also _transforms the output_ into STIX 2 Observations. Why would we do that you ask? To put it simply - so that all of the security data, regardless of the source, mostly looks and behaves the same.
 
-
-{doc}`overview`
-
-```{toctree}
-:hidden:
-overview.md
-```
+:::{card} Overview
+Header
+^^^
+For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Overview](OVERVIEW.md)
++++
+Footer
+:::
