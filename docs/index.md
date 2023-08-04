@@ -10,17 +10,15 @@ In addition to "finding" the data by using these patterns, STIX-Shifter also _tr
 :gutter: 1 1 1 2
 
 :::{grid-item-card} {octicon}`markdown;1.5em;sd-mr-1` Overview
-:link:  OVERVIEW.md
-:link-type: doc
-
-For general information about STIX, this project, and the command line utilities, see the STIX-shifter Overview.
-
-+++
-[Learn more » OVERVIEW](OVERVIEW.md)
+For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Overview](OVERVIEW.md).
 :::
 
-:::{grid-item-card} {octicon}`markdown;1.5em;sd-mr-1` Overview
-For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Overview](OVERVIEW.md).
+:::{grid-item-card} {octicon}`plug;1.5em;sd-mr-1` Available Connectors
+There are more than 30 connectors. For the list of connectors, see the [Available Connectors](CONNECTORS.md).
+:::
+
+:::{grid-item-card} {octicon}`tools;1.5em;sd-mr-1` Developer Guide
+Follow the developer guide to learn about developing a new STIX-Shifter connector, see [Connector Developer Guide](adapter-guide/develop-stix-adapter.md).
 :::
 
 ```{toctree}
