@@ -19,6 +19,16 @@ For general information about STIX, this project, and the command line utilities
 [Learn more »](OVERVIEW.md)
 :::
 
+:::{grid-item-card} {octicon}`markdown;1.5em;sd-mr-1` Overview
+:link:  OVERVIEW.md
+:link-type: ref
+
+For general information about STIX, this project, and the command line utilities, see the STIX-shifter Overview.
+
++++
+[Learn more »](OVERVIEW.md)
+:::
+
 ```{toctree}
 :hidden:
 README.md
