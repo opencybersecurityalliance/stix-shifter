@@ -24,9 +24,6 @@ For general information about STIX, this project, and the command line utilities
 :link-type: doc
 
 For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Overview](OVERVIEW.md).
-
-+++
-[Learn more »](OVERVIEW.md)
 :::
 
 ```{toctree}
