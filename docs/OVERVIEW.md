@@ -903,6 +903,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ```{toctree}
-:hidden:
+:maxdepth: 2
 OVERVIEW.md
 ```
