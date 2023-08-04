@@ -20,9 +20,6 @@ For general information about STIX, this project, and the command line utilities
 :::
 
 :::{grid-item-card} {octicon}`markdown;1.5em;sd-mr-1` Overview
-:link:  OVERVIEW.md
-:link-type: doc
-
 For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Overview](OVERVIEW.md).
 :::
 
