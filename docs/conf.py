@@ -39,7 +39,7 @@ myst_enable_extensions = [
     "attrs_block",
 ]
 
-html_theme = "sphinx_book_theme"
+html_theme = "sphinx_rtd_theme"
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
