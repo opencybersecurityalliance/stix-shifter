@@ -22,6 +22,6 @@ Follow the developer guide to learn about developing a new STIX-Shifter connecto
 :::
 
 ```{toctree}
-:hidden:
+:maxdepth: 2
 README.md
 ```
