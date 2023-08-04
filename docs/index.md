@@ -25,5 +25,32 @@ Follow the developer guide to learn about developing a new STIX-Shifter connecto
 :hidden:
 :maxdepth: 2
 README.md
+```
+
+```{toctree}
+:hidden:
+:caption: ✏️ Project Overview
+
 OVERVIEW.md
+```
+
+```{toctree}
+:hidden:
+:caption: ✏️ Available Connectors
+
+CONNECTORS.md
+```
+
+```{toctree}
+:hidden:
+:caption: ✏️ Developer Guide
+
+adapter-guide/develop-stix-adapter.md
+adapter-guide/develop-translation-module.md
+adapter-guide/custom_mappings.md
+adapter-guide/develop-mapping-keywords.md
+adapter-guide/custom_mappings.md
+adapter-guide/develop-transmission-module.md
+adapter-guide/develop-configuration-json.md
+adapter-guide/best_practices.md
 ```
