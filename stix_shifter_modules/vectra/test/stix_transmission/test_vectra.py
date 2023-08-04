@@ -446,7 +446,7 @@ class TestVectraConnection(unittest.TestCase, object):
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_result_response(self, mock_results_response):
-        """Test invalid query for results"""
+        """Test valid query for results"""
         query = '(detection.detection:"Hidden HTTPS Tunnel" AND (detection.last_timestamp:[2022-11-16T0000 to ' \
                 '2023-05-23T0000]))'
         mock_response_1 = json.dumps(self.mocked_response)
@@ -455,9 +455,31 @@ class TestVectraConnection(unittest.TestCase, object):
         mock_results_response.side_effect = [get_mock_response(200, mock_response_1, 'byte'),
                                              get_mock_response(200, mock_response_2, 'byte')]
         transmission = stix_transmission.StixTransmission('vectra', self.connection(), self.configuration())
-        offset = 20
-        length = 10
+        offset = 0
+        length = 4
         result_response = transmission.results(query, offset, length)
+        assert result_response is not None
+        assert result_response['success'] is True
+        assert result_response['data'] is not None
+        assert result_response['metadata'] is not None
+        assert result_response['metadata']['next_page_url'] is not None
+
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
+    def test_result_response_with_metadata(self, mock_results_response):
+        """Test using metadata to get the results"""
+        metadata = {'result_count': 4, 'next_page_url': 'https://test1/api/v2.4/search/detections/?page_size=4'
+                                                        '&query_string=detection.detection:"Hidden HTTPS Tunnel"'
+                                                        '&page=2'}
+        query = 'detection.detection:"Hidden HTTPS Tunnel"'
+        mock_response_1 = json.dumps(self.mocked_response)
+        self.mocked_response['next'] = None
+        mock_response_2 = json.dumps(self.mocked_response)
+        mock_results_response.side_effect = [get_mock_response(200, mock_response_1, 'byte'),
+                                             get_mock_response(200, mock_response_2, 'byte')]
+        transmission = stix_transmission.StixTransmission('vectra', self.connection(), self.configuration())
+        offset = 4
+        length = 4
+        result_response = transmission.results(query, offset, length, metadata)
         assert result_response is not None
         assert result_response['success'] is True
         assert result_response['data'] is not None

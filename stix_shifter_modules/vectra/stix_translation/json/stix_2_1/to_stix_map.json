@@ -292,10 +292,17 @@
       "key": "network-traffic.start",
       "object": "nt_session"
     },
-    "last_timestamp": {
-      "key": "network-traffic.end",
-      "object": "nt_session"
-    },
+    "last_timestamp": [
+      {
+        "key": "network-traffic.end",
+        "object": "nt_session"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "nt_session",
+        "references": "source_ip"
+      }
+    ],
     "duration": {
       "key": "network-traffic.x_time_duration",
       "object": "nt_session"
@@ -776,10 +783,17 @@
           "references": "dst_ip"
         }
       ],
-      "last_timestamp": {
-        "key": "network-traffic.end",
-        "object": "nt_host"
-      },
+      "last_timestamp": [
+        {
+          "key": "network-traffic.end",
+          "object": "nt_host"
+        },
+        {
+          "key": "network-traffic.src_ref",
+          "object": "nt_host",
+          "references": "source_ip"
+        }
+      ],
       "group_nt_Reference": {
           "key": "x-grouped-details.host_network_refs",
           "object": "group_detail",
@@ -854,10 +868,17 @@
         "key": "network-traffic.x_event_type",
         "object": "event"
       },
-      "first_timestamp": {
-        "key": "network-traffic.start",
-        "object": "event"
-      },
+      "first_timestamp": [
+        {
+          "key": "network-traffic.start",
+          "object": "event"
+        },
+        {
+          "key": "network-traffic.src_ref",
+          "object": "event",
+          "references": "source_ip"
+        }
+      ],
       "http_method": {
         "key": "network-traffic.extensions.http-request-ext.request_method",
         "object": "event"
@@ -943,10 +964,17 @@
           "key": "network-traffic.x_time_duration",
           "object": "event_session"
         },
-        "first_timestamp": {
-          "key": "network-traffic.start",
-          "object": "event_session"
-        },
+        "first_timestamp": [
+          {
+            "key": "network-traffic.start",
+            "object": "event_session"
+          },
+          {
+            "key": "network-traffic.src_ref",
+            "object": "event_session",
+            "references": "source_ip"
+          }
+        ],
         "protocol": {
           "key": "network-traffic.protocols",
           "object": "event_session",
@@ -1060,10 +1088,17 @@
         "object": "session",
         "transformer": "ToInteger"
       },
-      "first_timestamp": {
-        "key": "network-traffic.start",
-        "object": "session"
-      },
+      "first_timestamp": [
+        {
+          "key": "network-traffic.start",
+          "object": "session"
+        },
+        {
+          "key": "network-traffic.src_ref",
+          "object": "session",
+          "references": "source_ip"
+        }
+      ],
       "last_timestamp": {
         "key": "network-traffic.end",
         "object": "session"
@@ -1099,10 +1134,17 @@
         "key": "network-traffic.x_time_duration",
         "object": "con_event"
       },
-      "first_timestamp": {
-        "key": "network-traffic.start",
-        "object": "con_event"
-      },
+      "first_timestamp": [
+        {
+          "key": "network-traffic.start",
+          "object": "con_event"
+        },
+        {
+          "key": "network-traffic.src_ref",
+          "object": "con_event",
+          "references": "source_ip"
+        }
+      ],
       "last_timestamp": {
         "key": "network-traffic.end",
         "object": "con_event"

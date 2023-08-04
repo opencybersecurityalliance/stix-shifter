@@ -14,6 +14,7 @@ class APIClient:
                         'Content-Type': "application/json",
                         'Cache-Control': "no-cache"}
         self.client = RestApiClientAsync(connection.get('host'), port=None, headers=self.headers)
+        self.host = connection.get('host')
 
     async def ping_data_source(self):
         """
@@ -29,5 +30,8 @@ class APIClient:
         :return: Response Object
         """
         self.logger.debug("query: %s", query)
-        url = self.QUERY_ENDPOINT + '/?' + query
+        if self.QUERY_ENDPOINT not in query:
+            url = self.QUERY_ENDPOINT + '/?' + query
+        else:
+            url = query.replace('https://' + self.host, '')   # removing host address for next page url
         return await self.client.call_api(url, 'GET', headers=self.headers, data=None)

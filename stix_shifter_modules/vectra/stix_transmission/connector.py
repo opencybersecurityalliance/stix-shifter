@@ -3,6 +3,11 @@ from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 from .api_client import APIClient
 import json
+import re
+
+
+class InvalidMetadataException(Exception):
+    pass
 
 
 class Connector(BaseJsonSyncConnector):
@@ -33,65 +38,99 @@ class Connector(BaseJsonSyncConnector):
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
 
-    async def create_results_connection(self, query, offset, length):
+    async def create_results_connection(self, query, offset, length, metadata=None):
         """
          Function to create query connection
         :param query: str
         :param offset: int
         :param length: str
+        :param metadata: dict
         :return: list
         """
         response_dict = {}
         return_obj = {}
         data = []
+        local_result_count = 0
         try:
-            offset = int(offset)
-            length = int(length)
-            pagination_offset = offset
-            total_records = length
-            page = 1
+            if metadata:
+                if isinstance(metadata, dict) and metadata.get('result_count') and metadata.get('next_page_url'):
+                    result_count, next_page_url = metadata['result_count'], metadata['next_page_url']
+                    result_count = int(result_count)
+                    total_records = int(length)
+                    if abs(self.api_client.result_limit - result_count) < total_records:
+                        total_records = abs(self.api_client.result_limit - result_count)
 
-            # changing offset to page number
-            if offset >= length:
-                pagination_offset = offset % length
-                page = (offset // length) + 1
-
-            # set total record count
-            if self.api_client.result_limit < total_records:
-                total_records = self.api_client.result_limit
-
-            # set page size
+                else:
+                    # raise exception when metadata doesnt contain result count or next page token
+                    raise InvalidMetadataException(metadata)
+            else:
+                result_count, next_page_url = 0, None
+                total_records = int(offset) + int(length)
+                if self.api_client.result_limit < total_records:
+                    total_records = self.api_client.result_limit
             if total_records <= Connector.VECTRA_MAX_PAGE_SIZE:
                 page_size = total_records
             else:
                 page_size = Connector.VECTRA_MAX_PAGE_SIZE
 
-            query = f"page_size={page_size}&{query}&page={page}"
-            response_wrapper = await self.api_client.get_search_results(query)
-            response_code = response_wrapper.code
-            response = json.loads(response_wrapper.read().decode('utf-8'))
-
-            if response_code == 200:
-                data += response['results']
-                next_url = response.get('next')
-                while next_url:
-                    if len(data) >= total_records:
-                        break
-                    next_url = next_url.split('/api/v2.4/search/detections/?')
-                    query = next_url[1]
-                    next_response_wrapper = await self.api_client.get_search_results(query)
-                    response_code = next_response_wrapper.code
-                    next_response = json.loads(next_response_wrapper.read().decode('utf-8'))
-                    next_url = next_response.get('next')
-                    if response_code == 200:
-                        data += next_response['results']
-                    else:
-                        response = next_response
-                        break
-
-                if response_code == 200:
+            if (result_count == 0 and next_page_url is None) or (next_page_url and result_count <
+                                                                 self.api_client.result_limit):
+                if next_page_url:
+                    response_wrapper = await self.api_client.get_search_results(next_page_url)
+                else:
+                    query = f"page_size={page_size}&{query}&page=1"
+                    response_wrapper = await self.api_client.get_search_results(query)
+                response_dict = json.loads(response_wrapper.read().decode('utf-8'))
+                response_code = response_wrapper.code
+                response = response_dict
+                if response_wrapper.code == 200:
                     return_obj['success'] = True
-                    return_obj['data'] = self.get_results_data(data[pagination_offset:total_records])
+                    data += response_dict['results']
+                    result_count += len(response_dict['results'])
+                    local_result_count += len(response_dict['results'])
+                    next_url = response_dict.get('next')
+                    # loop until if there is next page link and records fetched is less than total records
+                    while next_url:
+                        if not metadata and result_count < total_records:
+                            remaining_records = total_records - result_count
+                        elif metadata and local_result_count < total_records:
+                            remaining_records = total_records - local_result_count
+                        else:
+                            break
+
+                        if remaining_records > Connector.VECTRA_MAX_PAGE_SIZE:
+                            page_size = Connector.VECTRA_MAX_PAGE_SIZE
+                        else:
+                            page_size = remaining_records
+                        next_url = re.sub(r'page_size=([^>]*?)&', f'page_size={page_size}&', next_url)
+                        next_response_wrapper = await self.api_client.get_search_results(next_url)
+                        next_response = json.loads(next_response_wrapper.read().decode('utf-8'))
+                        response_code = next_response_wrapper.code
+                        response = next_response
+                        if next_response_wrapper.code == 200:
+                            data += next_response['results']
+                            next_url = response_dict.get('next')
+                            result_count += len(next_response['results'])
+                            local_result_count += len(next_response['results'])
+                        else:
+                            data = []
+                            break
+                    if data:
+                        final_result = self.get_results_data(data)
+                        if metadata:
+                            return_obj['data'] = final_result if final_result else []
+                        else:
+                            return_obj['data'] = final_result[int(offset): total_records] if final_result else []
+                        if next_url and result_count < self.api_client.result_limit:
+                            return_obj['metadata'] = {"result_count": result_count,
+                                                      "next_page_url": next_url}
+                    else:
+                        if not return_obj.get('error') and return_obj.get('success') is not False:
+                            return_obj['success'] = True
+                            return_obj['data'] = []
+            else:
+                return_obj['success'] = True
+                return_obj['data'] = []
 
             # handling error response
             if response_code == 200:
@@ -113,6 +152,11 @@ class Connector(BaseJsonSyncConnector):
             else:
                 response_dict['message'] = str(response)
                 ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+
+        except InvalidMetadataException as ex:
+            response_dict['code'] = 422
+            response_dict['message'] = f'Invalid metadata: {str(ex)}'
+            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
         except Exception as ex:
             if "timeout_error" in str(ex):
