@@ -11,19 +11,19 @@ In addition to "finding" the data by using these patterns, STIX-Shifter also _tr
 
 :::{grid-item-card} {octicon}`markdown;1.5em;sd-mr-1` Overview
 :link:  OVERVIEW.md
-:link-type: ref
+:link-type: doc
 
 For general information about STIX, this project, and the command line utilities, see the STIX-shifter Overview.
 
 +++
-[Learn more »](OVERVIEW.md)
+[Learn more » OVERVIEW](OVERVIEW.md)
 :::
 
 :::{grid-item-card} {octicon}`markdown;1.5em;sd-mr-1` Overview
 :link:  OVERVIEW.md
 :link-type: ref
 
-For general information about STIX, this project, and the command line utilities, see the STIX-shifter Overview.
+For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Overview](OVERVIEW.md).
 
 +++
 [Learn more »](OVERVIEW.md)
