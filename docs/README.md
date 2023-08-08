@@ -9,10 +9,9 @@ This library takes in STIX 2 Patterns as input, and "finds" data that matches th
 
 In addition to "finding" the data by using these patterns, STIX-Shifter also _transforms the output_ into STIX 2 Observations. Why would we do that you ask? To put it simply - so that all of the security data, regardless of the source, mostly looks and behaves the same.
 
-## Project Overview and CLI Commands
+***Project Documenation***
 
-For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Overview](OVERVIEW.md)
-
+For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Documenation](https://kestrel.readthedocs.io/)
 
 # Installation
 

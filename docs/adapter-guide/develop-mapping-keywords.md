@@ -1,4 +1,4 @@
-# To STIX mapping Keywords
+## Mapping Keywords
 
 There are keywords which need to be specified in the `to-stix` mappings in order to perform specific operations on the datasource fields. There are two types of keywords:
 1. Required
@@ -6,7 +6,7 @@ There are keywords which need to be specified in the `to-stix` mappings in order
 
 The below table contains the keywords and their usages:
 
-## Required Keywords
+### Required Keywords
 
 <table>
 <tr>
@@ -41,7 +41,7 @@ The below table contains the keywords and their usages:
 </table>
 
 
-## Optional Keywords
+### Optional Keywords
 
 <table>
 <tr>
@@ -70,9 +70,9 @@ The below table contains the keywords and their usages:
 </table>
 
 
-## Examples of Optional keywords:
+### Examples of Optional keywords:
 
-##  unwrap 
+####  unwrap 
 
 **Mapping:**
 
@@ -140,7 +140,7 @@ This STIX bundle contains two ipv4-addr objects which are created based on `unwr
 
 <br>
 
-##  group 
+####  group 
 
 **Mapping:**
 
@@ -236,7 +236,7 @@ This STIX bundle contains two ipv4-addr objects which are created based on `unwr
 
 <br>
 
-##  group_ref 
+#### group_ref 
 
 **Mapping:**
 
@@ -337,7 +337,7 @@ List of nested dictionary in datasource results are referenced in `scanned_refs`
 
 <br>
 
-## value 
+#### value 
 
 **Mapping:**
 
@@ -397,7 +397,7 @@ List of nested dictionary in datasource results are referenced in `scanned_refs`
 
 <br>
 
-##  references 
+#### references 
 
 **Mapping:**
 
@@ -477,7 +477,7 @@ Source `ipv4-addr` object number is referenced in `network-traffic` object:
 
 <br>
 
-##   transformer  
+#### transformer  
 
 **Mapping:**
 ```
