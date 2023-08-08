@@ -22,7 +22,7 @@ class APIClient():
         try:
             pool = await aiomysql.create_pool(host=self.host, port=self.port,
                                             user=self.user, password=self.password,
-                                            db=self.database)
+                                            db=self.database, connect_timeout=self.timeout)
             async with pool.acquire() as conn:
                 async with conn.cursor() as cur:
                     await cur.execute("SELECT 42;")
@@ -47,7 +47,7 @@ class APIClient():
         try:
             pool = await aiomysql.create_pool(host=self.host, port=self.port,
                                             user=self.user, password=self.password,
-                                            db=self.database)
+                                            db=self.database, connect_timeout=self.timeout)
             async with pool.acquire() as conn:
                 async with conn.cursor() as cursor:
                     column_query = "SHOW COLUMNS FROM %s" % self.table 

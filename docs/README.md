@@ -11,7 +11,7 @@ In addition to "finding" the data by using these patterns, STIX-Shifter also _tr
 
 ## Project Overview and CLI Commands
 
-For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Overview](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/OVERVIEW.md)
+For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Overview](OVERVIEW.md)
 
 
 # Installation
@@ -27,7 +27,7 @@ The recommended method for installing stix-shifter is via pip. Two prerequisite 
 
 ## Dependencies
 
-STIX-shifter requries Python 3.8 or greater. See the [requirements file](stix_shifter/requirements.txt) for library dependencies. 
+STIX-shifter requries Python 3.8 or greater. See the [requirements file](../stix_shifter/requirements.txt) for library dependencies. 
 
 # Usage
 
@@ -37,7 +37,7 @@ STIX-Shifter can use used the following ways:
 
 The STIX-Shifter comes with a bundled script which you can use to translate STIX Pattern to a native datasource query. It can also be used to translate a JSON data source query result to a STIX bundle of observable objects. You can also send query to a datasource by using a transmission option. 
 
-More details of the command line option can be found [here](https://github.com/opencybersecurityalliance/stix-shifter/blob/master/OVERVIEW.md#how-to-use)
+More details of the command line option can be found [here](OVERVIEW.md#how-to-use)
 
 ```
 $ stix-shifter translate <MODULE NAME> query "<STIX IDENTITY OBJECT>" "<STIX PATTERN>" "<OPTIONS>"
@@ -86,22 +86,20 @@ print(response)
 ```
 ### Use of custom mappings
 
-If a connector has been installed using pip, the process for editing the STIX mappings is different than if you have pulled-down the project. When working locally, you can edit the mapping files directly. See the [mapping files for the MySQL connector](stix_shifter_modules/mysql/stix_translation/json) as an example. Editing the mapping files won't work if the connector has been installed with pip; the setup script of the stix-shifter package includes the mapppings inside `config.json`. This allows stix-shifter to injest custom mappings as part of the connector's configuration.
+If a connector has been installed using pip, the process for editing the STIX mappings is different than if you have pulled-down the project. When working locally, you can edit the mapping files directly. See the [mapping files for the MySQL connector](../stix_shifter_modules/mysql/stix_translation/json) as an example. Editing the mapping files won't work if the connector has been installed with pip; the setup script of the stix-shifter package includes the mapppings inside `config.json`. This allows stix-shifter to injest custom mappings as part of the connector's configuration.
 
-Refer to [Use of custom mappings](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/custom_mappings.md) for more details on how to edit the mappings in the configuration.
+Refer to [Use of custom mappings](adapter-guide/custom_mappings.md) for more details on how to edit the mappings in the configuration.
 
 # Contributing
 
 We are thrilled you are considering contributing! We welcome all contributors.
-Please read our [guidelines for contributing](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/CONTRIBUTING.md).
+Please read our [guidelines for contributing](CONTRIBUTING.md).
 
-## [Connector Developer Guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-stix-adapter.md)
+## [Connector Developer Guide](adapter-guide/develop-stix-adapter.md)
 
-<!-- If you want to create a new connector for STIX-shifter, see the [developer guide](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/adapter-guide/develop-stix-adapter.md) -->
 
-## [Jupyter Notebook Development Labs](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/lab)
+## [Jupyter Notebook Development Labs](lab)
 
-<!-- There are also a few [Jupyter Notebook labs](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/lab) that cover the CLI commands and dev process. -->
 
 # Licensing
 
@@ -129,4 +127,4 @@ limitations under the License.
 
 ## Changelog
 
-- [Changelog](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/CHANGELOG.md)
+- [Changelog](../CHANGELOG.md)
