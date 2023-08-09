@@ -8,8 +8,18 @@ The below table contains the keywords and their usages:
 
 ### Required Keywords
 
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 15px;
+}
+</style>
+
 <table style="width:100%; border: 1px solid black;  border-collapse: collapse;">
-<tr>
+<tr border: 1px solid black;>
 <th> Keywords </th> <th> Type </th> <th> Descriptions </th> <th> Usage </th> <th> Example </th>
 </tr>
 <td><b> key </b></td> <td> String </td> <td> The STIX object and properties whose path is defined in dot notation.</td> <td> "key": "stix-object.stix_object_property.sub_property" </td>
