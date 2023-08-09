@@ -1,0 +1,7 @@
+stix-shifter==6.0.4.dev100
+stix-shifter-utils==6.0.4.dev100
+stix-shifter-modules-stix-bundle==6.0.4.dev100
+stix-shifter-modules-mysql==6.0.4.dev100
+stix-shifter-modules-qradar==6.0.4.dev100
+notebook
+mysql-connector-python
