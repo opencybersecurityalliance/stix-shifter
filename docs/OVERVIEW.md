@@ -154,7 +154,6 @@ These are general translation options defined in [`config.json`](../stix_shifter
 | time_range | query | A default time range, in minutes, applied to the translated query when no `START STOP` qualifier is present in the STIX pattern. As an example, this would be the `last x minutes` in a SQL query. The default is `5` | A number between `1` and `10000` |
 | dialects | query | Dialects to be used for pattern translation. This will determine what `from_stix_map.json` files will be used. | A list of one or more dialect strings supported by the connector |
 | validate_pattern | query | Specifies if pattern validation is run during the query translation call. This can catch errors in the submitted STIX pattern that would otherwise raise exceptions during translation. | `true` or `false` |
-| stix_validator | results | Specifies if validation is run on the bundle of STIX data returned with results translation. This is performance intensive and should be used on a small result set. The default if `false`. | `true` or `false` |
 | unmapped_fallback | results | If set to `true`, any results data returned, that is not specifired in the to-STIX mapping, will be included in the results in the following STIX object:property format `x-<MODULE NAME>:<NATIVE DATA FIELD>`. The default is `false` | `true` or `false` |
 | stix_2.1 | results | Results are returned as STIX 2.0 objects by default. Setting this option will return results in STIX 2.1 format. The default is `false` | `true` or `false` |
 
@@ -296,16 +295,6 @@ python main.py translate qradar results \
 '[{"sourceip": "192.0.2.0", "filename": "someFile.exe", "sourceport": "0123", "username": "root"}]' '{"stix_2.1": true}'
 ```
 
-
-### Validating translated STIX 2.1 bundle from the CLI
-
-You can validate translated STIX results from the CLI provided they conform to the 2.1 standard. The `--stix-validator` flag at the end will run validation on the returned STIX objects to ensure they conform to the STIX 2.1 standard. Alternatively, `'{ "stix_validator": true }'` can be passed in at the end as an options dictionary.
-
-```
-python main.py translate qradar results \
-'{"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3", "name": "QRadar", "identity_class": "events"}' \
-'[{"sourceip": "192.0.2.0", "filename": "someFile.exe", "sourceport": "0123", "username": "root"}]' '{"stix_2.1": true, "stix_validator: true}'
-```
 
 ### Validating STIX 2.0 and 2.1 bundles with the validator script
 
@@ -594,7 +583,6 @@ These are general options defined in [`config.json`](../stix_shifter_modules/con
 | time_range | query translation | A default time range, in minutes, applied to the translated query when no `START STOP` qualifier is present in the STIX pattern. As an example, this would be the `last x minutes` in a SQL query. The default is `5` | A number between `1` and `10000` |
 | dialects | query translation | Dialects to be used for pattern translation. This will determine what `from_stix_map.json` files will be used. | A list of one or more dialect strings supported by the connector |
 | validate_pattern | query translation | Specifies if pattern validation is run during the query translation call. This can catch errors in the submitted STIX pattern that would otherwise raise exceptions during translation. | `true` or `false` |
-| stix_validator | results translation | Specifies if validation is run on the bundle of STIX data returned with results translation. This is performance intensive and should be used on a small result set. The default if `false`. | `true` or `false` |
 | unmapped_fallback | results translation | If set to `true`, any results data returned, that is not specifired in the to-STIX mapping, will be included in the results in the following STIX object:property format `x-<MODULE NAME>:<NATIVE DATA FIELD>`. The default is `false` | `true` or `false` |
 | stix_2.1 | results translation | Results are returned as STIX 2.0 objects by default. Setting this option will return results in STIX 2.1 format. The default is `false` | `true` or `false` |
 | timeout | transmission | The max amount of time in seconds before the query times out. The default is `30`. | A number between `1` and `60` |
