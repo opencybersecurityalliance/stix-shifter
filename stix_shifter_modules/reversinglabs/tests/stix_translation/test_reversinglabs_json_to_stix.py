@@ -6,7 +6,7 @@ from stix_shifter_modules.reversinglabs.entry_point import EntryPoint
 MODULE = "reversinglabs"
 DATA_SOURCE = {"type": "identity", "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
                "name": "ReversingLabs_Connector", "identity_class": "system"}
-entry_point = EntryPoint(options=options)
+entry_point = EntryPoint()
 translation_options = {}
 domain_name = "google.com"
 extension_types = ['toplevel-property-extension']
