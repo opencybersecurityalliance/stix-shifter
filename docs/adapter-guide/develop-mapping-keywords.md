@@ -8,7 +8,7 @@ The below table contains the keywords and their usages:
 
 ### Required Keywords
 
-<table>
+<table class="colwidths-auto table">
 <tr>
 <td> Keywords </td> <td> Type </td> <td> Descriptions </td> <td> Usage </td> <td> Example </td>
 </tr>
@@ -43,7 +43,7 @@ The below table contains the keywords and their usages:
 
 ### Optional Keywords
 
-<table>
+<table class="colwidths-auto table">
 <tr>
 <td> Keywords </td> <td> Type </td> <td> Descriptions </td> <td> Usage </td>
 </tr>
