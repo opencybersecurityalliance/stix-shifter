@@ -8,7 +8,7 @@ The below table contains the keywords and their usages:
 
 ### Required Keywords
 
-<table class="colwidths-auto table">
+<table style="width:100%; border: 1px solid black;  border-collapse: collapse;">
 <tr>
 <th> Keywords </th> <th> Type </th> <th> Descriptions </th> <th> Usage </th> <th> Example </th>
 </tr>
