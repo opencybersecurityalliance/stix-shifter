@@ -53,9 +53,9 @@ th, td {
 
 ### Optional Keywords
 
-<table class="colwidths-auto table">
+<table>
 <tr>
-<td> Keywords </td> <td> Type </td> <td> Descriptions </td> <td> Usage </td>
+<th> Keywords </th> <th> Type </th> <th> Descriptions </th> <th> Usage </th>
 </tr>
 <tr>
 <td><b> references </b></td> <td> String/List(string) </td> <td> Specifies named objects to reference in another object. </td> <td> "references": "src_ip" <br>"references": ["dst_mac"] </td>
