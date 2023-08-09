@@ -5,6 +5,52 @@ There are keywords which need to be specified in the `to-stix` mappings in order
 2. Optional 
 
 The below table contains the keywords and their usages:
+<table class="colwidths-auto table">
+<thead>
+  <tr>
+    <th>Keywords</th>
+    <th>Type</th>
+    <th>Descriptions</th>
+    <th>Usage</th>
+    <th>Example</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>key</td>
+    <td>String</td>
+    <td>The STIX object and properties whose path is defined in dot notation.</td>
+    <td>"key": "stix-object.stix_object_property.sub_property"</td>
+    <td>
+      ```json
+          {
+            "sha256hash": {
+              "key": "file.hashes.SHA-256",
+              "object": "fl"
+            }
+          }
+      ```
+    </td>
+  </tr>
+  <tr>
+    <td>object</td>
+    <td>String</td>
+    <td>The name specified in the object is used to add properties of same the object. </td>
+    <td>"object": "src_ip" </td>
+    <td>
+      ```json
+          {
+            "sourceip": {
+              "key": "ipv4-addr.value",
+              "object": "src_ip"
+            }
+          }
+      ```
+    </td>
+  </tr>
+</tbody>
+</table>
+
 
 ### Required Keywords
 
