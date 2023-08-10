@@ -15,7 +15,7 @@ class MockToken:
 
 class ClientSecretMockResponse:
     @staticmethod
-    async def get_token(scope):
+    async def get_token(scope, **kwargs):
         return MockToken
 
     @staticmethod
