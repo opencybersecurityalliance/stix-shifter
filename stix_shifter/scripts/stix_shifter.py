@@ -350,8 +350,6 @@ def main():
             for line in sys.stdin:
                 data_lines.append(line)
             data = '\n'.join(data_lines)
-        if args.stix_validator:
-            options['stix_validator'] = args.stix_validator
         recursion_limit = args.recursion_limit if args.recursion_limit else 1000
         translation = stix_translation.StixTranslation()
         result = translation.translate(
