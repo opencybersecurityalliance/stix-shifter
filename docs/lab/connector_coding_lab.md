@@ -77,7 +77,8 @@ class EntryPoint(BaseEntryPoint):
             "type": "text"
         },
         "help": {
-            "type": "link"
+            "type": "link",
+            "default": "data-sources.html"
         },
         "options": {
             "table": {
