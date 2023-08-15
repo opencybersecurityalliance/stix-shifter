@@ -1,4 +1,4 @@
-# Connector Coding Lab
+# Building a STIX-Shifter Connector Lab
 
 This is a hands-on lab to start implementing a connector module in STIX-shifter from scratch. The main purpose of this lab is to get an experience of developing a functional connector. You will basically recreate an already existing connector. We will mostly copy and paste required code blocks and functions. We chose the MySQL connector since its coding complexity is simpler than most of the existing connectors. 
 
