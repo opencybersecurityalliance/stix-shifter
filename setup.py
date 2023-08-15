@@ -34,7 +34,7 @@ import importlib
 here = os.path.abspath(os.path.dirname(__file__))
 SKIP_ME = 'SKIP.ME'
 
-with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
+with open(os.path.join(here, 'docs/README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 TMP_MAPPING_DIR = 'tmp_mapping'
