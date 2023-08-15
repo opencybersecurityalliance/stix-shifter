@@ -16,6 +16,28 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
+## 6.1.1 (2023-08-15)
+
+### Deprecations:
+
+*  CLI lab updates and STIX validator removal [#1555](https://github.com/opencybersecurityalliance/stix-shifter/pull/1555)
+
+### Changes:
+
+*  Add readthedocs configurations [#1547](https://github.com/opencybersecurityalliance/stix-shifter/pull/1547)
+*  Update connector coding lab [#1557](https://github.com/opencybersecurityalliance/stix-shifter/pull/1557)
+*  Add docs folder [#1551](https://github.com/opencybersecurityalliance/stix-shifter/pull/1551)
+
+### Fixes:
+
+*  cli lab instruction fixes [#1558](https://github.com/opencybersecurityalliance/stix-shifter/pull/1558)
+*  Fix variable assignment error with ECS event.start/end [#1556](https://github.com/opencybersecurityalliance/stix-shifter/pull/1556)
+*  Mysql connector timeout fix [#1552](https://github.com/opencybersecurityalliance/stix-shifter/pull/1552)
+*  fix cursor call in mysql API client [#1550](https://github.com/opencybersecurityalliance/stix-shifter/pull/1550)
+*  Mapping Fixes for AWS GuardDuty [#1543](https://github.com/opencybersecurityalliance/stix-shifter/pull/1543)
+
+--------------------------------------
+
 ## 6.0.3 (2023-07-27)
 
 ### Fixes:
