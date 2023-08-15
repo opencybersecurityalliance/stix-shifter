@@ -19,8 +19,12 @@ This is a hands-on lab to start implementing a connector module in STIX-shifter 
 ### 4. Create a python virtual environment
 
 ```
-virtualenv -p python3 virtualenv && source virtualenv/bin/activate
+virtualenv -p python3.9 virtualenv && source virtualenv/bin/activate
+```
+```
 python3 -m pip install --upgrade pip
+```
+```
 INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install
 ```
 
@@ -74,6 +78,7 @@ class EntryPoint(BaseEntryPoint):
         },
         "help": {
             "type": "link",
+            "default": "data-sources.html"
         },
         "options": {
             "table": {
@@ -160,8 +165,8 @@ python main.py translate lab_connector query {} "[ipv4-addr:value = '127.0.0.1']
 * First create a class called `APIClient()` in `stix_shifter_modules/lab_connector/stix_transmission/api_client.py`. This is where you initialize the connection and configurations needed for the data source API requests. This class also includes the utility functions needed for the major functionalities of the connector. Add the following code to the top of the API client:
 
 ```
-import mysql.connector
-from mysql.connector import errorcode
+import aiomysql
+from pymysql.err import DatabaseError
 
 
 class APIClient():
@@ -204,8 +209,8 @@ class Connector(BaseJsonSyncConnector):
 * Define and implement a function named `ping_connection(self)` inside `stix_shifter_modules/lab_connector/stix_transmission/connector.py` 
 
 ```
-def ping_connection(self):
-    response = self.api_client.ping_data_source()
+async def ping_connection(self):
+    response = await self.api_client.ping_data_source()
     response_code = response.get('code')
     response_txt = response.get('message')
     return_obj = dict()
@@ -221,32 +226,36 @@ def ping_connection(self):
 * Define and implement the `ping_data_source()` function inside `APIClient()`:
 
 ```
-def ping_data_source(self):
+async def ping_data_source(self):
     # Pings the data source
     response = {"code": 200, "message": "All Good!"}
     try:
-        cnx = mysql.connector.connect(user=self.user, password=self.password, 
-                                        host=self.host, database=self.database, 
-                                        port=self.port, auth_plugin=self.auth_plugin)  
+        pool = await aiomysql.create_pool(host=self.host, port=self.port,
+                                        user=self.user, password=self.password,
+                                        db=self.database, connect_timeout=self.timeout)
+        async with pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute("SELECT 42;")
+                (r,) = await cur.fetchone()
+                assert r == 42
 
-    except mysql.connector.Error as err:
-        response["code"] = err.errno
+        pool.close()
+        await pool.wait_closed()
+    except DatabaseError as err:
+        response["code"] = int(err.args[0])
+        response["message"] = err
+    except Exception as err:
+        response["code"] = 'unknown'
+        response["message"] = err
 
-        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            response["message"] = "Something is wrong with your user name or password"
-        elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            response["message"] = "Database does not exist"
-        else:
-            response["message"] = err
-    else:
-        cnx.close()
     return response
+
 ```
 
 **Test the Ping command using the CLI tool**
 
 ```
-python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' ping
+python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":""}}' ping
 ```
 
 ### Query 
@@ -274,17 +283,17 @@ python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db
 * Define and implement a function named `create_results_connection(self, query, offset, length)` inside `stix_shifter_modules/lab_connector/stix_transmission/connector.py`
 
 ```
-def create_results_connection(self, query, offset, length):
-    return_obj = dict()
-    response = self.api_client.run_search(query, start=offset, rows=length)
-    response_code = response.get('code')
-    response_txt = response.get('message')
-    if response_code == 200:
-        return_obj['success'] = True
-        return_obj['data'] = response.get('result')
-    else:
-        ErrorResponder.fill_error(return_obj, response, ['message'], error=response_txt, connector=self.connector)
-    return return_obj
+async def create_results_connection(self, query, offset, length):
+        return_obj = dict()
+        response = await self.api_client.run_search(query, start=offset, rows=length)
+        response_code = response.get('code')
+        response_txt = response.get('message')
+        if response_code == 200:
+            return_obj['success'] = True
+            return_obj['data'] = response.get('result')
+        else:
+            ErrorResponder.fill_error(return_obj, response, ['message'], error=response_txt, connector=self.connector)
+        return return_obj
 ```
 
 * Define and implement a function named `run_search(self, query, offset, length)`  in the `APIClient()` class.
@@ -294,7 +303,7 @@ def create_results_connection(self, query, offset, length):
 **Test the Results command using the CLI tool**
 
 ```
-python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' results "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 0 100
+python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":""}}' results "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 0 100
 ```
 
 ## Results Translation
@@ -314,7 +323,7 @@ class ResultsTranslator(JSONToStix):
     pass    
 ```
      
-* The parent utility class `JSONToStix` automatically translates the results into STIX.
+***Note*** If the datasource results need some pre-processing before applying the mapping then this ResultsTranslator() class can be used. Otherwise, the `self.setup_translation_simple(dialect_default='default')` statement inside entry point class `EntryPoint()` takes care of the results tranlsation automatically. The parent utility class `JSONToStix` automatically translates the results into STIX.  
 
 **Test the results translation command using the CLI tool**
 

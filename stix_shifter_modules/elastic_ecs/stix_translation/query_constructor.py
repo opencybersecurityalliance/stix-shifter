@@ -128,7 +128,7 @@ class QueryStringPatternTranslator:
 
             if stix_field == 'start' or stix_field == 'end':
                 transformer = TimestampToMilliseconds()
-                expression.value = transformer.transform(expression.value)
+                value = transformer.transform(expression.value)
 
             # Some values are formatted differently based on how they're being compared
             elif expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
