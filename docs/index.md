@@ -4,6 +4,8 @@ STIX-shifter is an open source python library allowing software to connect to pr
 
 [STIX-Shifter github repo](https://github.com/opencybersecurityalliance/stix-shifter) is the official portal of everything STIX-Shifter beyond this documentation: source, connectors, tutorial, community entrances, and more.
 
+::::
+
 ::::{grid} 1 2 2 3
 :gutter: 1 1 1 2
 
@@ -18,6 +20,8 @@ There are more than 30 connectors. For the list of connectors, see the [Availabl
 :::{grid-item-card} {octicon}`tools;1.5em;sd-mr-1` Developer Guide
 Follow the developer guide to learn about developing a new STIX-Shifter connector, see [Connector Developer Guide](adapter-guide/develop-stix-adapter.md).
 :::
+
+::::
 
 ```{toctree}
 :maxdepth: 2
