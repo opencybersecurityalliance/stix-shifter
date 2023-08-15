@@ -1,26 +1,7 @@
-# STIX-SHIFTER
 
-**Table of Contents**
-
-- [Introduction](#introduction)
-  - [What is STIX?](#what-is-stix)
-  - [What is STIX-SHIFTER?](#what-is-stix-shifter)
-  - [What is STIX Patterning? What are STIX Observations?](#what-is-stix-patterning-what-are-stix-observations)
-  - [This sounds like Sigma, I already have that](#this-sounds-like-sigma-i-already-have-that)
-  - [What is a STIX-SHIFTER connector?](#what-is-a-stix-shifter-connector)
-  - [Why would I want to use this?](#why-would-i-want-to-use-this)
-- [Available Connectors](CONNECTORS.md)
-- [How to use](#How-to-use)
-  - [Translate](#translate)
-  - [Transmit](#transmit)
-  - [Execute](#execute)
-  - [Debug](#Debug)
-- [Limitations](#limitations)
-- [Glossary](#glossary)
-- [Architecture Context](#architecture-context)
-- [Contributing](#contributing)
-- [Guide for creating new connectors](adapter-guide/develop-stix-adapter.md)
-- [Licensing](#licensing)
+```{contents} Table of Contents
+:depth: 3
+```
 
 ## Introduction
 

@@ -1,4 +1,4 @@
-# Use of custom mappings
+## Use of custom mappings
 
 Follow the below steps, if a user or threat hunter wants to use custom mapping after installing stix-shifter libraries:
 
