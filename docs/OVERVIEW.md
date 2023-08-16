@@ -1,26 +1,7 @@
-# STIX-SHIFTER
 
-**Table of Contents**
-
-- [Introduction](#introduction)
-  - [What is STIX?](#what-is-stix)
-  - [What is STIX-SHIFTER?](#what-is-stix-shifter)
-  - [What is STIX Patterning? What are STIX Observations?](#what-is-stix-patterning-what-are-stix-observations)
-  - [This sounds like Sigma, I already have that](#this-sounds-like-sigma-i-already-have-that)
-  - [What is a STIX-SHIFTER connector?](#what-is-a-stix-shifter-connector)
-  - [Why would I want to use this?](#why-would-i-want-to-use-this)
-- [Available Connectors](CONNECTORS.md)
-- [How to use](#How-to-use)
-  - [Translate](#translate)
-  - [Transmit](#transmit)
-  - [Execute](#execute)
-  - [Debug](#Debug)
-- [Limitations](#limitations)
-- [Glossary](#glossary)
-- [Architecture Context](#architecture-context)
-- [Contributing](#contributing)
-- [Guide for creating new connectors](adapter-guide/develop-stix-adapter.md)
-- [Licensing](#licensing)
+```{contents} Table of Contents
+:depth: 3
+```
 
 ## Introduction
 
@@ -167,7 +148,7 @@ These are general translation options defined in [`config.json`](../stix_shifter
 "[url:value = 'http://www.testaddress.com'] OR [ipv4-addr:value = '192.168.122.84']"
 ```
 
-#### OUTPUT: Native data source query
+***Output: Native data source query***
 
 ```
 # Translated Query (using SQL as an example):
@@ -321,7 +302,7 @@ _results.json_
 ]
 ```
 
-`python main.py translate qradar results '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "QRadar","identity_class": "system"}' '' < /path/to/file/results.json`
+```python main.py translate qradar results '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "QRadar","identity_class": "system"}' '' < /path/to/file/results.json```
 
 ## Transmit
 
@@ -443,7 +424,7 @@ Uses the data source API to ping the connection.
 
 `stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' ping`
 
-#### OUTPUT:
+***Output***
 
 `{'success': True}`
 
@@ -455,7 +436,7 @@ Uses the data source API to submit a query to the connection.
 
 `stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' query <NATIVE DATA SOURCE QUERY>`
 
-#### OUTPUT:
+***Output***
 
 `{'success': True, 'search_id': <SEARCH ID>}`
 
@@ -469,7 +450,7 @@ Uses the data source API to look up the query status based on the `search_id` th
 
 `stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' status <SEARCH ID> <METADATA(optional)>`
 
-#### OUTPUT:
+***Output***
 
 `{'success': True, 'status': <STATUS>, 'progress': <QUERY PERCENTAGE COMPLETE>}`
 
@@ -487,11 +468,11 @@ If the connector supports, you can specify `metadata` parameter which may contai
 
 The `OFFSET` and `LENGTH` control what pages/rows of data are returned in the query results. 
 
-#### OUTPUT:
+***Output***
 
 `{'success': True, 'data': [<QUERY RESULTS>]}`
 
-#### OUTPUT(with metadata):
+***Output(with metadata)***
 
 `{'success': True, 'data': [<QUERY RESULTS>], 'metadata': <metadata values>}`
 
@@ -533,7 +514,7 @@ Uses the data source API to fetch the query results based on the search ID, offs
 
 `stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' results_stix <SEARCH ID> <OFFSET> <LENGTH> '<STIX IDENTITY OBJECT>'`
 
-#### OUTPUT:
+***Output***
 
 STIX bundle of objects.
 
@@ -547,7 +528,7 @@ Checks if the data source connection is asynchronous.
 
 `stix-shifter transmit <MODULE NAME> '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' is_async`
 
-#### OUTPUT:
+**Output**
 
 `True` or `False`
 
@@ -614,7 +595,7 @@ You can redirect the output of your CLI command to a file to save the STIX resul
 
 `stix-shifter execute <TRANSMISSION MODULE NAME> <TRANSLATION MODULE NAME> '<STIX IDENTITY OBJECT>' '<CONNECTION OBJECT>' '<CONFIGURATION OBJECT>' '<STIX PATTERN>' > results.json`
 
-### OUTPUT:
+***Output***
 
 A bundle of STIX objects
 
@@ -626,7 +607,7 @@ The `modules` command will return a JSON of the existing connectors along with t
 
 `python main.py modules`
 
-#### output
+**Output**
 ```
 {
     "qradar": {
@@ -657,11 +638,9 @@ This command can also be used to get the dialects of a specific connector.
 
 `python main.py modules <module name>`
 
-### CLI Command
-
 `python main.py modules qradar`
 
-#### output
+***Output***
 ```
 {
     "qradar": {
@@ -690,7 +669,7 @@ The `configs` command returns the configuration pararmetes of the existing conne
 ### CLI Command
 
 `python main.py configs`
-#### output
+***Output***
 ```
 {
     "alertflex": {
@@ -730,10 +709,9 @@ The `configs` command returns the configuration pararmetes of the existing conne
 
 Specifying the connector module name will return the configuration parameters of a specific connector.
 
-### CLI Command
+`python main.py configs qradar`
 
-`python main.py configs `
-#### output
+***Output*** 
 ```
 {
     "qradar": {

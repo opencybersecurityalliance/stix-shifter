@@ -1,4 +1,4 @@
-# To STIX mapping Keywords
+## Mapping Keywords
 
 There are keywords which need to be specified in the `to-stix` mappings in order to perform specific operations on the datasource fields. There are two types of keywords:
 1. Required
@@ -6,13 +6,23 @@ There are keywords which need to be specified in the `to-stix` mappings in order
 
 The below table contains the keywords and their usages:
 
-## Required Keywords
+### Required Keywords
 
-<table>
-<tr>
-<td> Keywords </td> <td> Type </td> <td> Descriptions </td> <td> Usage </td> <td> Example </td>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 15px;
+}
+</style>
+
+<table style="width:100%; border: 1px solid black;  border-collapse: collapse;">
+<tr border: 1px solid black;>
+<th> Keywords </th> <th> Type </th> <th> Descriptions </th> <th> Usage </th> <th> Example </th>
 </tr>
-<td><b> key </b></td> <td> String </td> <td> The STIX object and properties whose path is defined in dot notation.</td> <td> "key": "stix-object.stix_object_property.sub_property" </td>
+<td><b> key </b></td> <td> String </td> <td> The STIX object and properties whose path is defined in dot notation.</td> <td> "key": "stix-object.stix-object-property.sub-property" </td>
 <td>
 
 ```json
@@ -41,11 +51,11 @@ The below table contains the keywords and their usages:
 </table>
 
 
-## Optional Keywords
+### Optional Keywords
 
 <table>
 <tr>
-<td> Keywords </td> <td> Type </td> <td> Descriptions </td> <td> Usage </td>
+<th> Keywords </th> <th> Type </th> <th> Descriptions </th> <th> Usage </th>
 </tr>
 <tr>
 <td><b> references </b></td> <td> String/List(string) </td> <td> Specifies named objects to reference in another object. </td> <td> "references": "src_ip" <br>"references": ["dst_mac"] </td>
@@ -65,14 +75,14 @@ The below table contains the keywords and their usages:
 <tr>
 <td><b> group_ref </b></td> <td> Boolean </td> <td> This keyword needs to be used when there is a nested list of dictionaries and each dictionary item creates an object. This keyword groups together references in a list and sets where the object is mapped. </td> <td> "group_ref": true </td>
 </tr>
-<td><b> ds_key </b></td> <td> String </td> <td> This keyword is used when datasource results are formatted to modify some field names. The value assigned to the keyword determines the mapping of a STIX object. This keyword is only used in the aws_athena and aws_cloud_watch_logs modules to resolve nested dictionary mappings. <b>This keyword has been deprecated since nested dictionary mappings are now handled by the JSON to STIX translation utility.</b> </td> <td> "ds_key": "resource_instancedetails_networkinterfaces_0_networkinterfaceid" </td>
+<td><b> ds_key </b></td> <td> String </td> <td> This keyword is used when datasource results are formatted to modify some field names. The value assigned to the keyword determines the mapping of a STIX object. This keyword is only used in the aws_athena and aws_cloud_watch_logs modules to resolve nested dictionary mappings. <b>This keyword has been deprecated since nested dictionary mappings are now handled by the JSON to STIX translation utility.</b> </td> <td> "ds_key": "resource_instancedetails" </td>
 </tr>
 </table>
 
 
-## Examples of Optional keywords:
+### Examples of Optional keywords:
 
-##  unwrap 
+####  unwrap 
 
 **Mapping:**
 
@@ -140,7 +150,7 @@ This STIX bundle contains two ipv4-addr objects which are created based on `unwr
 
 <br>
 
-##  group 
+####  group 
 
 **Mapping:**
 
@@ -236,7 +246,7 @@ This STIX bundle contains two ipv4-addr objects which are created based on `unwr
 
 <br>
 
-##  group_ref 
+#### group_ref 
 
 **Mapping:**
 
@@ -337,7 +347,7 @@ List of nested dictionary in datasource results are referenced in `scanned_refs`
 
 <br>
 
-## value 
+#### value 
 
 **Mapping:**
 
@@ -397,7 +407,7 @@ List of nested dictionary in datasource results are referenced in `scanned_refs`
 
 <br>
 
-##  references 
+#### references 
 
 **Mapping:**
 
@@ -477,7 +487,7 @@ Source `ipv4-addr` object number is referenced in `network-traffic` object:
 
 <br>
 
-##   transformer  
+#### transformer  
 
 **Mapping:**
 ```

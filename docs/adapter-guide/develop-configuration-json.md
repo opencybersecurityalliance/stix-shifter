@@ -1,10 +1,10 @@
-# Configuration Parameters
+## Configuration Parameters
 
 A json file needs to be created that contains configuration parameters for each module. The configuration json file is required in order to validate the module specific parameters for a successful translation and transmission call. Please follow this naming convention when you create the file: `config.json`
 
 A second json file is required to translate the parameters defined in `lang_en.json` for the UI. This file is necessary in order to help the UI framework show the parameters in human readable format.
 
-## File Location
+### File Location
 
 Create a directory named `configuration` in your module folder. The json files mentioned above needs to be created inside `configuration`. Make sure json files saved in the following location for your new module-
 
@@ -12,9 +12,9 @@ Create a directory named `configuration` in your module folder. The json files m
 /stix_shifter_modules/<module name>/configuration
 ```
 
-## JSON File Description
+### JSON File Description
 
-### config json file
+#### config json file
 
 Two top level json objects needs to be preset in the file: `connection` and `configuration`. The child attributes of the `connection` object should be the parameters required for making API calls which can be used by multiple users and role levels. The `configuration` object should contain the parameters that are required for API authentication for individual users and roles. 
 
@@ -104,7 +104,7 @@ Configuration object needs to have `auth` child object. `auth` object should con
 
 Both connection and configuration object may contain more or different parameters than that are defined in the example above based on the individual module. 
 
-### lang json file
+#### lang json file
 
 The `lang_en.json` file has the similar format like `config.json`. It has different child attributes to translate the files for UI framework.
 
