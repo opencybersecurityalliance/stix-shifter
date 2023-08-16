@@ -20,7 +20,7 @@ class QueryStringPatternTranslator:
         # List for any queries that are split due to START STOP qualifier
         self.qualified_queries = []
         # Translated query string without any qualifiers
-        self.translated = self._parse_expression(pattern)
+        self.translated = self.parse_expression(pattern)
         self.qualified_queries = [self.translated]
 
     @staticmethod
@@ -174,6 +174,9 @@ class QueryStringPatternTranslator:
         else:
             raise RuntimeError("Unknown Recursion Case for expression={}, type(expression)={}".format(
                 expression, type(expression)))
+
+    def parse_expression(self, pattern: Pattern):
+        return self._parse_expression(pattern)
 
 
 def _get_timestamp(mapped_field, comparator, value):
