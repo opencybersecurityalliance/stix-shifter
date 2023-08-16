@@ -5,8 +5,8 @@ This is a hands-on lab to start implementing a connector module in STIX-shifter 
 
 ## Prerequisites
 
-* Github account
-* Basic knowledge of Git such as forking, committing, branching, pulling, and merging
+* GitHub account
+* Basic knowledge of git such as forking, committing, branching, pulling, and merging.
 * Working knowledge of the Python programming language. This lab will work with Python 3.8 or greater.
 * An IDE to write Python code, such as VS Code.
 * Knowledge of the data source API that includes API request, response, datatype and schema.
@@ -16,15 +16,11 @@ This is a hands-on lab to start implementing a connector module in STIX-shifter 
 ### 1. Open stix-shifter folder in the VS Code IDE
 ### 2. Open a terminal in VS code
 ### 3. Make sure you are in the `stix-shifter/` parent directory
-### 4. Create a python virtual environment
+### 4. Create a python virtual environment in the terminal
 
-```
+```bash
 virtualenv -p python3.9 virtualenv && source virtualenv/bin/activate
-```
-```
 python3 -m pip install --upgrade pip
-```
-```
 INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install
 ```
 
@@ -38,7 +34,7 @@ INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install
 * Implement the `EntryPoint()` class in `stix_shifter_modules/lab_connector/entry_point.py`. 
 * The EntryPoint class acts as a gateway to the various methods used by the translation and transmission classes.
 
-```
+```python
 from stix_shifter_utils.utils.base_entry_point import BaseEntryPoint
 
 class EntryPoint(BaseEntryPoint):
@@ -58,7 +54,7 @@ class EntryPoint(BaseEntryPoint):
 * The child attributes of the connection object should be the parameters required for making API calls which can be used by multiple users and role levels.
 * Here's an example of the connection object:
 
-```
+```json
 "connection": {
         "type": {
             "displayName": "Lab Connector"
@@ -92,7 +88,7 @@ class EntryPoint(BaseEntryPoint):
 * The configuration object should contain the parameters that are required for API authentication for individual users and roles.
 * Here's an example of the configuration object:
 
-```
+```json
 "configuration": {
         "auth": {
             "type" : "fields",
@@ -112,7 +108,7 @@ class EntryPoint(BaseEntryPoint):
 
 Here's an example of the content of a `lang_en.json` file:
 
-```
+```json
 "configuration": {
         "auth": {
             "username": {
@@ -155,16 +151,18 @@ Here's an example of the content of a `lang_en.json` file:
 
 **Test the query translation command using the CLI tool**
 
-```
+```bash
 python main.py translate lab_connector query {} "[ipv4-addr:value = '127.0.0.1'] START t'2022-07-01T00:00:00.000Z' STOP t'2022-07-27T00:05:00.000Z'" '{"table":"demo_db"}'
 ```
 
 ### 10. Implement stix transmission module. 
 
 * You need to implement four functionalities of the transmission module which are `ping`, `query`, `status` and `results`. 
-* First create a class called `APIClient()` in `stix_shifter_modules/lab_connector/stix_transmission/api_client.py`. This is where you initialize the connection and configurations needed for the data source API requests. This class also includes the utility functions needed for the major functionalities of the connector. Add the following code to the top of the API client:
+* First create a class called `APIClient()` in `stix_shifter_modules/lab_connector/stix_transmission/api_client.py`. This is where you initialize the connection and configurations needed for the data source API requests. This class also includes the required data source API calls and utility functions. 
 
-```
+Add the following code to the top of the API client:
+
+```python
 import aiomysql
 from pymysql.err import DatabaseError
 
@@ -186,7 +184,7 @@ class APIClient():
 
 * Create a file called `connector.py` if it doesn't yet exist, and add the following code to the top of the file:
 
-```
+```python
 import datetime
 import json
 from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
@@ -208,7 +206,7 @@ class Connector(BaseJsonSyncConnector):
 
 * Define and implement a function named `ping_connection(self)` inside `stix_shifter_modules/lab_connector/stix_transmission/connector.py` 
 
-```
+```python
 async def ping_connection(self):
     response = await self.api_client.ping_data_source()
     response_code = response.get('code')
@@ -225,7 +223,7 @@ async def ping_connection(self):
 
 * Define and implement the `ping_data_source()` function inside `APIClient()`:
 
-```
+```python
 async def ping_data_source(self):
     # Pings the data source
     response = {"code": 200, "message": "All Good!"}
@@ -254,7 +252,7 @@ async def ping_data_source(self):
 
 **Test the Ping command using the CLI tool**
 
-```
+```bash
 python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":""}}' ping
 ```
 
@@ -264,8 +262,8 @@ python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db
 
 **Test the Query command using the CLI tool**
 
-```
-python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' query "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 
+```bash
+python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":""}}' query "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 
 ```
 
 ### Status
@@ -274,15 +272,15 @@ python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db
 
 **Test the Status command with the CLI tool**
 
-```
-python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' status "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 
+```bash
+python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":""}}' status "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 
 ```
 
 ### Results
 
 * Define and implement a function named `create_results_connection(self, query, offset, length)` inside `stix_shifter_modules/lab_connector/stix_transmission/connector.py`
 
-```
+```python
 async def create_results_connection(self, query, offset, length):
         return_obj = dict()
         response = await self.api_client.run_search(query, start=offset, rows=length)
@@ -302,7 +300,7 @@ async def create_results_connection(self, query, offset, length):
 
 **Test the Results command using the CLI tool**
 
-```
+```bash
 python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":""}}' results "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 0 100
 ```
 
@@ -316,7 +314,7 @@ python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db
 * For this lab, update `stix_shifter_modules/lab_connector/stix_translation/json/to_stix_map.json` file with the content of the [`to_stix_map.json` file](https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/json/to_stix_map.json)
 * Implement the `ResultsTranslator(JSONToStix)` class in `results_translator.py`
 
-```
+```python
 from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 
 class ResultsTranslator(JSONToStix):
@@ -327,7 +325,7 @@ class ResultsTranslator(JSONToStix):
 
 **Test the results translation command using the CLI tool**
 
-```
+```bash
 python main.py translate mysql results '{ "type":"identity","id":"identity--20a77a37-911e-468f-a165-28da7d02985b", "name":"MySQL Database", "identity_class":"system", "created": "2022-04-07T20:35:41.042Z", "modified": "2022-04-07T20:35:41.042Z" }' '[ { "source_ipaddr": "10.0.0.9",  "dest_ipaddr": "10.0.0.9",  "url": "www.example.org",  "filename": "spreadsheet.doc",  "sha256hash": "b0795d1f264efa26bf464612a95bba710c10d3de594d888b6282c48f15690459",  "md5hash": "0a556fbb7d3c184fad0a625afccd2b62",  "file_path": "C:/PHOTOS",  "username": "root", "source_port": 143,  "dest_port": 8080,  "protocol": "udp",  "entry_time": 1617123877.0,  "system_name": "demo_system",  "severity": 2,  "magnitude": 1 } ]' '{"table":"demo_table"}'
 ```
 
@@ -336,10 +334,10 @@ python main.py translate mysql results '{ "type":"identity","id":"identity--20a7
 * This is where you map any API specific error code messages for the return object. You can use the same [error mapper content](https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_transmission/error_mapper.py) that is used in the MySQL connector.
 
 ### 13. Add any data source specific dependency to the `stix_shifter_modules/lab_connector/requirements.txt`.  
-* In this case add `mysql-connector-python==8.0.25`
+* In this case add `aiomysql==0.1.1`
 
 ### 14. The entire end-to-end query flow can now be tested with the CLI `execute` command:
 
-```
-python main.py execute lab_connector lab_connector '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "mysql","identity_class": "system"}' '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":"Giv3@m@n@fish"}}' "[ipv4-addr:value = '10.0.0.9']"
+```bash
+python main.py execute lab_connector lab_connector '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "mysql","identity_class": "system"}' '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":""}}' "[ipv4-addr:value = '10.0.0.9']"
 ```
