@@ -326,3 +326,10 @@ class TestStixtoQuery(unittest.TestCase, object):
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
         test_query = ['(process.parent.name : "node" OR (process.executable : "node" OR process.parent.executable : "node"))']
         _test_query_assertions(translated_query, test_query)
+
+    def test_start_comparison(self):
+        stix_pattern = "[x-oca-event:start<='2023-12-12T00:00:00.000Z']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = ['(event.start:[* TO "2023-12-12T00:00:00.000Z"])']
+        _test_query_assertions(translated_query, test_query)
