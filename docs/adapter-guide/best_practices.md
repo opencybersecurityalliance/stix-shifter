@@ -1,4 +1,4 @@
-# Best practices when developing a new connector
+## Best practices
 
 An assessment of the data source APIs should be made before beginning implementation of a connector. The APIs should return a good coverage of [cyber observable](https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) data that fits within the standard STIX `observed-data` objects. If most of the data returned is getting mapped to custom STIX objects or properties, it may be an indication that the data source is not a good fit for a connector. The APIs should also allow for robust filtering of the data, or support a query language; this is essential for executing federated searches against multiple connectors using STIX patterning.
 

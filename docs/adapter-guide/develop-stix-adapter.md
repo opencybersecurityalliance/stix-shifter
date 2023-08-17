@@ -1,19 +1,12 @@
-# Developing a new STIX-shifter connector
+## Developing a new connector
 
-- [Introduction](../README.md)
-- [Overview of the project](../OVERVIEW.md)
-- [Scenario](#scenario)
-- [Prerequisites](#prerequisites)
-- [Best Practices for developing a connector](best_practices.md)
-- [Steps](#steps)
+### Scenario
 
-## Scenario
-
-### Participants
+***Participants***
 
 This scenario involves a software developer (_Developer A_) and an end user (_User A_). _Developer A_ wants to implement a new connector for the STIX-shifter project that can support a particular security product (_Product A_). _User A_ is another developer that uses the STIX-shifter library.
 
-### Problem to solve
+***Problem to solve***
 
 _User A_ performs security monitoring with _Product A_ and several other security products. The other products already have existing STIX-shifter connectors.
 
@@ -24,7 +17,7 @@ _User A_ would like to:
 
 By implementing a new connector, _Developer A_ allows _Product A_ to fit into the workflow.
 
-## Prerequisites
+### Prerequisites
 
 - Your development environment must use Python 3.8 or greater.
 - You must have access to the target data source. In the sample scenario, you must have access to Product A data source.
@@ -33,11 +26,11 @@ By implementing a new connector, _Developer A_ allows _Product A_ to fit into th
   - Observable objects. See [STIX™ Version 2.0. Part 4: Cyber Observable Objects](http://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html)
   - Stix patterning. See [STIX™ Version 2.0. Part 5: STIX Patterning](https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part5-stix-patterning.html)
 
-## Best practices
+### Best practices
 
 Familiarize yourself with some [best practices](best_practices.md) before beginning a new connector.
 
-## Steps
+### Steps
 
 To develop a STIX-shifter connector for a data source:
 
@@ -49,7 +42,7 @@ To develop a STIX-shifter connector for a data source:
 1. [Create the module entry points](#create-module-entry-points).
 1. Create a pull request to merge your changes in the `opencybersecurityalliance/stix-shifter` repository.
 
-### Create a module folder
+#### Create a module folder
 
 Connector modules are stored under the `stix_shifter_modules` directory. To help you get started with creating a new connector, two module templates are available. If your data source executes queries synchronously (there is no API call to check the status of the query), make a copy of the `synchronous_template` folder in the `stix_shifter_modules` directory. If your data source executes queries asynchronously, make a copy of the `async_template` folder. The instructions that follow use the async template as an example.
 
@@ -68,7 +61,7 @@ Each module contains the following directories and files:
 
 entry_point.py: Initializes classes and paths used by the connector. 
 
-### Create the module entry points
+#### Create the module entry points
 
 The `EntryPoint` class acts as a gateway to the various methods used by the translation and transmission classes. In most instances, it's fine to use the `setup_transmission_simple` and `setup_translation_simple(dialect_default='default')` methods. In cases where multiple dialects are used by the connector, the `dialect_default` argument is the dialect you wish to use as the default when the entire collection isn't passed in. See [Create a Translation module](develop-translation-module.md) to learn about dialects.
 
@@ -99,7 +92,7 @@ If the data source is synchronous, you must include `set_async(False)` in the co
 ```
 
 
-### Testing a new connector using the proxy host
+#### Testing a new connector using the proxy host
 
 Work on a new stix-shifter connector occurs after the project has been forked and cloned into a local development environment. Stix-shifter contains a **proxy** connector that facilitates a remote instance of the project calling out to a local instance. While in development, a new connector's working branch can be tested in any project using the stix-shifter library without first merging into the master branch on Github. A host is run on the local instance from the CLI. When a `proxy` data source is passed to the remote instance of stix-shifter, the real connection attributes (data source type, host, and port contained in the options) are passed onto the local instance of stix-shifter running the proxy host. The host will then use the new connector and return results back to the remote stix-shifter instance.
 
@@ -115,7 +108,7 @@ As an example:
 python main.py host '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "Bundle","identity_class": "events"}' "192.168.122.83:5000"
 ```
 
-#### Calling the proxy host
+##### Calling the proxy host
 
 Each of the translate and transmit CLI commands outlined in the stix-shifter overview can be used to call the proxy host.
 
@@ -125,7 +118,7 @@ As an example:
 python main.py transmit proxy '{"options": {"proxy_host": "127.0.0.1", "proxy_port": 5000, "destination": {"connection": {"options": {"result_limit": 10000, "time_range": 5, "timeout": 30}, "host": "<HOST>", "port": <PORT>, "type": "qradar"}, "configuration": {"auth": { "SEC": "<SEC TOKEN>"} } } }}' '{}' ping
 ```
 
-### Packaging individual connectors
+#### Packaging individual connectors
 
 Stix-shifter can be broken into several python whl packages by using the `setup.py` script found in the root of the project. This packaging script can be called from the CLI:
 
@@ -162,7 +155,7 @@ stix_shifter_modules =>
         entry_point
 ```
 
-### Building images of the connectors
+#### Building images of the connectors
 
 You can build the docker image your developed connector locally and publish it to your desired repository. In order to do that, follow the below steps-
 
