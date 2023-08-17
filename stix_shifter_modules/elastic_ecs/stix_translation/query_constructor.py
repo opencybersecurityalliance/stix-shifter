@@ -126,12 +126,8 @@ class QueryStringPatternTranslator:
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self.comparator_lookup[str(expression.comparator)]
 
-            if stix_field == 'start' or stix_field == 'end':
-                transformer = TimestampToMilliseconds()
-                value = transformer.transform(expression.value)
-
             # Some values are formatted differently based on how they're being compared
-            elif expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
+            if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
                 value = self._format_match(expression.value)
             # should be (x, y, z, ...)
             elif expression.comparator == ComparisonComparators.In:
