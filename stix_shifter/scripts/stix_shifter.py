@@ -417,7 +417,10 @@ def transmit(args):
         search_id = args.search_id
         offset = args.offset
         length = args.length
-        result = transmission.results(search_id, offset, length, metadata=None)
+        if args.metadata:
+            result = transmission.results(search_id, offset, length, metadata=metadata)
+        else:
+            result = transmission.results(search_id, offset, length, metadata=None)
     elif operation_command == stix_transmission.RESULTS_STIX:
         search_id = args.search_id
         offset = args.offset
