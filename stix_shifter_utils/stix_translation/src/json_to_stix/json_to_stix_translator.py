@@ -1,7 +1,7 @@
 from os import path
-import re
 import uuid
 import json
+import regex as re
 
 from stix_shifter_utils.utils.helpers import dict_merge
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable, id_contributing_properties
