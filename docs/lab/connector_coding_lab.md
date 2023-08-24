@@ -7,7 +7,7 @@ This is a hands-on lab to start implementing a connector module in STIX-shifter 
 
 * GitHub account
 * Basic knowledge of git such as forking, committing, branching, pulling, and merging.
-* Working knowledge of the Python programming language. This lab will work with Python 3.8 or greater.
+* Working knowledge of the Python programming language. This lab will use Python 3.9
 * An IDE to write Python code, such as VS Code.
 * Knowledge of the data source API that includes API request, response, datatype and schema.
 * Knowledge of STIX 2.0. To learn about STIX Cyber Observable Objects, see the [STIX 2.0](https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) specification.
@@ -16,11 +16,19 @@ This is a hands-on lab to start implementing a connector module in STIX-shifter 
 ### 1. Open stix-shifter folder in the VS Code IDE
 ### 2. Open a terminal in VS code
 ### 3. Make sure you are in the `stix-shifter/` parent directory
-### 4. Create a python virtual environment in the terminal
+### 4. Create a python virtual environment with required depedencies in the terminal
 
+**Create Python3.9 virtual environment:**
 ```bash
 virtualenv -p python3.9 virtualenv && source virtualenv/bin/activate
+```
+
+**Upgrade pip(optional):**
+```bash
 python3 -m pip install --upgrade pip
+```
+**Install Dependencies:**
+```bash
 INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install
 ```
 
@@ -125,7 +133,7 @@ Here's an example of the content of a `lang_en.json` file:
 
 * For this lab, copy the entire content from https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/configuration/lang_en.json.
 
-**Note** For more details about the configuration JSON, go to [Configuration JSON](../adapter-guide/develop-configuration-json.md)
+**Note** For more details about the configuration JSON, go to [Configuration JSON](https://stix-shifter.readthedocs.io/en/latest/adapter-guide/develop-configuration-json.html)
 
 ### 9. Implement stix to query translation
 
@@ -143,16 +151,16 @@ Here's an example of the content of a `lang_en.json` file:
     * Update `stix_shifter_modules/lab_connector/stix_translation/json/operators.json` with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/json/operators.json
 
 * The `QueryTranslator()` class can be left as is `stix_shifter_modules/mysql/stix_translation/query_translator.py`
-* Edit the query constructor file:
+* Edit the query constructor file in `stix_shifter_modules/lab_connector/stix_translation/query_constructor.py`:
+    * The `query_constructor.py` file is where the native query is built from the ANTLR parsing.
     * When a STIX pattern is translated by STIX-shifter, it is first parsed with ANTLR 4 into nested expression objects. The native data source query is constructed from these nested objects.
     * The parsing is recursively run through `QueryStringPatternTranslator._parse_expression`, which is found in `query_constructor.py`.
-    * The `query_constructor.py` file is where the native query is built from the ANTLR parsing.
-    * Update `stix_shifter_modules/lab_connector/stix_translation/query_constructor.py` with the content of https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/query_constructor.py
+    * The main query constructor class and functions are already defined and implemented for this lab.
 
 **Test the query translation command using the CLI tool**
 
 ```bash
-python main.py translate lab_connector query {} "[ipv4-addr:value = '127.0.0.1'] START t'2022-07-01T00:00:00.000Z' STOP t'2022-07-27T00:05:00.000Z'" '{"table":"demo_db"}'
+python main.py translate lab_connector query {} "[ipv4-addr:value = '127.0.0.1'] START t'2022-07-01T00:00:00.000Z' STOP t'2022-07-27T00:05:00.000Z'" '{"table":"demo_table"}'
 ```
 
 ### 10. Implement stix transmission module. 
@@ -310,7 +318,8 @@ python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db
     
 * Make sure the data source returns the results in JSON format
 * Go to `stix_shifter_modules/lab_connector/stix_translation`
-* Create a JSON file named `to_stix_map.json` that maps data source fields to STIX objects. 
+* Create a JSON file named `to_stix_map.json` that maps data source fields to STIX objects.
+* Details on to_stix_map file can be found in [Edit the to_stix_map JSON file](https://stix-shifter.readthedocs.io/en/latest/adapter-guide/develop-translation-module.html#step-5-edit-the-to-stix-map-json-file)
 * For this lab, update `stix_shifter_modules/lab_connector/stix_translation/json/to_stix_map.json` file with the content of the [`to_stix_map.json` file](https://raw.githubusercontent.com/opencybersecurityalliance/stix-shifter/develop/stix_shifter_modules/mysql/stix_translation/json/to_stix_map.json)
 * Implement the `ResultsTranslator(JSONToStix)` class in `results_translator.py`
 
@@ -321,7 +330,9 @@ class ResultsTranslator(JSONToStix):
     pass    
 ```
      
-***Note*** If the datasource results need some pre-processing before applying the mapping then this ResultsTranslator() class can be used. Otherwise, the `self.setup_translation_simple(dialect_default='default')` statement inside entry point class `EntryPoint()` takes care of the results tranlsation automatically. The parent utility class `JSONToStix` automatically translates the results into STIX.  
+***Note*** 
+1. If the datasource results need some pre-processing before applying the mapping then this ResultsTranslator() class can be used. Otherwise, the `self.setup_translation_simple(dialect_default='default')` statement inside entry point class `EntryPoint()` takes care of the results tranlsation automatically. The parent utility class `JSONToStix` automatically translates the results into STIX.  
+2. If the data source API offers more than one schema type then the dialect prefix can be added. For example: `dialect1_to_stix_map.json`
 
 **Test the results translation command using the CLI tool**
 

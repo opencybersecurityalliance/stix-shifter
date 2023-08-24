@@ -22,8 +22,8 @@
         }
     },
     "configuration": {
-        "type" : "fields",
         "auth": {
+            "type" : "fields",
             "username": {
                 "type": "password"
             },
