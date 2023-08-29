@@ -3,16 +3,16 @@
 The steps below assume you have renamed the `async_template` module directory to our example connector name, `abc_security_monitor`.
 
 
-1. [Exploring the stix_translation directory](#step-1-exploring-the-stix_translation-directory)
-1. [Edit the from_stix_map.json file](#step-2-edit-the-from_stix_map-json-file)
-1. [Edit the operators.json file](#step-3-edit-the-operators-json-file)
-1. [Edit the query_constructor.py file](#step-4-edit-the-query-constructor-file)
-1. [Edit the to_stix_map.json file](#step-5-edit-the-to_stix_map-json-file) 
+1. [Exploring the stix_translation directory](##step-1-exploring-the-stix_translation-directory)
+1. [Edit the from_stix_map.json file](##step-2-edit-the-from_stix_map-json-file)
+1. [Edit the operators.json file](##step-3-edit-the-operators-json-file)
+1. [Edit the query_constructor.py file](##step-4-edit-the-query-constructor-file)
+1. [Edit the to_stix_map.json file](##step-5-edit-the-to_stix_map-json-file) 
   
     Refer to the [keywords document](develop-mapping-keywords.md) when creating the to-STIX mappings.
     
-1. [Add custom data transformers (optional)](#step-6-add-custom-data-transformers-(optional))
-1. [Verify that the translation module was created successfully](#step-7-verify-that-the-translation-module-was-created-successfully)
+1. [Add custom data transformers (optional)](##step-6-add-custom-data-transformers-(optional))
+1. [Verify that the translation module was created successfully](##step-7-verify-that-the-translation-module-was-created-successfully)
 
 ## Step 1. Exploring the stix_translation directory
 
@@ -405,7 +405,7 @@ Every STIX observed-data object must include the following properties:
 
 The code for translating data source results to STIX is found in `stix_shifter_utils/stix_translation/src/json_to_stix/json_to_stix_translator.py`. Normally, there is no need to edit this file.
 
-**Using multiple to-STIX map files with dialects**
+### Using multiple to-STIX map files with dialects
 
 Query results translation can use dialects to differentiate between multiple to-STIX mapping files. Multiple to-STIX mappings may be needed in cases where datasource returns multiple tables that use different schemas. Any dialects are appended to the module name with the following format: `<module_name>:<dialect_1>:<dialect_2>` Using AWS Athena as an example, datasource can return multiple schemas such as OCSF, VPC Flow and Guardduty. This requires a to-STIX mapping file for each. When the datasource returns query results for a specific schema then the appropriate to-STIX mapping file can be used based on the dialect specified in the query. Dialects can be specified in the CLI as `aws-athena:ocsf` or in the connection object as-
 ```

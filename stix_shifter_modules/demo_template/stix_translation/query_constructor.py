@@ -1,5 +1,5 @@
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
-    ComparisonExpressionOperators, ComparisonComparators, Pattern, \
+    ComparisonExpressionOperators, ComparisonComparators, Pattern, StartStopQualifier,\
     CombinedComparisonExpression, CombinedObservationExpression, ObservationOperators
 from stix_shifter_utils.stix_translation.src.utils.transformers import TimestampToMilliseconds
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable
@@ -8,10 +8,11 @@ import re
 
 # Source and destination reference mapping for ip and mac addresses.
 # Change the keys to match the data source fields. The value array indicates the possible data type that can come into from field.
-REFERENCE_DATA_TYPES = {"SourceIpV4": ["ipv4", "ipv4_cidr"],
-                        "SourceIpV6": ["ipv6"],
-                        "DestinationIpV4": ["ipv4", "ipv4_cidr"],
-                        "DestinationIpV6": ["ipv6"]}
+REFERENCE_DATA_TYPES = {"source_ipaddr": ["ipv4", "ipv4_cidr", "ipv6", "ipv6_cidr"],
+                        "dest_ipaddr": ["ipv4", "ipv4_cidr"],
+                        }
+
+TIMESTAMP_STIX_PROPERTIES = ["created", "modified", "accessed", "ctime", "mtime", "atime", "created_time", "modifed_time"]
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +52,26 @@ class QueryStringPatternTranslator:
         value = "'%{value}%'".format(value=value)
         return QueryStringPatternTranslator._escape_value(value)
 
+    @classmethod
+    def _format_start_stop_qualifier(self, expression, qualifier) -> str:
+        """Convert a STIX start stop qualifier into a query string.
+
+        The sample MySQL schema included in this connector defines a timerange with a start and stop value
+        based on the entry_time field. 
+        """
+        transformer = TimestampToMilliseconds()
+        qualifier_split = qualifier.split("'")
+        start = transformer.transform(qualifier_split[1])
+        stop = transformer.transform(qualifier_split[3])
+        qualified_query = "%s AND (entry_time >= %s AND entry_time <= %s)" % (expression, start, stop)
+        return qualified_query
+
+    @classmethod
+    def _format_timestamp(self, value):
+        transformer = TimestampToMilliseconds()
+        value = re.sub("'", "", value)
+        return transformer.transform(value)
+
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
         if isinstance(value, str):
@@ -70,7 +91,6 @@ class QueryStringPatternTranslator:
                 return key
         return None
 
-    #TODO remove self reference from static methods
     @staticmethod
     def _parse_reference(self, stix_field, value_type, mapped_field, value, comparator):
         if value_type not in REFERENCE_DATA_TYPES["{}".format(mapped_field)]:
@@ -81,6 +101,8 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _parse_mapped_fields(self, expression, value, comparator, stix_field, mapped_fields_array):
+        if stix_field in TIMESTAMP_STIX_PROPERTIES:
+            value = self._format_timestamp(value)
         comparison_string = ""
         is_reference_value = self._is_reference_value(stix_field)
         # Need to use expression.value to match against regex since the passed-in value has already been formated.
@@ -108,7 +130,7 @@ class QueryStringPatternTranslator:
     @staticmethod
     def _lookup_comparison_operator(self, expression_operator):
         if str(expression_operator) not in self.comparator_lookup:
-            raise NotImplementedError("Comparison operator {} unsupported for connector".format(expression_operator.name))
+            raise NotImplementedError("Comparison operator {} unsupported for MySQL connector".format(expression_operator.name))
         return self.comparator_lookup[str(expression_operator)]
 
     def _parse_expression(self, expression, qualifier=None) -> str:
@@ -147,8 +169,9 @@ class QueryStringPatternTranslator:
 
             if expression.negated:
                 comparison_string = self._negate_comparison(comparison_string)
-            if qualifier is not None:
-                return "{} {}".format(comparison_string, qualifier)
+            if qualifier:
+                comparison_string = self._format_start_stop_qualifier(comparison_string, qualifier)
+                return comparison_string
             else:
                 return "{}".format(comparison_string)
 
@@ -159,12 +182,16 @@ class QueryStringPatternTranslator:
             if not expression_01 or not expression_02:
                 return ''
             if isinstance(expression.expr1, CombinedComparisonExpression):
-                expression_01 = "({})".format(expression_01)
+                expression_01 = "{}".format(expression_01)
             if isinstance(expression.expr2, CombinedComparisonExpression):
-                expression_02 = "({})".format(expression_02)
-            query_string = "{} {} {}".format(expression_01, operator, expression_02)
-            if qualifier is not None:
-                return "{} {}".format(query_string, qualifier)
+                expression_02 = "{}".format(expression_02)
+            if operator == 'AND':
+                query_string = "({} {} {})".format(expression_01, operator, expression_02)
+            else:
+                query_string = "{} {} {}".format(expression_01, operator, expression_02)
+            if qualifier:
+                query_string = self._format_start_stop_qualifier(query_string, qualifier)
+                return query_string
             else:
                 return "{}".format(query_string)
         elif isinstance(expression, ObservationExpression):
@@ -202,15 +229,16 @@ class QueryStringPatternTranslator:
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # Query result limit and time range can be passed into the QueryStringPatternTranslator if supported by the data source.
-    # result_limit = options['result_limit']
+    result_limit = options['result_limit']
     # time_range = options['time_range']
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
     # Add space around START STOP qualifiers
     query = re.sub("START", "START ", query)
     query = re.sub("STOP", " STOP ", query)
+    table = options.get('table')
 
     # This sample return statement is in an SQL format. This should be changed to the native data source query language.
     # If supported by the query language, a limit on the number of results should be added to the query as defined by options['result_limit'].
     # Translated patterns must be returned as a list of one or more native query strings.
     # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
-    return ["SELECT * FROM tableName WHERE %s" % query]
+    return ["SELECT * FROM %s WHERE %s limit %s" % (table, query, result_limit)]
