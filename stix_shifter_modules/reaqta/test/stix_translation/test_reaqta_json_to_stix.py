@@ -167,11 +167,9 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         extensions = find('extensions.x-reaqta-process', proc_obj)
         assert(extensions is not None), "file extensions not found"
-        assert(extensions.keys() == {'privilege_level', 'no_gui', 'logon_id', 'command_line_args'})
-        assert(extensions['privilege_level'] == DATA_PROCESS_PRIVILEGE_LEVEL)
+        assert(extensions.keys() == {'no_gui', 'logon_id'})
         assert(extensions['no_gui'] == DATA_PROCESS_NO_GUI)
         assert(extensions['logon_id'] == DATA_PROCESS_LOGON_ID)
-        assert(extensions['command_line_args'] == [])
 
         extensions = find('extensions.windows-process-ext', proc_obj)
         assert(extensions is not None), "file extensions not found"
@@ -334,9 +332,8 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         extensions = find('extensions.x-reaqta-alert', event)
         assert(extensions is not None), "file extensions not found"
-        assert(extensions.keys() == {'incidents', 'triggered_incidents'})
-        assert(extensions['incidents'] == [])
-        assert(extensions['triggered_incidents'] == [])
+        assert(extensions.keys() == {'incidents'})
+        assert(extensions['incidents'] == [254356654453, 4352345234525])
 
     def test_x_reaqta_event(self):
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
@@ -410,7 +407,6 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(sum(obj['type'] == 'x-reaqta-event' for obj in result_bundle_objects) == 1)
 
         # Insure fixed deterministic IDs are present
-        print(set(STIX_2_1_OBJECT_REFS).difference(observed_data['object_refs']))
         assert(set(STIX_2_1_OBJECT_REFS).issubset(observed_data['object_refs']))
 
         event = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'x-reaqta-event')
@@ -438,11 +434,9 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         extensions = find('extensions.x-reaqta-process-ext', proc_obj)
         assert(extensions is not None), "file extensions not found"
-        assert(extensions.keys() == {'privilege_level', 'no_gui', 'logon_id', 'command_line_args'})
-        assert(extensions['privilege_level'] == DATA_PROCESS_PRIVILEGE_LEVEL)
+        assert(extensions.keys() == {'no_gui', 'logon_id'})
         assert(extensions['no_gui'] == DATA_PROCESS_NO_GUI)
         assert(extensions['logon_id'] == DATA_PROCESS_LOGON_ID)
-        assert(extensions['command_line_args'] == [])
 
         extensions = find('extensions.windows-process-ext', proc_obj)
         assert(extensions is not None), "file extensions not found"
