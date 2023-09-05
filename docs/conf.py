@@ -17,6 +17,7 @@ release = '6.2.0'
 extensions = [
     "myst_parser",
     "sphinx_design",
+    "myst_nb"
     ]
 
 # -- MyST settings ---------------------------------------------------
