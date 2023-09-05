@@ -34,8 +34,12 @@ def read_json(filepath, options, search_path=__default_search_path):
         json_path = get_json_path(search_path)
         file_path = os.path.join(json_path, file_name)
         logger.debug('returning in_module_path for: ' + filepath + '->' + file_path)
-    with open(file_path, 'r') as f:
-        return json.load(f)
+    try:
+        with open(file_path, 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        logger.warning('Filepath for ' + file_path + ' still does not exist. Returning empty json')
+        return {}
 
 
 def get_json_path(search_path=__default_search_path, depth=3):
