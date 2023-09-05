@@ -29,11 +29,11 @@
             "ppid": 556,
             "pstartTime": "2022-03-23T14:41:01.638Z",
             "userSID": "S-1-1-1",
-            "privilegeLevel": "SYSTEM",
+            "privilegeLevel": "",
             "noGui": false,
             "logonId": "0x141111"
         },
-        "incidents": [],
+        "incidents": [254356654453, 4352345234525],
         "triggeredIncidents": [],
         "data": {
             "cmdLine": "java -cp /app/resources:/app/classes:/app/libs/* com.ibm.security.apps.controller.operator.KubernetesAppOperator ",
