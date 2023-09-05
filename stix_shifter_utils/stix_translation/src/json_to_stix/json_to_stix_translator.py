@@ -393,7 +393,15 @@ class DataSourceObjToStixObj:
                         value = self._compose_value_object(data, config_keys[2:], observable_key=key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap, is_group_ref=is_group_ref)
 
                     # Remove the values which has empty list brackets.
+                    remove_value = False
                     if value is None or value in ('', []):
+                        remove_value = True
+                    elif isinstance(value, dict):
+                        for k, v in value.items():
+                            if isinstance(v, dict) and list(v.values())[0] in ('', []):
+                                remove_value = True
+                                continue
+                    if remove_value:
                         continue
 
                     if not references and unwrap and isinstance(value, list):
