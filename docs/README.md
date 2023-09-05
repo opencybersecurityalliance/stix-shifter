@@ -97,7 +97,7 @@ Please read our [guidelines for contributing](CONTRIBUTING.md).
 ## [Connector Developer Guide](adapter-guide/develop-stix-adapter.md)
 
 
-## [CLI tools and Connector Development Labs](/docs/lab/)
+## [CLI tools and Connector Development Labs](lab/README.md)
 
 
 # Licensing
