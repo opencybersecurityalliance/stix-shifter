@@ -63,6 +63,7 @@ class QueryStringPatternTranslator:
         value = re.sub(r"([^\\])\\S", r"\1[^ \t\n\r\f\v]", value)
         value = re.sub(r"([^\\])\\w", r"\1[a-zA-Z0-9_]", value)
         value = re.sub(r"([^\\])\\W", r"\1[^a-zA-Z0-9_]", value)
+        value = _unfold_case_insensitive_regex(value)
         return '/{}/'.format(value)
 
     @staticmethod
@@ -302,6 +303,51 @@ def _format_translated_queries(query_array):
             formatted_queries.append(query)
 
     return formatted_queries
+
+
+def _unfold_case_insensitive_regex(regex_pattern):
+    # this function should be executed after \s unfolding
+
+    if "(?i)" in regex_pattern:
+
+        escaped_left_bracket_symbol  = "===%####===%####"
+        escaped_right_bracket_symbol = "====%###====%###"
+        escaped_backslash = "==##==###%###==##=="
+        synthetic_splitter = "==%%##%%=="
+
+        p = regex_pattern
+        p = p.replace(r"\\", escaped_backslash)
+        p = p.replace(r"\[", escaped_left_bracket_symbol)
+        p = p.replace(r"\]", escaped_right_bracket_symbol)
+
+        if p.count("[") != p.count("]"):
+            raise RuntimeError(f"regex /{regex_pattern}/ has odd number of brackets.")
+        else:
+            xs = re.split(r"[\[\]]", p)
+            xs_even = [f"[{x}]" for x in xs[1::2]]
+            xs[1::2] = xs_even
+
+            xs_odd = xs[0::2]
+            p_odd = synthetic_splitter.join(xs_odd)
+            ys_odd = p_odd.split("(?i)")
+            p_odd_unfolded = ys_odd[0] + _unfold_case_insensitive_char("".join(ys_odd[1:]))
+            xs_odd_unfolded = p_odd_unfolded.split(synthetic_splitter)
+            xs[0::2] = xs_odd_unfolded
+
+            p_unfolded = "".join(xs)
+            p_unfolded = p_unfolded.replace(escaped_right_bracket_symbol, r"\]")
+            p_unfolded = p_unfolded.replace(escaped_left_bracket_symbol, r"\[")
+            p_unfolded = p_unfolded.replace(escaped_backslash, r"\\")
+            return p_unfolded
+
+    else:
+        return regex_pattern
+
+
+def _unfold_case_insensitive_char(ascii_regex_str):
+    xs = list(ascii_regex_str)
+    ys = [f"[{x.lower()}{x.upper()}]" if x.isalpha() else x for x in xs]
+    return "".join(ys)
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
