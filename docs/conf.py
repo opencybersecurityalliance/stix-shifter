@@ -9,7 +9,7 @@
 project = 'STIX-Shifter'
 copyright = '2023, Md Azam, Danny Elliott'
 author = 'Md Azam, Danny Elliott'
-release = '6.1.0'
+release = '6.2.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
