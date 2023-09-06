@@ -1,3 +1,5 @@
+from stix_shifter.stix_translation import stix_translation
+
 from stix_shifter_modules.mysql.entry_point import EntryPoint
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 from stix_shifter_utils.utils.async_utils import run_in_thread
@@ -289,5 +291,46 @@ class TestTransform(object):
         assert "image_ref" in process_object
         assert "binary_ref" not in process_object
         assert "id" in directory_object and str(directory_object['id']) == CYBOX_ID["directory"]
+    
+    def test_stix_value_validation_with_regex(self):
+        """to test domain-name stix object properties"""
+        options = {}
+        data_source = {
+            "type": "identity",
+            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "name": "paloalto",
+            "identity_class": "events"
+        }
+        data = {'xdr_data': {'auth_domain': 'a64a9282-0337-11e7-a6a5-00505680a503/934023ae-0339-11e7-a6a5-00505680a503',
+                             'dst_host_metadata_domain': '8.tlu.dl.delivery.mp.microsoft.com',
+                             'host_metadata_domain': '7.tlu.dl.delivery.mp.microsoft.com'
+                             }}
 
+        translation = stix_translation.StixTranslation()
+        result_bundle = translation.translate('paloalto', 'results', data_source, [data], options)
+
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        assert('objects' in observed_data)
+        objects = observed_data['objects']
+
+        keys = self.get_object_keys(objects)
+        domain_key_count = 0
+        for key in keys:
+            domain_key_count +=1
+
+        # one domain object stripped off because of invalid value
+        assert domain_key_count == 2 
+
+        translated_domains = []
+        for key in objects.keys():
+            domain = objects.get(key)
+            translated_domains.append(domain['value'])
         
+        original_domains = []
+        xdr_data = data['xdr_data']
+        
+        original_domains.append(xdr_data['dst_host_metadata_domain'])
+        original_domains.append(xdr_data['host_metadata_domain'])
+
+        assert set(translated_domains) == set(original_domains)

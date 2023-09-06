@@ -2,7 +2,6 @@ import json
 from datetime import datetime, timedelta
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils import logger
-from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
 class APIClient:
@@ -27,11 +26,14 @@ class APIClient:
         self._client_secret = auth['clientSecret']
         self._token = None
         self._token_time = None
-         
+        self.headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+
     async def get_token(self):
         """get the token and if expired re-generate and store in token variable"""
-        tokenResponse = await self.generate_token()
-        return tokenResponse
+        return await self.generate_token()
 
     async def generate_token(self):
         """To generate the Token"""
@@ -56,7 +58,7 @@ class APIClient:
             except Exception as e:
                 pass
 
-        return response
+        return self._token
 
     def token_expired(self) -> bool:
         """Check if the verify token is expired.
@@ -68,7 +70,6 @@ class APIClient:
             expired = (datetime.now() - self._token_time) >= timedelta(minutes=30)
         return expired
 
-
     async def run_search(self, query_expr, range_end=None):
         """get the response from verify endpoints
         :param quary_expr: dict, filter parameters
@@ -79,30 +80,35 @@ class APIClient:
         events = await self.get_events(query_expr)
         return self.response_handler(events, query_expr)
 
-
-    async def get_events(self,query_expr):
+    async def get_events(self, query_expr):
         token = await self.get_token()
-        self.headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {0}'.format(token)}
-        if query_expr is None:
-            data=None
-        return await self.client.call_api(self.endpoint_start,'GET',self.headers,urldata= query_expr, timeout=self.timeout)
+        self.headers['Authorization'] = f'Bearer {token}'
+        return await self.client.call_api(
+            self.endpoint_start,
+            'GET',
+            self.headers,
+            urldata=query_expr,
+            timeout=self.timeout)
 
-    def response_handler(self, data=None, query_expr=None):
-        if data is None:
-            data = []
-        response = dict()
-        response['data'] =json.loads(data.read())
+    def response_handler(self, data, query_expr=None):
+        response = {}
+        try:
+            buf = data.read()
+            buf = json.loads(buf)
+        except json.JSONDecodeError:
+            buf = ''
+        response['data'] = buf
         response['error'] = data.code
-        response['code'] =data.code
+        response['code'] = data.code
         response['error_msg'] = data.response.reason
-        response['success'] =data.code
-        if response['code'] ==200:
+        response['success'] = data.code
+        if response['code'] == 200:
             response['search_after'] = response.get("data")['response']['events']['search_after']
 
             try:
                response['event_data'] = self.parseJson(response.get("data")['response']['events']['events'])
             except KeyError:
-                self.logger.debug('events data not found in respose object',response)
+                self.logger.debug('events data not found in respose object %s', response)
                 response['event_data'] = []
 
         elif response['error'] == 500 and "true" in response['error_msg']:
@@ -154,25 +160,9 @@ class APIClient:
             try:
                 _element = _element[key]
             except KeyError:
-                self.logger.debug('key not found ',key )
+                self.logger.debug('key not found: %s', key)
                 return False
         return True
-
-    async def get_search_results(self, search_id, response_type, range_start=None, range_end=None):
-        # Sends a GET request to
-        # https://<server_ip>//<search_id>
-        # response object body should contain information pertaining to search.
-        #https://isrras.ice.ibmcloud.com/v1.0/events?event_type="sso"&size=10&after="1640104162523","eeb40fd5-6b84-4dc9-9251-3f7a4cfd91c0"
-        headers = dict()
-        headers['Accept'] = response_type
-        size = 1000
-        if ((range_start is  None) and (range_end is  None)):
-            size = range_end - range_start
-        
-        request_param = search_id+"& size="+str(size)
-        endpoint = self.endpoint_start+ request_param
-
-        return await self.run_search(search_id)   
 
     async def get_search(self, search_id):
         # Sends a GET request to

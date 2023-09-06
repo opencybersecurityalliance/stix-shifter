@@ -1,5 +1,5 @@
-##### Updated on 05/15/23
-## IBM Security ReaQta
+##### Updated on 06/21/23
+## IBM Security QRadar EDR
 ### Results STIX Domain Objects
 * Identity
 * Observed Data
@@ -61,6 +61,10 @@
 | **x-ibm-finding**:finding_type | antimalware.threatType |
 | **x-ibm-finding**:name | antimalware.objectStatus |
 | **x-ibm-finding**:src_ip_ref.value | ip |
+| **x-ibm-finding**:ttp_tagging_refs | mitre.tactic, mitre.technique |
+| **x-ibm-ttp-tagging**:name | mitre.technique |
+| **x-ibm-ttp-tagging**:extensions.'mitre-attack-ext'.tactic_name | mitre.tactic |
+| **x-ibm-ttp-tagging**:extensions.'mitre-attack-ext'.technique_name | mitre.technique |
 | **x-oca-asset**:extensions.'x-reaqta-consumer'.command_line_template_tokens | consumer.cmdline |
 | **x-oca-asset**:extensions.'x-reaqta-consumer'.consumer_name | wmi.consumerName |
 | **x-oca-asset**:extensions.'x-reaqta-consumer'.consumer_type | wmi.consumerType |
@@ -88,7 +92,6 @@
 | **x-oca-event**:network_ref.src_ref.value | ip |
 | **x-oca-event**:parent_process_ref.pid | service.ppid |
 | **x-oca-event**:process_ref.pid | wmi.clientPid |
-| **x-oca-event**:user_ref.user_id |  |
 | **x-reaqta-amsi**:content_name | antimalware.contentName |
 | **x-reaqta-amsi**:scan_result | antimalware.scanResult |
 | **x-reaqta-avdetection**:av_scan_reason | antimalware.scanReason |
@@ -182,10 +185,8 @@
 | **x-reaqta-event**:service_name | service.name |
 | **x-reaqta-event**:service_type | service.type |
 | **x-reaqta-event**:start_type | service.startType |
-| **x-reaqta-event**:tactics | mitre.tactic |
 | **x-reaqta-event**:tags | eventdata.tag |
 | **x-reaqta-event**:task_name | task.name |
-| **x-reaqta-event**:technique | mitre.technique |
 | **x-reaqta-event**:version | eventdata.version |
 | **x-reaqta-network**:outbound | isOutbound |
 | **x-reaqta-process**:logon_id | accessor.login.id, allocator.login.id, engine.login.id, login.id, service.login.id |
@@ -289,6 +290,12 @@
 | x-ibm-finding | src_ip_ref | localAddrV6 |
 | x-ibm-finding | dst_ip_ref | remoteAddrV4 |
 | x-ibm-finding | dst_ip_ref | remoteAddrV6 |
+| x-ibm-finding | ttp_tagging_refs | tactics |
+| x-ibm-finding | ttp_tagging_refs | technique |
+| <br> | | |
+| x-ibm-ttp-tagging | extensions.'mitre-attack-ext'.tactic_name | tactics |
+| x-ibm-ttp-tagging | extensions.'mitre-attack-ext'.technique_name | technique |
+| x-ibm-ttp-tagging | extensions.name | technique |
 | <br> | | |
 | x-oca-asset | host_id | endpointId |
 | x-oca-asset | hostname | clientMachine |
@@ -416,10 +423,8 @@
 | x-reaqta-event | service_name | serviceName |
 | x-reaqta-event | service_type | serviceType |
 | x-reaqta-event | start_type | startType |
-| x-reaqta-event | tactics | tactics |
 | x-reaqta-event | tags | tags |
 | x-reaqta-event | task_name | taskName |
-| x-reaqta-event | technique | technique |
 | x-reaqta-event | version | version |
 | <br> | | |
 | x509-certificate | extensions.x-reaqta-cert.expired | expired |

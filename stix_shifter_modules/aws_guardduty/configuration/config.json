@@ -1,0 +1,34 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "AWS GuardDuty",
+            "group": "aws"
+        },
+        "region": {
+            "type": "text"
+        },
+        "help": {
+            "type": "link",
+            "default": "data-sources.html"
+        },
+        "detector_ids": {
+            "type": "text",
+            "optional": true
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "aws_access_key_id": {
+                "type": "password"
+            },
+            "aws_iam_role": {
+                "type": "password",
+                "optional": true
+            },
+            "aws_secret_access_key": {
+                "type": "password"
+            }
+        }
+    }
+}

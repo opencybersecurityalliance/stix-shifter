@@ -6,8 +6,9 @@ You can easily validate your stix bundle file by following the below steps:
 
 The following needs to be installed on your local machine:
 
-* Python 3
-* GIT
+* Python 3.8 or greater
+* git
+* [`stix2-validator`](https://github.com/oasis-open/cti-stix-validator) python library
 
 If you have not already cloned the [stix-shifter github project](https://github.com/opencybersecurityalliance/stix-shifter): 
 ```

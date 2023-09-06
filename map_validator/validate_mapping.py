@@ -103,12 +103,17 @@ def main():
 
         # "object" is an optional name for target SCO
         obj = mapping.get('object')
+        if obj is not None:
+            if not isinstance(obj, str):
+                log_error(mapping, '"object" is not a string')
+                continue  # This is "fatal" for this mapping
 
         # Validate key
         key = mapping['key']
         if not isinstance(key, str):
             log_error(mapping, '"key" is not a string')
             continue  # This is "fatal" for this mapping
+
         otype, _, rest = key.partition('.')
         if not rest:
             # No SCO type, so it's an observed-data property

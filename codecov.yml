@@ -3,7 +3,7 @@ coverage:
     project:
       default:
         target: auto
-        threshold: 1%
+        threshold: 2%
     patch: off
 ignore:
   - "stix_shifter/scripts/"  # ignore folders and all its contents

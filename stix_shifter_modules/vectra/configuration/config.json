@@ -1,0 +1,30 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "Vectra",
+            "group": "vectra"
+        },
+        "host": {
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
+        },
+        "help": {
+            "type": "link",
+            "default": "data-sources.html"
+        },
+        "options": {
+            "type": "fields",
+            "result_limit": {
+                "max": 10000
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "api_token": {
+                "type": "password"
+            }
+        }
+    }
+}

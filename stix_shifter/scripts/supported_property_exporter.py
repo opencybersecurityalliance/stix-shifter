@@ -41,7 +41,7 @@ SCO_CONNECTORS = {
     "cybereason": "Cybereason",
     "paloalto": "PaloAlto Cortex XDR",
     "sentinelone": "SentinelOne",
-    "reaqta": "IBM Security ReaQta",
+    "reaqta": "IBM Security QRadar EDR",
     "darktrace": "Darktrace",
     "rhacs": "Red Hat Advanced Cluster Security for Kubernetes (StackRox)",
     "ibm_security_verify": "IBM Security Verify",
