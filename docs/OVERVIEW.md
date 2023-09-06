@@ -1,6 +1,6 @@
 
 ```{contents} Table of Contents
-:depth: 3
+:depth: 1
 ```
 
 ## Introduction
@@ -144,14 +144,13 @@ These are general translation options defined in [`config.json`](../stix_shifter
 #### INPUT: STIX 2 pattern
 
 ```
-# STIX Pattern:
-"[url:value = 'http://www.testaddress.com'] OR [ipv4-addr:value = '192.168.122.84']"
+[url:value = 'http://www.testaddress.com'] OR [ipv4-addr:value = '192.168.122.84']
 ```
 
 ***Output: Native data source query***
 
+Translated Query (using SQL as an example):
 ```
-# Translated Query (using SQL as an example):
 "SELECT * FROM tableName WHERE (Url = 'http://www.testaddress.com')
 OR
 ((SourceIpV4 = '192.168.122.84' OR DestinationIpV4 = '192.168.122.84'))"
@@ -662,7 +661,7 @@ This command can also be used to get the dialects of a specific connector.
 
 In the above example, the QRadar connector can use three dialects: `flows`, `events`, and `aql`. When a connector only has a `default` dialect, such as with Security Advisor, only one dialect is used by the connector. Most dialects will use the `stix` language since they translate STIX patterns into native queries. QRadar's `aql` dialect uses the `aql` language since it is meant to accept an AQL query rather than a STIX pattern. See the [QRadar connector README](../stix_shifter_modules/qradar/README.md) for more information on AQL passthrough.
 
-## configs
+## Configs
 
 The `configs` command returns the configuration pararmetes of the existing connectors. It basically returns a JSON of the existing connectors along with their connections and configuation objects that are specified in config.json.
 
