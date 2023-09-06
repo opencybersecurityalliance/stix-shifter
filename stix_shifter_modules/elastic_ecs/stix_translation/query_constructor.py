@@ -306,14 +306,13 @@ def _format_translated_queries(query_array):
 
 
 def _unfold_case_insensitive_regex(regex_pattern):
-    # this function should be executed after \s unfolding
+    # this function should be executed after "\s" unfolding
 
     if "(?i)" in regex_pattern:
 
-        escaped_left_bracket_symbol  = "===%####===%####"
-        escaped_right_bracket_symbol = "====%###====%###"
-        escaped_backslash = "==##==###%###==##=="
-        synthetic_splitter = "==%%##%%=="
+        escaped_left_bracket_symbol = "辶"
+        escaped_right_bracket_symbol = "廴"
+        escaped_backslash = "彳"
 
         p = regex_pattern
         p = p.replace(r"\\", escaped_backslash)
@@ -324,30 +323,57 @@ def _unfold_case_insensitive_regex(regex_pattern):
             raise RuntimeError(f"regex /{regex_pattern}/ has odd number of brackets.")
         else:
             xs = re.split(r"[\[\]]", p)
-            xs_even = [f"[{x}]" for x in xs[1::2]]
-            xs[1::2] = xs_even
 
-            xs_odd = xs[0::2]
-            p_odd = synthetic_splitter.join(xs_odd)
-            ys_odd = p_odd.split("(?i)")
-            p_odd_unfolded = ys_odd[0] + _unfold_case_insensitive_char("".join(ys_odd[1:]))
-            xs_odd_unfolded = p_odd_unfolded.split(synthetic_splitter)
-            xs[0::2] = xs_odd_unfolded
+            # ci_index: case insensitive index (first appearance)
+            ci_index = -1
+            for i, x in enumerate(xs):
+                if i % 2 == 0 and "(?i)" in x:
+                    ci_index = i
+                    break
 
-            p_unfolded = "".join(xs)
-            p_unfolded = p_unfolded.replace(escaped_right_bracket_symbol, r"\]")
-            p_unfolded = p_unfolded.replace(escaped_left_bracket_symbol, r"\[")
-            p_unfolded = p_unfolded.replace(escaped_backslash, r"\\")
-            return p_unfolded
+            if ci_index > -1:
+
+                # xsb: xs inside bracket
+                xsb = xs[1::2]
+                xsb[ci_index//2:] = ["[" + _unfold_ci_chars(x, True) + "]" for x in xsb[ci_index//2:]]
+                xs[1::2] = xsb
+
+                # xsob: xs outside bracket
+                xsob = xs[0::2]
+                xsob_s_h, *xsob_s_t = xsob[ci_index//2].split("(?i)")
+                xsob_s_t = [_unfold_ci_chars(x, False) for x in xsob_s_t]
+                xsob[ci_index//2] = "".join([xsob_s_h] + xsob_s_t)
+                xsob[ci_index//2+1:] = [_unfold_ci_chars(x.replace("(?i)", ""), False) for x in xsob[ci_index//2+1:]]
+                xs[0::2] = xsob
+
+                p_unfolded = "".join(xs)
+                p_unfolded = p_unfolded.replace(escaped_right_bracket_symbol, r"\]")
+                p_unfolded = p_unfolded.replace(escaped_left_bracket_symbol, r"\[")
+                p_unfolded = p_unfolded.replace(escaped_backslash, r"\\")
+                return p_unfolded
+
+            else:
+                # fake case insensitive flag in square bracket
+                return regex_pattern
 
     else:
+        # no case insensitive flag
         return regex_pattern
 
 
-def _unfold_case_insensitive_char(ascii_regex_str):
-    xs = list(ascii_regex_str)
-    ys = [f"[{x.lower()}{x.upper()}]" if x.isalpha() else x for x in xs]
-    return "".join(ys)
+def _unfold_ci_chars(regex_pattern_segment, if_set):
+    # if_set: if all chars are in the square bracket of regex
+    def char_mapper(c):
+        if if_set:
+            return c.lower() + c.upper()
+        else:
+            return f"[{c.lower()}{c.upper()}]"
+    xs = list(regex_pattern_segment)
+    s = "".join([char_mapper(x) if x.isascii() and x.isalpha() else x for x in xs])
+    if if_set:
+        # dedup for items inside square bracket
+        s = "".join(sorted(set(s)))
+    return s
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
