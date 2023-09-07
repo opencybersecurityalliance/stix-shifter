@@ -16,6 +16,33 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
+## 6.2.1 (2023-09-07)
+
+### Changes:
+
+*  Update coding lab [#1566](https://github.com/opencybersecurityalliance/stix-shifter/pull/1566)
+*  Vectra UDI connector [#1530](https://github.com/opencybersecurityalliance/stix-shifter/pull/1530)
+*  add operator mapping example in CLI lab [#1564](https://github.com/opencybersecurityalliance/stix-shifter/pull/1564)
+*  Lab landing page [#1563](https://github.com/opencybersecurityalliance/stix-shifter/pull/1563)
+*  Update overview doc [#1561](https://github.com/opencybersecurityalliance/stix-shifter/pull/1561)
+
+### Fixes:
+
+*  resolve case insensitive regex in elastic ECS connector #1569 [#1573](https://github.com/opencybersecurityalliance/stix-shifter/pull/1573)
+*  Fix readthedocs reference links [#1574](https://github.com/opencybersecurityalliance/stix-shifter/pull/1574)
+*  Temporary fix for dialect not found map file [#1572](https://github.com/opencybersecurityalliance/stix-shifter/pull/1572)
+*  Fix: skip empty list and string in stix objects [#1568](https://github.com/opencybersecurityalliance/stix-shifter/pull/1568)
+*  Performance improvement of regex validation [#1565](https://github.com/opencybersecurityalliance/stix-shifter/pull/1565)
+*  Fix ECS range queries with x-oca-event:start/end [#1559](https://github.com/opencybersecurityalliance/stix-shifter/pull/1559)
+
+### Dependency update:
+
+*  Bump jsonmerge from 1.9.0 to 1.9.2 in /stix_shifter [#1570](https://github.com/opencybersecurityalliance/stix-shifter/pull/1570)
+*  Bump flask from 2.3.2 to 2.3.3 in /stix_shifter [#1567](https://github.com/opencybersecurityalliance/stix-shifter/pull/1567)
+*  Bump aioboto3 from 11.1.0 to 11.2.0 in /stix_shifter [#1562](https://github.com/opencybersecurityalliance/stix-shifter/pull/1562)
+
+--------------------------------------
+
 ## 6.1.1 (2023-08-15)
 
 ### Deprecations:
