@@ -165,7 +165,7 @@ python main.py translate lab_connector query {} "[ipv4-addr:value = '127.0.0.1']
 
 ### 10. Implement stix transmission module. 
 
-* You need to implement four functionalities of the transmission module which are `ping`, `query`, `status` and `results`. 
+* You need to implement five functionalities of the transmission module which are `ping`, `query`, `status`, `results` and `delete`. 
 * First create a class called `APIClient()` in `stix_shifter_modules/lab_connector/stix_transmission/api_client.py`. This is where you initialize the connection and configurations needed for the data source API requests. This class also includes the required data source API calls and utility functions. 
 
 Add the following code to the top of the API client:
@@ -216,45 +216,45 @@ class Connector(BaseJsonSyncConnector):
 
 ```python
 async def ping_connection(self):
-    response = await self.api_client.ping_data_source()
-    response_code = response.get('code')
-    response_txt = response.get('message')
-    return_obj = dict()
-    return_obj['success'] = False
+        response = await self.api_client.ping_data_source()
+        response_code = response.get('code')
+        response_txt = response.get('message')
+        return_obj = dict()
+        return_obj['success'] = False
 
-    if len(response) > 0 and response_code == 200:
-        return_obj['success'] = True
-    else:
-        ErrorResponder.fill_error(return_obj, response, ['message'], error=response_txt, connector=self.connector)
-    return return_obj
+        if len(response) > 0 and response_code == 200:
+            return_obj['success'] = True
+        else:
+            ErrorResponder.fill_error(return_obj, response, ['message'], error=response_txt, connector=self.connector)
+        return return_obj
 ```
 
 * Define and implement the `ping_data_source()` function inside `APIClient()`:
 
 ```python
 async def ping_data_source(self):
-    # Pings the data source
-    response = {"code": 200, "message": "All Good!"}
-    try:
-        pool = await aiomysql.create_pool(host=self.host, port=self.port,
-                                        user=self.user, password=self.password,
-                                        db=self.database, connect_timeout=self.timeout)
-        async with pool.acquire() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute("SELECT 42;")
-                (r,) = await cur.fetchone()
-                assert r == 42
+        # Pings the data source
+        response = {"code": 200, "message": "All Good!"}
+        try:
+            pool = await aiomysql.create_pool(host=self.host, port=self.port,
+                                            user=self.user, password=self.password,
+                                            db=self.database, connect_timeout=self.timeout)
+            async with pool.acquire() as conn:
+                async with conn.cursor() as cur:
+                    await cur.execute("SELECT 42;")
+                    (r,) = await cur.fetchone()
+                    assert r == 42
 
-        pool.close()
-        await pool.wait_closed()
-    except DatabaseError as err:
-        response["code"] = int(err.args[0])
-        response["message"] = err
-    except Exception as err:
-        response["code"] = 'unknown'
-        response["message"] = err
+            pool.close()
+            await pool.wait_closed()
+        except DatabaseError as err:
+            response["code"] = int(err.args[0])
+            response["message"] = err
+        except Exception as err:
+            response["code"] = 'unknown'
+            response["message"] = err
 
-    return response
+        return response
 
 ```
 
@@ -306,6 +306,16 @@ async def create_results_connection(self, query, offset, length):
 
 * Copy the code block for the MySQL connector's [`run_search` function](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_modules/mysql/stix_transmission/api_client.py#L43)
 
+### Delete
+
+* Deleting a query is not supported by the datasource API so no action is needed.
+
+**Test the Status command with the CLI tool**
+
+```bash
+python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":""}}' delete "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 
+```
+
 **Test the Results command using the CLI tool**
 
 ```bash
@@ -337,7 +347,7 @@ class ResultsTranslator(JSONToStix):
 **Test the results translation command using the CLI tool**
 
 ```bash
-python main.py translate mysql results '{ "type":"identity","id":"identity--20a77a37-911e-468f-a165-28da7d02985b", "name":"MySQL Database", "identity_class":"system", "created": "2022-04-07T20:35:41.042Z", "modified": "2022-04-07T20:35:41.042Z" }' '[ { "source_ipaddr": "10.0.0.9",  "dest_ipaddr": "10.0.0.9",  "url": "www.example.org",  "filename": "spreadsheet.doc",  "sha256hash": "b0795d1f264efa26bf464612a95bba710c10d3de594d888b6282c48f15690459",  "md5hash": "0a556fbb7d3c184fad0a625afccd2b62",  "file_path": "C:/PHOTOS",  "username": "root", "source_port": 143,  "dest_port": 8080,  "protocol": "udp",  "entry_time": 1617123877.0,  "system_name": "demo_system",  "severity": 2,  "magnitude": 1 } ]' '{"table":"demo_table"}'
+python main.py translate lab_connector results '{ "type":"identity","id":"identity--20a77a37-911e-468f-a165-28da7d02985b", "name":"MySQL Database", "identity_class":"system", "created": "2022-04-07T20:35:41.042Z", "modified": "2022-04-07T20:35:41.042Z" }' '[ { "source_ipaddr": "10.0.0.9",  "dest_ipaddr": "10.0.0.9",  "url": "www.example.org",  "filename": "spreadsheet.doc",  "sha256hash": "b0795d1f264efa26bf464612a95bba710c10d3de594d888b6282c48f15690459",  "md5hash": "0a556fbb7d3c184fad0a625afccd2b62",  "file_path": "C:/PHOTOS",  "username": "root", "source_port": 143,  "dest_port": 8080,  "protocol": "udp",  "entry_time": 1617123877.0,  "system_name": "demo_system",  "severity": 2,  "magnitude": 1 } ]' '{"table":"demo_table"}'
 ```
 
 ### 12. Implement the `ErrorMapper()` class in `stix_shifter_modules/lab_connector/stix_transmission/error_mapper.py` 
