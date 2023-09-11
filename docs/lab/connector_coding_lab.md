@@ -306,20 +306,20 @@ async def create_results_connection(self, query, offset, length):
 
 * Copy the code block for the MySQL connector's [`run_search` function](https://github.com/opencybersecurityalliance/stix-shifter/blob/develop/stix_shifter_modules/mysql/stix_transmission/api_client.py#L43)
 
-### Delete
-
-* Deleting a query is not supported by the datasource API so no action is needed.
-
-**Test the Status command with the CLI tool**
-
-```bash
-python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":""}}' delete "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 
-```
-
 **Test the Results command using the CLI tool**
 
 ```bash
 python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":""}}' results "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 0 100
+```
+
+### Delete
+
+* Deleting a query is not supported by the datasource API so no action is needed.
+
+**Test the Delete command with the CLI tool**
+
+```bash
+python main.py transmit lab_connector '{"host": "localhost", "database":"demo_db", "options": {"table":"demo_table"}}' '{"auth": {"username":"root", "password":""}}' delete "SELECT * FROM demo_table WHERE source_ipaddr = '10.0.0.9'" 
 ```
 
 ## Results Translation
