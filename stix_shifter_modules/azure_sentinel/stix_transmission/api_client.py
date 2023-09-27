@@ -6,11 +6,11 @@ class APIClient:
     """API Client to handle all calls."""
     credential = None
     
-    def __init__(self, base_uri, connection, configuration):
+    def __init__(self, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
-        self.host = base_uri
+        self.host = connection['host']
         self.connection = connection
         self.configuration = configuration
         self.timeout = connection['options'].get('timeout')
