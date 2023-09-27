@@ -7,7 +7,16 @@ class APIClient:
 
     def __init__(self, connection, configuration):
         auth = configuration.get('auth')
-        self.headers = {'Authorization': auth['api_token'],
+        """
+        The Okta API requires the custom HTTP authentication scheme SSWS for API token (API key) authentication. 
+        Requests must have a valid API token specified in the HTTP Authorization header with the SSWS scheme.
+        Ref: https://developer.okta.com/docs/reference/core-okta-api/#api-token-authentication
+        """
+        if 'SSWS' in auth['api_token']: #this check is for backward compatibility
+            self.api_token = auth['api_token']
+        else:
+            self.api_token = 'SSWS '+ auth['api_token']
+        self.headers = {'Authorization': self.api_token,
                         'Content-Type': 'application/json', 'Accept': 'application/json'}
 
         self.client = RestApiClientAsync(connection.get('host'), port=None, headers=self.headers)
