@@ -39,7 +39,7 @@ class ConvertToReal(ValueTransformer):
     def transform(obj):
         try:
             if not isinstance(obj, float):
-                obj = obj * 1.0
+                obj = obj / 100
         except ValueError:
             LOGGER.error('Cannot convert input %s to a float value between 0 to 1', obj)
         return obj

@@ -186,9 +186,7 @@
       "start": ["detection.first_timestamp"],
       "end": ["detection.last_timestamp"],
       "time_observed": ["detection.created_timestamp"],
-      "event_count": ["detection.summary.num_sessions", "detection.summary.num_attempts"],
       "x_state": ["detection.state"],
-      "x_num_successes": ["detection.summary.num_successes"],
       "x_assigned_to": [
         "detection.assigned_to"
       ],

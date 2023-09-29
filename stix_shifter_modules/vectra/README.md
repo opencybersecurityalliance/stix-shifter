@@ -224,7 +224,6 @@ results
                     "x_dst_ports": [
                         80
                     ],
-                    "event_count": 197,
                     "x_is_triaged": false
                 },
                 "1": {
@@ -346,7 +345,6 @@ vectra
                     "ioc_refs": [
                         "5"
                     ],
-                    "event_count": 2,
                     "x_is_triaged": false
                 },
                 "1": {

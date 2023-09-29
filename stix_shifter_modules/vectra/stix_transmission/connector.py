@@ -223,6 +223,16 @@ class Connector(BaseJsonSyncConnector):
 
             detection_type = record.get('detection_type', '')
 
+            # adding new field for confidence field mapping
+            if 'certainty' in record:
+                record['certainty_score'] = record['certainty']
+
+            # converting 0 to 1 for severity and confidence
+            if record.get('certainty_score') == 0:
+                record['certainty_score'] = 1
+            if record.get('threat') == 0:
+                record['threat'] = 1
+
             if 'Privilege' in detection_type:
                 # Skip any preprocessing for these detections.
                 continue
