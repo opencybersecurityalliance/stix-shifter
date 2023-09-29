@@ -75,7 +75,7 @@ class Connector(BaseJsonSyncConnector):
                     data = []
                     break
             if data:
-                data = self.add_protocol(data)
+                data = self.add_is_multipart(data)
                 if metadata:
                     return_obj['data'] = data if data else []
                 else:
@@ -154,15 +154,14 @@ class Connector(BaseJsonSyncConnector):
         return return_obj
 
     @staticmethod
-    def add_protocol(response_dict):
+    def add_is_multipart(data):
         """
-         Add protocol
-        :param response_dict: list
-        :return: list
+        add is_multipart field
+        :param data, list
+        :return: data, list
         """
-        for record in response_dict:
-            if record.get('attributes') and record['attributes'].get('senderIp'):
-                temp_dict = {'protocol': ['tcp']}
-                temp_dict.update(record['attributes'])
-                record['attributes'] = temp_dict
-        return response_dict
+        for row in data:
+            if row['attributes'].get('recipient') or row['attributes'].get('friendly_from') or \
+                    row['attributes'].get('sender') or row['attributes'].get('subject'):
+                row['attributes']['is_multipart'] = True
+        return data

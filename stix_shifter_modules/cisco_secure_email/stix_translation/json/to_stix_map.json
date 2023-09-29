@@ -30,7 +30,8 @@
       {
         "key": "email-addr.value",
         "object": "recipient",
-        "unwrap": "true"
+        "unwrap": "true",
+        "transformer": "ValidateEmailTransformer"
       },
       {
         "key": "email-message.to_refs",
@@ -38,44 +39,31 @@
         "references": [
           "recipient"
         ]
-      },
-      {
-        "key": "email-message.is_multipart",
-        "object": "email_message",
-        "value": true
       }
     ],
     "friendly_from": [
       {
         "key": "email-addr.value",
         "object": "from",
-        "unwrap": "true"
+        "unwrap": "true",
+        "transformer": "ValidateEmailTransformer"
       },
       {
         "key": "email-message.from_ref",
         "object": "email_message",
         "references": "from"
-      },
-      {
-        "key": "email-message.is_multipart",
-        "object": "email_message",
-        "value": true
       }
     ],
     "sender": [
       {
         "key": "email-addr.value",
-        "object": "sender"
+        "object": "sender",
+        "transformer": "ValidateEmailTransformer"
       },
       {
         "key": "email-message.sender_ref",
         "object": "email_message",
         "references": "sender"
-      },
-      {
-        "key": "email-message.is_multipart",
-        "object": "email_message",
-        "value": true
       }
     ],
     "replyTo": [
@@ -94,13 +82,12 @@
       {
         "key": "email-message.subject",
         "object": "email_message"
-      },
-      {
-        "key": "email-message.is_multipart",
-        "object": "email_message",
-        "value": true
       }
     ],
+    "is_multipart": {
+        "key": "email-message.is_multipart",
+        "object": "email_message"
+    },
     "messageID": {
       "key": "email-message.x_message_id_header",
       "object": "email_message",
@@ -116,15 +103,11 @@
         "object": "source_ip"
       },
       {
-        "key": "network-traffic.src_ref",
-        "object": "message_nt",
+        "key": "email-message.x_sender_ip_ref",
+        "object": "email_message",
         "references": "source_ip"
       }
     ],
-    "protocol": {
-        "key": "network-traffic.protocols",
-        "object": "message_nt"
-    },
     "senderDomain": [
       {
         "key": "domain-name.value",

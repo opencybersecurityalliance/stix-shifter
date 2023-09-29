@@ -26,6 +26,9 @@
       ],
       "x_cisco_mid": [
         "ciscoMid"
+      ],
+      "x_sender_ip_ref": [
+        "senderIp"
       ]
     }
   },
@@ -57,13 +60,6 @@
     "fields": {
       "value": [
         "domainNameValue"
-      ]
-    }
-  },
-  "network-traffic": {
-    "fields": {
-      "src_ref": [
-        "senderIp"
       ]
     }
   },

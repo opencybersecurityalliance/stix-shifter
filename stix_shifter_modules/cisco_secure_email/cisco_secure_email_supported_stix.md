@@ -26,12 +26,12 @@
 | **email-message**:subject | subjectfilterValue |
 | **email-message**:x_message_id_header | messageIdHeader |
 | **email-message**:x_cisco_mid | ciscoMid |
+| **email-message**:x_sender_ip_ref | senderIp |
 | **file**:name | attachmentNameValue |
 | **file**:hashes.'SHA-256' | fileSha256 |
 | **ipv4-addr**:value | senderIp |
 | **ipv6-addr**:value | senderIp |
 | **domain-name**:value | domainNameValue |
-| **network-traffic**:src_ref | senderIp |
 | **x-oca-host**:hostname | ciscoHost |
 | **x-cisco-email-msgevent**:advanced_malware_protection_mailflow_direction | advancedMalwareProtectionMailflowDirection |
 | **x-cisco-email-msgevent**:advanced_malware_protection | advancedMalwareProtection |
@@ -96,6 +96,7 @@
 | email-message | subject | subjectfilterValue |
 | email-message | x_message_id_header | messageIdHeader |
 | email-message | x_cisco_mid | ciscoMid |
+| email-message | x_sender_ip_ref | senderIp |
 | <br> | | |
 | file | name | attachmentNameValue |
 | file | hashes.'SHA-256' | fileSha256 |
@@ -105,8 +106,6 @@
 | ipv6-addr | value | senderIp |
 | <br> | | |
 | domain-name | value | domainNameValue |
-| <br> | | |
-| network-traffic | src_ref | senderIp |
 | <br> | | |
 | x-oca-host | hostname | ciscoHost |
 | <br> | | |

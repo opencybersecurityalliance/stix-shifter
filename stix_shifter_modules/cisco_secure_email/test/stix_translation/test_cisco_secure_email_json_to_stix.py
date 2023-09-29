@@ -68,7 +68,8 @@ cisco_secure_email_sample_response = [
             "allIcid": [
                 1418
             ],
-            "sbrs": "3.4"
+            "sbrs": "3.4",
+            "is_multipart": True
         }
     }
 ]
@@ -123,7 +124,7 @@ class TestCiscoSecureEmailResultsToStix(unittest.TestCase):
         objects = TestCiscoSecureEmailResultsToStix.get_observed_data_objects(cisco_secure_email_sample_response)
         email_msg_obj = TestCiscoSecureEmailResultsToStix.get_first_of_type(objects.values(), 'email-message')
         assert email_msg_obj is not None
-        assert (email_msg_obj.keys() == {'type', 'from_ref', 'is_multipart', 'x_sender_group', 'subject',
+        assert (email_msg_obj.keys() == {'type', 'from_ref', 'is_multipart', 'x_sender_ip_ref', 'x_sender_group', 'subject',
                                          'x_cisco_mid', 'x_cisco_icid', 'date', 'x_message_id_header', 'to_refs',
                                          'sender_ref', 'x_serial_number'})
         assert email_msg_obj['type'] == 'email-message'

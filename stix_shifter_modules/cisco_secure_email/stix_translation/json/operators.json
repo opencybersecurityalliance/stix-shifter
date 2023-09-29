@@ -1,6 +1,6 @@
 {
     "ComparisonExpressionOperators.And": "&",
-    "ComparisonExpressionOperators.Or": "",
+    "ComparisonExpressionOperators.Or": " ",
     "ComparisonComparators.Equal": "=",
     "ComparisonComparators.In": "=",
     "ComparisonComparators.Like": "=",

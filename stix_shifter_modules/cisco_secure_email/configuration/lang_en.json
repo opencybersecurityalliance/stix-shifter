@@ -15,7 +15,13 @@
         "selfSignedCert": {
             "label": "Cisco Secure Email HTTPS connection certificate",
             "description": "Use self-signed Security Sockets Layer (SSL) or CA certificate for HTTPS services"
-        }
+        },
+         "options": {
+             "result_limit": {
+                 "label": "Result size limit",
+                 "description": "The maximum number of entries or objects that are returned by search query.  Valid input range is {{min}} to {{max}}."
+             }
+         }
     },
     "configuration": {
         "auth": {

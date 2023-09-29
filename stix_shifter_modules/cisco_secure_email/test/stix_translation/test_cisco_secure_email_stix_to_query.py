@@ -108,7 +108,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_comparison_OR_operator_for_basic_attributes(self):
-        stix_pattern = "[network-traffic:src_ref = '3.87.209.25' OR email-message:subject = 'important']START " \
+        stix_pattern = "[email-message:x_sender_ip_ref = '3.87.209.25' OR email-message:subject = 'important']START " \
                        "t'2022-10-01T00:00:00.000Z' STOP t'2022-11-07T11:00:00.000Z'"
         query = translation.translate('cisco_secure_email', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
@@ -160,7 +160,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_multiple_observation_OR_operator(self):
-        stix_pattern = "[email-message:from_ref LIKE 'user1'] OR [network-traffic:src_ref = '3.87.209.25']START " \
+        stix_pattern = "[email-message:from_ref LIKE 'user1'] OR [email-message:x_sender_ip_ref = '3.87.209.25']START " \
                        "t'2023-07-19T01:56:00.000Z' STOP t'2023-09-01T01:57:00.003Z'"
         query = translation.translate('cisco_secure_email', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])

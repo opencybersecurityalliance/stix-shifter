@@ -56,7 +56,13 @@ class ValidateEmailTransformer(ValueTransformer):
     def transform(obj):
         try:
             pattern = re.compile(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
-            if pattern.match(str(obj)):
+            if isinstance(obj, list):
+                result = []
+                for val in obj:
+                    if pattern.match(str(val)):
+                        result.append(val)
+                return result
+            elif pattern.match(str(obj)):
                 return obj
             return None
         except ValueError:
