@@ -1,5 +1,9 @@
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.utils.error_response import ErrorCode
+from stix_shifter_modules.elastic_ecs.stix_translation.query_constructor import (
+    _unfold_ci_chars,
+    _unfold_case_insensitive_regex,
+)
 import unittest
 import datetime
 import re
@@ -35,6 +39,31 @@ def _remove_timestamp_from_query(queries):
 
 
 class TestStixtoQuery(unittest.TestCase, object):
+
+    def test_case_insensitive_unfold_chars(self):
+        input_output_pairs = [ ("a", False, "[aA]")
+                             , ("ab", False, "[aA][bB]")
+                             , ("ab7#*c((D))", False, "[aA][bB]7#*[cC](([dD]))")
+                             , ("aba", True, "ABab")
+                             , ("ab7#BBeE", True, "#7ABEabe")
+                             ]
+        for (x,y,z) in input_output_pairs:
+            assert z == _unfold_ci_chars(x, y)
+
+
+    def test_case_insensitive_unfold_regex(self):
+        iopairs = [ ("http://z[abc]83m li", "http://z[abc]83m li")
+                  , ("(?i)virus", "[vV][iI][rR][uU][sS]")
+                  , ("(?i)virus[ s]", "[vV][iI][rR][uU][sS][ Ss]")
+                  , ("(?i)virus[ s] bin [c3b]", "[vV][iI][rR][uU][sS][ Ss] [bB][iI][nN] [3BCbc]")
+                  , (r"(?i)virus\[ s\]", r"[vV][iI][rR][uU][sS]\[ [sS]\]")
+                  , (r"(?i)virus\\[ s\\]", r"[vV][iI][rR][uU][sS]\\[ Ss\\]")
+                  , ("(?i)http://z83m li", "[hH][tT][tT][pP]://[zZ]83[mM] [lL][iI]")
+                  , ("(?i)http://z[abc]83m li", "[hH][tT][tT][pP]://[zZ][ABCabc]83[mM] [lL][iI]")
+                  , ("http://(?i)z[abc]83m li", "http://[zZ][ABCabc]83[mM] [lL][iI]")
+                  ]
+        for (x,y) in iopairs:
+            assert y == _unfold_case_insensitive_regex(x)
 
     def test_ipv4_query(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '192.168.122.84']"
@@ -278,6 +307,13 @@ class TestStixtoQuery(unittest.TestCase, object):
         test_query = ['(process.name : /cmd\\.exe/ OR process.parent.name : /cmd\\.exe/)']
         _test_query_assertions(translated_query, test_query)
 
+    def test_match_operator_case_sensitive(self):
+        stix_pattern = r"[process:name MATCHES '(?i)virus\\.exe']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = ['(process.name : /[vV][iI][rR][uU][sS]\\.[eE][xX][eE]/ OR process.parent.name : /[vV][iI][rR][uU][sS]\\.[eE][xX][eE]/)']
+        _test_query_assertions(translated_query, test_query)
+
     def test_match_operator_with_backslash(self):
         # STIX uses backslash as escape, so to match a literal . in RE you need double-backslash
         stix_pattern = r"[process:name MATCHES '^cmd\\.exe .*']"
@@ -329,4 +365,11 @@ class TestStixtoQuery(unittest.TestCase, object):
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
         test_query = ['(process.parent.name : "node" OR (process.executable : "node" OR process.parent.executable : "node"))']
+        _test_query_assertions(translated_query, test_query)
+
+    def test_start_comparison(self):
+        stix_pattern = "[x-oca-event:start<='2023-12-12T00:00:00.000Z']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = ['(event.start:[* TO "2023-12-12T00:00:00.000Z"])']
         _test_query_assertions(translated_query, test_query)

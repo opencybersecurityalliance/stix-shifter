@@ -9,7 +9,6 @@ from stix_shifter_utils.utils import logger
 class Connector(BaseJsonSyncConnector):
     api_client = None
     max_limit = 1000
-    base_uri = 'graph.microsoft.com' # Microsoft Graph API has single endpoint
     DEFAULT_API_VERSION = 'v1.0'
     LEGACY_ALERT = 'alerts'
     ALERT_V2 = 'alerts_v2'
@@ -22,7 +21,7 @@ class Connector(BaseJsonSyncConnector):
         self.connector = __name__.split('.')[1]
         self.connection = connection
         self.configuration = configuration
-        self.api_client = APIClient(self.base_uri, self.connection, self.configuration)
+        self.api_client = APIClient(self.connection, self.configuration)
         
         # self.legacy_alert = connection['options'].get('alert')
         # self.alert_v2 = connection['options'].get('alertV2')

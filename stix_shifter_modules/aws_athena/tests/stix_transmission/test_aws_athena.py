@@ -476,7 +476,6 @@ class TestAWSConnection(unittest.TestCase):
         length = 2
         transmission = stix_transmission.StixTransmission('aws_athena', CONNECTION, CONFIGURATION)
         results_response = transmission.results(search_id, offset, length)
-        print(results_response)
 
         assert results_response is not None
         assert 'success' in results_response

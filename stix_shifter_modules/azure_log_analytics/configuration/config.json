@@ -17,11 +17,7 @@
         },
         "help": {
             "type": "link",
-            "default": "data-sources-sentinel.html"
-        },
-        "sni": {
-            "type": "text",
-            "optional": true
+            "default": "data-sources.html"
         },
         "workspaceId": {
             "type": "text",

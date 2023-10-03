@@ -1,11 +1,10 @@
 from os import path
-import re
 import uuid
 import json
+import regex as re
 
 from stix_shifter_utils.utils.helpers import dict_merge
 from stix_shifter_utils.stix_translation.src.json_to_stix import observable, id_contributing_properties
-from stix2validator import validate_instance, print_results, ValidationOptions
 from datetime import datetime
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.helpers import StixObjectId
@@ -34,16 +33,6 @@ def convert_to_stix(data_source, map_data, data, transformers, options, callback
         for _, value in ds2stix.unique_cybox_objects.items():
             ds2stix.bundle["objects"].append(value)
 
-        if options.get('stix_validator'):
-            if ds2stix.spec_version == "2.1":
-                # Serialize and Deserialize bundle to covert StixObjectIds to strings
-                bundle_obj = json.dumps(ds2stix.bundle, sort_keys=False)
-                bundle_obj = json.loads(bundle_obj)
-            else:
-                bundle_obj = ds2stix.bundle
-            validated_result = validate_instance(bundle_obj, ValidationOptions(version=ds2stix.spec_version))
-            print_results(validated_result)
-
         return ds2stix.bundle
 
     except Exception as e:
@@ -66,7 +55,6 @@ class DataSourceObjToStixObj:
         self.callback = callback
 
         # parse through options
-        self.cybox_default = options.get('cybox_default', True)
 
         self.properties = observable.properties
 
@@ -123,14 +111,14 @@ class DataSourceObjToStixObj:
             self.logger.debug("Failed to validate STIX property '{}' with value '{}'. Exception: {}".format(observable_key, stix_value, e))
             return False
 
-    def _compose_value_object(self, value, key_list, observable_key=None, object_tag_ref_map=None, transformer=None, references=None, unwrap=False):
+    def _compose_value_object(self, value, key_list, observable_key=None, object_tag_ref_map=None, transformer=None, references=None, unwrap=False, is_group_ref=False):
         """
         Converts the value of the data to STIX valid value
         """
         try:
             return_value = {}
             for key in key_list:
-                return_value[key] = self._compose_value_object(value, key_list[1:], observable_key=observable_key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap)
+                return_value[key] = self._compose_value_object(value, key_list[1:], observable_key=observable_key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap, is_group_ref=is_group_ref)
                 break
             else:
                 if transformer:
@@ -146,13 +134,31 @@ class DataSourceObjToStixObj:
                         return_value = []
                         for ref in references:
                             if not isinstance(value, list):
-                                value = [value]
-                            for i, _ in enumerate(value):
-                                parent_key_ind = self._get_tag_ind(ref, object_tag_ref_map, create_on_absence=False, unwrap=i)
+                                # Fetch the index of reference object name which has a single value.
+                                parent_key_ind = self._get_tag_ind(ref, object_tag_ref_map, create_on_absence=False)
                                 if parent_key_ind:
                                     return_value.append(parent_key_ind)
+                            else:
+                                for i, _ in enumerate(value):
+                                    parent_key_ind = self._get_tag_ind(ref, object_tag_ref_map, create_on_absence=False, unwrap=str(i))
+                                    if parent_key_ind:
+                                        return_value.append(parent_key_ind)
+                                    # Iterate through the object_tag_ref_map to fetch the index, for grouping
+                                    # reference objects of nested type through group_ref.
+                                    elif is_group_ref:
+                                        list_parent_ind = ref + '_' + str(i)
+                                        for key, val in object_tag_ref_map['tags'].items():
+                                            if key.startswith(list_parent_ind):
+                                                return_value.append(
+                                                    self._get_tag_ind(key, object_tag_ref_map, create_on_absence=False))
+
                     else:
-                        return_value = self._get_tag_ind(references, object_tag_ref_map, create_on_absence=False)
+                        # Fetch first object (index 0) for single reference when the value is of type list .
+                        if isinstance(value, list):
+                            return_value = self._get_tag_ind(references, object_tag_ref_map, create_on_absence=False,
+                                                             unwrap='0')
+                        else:
+                            return_value = self._get_tag_ind(references, object_tag_ref_map, create_on_absence=False)
                         # if the property has unwrap true and is not a list, convert to list
                         if unwrap is True and not isinstance(return_value, list):
                             return_value = [return_value]
@@ -252,7 +258,14 @@ class DataSourceObjToStixObj:
                 elif isinstance(data, list):
                     for i, d in enumerate(data):
                         if isinstance(d, list) or isinstance(d, dict):
-                            self._handle_properties(to_stix_config_prop, d, objects, object_tag_ref_map, data, ds_sub_key, i)
+                            # Added parent key indexes to inner objects in order to handle nested lists of
+                            # dictionaries and lists. For Example, if a list of IP address is present inside
+                            # a list of network objects, then without adding this code, only the IP address information
+                            # in the first network object will be created and the rest are not created.
+                            if object_key_ind:
+                                i = str(object_key_ind) + '_' + str(i)
+                            # Inorder to include 0th index, the integer field 'i' is converted to string.
+                            self._handle_properties(to_stix_config_prop, d, objects, object_tag_ref_map, data, ds_sub_key, str(i))
                         else:
                             # data variable is the final value, process in bulk
                             self._handle_value(data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map, object_key_ind)
@@ -263,9 +276,12 @@ class DataSourceObjToStixObj:
                                       isinstance(value, dict) and value.get('group_ref') and value.get(
                                           'references')]
                         for group_ref in group_refs:
+                            # Added a new boolean (True) parameter (is_group_ref) to indicate grouping of references
+                            # through group_ref key in mapping
                             self._handle_value(data, to_stix_config_prop, ds_sub_key,
                                                to_stix_config_prop[group_ref],
-                                               objects, object_tag_ref_map, object_key_ind)
+                                               objects, object_tag_ref_map, object_key_ind, True)
+
                 elif isinstance(data, dict):
                     for k in data:
                         cust_prop = None
@@ -282,7 +298,7 @@ class DataSourceObjToStixObj:
             raise Exception("Error in json_to_stix_translator._handle_properties: %s" % e)
 
 
-    def _handle_value(self, data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map, object_key_ind=None):
+    def _handle_value(self, data, parent_data, ds_sub_key, to_stix_config_prop, objects, object_tag_ref_map, object_key_ind=None, is_group_ref=False):
         """
         Receives the raw value of a data property, converts to a STIX valid value and adds to the cached observable `objects` dictionary
         """
@@ -299,9 +315,29 @@ class DataSourceObjToStixObj:
 
                 transformer = self.transformers[prop['transformer']] if 'transformer' in prop else None
                 references = references = prop['references'] if 'references' in prop else None
+
+                # This check avoid using duplicate reference in the multiple objects of the same type.
+                # For example: If there are multiple source ipv4-addr and network-traffic objects then
+                # without this reference check the first source ipv4-addr object will be referenced to all network-traffic objects.
+                if references:
+                    if isinstance(references, str):
+                        if object_key_ind:
+                            references = references + '_' + str(object_key_ind)
+                        elif not isinstance(data, list):
+                            references = references + '_' + '0'
+                    elif isinstance(references, list):
+                        if object_key_ind:
+                            references = [ref + '_' + str(object_key_ind) for ref in references]
+                        elif not isinstance(data, list):
+                            references = [ref + '_' + '0' for ref in references]
                 # unwrap array of stix values to separate stix objects
                 unwrap = True if 'unwrap' in prop and isinstance(data, list) else False
-                cybox = prop.get('cybox', self.cybox_default)
+                if "." in key:
+                    cybox = True
+                else:
+                    cybox = False
+                
+                # cybox = prop.get('cybox', self.cybox_default)
 
                 if self.callback:
                     try:
@@ -313,7 +349,8 @@ class DataSourceObjToStixObj:
 
                 config_keys = key.split('.')
                 if len(config_keys) < 2:
-                    if False is prop.get('cybox', self.cybox_default): 
+                    # if False is prop.get('cybox', self.cybox_default):
+                    if not cybox:
                         object_tag_ref_map['out_cybox'][key] = self._compose_value_object(data, [], observable_key=key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap)
                     pass
                 else:
@@ -333,6 +370,15 @@ class DataSourceObjToStixObj:
 
                     if object_key_ind:
                         parent_key = parent_key + '_' + str(object_key_ind)
+                    # Adding _0 as a tag index for the following
+                    # 1. For object name of non-list type data or unwrapped data
+                    # 2. For the object name containing references to list type of data.
+                    # For Example, when a single IP address value and references to the list of domain values, needs
+                    # to be added to a single custom object, the 0th index is added to the custom object to have ip
+                    # address and references to list of domains under the same custom object.
+                    elif (isinstance(data, list) and not unwrap and not references) \
+                            or (isinstance(data, list) and references) or (not isinstance(data, list)):
+                        parent_key = parent_key + '_' + '0'
 
                     # use the hard-coded value in the mapping
                     if 'value' in prop:
@@ -344,14 +390,24 @@ class DataSourceObjToStixObj:
                             if False is cybox:
                                 object_tag_ref_map['ds_key_cybox'][substitute_key] = True
                         
-                        value = self._compose_value_object(data, config_keys[2:], observable_key=key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap)
+                        value = self._compose_value_object(data, config_keys[2:], observable_key=key, object_tag_ref_map=object_tag_ref_map, transformer=transformer, references=references, unwrap=unwrap, is_group_ref=is_group_ref)
 
-                    if value is None or value == '':
+                    # Remove the values which has empty list brackets.
+                    remove_value = False
+                    if value is None or value in ('', []):
+                        remove_value = True
+                    elif isinstance(value, dict):
+                        for k, v in value.items():
+                            if isinstance(v, dict) and list(v.values())[0] in ('', []):
+                                remove_value = True
+                                continue
+                    if remove_value:
                         continue
 
                     if not references and unwrap and isinstance(value, list):
                         for i, val_el in enumerate(value):
-                            parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, unwrap=i, property_key=property_key)
+                            # Inorder to include 0th index, the integer field 'i' is converted to string.
+                            parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, unwrap=str(i), property_key=property_key)
                             self._add_property(type_name, property_key, parent_key_ind, val_el, objects, group=group)
                     else:
                         parent_key_ind = self._get_tag_ind(parent_key, object_tag_ref_map, create_on_absence=True, property_key=property_key)

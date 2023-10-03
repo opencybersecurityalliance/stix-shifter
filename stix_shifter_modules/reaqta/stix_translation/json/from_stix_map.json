@@ -73,7 +73,21 @@
       "extensions.'x-reaqta-avdetection'.av_threat_info_array": ["antimalware.threatInfo"],
       "finding_type": ["antimalware.threatType"],
       "name": ["antimalware.objectStatus"],
-      "src_ip_ref.value": ["ip"]
+      "src_ip_ref.value": ["ip"],
+      "ttp_tagging_refs": ["mitre.tactic", "mitre.technique"]
+    }
+  },
+  "x-ibm-ttp-tagging": {
+    "fields": {
+      "name": [
+        "mitre.technique"
+      ],
+      "extensions.'mitre-attack-ext'.tactic_name": [
+        "mitre.tactic"
+      ],
+      "extensions.'mitre-attack-ext'.technique_name": [
+        "mitre.technique"
+      ]
     }
   },
   "x-oca-asset": {
@@ -108,8 +122,7 @@
       "network_ref.dst_ref.value": ["ip"],
       "network_ref.src_ref.value": ["ip"],
       "parent_process_ref.pid": ["service.ppid"],
-      "process_ref.pid": ["wmi.clientPid"],
-      "user_ref.user_id": []
+      "process_ref.pid": ["wmi.clientPid"]
     }
   },
   "x-reaqta-amsi": {
@@ -231,10 +244,8 @@
       "service_name": ["service.name"],
       "service_type": ["service.type"],
       "start_type": ["service.startType"],
-      "tactics": ["mitre.tactic"],
       "tags": ["eventdata.tag"],
       "task_name": ["task.name"],
-      "technique": ["mitre.technique"],
       "version": ["eventdata.version"]
     }
   },

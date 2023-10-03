@@ -23,7 +23,6 @@ class APIClient():
         # TODO switch on cert_verify
         # cert_verify = connection.get('selfSignedCert', True)
         cert_verify = connection.get(False)
-        sni = connection.get('sni', None)
         auth = connection.get('auth', None)
         url = "https://" + host + ":" + str(port)
         params = dict()
@@ -39,7 +38,6 @@ class APIClient():
                                          headers,
                                          url_modifier_function,
                                          cert_verify,
-                                         sni,
                                          auth
                                          )
 

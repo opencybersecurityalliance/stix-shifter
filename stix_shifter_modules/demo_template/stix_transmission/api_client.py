@@ -32,7 +32,7 @@ class APIClient():
         # Check the current status of the search
         return {"code": 200, "status": "COMPLETED"}
 
-    async def get_search_results(self, search_id, range_start=None, range_end=None):
+    async def run_search(self, search_id, range_start=None, range_end=None):
         # Return the search results. Results must be in JSON format before being translated into STIX
         return {"code": 200, "data": "Results from search"}
 

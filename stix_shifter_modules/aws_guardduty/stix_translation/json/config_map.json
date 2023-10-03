@@ -1,0 +1,53 @@
+{
+	"int_supported_fields": [
+		"service.action.awsApiCallAction.remoteIpDetails.organization.asn",
+        "service.action.networkConnectionAction.remoteIpDetails.organization.asn",
+		"service.action.networkConnectionAction.localPortDetails.port",
+		"service.action.networkConnectionAction.remotePortDetails.port",
+		"confidence",
+		"severity"
+	],
+	"enum_supported_fields": [
+		"service.action.actionType",
+		"resource.resourceType",
+		"service.action.networkConnectionAction.connectionDirection",
+		"service.action.networkConnectionAction.protocol",
+		"service.resourceRole",
+		"resource.s3BucketDetails.publicAccess.effectivePermission",
+		"resource.s3BucketDetails.type",
+		"service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.severity"
+	],
+	"boolean_supported_fields": [
+		"service.action.networkConnectionAction.blocked",
+		"service.archived",
+		"service.action.awsApiCallAction.RemoteAccountDetails.affiliated"
+	],
+	"enum_supported_values": {
+		"service.action.actionType": [
+			"NETWORK_CONNECTION", "PORT_PROBE", "DNS_REQUEST", "AWS_API_CALL", "RDS_LOGIN_ATTEMPT",
+			"KUBERNETES_API_CALL"
+		],
+		"resource.resourceType": [
+			"Instance", "AccessKey", "S3Bucket", "EKSCluster", "ECSCluster",
+			"Container", "RDSDBInstance", "Lambda"
+		],
+		"service.action.networkConnectionAction.connectionDirection": [
+			"INBOUND","OUTBOUND"
+		],
+		"service.action.networkConnectionAction.protocol": [
+			"GRE","ICMP","TCP","UDP"
+		],
+		"service.resourceRole": [
+			"ACTOR", "TARGET"
+		],
+		"resource.s3BucketDetails.publicAccess.effectivePermission": [
+			"PUBLIC", "NOT_PUBLIC"
+		],
+		"resource.s3BucketDetails.type": [
+			"Destination", "Source"
+		],
+		"service.ebsVolumeScanDetails.scanDetections.threatDetectedByName.threatNames.severity": [
+			"HIGH", "MEDIUM"
+		]
+	}
+}
