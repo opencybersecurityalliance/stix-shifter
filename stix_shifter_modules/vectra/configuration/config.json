@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Vectra"
+            "displayName": "Vectra",
+            "group": "vectra"
         },
         "host": {
             "type": "text",

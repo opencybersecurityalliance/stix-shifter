@@ -227,7 +227,9 @@ class Connector(BaseJsonSyncConnector):
             if 'certainty' in record:
                 record['certainty_score'] = record['certainty']
 
-            # converting 0 to 1 for severity and confidence
+            # Vectra 'certainty' and 'threat' scores range from 0 to 100. These attributes are
+            # mapped to 'severity' and 'confidence' in the x-ibm-finding object, which are in the range of 1 to 100.
+            # Setting the minimal value from 0 to 1 for severity and confidence
             if record.get('certainty_score') == 0:
                 record['certainty_score'] = 1
             if record.get('threat') == 0:
