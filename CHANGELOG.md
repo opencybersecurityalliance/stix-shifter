@@ -16,6 +16,27 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
+## 6.2.2 (2023-10-03)
+
+### Changes:
+
+*  include connector type in logger error [#1585](https://github.com/opencybersecurityalliance/stix-shifter/pull/1585)
+*  Add new screen shots to CLI Lab [#1576](https://github.com/opencybersecurityalliance/stix-shifter/pull/1576)
+
+### Fixes:
+
+*  Update Azure Log Analytics stix transmission to use BaseJsonSyncConnector [#1584](https://github.com/opencybersecurityalliance/stix-shifter/pull/1584)
+*  Fixing authentication token handling [#1583](https://github.com/opencybersecurityalliance/stix-shifter/pull/1583)
+*  allow host address input in MS Graph configuration [#1582](https://github.com/opencybersecurityalliance/stix-shifter/pull/1582)
+*  fix coding lab [#1578](https://github.com/opencybersecurityalliance/stix-shifter/pull/1578)
+*  Fix and update coding lab [#1577](https://github.com/opencybersecurityalliance/stix-shifter/pull/1577)
+
+### Dependency update:
+
+*  Bump aioboto3 from 11.2.0 to 11.3.0 in /stix_shifter [#1575](https://github.com/opencybersecurityalliance/stix-shifter/pull/1575)
+
+--------------------------------------
+
 ## 6.2.1 (2023-09-07)
 
 ### Changes:

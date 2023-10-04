@@ -26,7 +26,7 @@
         "options": {
             "alert": {
                 "type": "boolean",
-                "default": false
+                "default": true
             },
             "alertV2": {
                 "type": "boolean",
