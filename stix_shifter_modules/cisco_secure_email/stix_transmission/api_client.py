@@ -8,6 +8,7 @@ class APIClient:
     QUERY_ENDPOINT = "esa/api/v2.0/message-tracking/messages?searchOption=messages&"
     PING_ENDPOINT = "esa/api/v2.0/login/privileges"
     TOKEN_ENDPOINT = "esa/api/v2.0/login"
+    CISCO_RESULT_LIMIT = 800
 
     def __init__(self, connection, configuration):
         self.auth = configuration.get('auth')
@@ -20,6 +21,9 @@ class APIClient:
         # Cisco Secure Email API requires larger timeout, so setting 60sec value for timeout.
         if int(self.timeout) < 60:
             self.timeout = 60
+        # Due to a Cisco API limitation, the maximum value for result limit is 800.
+        if int(self.result_limit) > self.CISCO_RESULT_LIMIT:
+            self.result_limit = self.CISCO_RESULT_LIMIT
 
     async def ping_data_source(self, token):
         """
