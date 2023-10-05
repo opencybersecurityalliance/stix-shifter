@@ -86,7 +86,9 @@
 | **x-ibm-finding**:start | detection.first_timestamp |
 | **x-ibm-finding**:end | detection.last_timestamp |
 | **x-ibm-finding**:time_observed | detection.created_timestamp |
+| **x-ibm-finding**:event_count | detection.summary.num_sessions, detection.summary.num_attempts |
 | **x-ibm-finding**:x_state | detection.state |
+| **x-ibm-finding**:x_num_successes | detection.summary.num_successes |
 | **x-ibm-finding**:x_assigned_to | detection.assigned_to |
 | **x-ibm-finding**:x_assigned_date | detection.assigned_date |
 | **x-ibm-finding**:x_sensor_name | detection.sensor_name |
@@ -301,7 +303,10 @@
 | x-ibm-finding | start | detection.first_timestamp |
 | x-ibm-finding | end | detection.last_timestamp |
 | x-ibm-finding | time_observed | detection.created_timestamp |
+| x-ibm-finding | event_count | detection.summary.num_sessions |
+| x-ibm-finding | event_count | detection.summary.num_attempts |
 | x-ibm-finding | x_state | detection.state |
+| x-ibm-finding | x_num_successes | detection.summary.num_successes |
 | x-ibm-finding | x_assigned_to | detection.assigned_to |
 | x-ibm-finding | x_assigned_date | detection.assigned_date |
 | x-ibm-finding | x_sensor_name | detection.sensor_name |

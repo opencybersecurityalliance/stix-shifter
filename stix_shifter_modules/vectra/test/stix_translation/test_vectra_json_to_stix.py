@@ -328,7 +328,7 @@ class TestVectraResultsToStix(unittest.TestCase):
         """test x-ibm-finding stix object properties"""
         objects = TestVectraResultsToStix.get_observed_data_objects(vectra_sample_response)
         x_ibm_obj = TestVectraResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
-        assert (x_ibm_obj.keys() == {'type', 'type', 'description', 'alert_id', 'ttp_tagging_refs',
+        assert (x_ibm_obj.keys() == {'type', 'type', 'event_count', 'description', 'alert_id', 'ttp_tagging_refs',
                                      'name', 'finding_type', 'src_ip_ref', 'x_state', 'confidence', 'severity',
                                      'time_observed', 'start', 'end', 'x_sensor_name', 'x_assigned_to',
                                      'x_assigned_date', 'x_is_triaged', 'ioc_refs'})

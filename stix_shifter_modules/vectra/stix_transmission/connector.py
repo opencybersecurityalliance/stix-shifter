@@ -227,13 +227,11 @@ class Connector(BaseJsonSyncConnector):
             if 'certainty' in record:
                 record['certainty_score'] = record['certainty']
 
-            # Vectra 'certainty' and 'threat' scores range from 0 to 100. These attributes are
-            # mapped to 'severity' and 'confidence' in the x-ibm-finding object, which are in the range of 1 to 100.
-            # Setting the minimal value from 0 to 1 for severity and confidence
-            if record.get('certainty_score') == 0:
-                record['certainty_score'] = 1
-            if record.get('threat') == 0:
-                record['threat'] = 1
+            # if x-ibm-finding object event_count is not available, setting the default value to 1.
+            # if default value is not set, CP4S inserts NaN value for event_count which causes rendering issue in UI.
+            if record.get('summary') and \
+                    'num_attempts' not in record['summary'] and 'num_sessions' not in record['summary']:
+                record['summary']['num_sessions'] = 1
 
             if 'Privilege' in detection_type:
                 # Skip any preprocessing for these detections.

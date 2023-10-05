@@ -52,6 +52,19 @@
       "key": "x-ibm-finding.description",
       "object": "detection"
     },
+    "num_sessions": {
+      "key": "x-ibm-finding.event_count",
+      "object": "detection"
+    },
+    "num_attempts": {
+      "key": "x-ibm-finding.event_count",
+      "object": "detection"
+    },
+    "num_successes": {
+      "key": "x-ibm-finding.x_num_successes",
+      "object": "detection",
+      "transformer": "ToString"
+    },
     "dst_ports": {
       "key": "x-ibm-finding.x_dst_ports",
       "object": "detection"
