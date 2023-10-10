@@ -13,7 +13,7 @@ class APIClient:
         self.headers = {"Authorization": "Token " + self.auth["api_token"],
                         'Content-Type': "application/json",
                         'Cache-Control': "no-cache"}
-        self.client = RestApiClientAsync(connection.get('host'), port=None, headers=self.headers)
+        self.client = RestApiClientAsync(connection.get('host'), port=connection.get('port'), headers=self.headers)
         self.host = connection.get('host')
 
     async def ping_data_source(self):

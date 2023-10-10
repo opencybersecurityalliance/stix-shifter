@@ -223,6 +223,12 @@ class Connector(BaseJsonSyncConnector):
 
             detection_type = record.get('detection_type', '')
 
+            # if x-ibm-finding object event_count is not available, setting the default value to 1.
+            # if default value is not set, CP4S inserts NaN value for event_count which causes rendering issue in UI.
+            if record.get('summary') and \
+                    'num_attempts' not in record['summary'] and 'num_sessions' not in record['summary']:
+                record['summary']['num_sessions'] = 1
+
             if 'Privilege' in detection_type:
                 # Skip any preprocessing for these detections.
                 continue
