@@ -105,15 +105,13 @@
   ],
   "certainty": [
     {
+      "key": "x-ibm-finding.confidence",
+      "object": "detection"
+    },
+    {
       "key": "x-ibm-ttp-tagging.confidence",
       "object": "ttp_finding",
       "transformer": "ConvertToReal"
-    }
-  ],
-  "certainty_score": [
-    {
-      "key": "x-ibm-finding.confidence",
-      "object": "detection"
     }
   ],
   "first_timestamp": [

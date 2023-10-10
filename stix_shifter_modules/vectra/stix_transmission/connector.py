@@ -223,10 +223,6 @@ class Connector(BaseJsonSyncConnector):
 
             detection_type = record.get('detection_type', '')
 
-            # adding new field for confidence field mapping
-            if 'certainty' in record:
-                record['certainty_score'] = record['certainty']
-
             # if x-ibm-finding object event_count is not available, setting the default value to 1.
             # if default value is not set, CP4S inserts NaN value for event_count which causes rendering issue in UI.
             if record.get('summary') and \
