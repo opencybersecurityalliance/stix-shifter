@@ -62,7 +62,8 @@
     },
     "num_successes": {
       "key": "x-ibm-finding.x_num_successes",
-      "object": "detection"
+      "object": "detection",
+      "transformer": "ToString"
     },
     "dst_ports": {
       "key": "x-ibm-finding.x_dst_ports",

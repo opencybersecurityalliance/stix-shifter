@@ -333,7 +333,10 @@ class TestVectraConnection(unittest.TestCase, object):
 
     def connection(self):
         """format for connection"""
-        return {"host": "hostbla"}
+        return {
+            "host": "hostbla",
+            "port": 443
+        }
 
     def configuration(self):
         """format for configuration"""
