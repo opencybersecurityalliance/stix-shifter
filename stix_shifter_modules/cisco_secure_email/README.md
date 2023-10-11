@@ -404,7 +404,7 @@ cisco_secure_email
 
 
 ### Limitations
-- Due to a Cisco API limitation, the recommended maximum value for result limit is 5000. If timeout error occurs it is recommended to use smaller value for result limit.
+- Due to a Cisco API limitation, if timeout error occurs it is recommended increase the timeout configuration to higher value and/or configure smaller value for result limit.
 - ‘NOT’, <, >, <=, >= operators are not supported.
 
 ### References

@@ -21,15 +21,6 @@
         "selfSignedCert": {
             "type": "password",
             "optional": true
-        },
-        "options": {
-            "result_limit": {
-                "default": 5000,
-                "min": 1,
-                "max": 5000,
-                "type": "number",
-                "previous": "connection.resultSizeLimit"
-            }
         }
     },
     "configuration": {

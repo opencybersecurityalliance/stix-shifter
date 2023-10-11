@@ -16,10 +16,6 @@ class APIClient:
                                          cert_verify=connection.get('selfSignedCert', True))
         self.result_limit = connection['options'].get('result_limit')
         self.timeout = connection['options'].get('timeout')
-        # timeout configuration value from CP4S is not reflected here, it is always coming as 30sec.
-        # Cisco Secure Email API requires larger timeout, so setting 60sec value for timeout.
-        if int(self.timeout) < 60:
-            self.timeout = 60
 
     async def ping_data_source(self, token):
         """
