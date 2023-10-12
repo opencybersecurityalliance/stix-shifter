@@ -334,5 +334,18 @@ class TestCiscoEmailConnection(unittest.TestCase, object):
         result_response = transmission.results(query, offset, length)
         assert result_response is not None
         assert result_response['success'] is False
-        assert result_response['code'] == "no_results"
+        assert result_response['code'] == "invalid_query"
         assert 'Nothing matches the given URI' in result_response['error']
+
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
+    def test_invalid_certificate(self, mock_results_response):
+        """Test invalid certificate for results"""
+        mock_results_response.side_effect = Exception("[X509] PEM lib (_ssl.c:4293)")
+        transmission = stix_transmission.StixTransmission('cisco_secure_email', self.connection(), self.configuration())
+        offset = 0
+        length = 1
+        result_response = transmission.results('', offset, length)
+        assert result_response is not None
+        assert result_response['success'] is False
+        assert result_response['code'] == "certificate_fail"
+        assert "Invalid Self Signed Certificate" in result_response['error']

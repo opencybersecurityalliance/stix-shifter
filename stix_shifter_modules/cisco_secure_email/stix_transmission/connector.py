@@ -97,7 +97,11 @@ class Connector(BaseJsonSyncConnector):
                 response_dict['code'] = 503
             elif "timeout_error" in str(ex):
                 response_dict['code'] = 408
-            response_dict['message'] = str(ex)
+            elif "X509" in str(ex):
+                response_dict['code'] = 101
+                response_dict['message'] = "Invalid Self Signed Certificate: "+str(ex)
+            if not response_dict.get('message'):
+                response_dict['message'] = str(ex)
             self.logger.error('error while fetching results: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
@@ -124,7 +128,11 @@ class Connector(BaseJsonSyncConnector):
                 response_dict['code'] = 503
             elif "timeout_error" in str(ex):
                 response_dict['code'] = 408
-            response_dict['message'] = str(ex)
+            elif "X509" in str(ex):
+                response_dict['code'] = 101
+                response_dict['message'] = "Invalid Self Signed Certificate: "+str(ex)
+            if not response_dict.get('message'):
+                response_dict['message'] = str(ex)
             self.logger.error('error while pinging: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
