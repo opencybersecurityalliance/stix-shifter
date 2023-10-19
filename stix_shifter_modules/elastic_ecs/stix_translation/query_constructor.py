@@ -335,15 +335,15 @@ def _unfold_case_insensitive_regex(regex_pattern):
 
                 # xsb: xs inside bracket
                 xsb = xs[1::2]
-                xsb[ci_index//2:] = ["[" + _unfold_ci_chars(x, True) + "]" for x in xsb[ci_index//2:]]
+                xsb[ci_index//2:] = [_unfold_ci_chars_in_bracket(x) for x in xsb[ci_index//2:]]
                 xs[1::2] = xsb
 
                 # xsob: xs outside bracket
                 xsob = xs[0::2]
                 xsob_s_h, *xsob_s_t = xsob[ci_index//2].split("(?i)")
-                xsob_s_t = [_unfold_ci_chars(x, False) for x in xsob_s_t]
+                xsob_s_t = [_unfold_plaintext_ci_chars(x) for x in xsob_s_t]
                 xsob[ci_index//2] = "".join([xsob_s_h] + xsob_s_t)
-                xsob[ci_index//2+1:] = [_unfold_ci_chars(x.replace("(?i)", ""), False) for x in xsob[ci_index//2+1:]]
+                xsob[ci_index//2+1:] = [_unfold_plaintext_ci_chars(x.replace("(?i)", "")) for x in xsob[ci_index//2+1:]]
                 xs[0::2] = xsob
 
                 p_unfolded = "".join(xs)
@@ -361,19 +361,47 @@ def _unfold_case_insensitive_regex(regex_pattern):
         return regex_pattern
 
 
-def _unfold_ci_chars(regex_pattern_segment, if_set):
-    # if_set: if all chars are in the square bracket of regex
-    def char_mapper(c):
-        if if_set:
-            return c.lower() + c.upper()
+def _unfold_plaintext_ci_chars(regex_pattern_segment):
+    return "".join([f"[{x.lower()}{x.upper()}]" if x.isascii() and x.isalpha() else x for x in regex_pattern_segment])
+
+
+def _unfold_ci_chars_in_bracket(regex_pattern_in_bracket):
+    # split segments
+    segs = [""]
+    # effective i that knows skipped indexes/chars
+    ie = 0
+    for i, x in enumerate(regex_pattern_in_bracket):
+        if i < ie:
+            continue
+        if i < len(regex_pattern_in_bracket)-2:
+            if x.isascii():
+                ahead1 = regex_pattern_in_bracket[i+1]
+                ahead2 = regex_pattern_in_bracket[i+2]
+                if ahead1 == "-" and ahead2.isascii():
+                    segs.append(regex_pattern_in_bracket[i:i+3])
+                    segs.append("")
+                    ie = i+3
+                else:
+                    segs[-1] = segs[-1] + x
+            else:
+                segs[-1] = segs[-1] + x
         else:
-            return f"[{c.lower()}{c.upper()}]"
-    xs = list(regex_pattern_segment)
-    s = "".join([char_mapper(x) if x.isascii() and x.isalpha() else x for x in xs])
-    if if_set:
-        # dedup for items inside square bracket
-        s = "".join(sorted(set(s)))
-    return s
+            segs.append(regex_pattern_in_bracket[i:len(regex_pattern_in_bracket)])
+            break
+    segs_new = []
+    for seg in segs:
+        if len(seg) == 3 and seg[1] == "-" and seg[0].isascii() and seg[0].isalpha() and seg[2].isascii() and seg[2].isalpha():
+            lower = f"{seg[0].lower()}-{seg[2].lower()}"
+            if lower not in segs_new:
+                segs_new.append(lower)
+            upper = f"{seg[0].upper()}-{seg[2].upper()}"
+            if upper not in segs_new:
+                segs_new.append(upper)
+        else:
+            new = "".join([x.lower()+x.upper() if x.isascii() and x.isalpha() else x for x in seg])
+            if new not in segs_new:
+                segs_new.append(new)
+    return "[" + "".join(segs_new) + "]"
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
