@@ -1,7 +1,8 @@
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.utils.error_response import ErrorCode
 from stix_shifter_modules.elastic_ecs.stix_translation.query_constructor import (
-    _unfold_ci_chars,
+    _unfold_plaintext_ci_chars,
+    _unfold_ci_chars_in_bracket,
     _unfold_case_insensitive_regex,
 )
 import unittest
@@ -41,26 +42,35 @@ def _remove_timestamp_from_query(queries):
 class TestStixtoQuery(unittest.TestCase, object):
 
     def test_case_insensitive_unfold_chars(self):
-        input_output_pairs = [ ("a", False, "[aA]")
-                             , ("ab", False, "[aA][bB]")
-                             , ("ab7#*c((D))", False, "[aA][bB]7#*[cC](([dD]))")
-                             , ("aba", True, "ABab")
-                             , ("ab7#BBeE", True, "#7ABEabe")
+        input_output_pairs = [ ("a", "[aA]")
+                             , ("ab", "[aA][bB]")
+                             , ("ab7#*c((D))", "[aA][bB]7#*[cC](([dD]))")
                              ]
-        for (x,y,z) in input_output_pairs:
-            assert z == _unfold_ci_chars(x, y)
+        for (x,y) in input_output_pairs:
+            assert y == _unfold_plaintext_ci_chars(x)
 
+    def test_unfold_ci_chars_in_bracket(self):
+        iopairs = [ ("abD", "[aAbBdD]")
+                  , ("a-z0-9", "[a-zA-Z0-9]")
+                  , ("-ef-z", "[-eEf-zF-Z]")
+                  , ("ab-", "[aAbB-]")
+                  , ("a-zA-Z0-9", "[a-zA-Z0-9]")
+                  ]
+        for (x,y) in iopairs:
+            assert y == _unfold_ci_chars_in_bracket(x)
 
     def test_case_insensitive_unfold_regex(self):
         iopairs = [ ("http://z[abc]83m li", "http://z[abc]83m li")
                   , ("(?i)virus", "[vV][iI][rR][uU][sS]")
-                  , ("(?i)virus[ s]", "[vV][iI][rR][uU][sS][ Ss]")
-                  , ("(?i)virus[ s] bin [c3b]", "[vV][iI][rR][uU][sS][ Ss] [bB][iI][nN] [3BCbc]")
+                  , ("(?i)virus[ s]", "[vV][iI][rR][uU][sS][ sS]")
+                  , ("(?i)virus[ s] bin [c3b]", "[vV][iI][rR][uU][sS][ sS] [bB][iI][nN] [cC3bB]")
                   , (r"(?i)virus\[ s\]", r"[vV][iI][rR][uU][sS]\[ [sS]\]")
-                  , (r"(?i)virus\\[ s\\]", r"[vV][iI][rR][uU][sS]\\[ Ss\\]")
+                  , (r"(?i)virus\\[ s\\]", r"[vV][iI][rR][uU][sS]\\[ sS\\]")
                   , ("(?i)http://z83m li", "[hH][tT][tT][pP]://[zZ]83[mM] [lL][iI]")
-                  , ("(?i)http://z[abc]83m li", "[hH][tT][tT][pP]://[zZ][ABCabc]83[mM] [lL][iI]")
-                  , ("http://(?i)z[abc]83m li", "http://[zZ][ABCabc]83[mM] [lL][iI]")
+                  , ("(?i)http://z[abc]83m li", "[hH][tT][tT][pP]://[zZ][aAbBcC]83[mM] [lL][iI]")
+                  , ("http://(?i)z[abc]83m li", "http://[zZ][aAbBcC]83[mM] [lL][iI]")
+                  , ("http://(?i)z[a-z]83m li", "http://[zZ][a-zA-Z]83[mM] [lL][iI]")
+                  , ("http://(?i)z[a-z0-9A-Z]83m li", "http://[zZ][a-zA-Z0-9]83[mM] [lL][iI]")
                   ]
         for (x,y) in iopairs:
             assert y == _unfold_case_insensitive_regex(x)
