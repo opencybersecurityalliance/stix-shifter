@@ -1,0 +1,18 @@
+{
+  "x-oca-event": {
+    "fields": {
+      "action": ["intelDocName"],
+      "category": ["matchType"],
+      "code": ["id"],
+      "description": ["details"],
+      "outcome": ["state"],
+      "provider":["intelSource"],
+      "host_ref.hostname":["computerName"],
+      "host_ref.ip_ref.value":["computerIpAddress"],
+      "host_ref.os_ref.name":["platforms"],
+      "file_ref.parent_directory_ref.path":["path"],
+      "severity": ["severity"],
+      "x_ttp_tagging_refs.name": ["mitreId"]
+    } 
+  }
+}

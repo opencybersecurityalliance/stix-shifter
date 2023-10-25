@@ -1,0 +1,12 @@
+{
+    "connection": {
+        "options": {
+            "hostname": {
+                "type": "text",
+                "optional": false
+            }
+        }
+    },
+    "configuration": {
+    }
+}
