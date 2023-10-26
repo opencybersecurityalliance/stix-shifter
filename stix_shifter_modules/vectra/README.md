@@ -44,7 +44,7 @@ translate vectra query {} "[ipv4-addr:value='1.1.1.1' AND x-ibm-finding:name='Hi
 ```shell
 transmit 
 vectra 
-"{\"host\":\"instance.vectra.com\"}" 
+"{\"host\":\"instance.vectra.com\", \"port\":xxxx}" 
 "{\"auth\":{\"apitoken\": \"xxxx\"}}" 
 results 
 "[query_string=(detection.detection_type:\"Hidden HTTP Tunnel\" AND (detection.src_ip:\"1.1.1.1\" OR detection.grouped_details.dst_ips:\"1.1.1.1\" OR detection.grouped_details.dst_hosts.dst_ip:\"1.1.1.1\" OR detection.grouped_details.origin_ip:\"1.1.1.1\" OR detection.grouped_details.sessions.dst_ip:\"1.1.1.1\" OR detection.grouped_details.subnet:\"1.1.1.1\" OR detection.grouped_details.events.dst_ip:\"1.1.1.1\" OR detection.grouped_details.events.dst_ips:\"1.1.1.1\" OR detection.grouped_details.events.sessions.dst_ip:\"1.1.1.1\" OR detection.grouped_details.connection_events.target_host.ip:\"1.1.1.1\") AND (detection.last_timestamp:[2023-04-01T0000 to 2023-06-12T0000]))]"
@@ -301,7 +301,7 @@ execute
 vectra
 vectra
 "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"Vectra NDR\",\"identity_class\":\"system\",\"created\":\"2023-02-23T13:22:50.336Z\",\"modified\":\"2022-02-23T13:22:50.336Z\"}"
-"{\"host\":\"xyz\"}"
+"{\"host\":\"xyz\", \"port\":xxxx}"
 "{\"auth\":{\"api_token\": \"xxx\"}}"
 "([x-ibm-finding:confidence>20 AND x-sql-request-info:response_code=404] AND [x-ibm-finding:severity>20 AND x-sql-request-info:user_agent LIKE 'Mozilla']) START t'2023-04-01T00:00:00.000Z' STOP t'2023-06-12T00:00:00.000Z'"
 ```
@@ -437,3 +437,4 @@ vectra
 - [Advanced Search Reference Guide](https://support.vectra.ai/s/article/KB-VS-1116)
 - [Understanding Vectra AI](https://support.vectra.ai/s/article/KB-VS-1285)
 - [Detection and Campaign lifespan and retention periods](https://support.vectra.ai/s/article/KB-VS-1099)
+
