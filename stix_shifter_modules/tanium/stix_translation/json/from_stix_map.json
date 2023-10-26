@@ -3,10 +3,9 @@
     "fields": {
       "action": ["intelDocName"],
       "category": ["matchType"],
-      "code": ["id"],
       "description": ["details"],
       "outcome": ["state"],
-      "provider":["intelSource"],
+      "provider":["intelType"],
       "host_ref.hostname":["computerName"],
       "host_ref.ip_ref.value":["computerIpAddress"],
       "host_ref.os_ref.name":["platforms"],
