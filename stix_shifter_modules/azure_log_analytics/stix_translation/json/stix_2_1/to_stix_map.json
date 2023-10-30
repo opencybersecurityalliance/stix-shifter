@@ -47,10 +47,17 @@
       "transformer": "ConvertToReal"
     }
   ],
-  "EndTime": {
-    "key": "x-ibm-finding.end",
-    "object": "finding"
-  },
+  "EndTime": [
+    {
+      "key": "x-ibm-finding.end",
+      "object": "finding",
+      "transformer": "TimestampConversion"
+    },
+    {
+      "key": "last_observed",
+      "transformer": "TimestampConversion"
+    }
+  ],
   "ExtendedProperties": {
     "resourceType": {
       "key": "x-cloud-resource.resource_type",
@@ -59,7 +66,8 @@
   },
   "ProcessingEndTime": {
     "key": "x-ibm-finding.x_processing_endtime",
-    "object": "finding"
+    "object": "finding",
+    "transformer": "TimestampConversion"
   },
   "ProductComponentName": {
     "key": "software.x_product_component_name",
@@ -88,10 +96,17 @@
     "key": "x-cloud-resource.resource_id",
     "object": "cloud_resource"
   },
-  "StartTime": {
-    "key": "x-ibm-finding.start",
-    "object": "finding"
-  },
+  "StartTime": [
+    {
+      "key": "x-ibm-finding.start",
+      "object": "finding",
+      "transformer": "TimestampConversion"
+    },
+    {
+      "key": "first_observed",
+      "transformer": "TimestampConversion"
+    }
+  ],
   "Status": {
     "key": "x-ibm-finding.x_status",
     "object": "finding"
@@ -118,7 +133,8 @@
   },
   "TimeGenerated": {
       "key": "x-ibm-finding.time_observed",
-      "object": "finding"
+      "object": "finding",
+      "transformer": "TimestampConversion"
     },
   "Type": {
     "key": "x-ibm-finding.finding_type",
@@ -165,27 +181,37 @@
   },
   "ClosedTime": {
     "key": "x-incident-info.closed_time",
-    "object": "incident"
+    "object": "incident",
+    "transformer": "TimestampConversion"
   },
   "Comments": {
     "key": "x-incident-info.comments",
     "object": "incident"
   },
-  "CreatedTime": {
-    "key": "x-ibm-finding.start",
-    "object": "finding"
-  },
+  "CreatedTime": [
+    {
+      "key": "x-ibm-finding.start",
+      "object": "finding",
+      "transformer": "TimestampConversion"
+    },
+    {
+      "key": "first_observed",
+      "transformer": "TimestampConversion"
+    }
+  ],
   "Description": {
     "key": "x-ibm-finding.description",
     "object": "finding"
   },
   "FirstActivityTime": {
     "key": "x-incident-info.first_activity",
-    "object": "incident"
+    "object": "incident",
+    "transformer": "TimestampConversion"
   },
   "FirstModifiedTime": {
     "key": "x-incident-info.first_modified",
-    "object": "incident"
+    "object": "incident",
+    "transformer": "TimestampConversion"
   },
   "IncidentName": {
     "key": "x-ibm-finding.x_incident_name",
@@ -216,12 +242,21 @@
   },
   "LastActivityTime": {
     "key": "x-incident-info.last_active",
-    "object": "incident"
+    "object": "incident",
+    "transformer": "TimestampConversion"
   },
-  "LastModifiedTime": {
-    "key": "x-ibm-finding.end",
-    "object": "finding"
-  },
+  "LastModifiedTime": [
+    {
+      "key": "x-ibm-finding.end",
+      "object": "finding",
+      "transformer": "TimestampConversion"
+    },
+    {
+      "key": "last_observed",
+      "transformer": "TimestampConversion"
+    }
+
+  ],
   "ModifiedBy": {
     "key": "x-ibm-finding.x_modified_by",
     "object": "finding"
@@ -280,10 +315,17 @@
     "key": "x-ibm-finding.alert_id",
     "object": "finding"
   },
-  "PreviousTime": {
-    "key": "x-ibm-finding.start",
-    "object": "finding"
-  },
+  "PreviousTime": [
+    {
+      "key": "x-ibm-finding.start",
+      "object": "finding",
+      "transformer": "TimestampConversion"
+    },
+    {
+      "key": "first_observed",
+      "transformer": "TimestampConversion"
+    }
+  ],
   "EventID": {
     "key": "x-oca-event.code",
     "object": "event"
@@ -708,7 +750,8 @@
       },
       "CreationTimeUtc": {
         "key": "process.created",
-        "object": "process1"
+        "object": "process1",
+        "transformer": "TimestampConversion"
       },
       "ElevationToken": {
         "key": "process.x_elevation_token",
@@ -733,7 +776,8 @@
         },
         "CreationTimeUtc": {
           "key": "process.created",
-          "object": "parent_process"
+          "object": "parent_process",
+          "transformer": "TimestampConversion"
         },
         "ElevationToken": {
           "key": "process.x_elevation_token",
@@ -958,11 +1002,13 @@
       },
       "StartTimeUtc": {
         "key": "x-host-logon-session.start_time",
-        "object": "logon_session"
+        "object": "logon_session",
+        "transformer": "TimestampConversion"
       },
       "EndTimeUtc": {
         "key": "x-host-logon-session.end_time",
-        "object": "logon_session"
+        "object": "logon_session",
+        "transformer": "TimestampConversion"
       }
     },
     "file": {
@@ -1054,11 +1100,13 @@
             },
           "Longitude": {
               "key": "x-geo-location.longitude",
-              "object": "location"
+              "object": "location",
+              "transformer": "ToFloat"
             },
           "Latitude": {
               "key": "x-geo-location.latitude",
-              "object": "location"
+              "object": "location",
+              "transformer": "ToFloat"
             },
           "Organization": {
               "key": "x-geo-location.organization",
