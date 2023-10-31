@@ -35,7 +35,7 @@ DATA1 = {
     'ConfidenceScore': '1.0',
     'IsIncident': 'False',
     'StartTime': '2023-03-22 07:27:09.489644+00:00',
-    'EndTime': '2023-03-22 07:27:09.489644+00:00',
+    'EndTime': '2023-03-22 07:27:09+00:00',
     'ProcessingEndTime': '2023-03-22 07:27:51.489644+00:00',
     'RemediationSteps': 'Review with Sample-account the suspicious command process and command line to confirm '
                         'that this is legitimate activity that you expect to see on Sample-VM. If not, '
@@ -238,7 +238,33 @@ DATA1 = {
             'Value': 'Sample-SHA',
             'Type': 'filehash',
             'SHA256': 'Sample-SHA'
-        }
+        },
+        'network-connection': [
+            {
+                '$id': '11',
+                'SourceAddress': {
+                    '$id': '10',
+                    'Address': '11.111.111.111',
+                    'Location': {
+                        'CountryCode': 'RU',
+                        'CountryName': 'Russian Federation',
+                        'State': 'Bryanskaya Oblast',
+                        'City': 'Bryansk',
+                        'Longitude': 34,
+                        'Latitude': 53.2875,
+                        'Asn': 55555,
+                        'Carrier': 'Chang Way Technologies Co. Limited'
+                    },
+                    'Asset': 'False',
+                    'Type': 'ip'
+                },
+                'DestinationPort': 3333,
+                'Protocol': 'Tcp',
+                'FriendlyName': '11.111.111.111 -> 3333',
+                'Asset': 'False',
+                'Type': 'network-connection'
+            }
+        ]
     },
     'SourceSystem': 'Detection',
     'WorkspaceSubscriptionId': '00000000-0000-0000-0000-000000000001',
@@ -827,3 +853,20 @@ class TestLogAnalyticsResultsToStix(unittest.TestCase):
         assert 'objects' in observed_data
         objects = observed_data['objects']
         assert objects == {}
+
+    @staticmethod
+    def test_x_geo_location_property():
+        """ test the x-geo-location object properties """
+        result_bundle = json_to_stix_translator.convert_to_stix(
+            data_source, map_data, [DATA1], get_module_transformers(MODULE), options)
+        assert result_bundle['type'] == 'bundle'
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        assert 'objects' in observed_data
+        objects = observed_data['objects']
+        x_geo_location = TestLogAnalyticsResultsToStix.get_first_of_type(objects.values(), 'x-geo-location')
+        assert x_geo_location['longitude'] == 34.0
+        assert type(x_geo_location['latitude']) == float
+        assert observed_data['first_observed'] == '2023-03-22T07:27:09.489644Z'
+        assert observed_data['last_observed'] == '2023-03-22T07:27:09.000Z'
+

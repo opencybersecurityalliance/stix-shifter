@@ -25,7 +25,7 @@ class RealToNumber(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
-            if obj == "None":
+            if obj in ("None", "nan", "NaN"):
                 obj = 0
             else:
                 obj = float(obj)*100
@@ -67,9 +67,14 @@ class TimestampConversion(ValueTransformer):
     @staticmethod
     def transform(timestamp):
         try:
+            # with milliseconds
             if re.search(r"\d{4}(-\d{2}){2} \d{2}(:\d{2}){2}.\d{0,6}\+\d{2}:\d{2}", str(timestamp)):
                 converted_date = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f%z")
                 timestamp = datetime.strftime(converted_date, "%Y-%m-%dT%H:%M:%S.%fZ")
+            # for without milliseconds, setting three zeroes in the millisecond in the converted date
+            elif re.search(r"\d{4}(-\d{2}){2} \d{2}(:\d{2}){2}\+\d{2}:\d{2}", str(timestamp)):
+                converted_date = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S%z")
+                timestamp = datetime.strftime(converted_date, "%Y-%m-%dT%H:%M:%S.%f")[:-3]+'Z'
         except:
             LOGGER.error('Cannot convert this timestamp %s', timestamp)
         return timestamp
@@ -86,3 +91,15 @@ class ConvertSeverityToScore(ValueTransformer):
         except ValueError:
             LOGGER.error('Cannot convert input %s to severity score', obj)
         return obj
+
+
+class ToFloat(ValueTransformer):
+    """ Transform the int value to float """
+    @staticmethod
+    def transform(obj):
+        try:
+            if isinstance(obj, int):
+                obj = float(obj)
+            return obj
+        except ValueError:
+            LOGGER.error("Cannot convert input {} to float".format(obj))
