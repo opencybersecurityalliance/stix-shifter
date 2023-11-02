@@ -1,4 +1,4 @@
-##### Updated on 05/15/23
+##### Updated on 10/25/23
 ## IBM Security Verify
 ### Results STIX Domain Objects
 * Identity
@@ -9,7 +9,7 @@
 
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND (Comparision) | & |
+| AND (Comparison) | & |
 | = | = |
 | AND (Observation) | = |
 | IN | = |
