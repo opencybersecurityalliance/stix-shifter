@@ -1,4 +1,4 @@
-##### Updated on 05/15/23
+##### Updated on 10/25/23
 ## GCP Chronicle
 ### Results STIX Domain Objects
 * Identity
@@ -9,8 +9,8 @@
 
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND (Comparision) | and |
-| OR (Comparision) | or |
+| AND (Comparison) | and |
+| OR (Comparison) | or |
 | = | = |
 | != | != |
 | LIKE | = |
@@ -202,7 +202,7 @@
 | email-message | to_refs | to |
 | email-message | cc_refs | cc |
 | email-message | bcc_refs | bcc |
-| email-message | extensions.x-gcp-chronicle-email-message.file_ref | fullPath |
+| email-message | extensions.x-gcp-chronicle-email-message.file_refs | GroupAboutFileReferences |
 | <br> | | |
 | file | name | fullPath |
 | file | parent_directory_ref | fullPath |
@@ -302,7 +302,7 @@
 | x-ibm-finding | dst_ip_ref | ip |
 | x-ibm-finding | dst_os_ref | platform |
 | x-ibm-finding | dst_application_ref | name |
-| x-ibm-finding | extensions.x-gcp-chronicle-security-result.url_ref | url |
+| x-ibm-finding | extensions.x-gcp-chronicle-security-result.url_refs | groupAboutUrlReferences |
 | x-ibm-finding | finding_type | findingType |
 | x-ibm-finding | extensions.x-gcp-chronicle-security-result.threat_name | threatName |
 | x-ibm-finding | rule_names | ruleName |

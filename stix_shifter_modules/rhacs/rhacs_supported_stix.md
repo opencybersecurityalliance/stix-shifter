@@ -1,5 +1,5 @@
-##### Updated on 05/15/23
-## Red Hat Advanced Cluster Security for Kubernetes (StackRox)
+##### Updated on 10/25/23
+## Red Hat Advanced Cluster Security for Kubernetes
 ### Results STIX Domain Objects
 * Identity
 * Observed Data
@@ -9,7 +9,7 @@
 
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND (Comparision) | + |
+| AND (Comparison) | + |
 | = | : |
 | != | :! |
 | LIKE | :r/ |
