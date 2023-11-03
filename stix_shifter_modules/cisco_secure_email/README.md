@@ -13,7 +13,7 @@ See the [table of mappings](cisco_secure_email_supported_stix.md) for the STIX o
 - [STIX Execute Query](#stix-execute-query)
 - [Limitations](#limitations)
 - [Observations](#observations)
-- [README detailed](README_detailed.pdf)
+- [STIX Pattern Use cases and examples](stix_pattern_use_cases_and_examples.md)
 - [References](#references)
 
 ### Cisco Secure Email API Endpoints
