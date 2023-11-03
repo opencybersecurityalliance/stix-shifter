@@ -1,4 +1,4 @@
-##### Updated on 05/15/23
+##### Updated on 10/25/23
 ## PaloAlto Cortex XDR
 ### Results STIX Domain Objects
 * Identity
@@ -9,8 +9,8 @@
 
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND (Comparision) | and |
-| OR (Comparision) | or |
+| AND (Comparison) | and |
+| OR (Comparison) | or |
 | = | = |
 | != | != |
 | LIKE | contains |

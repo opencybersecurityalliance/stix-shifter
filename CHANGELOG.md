@@ -16,6 +16,34 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
+## 6.3.0 (2023-11-02)
+
+### Changes:
+
+*  table of mapping script update for to-stix dialects [#1609](https://github.com/opencybersecurityalliance/stix-shifter/pull/1609)
+*  cisco secure email connector [#1579](https://github.com/opencybersecurityalliance/stix-shifter/pull/1579)
+*  add from stix mapping of OS in ECS [#1597](https://github.com/opencybersecurityalliance/stix-shifter/pull/1597)
+
+### Fixes:
+
+*  Fix Azure log analytics results translation. [#1612](https://github.com/opencybersecurityalliance/stix-shifter/pull/1612)
+*  Vectra config changes [#1581](https://github.com/opencybersecurityalliance/stix-shifter/pull/1581)
+
+### Dependency update:
+
+*  Bump flatten-json from 0.1.13 to 0.1.14 in /stix_shifter [#1613](https://github.com/opencybersecurityalliance/stix-shifter/pull/1613)
+*  Bump azure-identity from 1.14.1 to 1.15.0 in /stix_shifter [#1614](https://github.com/opencybersecurityalliance/stix-shifter/pull/1614)
+*  Bump pyopenssl from 23.2.0 to 23.3.0 in /stix_shifter [#1610](https://github.com/opencybersecurityalliance/stix-shifter/pull/1610)
+*  Bump aioboto3 from 11.3.1 to 12.0.0 in /stix_shifter [#1611](https://github.com/opencybersecurityalliance/stix-shifter/pull/1611)
+*  Bump aioboto3 from 11.3.0 to 11.3.1 in /stix_shifter [#1607](https://github.com/opencybersecurityalliance/stix-shifter/pull/1607)
+*  Bump flask from 2.3.3 to 3.0.0 in /stix_shifter [#1600](https://github.com/opencybersecurityalliance/stix-shifter/pull/1600)
+*  Bump azure-identity from 1.12.0 to 1.14.1 in /stix_shifter [#1599](https://github.com/opencybersecurityalliance/stix-shifter/pull/1599)
+*  Bump attrs from 22.2.0 to 23.1.0 in /stix_shifter [#1595](https://github.com/opencybersecurityalliance/stix-shifter/pull/1595)
+*  Bump regex from 2023.8.8 to 2023.10.3 in /stix_shifter [#1598](https://github.com/opencybersecurityalliance/stix-shifter/pull/1598)
+*  Upgrade urllib3 version in dependency [#1594](https://github.com/opencybersecurityalliance/stix-shifter/pull/1594)
+
+--------------------------------------
+
 ## 6.2.2 (2023-10-03)
 
 ### Changes:
