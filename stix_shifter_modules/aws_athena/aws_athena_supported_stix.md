@@ -1,4 +1,4 @@
-##### Updated on 05/15/23
+##### Updated on 10/25/23
 ## Amazon Athena
 ### Results STIX Domain Objects
 * Identity
@@ -9,8 +9,8 @@
 
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND (Comparision) | AND |
-| OR (Comparision) | OR |
+| AND (Comparison) | AND |
+| OR (Comparison) | OR |
 | > | > |
 | >= | >= |
 | < | < |
@@ -311,29 +311,27 @@
 ### Searchable STIX objects and properties for Vpcflow dialect
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
-| **ipv4-addr**:value | sourceaddress, destinationaddress |
-| **ipv4-addr**:x_aws_interface_id | interfaceId |
-| **ipv6-addr**:value | sourceaddress, destinationaddress |
-| **ipv6-addr**:x_aws_interface_id | interfaceid |
-| **network-traffic**:src_port | sourceport |
-| **network-traffic**:dst_port | destinationport |
-| **network-traffic**:src_ref.value | sourceaddress |
-| **network-traffic**:dst_ref.value | destinationaddress |
+| **ipv4-addr**:value | srcaddr, dstaddr |
+| **ipv4-addr**:x_aws_interface_id | interface_id |
+| **ipv6-addr**:value | srcaddr, dstaddr |
+| **ipv6-addr**:x_aws_interface_id | interface_id |
+| **network-traffic**:src_port | srcport |
+| **network-traffic**:dst_port | dstport |
+| **network-traffic**:src_ref.value | srcaddr |
+| **network-traffic**:dst_ref.value | dstaddr |
 | **network-traffic**:protocols[*] | protocol |
 | **network-traffic**:start | starttime |
 | **network-traffic**:end | endtime |
 | **x-aws-details**:account_id | account |
 | **x-ibm-finding**:finding_type | action |
-| **x-ibm-finding**:src_ip_ref.value | sourceaddress |
-| **x-ibm-finding**:dst_ip_ref.value | destinationaddress |
+| **x-ibm-finding**:src_ip_ref.value | srcaddr |
+| **x-ibm-finding**:dst_ip_ref.value | dstaddr |
 | **x-ibm-finding**:start | starttime |
 | **x-ibm-finding**:end | endtime |
 | <br> | |
-### Supported STIX Objects and Properties for Query Results
+### Supported STIX Objects and Properties for Query Results from Guardduty dialect
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
-| directory | path | parent_folder |
-| <br> | | |
 | domain-name | resolves_to_refs | resource_instancedetails_networkinterfaces_0_privateipaddress |
 | domain-name | resolves_to_refs | resource_instancedetails_networkinterfaces_0_publicip |
 | domain-name | value | resource_instancedetails_networkinterfaces_0_privatednsname |
@@ -343,6 +341,84 @@
 | domain-name | resolves_to_refs | portprobe_resource_instancedetails_networkinterfaces_0_privateipaddress |
 | domain-name | resolves_to_refs | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
 | domain-name | value | service_action_dnsrequestaction_domain |
+| <br> | | |
+| ipv4-addr | value | resource_instancedetails_networkinterfaces_0_privateipaddress |
+| ipv4-addr | x_aws_interface_id | resource_instancedetails_networkinterfaces_0_privateipaddress |
+| ipv4-addr | x_aws_ip_type | resource_instancedetails_networkinterfaces_0_privateipaddress |
+| ipv4-addr | value | resource_instancedetails_networkinterfaces_0_publicip |
+| ipv4-addr | x_aws_interface_id | resource_instancedetails_networkinterfaces_0_publicip |
+| ipv4-addr | x_aws_ip_type | resource_instancedetails_networkinterfaces_0_publicip |
+| ipv4-addr | value | resource_instancedetails_networkinterfaces_1_privateipaddress |
+| ipv4-addr | x_aws_interface_id | resource_instancedetails_networkinterfaces_1_privateipaddress |
+| ipv4-addr | x_aws_ip_type | resource_instancedetails_networkinterfaces_1_privateipaddress |
+| ipv4-addr | value | service_action_networkconnectionaction_remoteipdetails_ipaddressv4 |
+| ipv4-addr | x_aws_remote_city_name | service_action_networkconnectionaction_remoteipdetails_ipaddressv4 |
+| ipv4-addr | x_aws_remote_country_name | service_action_networkconnectionaction_remoteipdetails_ipaddressv4 |
+| ipv4-addr | value | portprobe_resource_instancedetails_networkinterfaces_0_privateipaddress |
+| ipv4-addr | x_aws_interface_id | portprobe_resource_instancedetails_networkinterfaces_0_privateipaddress |
+| ipv4-addr | x_aws_ip_type | portprobe_resource_instancedetails_networkinterfaces_0_privateipaddress |
+| ipv4-addr | value | service_action_portprobeaction_portprobedetails_0_remoteipdetails_ipaddressv4 |
+| ipv4-addr | x_aws_remote_city_name | service_action_portprobeaction_portprobedetails_0_remoteipdetails_ipaddressv4 |
+| ipv4-addr | x_aws_remote_country_name | service_action_portprobeaction_portprobedetails_0_remoteipdetails_ipaddressv4 |
+| ipv4-addr | value | service_action_awsapicallaction_remoteipdetails_ipaddressv4 |
+| ipv4-addr | x_aws_remote_city_name | service_action_awsapicallaction_remoteipdetails_ipaddressv4 |
+| ipv4-addr | x_aws_remote_country_name | service_action_awsapicallaction_remoteipdetails_ipaddressv4 |
+| ipv4-addr | value | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
+| ipv4-addr | x_aws_interface_id | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
+| ipv4-addr | x_aws_ip_type | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
+| <br> | | |
+| ipv6-addr | value | resource_instancedetails_networkinterfaces_0_ipv6addresses_0 |
+| ipv6-addr | x_aws_interface_id | resource_instancedetails_networkinterfaces_0_ipv6addresses_0 |
+| <br> | | |
+| network-traffic | src_ref | resource_instancedetails_networkinterfaces_0_privateipaddress |
+| network-traffic | dst_ref | service_action_networkconnectionaction_remoteipdetails_ipaddressv4 |
+| network-traffic | src_port | service_action_networkconnectionaction_localportdetails_port |
+| network-traffic | dst_port | service_action_networkconnectionaction_remoteportdetails_port |
+| network-traffic | protocols | service_action_networkconnectionaction_protocol |
+| <br> | | |
+| software | name | resource_instancedetails_platform |
+| <br> | | |
+| user-account | user_id | resource_accesskeydetails_principalid |
+| user-account | account_login | resource_accesskeydetails_username |
+| <br> | | |
+| x-aws-api | access_key_id | resource_accesskeydetails_accesskeyid |
+| x-aws-api | api | service_action_awsapicallaction_api |
+| x-aws-api | service_name | service_action_awsapicallaction_servicename |
+| <br> | | |
+| x-aws-details | account_id | accountid |
+| x-aws-details | region | region |
+| <br> | | |
+| x-aws-instance | image_id | resource_instancedetails_imageid |
+| x-aws-instance | instance_id | resource_instancedetails_instanceid |
+| x-aws-instance | availability_zone | resource_instancedetails_availabilityzone |
+| <br> | | |
+| x-aws-vpc | subnet_id | resource_instancedetails_networkinterfaces_0_subnetid |
+| x-aws-vpc | vpc_id | resource_instancedetails_networkinterfaces_0_vpcid |
+| x-aws-vpc | security_group_id | resource_instancedetails_networkinterfaces_0_securitygroups_0_groupid |
+| x-aws-vpc | security_group_name | resource_instancedetails_networkinterfaces_0_securitygroups_0_groupname |
+| <br> | | |
+| x-ibm-finding | src_ip_ref | resource_instancedetails_networkinterfaces_0_privateipaddress |
+| x-ibm-finding | dst_ip_ref | service_action_networkconnectionaction_remoteipdetails_ipaddressv4 |
+| x-ibm-finding | dst_geolocation | service_action_networkconnectionaction_remoteipdetails_ipaddressv4 |
+| x-ibm-finding | src_ip_ref | portprobe_resource_instancedetails_networkinterfaces_0_privateipaddress |
+| x-ibm-finding | dst_ip_ref | service_action_portprobeaction_portprobedetails_0_remoteipdetails_ipaddressv4 |
+| x-ibm-finding | dst_geolocation | service_action_portprobeaction_portprobedetails_0_remoteipdetails_ipaddressv4 |
+| x-ibm-finding | probe_port | service_action_portprobeaction_portprobedetails_0_localportdetails_port |
+| x-ibm-finding | dst_ip_ref | service_action_awsapicallaction_remoteipdetails_ipaddressv4 |
+| x-ibm-finding | dst_geolocation | service_action_awsapicallaction_remoteipdetails_ipaddressv4 |
+| x-ibm-finding | src_ip_ref | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
+| x-ibm-finding | severity | severity |
+| x-ibm-finding | name | title |
+| x-ibm-finding | finding_type | type |
+| x-ibm-finding | description | description |
+| x-ibm-finding | src_os_ref | resource_instancedetails_platform |
+| x-ibm-finding | start | service_eventfirstseen |
+| x-ibm-finding | end | service_eventlastseen |
+| <br> | | |
+### Supported STIX Objects and Properties for Query Results from Ocsf dialect
+| STIX Object | STIX Property | Data Source Field |
+|--|--|--|
+| directory | path | parent_folder |
 | <br> | | |
 | email-addr | value | email_addr |
 | <br> | | |
@@ -373,41 +449,9 @@
 | <br> | | |
 | ipv4-addr | value | ip |
 | ipv4-addr | value | intermediate_ips |
-| ipv4-addr | value | sourceaddress |
-| ipv4-addr | x_aws_interface_id | sourceaddress |
-| ipv4-addr | value | destinationaddress |
-| ipv4-addr | value | resource_instancedetails_networkinterfaces_0_privateipaddress |
-| ipv4-addr | x_aws_interface_id | resource_instancedetails_networkinterfaces_0_privateipaddress |
-| ipv4-addr | x_aws_ip_type | resource_instancedetails_networkinterfaces_0_privateipaddress |
-| ipv4-addr | value | resource_instancedetails_networkinterfaces_0_publicip |
-| ipv4-addr | x_aws_interface_id | resource_instancedetails_networkinterfaces_0_publicip |
-| ipv4-addr | x_aws_ip_type | resource_instancedetails_networkinterfaces_0_publicip |
-| ipv4-addr | value | resource_instancedetails_networkinterfaces_1_privateipaddress |
-| ipv4-addr | x_aws_interface_id | resource_instancedetails_networkinterfaces_1_privateipaddress |
-| ipv4-addr | x_aws_ip_type | resource_instancedetails_networkinterfaces_1_privateipaddress |
-| ipv4-addr | value | service_action_networkconnectionaction_remoteipdetails_ipaddressv4 |
-| ipv4-addr | x_aws_remote_city_name | service_action_networkconnectionaction_remoteipdetails_ipaddressv4 |
-| ipv4-addr | x_aws_remote_country_name | service_action_networkconnectionaction_remoteipdetails_ipaddressv4 |
-| ipv4-addr | value | portprobe_resource_instancedetails_networkinterfaces_0_privateipaddress |
-| ipv4-addr | x_aws_interface_id | portprobe_resource_instancedetails_networkinterfaces_0_privateipaddress |
-| ipv4-addr | x_aws_ip_type | portprobe_resource_instancedetails_networkinterfaces_0_privateipaddress |
-| ipv4-addr | value | service_action_portprobeaction_portprobedetails_0_remoteipdetails_ipaddressv4 |
-| ipv4-addr | x_aws_remote_city_name | service_action_portprobeaction_portprobedetails_0_remoteipdetails_ipaddressv4 |
-| ipv4-addr | x_aws_remote_country_name | service_action_portprobeaction_portprobedetails_0_remoteipdetails_ipaddressv4 |
-| ipv4-addr | value | service_action_awsapicallaction_remoteipdetails_ipaddressv4 |
-| ipv4-addr | x_aws_remote_city_name | service_action_awsapicallaction_remoteipdetails_ipaddressv4 |
-| ipv4-addr | x_aws_remote_country_name | service_action_awsapicallaction_remoteipdetails_ipaddressv4 |
-| ipv4-addr | value | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
-| ipv4-addr | x_aws_interface_id | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
-| ipv4-addr | x_aws_ip_type | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
 | <br> | | |
 | ipv6-addr | value | ip |
 | ipv6-addr | value | intermediate_ips |
-| ipv6-addr | value | sourceaddress |
-| ipv6-addr | x_aws_interface_id | sourceaddress |
-| ipv6-addr | value | destinationaddress |
-| ipv6-addr | value | resource_instancedetails_networkinterfaces_0_ipv6addresses_0 |
-| ipv6-addr | x_aws_interface_id | resource_instancedetails_networkinterfaces_0_ipv6addresses_0 |
 | <br> | | |
 | network-traffic | src_port | port |
 | network-traffic | src_ref | ip |
@@ -428,18 +472,6 @@
 | network-traffic | dst_byte_count | bytes_in |
 | network-traffic | src_byte_count | bytes_out |
 | network-traffic | extensions.x-network-ext.bytes | bytes |
-| network-traffic | src_ref | sourceaddress |
-| network-traffic | dst_ref | destinationaddress |
-| network-traffic | src_port | sourceport |
-| network-traffic | dst_port | destinationport |
-| network-traffic | protocols | protocol |
-| network-traffic | start | starttime |
-| network-traffic | end | endtime |
-| network-traffic | src_ref | resource_instancedetails_networkinterfaces_0_privateipaddress |
-| network-traffic | dst_ref | service_action_networkconnectionaction_remoteipdetails_ipaddressv4 |
-| network-traffic | src_port | service_action_networkconnectionaction_localportdetails_port |
-| network-traffic | dst_port | service_action_networkconnectionaction_remoteportdetails_port |
-| network-traffic | protocols | service_action_networkconnectionaction_protocol |
 | <br> | | |
 | process | command_line | cmd_line |
 | process | created | created_time |
@@ -470,7 +502,6 @@
 | software | extensions.x-ocsf-product-ext.product_uid | uid |
 | software | vendor | vendor_name |
 | software | version | version |
-| software | name | resource_instancedetails_platform |
 | <br> | | |
 | url | value | url |
 | <br> | | |
@@ -509,25 +540,6 @@
 | user-account | user_id | uid |
 | user-account | extensions.x-accessor-ext.uuid | uuid |
 | user-account | creator_user_ref | uid |
-| user-account | user_id | resource_accesskeydetails_principalid |
-| user-account | account_login | resource_accesskeydetails_username |
-| <br> | | |
-| x-aws-api | access_key_id | resource_accesskeydetails_accesskeyid |
-| x-aws-api | api | service_action_awsapicallaction_api |
-| x-aws-api | service_name | service_action_awsapicallaction_servicename |
-| <br> | | |
-| x-aws-details | account_id | account |
-| x-aws-details | account_id | accountid |
-| x-aws-details | region | region |
-| <br> | | |
-| x-aws-instance | image_id | resource_instancedetails_imageid |
-| x-aws-instance | instance_id | resource_instancedetails_instanceid |
-| x-aws-instance | availability_zone | resource_instancedetails_availabilityzone |
-| <br> | | |
-| x-aws-vpc | subnet_id | resource_instancedetails_networkinterfaces_0_subnetid |
-| x-aws-vpc | vpc_id | resource_instancedetails_networkinterfaces_0_vpcid |
-| x-aws-vpc | security_group_id | resource_instancedetails_networkinterfaces_0_securitygroups_0_groupid |
-| x-aws-vpc | security_group_name | resource_instancedetails_networkinterfaces_0_securitygroups_0_groupname |
 | <br> | | |
 | x-ibm-finding | time_observed | _time |
 | x-ibm-finding | ttp_tagging_refs | name |
@@ -553,28 +565,6 @@
 | x-ibm-finding | severity | severity_id |
 | x-ibm-finding | src_ip_ref | ip |
 | x-ibm-finding | dst_ip_ref | ip |
-| x-ibm-finding | src_ip_ref | sourceaddress |
-| x-ibm-finding | dst_ip_ref | destinationaddress |
-| x-ibm-finding | start | starttime |
-| x-ibm-finding | end | endtime |
-| x-ibm-finding | finding_type | action |
-| x-ibm-finding | name | name |
-| x-ibm-finding | src_ip_ref | resource_instancedetails_networkinterfaces_0_privateipaddress |
-| x-ibm-finding | dst_ip_ref | service_action_networkconnectionaction_remoteipdetails_ipaddressv4 |
-| x-ibm-finding | dst_geolocation | service_action_networkconnectionaction_remoteipdetails_ipaddressv4 |
-| x-ibm-finding | src_ip_ref | portprobe_resource_instancedetails_networkinterfaces_0_privateipaddress |
-| x-ibm-finding | dst_ip_ref | service_action_portprobeaction_portprobedetails_0_remoteipdetails_ipaddressv4 |
-| x-ibm-finding | dst_geolocation | service_action_portprobeaction_portprobedetails_0_remoteipdetails_ipaddressv4 |
-| x-ibm-finding | probe_port | service_action_portprobeaction_portprobedetails_0_localportdetails_port |
-| x-ibm-finding | dst_ip_ref | service_action_awsapicallaction_remoteipdetails_ipaddressv4 |
-| x-ibm-finding | dst_geolocation | service_action_awsapicallaction_remoteipdetails_ipaddressv4 |
-| x-ibm-finding | src_ip_ref | dnsrequest_resource_instancedetails_networkinterfaces_0_privateipaddress |
-| x-ibm-finding | severity | severity |
-| x-ibm-finding | finding_type | type |
-| x-ibm-finding | description | description |
-| x-ibm-finding | src_os_ref | resource_instancedetails_platform |
-| x-ibm-finding | start | service_eventfirstseen |
-| x-ibm-finding | end | service_eventlastseen |
 | <br> | | |
 | x-ibm-observables | name | name |
 | x-ibm-observables | finding_type | type |
@@ -762,4 +752,32 @@
 | x-ocsf-vulnerabilities | related_vulnerabilities | related_vulnerabilities |
 | x-ocsf-vulnerabilities | title | title |
 | x-ocsf-vulnerabilities | vendor_name | vendor_name |
+| <br> | | |
+### Supported STIX Objects and Properties for Query Results from Vpcflow dialect
+| STIX Object | STIX Property | Data Source Field |
+|--|--|--|
+| ipv4-addr | value | srcaddr |
+| ipv4-addr | x_aws_interface_id | srcaddr |
+| ipv4-addr | value | dstaddr |
+| <br> | | |
+| ipv6-addr | value | srcaddr |
+| ipv6-addr | x_aws_interface_id | srcaddr |
+| ipv6-addr | value | dstaddr |
+| <br> | | |
+| network-traffic | src_ref | srcaddr |
+| network-traffic | dst_ref | dstaddr |
+| network-traffic | src_port | srcport |
+| network-traffic | dst_port | dstport |
+| network-traffic | protocols | protocol |
+| network-traffic | start | starttime |
+| network-traffic | end | endtime |
+| <br> | | |
+| x-aws-details | account_id | account |
+| <br> | | |
+| x-ibm-finding | src_ip_ref | srcaddr |
+| x-ibm-finding | dst_ip_ref | dstaddr |
+| x-ibm-finding | start | starttime |
+| x-ibm-finding | end | endtime |
+| x-ibm-finding | finding_type | action |
+| x-ibm-finding | name | name |
 | <br> | | |
