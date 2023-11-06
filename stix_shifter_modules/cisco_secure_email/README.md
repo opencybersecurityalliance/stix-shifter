@@ -1,13 +1,19 @@
 # Cisco Secure Email
 
+## Supported STIX Mappings
+
+See the [table of mappings](cisco_secure_email_supported_stix.md) for the STIX objects and operators supported by this connector.
+
+
 **Table of Contents**
 
-- [Cisco Secure Email API Endpoints](#Cisco Secure Email-api-endpoints)
+- [Cisco Secure Email API Endpoints](#cisco-secure-email-api-endpoints)
 - [Pattern expression with STIX and CUSTOM attributes - Single Observation](#single-observation)
 - [Pattern expression with STIX and CUSTOM attributes - Multiple Observation](#multiple-observation)
 - [STIX Execute Query](#stix-execute-query)
 - [Limitations](#limitations)
 - [Observations](#observations)
+- [STIX Pattern Use cases and examples](stix_pattern_use_cases_and_examples.md)
 - [References](#references)
 
 ### Cisco Secure Email API Endpoints
