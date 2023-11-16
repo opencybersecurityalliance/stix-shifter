@@ -74,7 +74,7 @@ class Connector(BaseJsonSyncConnector):
                     error_response = json.loads(response_txt)
                     response_dict['type'] = 'AuthenticationError'
                     response_dict['message'] = error_response['errors'][0]['message']
-                    self.logger.error('Error connecting the datasource: ' + str(error_response))
+                    self.logger.error('Error connecting the Crowdstrike datasource: ' + str(error_response))
                     ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
                 else:
                     raise Exception(response_txt)
@@ -83,7 +83,7 @@ class Connector(BaseJsonSyncConnector):
                     error_response = json.loads(response_txt)
                     response_dict['type'] = 'ValidationError'
                     response_dict['message'] = error_response['errors'][0]['message']
-                    self.logger.error('Error connecting the datasource: ' + str(error_response))
+                    self.logger.error('Error connecting the Crowdstrike datasource: ' + str(error_response))
                     ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
                 else:
                     raise Exception(response_txt)
@@ -100,7 +100,7 @@ class Connector(BaseJsonSyncConnector):
         except Exception as e:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception: ' + str(response_txt), connector=self.connector)
-                self.logger.error('can not parse response: ' + str(response_txt))
+                self.logger.error('Can not parse response Crowdstrike error: ' + str(response_txt))
             else:
                 raise e
 
@@ -237,6 +237,6 @@ class Connector(BaseJsonSyncConnector):
             error_dict['type'] = 'AttributeError'
             error_dict['message'] = 'Error while parsing API response: ' + str(ex)
             ErrorResponder.fill_error(return_obj, error_dict, ['message'], connector=self.connector)
-            self.logger.error('unexpected exception: ' + str(ex))
+            self.logger.error('Unexpected exception from Crowdstrike datasource: ' + str(ex))
 
             return return_obj
