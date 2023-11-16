@@ -317,13 +317,14 @@ class TestQueryTranslator(unittest.TestCase):
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_invalid_qualifier_with_future_timestamp(self):
+    def test_timestamp_qualifier(self):
         stix_pattern = "[domain-name:value LIKE 'amazonaws.com'] " \
                        "START t'2023-01-19T11:00:00.000Z' STOP t'2024-02-07T11:00:00.003Z'"
-        result = translation.translate('okta', 'query', '{}', stix_pattern)
-        assert result['success'] is False
-        assert "translation_error" == result['code']
-        assert 'Start/Stop time should not be in the future UTC timestamp' in result['error']
+        query = translation.translate('okta', 'query', '{}', stix_pattern)
+        query['queries'] = _remove_timestamp_from_query(query['queries'])
+        queries = ["filter=securityContext.domain co \"amazonaws.com\" &since=2023-01-19T11:00:00.000Z&until=2024-02-07T11:00:00.003Z"]
+        queries = _remove_timestamp_from_query(queries)
+        self._test_query_assertions(query, queries)
 
     def test_invalid_operator_for_integer_type_field(self):
         stix_pattern = "[autonomous-system:number LIKE '50']"
