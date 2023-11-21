@@ -26,6 +26,7 @@ class Connector(BaseJsonSyncConnector):
             auth = BasicAuth(conf_auth['username'], conf_auth['password'])
         self.client = RestApiClientAsync(None,
                                     auth=auth,
+                                    cert_verify=connection.get('selfSignedCert', False),
                                     url_modifier_function=lambda host_port, endpoint, headers: f'{endpoint}')
 
     # We re-implement this method so we can fetch all the "bindings", as their method only
