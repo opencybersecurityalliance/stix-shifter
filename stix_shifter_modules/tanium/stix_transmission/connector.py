@@ -1,10 +1,10 @@
 import ast
 from http.client import responses
 import json
+from stix_shifter_modules.tanium.stix_transmission.tanium_config import TaniumConfig
 
 from stix_shifter_utils.utils.error_response import ErrorCode
 
-from stix_shifter_modules.tanium.configuration.tanium_config import TaniumConfig
 from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils.error_response import ErrorResponder
@@ -40,7 +40,8 @@ class Connector(BaseJsonSyncConnector):
     async def create_results_connection(self, query, offset, limit):
         self.return_obj['success'] = False
         self.return_obj["data"] = {}
-        
+        offset = int(offset)
+        limit = int(limit)
         #Initalize values
         self.current_offset = offset
         per_query_limit = 100
@@ -56,6 +57,7 @@ class Connector(BaseJsonSyncConnector):
                 
             self.return_obj["data"] = self.final_results
             self.return_obj['success'] = True
+            self.return_obj['metadata'] = self.return_obj['metadata'] = {"next_offset": self.current_offset, "total_result_count": len(self.final_results)}
         except Exception as err:
             self.logger.error('error when connecting to the Tanium datasource {}:'.format(self.return_obj["error"]))
         return self.return_obj
@@ -76,9 +78,8 @@ class Connector(BaseJsonSyncConnector):
         for batch_of_results in current_query_results:
             for result in batch_of_results:
                 self.final_results.append(batch_of_results.get(result))
-                id = batch_of_results.get(result).get("id")
-                if(self.current_offset < id):
-                    self.current_offset = id
+        self.current_offset = self.current_offset + len(current_query_results)
+            
 
     async def query_tanium_api(self, current_query):
         response_dict = dict()

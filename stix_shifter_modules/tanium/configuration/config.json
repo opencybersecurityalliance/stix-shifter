@@ -1,6 +1,6 @@
 {
     "connection": {
-        "hostname": {
+        "host": {
             "type": "text",
             "optional": false
         },
@@ -13,9 +13,12 @@
         }
     },
     "configuration": {
-        "accessToken": {
-            "type": "password",
-            "optional": false
+        "auth":
+        {
+            "accessToken": {
+                "type": "password",
+                "optional": false
+            }
         }
     }
 }

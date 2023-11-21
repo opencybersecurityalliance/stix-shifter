@@ -77,13 +77,16 @@ EXCEPTION_404_FORMAT = {"errors": [{"code":"errortitle","description":"errordesc
 
 
 CONNECTION= {
-        "hostname": "sanatized",
+        "host": "sanatized",
         "port": 443
     }
 
 
 CONFIG = {
-        "accessToken": "sanatized"
+        "auth":
+        {
+            "accessToken": "sanatized"
+        }
     }
 
 class TestTaniumTransmission(unittest.TestCase, object):
