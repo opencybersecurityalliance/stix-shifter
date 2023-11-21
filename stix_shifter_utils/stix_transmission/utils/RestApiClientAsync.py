@@ -75,7 +75,7 @@ class RestApiClientAsync:
 
         if self.ssl_context:
             self.ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-            self.ssl_context.verify_mode = ssl.CERT_OPTIONAL
+            self.ssl_context.verify_mode = ssl.CERT_REQUIRED
             self.ssl_context.check_hostname = True
 
         self.headers = headers
@@ -98,7 +98,6 @@ class RestApiClientAsync:
                     self.ssl_context.load_verify_locations(self.server_cert_name)
                 except Exception as ex:
                     self.logger.debug('Unable to load the certificate for ssl context. Reasons: Connection does not require certificate or unexpected exception while loading the certificate: ' + str(ex))
-                self.ssl_context.verify_mode = ssl.CERT_REQUIRED
 
             url = None
             actual_headers = self.headers.copy()
