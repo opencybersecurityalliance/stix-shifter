@@ -63,7 +63,7 @@ class RestApiClientAsync:
 
         self.server_cert_file_content = None
         self.ssl_context = False
-        
+        print('cert_verify: ' + str(cert_verify))
         if isinstance(cert_verify, bool):
             # verify certificate non self signed case
             if cert_verify:
@@ -72,7 +72,7 @@ class RestApiClientAsync:
         elif isinstance(cert_verify, str):
             self.server_cert_file_content = cert_verify
             self.ssl_context = True
-        
+        print('self.ssl_context : ' + str(self.ssl_context))
         if self.ssl_context:
             self.ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
             self.ssl_context.verify_mode = ssl.CERT_REQUIRED
