@@ -21,6 +21,7 @@ class TestSTIXBundleConnector(unittest.TestCase, object):
         entry_point = EntryPoint(self.connection, self.configuration)
         ping_result = run_in_thread(entry_point.ping_connection)
         assert ping_result["success"] is True
+        assert False
 
     def test_ping_failure(self):
         connection = {

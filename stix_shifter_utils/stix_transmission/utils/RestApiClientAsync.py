@@ -64,6 +64,7 @@ class RestApiClientAsync:
         self.server_cert_file_content = None
         self.ssl_context = False
         
+        print('cert_verify: ' + str(cert_verify))
         if isinstance(cert_verify, bool):
             # verify certificate non self signed case
             if cert_verify:
@@ -110,6 +111,8 @@ class RestApiClientAsync:
                 retry_options = ExponentialRetry(attempts=self.retry_max, statuses=[429, 500, 502, 503, 504])
                 async with RetryClient(retry_options=retry_options) as client:
                     call = getattr(client, method.lower()) 
+
+                    print('self.ssl_context: ' + str(self.ssl_context))
 
                     async with call(url, headers=actual_headers, params=urldata, data=data,
                                             ssl=self.ssl_context,
