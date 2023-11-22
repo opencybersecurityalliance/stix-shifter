@@ -654,13 +654,30 @@ class TestQueryTranslator(unittest.TestCase):
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_invalid_qualifier_with_future_timestamp(self):
+    def test_timestamp_qualifier(self):
         stix_pattern = "[network-traffic:src_port >= 32794]START t'2023-01-19T11:00:00.000Z' " \
                        "STOP t'2024-02-07T11:00:00.003Z'"
-        result = translation.translate('aws_guardduty', 'query', '{}', stix_pattern)
-        assert result['success'] is False
-        assert "translation_error" == result['code']
-        assert 'Start/Stop time should not be in the future UTC timestamp' in result['error']
+        queries = {
+            "queries": [
+                {
+                    "FindingCriteria": {
+                        "Criterion": {
+                            "service.action.networkConnectionAction.localPortDetails.port": {
+                                "GreaterThanOrEqual": 32794
+                            },
+                            "updatedAt": {
+                                "GreaterThanOrEqual": 1674126000000,
+                                "LessThanOrEqual": 1707303600003
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+        query = translation.translate('aws_guardduty', 'query', '{}', stix_pattern)
+        query = _remove_timestamp_from_query(query)
+        queries = _remove_timestamp_from_query(queries)
+        self._test_query_assertions(query, queries)
 
     def test_stop_time_lesser_than_start_time(self):
         stix_pattern = "[network-traffic:src_port >= 32794]START t'2023-01-19T11:00:00.000Z' " \
