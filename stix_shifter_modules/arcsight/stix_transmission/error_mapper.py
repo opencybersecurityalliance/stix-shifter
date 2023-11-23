@@ -45,4 +45,4 @@ class ErrorMapper:
         if error_code == ErrorMapper.DEFAULT_ERROR:
             ErrorMapper.logger.debug("failed to map: " + str(json_data))
 
-        ErrorMapperBase.set_error_code(return_obj, error_code, connector)
+        ErrorMapperBase.set_error_code(return_obj, error_code, connector=connector)

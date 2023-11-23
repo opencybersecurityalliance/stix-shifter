@@ -1,13 +1,14 @@
 
-def get_mock_response(status_code, content=None, return_type='str', response=None):
-    return RequestMockResponse(status_code, content, return_type, response)
+def get_mock_response(status_code, content=None, return_type='str', response=None, headers=None):
+    return RequestMockResponse(status_code, content, return_type, response, headers)
 
 def get_aws_mock_response(obj):
     return AWSComposeMockResponse(obj)
 
 class RequestMockResponse:
-    def __init__(self, status_code, content, return_type='str', response=None):
+    def __init__(self, status_code, content, return_type='str', response=None, headers=None):
         self.code = status_code
+        self.headers = headers
         self.content = content
         self.response = response
         self.object = response

@@ -230,13 +230,9 @@ class QueryStringPatternTranslator:
         checks for valid start and stop time
         :param time_range_list: list
         """
-        utc_timestamp = STOP_TIME.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
-        converted_utc_timestamp = QueryStringPatternTranslator._format_datetime(utc_timestamp)
         converted_timestamp = []
         for timestamp in time_range_list:
             converted_time = QueryStringPatternTranslator._format_datetime(timestamp)
-            if converted_time > converted_utc_timestamp:
-                raise StartStopQualifierValueException('Start/Stop time should not be in the future UTC timestamp')
             converted_timestamp.append(converted_time)
         if converted_timestamp[0] >= converted_timestamp[1]:
             raise StartStopQualifierValueException('Start time should be lesser than Stop time')
