@@ -62,16 +62,15 @@ class RestApiClientAsync:
         self.server_ip = server_ip
 
         self.server_cert_file_content = None
-        self.ssl_context = False
+        self.ssl_context = True
 
         if isinstance(cert_verify, bool):
             # verify certificate non self signed case
-            if cert_verify:
-                self.ssl_context = True
+            if not cert_verify:
+                self.ssl_context = False
         # self signed cert provided
         elif isinstance(cert_verify, str):
             self.server_cert_file_content = cert_verify
-            self.ssl_context = True
 
         self.headers = headers
         self.url_modifier_function = url_modifier_function
