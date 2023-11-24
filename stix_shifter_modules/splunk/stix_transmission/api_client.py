@@ -24,7 +24,7 @@ class APIClient():
         self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port'),
                                     headers,
-                                    cert_verify=connection.get('selfSignedCert', True)
+                                    cert_verify=connection.get('selfSignedCert')
                                     )
         self.auth = configuration.get('auth')
         self.headers = headers

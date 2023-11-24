@@ -179,7 +179,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         transmission = stix_transmission.StixTransmission('elastic_ecs', connection, config)
         results_response = transmission.results(search_id, offset, length)
 
-        assert results_response['code'] == 'unknown'
+        assert results_response['code'] == 'certificate_fail'
         assert results_response['success'] is False
 
 

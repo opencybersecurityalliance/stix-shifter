@@ -18,7 +18,7 @@ class APIClient():
                                     connection.get('port'),
                                     headers,
                                     url_modifier_function,
-                                    cert_verify=connection.get('selfSignedCert', True))
+                                    cert_verify=connection.get('selfSignedCert'))
 
     async def ping_data_source(self):
         endpoint = self.endpoint_start + '/status'

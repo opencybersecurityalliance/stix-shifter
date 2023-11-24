@@ -61,14 +61,18 @@ class RestApiClientAsync:
             server_ip += ":" + str(port)
         self.server_ip = server_ip
 
+        # default ssl context is used based on https://docs.python.org/3.9/library/ssl.html#ssl.create_default_context
         self.ssl_context = ssl.create_default_context(purpose=ssl.Purpose.CLIENT_AUTH)
         ssl_cert_file = os.environ.get('SSL_CERT_FILE')
         if ssl_cert_file:
+            # library reference https://docs.python.org/3.9/library/ssl.html#ssl.SSLContext.load_verify_locations
             self.ssl_context.load_verify_locations(cafile=ssl_cert_file)
         else:
             self.ssl_context.load_default_certs()
 
         self.ssl_context.check_hostname = True
+    
+        # If custom certificate is used for authentication then load it in the ssl context
         if cert_verify:
             try:
                 self.ssl_context.load_verify_locations(cadata=cert_verify)

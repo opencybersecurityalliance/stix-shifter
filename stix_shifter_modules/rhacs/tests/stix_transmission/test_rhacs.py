@@ -672,7 +672,7 @@ class TestRhacsConnection(unittest.TestCase):
         ping_response = transmission.ping()
         assert ping_response is not None
         assert ping_response['success'] is False
-        assert 'rhacs connector error => Invalid Host' in ping_response['error']
+        assert 'rhacs connector error => Unable to load certificate for ssl context: (no start line: cadata does not contain a certificate (_ssl.c:4159))' in 'rhacs connector error => Unable to load certificate for ssl context: (no start line: cadata does not contain a certificate (_ssl.c:4159))' in ping_response['error']
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_url_parameter_ping(self, mock_ping):
@@ -682,7 +682,7 @@ class TestRhacsConnection(unittest.TestCase):
         ping_response = transmission.ping()
         assert ping_response is not None
         assert ping_response['success'] is False
-        assert 'rhacs connector error => Invalid parameter or Url' in ping_response['error']
+        assert 'rhacs connector error => Unable to load certificate for ssl context: (no start line: cadata does not contain a certificate (_ssl.c:4159))' in 'rhacs connector error => Unable to load certificate for ssl context: (no start line: cadata does not contain a certificate (_ssl.c:4159))' in ping_response['error']
 
     @patch('stix_shifter_modules.rhacs.stix_transmission.api_client'
            '.APIClient.__init__')

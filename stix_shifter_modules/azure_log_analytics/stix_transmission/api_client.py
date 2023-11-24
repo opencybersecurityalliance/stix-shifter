@@ -31,7 +31,7 @@ class APIClient:
         self.client = RestApiClientAsync(self.host,
                                     self.connection.get('port', None),
                                     headers,
-                                    cert_verify=self.connection.get('selfSignedCert', True)
+                                    cert_verify=self.connection.get('selfSignedCert')
                                     )
 
     async def ping_box(self):
