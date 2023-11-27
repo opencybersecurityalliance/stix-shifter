@@ -16,6 +16,23 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
+## 7.0.0 (2023-11-27)
+
+### Deprecations:
+
+*  Make sure certificate is verified when required by RestApiClientAsync and deprecate selfSignedCert:false by-pass [#1620](https://github.com/opencybersecurityalliance/stix-shifter/pull/1620)
+
+### Changes:
+
+*  Cisco secure email added readme detailed file. [#1615](https://github.com/opencybersecurityalliance/stix-shifter/pull/1615)
+
+### Fixes:
+
+*  Remove future timestamp qualifier conditions [#1619](https://github.com/opencybersecurityalliance/stix-shifter/pull/1619)
+*  Fix parameter assignment in error handling function [#1616](https://github.com/opencybersecurityalliance/stix-shifter/pull/1616)
+
+--------------------------------------
+
 ## 6.3.0 (2023-11-02)
 
 ### Changes:
