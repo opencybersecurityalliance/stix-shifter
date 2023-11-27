@@ -17,7 +17,9 @@ class TestElasticEcsConnection(unittest.TestCase, object):
 
         assert check_async is False
 
+    @staticmethod
     @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.ping_box')
+    @patch('ssl.SSLContext.load_verify_locations')
     def test_ping_endpoint(self, mock_ping_response):
         mocked_return_value = '["mock", "placeholder"]'
 
@@ -42,7 +44,9 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert ping_response is not None
         assert ping_response['success']
 
+    @staticmethod
     @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.ping_box')
+    @patch('ssl.SSLContext.load_verify_locations')
     def test_ping_endpoint_exception(self, mock_ping_response):
         mock_ping_response.side_effect = UnexpectedResponseException('exception')
         config = {
@@ -66,8 +70,9 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert ping_response is not None
         assert ping_response['success'] is False
         assert ping_response['code'] == ErrorCode.TRANSMISSION_UNKNOWN.value
-
-
+    
+    @staticmethod
+    @patch('ssl.SSLContext.load_verify_locations')
     def test_query_response(self):
         config = {
             "auth": {
@@ -91,7 +96,9 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert 'search_id' in query_response
         assert query_response['search_id'] == query
 
+    @staticmethod
     @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination', autospec=True)
+    @patch('ssl.SSLContext.load_verify_locations')
     def test_results_response(self, mock_results_response):
         mocked_return_value = """ {
                     "hits" : {
@@ -182,8 +189,9 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert results_response['code'] == 'certificate_fail'
         assert results_response['success'] is False
 
-
+    @staticmethod
     @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination', autospec=True)
+    @patch('ssl.SSLContext.load_verify_locations')
     def test_query_flow(self, mock_results_response):
         results_mock = """ {
                     "hits" : {
@@ -253,8 +261,9 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert len(results_response['data']) > 0
         assert len(results_response['metadata']) >= 1
 
-
+    @staticmethod
     @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.get_max_result_window', autospec=True)
+    @patch('ssl.SSLContext.load_verify_locations')
     def test_pagesize(self, mock_results_response):
         mocked_return_value = """ {
                 "index1": {
@@ -306,7 +315,9 @@ class TestElasticEcsConnection(unittest.TestCase, object):
 
         assert max_result_window == 20000
 
+    @staticmethod
     @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.get_max_result_window')
+    @patch('ssl.SSLContext.load_verify_locations')
     def test_pagesize_exception(self, mock_result_response):
         mocked_return_value = '["mock", "placeholder"]'
         mock_result_response.return_value = get_mock_response(200, mocked_return_value, 'byte')
