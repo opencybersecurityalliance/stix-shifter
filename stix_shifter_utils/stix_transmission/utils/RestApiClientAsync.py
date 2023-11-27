@@ -47,7 +47,7 @@ class RestApiClientAsync:
     #  True -- do proper signed cert check that is in trust store,
     #  False -- skip all cert checks,
     #  or The String content of your self signed cert required for TLS communication
-    def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=True,  auth=None):
+    def __init__(self, host, port=None, headers={}, url_modifier_function=None, cert_verify=None,  auth=None):
         self.retry_max = os.getenv('STIXSHIFTER_RETRY_MAX', RETRY_MAX_DEFAULT)
         self.retry_max = int(self.retry_max)
         self.connect_timeout = os.getenv('STIXSHIFTER_CONNECT_TIMEOUT', CONNECT_TIMEOUT_DEFAULT)
@@ -61,16 +61,23 @@ class RestApiClientAsync:
             server_ip += ":" + str(port)
         self.server_ip = server_ip
 
-        self.server_cert_file_content = None
-        self.ssl_context = False
-        
-        if isinstance(cert_verify, bool):
-            # verify certificate non self signed case
-            if cert_verify:
-                self.ssl_context = True
-        # self signed cert provided
-        elif isinstance(cert_verify, str):
-            self.server_cert_file_content = cert_verify
+        # default ssl context is used based on https://docs.python.org/3.9/library/ssl.html#ssl.create_default_context
+        self.ssl_context = ssl.create_default_context(purpose=ssl.Purpose.CLIENT_AUTH)
+        ssl_cert_file = os.environ.get('SSL_CERT_FILE')
+        if ssl_cert_file:
+            # library reference https://docs.python.org/3.9/library/ssl.html#ssl.SSLContext.load_verify_locations
+            self.ssl_context.load_verify_locations(cafile=ssl_cert_file)
+        else:
+            self.ssl_context.load_default_certs()
+
+        self.ssl_context.check_hostname = True
+    
+        # If custom certificate is used for authentication then load it in the ssl context
+        if cert_verify:
+            try:
+                self.ssl_context.load_verify_locations(cadata=cert_verify)
+            except Exception as ex:
+                raise Exception(f'Unable to load certificate for ssl context: ({ex})')
 
         self.headers = headers
         self.url_modifier_function = url_modifier_function
@@ -78,73 +85,51 @@ class RestApiClientAsync:
 
     # This method is used to set up an HTTP request and send it to the server
     async def call_api(self, endpoint, method, headers=None, cookies=None, data=None, urldata=None, timeout=None):
+        url = None
+        actual_headers = self.headers.copy()
+        if headers is not None:
+            for header_key in headers:
+                actual_headers[header_key] = headers[header_key]
+
+        if self.url_modifier_function is not None:
+            url = self.url_modifier_function(
+                self.server_ip, endpoint, actual_headers)
+        else:
+            url = 'https://' + self.server_ip + '/' + endpoint
+
         try:
-            # covnert server cert to file
-            if self.server_cert_file_content:
-                with open(self.server_cert_name, 'w') as f:
-                    try:
-                        f.write(self.server_cert_file_content)
-                    except IOError:
-                        self.logger.error('Failed to setup certificate')
+            client_timeout = ClientTimeout(connect=self.connect_timeout, total=timeout) # https://docs.aiohttp.org/en/stable/client_reference.html?highlight=timeout#aiohttp.ClientTimeout
+            retry_options = ExponentialRetry(attempts=self.retry_max, statuses=[429, 500, 502, 503, 504])
+            async with RetryClient(retry_options=retry_options) as client:
+                call = getattr(client, method.lower()) 
 
-                self.ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-                self.ssl_context.load_verify_locations(self.server_cert_name)
-                self.ssl_context.verify_mode = ssl.CERT_REQUIRED
-                self.ssl_context.check_hostname = True
+                async with call(url, headers=actual_headers, params=urldata, data=data,
+                                        ssl=self.ssl_context,
+                                        timeout=client_timeout,
+                                        cookies=cookies,
+                                        auth=self.auth) as response:
 
-            url = None
-            actual_headers = self.headers.copy()
-            if headers is not None:
-                for header_key in headers:
-                    actual_headers[header_key] = headers[header_key]
+                    respWrapper = ResponseWrapper(response, client)
+                    await respWrapper.wait()
 
-            if self.url_modifier_function is not None:
-                url = self.url_modifier_function(
-                    self.server_ip, endpoint, actual_headers)
-            else:
-                url = 'https://' + self.server_ip + '/' + endpoint
-            
-            
-            try:
-                client_timeout = ClientTimeout(connect=self.connect_timeout, total=timeout) # https://docs.aiohttp.org/en/stable/client_reference.html?highlight=timeout#aiohttp.ClientTimeout
-                retry_options = ExponentialRetry(attempts=self.retry_max, statuses=[429, 500, 502, 503, 504])
-                async with RetryClient(retry_options=retry_options) as client:
-                    call = getattr(client, method.lower()) 
+                    if respWrapper.code == 429:
+                        raise Exception(f'Max retries exceeded. too_many_requests with max retry ({self.retry_max})')
 
-                    async with call(url, headers=actual_headers, params=urldata, data=data,
-                                            ssl=self.ssl_context,
-                                            timeout=client_timeout,
-                                            cookies=cookies,
-                                            auth=self.auth) as response:
+                    if 'headers' in dir(response) and isinstance(response.headers, Mapping) and \
+                        'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
 
-                        respWrapper = ResponseWrapper(response, client)
-                        await respWrapper.wait()
+                        self.logger.error("WARNING: " + response.headers['Content-Type'], file=sys.stderr)
 
-                        if respWrapper.code == 429:
-                            raise Exception(f'Max retries exceeded. too_many_requests with max retry ({self.retry_max})')
-
-                        if 'headers' in dir(response) and isinstance(response.headers, Mapping) and \
-                            'Content-Type' in response.headers and "Deprecated" in response.headers['Content-Type']:
-
-                            self.logger.error("WARNING: " + response.headers['Content-Type'], file=sys.stderr)
-
-                        return respWrapper
-            except aiohttp.client_exceptions.ServerTimeoutError as e:
-                raise Exception(f'server timeout_error ({self.connect_timeout} sec)')
-            except aiohttp.client_exceptions.ClientConnectorError as e:
-                raise Exception(f'client_connector_error: ({e})')
-            except TimeoutError as e:
-                raise Exception(f'timeout_error ({timeout} sec)')
-            except Exception as e:
-                self.logger.error('exception occured during requesting url: ' + str(e) + " " + str(type(e)))
-                raise e
-        finally:
-            if self.server_cert_file_content:
-                try:
-                    os.remove(self.server_cert_name)
-                except OSError as e:
-                    if e.errno != errno.ENOENT:
-                        raise
+                    return respWrapper
+        except aiohttp.client_exceptions.ServerTimeoutError as e:
+            raise Exception(f'server timeout_error ({self.connect_timeout} sec): ({e})')
+        except aiohttp.client_exceptions.ClientConnectorError as e:
+            raise Exception(f'client_connector_error: ({e})')
+        except TimeoutError as e:
+            raise Exception(f'timeout_error ({timeout} sec): ({e})')
+        except Exception as e:
+            self.logger.error('exception occured during requesting url: ' + str(e) + " " + str(type(e)))
+            raise e
 
     # Simple getters that can be used to inspect the state of this client.
     def get_headers(self):
