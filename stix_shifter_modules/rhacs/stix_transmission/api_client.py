@@ -17,7 +17,7 @@ class APIClient:
                                     connection.get('port', None),
                                     headers,
                                     url_modifier_function=url_modifier_function,
-                                    cert_verify=connection.get('selfSignedCert', True)
+                                    cert_verify=connection.get('selfSignedCert')
                                     )
         self.timeout = connection['options'].get('timeout')
 
