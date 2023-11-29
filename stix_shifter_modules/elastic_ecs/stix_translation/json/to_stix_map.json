@@ -2616,6 +2616,61 @@
       }
     }
   },
+  "email": {
+    "subject": {
+      "key": "email-message.subject",
+      "object": "mail"
+    },
+    "from": {
+      "address": [
+        {
+          "key": "email-addr.value",
+          "object": "emailfrom"
+        },
+        {
+          "key": "email-message.from_ref",
+          "object": "mail",
+          "references": "emailfrom"
+        }
+      ]
+    },
+    "to": {
+      "address": [
+        {
+          "key": "email-addr.value",
+          "unwrap": true,
+          "object": "emailto"
+        },
+        {
+          "key": "email-message.to_refs",
+          "object": "mail",
+          "references": ["emailto"]
+        }
+      ]
+    },
+    "cc": {
+      "address": [
+        {
+          "key": "email-addr.value",
+          "unwrap": true,
+          "object": "emailcc"
+        },
+        {
+          "key": "email-message.cc_refs",
+          "object": "mail",
+          "references": ["emailcc"]
+        }
+      ]
+    },
+    "attachments": {
+      "file": {
+        "name": {
+          "key": "file.name",
+          "object": "attachment"
+        }
+      }
+    }
+  },
   "tags": {
     "key": "process.x_tags",
     "object": "process"

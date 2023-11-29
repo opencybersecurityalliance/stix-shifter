@@ -380,6 +380,29 @@ observer_data = {
     }
 }
 
+email_data = {
+    "email": {
+        "attachments": [
+            { "file": { "name": "tabby.html", "mime_type": "text/html" } },
+            { "file": { "name": "tabby.zip", "mime_type": "application/zip" } }
+        ],
+        "subject": "Check out this picture of a cat!",
+        "from": { "address": "from@address.com" },
+        "to": {
+            "address": [
+                "to1@address.com",
+                "to2@address.com"
+            ]
+        },
+        "cc": {
+            "address": [
+                "cc1@address.com",
+                "cc2@address.com"
+            ]
+        }
+    }
+}
+
 class TestElasticEcsTransform(unittest.TestCase, object):
     @staticmethod
     def get_first(itr, constraint):
@@ -849,3 +872,12 @@ class TestElasticEcsTransform(unittest.TestCase, object):
           observer_ip.get("type") == "ipv4-addr" and
           observer_ip.get("value") == "10.0.0.101" 
         )
+
+    def test_email(self):
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [email_data])
+        assert (result_bundle['type'] == 'bundle')
+        translation_objects = result_bundle.get('objects')
+        assert (translation_objects and len(translation_objects) == 2)
+        observed_data = translation_objects[1]
+        stix_objects = observed_data.get("objects")
+        assert len(stix_objects) == 8
