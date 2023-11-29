@@ -881,3 +881,16 @@ class TestElasticEcsTransform(unittest.TestCase, object):
         observed_data = translation_objects[1]
         stix_objects = observed_data.get("objects")
         assert len(stix_objects) == 8
+        for k,v in stix_objects.items():
+            print(f"{k}: {v}")
+        emailmsg = stix_objects.get("2")
+        assert (
+            emailmsg and emailmsg.get("type") == "email-message" and
+            emailmsg.get("subject") == "Check out this picture of a cat!"
+        )
+        from_email = stix_objects.get(emailmsg.get("from_ref"))
+        assert from_email and from_email.get("value") == "from@address.com"
+        to_emails = {stix_objects.get(ref).get("value") for ref in emailmsg.get("to_refs")}
+        assert to_emails == {"to1@address.com", "to2@address.com"}
+        filenames = {stix_objects[str(ref)]["name"] for ref in range(len(stix_objects)) if stix_objects[str(ref)] and stix_objects[str(ref)]["type"] == "file"}
+        assert filenames == {"tabby.zip", "tabby.html"}
