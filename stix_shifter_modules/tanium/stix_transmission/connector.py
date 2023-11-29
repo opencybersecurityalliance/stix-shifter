@@ -58,6 +58,7 @@ class Connector(BaseJsonSyncConnector):
             self.return_obj["data"] = self.final_results
             self.return_obj['success'] = True
             self.return_obj['metadata'] = self.return_obj['metadata'] = {"next_offset": self.current_offset, "total_result_count": len(self.final_results)}
+            
         except Exception as err:
             self.logger.error('error when connecting to the Tanium datasource {}:'.format(self.return_obj["error"]))
         return self.return_obj
@@ -65,9 +66,9 @@ class Connector(BaseJsonSyncConnector):
     async def get_results(self, per_query_limit, query, current_offset):
         #Create initial query
         if(query != ""):
-            current_query = "%s%s&limit=%s&offset=%s" % (self._QUERY_ENDPOINT, query, per_query_limit, current_offset)
+            current_query = "%s%s&limit=%s&offset=%s&expand=intelDoc" % (self._QUERY_ENDPOINT, query, per_query_limit, current_offset)
         else:
-            current_query = "limit=%s&offset=%s" % (self._QUERY_ENDPOINT, per_query_limit, current_offset)
+            current_query = "limit=%s&offset=%s&expand=intelDoc" % (self._QUERY_ENDPOINT, per_query_limit, current_offset)
             
         response_data = await self.query_tanium_api(current_query)
         response_data_as_json = json.loads(response_data.content.decode('utf-8'))
@@ -76,8 +77,7 @@ class Connector(BaseJsonSyncConnector):
         
     def _add_results_to_final_dataset(self, current_query_results):
         for batch_of_results in current_query_results:
-            for result in batch_of_results:
-                self.final_results.append(batch_of_results.get(result))
+            self.final_results.append(batch_of_results)
         self.current_offset = self.current_offset + len(current_query_results)
             
 

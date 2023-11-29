@@ -45,7 +45,7 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _format_equality(value) -> str:
-        return '\'{}\''.format(value)
+        return '{}'.format(value)
 
     @staticmethod
     def _format_like(value) -> str:
@@ -234,7 +234,6 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
         print(f'{key}: {options[key]}')
 
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
-    result_limit = f"&limit={options['result_limit']}"
 
     # Add space around START STOP qualifiers
     query = re.sub("START", "START ", query)
@@ -246,4 +245,4 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.
         
     logger.info("The Query is " + query)
-    return ["%s%s" % (query, result_limit)]
+    return ["%s" % (query)]

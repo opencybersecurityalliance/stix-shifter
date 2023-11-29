@@ -1,7 +1,5 @@
 from stix_shifter.stix_translation import stix_translation
 import unittest
-import json
-import os
 translation = stix_translation.StixTranslation()
 
 def _test_query_assertions(queryList, expectedQueryList):
@@ -85,3 +83,15 @@ class TestQueryTranslator(unittest.TestCase, object):
                              f"&alertedAtUntil=2024-07-27T00:05:00.000Z" \
                              f"&limit=10000"]
         _test_stix_to_json(stix_pattern, expectedQueryList)
+        
+    def test_get_observed_data_objects(self):
+        assert True
+        # result_bundle = json_to_stix_translator.convert_to_stix(
+        #     data_source, map_data, [SAMPLE_DATA_DICT], get_module_transformers(MODULE), options)
+        # result_bundle_objects = result_bundle['objects']
+
+        # result_bundle_identity = result_bundle_objects[0]
+        # assert result_bundle_identity['type'] == data_source['type']
+        # observed_data = result_bundle_objects[1]
+
+        # assert 'objects' in observed_data

@@ -1,2 +1,208 @@
 {
+    "computerIpAddress":
+    [{
+        "key": "ipv4-addr.value",
+        "object": "ip"
+    },
+    {
+        "key": "x-oca-event.ip_refs",
+        "object": "x-oca-event",
+        "references": ["ip"]
+    },
+    {
+        "key": "x-oca-asset.ip_refs",
+        "object": "asset",
+        "references": ["ip"]
+    }],
+    "computerName":
+    [{
+        "key": "x-oca-asset.hostname",
+        "object": "asset"
+    },
+    {
+        "key": "x-oca-event.host_ref",
+        "object": "x-oca-event",
+        "references": "asset"
+    }],
+    "state":
+    {
+        "key": "x-oca-event.outcome",
+        "object": "x-oca-event"
+    },
+    "severity":
+    {
+        "key": "x-oca-event.severity",
+        "object": "x-oca-event"
+    },
+    "details": [
+    {
+        "key": "process",
+        "object": "process_all",
+        "transformer":"ProcessTransformer"
+    },
+    {
+        "key": "process.pid",
+        "object": "process_some",
+        "transformer":"ProcessPidTransformer"
+    },
+    {
+        "key": "process.created",
+        "object": "process_some",
+        "transformer":"ProcessCreatedTransformer"
+    },
+    {
+        "key": "process.args",
+        "object": "process_some",
+        "transformer":"ProcessArgsTransformer"
+    },
+    {
+        "key": "process.name",
+        "object": "process_some",
+        "transformer":"ProcessNameTransformer"
+    },
+    {
+        "key": "process.cwd",
+        "object": "process_some",
+        "transformer":"ProcessCWDPathTransformer"
+    },
+    {
+        "key": "user-account.user_id",
+        "object": "user",
+        "transformer":"ProcessUserIdTransformer"
+    },
+    {
+        "key": "user-account.display_name",
+        "object": "user",
+        "transformer":"ProcessUserDisplayNameTransformer"
+    },
+    {
+        "key": "user-account.is_service_account",
+        "object": "user",
+        "transformer":"ProcessUserDaemonTransformer"
+    },
+    {
+        "key": "process.creator_user_ref",
+        "object": "process_some",
+        "references":"user"
+    },
+    {
+        "key": "binary_ref.hashes",
+        "object": "processFile",
+        "transformer":"ProcessFileHashesTransformer"
+    },
+    {
+        "key": "binary_ref.name",
+        "object": "processFile",
+        "transformer": "ProcessNameTransformer"
+    },
+    {
+        "key": "parent_directory_ref.path",
+        "object": "processFileDirectory",
+        "transformer": "ProcessCWDPathTransformer"
+    },
+    {
+        "key": "content_refs.issuer",
+        "object": "certificate",
+        "transformer": "ProcessFileCertificateIssuerTransformer"
+    },
+    {
+        "key": "content_refs.subject",
+        "object": "certificate",
+        "transformer": "ProcessFileCertificateSubjectTransformer"
+    },
+    {
+        "key": "binary_ref.parent_directory_ref",
+        "object": "processFile",
+        "references": "processFileDirectory"
+    },
+    {
+        "key": "binary_ref.content_refs",
+        "object": "processFile",
+        "references": "certificate"
+    },
+    {
+        "key": "process.binary_ref",
+        "object": "process_some",
+        "references": "processFile"
+    },
+    {
+        "key": "x-oca-asset.process_ref",
+        "object": "x-oca-event",
+        "references": "process_some"
+    },
+    {
+        "key": "x-oca-asset.file_ref",
+        "object": "x-oca-event",
+        "references": "processFile"
+    }
+],
+    "matchType":
+    {
+        "key": "x-oca-event.category",
+        "object": "x-oca-event"
+    },
+    "suppressedAt":
+    {
+        "key": "x-oca-event.end",
+        "object": "x-oca-event"
+    },
+    "alertedAt":
+    {
+        "key": "x-oca-event.created",
+        "object": "x-oca-event"
+    },
+    "createdAt":
+    {
+        "key":"x-oca-event.start",
+        "object":"x-oca-event"
+    },
+    "intelDocs":
+    {
+        "id":
+        {
+        },
+        "type":
+        {
+            "key":"x-oca-event.provider",
+            "object":"x-oca-event"
+        },
+        "typeVersion":
+        {
+        },
+        "md5":
+        {
+        },
+        "name":
+        {
+            "key":"x-oca-event.action",
+            "object":"x-oca-event"
+        },
+        "description":
+        {
+            "key":"x-oca-event.description",
+            "object":"x-oca-event"
+        },
+        "size":
+        {
+        },
+        "compiled":
+        {
+        },
+        "isSchemaValid":
+        {
+        },
+        "sourceId":
+        {
+        },
+        "mitreAttack":
+        {
+            "techniques":
+            {
+                
+            }
+        },
+        "status":
+        {
+        }
+    }
 }
