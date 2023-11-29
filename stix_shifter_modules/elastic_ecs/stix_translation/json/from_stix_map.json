@@ -43,7 +43,7 @@
   },
   "file": {
     "fields": {
-      "name": ["file.name", "dll.name", "file.path", "process.name", "process.executable", "process.parent.name", "process.parent.executable"],
+      "name": ["file.name", "dll.name", "file.path", "process.name", "process.executable", "process.parent.name", "process.parent.executable", "email.attachments.file.name"],
       "created": ["file.created", "file.ctime"],
       "modified": ["file.mtime"],
       "accessed": ["file.accessed"],
@@ -159,7 +159,15 @@
   },
   "email-addr": {
     "fields": {
-      "value": ["user.email"]
+      "value": ["user.email", "email.from.address", "email.to.address"]
+    }
+  },
+  "email-message": {
+    "fields": {
+      "subject": ["email.subject"],
+      "from_ref.value": ["email.from.address"],
+      "to_refs[*].value": ["email.to.address"],
+      "cc_refs[*].value": ["email.to.address"]
     }
   },
   "x-oca-event": {
