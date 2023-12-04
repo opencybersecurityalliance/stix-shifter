@@ -53,7 +53,7 @@ python main.py translate infoblox query '{}' "[ipv4-addr:value = '127.0.0.1'] ST
 export SS_CONNECTION='{"host":"xxx","port":443,"options":{"timeout":20}}'
 export SS_AUTH='{"auth":{"token":"xxx"}}'
 
-python main.py transmit infoblox:dnsEventData ${SS_CONNECTION} ${SS_AUTH} query '{"offset": 0, "query": "t0=1622536990&t1=1630406590&qip=127.0.0.1", "source": "dnsEventData"}'
+python main.py transmit infoblox ${SS_CONNECTION} ${SS_AUTH} query '{"offset": 0, "query": "t0=1622536990&t1=1630406590&qip=127.0.0.1", "source": "dnsEventData"}'
 ```
 
 #### STIX transmit query - output
@@ -69,7 +69,7 @@ python main.py transmit infoblox:dnsEventData ${SS_CONNECTION} ${SS_AUTH} query 
 export SS_CONNECTION='{"host":"xxx","port":443,"options":{"timeout":20}}'
 export SS_AUTH='{"auth":{"token":"xxx"}}'
 
-python main.py transmit infoblox:dnsEventData ${SS_CONNECTION} ${SS_AUTH} results '{"offset": 0, "query": "t0=1622536990&t1=1630406590&qip=127.0.0.1", "source": "dnsEventData"}' 0 5
+python main.py transmit infoblox ${SS_CONNECTION} ${SS_AUTH} results '{"offset": 0, "query": "t0=1622536990&t1=1630406590&qip=127.0.0.1", "source": "dnsEventData"}' 0 5
 ```
 
 #### STIX transmit results - output
@@ -115,7 +115,7 @@ export SS_DATA_SOURCE='{"type": "identity", "id": "xxx", "name": "Infoblox", "id
 export SS_CONNECTION='{"host":"xxx","port":443,"options":{"timeout":20}}'
 export SS_AUTH='{"auth":{"token":"xxx"}}'
 
-python3 main.py execute infoblox:dnsEventData infoblox:dnsEventData $SS_DATA_SOURCE $SS_CONNECTION $SS_AUTH "[ipv4-addr:value = '208.50.179.13'] START t'2021-06-27T09:00:10Z' STOP t'2021-06-29T10:43:10Z'"
+python3 main.py execute infoblox infoblox $SS_DATA_SOURCE $SS_CONNECTION $SS_AUTH "[ipv4-addr:value = '208.50.179.13'] START t'2021-06-27T09:00:10Z' STOP t'2021-06-29T10:43:10Z'"
 ```
 
 #### STIX execute - output
