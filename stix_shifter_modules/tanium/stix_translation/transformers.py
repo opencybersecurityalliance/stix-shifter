@@ -68,44 +68,13 @@ class ProcessTransformer(ValueTransformer):
             LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
         except Exception as err:
             LOGGER.error(err)
-    
-    
-class ProcessPidTransformer(ValueTransformer):
-
-    @staticmethod
-    def transform(data): # Leave method name as is.
-        try:
-            dataAsAJson = json.loads(data)
-            
-            if(dataAsAJson["match"]['type'] == "process"):
-                return dataAsAJson["match"]["properties"]["pid"]
-        except ValueError:
-            LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
-        except Exception as err:
-            LOGGER.error(err)
-            
-class ProcessCreatedTransformer(ValueTransformer):
-
-    @staticmethod
-    def transform(data): # Leave method name as is.
-        try:
-            dataAsAJson = json.loads(data)
-            
-            if(dataAsAJson["match"]['type'] == "process"):
-                return dataAsAJson["match"]["properties"]["start_time"]
-        except ValueError:
-            LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
-        except Exception as err:
-            LOGGER.error(err)
             
 class ProcessArgsTransformer(ValueTransformer):
 
     @staticmethod
     def transform(data): # Leave method name as is.
         try:
-            dataAsAJson = json.loads(data)
-            
-            arguments_list = shlex.split(dataAsAJson["match"]["properties"]["args"])
+            arguments_list = shlex.split(data)
             return arguments_list
         except ValueError:
             LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
@@ -117,10 +86,9 @@ class ProcessNameTransformer(ValueTransformer):
     @staticmethod
     def transform(data): # Leave method name as is.
         try:
-            dataAsAJson = json.loads(data)
-            converted_file = dataAsAJson["match"]["properties"]["name"].replace('\\', '/')
+            converted_file = data.replace('\\', '/')
             pathObject = pathlib.Path(converted_file)
-            return pathObject.name + pathObject.suffix
+            return pathObject.name
             
         except ValueError:
             LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
@@ -131,37 +99,10 @@ class ProcessCWDPathTransformer(ValueTransformer):
 
     @staticmethod
     def transform(data): # Leave method name as is.
-        try:
-            dataAsAJson = json.loads(data)
-            
-            converted_file = dataAsAJson["match"]["properties"]["name"].replace('\\', '/')
+        try:            
+            converted_file = data.replace('\\', '/')
             pathObject = pathlib.Path(converted_file)
             return pathObject.parent.as_posix()
-        except ValueError:
-            LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
-        except Exception as err:
-            LOGGER.error(err)
-            
-class ProcessUserIdTransformer(ValueTransformer):
-
-    @staticmethod
-    def transform(data): # Leave method name as is.
-        try:
-            dataAsAJson = json.loads(data)
-            return dataAsAJson["finding"]["whats"][0]["artifact_activity"]["acting_artifact"]["process"]["user"]["user"]["user_id"]
-        except ValueError:
-            LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
-        except Exception as err:
-            LOGGER.error(err)
-            
-class ProcessUserDisplayNameTransformer(ValueTransformer):
-
-    @staticmethod
-    def transform(data): # Leave method name as is.
-        try:
-            dataAsAJson = json.loads(data)
-            
-            return dataAsAJson["finding"]["whats"][0]["artifact_activity"]["acting_artifact"]["process"]["user"]["user"]["name"]
         except ValueError:
             LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
         except Exception as err:
@@ -170,53 +111,8 @@ class ProcessUserDisplayNameTransformer(ValueTransformer):
 class ProcessUserDaemonTransformer(ValueTransformer):
 
     @staticmethod
-    def transform(data): # Leave method name as is.
-        try:
-            dataAsAJson = json.loads(data)
-            
-            if (dataAsAJson["finding"]["whats"][0]["artifact_activity"]["acting_artifact"]["process"]["user"]["user"]["domain"] is not None):
-                return True
-            else:
-                return False
-        except ValueError:
-            LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
-        except Exception as err:
-            LOGGER.error(err)
-            
-class ProcessFileCertificateIssuerTransformer(ValueTransformer):
-
-    @staticmethod
-    def transform(data): # Leave method name as is.
-        try:
-            dataAsAJson = json.loads(data)
-            return dataAsAJson["finding"]["whats"][0]["artifact_activity"]["acting_artifact"]["process"]["file"]["file"]["signature_data"]["issuer"]
-        
-        except ValueError:
-            LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
-        except Exception as err:
-            LOGGER.error(err)
-            
-class ProcessFileCertificateSubjectTransformer(ValueTransformer):
-
-    @staticmethod
-    def transform(data): # Leave method name as is.
-        try:
-            dataAsAJson = json.loads(data)
-            return dataAsAJson["finding"]["whats"][0]["artifact_activity"]["acting_artifact"]["process"]["file"]["file"]["signature_data"]["subject"]
-        
-        except ValueError:
-            LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
-        except Exception as err:
-            LOGGER.error(err)
-            
-class ProcessFileHashesTransformer(ValueTransformer):
-
-    @staticmethod
-    def transform(data): # Leave method name as is.
-        try:
-            dataAsAJson = json.loads(data)
-            return dataAsAJson["finding"]["whats"][0]["artifact_activity"]["acting_artifact"]["process"]["file"]["file"]["hash"]
-        except ValueError:
-            LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
-        except Exception as err:
-            LOGGER.error(err)
+    def transform(data): # Leave method name as is.       
+        if (data is not None and data is not ""):
+            return True
+        else:
+            return False

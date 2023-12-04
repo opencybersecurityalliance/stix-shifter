@@ -77,6 +77,7 @@ class Connector(BaseJsonSyncConnector):
         
     def _add_results_to_final_dataset(self, current_query_results):
         for batch_of_results in current_query_results:
+            batch_of_results["details"] = json.loads(batch_of_results["details"])
             self.final_results.append(batch_of_results)
         self.current_offset = self.current_offset + len(current_query_results)
             

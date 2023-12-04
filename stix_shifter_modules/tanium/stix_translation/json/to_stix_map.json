@@ -34,108 +34,238 @@
         "key": "x-oca-event.severity",
         "object": "x-oca-event"
     },
-    "details": [
+    "details":
     {
-        "key": "process",
-        "object": "process_all",
-        "transformer":"ProcessTransformer"
+        "match":
+        {
+            "properties":
+            {
+                "pid":
+                {
+                    "key": "process.pid",
+                    "object": "process"
+                },
+                "start_time":
+                {
+                    "key": "process.created",
+                    "object": "process"
+                },
+                "args":
+                {
+                    "key": "process.args",
+                    "object": "process",
+                    "transformer":"ProcessArgsTransformer"
+                },
+                "name":
+                [{
+                    "key": "process.name",
+                    "object": "process",
+                    "transformer":"ProcessNameTransformer"
+                },
+                {
+                    "key": "process.cwd",
+                    "object": "process",
+                    "transformer":"ProcessCWDPathTransformer"
+                }]
+            }
+        },
+        "finding":
+        {
+            "whats":
+            {
+                "artifact_activity":
+                {
+                    "acting_artifact":
+                    {
+                        "process":
+                        {
+                            "user":
+                            {
+                                "user":
+                                {
+                                    "user_id":
+                                    {
+                                        "key": "user-account.user_id",
+                                        "object": "user"
+                                    },
+                                    "name":
+                                    {
+                                        "key": "user-account.display_name",
+                                        "object": "user"
+                                    },
+                                    "domain":
+                                    [{
+                                        "key": "user-account.is_service_account",
+                                        "object": "user",
+                                        "transformer":"ProcessUserDaemonTransformer"
+                                    },
+                                    {
+                                        "key": "process.creator_user_ref",
+                                        "object": "process",
+                                        "references":"user"
+                                    }]
+                                }
+                            },
+                            "file":
+                            {
+                                "file":
+                                {
+                                    "hash":
+                                    {
+                                        "key": "binary_ref.hashes",
+                                        "object": "processFile"
+                                    },
+                                    "path":
+                                    [{
+                                        "key": "binary_ref.name",
+                                        "object": "processFile",
+                                        "transformer": "ProcessNameTransformer"
+                                    },
+                                    {
+                                        "key": "parent_directory_ref.path",
+                                        "object": "processFileDirectory",
+                                        "transformer": "ProcessCWDPathTransformer"
+                                    },
+                                    {
+                                        "key": "binary_ref.parent_directory_ref",
+                                        "object": "processFile",
+                                        "references": "processFileDirectory"
+                                    },
+                                    {
+                                        "key": "process.binary_ref",
+                                        "object": "process",
+                                        "references": "processFile"
+                                    }],
+                                    "signature_data":
+                                    {
+                                        "issuer":
+                                        {
+                                            "key": "content_refs.issuer",
+                                            "object": "certificate"
+                                        },
+                                        "subject":
+                                        [{
+                                            "key": "content_refs.subject",
+                                            "object": "certificate"
+                                        },
+                                        {
+                                            "key": "binary_ref.content_refs",
+                                            "object": "processFile",
+                                            "references": "certificate"
+                                        }]
+                                    }
+                                }
+                            },
+                            "parent":
+                            {
+                                "process":
+                                {
+                                    "pid":
+                                    [{
+                                        "key": "process.pid",
+                                        "object": "parent-process"
+                                    },
+                                    {
+                                       "key": "process.parent_ref" ,
+                                       "object": "process",
+                                       "references": "parent-process"
+                                    }],
+                                    "arguments":
+                                    {
+                                        "key": "process.args",
+                                        "object": "parent-process",
+                                        "transformer":"ProcessArgsTransformer"
+                                    },
+                                    "start_time":
+                                    {
+                                        "key": "process.created",
+                                        "object": "parent-process"
+                                    },
+                                    "user":
+                                    {
+                                        "user":
+                                        {
+                                            "user_id":
+                                            {
+                                                "key": "user-account.user_id",
+                                                "object": "parent-user"
+                                            },
+                                            "name":
+                                            {
+                                                "key": "user-account.display_name",
+                                                "object": "parent-user"
+                                            },
+                                            "domain":
+                                            [{
+                                                "key": "user-account.is_service_account",
+                                                "object": "parent-user",
+                                                "transformer":"ProcessUserDaemonTransformer"
+                                            },
+                                            {
+                                                "key": "process.creator_user_ref",
+                                                "object": "parent-process",
+                                                "references":"parent-user"
+                                            }]
+                                        }
+                                    },
+                                    "file":
+                                    {
+                                        "file":
+                                        {
+                                            "hash":
+                                            {
+                                                "key": "binary_ref.hashes",
+                                                "object": "parent-processFile"
+                                            },
+                                            "path":
+                                            [{
+                                                "key": "binary_ref.name",
+                                                "object": "parent-processFile",
+                                                "transformer": "ProcessNameTransformer"
+                                            },
+                                            {
+                                                "key": "parent_directory_ref.path",
+                                                "object": "parent-processFile",
+                                                "transformer": "ProcessCWDPathTransformer"
+                                            },
+                                            {
+                                                "key": "binary_ref.parent_directory_ref",
+                                                "object": "parent-processFile",
+                                                "references": "processFileDirectory"
+                                            },
+                                            {
+                                                "key": "process.binary_ref",
+                                                "object": "parent-process",
+                                                "references": "parent-processFile"
+                                            }],
+                                            "signature_data":
+                                            {
+                                                "issuer":
+                                                {
+                                                    "key": "content_refs.issuer",
+                                                    "object": "parent-processFile-certificate"
+                                                },
+                                                "subject":
+                                                [{
+                                                    "key": "content_refs.subject",
+                                                    "object": "parent-processFile-certificate"
+                                                },
+                                                {
+                                                    "key": "binary_ref.content_refs",
+                                                    "object": "parent-processFile",
+                                                    "references": "parent-processFile-certificate"
+                                                }]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     },
-    {
-        "key": "process.pid",
-        "object": "process_some",
-        "transformer":"ProcessPidTransformer"
-    },
-    {
-        "key": "process.created",
-        "object": "process_some",
-        "transformer":"ProcessCreatedTransformer"
-    },
-    {
-        "key": "process.args",
-        "object": "process_some",
-        "transformer":"ProcessArgsTransformer"
-    },
-    {
-        "key": "process.name",
-        "object": "process_some",
-        "transformer":"ProcessNameTransformer"
-    },
-    {
-        "key": "process.cwd",
-        "object": "process_some",
-        "transformer":"ProcessCWDPathTransformer"
-    },
-    {
-        "key": "user-account.user_id",
-        "object": "user",
-        "transformer":"ProcessUserIdTransformer"
-    },
-    {
-        "key": "user-account.display_name",
-        "object": "user",
-        "transformer":"ProcessUserDisplayNameTransformer"
-    },
-    {
-        "key": "user-account.is_service_account",
-        "object": "user",
-        "transformer":"ProcessUserDaemonTransformer"
-    },
-    {
-        "key": "process.creator_user_ref",
-        "object": "process_some",
-        "references":"user"
-    },
-    {
-        "key": "binary_ref.hashes",
-        "object": "processFile",
-        "transformer":"ProcessFileHashesTransformer"
-    },
-    {
-        "key": "binary_ref.name",
-        "object": "processFile",
-        "transformer": "ProcessNameTransformer"
-    },
-    {
-        "key": "parent_directory_ref.path",
-        "object": "processFileDirectory",
-        "transformer": "ProcessCWDPathTransformer"
-    },
-    {
-        "key": "content_refs.issuer",
-        "object": "certificate",
-        "transformer": "ProcessFileCertificateIssuerTransformer"
-    },
-    {
-        "key": "content_refs.subject",
-        "object": "certificate",
-        "transformer": "ProcessFileCertificateSubjectTransformer"
-    },
-    {
-        "key": "binary_ref.parent_directory_ref",
-        "object": "processFile",
-        "references": "processFileDirectory"
-    },
-    {
-        "key": "binary_ref.content_refs",
-        "object": "processFile",
-        "references": "certificate"
-    },
-    {
-        "key": "process.binary_ref",
-        "object": "process_some",
-        "references": "processFile"
-    },
-    {
-        "key": "x-oca-asset.process_ref",
-        "object": "x-oca-event",
-        "references": "process_some"
-    },
-    {
-        "key": "x-oca-asset.file_ref",
-        "object": "x-oca-event",
-        "references": "processFile"
-    }
-],
     "matchType":
     {
         "key": "x-oca-event.category",
@@ -156,7 +286,7 @@
         "key":"x-oca-event.start",
         "object":"x-oca-event"
     },
-    "intelDocs":
+    "intelDoc":
     {
         "id":
         {
@@ -198,7 +328,25 @@
         {
             "techniques":
             {
-                
+                "name":
+                [{
+                    "key": "x-ibm-ttp-tagging.name",
+                    "object": "mitre-tag"
+                },
+                {
+                    "key": "x-ibm-ttp-tagging.extensions.technique_name",
+                    "object": "mitre-tag"
+                },
+                {
+                    "key": "x-oca-event.ttp_tagging_refs",
+                    "object": "x-oca-event",
+                    "references": "mitre-tag"
+                }],
+                "id":
+                {
+                    "key": "x-ibm-ttp-tagging.extensions.technique_id",
+                    "object": "mitre-tag"
+                }
             }
         },
         "status":
