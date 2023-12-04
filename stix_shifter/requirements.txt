@@ -6,7 +6,7 @@ asyncio==3.4.3
 asynctest==0.13.0
 attrs==23.1.0
 azure-identity==1.15.0
-colorlog==6.7.0
+colorlog==6.8.0
 flask==3.0.0
 flatten_json==0.1.14
 json-fix==0.5.2
