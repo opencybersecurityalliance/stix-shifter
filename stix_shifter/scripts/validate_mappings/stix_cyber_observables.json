@@ -1,0 +1,351 @@
+{
+    "archive-ext": [
+        "contains_refs",
+        "version",
+        "comment"
+    ],
+    "artifact": [
+        "type",
+        "mime_type",
+        "payload_bin",
+        "url",
+        "hashes",
+        "extensions"
+    ],
+    "autonomous-system": [
+        "type",
+        "number",
+        "name",
+        "rir",
+        "extensions"
+    ],
+    "directory": [
+        "type",
+        "path",
+        "path_enc",
+        "created",
+        "modified",
+        "accessed",
+        "contains_refs",
+        "extensions"
+    ],
+    "domain-name": [
+        "type",
+        "value",
+        "resolves_to_refs",
+        "extensions"
+    ],
+    "email-addr": [
+        "type",
+        "value",
+        "display_name",
+        "belongs_to_ref",
+        "extensions"
+    ],
+    "emailmime-component": [
+        "body",
+        "body_raw_ref",
+        "content_type",
+        "content_disposition"
+    ],
+    "email-message": [
+        "type",
+        "is_multipart",
+        "date",
+        "content_type",
+        "from_ref",
+        "sender_ref",
+        "to_refs",
+        "cc_refs",
+        "bcc_refs",
+        "subject",
+        "received_lines",
+        "additional_header_fields",
+        "body",
+        "body_multipart",
+        "raw_email_ref",
+        "extensions"
+    ],
+    "file": [
+        "type",
+        "hashes",
+        "size",
+        "name",
+        "name_enc",
+        "magic_number_hex",
+        "mime_type",
+        "created",
+        "modified",
+        "accessed",
+        "parent_directory_ref",
+        "is_encrypted",
+        "encryption_algorithm",
+        "decryption_key",
+        "contains_refs",
+        "content_ref",
+        "extensions"
+    ],
+    "http-request-ext": [
+        "request_method",
+        "request_value",
+        "request_version",
+        "request_header",
+        "message_body_length",
+        "message_body_data_ref"
+    ],
+    "icmp-ext": [
+        "icmp_type_hex",
+        "icmp_code_hex"
+    ],
+    "ipv4-addr": [
+        "type",
+        "value",
+        "resolves_to_refs",
+        "belongs_to_refs",
+        "extensions"
+    ],
+    "ipv6-addr": [
+        "type",
+        "value",
+        "resolves_to_refs",
+        "belongs_to_refs",
+        "extensions"
+    ],
+    "mac-addr": [
+        "type",
+        "value",
+        "extensions"
+    ],
+    "mutex": [
+        "type",
+        "name",
+        "extensions"
+    ],
+    "ntfs-ext": [
+        "sid",
+        "alternate_data_streams"
+    ],
+    "network-traffic": [
+        "type",
+        "start",
+        "end",
+        "is_active",
+        "src_ref",
+        "dst_ref",
+        "src_port",
+        "dst_port",
+        "protocols",
+        "src_byte_count",
+        "dst_byte_count",
+        "src_packets",
+        "dst_packets",
+        "ipfix",
+        "src_payload_ref",
+        "dst_payload_ref",
+        "encapsulates_refs",
+        "encapsulates_by_ref",
+        "extensions"
+    ],
+    "pdf-ext": [
+        "version",
+        "is_optimized",
+        "document_info_dict",
+        "pdfid0",
+        "pdfid1"
+    ],
+    "process": [
+        "type",
+        "is_hidden",
+        "pid",
+        "name",
+        "created",
+        "cwd",
+        "arguments",
+        "command_line",
+        "environment_variables",
+        "opened_connection_refs",
+        "creator_user_ref",
+        "binary_ref",
+        "parent_ref",
+        "child_refs",
+        "extensions"
+    ],
+    "raster-image-ext": [
+        "image_height",
+        "image_width",
+        "bits_per_pixel",
+        "image_compression_algorithm",
+        "exif_tags"
+    ],
+    "socket-ext": [
+        "address_family",
+        "is_blocking",
+        "is_listening",
+        "protocol_family",
+        "options",
+        "socket_type",
+        "socket_descriptor",
+        "socket_handle"
+    ],
+    "software": [
+        "type",
+        "name",
+        "cpe",
+        "languages",
+        "vendor",
+        "version",
+        "extensions"
+    ],
+    "tcp-ext": [
+        "src_flags_hex",
+        "dst_flags_hex"
+    ],
+    "unix-account-ext": [
+        "gid",
+        "groups",
+        "home_dir",
+        "shell"
+    ],
+    "url": [
+        "type",
+        "value",
+        "extensions"
+    ],
+    "user-account": [
+        "type",
+        "user_id",
+        "account_login",
+        "account_type",
+        "display_name",
+        "is_service_account",
+        "is_privileged",
+        "can_escalate_privs",
+        "is_disabled",
+        "account_created",
+        "account_expires",
+        "password_last_changed",
+        "account_first_login",
+        "account_last_login",
+        "extensions"
+    ],
+    "windows-pebinary-ext": [
+        "pe_type",
+        "imphash",
+        "machine_hex",
+        "number_of_sections",
+        "time_date_stamp",
+        "pointer_to_symbol_table_hex",
+        "number_of_symbols",
+        "size_of_optional_header",
+        "characteristics_hex",
+        "file_header_hashes",
+        "optional_header",
+        "sections"
+    ],
+    "windows-pe-optional-header-type": [
+        "magic_hex",
+        "major_linker_version",
+        "minor_linker_version",
+        "size_of_code",
+        "size_of_initialized_data",
+        "size_of_uninitialized_data",
+        "address_of_entry_point",
+        "base_of_code",
+        "base_of_data",
+        "image_base",
+        "section_alignment",
+        "file_alignment",
+        "major_os_version",
+        "minor_os_version",
+        "major_image_version",
+        "minor_image_version",
+        "major_subsystem_version",
+        "minor_subsystem_version",
+        "win32_version_value_hex",
+        "size_of_image",
+        "size_of_headers",
+        "checksum_hex",
+        "subsystem_hex",
+        "dll_characteristics_hex",
+        "size_of_stack_reserve",
+        "size_of_stack_commit",
+        "size_of_heap_reserve",
+        "size_of_heap_commit",
+        "loader_flags_hex",
+        "number_of_rva_and_sizes",
+        "hashes"
+    ],
+    "windows-pe-section": [
+        "name",
+        "size",
+        "entropy",
+        "hashes"
+    ],
+    "windows-process-ext": [
+        "aslr_enabled",
+        "dep_enabled",
+        "priority",
+        "owner_sid",
+        "window_title",
+        "startup_info"
+    ],
+    "windows-registry-key": [
+        "type",
+        "key",
+        "values",
+        "modified",
+        "creator_user_ref",
+        "number_of_subkeys",
+        "extensions"
+    ],
+    "windows-registry-value-type": [
+        "name",
+        "data",
+        "data_type"
+    ],
+    "windows-service-ext": [
+        "service_name",
+        "descriptions",
+        "display_name",
+        "group_name",
+        "start_type",
+        "service_dll_refs",
+        "service_type",
+        "service_status"
+    ],
+    "x509-certificate": [
+        "type",
+        "is_self_signed",
+        "hashes",
+        "version",
+        "serial_number",
+        "signature_algorithm",
+        "issuer",
+        "validity_not_before",
+        "validity_not_after",
+        "subject",
+        "subject_public_key_algorithm",
+        "subject_public_key_modulus",
+        "subject_public_key_exponent",
+        "x509_v3_extensions",
+        "extensions"
+    ],
+    "x509-v3-extensions-type": [
+        "basic_constraints",
+        "name_constraints",
+        "policy_constraints",
+        "key_usage",
+        "extended_key_usage",
+        "subject_key_identifier",
+        "authority_key_identifier",
+        "subject_alternative_name",
+        "issuer_alternative_name",
+        "subject_directory_attributes",
+        "crl_distribution_points",
+        "inhibit_any_policy",
+        "private_key_usage_period_not_before",
+        "private_key_usage_period_not_after",
+        "certificate_policies",
+        "policy_mappings"
+    ]
+}
