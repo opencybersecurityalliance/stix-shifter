@@ -16,7 +16,8 @@ data_source = {
 }
 options = {}
 
-sample_files_location = os.getcwd() + "/stix-shifter/stix_shifter_modules/tanium/tests"
+
+sample_files_location = os.getcwd() + "stix_shifter_modules/tanium/tests"
 
 class TestTaniumResultsToStix(unittest.TestCase, object):
     def test_confirm_objects_parse(self):
