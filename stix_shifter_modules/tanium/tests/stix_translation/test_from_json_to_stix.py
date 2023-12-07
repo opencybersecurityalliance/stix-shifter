@@ -1,4 +1,3 @@
-import datetime
 import json
 import os
 from stix_shifter_modules.tanium.entry_point import EntryPoint
