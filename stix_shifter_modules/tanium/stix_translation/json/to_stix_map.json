@@ -1,39 +1,60 @@
 {
+    "id":
+    [{
+        "key":"x-ibm-finding.finding_type",
+        "object":"alert",
+        "transformer":"ReturnAlertTransformer"
+    },
+    {
+        "key":"x-ibm-finding.alert_id",
+        "object":"alert"
+    }],
     "computerIpAddress":
     [{
         "key": "ipv4-addr.value",
-        "object": "ip"
+        "object": "target-ip"
+    },
+    {
+        "key": "x-ibm-finding.dst_ip_ref",
+        "object": "alert",
+        "references": "target-ip"
     },
     {
         "key": "x-oca-event.ip_refs",
-        "object": "x-oca-event",
+        "object": "event",
         "references": ["ip"]
     },
     {
         "key": "x-oca-asset.ip_refs",
-        "object": "asset",
-        "references": ["ip"]
+        "object": "target-asset",
+        "references": ["target-ip"]
     }],
     "computerName":
     [{
         "key": "x-oca-asset.hostname",
-        "object": "asset"
+        "object": "target-asset"
     },
     {
         "key": "x-oca-event.host_ref",
-        "object": "x-oca-event",
-        "references": "asset"
+        "object": "event",
+        "references": "target-asset"
     }],
     "state":
     {
         "key": "x-oca-event.outcome",
-        "object": "x-oca-event"
+        "object": "event"
     },
     "severity":
+    [{
+        "key": "x-ibm-finding.severity",
+        "object": "alert",
+        "transformer": "ConvertTextSeverityToNumberValue"
+    },
     {
         "key": "x-oca-event.severity",
-        "object": "x-oca-event"
-    },
+        "object": "event",
+        "transformer": "ConvertTextSeverityToNumberValue"
+    }],
     "details":
     {
         "match":
@@ -41,10 +62,15 @@
             "properties":
             {
                 "pid":
-                {
+                [{
                     "key": "process.pid",
                     "object": "process"
                 },
+                {
+                    "key":"x-oca-event.process_ref",
+                    "object":"event",
+                    "references":"process"
+                }],
                 "start_time":
                 {
                     "key": "process.created",
@@ -84,26 +110,36 @@
                                 "user":
                                 {
                                     "user_id":
-                                    {
-                                        "key": "user-account.user_id",
-                                        "object": "user"
-                                    },
-                                    "name":
-                                    {
-                                        "key": "user-account.display_name",
-                                        "object": "user"
-                                    },
-                                    "domain":
                                     [{
-                                        "key": "user-account.is_service_account",
-                                        "object": "user",
-                                        "transformer":"ProcessUserDaemonTransformer"
+                                        "key": "user-account.user_id",
+                                        "object": "source-user"
                                     },
                                     {
                                         "key": "process.creator_user_ref",
                                         "object": "process",
-                                        "references":"user"
-                                    }]
+                                        "references":"source-user"
+                                    },
+                                    {
+                                        "key": "x-ibm-finding.dst_os_user_ref",
+                                        "object": "alert",
+                                        "references":"source-user"
+                                    },
+                                    {
+                                        "key": "x-oca-event.user_ref",
+                                        "object": "event",
+                                        "references":"source-user"
+                                    }],
+                                    "name":
+                                    {
+                                        "key": "user-account.display_name",
+                                        "object": "source-user"
+                                    },
+                                    "domain":
+                                    {
+                                        "key": "user-account.is_service_account",
+                                        "object": "source-user",
+                                        "transformer":"ProcessUserDaemonTransformer"
+                                    }
                                 }
                             },
                             "file":
@@ -112,22 +148,22 @@
                                 {
                                     "hash":
                                     {
-                                        "key": "binary_ref.hashes",
+                                        "key": "file.hashes",
                                         "object": "processFile"
                                     },
                                     "path":
                                     [{
-                                        "key": "binary_ref.name",
+                                        "key": "file.name",
                                         "object": "processFile",
                                         "transformer": "ProcessNameTransformer"
                                     },
                                     {
-                                        "key": "parent_directory_ref.path",
+                                        "key": "directory.path",
                                         "object": "processFileDirectory",
                                         "transformer": "ProcessCWDPathTransformer"
                                     },
                                     {
-                                        "key": "binary_ref.parent_directory_ref",
+                                        "key": "file.parent_directory_ref",
                                         "object": "processFile",
                                         "references": "processFileDirectory"
                                     },
@@ -135,24 +171,24 @@
                                         "key": "process.binary_ref",
                                         "object": "process",
                                         "references": "processFile"
+                                    },
+                                    {
+                                        "key":"x-oca-event.file_ref",
+                                        "object":"event",
+                                        "references":"processFile"
                                     }],
                                     "signature_data":
                                     {
                                         "issuer":
                                         {
-                                            "key": "content_refs.issuer",
+                                            "key": "x509-certificate.issuer",
                                             "object": "certificate"
                                         },
                                         "subject":
-                                        [{
-                                            "key": "content_refs.subject",
-                                            "object": "certificate"
-                                        },
                                         {
-                                            "key": "binary_ref.content_refs",
-                                            "object": "processFile",
-                                            "references": "certificate"
-                                        }]
+                                            "key": "x509-certificate.subject",
+                                            "object": "certificate"
+                                        }
                                     }
                                 }
                             },
@@ -169,6 +205,11 @@
                                        "key": "process.parent_ref" ,
                                        "object": "process",
                                        "references": "parent-process"
+                                    },
+                                    {
+                                        "key":"x-oca-event.parent_process_ref",
+                                        "object":"event",
+                                        "references":"process"
                                     }],
                                     "arguments":
                                     {
@@ -188,23 +229,23 @@
                                             "user_id":
                                             {
                                                 "key": "user-account.user_id",
-                                                "object": "parent-user"
+                                                "object": "parent-source-user"
                                             },
                                             "name":
                                             {
                                                 "key": "user-account.display_name",
-                                                "object": "parent-user"
+                                                "object": "parent-source-user"
                                             },
                                             "domain":
                                             [{
                                                 "key": "user-account.is_service_account",
-                                                "object": "parent-user",
+                                                "object": "parent-source-user",
                                                 "transformer":"ProcessUserDaemonTransformer"
                                             },
                                             {
                                                 "key": "process.creator_user_ref",
                                                 "object": "parent-process",
-                                                "references":"parent-user"
+                                                "references":"parent-source-user"
                                             }]
                                         }
                                     },
@@ -214,22 +255,22 @@
                                         {
                                             "hash":
                                             {
-                                                "key": "binary_ref.hashes",
+                                                "key": "file.hashes",
                                                 "object": "parent-processFile"
                                             },
                                             "path":
                                             [{
-                                                "key": "binary_ref.name",
+                                                "key": "file.name",
                                                 "object": "parent-processFile",
                                                 "transformer": "ProcessNameTransformer"
                                             },
                                             {
-                                                "key": "parent_directory_ref.path",
+                                                "key": "directory.path",
                                                 "object": "parent-processFile",
                                                 "transformer": "ProcessCWDPathTransformer"
                                             },
                                             {
-                                                "key": "binary_ref.parent_directory_ref",
+                                                "key": "file.parent_directory_ref",
                                                 "object": "parent-processFile",
                                                 "references": "processFileDirectory"
                                             },
@@ -242,19 +283,14 @@
                                             {
                                                 "issuer":
                                                 {
-                                                    "key": "content_refs.issuer",
+                                                    "key": "x509-certificate.issuer",
                                                     "object": "parent-processFile-certificate"
                                                 },
                                                 "subject":
-                                                [{
-                                                    "key": "content_refs.subject",
-                                                    "object": "parent-processFile-certificate"
-                                                },
                                                 {
-                                                    "key": "binary_ref.content_refs",
-                                                    "object": "parent-processFile",
-                                                    "references": "parent-processFile-certificate"
-                                                }]
+                                                    "key": "x509-certificate.subject",
+                                                    "object": "parent-processFile-certificate"
+                                                }
                                             }
                                         }
                                     }
@@ -263,66 +299,65 @@
                         }
                     }
                 }
+            },
+            "system_info":
+            {
+                "os":
+                [{
+                    "key": "software.name",
+                    "object": "target-operating-system"
+                },
+                {
+                    "key": "x-ibm-finding.dst_os_ref",
+                    "object": "alert",
+                    "references": "target-operating-system"
+                }],
+                "patch_level":
+                {
+                    "key": "software.version",
+                    "object": "target-operating-system"
+                }
             }
         }
     },
     "matchType":
     {
         "key": "x-oca-event.category",
-        "object": "x-oca-event"
-    },
-    "suppressedAt":
-    {
-        "key": "x-oca-event.end",
-        "object": "x-oca-event"
+        "object": "event"
     },
     "alertedAt":
-    {
+    [{
         "key": "x-oca-event.created",
-        "object": "x-oca-event"
+        "object": "event"
     },
-    "createdAt":
     {
-        "key":"x-oca-event.start",
-        "object":"x-oca-event"
-    },
+        "key": "x-ibm-finding.time_observed",
+        "object": "alert"
+    }],
     "intelDoc":
     {
-        "id":
-        {
+        "name":
+        [{
+            "key":"x-ibm-finding.action",
+            "object":"alert"
         },
+        {
+            "key":"x-oca-event.action",
+            "object":"event"
+        }],
+        "description":
+        [{
+            "key":"x-ibm-finding.description",
+            "object":"alert"
+        },
+        {
+            "key":"x-oca-event.description",
+            "object":"event"
+        }],
         "type":
         {
             "key":"x-oca-event.provider",
-            "object":"x-oca-event"
-        },
-        "typeVersion":
-        {
-        },
-        "md5":
-        {
-        },
-        "name":
-        {
-            "key":"x-oca-event.action",
-            "object":"x-oca-event"
-        },
-        "description":
-        {
-            "key":"x-oca-event.description",
-            "object":"x-oca-event"
-        },
-        "size":
-        {
-        },
-        "compiled":
-        {
-        },
-        "isSchemaValid":
-        {
-        },
-        "sourceId":
-        {
+            "object":"event"
         },
         "mitreAttack":
         {
@@ -338,9 +373,14 @@
                     "object": "mitre-tag"
                 },
                 {
-                    "key": "x-oca-event.ttp_tagging_refs",
-                    "object": "x-oca-event",
+                    "key": "x-ibm-finding.ttp_tagging_refs",
+                    "object": "alert",
                     "references": "mitre-tag"
+                },
+                {
+                    "key": "x-ibm-ttp-tagging.extensions.tactic_name",
+                    "object": "mitre-tag",
+                    "transformer": "ReturnEmpty"
                 }],
                 "id":
                 {
@@ -348,9 +388,6 @@
                     "object": "mitre-tag"
                 }
             }
-        },
-        "status":
-        {
         }
     }
 }

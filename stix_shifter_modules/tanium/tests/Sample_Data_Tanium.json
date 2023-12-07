@@ -1,0 +1,281 @@
+{
+    "id": 2,
+    "eid": 1003,
+    "state": "unresolved",
+    "type": "detect.match",
+    "guid": "00000000-0000-0000-114a-7429237cffc5",
+    "priority": "high",
+    "severity": "info",
+    "details":
+    {
+        "finding": 
+        {
+            "whats": 
+            [{
+                "intel_intra_ids": 
+                [{
+                    "id": 1204114022
+                },
+                {
+                    "id": 1670888670
+                },
+                {
+                    "id": 2753281896
+                },
+                {
+                    "id": 3854795733
+                }],
+                "source_name": "recorder",
+                "artifact_activity": 
+                {
+                    "relevant_actions": [{
+                    },
+                    {
+                        "verb": 6,
+                        "target": 
+                        {
+                            "file": 
+                            {
+                                "path": "C:\\Users\\Bob\\AppData\\Local\\Temp\\gfw-install-CZejgRlL.exe",
+                                "hash": 
+                                {
+                                    "md5": "d41d8cd98f00b204e9800998ecf8427e",
+                                    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                                },
+                                "size_bytes": 
+                                {  
+                                },
+                                "modification_time": "2022-06-10T23:19:37.000Z",
+                                "instance_hash_salt": "132993767777627641"
+                            },
+                            "instance_hash": "8639093369865776459",
+                            "artifact_hash": "15425104092171844481"
+                        },
+                        "timestamp": "2022-06-10T23:19:37.000Z",
+                        "tanium_recorder_event_table_id": "4611686018468280136"
+                    },
+                    {
+                        "verb": 6,
+                        "target": 
+                        {
+                            "file": 
+                            {
+                                "path": "C:\\Users\\Bob\\AppData\\Local\\Temp\\gfw-install-CZejgRlL.exe",
+                                "hash": 
+                                {
+                                    "md5": "d41d8cd98f00b204e9800998ecf8427e",
+                                    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                                },
+                                "size_bytes": 
+                                {
+                                },
+                                "modification_time": "2022-06-10T23:19:37.000Z",
+                                "instance_hash_salt": "132993767777627641"
+                            },
+                            "instance_hash": "8639093369865776459",
+                            "artifact_hash": "15425104092171844481"
+                        },
+                        "timestamp": "2022-06-10T23:19:37.000Z",
+                        "tanium_recorder_event_table_id": "4611686018468280136"
+                    }],
+                    "acting_artifact": 
+                    {
+                        "process": 
+                        {
+                            "handles": 
+                            [
+                            ],
+                            "pid": 8372,
+                            "arguments": "\"C:\\Program Files\\Git\\usr\\bin\\mktemp.exe\" -t gfw-install-XXXXXXXX.exe",
+                            "file": 
+                            {
+                                "file": 
+                                {
+                                    "path": "C:\\Program Files\\Git\\usr\\bin\\mktemp.exe",
+                                    "hash": 
+                                    {
+                                        "md5": "2204459dcbf34aed8906daac26db6f56"
+                                    }
+                                },
+                                "instance_hash": "7306911300040087486",
+                                "artifact_hash": "7306911300040087486"
+                            },
+                            "user": 
+                            {
+                                "user": 
+                                {
+                                    "name": "Bob",
+                                    "domain": "MEDIATOO"
+                                }
+                            },
+                            "parent": 
+                            {
+                                "process": 
+                                {
+                                    "handles": 
+                                    [],
+                                    "pid": 7528,
+                                    "arguments": "sh \"C:\\\\Program Files\\\\Git\\\\mingw64\\\\bin\\\\git-update-git-for-windows\" --quiet --gui",
+                                    "file": 
+                                    {
+                                        "file": 
+                                        {
+                                            "path": "C:\\Program Files\\Git\\usr\\bin\\sh.exe",
+                                            "hash": 
+                                            {
+                                                "md5": "0d46559e826c8a7b5d432d0a91954ba2"
+                                            }
+                                        },
+                                        "instance_hash": "4573824187960625975",
+                                        "artifact_hash": "4573824187960625975"
+                                    },
+                                    "user": 
+                                    {
+                                        "user": 
+                                        {
+                                            "name": "Bob",
+                                            "domain": "MEDIATOO"
+                                        }
+                                    },
+                                    "start_time": "2022-06-10T23:19:37.000Z",
+                                    "tanium_unique_id": "8426546338933681227"
+                                },
+                                "instance_hash": "2725601412602158353",
+                                "artifact_hash": "6063500060437154276"
+                            },
+                            "start_time": "2022-06-10T23:19:37.000Z",
+                            "tanium_unique_id": "3601155573093657773"
+                        },
+                        "instance_hash": "17370642301569032073",
+                        "artifact_hash": "16343609532904785305",
+                        "is_intel_target": "true"
+                    }
+                }
+            }],
+            "domain": "threatresponse",
+            "intel_id": "365:2:761d796b-b362-455f-98ae-6d0472ecf640",
+            "hunt_id": "1",
+            "threat_id": "1204114022,1670888670,2753281896,3854795733",
+            "source_name": "recorder",
+            "system_info": 
+            {
+                "os": "Microsoft Windows 11 Pro",
+                "bits": 64,
+                "platform": "Windows",
+                "build_number": "22000",
+                "patch_level": "10.0.22000.0.0"
+            },
+            "first_seen": "2022-06-10T23:19:38.000Z",
+            "last_seen": "2022-06-10T23:19:38.000Z",
+            "finding_id": "2433404061633741123",
+            "reporting_id": "reporting-id-placeholder"
+        },
+        "match": 
+        {
+            "version": 1,
+            "type": "process",
+            "source": "recorder",
+            "hash": "16343609532904785305",
+            "properties": 
+            {
+                "pid": 8372,
+                "args": "\"C:\\Program Files\\Git\\usr\\bin\\mktemp.exe\" -t gfw-install-XXXXXXXX.exe",
+                "recorder_unique_id": "3601155573093657773",
+                "start_time": "2022-06-10T23:19:37.000Z",
+                "ppid": 7528,
+                "user": "MEDIATOO\\Bob",
+                "file": 
+                {
+                    "md5": "2204459dcbf34aed8906daac26db6f56",
+                    "fullpath": "C:\\Program Files\\Git\\usr\\bin\\mktemp.exe"
+                },
+                "parent": 
+                {
+                    "pid": 7528,
+                    "args": "sh \"C:\\\\Program Files\\\\Git\\\\mingw64\\\\bin\\\\git-update-git-for-windows\" --quiet --gui",
+                    "recorder_unique_id": "8426546338933681227",
+                    "start_time": "2022-06-10T23:19:37.000Z",
+                    "ppid": 10396,
+                    "user": "MEDIATOO\\Bob",
+                    "file": 
+                    {
+                        "md5": "0d46559e826c8a7b5d432d0a91954ba2",
+                        "fullpath": "C:\\Program Files\\Git\\usr\\bin\\sh.exe"
+                    }
+                }
+            }
+        }
+    },
+    "intelDocId": 700,
+    "groupingId": 2,
+    "intelDocRevisionId": 1,
+    "scanConfigId": 2,
+    "scanConfigRevisionId": 1,
+    "computerName": "ComputerName",
+    "computerIpAddress": "1.1.1.1",
+    "matchType": "process",
+    "path": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+    "receivedAt": "2023-10-16T12:29:34.609Z",
+    "suppressedAt": null,
+    "alertedAt": "2023-10-16T12:26:51.000Z",
+    "findingId": "1245935966959239109",
+    "ackedAt": "2023-10-16T12:38:03.961Z",
+    "firstEIDResolutionAttempt": "2023-10-16T12:29:37.091Z",
+    "lastEIDResolutionAttempt": "2023-10-16T12:29:37.091Z",
+    "createdAt": "2023-10-16T12:29:34.849Z",
+    "updatedAt": "2023-10-16T12:38:03.968Z",
+    "intelDoc": {
+        "id": 700,
+        "type": "tanium-signal",
+        "typeVersion": "1.0",
+        "md5": "b5050a54c2556267931541b944ab0481",
+        "blobId": "4ef7353d-ae4c-4eac-9c0b-75522592b438",
+        "revisionId": 1,
+        "intrinsicId": null,
+        "name": "Testing eicar",
+        "description": "Alerting on eicar file present on windows system",
+        "size": 276,
+        "compiled": {
+            "expressions": [],
+            "terms": [
+                {
+                    "condition": "contains",
+                    "negate": false,
+                    "value": "eicar",
+                    "object": "file",
+                    "property": "path"
+                }
+            ],
+            "operator": "or",
+            "text": "file.path contains 'eicar'",
+            "syntax_version": 6
+        },
+        "isSchemaValid": true,
+        "sourceId": 2,
+        "alertCount": 8,
+        "unresolvedAlertCount": 8,
+        "customHash": null,
+        "mitreAttack": {
+            "techniques": [
+                {
+                    "id": "T1134.002",
+                    "name": "Access Token Manipulation Mitigation: Create Process with Token"
+                }
+            ]
+        },
+        "platforms": [
+            "windows"
+        ],
+        "createdAt": "2023-10-11T19:47:06.485Z",
+        "updatedAt": "2023-11-28T18:50:31.943Z",
+        "throttledFindingCount": 0,
+        "allowAutoDisable": true,
+        "disabled": false,
+        "disabledEndpointCount": 0,
+        "firstDeploymentTimestamp": "2023-10-13T19:28:05.584Z",
+        "lastDeploymentTimestamp": "2023-11-28T18:50:31.920Z",
+        "status": "HIGH_FIDELITY"
+    }
+}

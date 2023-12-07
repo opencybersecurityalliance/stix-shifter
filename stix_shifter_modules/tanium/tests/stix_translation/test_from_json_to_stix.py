@@ -1,3 +1,6 @@
+import datetime
+import json
+import os
 from stix_shifter_modules.tanium.entry_point import EntryPoint
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
@@ -14,223 +17,157 @@ data_source = {
 }
 options = {}
 
-SAMPLE_DATA_DICT = {
-    "details":
-    {
-        "finding": 
-        {
-            "whats": 
-            [{
-                "intel_intra_ids": 
-                [{
-                    "id": 1204114022
-                },
-                {
-                    "id": 1670888670
-                },
-                {
-                    "id": 2753281896
-                },
-                {
-                    "id": 3854795733
-                }],
-                "source_name": "recorder",
-                "artifact_activity": 
-                {
-                    "relevant_actions": [{
-                    },
-                    {
-                        "verb": 6,
-                        "target": 
-                        {
-                            "file": 
-                            {
-                                "path": "C:\\Users\\Bob\\AppData\\Local\\Temp\\gfw-install-CZejgRlL.exe",
-                                "hash": 
-                                {
-                                    "md5": "d41d8cd98f00b204e9800998ecf8427e",
-                                    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-                                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-                                },
-                                "size_bytes": 
-                                {  
-                                },
-                                "modification_time": "2022-06-10T23:19:37.000Z",
-                                "instance_hash_salt": "132993767777627641"
-                            },
-                            "instance_hash": "8639093369865776459",
-                            "artifact_hash": "15425104092171844481"
-                        },
-                        "timestamp": "2022-06-10T23:19:37.000Z",
-                        "tanium_recorder_event_table_id": "4611686018468280136"
-                    },
-                    {
-                        "verb": 6,
-                        "target": 
-                        {
-                            "file": 
-                            {
-                                "path": "C:\\Users\\Bob\\AppData\\Local\\Temp\\gfw-install-CZejgRlL.exe",
-                                "hash": 
-                                {
-                                    "md5": "d41d8cd98f00b204e9800998ecf8427e",
-                                    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-                                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-                                },
-                                "size_bytes": 
-                                {
-                                },
-                                "modification_time": "2022-06-10T23:19:37.000Z",
-                                "instance_hash_salt": "132993767777627641"
-                            },
-                            "instance_hash": "8639093369865776459",
-                            "artifact_hash": "15425104092171844481"
-                        },
-                        "timestamp": "2022-06-10T23:19:37.000Z",
-                        "tanium_recorder_event_table_id": "4611686018468280136"
-                    }],
-                    "acting_artifact": 
-                    {
-                        "process": 
-                        {
-                            "handles": 
-                            [
-                            ],
-                            "pid": 8372,
-                            "arguments": "\"C:\\Program Files\\Git\\usr\\bin\\mktemp.exe\" -t gfw-install-XXXXXXXX.exe",
-                            "file": 
-                            {
-                                "file": 
-                                {
-                                    "path": "C:\\Program Files\\Git\\usr\\bin\\mktemp.exe",
-                                    "hash": 
-                                    {
-                                        "md5": "2204459dcbf34aed8906daac26db6f56"
-                                    }
-                                },
-                                "instance_hash": "7306911300040087486",
-                                "artifact_hash": "7306911300040087486"
-                            },
-                            "user": 
-                            {
-                                "user": 
-                                {
-                                    "name": "Bob",
-                                    "domain": "MEDIATOO"
-                                }
-                            },
-                            "parent": 
-                            {
-                                "process": 
-                                {
-                                    "handles": 
-                                    [],
-                                    "pid": 7528,
-                                    "arguments": "sh \"C:\\\\Program Files\\\\Git\\\\mingw64\\\\bin\\\\git-update-git-for-windows\" --quiet --gui",
-                                    "file": 
-                                    {
-                                        "file": 
-                                        {
-                                            "path": "C:\\Program Files\\Git\\usr\\bin\\sh.exe",
-                                            "hash": 
-                                            {
-                                                "md5": "0d46559e826c8a7b5d432d0a91954ba2"
-                                            }
-                                        },
-                                        "instance_hash": "4573824187960625975",
-                                        "artifact_hash": "4573824187960625975"
-                                    },
-                                    "user": 
-                                    {
-                                        "user": 
-                                        {
-                                            "name": "Bob",
-                                            "domain": "MEDIATOO"
-                                        }
-                                    },
-                                    "start_time": "2022-06-10T23:19:37.000Z",
-                                    "tanium_unique_id": "8426546338933681227"
-                                },
-                                "instance_hash": "2725601412602158353",
-                                "artifact_hash": "6063500060437154276"
-                            },
-                            "start_time": "2022-06-10T23:19:37.000Z",
-                            "tanium_unique_id": "3601155573093657773"
-                        },
-                        "instance_hash": "17370642301569032073",
-                        "artifact_hash": "16343609532904785305",
-                        "is_intel_target": "true"
-                    }
-                }
-            }],
-            "domain": "threatresponse",
-            "intel_id": "365:2:761d796b-b362-455f-98ae-6d0472ecf640",
-            "hunt_id": "1",
-            "threat_id": "1204114022,1670888670,2753281896,3854795733",
-            "source_name": "recorder",
-            "system_info": 
-            {
-                "os": "Microsoft Windows 11 Pro",
-                "bits": 64,
-                "platform": "Windows",
-                "build_number": "22000",
-                "patch_level": "10.0.22000.0.0"
-            },
-            "first_seen": "2022-06-10T23:19:38.000Z",
-            "last_seen": "2022-06-10T23:19:38.000Z",
-            "finding_id": "2433404061633741123",
-            "reporting_id": "reporting-id-placeholder"
-        },
-        "match": 
-        {
-            "version": 1,
-            "type": "process",
-            "source": "recorder",
-            "hash": "16343609532904785305",
-            "properties": 
-            {
-                "pid": 8372,
-                "args": "\"C:\\Program Files\\Git\\usr\\bin\\mktemp.exe\" -t gfw-install-XXXXXXXX.exe",
-                "recorder_unique_id": "3601155573093657773",
-                "start_time": "2022-06-10T23:19:37.000Z",
-                "ppid": 7528,
-                "user": "MEDIATOO\\Bob",
-                "file": 
-                {
-                    "md5": "2204459dcbf34aed8906daac26db6f56",
-                    "fullpath": "C:\\Program Files\\Git\\usr\\bin\\mktemp.exe"
-                },
-                "parent": 
-                {
-                    "pid": 7528,
-                    "args": "sh \"C:\\\\Program Files\\\\Git\\\\mingw64\\\\bin\\\\git-update-git-for-windows\" --quiet --gui",
-                    "recorder_unique_id": "8426546338933681227",
-                    "start_time": "2022-06-10T23:19:37.000Z",
-                    "ppid": 10396,
-                    "user": "MEDIATOO\\Bob",
-                    "file": 
-                    {
-                        "md5": "0d46559e826c8a7b5d432d0a91954ba2",
-                        "fullpath": "C:\\Program Files\\Git\\usr\\bin\\sh.exe"
-                    }
-                }
-            }
-        }
-    },
-    "MITRE Techniques": "[\"T1036\",\"T1036.001\"]",
-    "Impact Score": ""
-}
+sample_files_location = os.getcwd() + "/stix-shifter/stix_shifter_modules/tanium/tests"
 
 class TestTaniumResultsToStix(unittest.TestCase, object):
-    def test_get_observed_data_objects(self):
-        result_bundle = json_to_stix_translator.convert_to_stix(
-        data_source, map_data, [SAMPLE_DATA_DICT], get_module_transformers(MODULE), options)
-        result_bundle_objects = result_bundle['objects']
+    def test_confirm_objects_parse(self):
+        sample_data_large = open(sample_files_location + "/Sample_Data.json", "r")
+        sample_data_tanium = open(sample_files_location + "/Sample_Data_Tanium.json", "r")
 
-        print(result_bundle_objects)
+        sample_data_large_json = json.load(sample_data_large)
+        sample_data_tanium_json = json.load(sample_data_tanium)
+        for alert in sample_data_large_json["data"]:
+            result_bundle_large = json_to_stix_translator.convert_to_stix(data_source, map_data, [alert], get_module_transformers(MODULE), options)
+            assert len(result_bundle_large["objects"][1]["objects"]) > 5
+        
+        result_bundle_tanium = json_to_stix_translator.convert_to_stix(data_source, map_data, [sample_data_tanium_json], get_module_transformers(MODULE), options)
+        assert len(result_bundle_tanium["objects"][1]["objects"]) > 5
+    
+    def test_results_no_parent(self):
+        sample_data_large = open(sample_files_location + "/Sample_Data.json", "r")
+        sample_data_large_json = json.load(sample_data_large)
+        
+        #There are many events in the sample. For the unit testing I will only be using the first two.
+        #The first one has no parent process. The second has one.
+        alert = sample_data_large_json["data"][0]
+        result_bundle_large = json_to_stix_translator.convert_to_stix(data_source, map_data, [alert], get_module_transformers(MODULE), options)
+        result_bundle = result_bundle_large["objects"][1]["objects"]
+        
+        type_count = self.get_type_count(result_bundle)
+        attempt_count = dict()
+        for i in range(0, len(result_bundle), +1):
+            index = str(i)
+            if( "type" not in result_bundle[index]):
+                assert False
+            try:
+                self._test_against_sample_data(result_bundle[index], result_bundle[index]["type"])        
+            except:
+                if (result_bundle[index]["type"] in attempt_count):
+                    attempt_count[result_bundle[index]["type"]] = result_bundle[index]["type"] + 1
+                else:
+                    attempt_count[result_bundle[index]["type"]] = 1
+                
+                if(attempt_count[result_bundle[index]["type"]] >= type_count[result_bundle[index]["type"]]):
+                    raise 
+            
+    def _test_against_sample_data(self, result_bundle_object, type_name):
+        try:
+            if(type_name == "x-ibm-finding"):
+                self.alert_asserts(result_bundle_object)
+            elif(type_name == 'x-oca-event'):
+                self.event_asserts(result_bundle_object)       
+            elif(type_name == 'process'):
+                self.process_asserts(result_bundle_object)   
+            elif(type_name == 'file'):
+                self.file_asserts(result_bundle_object)   
+            elif(type_name == 'directory'):
+                self.directory_asserts(result_bundle_object)   
+            elif(type_name == 'x509-certificate'):
+                self.certificate_asserts(result_bundle_object)   
+            elif(type_name == 'user-account'):
+                self.user_asserts(result_bundle_object)   
+            elif(type_name == 'software'):
+                self.software_asserts(result_bundle_object)   
+            elif(type_name == 'x-oca-asset'):
+                self.asset_asserts(result_bundle_object)   
+            elif(type_name == 'ipv4-addr'):
+                self.ip_asserts(result_bundle_object)   
+            elif(type_name == 'x-ibm-ttp-tagging'):
+                self.ttp_tagging_asserts(result_bundle_object)   
+        except:
+            raise
 
-        result_bundle_identity = result_bundle_objects[0]
-        assert result_bundle_identity['type'] == data_source['type']
-        observed_data = result_bundle_objects[1]
+    def get_type_count(self, result_bundle):
+        #There may be multiple objects with the same type name.
+        #This gets a count of those objects.
+        type_count = dict()
+        for i in range(0, len(result_bundle), +1):
+            index = str(i)
+            if( "type" not in result_bundle[index]):
+                assert False
+            
+            if (result_bundle[index]["type"] in type_count):
+                type_count[result_bundle[index]["type"]] =  type_count[result_bundle[index]["type"]] + 1
+            else:
+                type_count[result_bundle[index]["type"]] = 1
+            
+        return type_count
+    
+    def alert_asserts(self, result_bundle_object):
+        assert result_bundle_object["finding_type"] == "alert"
+        assert result_bundle_object["alert_id"] == 2
+        assert result_bundle_object["severity"] == 0
+        assert result_bundle_object["dst_os_user_ref"] is not None
+        assert result_bundle_object["dst_os_ref"] is not None
+        assert result_bundle_object["dst_ip_ref"] is not None
+        assert result_bundle_object["time_observed"] == '2023-10-16T12:26:51.000Z'
+        assert result_bundle_object["action"] == 'Testing eicar'
+        assert result_bundle_object["description"] == 'Alerting on eicar file present on windows system'
+        assert result_bundle_object["ttp_tagging_refs"] is not None
+        
+    def event_asserts(self, result_bundle_object):
+        assert result_bundle_object["outcome"] == 'unresolved'
+        assert result_bundle_object["severity"] == 0
+        assert result_bundle_object["process_ref"] is not None
+        assert result_bundle_object["file_ref"] is not None
+        assert result_bundle_object["user_ref"] is not None
+        assert result_bundle_object["host_ref"] is not None
+        assert result_bundle_object["category"] == "process"
+        assert result_bundle_object["created"] == '2023-10-16T12:26:51.000Z'
+        assert result_bundle_object["provider"] == 'tanium-signal'
+        assert result_bundle_object["action"] == 'Testing eicar'
+        assert result_bundle_object["description"] == 'Alerting on eicar file present on windows system'
+        
+    def process_asserts(self, result_bundle_object):
+        assert result_bundle_object["pid"] == 9080
+        assert result_bundle_object["args"] == ['C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe', '--no-startup-window', '--continue-active-setup']
+        assert result_bundle_object["name"] == 'msedge.exe'
+        assert result_bundle_object["cwd"] == 'C:/Program Files (x86)/Microsoft/Edge/Application'
+        assert result_bundle_object["created"] == '2023-10-13T14:46:31.000Z'
+        assert result_bundle_object["binary_ref"] is not None
+        assert result_bundle_object["creator_user_ref"] is not None
+    
+    def file_asserts(self, result_bundle_object):
+        assert result_bundle_object["hashes"] == {'md5':'d193ea4b8d102d020c02dc45af23ff0d', "sha1":'469e259b884043aedac879a96356fb741f82daa8', "sha256":'9ba39dd15eff718ff357db346d0fda3a12c9dbb216511cbb41050fb0d6b3d9c9'}
+        assert result_bundle_object["name"] == 'msedge.exe'
+        assert result_bundle_object["parent_directory_ref"] is not None
 
-        assert 'objects' in observed_data
+    def directory_asserts(self, result_bundle_object):
+        assert result_bundle_object["path"] == 'C:/Program Files (x86)/Microsoft/Edge/Application'
+        
+    def certificate_asserts(self, result_bundle_object):
+        assert result_bundle_object["issuer"] == 'Microsoft Code Signing PCA 2011'
+        assert result_bundle_object["subject"] == 'Microsoft Corporation'
+        
+    def user_asserts(self, result_bundle_object):
+        assert result_bundle_object["display_name"] == 'username'
+        assert result_bundle_object["is_service_account"] == True
+        assert result_bundle_object["user_id"] == 'S-1-5-21-1252622098-4149316198-505502587-500'
+        
+    def software_asserts(self, result_bundle_object):
+        assert result_bundle_object["name"] == 'Microsoft Windows 11 Pro'
+        assert result_bundle_object["version"] == '10.0.22621.0.0'
+        
+    def asset_asserts(self, result_bundle_object):
+        assert result_bundle_object["hostname"] == 'ComputerName'
+        assert result_bundle_object["ip_refs"] is not None
+        
+    def ip_asserts(self, result_bundle_object):
+        assert result_bundle_object["value"] == '1.1.1.1'
+        
+    def ttp_tagging_asserts(self, result_bundle_object):
+        assert result_bundle_object["extensions"] is not None
+        assert result_bundle_object["extensions"]["technique_id"] == 'T1134.002'
+        assert result_bundle_object["extensions"]["technique_name"] == 'Access Token Manipulation Mitigation: Create Process with Token'
+        assert result_bundle_object["extensions"]["tactic_name"] == ''
+        assert result_bundle_object["name"] == 'Access Token Manipulation Mitigation: Create Process with Token'

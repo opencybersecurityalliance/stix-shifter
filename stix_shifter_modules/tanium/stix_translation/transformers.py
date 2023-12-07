@@ -1,4 +1,3 @@
-import json
 import pathlib
 import shlex
 from stix_shifter_utils.stix_translation.src.utils.transformers import ValueTransformer
@@ -6,73 +5,11 @@ from stix_shifter_utils.utils import logger
 
 LOGGER = logger.set_logger(__name__)
 
-# Implement custom transformer classes here. 
-# The class name needs to be added to the module's to_stix_map.json
-
-class ProcessTransformer(ValueTransformer):
-    """A value transformer to convert <data type> to <transformed format>"""
-
-    @staticmethod
-    def transform(data): # Leave method name as is.
-        try:
-            dataAsAJson = json.loads(data)
-            
-            #print (json.dumps(dataAsAJson, indent=4))
-            
-            if(dataAsAJson["match"]['type'] == "process"):
-                process = dict()
-                process["type"] = dataAsAJson["match"]["type"]
-                process["pid"] = dataAsAJson["match"]["properties"]["pid"]
-                process["created"] = dataAsAJson["match"]["properties"]["start_time"]
-               
-                arguments_list = shlex.split(dataAsAJson["match"]["properties"]["args"])
-                process["args"] = arguments_list
-                
-                converted_file = dataAsAJson["match"]["properties"]["name"].replace('\\', '/')
-                pathObject = pathlib.Path(converted_file)
-                process["name"] = pathObject.name + pathObject.suffix
-                process["cwd"] = pathObject.parent.as_posix()
-                
-                creator_user_ref = dict()
-                creator_user_ref["type"] = "user-account"
-                creator_user_ref["user_id"] = dataAsAJson["finding"]["whats"][0]["artifact_activity"]["acting_artifact"]["process"]["user"]["user"]["user_id"]
-                creator_user_ref["display_name"] = dataAsAJson["finding"]["whats"][0]["artifact_activity"]["acting_artifact"]["process"]["user"]["user"]["name"]
-                if (dataAsAJson["finding"]["whats"][0]["artifact_activity"]["acting_artifact"]["process"]["user"]["user"]["domain"] is not None):
-                    creator_user_ref["is_service_account"] = True
-                else:
-                    creator_user_ref["is_service_account"] = False
-
-                binary_ref = dict()
-                binary_ref["type"] = "file"
-                binary_ref["hashes"] = dataAsAJson["finding"]["whats"][0]["artifact_activity"]["acting_artifact"]["process"]["file"]["file"]["hash"]
-                binary_ref["name"] = pathObject.name + pathObject.suffix
-                
-                parent_ref = dict()
-                parent_ref["type"] = "directory"
-                parent_ref["path"] = pathObject.parent.as_posix()
-
-                binary_ref["parent_directory_ref"] = parent_ref
-                
-                certificate = dict()
-                certificate["type"] = "x509-certificate"
-                certificate["issuer"] = dataAsAJson["finding"]["whats"][0]["artifact_activity"]["acting_artifact"]["process"]["file"]["file"]["signature_data"]["issuer"]
-                certificate["subject"] = dataAsAJson["finding"]["whats"][0]["artifact_activity"]["acting_artifact"]["process"]["file"]["file"]["signature_data"]["subject"]
-                binary_ref["content_refs"] = [certificate]
-
-                process["creator_user_ref"] = creator_user_ref
-                process["binary_ref"] = binary_ref
-                return process
-            else:
-                raise Exception("There was no process type")
-        except ValueError:
-            LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
-        except Exception as err:
-            LOGGER.error(err)
-            
 class ProcessArgsTransformer(ValueTransformer):
-
     @staticmethod
-    def transform(data): # Leave method name as is.
+    def transform(data):
+        #The argument is passed in as if it was run in the command line.
+        #This method uses shlex to convert it to a list.
         try:
             arguments_list = shlex.split(data)
             return arguments_list
@@ -82,9 +19,10 @@ class ProcessArgsTransformer(ValueTransformer):
             LOGGER.error(err)
 
 class ProcessNameTransformer(ValueTransformer):
-
     @staticmethod
-    def transform(data): # Leave method name as is.
+    def transform(data):
+        #The path is given in the form of path/file.extension.
+        #This method uses pathlib to only return the file name.
         try:
             converted_file = data.replace('\\', '/')
             pathObject = pathlib.Path(converted_file)
@@ -96,9 +34,10 @@ class ProcessNameTransformer(ValueTransformer):
             LOGGER.error(err)
             
 class ProcessCWDPathTransformer(ValueTransformer):
-
     @staticmethod
-    def transform(data): # Leave method name as is.
+    def transform(data):
+        #The path is given in the form of path/file.extension.
+        #This method uses pathlib to only return the directory path.
         try:            
             converted_file = data.replace('\\', '/')
             pathObject = pathlib.Path(converted_file)
@@ -109,10 +48,40 @@ class ProcessCWDPathTransformer(ValueTransformer):
             LOGGER.error(err)
             
 class ProcessUserDaemonTransformer(ValueTransformer):
-
     @staticmethod
-    def transform(data): # Leave method name as is.       
+    def transform(data):    
+        #This method just checks if a domain was provided for the user. If it does, than it's true. Otherwise it's false.
         if (data is not None and data is not ""):
             return True
         else:
             return False
+        
+class ReturnAlertTransformer(ValueTransformer):
+    @staticmethod
+    def transform(data): 
+        #The type of the alert isn't returned as an object in the data.
+        #Thus I had to set it to always return it as an alert.
+        return "alert"
+                
+class ConvertTextSeverityToNumberValue(ValueTransformer):
+    @staticmethod
+    def transform(data):
+        #This method converts the text value of a severity (info,low,high) to a hardcoded number.
+        #One assumption is that the fields are "info", "low", and "high". I could not find any reference to all of the possible values.
+        #I do know that info and high exist.
+        #The second assumption is their relative values. I don't actually know how severe an 80 is for example or if their is a higher value.
+        #Finally, if it comes across a new value, it returns 50 as default. This is mostly in case something critical exist, in which case it should show up.
+        if("info" in data):
+            return 0
+        elif("low" in data):
+            return 40
+        elif("high" in data):
+            return 80
+        else:
+            return 50
+        
+class ReturnEmpty(ValueTransformer):
+    @staticmethod
+    def transform(data):
+        #This is used because the mitre extension requires an empty tactic value if an actual value doesn't exist.
+        return ""

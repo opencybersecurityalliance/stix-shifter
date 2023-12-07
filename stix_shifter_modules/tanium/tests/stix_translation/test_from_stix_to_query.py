@@ -38,18 +38,16 @@ class TestQueryTranslator(unittest.TestCase, object):
     
     def test_action_query(self):
         stix_pattern = f"[x-oca-event:action = 'Outlook Spawned Process Creating DLL Files']"
-        expectedQueryList = [f"intelDocName='{default_values.get('x-oca-event:action')}'" \
-                             f"&limit=10000"]
+        expectedQueryList = [f"intelDocName={default_values.get('x-oca-event:action')}"]
         _test_stix_to_json(stix_pattern, expectedQueryList)
         
     def test_action_query_with_time_frame(self):
         stix_pattern = f"[x-oca-event:action = 'Outlook Spawned Process Creating DLL Files']" \
                             " START t'2022-07-01T00:00:00.000Z'" \
                             " STOP t'2024-07-27T00:05:00.000Z'"
-        expectedQueryList = [f"intelDocName='{default_values.get('x-oca-event:action')}'" \
+        expectedQueryList = [f"intelDocName={default_values.get('x-oca-event:action')}" \
                              f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
-                             f"&alertedAtUntil=2024-07-27T00:05:00.000Z" \
-                             f"&limit=10000"]
+                             f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
         
         _test_stix_to_json(stix_pattern, expectedQueryList)
         
@@ -68,20 +66,19 @@ class TestQueryTranslator(unittest.TestCase, object):
                             " START t'2022-07-01T00:00:00.000Z'" \
                             " STOP t'2024-07-27T00:05:00.000Z'"
         
-        expectedQueryList = [f"intelDocName='{default_values.get('x-oca-event:action')}'" \
-                             f"&matchType='{default_values.get('x-oca-event:category')}'" \
-                             f"&details='{default_values.get('x-oca-event:description')}'" \
-                             f"&state='{default_values.get('x-oca-event:outcome')}'" \
-                             f"&intelType='{default_values.get('x-oca-event:provider')}'" \
-                             f"&computerName='{default_values.get('x-oca-event:host_ref.hostname')}'" \
-                             f"&computerIpAddress='{default_values.get('x-oca-event:host_ref.ip_ref.value')}'" \
-                             f"&platforms='{default_values.get('x-oca-event:host_ref.os_ref.name')}'" \
-                             f"&path='{default_values.get('x-oca-event:file_ref.parent_directory_ref.path')}'" \
-                             f"&severity='{default_values.get('x-oca-event:severity')}'" \
-                             f"&mitreId='{default_values.get('x-oca-event:x_ttp_tagging_refs.name')}'" \
+        expectedQueryList = [f"intelDocName={default_values.get('x-oca-event:action')}" \
+                             f"&matchType={default_values.get('x-oca-event:category')}" \
+                             f"&details={default_values.get('x-oca-event:description')}" \
+                             f"&state={default_values.get('x-oca-event:outcome')}" \
+                             f"&intelType={default_values.get('x-oca-event:provider')}" \
+                             f"&computerName={default_values.get('x-oca-event:host_ref.hostname')}" \
+                             f"&computerIpAddress={default_values.get('x-oca-event:host_ref.ip_ref.value')}" \
+                             f"&platforms={default_values.get('x-oca-event:host_ref.os_ref.name')}" \
+                             f"&path={default_values.get('x-oca-event:file_ref.parent_directory_ref.path')}" \
+                             f"&severity={default_values.get('x-oca-event:severity')}" \
+                             f"&mitreId={default_values.get('x-oca-event:x_ttp_tagging_refs.name')}" \
                              f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
-                             f"&alertedAtUntil=2024-07-27T00:05:00.000Z" \
-                             f"&limit=10000"]
+                             f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
         _test_stix_to_json(stix_pattern, expectedQueryList)
         
     def test_get_observed_data_objects(self):
