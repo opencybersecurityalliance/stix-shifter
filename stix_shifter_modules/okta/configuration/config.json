@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Okta"
+            "displayName": "Okta",
+            "group": "okta"
         },
         "host": {
             "type": "text",
