@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Micro Focus ArcSight"
+            "displayName": "Micro Focus ArcSight",
+            "group": "microfocus"
         },
         "host": {
             "type": "text"
