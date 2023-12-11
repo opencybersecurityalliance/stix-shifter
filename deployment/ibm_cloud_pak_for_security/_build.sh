@@ -16,9 +16,9 @@ NAMESPACE="$2"
 validate_cmd openssl
 validate_cmd python3
 validate_cmd pip3
-validate_cmd docker
-echo -n "Checking if it is possible to execute docker command.."
-docker ps > /dev/null
+validate_cmd podman
+echo -n "Checking if it is possible to execute podman command.."
+podman ps > /dev/null
 if [ $? -eq 0 ]; then
     echo "Ok"
 else
@@ -93,7 +93,7 @@ echo $REPOSITORY
 
 
 
-REPOSITORY_CERT_DIR=/etc/docker/certs.d/$REPOSITORY/
+REPOSITORY_CERT_DIR=/etc/containers/certs.d/$REPOSITORY/
 REPOSITORY_CERT_FILE=${REPOSITORY_CERT_DIR}/ca.crt
 REPOSITORY_CERT_TMP=ca.crt.tmp
 
@@ -127,15 +127,15 @@ if [ ! -f "$REPOSITORY_CERT_FILE" ]; then
   sudo cp $REPOSITORY_CERT_TMP $REPOSITORY_CERT_FILE
   rm -rf $REPOSITORY_CERT_TMP | true
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    echo -n "Adding certificate to docker VM... "
+    echo -n "Adding certificate to podman VM... "
     sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $REPOSITORY_CERT_FILE
     echo 'Ok'
-    echo -n "Restarting docker... "
-    killall Docker && open /Applications/Docker.app
+    echo -n "Restarting podman... "
+    killall Podman\ Desktop && open /Applications/Podman\ Desktop.app
     sleep 60
     echo 'Ok'
-    echo -n "Checking docker.."
-    docker ps > /dev/null
+    echo -n "Checking podman.."
+    podman ps > /dev/null
     if [ $? -eq 0 ]; then
         echo "Ok"
     else
@@ -164,13 +164,13 @@ if [ -z "${IMAGE_URL}" ]; then
   fi
 fi
 
-DOCKER_USER=`oc whoami`
-echo "Logging in into internal registry $REPOSITORY as $DOCKER_USER ..."
-docker login -u $DOCKER_USER -p `oc whoami -t` $REPOSITORY
+REGISTRY_USER=`oc whoami`
+echo "Logging in into internal registry $REPOSITORY as $REGISTRY_USER ..."
+podman login -u $REGISTRY_USER -p `oc whoami -t` $REPOSITORY
 
 if [ ! -z "${IMAGE_URL}" ]; then
   echo "Pulling ${IMAGE_URL}"
-  docker pull ${IMAGE_URL}
+  podman pull ${IMAGE_URL}
   IMAGE_LOCAL_URL=${IMAGE_URL}
   IMAGE_PUSH_URL=${REPOSITORY}/${NAMESPACE}/${FILE_PREFIX}${PROJECT_NAME_WITHOUT_DASH}:${TAG}
   # exit 0
@@ -178,16 +178,21 @@ else
   IMAGE_LOCAL_URL=${FILE_PREFIX}${PROJECT_NAME_WITHOUT_DASH}:${TAG}
   IMAGE_PUSH_URL=${REPOSITORY}/${NAMESPACE}/${IMAGE_LOCAL_URL}
   echo "Building image..."
-  docker build --no-cache -t ${IMAGE_LOCAL_URL} --build-arg APP=${FILENAME%.whl} --build-arg VERSION=${PROJECT_VERSION} . --platform linux/amd64
+  podman build --no-cache -t ${IMAGE_LOCAL_URL} --build-arg APP=${FILENAME%.whl} --build-arg VERSION=${PROJECT_VERSION} . --platform linux/amd64
 fi
 
+# Change the registry URL if you use a different image registry
 IMAGE_POD_URL=image-registry.openshift-image-registry.svc:5000/${NAMESPACE}/${FILE_PREFIX}${PROJECT_NAME_WITHOUT_DASH}:${TAG}
 
 echo "retagging image... ${IMAGE_LOCAL_URL} > ${IMAGE_PUSH_URL}"
-docker tag ${IMAGE_LOCAL_URL} ${IMAGE_PUSH_URL}
+podman tag ${IMAGE_LOCAL_URL} ${IMAGE_PUSH_URL}
 
 echo "Pushing image..."
-docker push ${IMAGE_PUSH_URL}
+
+# "tls: failed to verify certificate" exception may occur while pusing the image
+# To resolve, Use `--tls-verify=false` if you use internal trusted registry
+# Otherwise, make sure the TLS verification is done.
+podman push ${IMAGE_PUSH_URL} 
 
 CR_FILENAME=udi-${PROJECT_NAME}-NEW.yaml
 BACKUP_FOLDER=backup_${TIMESTAMP}

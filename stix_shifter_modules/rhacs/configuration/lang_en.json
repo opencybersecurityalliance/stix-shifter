@@ -14,7 +14,7 @@
     },
     "selfSignedCert": {
       "label": "RHACS connection certificate",
-      "description": "Use self-signed SSL certificate or CA content(root and intermediate) of data source"
+      "description": "Optional self-signed SSL certificate or CA content (root and intermediate)"
     }
   },
   "configuration": {
