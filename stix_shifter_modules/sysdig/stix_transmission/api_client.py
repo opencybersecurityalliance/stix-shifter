@@ -18,7 +18,7 @@ class APIClient:
                                          connection.get('port', None),
                                          headers,
                                          url_modifier_function=None,
-                                         cert_verify=connection.get('selfSignedCert', True))
+                                         cert_verify=connection.get('selfSignedCert'))
         self.timeout = connection['options'].get('timeout')
 
     async def ping_data_source(self):
