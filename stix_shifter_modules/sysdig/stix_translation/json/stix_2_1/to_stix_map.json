@@ -1,0 +1,356 @@
+{
+  "category": {
+    "key": "x-ibm-finding.x_category",
+    "object": "finding"
+  },
+  "originator": {
+    "key": "x-ibm-finding.x_threat_originator",
+    "object": "finding"
+  },
+  "source": {
+    "key": "x-ibm-finding.x_threat_source",
+    "object": "finding"
+  },
+  "agentId": {
+    "key": "x-ibm-finding.x_agent_id",
+    "object": "finding"
+  },
+  "finding_type": {
+    "key": "x-ibm-finding.finding_type",
+    "object": "finding"
+  },
+  "l4protocol": {
+    "key": "network-traffic.protocols",
+    "object": "network",
+    "transformer": "ToLowercaseArray"
+  },
+  "clientPort": {
+    "key": "network-traffic.src_port",
+    "object": "network",
+    "transformer": "ToInteger"
+  },
+  "serverPort": {
+    "key": "network-traffic.dst_port",
+    "object": "network",
+    "transformer": "ToInteger"
+  },
+  "direction": {
+    "key": "network-traffic.x_direction",
+    "object": "network"
+  },
+  "serverIpv4": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "network",
+      "references": "dst_ip"
+    }
+  ],
+  "clientIpv4": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "network",
+      "references": "src_ip"
+    }
+  ],
+  "severity": {
+    "key": "x-ibm-finding.x_severity",
+    "object": "finding",
+    "transformer": "SeverityToScore"
+  },
+  "containerId": {
+    "key": "x-oca-asset.extensions.x-oca-container-ext.container_id",
+    "object": "asset"
+  },
+  "description": [
+    {
+      "key": "x-sysdig-policy.description",
+      "object": "policy"
+    },
+    {
+      "key": "x-ibm-finding.x_policy_ref",
+      "object": "finding",
+      "references": "policy"
+    }
+  ],
+  "content": {
+    "ruleName": {
+      "key": "x-sysdig-policy.rule_name",
+      "object": "policy"
+    },
+    "ruleType": {
+      "key": "x-sysdig-policy.rule_type",
+      "object": "policy"
+    },
+    "ruleSubType": {
+      "key": "x-sysdig-policy.rule_subtype",
+      "object": "policy"
+    },
+    "policyId": {
+      "key": "x-sysdig-policy.policy_id",
+      "object": "policy"
+    },
+    "fields": {
+      "falco.rule": {
+        "key": "x-ibm-finding.name",
+        "object": "finding"
+      },
+      "proc.cmdline": {
+        "key": "process.command_line",
+        "object": "proc"
+      },
+      "proc.name": [
+        {
+          "key": "file.name",
+          "object": "file"
+        },
+        {
+          "key": "process.name",
+          "object": "proc"
+        },
+        {
+          "key": "process.binary_ref",
+          "object": "proc",
+          "references": "file"
+        }
+      ],
+      "proc.pid": {
+        "key": "process.pid",
+        "object": "proc",
+        "transformer": "ToInteger"
+      },
+      "proc.sid": {
+        "key": "process.x_sid",
+        "object": "proc"
+      },
+      "proc.exepath": [
+        {
+          "key": "directory.path",
+          "object": "file_dir"
+        },
+        {
+          "key": "file.parent_directory_ref",
+          "object": "file",
+          "references": "file_dir"
+        }
+      ],
+      "proc.cwd": {
+        "key": "process.cwd",
+        "object": "proc"
+      },
+      "proc.pcmdline": {
+        "key": "process.x_pcmdline",
+        "object": "proc"
+      },
+      "proc.pname": [
+        {
+          "key": "file.name",
+          "object": "parent_file"
+        },
+        {
+          "key": "process.name",
+          "object": "parent_proc"
+        },
+        {
+          "key": "process.parent_ref",
+          "object": "proc",
+          "references": "parent_proc"
+        },
+        {
+          "key": "process.binary_ref",
+          "object": "parent_proc",
+          "references": "parent_file"
+        }
+      ],
+      "proc.ppid": {
+        "key": "process.pid",
+        "object": "parent_proc",
+        "transformer": "ToInteger"
+      },
+      "user.loginname": {
+        "key": "user-account.account_login",
+        "object": "user"
+      },
+      "user.loginuid": {
+        "key": "user-account.x_loginuid",
+        "object": "user"
+      },
+      "user.name": [
+        {
+          "key": "user-account.display_name",
+          "object": "user"
+        },
+        {
+          "key": "process.creator_user_ref",
+          "object": "proc",
+          "references": "user"
+        }
+      ],
+      "user.uid": {
+        "key": "user-account.user_id",
+        "object": "user"
+      },
+      "proc.aname[1]": {
+        "key": "process.x_ancestor_name_1",
+        "object": "proc"
+      },
+      "proc.aname[2]": {
+        "key": "process.x_ancestor_name_2",
+        "object": "proc"
+      },
+      "proc.aname[3]": {
+        "key": "process.x_ancestor_name_3",
+        "object": "proc"
+      },
+      "proc.aname[4]": {
+        "key": "process.x_ancestor_name_4",
+        "object": "proc"
+      },
+      "proc.aname[5]": {
+        "key": "process.x_ancestor_name_5",
+        "object": "proc"
+      },
+      "proc.aname[6]": {
+        "key": "process.x_ancestor_name_6",
+        "object": "proc"
+      },
+      "proc.aname[7]": {
+        "key": "process.x_ancestor_name_7",
+        "object": "proc"
+      }
+    }
+  },
+  "labels": {
+    "host.hostName": {
+      "key": "x-oca-asset.hostname",
+      "object": "asset"
+    },
+    "container.image.digest": {
+      "key": "x-oca-asset.extensions.x-oca-container-ext.x_digest",
+      "object": "asset"
+    },
+    "container.image.id": {
+      "key": "x-oca-asset.extensions.x-oca-container-ext.image_id",
+      "object": "asset"
+    },
+    "container.image.tag": {
+      "key": "x-oca-asset.extensions.x-oca-container-ext.x_tag",
+      "object": "asset"
+    },
+    "container.image.repo": {
+      "key": "x-oca-asset.extensions.x-oca-container-ext.x_repo",
+      "object": "asset"
+    },
+    "container.label.io.kubernetes.pod.namespace": {
+      "key": "x-oca-asset.extensions.x-oca-pod-ext.x_namespace",
+      "object": "asset"
+    },
+    "container.name": {
+      "key": "x-oca-asset.extensions.x-oca-container-ext.name",
+      "object": "asset"
+    },
+    "host.mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "asset",
+        "references": [
+          "mac"
+        ]
+      }
+    ],
+    "kubernetes.cluster.name": [
+      {
+        "key": "x-sysdig-cluster.name",
+        "object": "cluster"
+      },
+      {
+        "key": "x-ibm-finding.x_cluster_ref",
+        "object": "finding",
+        "references": "cluster"
+      },
+      {
+        "key": "x-sysdig-cluster.x_node_ref",
+        "object": "cluster",
+        "references": "asset"
+      }
+    ],
+    "kubernetes.daemonSet.name": {
+      "key": "x-sysdig-cluster.daemonset",
+      "object": "cluster"
+    },
+    "kubernetes.namespace.name": {
+      "key": "x-sysdig-cluster.namespace",
+      "object": "cluster"
+    },
+    "kubernetes.deployment.name": [
+      {
+        "key": "x-sysdig-deployment.name",
+        "object": "deployment"
+      },
+      {
+        "key": "x-ibm-finding.x_deployment_ref",
+        "object": "finding",
+        "references": "deployment"
+      }
+    ],
+    "kubernetes.node.name": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "ip",
+        "transformer": "HostnameToIpAddress"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "asset",
+        "references": [
+          "ip"
+        ]
+      }
+    ],
+    "kubernetes.workload.name": {
+      "key": "x-ibm-finding.x_workload_name",
+      "object": "finding"
+    },
+    "kubernetes.workload.type": {
+      "key": "x-ibm-finding.x_workload_type",
+      "object": "finding"
+    },
+    "aws.accountId": {
+      "key": "x-cloud-provider.account_id",
+      "object": "cloud_provider"
+    },
+    "cloudProvider.name": {
+      "key": "x-cloud-provider.name",
+      "object": "cloud_provider"
+    },
+    "aws.region": {
+      "key": "x-cloud-provider.region",
+      "object": "cloud_provider"
+    },
+    "aws.instanceId": {
+      "key": "x-cloud-resource.aws_instance_id",
+      "object": "cloud_resource"
+    }
+  },
+  "timestamp": [
+    {
+      "key": "first_observed",
+      "transformer": "TimestampConversion"
+    },
+    {
+      "key": "last_observed",
+      "transformer": "TimestampConversion"
+    }
+  ]
+}

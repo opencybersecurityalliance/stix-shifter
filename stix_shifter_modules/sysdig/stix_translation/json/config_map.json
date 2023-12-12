@@ -1,0 +1,32 @@
+{
+  "int_supported_fields": [
+    "severity",
+    "ruleType",
+    "ruleSubType",
+    "policyId",
+    "agentId",
+    "aws.accountId"
+  ],
+  "string_supported_fields": [
+    "kubernetes.cluster.name",
+    "kubernetes.namespace.name",
+    "kubernetes.deployment.name",
+    "containerId",
+    "container.name",
+    "container.image.id",
+    "container.image.repo",
+    "container.image.tag",
+    "container.image.digest",
+    "container.label.io.kubernetes.pod.namespace",
+    "ruleName",
+    "category",
+    "originator",
+    "source",
+    "host.hostName",
+    "cloudProvider.name",
+    "aws.region"
+  ],
+  "mac_supported_fields": [
+    "machineId"
+  ]
+}
