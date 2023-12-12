@@ -16,6 +16,41 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 --------------------------------------
 
+## 7.0.1 (2023-12-11)
+
+### Changes:
+
+*  Replace docker with podman since it is still free to use [#1625](https://github.com/opencybersecurityalliance/stix-shifter/pull/1625)
+*  Update group_ref keyword documenation [#1622](https://github.com/opencybersecurityalliance/stix-shifter/pull/1622)
+*  add email-message translation to ecs [#1621](https://github.com/opencybersecurityalliance/stix-shifter/pull/1621)
+
+### Fixes:
+
+*  Add missing group param to connector configs, fix CrowdStrike spelling [#1626](https://github.com/opencybersecurityalliance/stix-shifter/pull/1626)
+
+### Dependency update:
+
+*  Bump colorlog from 6.7.0 to 6.8.0 in /stix_shifter [#1624](https://github.com/opencybersecurityalliance/stix-shifter/pull/1624)
+
+--------------------------------------
+
+## 7.0.0 (2023-11-27)
+
+### Deprecations:
+
+*  Make sure certificate is verified when required by RestApiClientAsync and deprecate selfSignedCert:false by-pass [#1620](https://github.com/opencybersecurityalliance/stix-shifter/pull/1620)
+
+### Changes:
+
+*  Cisco secure email added readme detailed file. [#1615](https://github.com/opencybersecurityalliance/stix-shifter/pull/1615)
+
+### Fixes:
+
+*  Remove future timestamp qualifier conditions [#1619](https://github.com/opencybersecurityalliance/stix-shifter/pull/1619)
+*  Fix parameter assignment in error handling function [#1616](https://github.com/opencybersecurityalliance/stix-shifter/pull/1616)
+
+--------------------------------------
+
 ## 6.3.0 (2023-11-02)
 
 ### Changes:
