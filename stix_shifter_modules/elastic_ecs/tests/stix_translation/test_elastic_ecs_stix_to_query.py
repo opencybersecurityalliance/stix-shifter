@@ -121,7 +121,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "[file:name = 'some_file.exe']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['(file.name : "some_file.exe" OR dll.name : "some_file.exe" OR file.path : "some_file.exe" OR process.name : "some_file.exe" OR process.executable : "some_file.exe" OR process.parent.name : "some_file.exe" OR process.parent.executable : "some_file.exe")']
+        test_query = ['(file.name : "some_file.exe" OR dll.name : "some_file.exe" OR file.path : "some_file.exe" OR process.name : "some_file.exe" OR process.executable : "some_file.exe" OR process.parent.name : "some_file.exe" OR process.parent.executable : "some_file.exe" OR email.attachments.file.name : "some_file.exe")']
         _test_query_assertions(translated_query, test_query)
 
     def test_complex_query(self):
@@ -137,7 +137,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "[file:name != 'some_file.exe']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['((NOT file.name : "some_file.exe" AND file.name:*) OR (NOT dll.name : "some_file.exe" AND dll.name:*) OR (NOT file.path : "some_file.exe" AND file.path:*) OR (NOT process.name : "some_file.exe" AND process.name:*) OR (NOT process.executable : "some_file.exe" AND process.executable:*) OR (NOT process.parent.name : "some_file.exe" AND process.parent.name:*) OR (NOT process.parent.executable : "some_file.exe" AND process.parent.executable:*))']
+        test_query = ['((NOT file.name : "some_file.exe" AND file.name:*) OR (NOT dll.name : "some_file.exe" AND dll.name:*) OR (NOT file.path : "some_file.exe" AND file.path:*) OR (NOT process.name : "some_file.exe" AND process.name:*) OR (NOT process.executable : "some_file.exe" AND process.executable:*) OR (NOT process.parent.name : "some_file.exe" AND process.parent.name:*) OR (NOT process.parent.executable : "some_file.exe" AND process.parent.executable:*) OR (NOT email.attachments.file.name : "some_file.exe" AND email.attachments.file.name:*))']
         _test_query_assertions(translated_query, test_query)
 
     def test_port_queries(self):
@@ -383,3 +383,21 @@ class TestStixtoQuery(unittest.TestCase, object):
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
         test_query = ['(event.start:[* TO "2023-12-12T00:00:00.000Z"])']
         _test_query_assertions(translated_query, test_query)
+
+    def test_email_query(self):
+        stix_pattern = "[email-addr:value = 'ccc@gmail.com']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        translated_query["queries"] == ['(user.email : "ccc@gmail.com" OR email.from.address : "ccc@gmail.com" OR email.to.address : "ccc@gmail.com")']
+
+    def test_email_from(self):
+        stix_pattern = "[email-message:from_ref.value = 'fm@gmail.com']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        translated_query["queries"] == ['(email.from.address : "fm@gmail.com")']
+
+    def test_email_to(self):
+        stix_pattern = "[email-message:to_refs[*].value = 'to1@gmail.com']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        translated_query["queries"] == ['(email.to.address : "to1@gmail.com")']

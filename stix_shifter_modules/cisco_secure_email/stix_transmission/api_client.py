@@ -13,7 +13,7 @@ class APIClient:
         self.auth = configuration.get('auth')
         self.headers = {'Content-Type': 'application/json'}
         self.client = RestApiClientAsync(connection.get('host'), connection.get('port'), headers=self.headers,
-                                         cert_verify=connection.get('selfSignedCert', True))
+                                         cert_verify=connection.get('selfSignedCert'))
         self.result_limit = connection['options'].get('result_limit')
         self.timeout = connection['options'].get('timeout')
 

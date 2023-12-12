@@ -73,7 +73,7 @@ th, td {
 <td><b> group </b></td> <td> Boolean </td> <td> Combine the references into a list </td> <td> "group" : true </td>
 </tr>
 <tr>
-<td><b> group_ref </b></td> <td> Boolean </td> <td> This keyword needs to be used when there is a nested list of dictionaries and each dictionary item creates an object. This keyword groups together references in a list and sets where the object is mapped. </td> <td> "group_ref": true </td>
+<td><b> group_ref </b></td> <td> Boolean </td> <td> This keyword needs to be used when there is a nested list of dictionaries and each dictionary item creates an object. This keyword groups together references in a list and sets where the object is mapped. To do that, create a mapping field under same nested dictionary as the datasource field and specify the mappings. See the group_ref Examples section for more details. </td> <td> "group_ref": true </td>
 </tr>
 <td><b> ds_key </b></td> <td> String </td> <td> This keyword is used when datasource results are formatted to modify some field names. The value assigned to the keyword determines the mapping of a STIX object. This keyword is only used in the aws_athena and aws_cloud_watch_logs modules to resolve nested dictionary mappings. <b>This keyword has been deprecated since nested dictionary mappings are now handled by the JSON to STIX translation utility.</b> </td> <td> "ds_key": "resource_instancedetails" </td>
 </tr>
@@ -246,26 +246,35 @@ This STIX bundle contains two ipv4-addr objects which are created based on `unwr
 
 <br>
 
-#### group_ref 
+
+#### group_ref
 
 **Mapping:**
 
+A custom field needs to be created to use the `group_ref` keyword. The name of the field can be anything. Make sure the mapping is defined under same nested dictionary as datasource fields. In this example, `groupReference` is the custom field. The reference object is `target` hence `groupReference` is placed under `"target":{}`. The `x_target_refs` property will store the references of `target` objects in `x-oca-event` object. You must specify `"group_ref": true` in the mapping for `groupReference` custom field.
+
 ```
 {
-  "EbsVolumeDetails": {
-    "ScannedVolumeDetails": {
-      "DeviceName": {
-        "key": "x-aws-ebs-volume-scanned.device_name",
-        "object": "ebsvolume_scanned"
-      },
-      "GroupEbsVolumeScannedReferences": {
-        "key": "x-aws-resource.ebs_volume.scanned_refs",
-        "object": "resource",
-        "references": [
-          "ebsvolume_scanned"
-        ],
-        "group_ref": true
-      }
+  "eventType": {
+    "key": "x-oca-event.action",
+    "object": "event"
+  },
+  "target": {
+    "id": {
+      "key": "x-okta-target.target_id",
+      "object": "target"
+    },
+    "type": {
+      "key": "x-okta-target.target_type",
+      "object": "target"
+    },
+    "groupReference": {
+      "key": "x-oca-event.x_target_refs",
+      "object": "event",
+      "references": [
+        "target"
+      ],
+      "group_ref": true
     }
   }
 }
@@ -273,74 +282,62 @@ This STIX bundle contains two ipv4-addr objects which are created based on `unwr
 
 **Datasource Result:**
 
+"target" datasrouce field contains nested dictionaries. The above mapping will create two `x-okta-target` objects and a `x-oca-event` object from the below datasource result. 
+
 ```
 {
-    "Resource": {
-        "ResourceType": "Container",
-        "EbsVolumeDetails": {
-            "ScannedVolumeDetails": [
-                {
-                    "VolumeArn": "arn:aws:ec2:us-west-2:12345678910:volume/vol-09d5050dea915943d",
-                    "VolumeType": "GeneratedScannedVolumeType",
-                    "DeviceName": "GeneratedScannedDeviceName",
-                    "VolumeSizeInGB": 8,
-                    "EncryptionType": "UNENCRYPTED",
-                    "SnapshotArn": "arn:aws:ec2:us-east-2:12345678910:snapshot/snap-12345678901234567",
-                    "KmsKeyArn": 'null'
-                }
-            ]
+    "eventType": "user.authentication.auth_via_mfa",
+    "target": [
+        {
+            "id": "00u7rkrly9sNvp7sa5d7",
+            "type": "User",
+            "alternateId": "user1@login.com",
+            "displayName": "user1"
         },
-        "ContainerDetails": {
-            "Id": "abcdefghijklmn",
-            "Name": "GeneratedFindingContainerName",
-            "Image": "GeneratedFindingContainerImage"
+        {
+            "id": "pfd7rkr4nqHLoMqI85d7",
+            "type": "AuthenticatorEnrollment",
+            "alternateId": "unknown",
+            "displayName": "Okta Verify",
         }
-     }
-    }
+    ]
+}
 ```
 
 **STIX Translation**
 
-List of nested dictionary in datasource results are referenced in `scanned_refs` property when `group_ref` keyword is used in the mapping:
+Two `x-okta-target` objects(1 and 2) are referenced in `x_target_refs` property inside `x-oca-event` object when `group_ref` keyword is used in the mapping.
 
 
 ```
 {
-    "id": "observed-data--eebc6bb5-ee4c-4923-86d4-8223caa28d12",
+    "id": "observed-data--c0b44436-3f99-4d39-ade0-509c65e990d4",
     "type": "observed-data",
     "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-    "created": "2023-07-20T18:33:39.981Z",
-    "modified": "2023-07-20T18:33:39.981Z",
+    "created": "2023-11-29T18:16:13.340Z",
+    "modified": "2023-11-29T18:16:13.340Z",
     "objects": {
         "0": {
-            "type": "x-aws-resource",
-            "resource_type": "Container",
-            "ebs_volume": {
-                "scanned_refs": [
-                    "2"
-                ]
-            },
-            "standalone_container_ref": "3"
+            "type": "x-oca-event",
+            "action": "user.authentication.auth_via_mfa",
+            "x_target_refs": [
+                "1",
+                "2"
+            ]
+        },
+        "1": {
+            "type": "x-okta-target",
+            "target_id": "00u7rkrly9sNvp7sa5d7",
+            "target_type": "User"
         },
         "2": {
-            "type": "x-aws-ebs-volume-scanned",
-            "volume_arn": "arn:aws:ec2:us-west-2:12345678910:volume/vol-09d5050dea915943d",
-            "volume_type": "GeneratedScannedVolumeType",
-            "device_name": "GeneratedScannedDeviceName",
-            "volume_size": 8,
-            "encryption_type": "UNENCRYPTED",
-            "snapshot_key_arn": "arn:aws:ec2:us-east-2:12345678910:snapshot/snap-12345678901234567",
-            "kms_key_arn": "null"
-        },
-        "3": {
-            "type": "x-aws-container",
-            "container_id": "abcdefghijklmn",
-            "name": "GeneratedFindingContainerName",
-            "image": "GeneratedFindingContainerImage"
+            "type": "x-okta-target",
+            "target_id": "pfd7rkr4nqHLoMqI85d7",
+            "target_type": "AuthenticatorEnrollment"
         }
     },
-    "first_observed": "2023-07-20T18:33:39.981Z",
-    "last_observed": "2023-07-20T18:33:39.981Z",
+    "first_observed": "2023-11-29T18:16:13.340Z",
+    "last_observed": "2023-11-29T18:16:13.340Z",
     "number_observed": 1
 }
 ```

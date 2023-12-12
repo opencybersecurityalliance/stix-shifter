@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Alertflex"
+            "displayName": "Alertflex",
+            "group": "alertflex"
         },
         "host": {
             "type": "text",
