@@ -248,6 +248,10 @@
       "key": "x-oca-asset.extensions.x-oca-container-ext.x_repo",
       "object": "asset"
     },
+    "container.label.io.kubernetes.pod.name": {
+      "key": "x-oca-asset.extensions.x-oca-pod-ext.pod_name",
+      "object": "asset"
+    },
     "container.label.io.kubernetes.pod.namespace": {
       "key": "x-oca-asset.extensions.x-oca-pod-ext.x_namespace",
       "object": "asset"

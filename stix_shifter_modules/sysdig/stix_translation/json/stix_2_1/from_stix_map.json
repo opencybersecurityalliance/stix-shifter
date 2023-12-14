@@ -29,6 +29,9 @@
       "extensions.'x-oca-container-ext'.x_digest": [
         "container.image.digest"
       ],
+      "extensions.'x-oca-pod-ext'.pod_name": [
+        "container.label.io.kubernetes.pod.name"
+      ],
       "extensions.'x-oca-pod-ext'.x_namespace": [
         "container.label.io.kubernetes.pod.namespace"
       ]

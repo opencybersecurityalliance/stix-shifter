@@ -17,6 +17,7 @@
     "container.image.repo",
     "container.image.tag",
     "container.image.digest",
+    "container.label.io.kubernetes.pod.name",
     "container.label.io.kubernetes.pod.namespace",
     "ruleName",
     "category",

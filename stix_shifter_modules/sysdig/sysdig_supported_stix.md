@@ -33,6 +33,7 @@
 | **x-oca-asset**:extensions.'x-oca-container-ext'.x_repo | container.image.repo |
 | **x-oca-asset**:extensions.'x-oca-container-ext'.x_tag | container.image.tag |
 | **x-oca-asset**:extensions.'x-oca-container-ext'.x_digest | container.image.digest |
+| **x-oca-asset**:extensions.'x-oca-pod-ext'.pod_name | container.label.io.kubernetes.pod.name |
 | **x-oca-asset**:extensions.'x-oca-pod-ext'.x_namespace | container.label.io.kubernetes.pod.namespace |
 | **x-ibm-finding**:name | ruleName |
 | **x-ibm-finding**:severity | severity |
@@ -63,6 +64,7 @@
 | x-oca-asset | extensions.x-oca-container-ext.x_tag | container.image.tag |
 | x-oca-asset | extensions.x-oca-container-ext.x_repo | container.image.repo |
 | x-oca-asset | extensions.x-oca-container-ext.name | container.name |
+| x-oca-asset | x-oca-asset.extensions.x-oca-pod-ext.pod_name | container.label.io.kubernetes.pod.name |
 | x-oca-asset | x-oca-asset.extensions.x-oca-pod-ext.x_namespace | container.label.io.kubernetes.pod.namespace |
 | x-oca-asset | ip_refs | kubernetes.node.name |
 | x-oca-asset | mac_refs | host.mac |

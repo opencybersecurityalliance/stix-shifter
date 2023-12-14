@@ -235,6 +235,7 @@ results
                             "name": "node-exporter"
                         },
                         "x-oca-pod-ext": {
+                            "pod_name": "prometheus-prometheus-node"
                             "x_namespace": "prometheus-monitor"
                         }
                     },
@@ -546,6 +547,7 @@ results
                             "name": "curl-sample-app1"
                         },
                         "x-oca-pod-ext": {
+                            "pod_name": "curl-sample-app1"
                             "x_namespace": "default"
                         }
                     },
@@ -996,6 +998,7 @@ results
                             "name": "sti-build"
                         },
                         "x-oca-pod-ext": {
+                            "pod_name": "django-psql-example"
                             "x_namespace": "sample-app2"
                         }
                     },
@@ -1124,6 +1127,7 @@ results
                             "name": "curl-test1"
                         },
                         "x-oca-pod-ext": {
+                            "pod_name": "curl-test1",
                             "x_namespace": "default"
                         }
                     },
@@ -1268,7 +1272,8 @@ execute sysdig sysdig "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-4
                             "name": "node-exporter"
                         },
                         "x-oca-pod-ext": {
-                            "x_namespace": "prometheus"
+                           "pod_name": "prometheus-prometheus-node-exporter-52glj", 
+                           "x_namespace": "prometheus"
                         }
                     },
                     "hostname": "ip-111-111-11-11.ec2.internal",
