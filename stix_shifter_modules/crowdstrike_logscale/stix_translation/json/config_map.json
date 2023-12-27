@@ -1,0 +1,13 @@
+{
+  "crowdstrike_edr":
+  {
+    "integer_fields": [
+      "behaviors[*].severity",
+      "behaviors[*].confidence",
+      "behaviors[*].pattern_disposition",
+      "behaviors[*].rule_instance_version"
+    ]
+  }
+}
+
+

@@ -1,0 +1,333 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "device.local_ip",
+        "device.external_ip"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": [
+        "device.local_ip",
+        "device.external_ip"
+      ]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": [
+        "device.mac_address"
+      ]
+    }
+  },
+  "process": {
+    "fields": {
+      "x_process_graph_id": [
+        "behaviors[*].triggering_process_graph_id"
+      ],
+      "command_line": [
+        "behaviors[*].cmdline"
+      ],
+      "parent_ref.command_line": [
+        "behaviors[*].parent_details.parent_cmdline"
+      ],
+      "parent_ref.x_process_graph_id": [
+        "behaviors[*].parent_details.parent_process_graph_id"
+      ],
+      "image_ref.name": [
+        "behaviors[*].filename"
+      ],
+      "image_ref.hashes.MD5": [
+        "behaviors[*].md5"
+      ],
+      "image_ref.hashes.'SHA-256'": [
+        "behaviors[*].sha256"
+      ],
+      "creator_user_ref.user_id": [
+        "behaviors[*].user_id"
+      ]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": [
+        "behaviors[*].filename"
+      ],
+      "hashes.MD5": [
+        "behaviors[*].parent_details.parent_md5",
+        "behaviors[*].md5"
+      ],
+      "hashes.'SHA-256'": [
+        "behaviors[*].parent_details.parent_sha256",
+        "behaviors[*].sha256"
+      ],
+      "x_extension": [
+        "behaviors[*].alleged_filetype"
+      ],
+      "x_path": [
+        "behaviors[*].filepath"
+      ],
+      "parent_directory_ref.path": [
+        "behaviors[*].filepath"
+      ]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": [
+        "behaviors[*].filepath"
+      ]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": [
+        "behaviors[*].user_id"
+      ],
+      "display_name": [
+        "behaviors[*].user_name"
+      ]
+    }
+  },
+  "software": {
+    "fields": {
+      "name": [
+        "device.platform_name"
+      ],
+      "version": [
+        "device.os_version"
+      ],
+      "x_id": [
+        "device.platform_id"
+      ],
+      "x_minor_version": [
+        "device.minor_version"
+      ],
+      "x_major_version": [
+        "device.major_version"
+      ]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": [
+        "hostinfo.domain"
+      ]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": [
+        "device.hostname"
+      ],
+      "device_id": [
+        "device.device_id"
+      ],
+      "ip_refs[*].value": [
+        "device.local_ip",
+        "device.external_ip"
+      ],
+      "mac_refs[*].value": [
+        "device.mac_address"
+      ],
+      "host_type": [
+        "device.product_type_desc"
+      ],
+      "x_instance_id": [
+        "device.instance_id"
+      ],
+      "x_host_type_number": [
+        "device.product_type"
+      ],
+      "x_first_seen": [
+        "device.first_seen"
+      ],
+      "x_last_seen": [
+        "device.last_seen"
+      ],
+      "x_bios_manufacturer": [
+        "device.bios_manufacturer"
+      ],
+      "x_bios_version": [
+        "device.bios_version"
+      ],
+      "x_last_modified": [
+        "device.modified_timestamp"
+      ],
+      "x_service_provider": [
+        "device.service_provider"
+      ],
+      "x_service_account_id": [
+        "device.service_provider_account_id"
+      ],
+      "x_status": [
+        "device.status"
+      ],
+      "x_system_product_name": [
+        "device.system_product_name"
+      ],
+      "x_system_manufacturer": [
+        "device.system_manufacturer"
+      ],
+      "x_agent_ref.version": [
+        "device.agent_version"
+      ],
+      "x_cid": [
+        "cid"
+      ],
+      "x_device_groups[*]": [
+        "device.groups[*]"
+      ],
+      "os_ref.name": [
+        "device.platform_name"
+      ]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "confidence": [
+        "max_confidence"
+      ],
+      "time_observed": [
+        "created_timestamp"
+      ],
+      "name": [
+        "detection_id"
+      ],
+      "x_severity": [
+        "max_severity"
+      ],
+      "x_severity_name": [
+        "max_severity_displayname"
+      ],
+      "x_status": [
+        "status"
+      ],
+      "x_first_behavior_observed": [
+        "first_behavior"
+      ],
+      "x_last_behavior_observed": [
+        "last_behavior"
+      ],
+      "x_last_updated": [
+        "date_updated"
+      ],
+      "x_behaviors_processed[*]": [
+        "behaviors_processed[*]"
+      ],
+      "x_behavior_refs[*].behavior_id": [
+        "behaviors[*].behavior_id"
+      ],
+      "src_ip_ref.value": [
+        "device.external_ip"
+      ],
+      "src_os_ref.name": [
+        "device.platform_name"
+      ],
+      "ttp_tagging_refs.name": [
+        "behaviors[*].tactic"
+      ]
+    }
+  },
+  "x-crowdstrike-detection-behavior": {
+    "fields": {
+      "description": [
+        "behaviors[*].description"
+      ],
+      "objective": [
+        "behaviors[*].objective"
+      ],
+      "behavior_id": [
+        "behaviors[*].behavior_id"
+      ],
+      "display_name": [
+        "behaviors[*].display_name"
+      ],
+      "rule_instance_version": [
+        "behaviors[*].rule_instance_version"
+      ],
+      "pattern_disposition": [
+        "behaviors[*].pattern_disposition"
+      ],
+      "rule_instance_id": [
+        "behaviors[*].rule_instance_id"
+      ],
+      "created_time": [
+        "behaviors[*].timestamp"
+      ],
+      "control_graph_id": [
+        "behaviors[*].control_graph_id"
+      ],
+      "x_severity": [
+        "behaviors[*].severity"
+      ],
+      "confidence": [
+        "behaviors[*].confidence"
+      ],
+      "template_instance_id": [
+        "behaviors[*].template_instance_id"
+      ],
+      "scenario": [
+        "behaviors[*].scenario"
+      ],
+      "ioc_description": [
+        "behaviors[*].ioc_description"
+      ],
+      "ioc_source": [
+        "behaviors[*].ioc_source"
+      ],
+      "ioc_type": [
+        "behaviors[*].ioc_type"
+      ],
+      "ioc_value": [
+        "behaviors[*].ioc_value"
+      ],
+      "ttp_tagging_ref.name": [
+        "behaviors[*].tactic"
+      ],
+      "process_ref.name": [
+        "behaviors[*].filename"
+      ],
+      "user_ref.user_id": [
+        "behaviors[*].user_id"
+      ]
+    }
+  },
+  "x-crowdstrike-edr-agent": {
+    "fields": {
+      "local_time": [
+        "device.agent_local_time"
+      ],
+      "version": [
+        "device.agent_version"
+      ],
+      "config_id_platform": [
+        "device.config_id_platform"
+      ],
+      "config_id_base": [
+        "device.config_id_base"
+      ],
+      "config_id_build": [
+        "device.config_id_build"
+      ]
+    }
+  },
+  "x-ibm-ttp-tagging": {
+    "fields": {
+      "name": [
+        "behaviors[*].tactic"
+      ],
+      "extensions.'mitre-attack-ext'.technique_name": [
+        "behaviors[*].technique"
+      ],
+      "extensions.'mitre-attack-ext'.technique_id": [
+        "behaviors[*].technique_id"
+      ],
+      "extensions.'mitre-attack-ext'.tactic_id": [
+        "behaviors[*].tactic_id"
+      ]
+    }
+  }
+}
