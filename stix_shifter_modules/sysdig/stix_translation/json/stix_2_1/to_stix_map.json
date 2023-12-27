@@ -145,10 +145,6 @@
         "key": "process.cwd",
         "object": "proc"
       },
-      "proc.pcmdline": {
-        "key": "process.x_pcmdline",
-        "object": "proc"
-      },
       "proc.pname": [
         {
           "key": "file.name",
@@ -169,10 +165,18 @@
           "references": "parent_file"
         }
       ],
+      "proc.pcmdline": {
+        "key": "process.command_line",
+        "object": "parent_proc"
+      },
       "proc.ppid": {
         "key": "process.pid",
         "object": "parent_proc",
         "transformer": "ToInteger"
+      },
+      "proc.anames": {
+        "key": "process.x_parent_names",
+        "object": "parent_proc"
       },
       "user.loginname": {
         "key": "user-account.account_login",
@@ -196,34 +200,6 @@
       "user.uid": {
         "key": "user-account.user_id",
         "object": "user"
-      },
-      "proc.aname[1]": {
-        "key": "process.x_ancestor_name_1",
-        "object": "proc"
-      },
-      "proc.aname[2]": {
-        "key": "process.x_ancestor_name_2",
-        "object": "proc"
-      },
-      "proc.aname[3]": {
-        "key": "process.x_ancestor_name_3",
-        "object": "proc"
-      },
-      "proc.aname[4]": {
-        "key": "process.x_ancestor_name_4",
-        "object": "proc"
-      },
-      "proc.aname[5]": {
-        "key": "process.x_ancestor_name_5",
-        "object": "proc"
-      },
-      "proc.aname[6]": {
-        "key": "process.x_ancestor_name_6",
-        "object": "proc"
-      },
-      "proc.aname[7]": {
-        "key": "process.x_ancestor_name_7",
-        "object": "proc"
       }
     }
   },

@@ -60,7 +60,12 @@ data = {
             "user.loginname": "",
             "user.loginuid": "-1",
             "user.name": "root",
-            "user.uid": "0"
+            "user.uid": "0",
+            "proc.anames": [
+                "run",
+                "conmon",
+                "systemd"
+            ]
         },
         "internalRuleName": "Possible Backdoor using BPF",
         "matchedOnDefault": 'false',
@@ -104,7 +109,8 @@ data = {
         "kubernetes.workload.name": "tuned",
         "kubernetes.workload.type": "daemonset",
         "process.name": "tuned -Es /usr/sbin/tuned --no-dbus"
-    }
+    },
+    "finding_type": "threat"
 }
 
 data_1 = {
@@ -146,7 +152,11 @@ data_1 = {
             "user.loginname": "",
             "user.loginuid": "-1",
             "user.name": "root",
-            "user.uid": "0"
+            "user.uid": "0",
+            "proc.anames": [
+                "conmon",
+                "systemd"
+            ]
         },
         "internalRuleName": "Packet socket created in container",
         "matchedOnDefault": 'false',
@@ -208,7 +218,8 @@ data_1 = {
         "kubernetes.workload.name": "ibm-cloud-provider-ip-123-45-67-8910",
         "kubernetes.workload.type": "deployment",
         "process.name": "tcpdump -v -l -n -i eth1 ip proto 112 or host 222.0.0.11"
-    }
+    },
+    "finding_type": "threat"
 }
 data_2 = {
     "id": "123456789100000",
@@ -253,7 +264,11 @@ data_2 = {
             "user.loginname": "",
             "user.loginuid": "-1",
             "user.name": "root",
-            "user.uid": "0"
+            "user.uid": "0",
+            "proc.anames": [
+                "containerd-shim",
+                "systemd"
+            ]
         },
         "internalRuleName": "Contact EC2 Instance Metadata Service From Container",
         "matchedOnDefault": 'false',

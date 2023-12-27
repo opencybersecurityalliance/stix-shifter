@@ -94,21 +94,14 @@
 | x-cloud-provider | name | cloudProvider.name |
 | x-cloud-provider | region | aws.region |
 | x-cloud-resource | aws_instance_id | aws.instanceId |
-| process | command_line | proc.cmdline |
+| process | command_line | proc.cmdline | proc.pcmdline |
 | process | name | proc.name |
 | process | pid |proc.pid |
 | process | x_pid |proc.sid |
 | process | cwd | proc.cwd |
-| process | x_pcmdline | proc.pcmdline |
 | process | x_pname | proc.pname |
 | process | pid | proc.ppid |
-| process | x_ancestor_name_1 | proc.aname[1] |
-| process | x_ancestor_name_2 | proc.aname[2] |
-| process | x_ancestor_name_3 | proc.aname[3] |
-| process | x_ancestor_name_4 | proc.aname[4] |
-| process | x_ancestor_name_5 | proc.aname[5] |
-| process | x_ancestor_name_6 | proc.aname[6] |
-| process | x_ancestor_name_7 | proc.aname[7] |
+| process | x_parent_names | proc.anames |
 | process | creator_user_ref | user.name |
 | process | binary_ref | proc.pname |
 | process | binary_ref | proc.name |

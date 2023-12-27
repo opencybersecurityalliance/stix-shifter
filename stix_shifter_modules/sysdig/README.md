@@ -14,11 +14,10 @@ See the [table of mappings](sysdig_supported_stix.md) for the STIX objects and o
 
 ### Sysdig API Endpoints
 
-   | Connector Method | Sysdig API Endpoint                                  | Method 
+   | Connector Method | Sysdig API Endpoint                                  | Method |
    |------------------|------------------------------------------------------|--------|
-   | Ping Endpoint    | https://< sysdig-server >/api/v1/secureEvents/status | GET    
-   | Events Endpoint  | https://< sysdig-server >/api/v1/secureEvents        | GET    
-   
+   | Ping Endpoint    | https://< sysdig-server >/api/v1/secureEvents/status | GET    |
+   | Events Endpoint  | https://< sysdig-server >/api/v1/secureEvents        | GET    |
 
 ### Format for calling stix-shifter from the command line
 ```
@@ -95,7 +94,8 @@ results
           "user.loginname": "",
           "user.loginuid": "0",
           "user.name": "11111",
-          "user.uid": "0"
+          "user.uid": "0", 
+          "proc.anames" : []
         },
         "internalRuleName": "Launch Sensitive Mount Container",
         "matchedOnDefault": false,
@@ -384,7 +384,11 @@ results
           "user.loginname": "",
           "user.loginuid": "-1",
           "user.name": "root",
-          "user.uid": "0"
+          "user.uid": "0", 
+          "proc.anames": [
+            "containerd-shim",
+            "systemd"
+          ]
         },
         "internalRuleName": "Contact",
         "matchedOnDefault": false,
@@ -558,13 +562,10 @@ results
                 },
                 "3": {
                     "type": "process",
-                    "x_ancestor_name_2": "containerd-shim",
-                    "x_ancestor_name_3": "systemd",
                     "command_line": "curl -s http://101.101.101.101:10/iam/security-credentials",
                     "cwd": "/",
                     "name": "curl",
                     "binary_ref": "5",
-                    "x_pcmdline": "sh",
                     "pid": 12345,
                     "parent_ref": "7",
                     "x_sid": "1",
@@ -585,9 +586,14 @@ results
                 },
                 "7": {
                     "type": "process",
+                    "command_line": "sh",
                     "name": "sh",
                     "binary_ref": "6",
-                    "pid": 11111
+                    "pid": 11111,
+                    "x_parent_names": [
+                       "containerd-shim", 
+                       "systemd"
+                    ]
                 },
                 "8": {
                     "type": "user-account",
@@ -737,7 +743,12 @@ results
                     "user.loginname": "",
                     "user.loginuid": "-1",
                     "user.name": "default",
-                    "user.uid": "100"
+                    "user.uid": "100",
+                    "proc.anames": [
+                      "exe",
+                      "openshift-sti-b",
+                      "conmon"
+                    ]
                 },
                 "internalRuleName": "Launch Package Management",
                 "matchedOnDefault": false,
@@ -830,7 +841,7 @@ results
 ```json
 {
     "success": true,
-   [
+    "data": [
         {
             "id": "12345678910",
             "cursor": "ABCDEFGHIJKLM",
@@ -872,7 +883,10 @@ results
                     "user.loginname": "",
                     "user.loginuid": "-1",
                     "user.name": "curl_user",
-                    "user.uid": "100"
+                    "user.uid": "100",
+                    "proc.anames": [
+                      "systemd"
+                    ]
                 },
                 "internalRuleName": "Non sudo setuid",
                 "matchedOnDefault": false,
@@ -1012,14 +1026,10 @@ results
                 },
                 "3": {
                     "type": "process",
-                    "x_ancestor_name_2": "exe",
-                    "x_ancestor_name_3": "openshift-sti-b",
-                    "x_ancestor_name_4": "conmon",
                     "command_line": "pip /opt/app-root/bin/pip install -r requirements.txt",
                     "cwd": "/opt/app-root/src/",
                     "name": "pip",
                     "binary_ref": "5",
-                    "x_pcmdline": "assemble /usr/libexec/s2i/assemble",
                     "pid": 100000,
                     "parent_ref": "7",
                     "x_sid": "1000",
@@ -1040,9 +1050,15 @@ results
                 },
                 "7": {
                     "type": "process",
+                    "command_line": "assemble /usr/libexec/s2i/assemble",
                     "name": "assemble",
                     "binary_ref": "6",
-                    "pid": 101010
+                    "pid": 101010,
+                    "x_parent_names": [
+                       "exe",
+                       "openshift-sti-b",
+                       "conmon"
+                    ]
                 },
                 "8": {
                     "type": "user-account",
@@ -1138,12 +1154,10 @@ results
                 },
                 "3": {
                     "type": "process",
-                    "x_ancestor_name_2": "systemd",
                     "command_line": "entrypoint.sh /entrypoint.sh bash",
                     "cwd": "/home/curl_user/",
                     "name": "entrypoint.sh",
                     "binary_ref": "5",
-                    "x_pcmdline": "containerd-shim -namespace k8s.io -address /run/containerd/containerd.sock",
                     "pid": 111111,
                     "parent_ref": "7",
                     "x_sid": "1",
@@ -1164,9 +1178,13 @@ results
                 },
                 "7": {
                     "type": "process",
+                    "command_line": "containerd-shim -namespace k8s.io -address /run/containerd/containerd.sock",
                     "name": "containerd-shim",
                     "binary_ref": "6",
-                    "pid": 0
+                    "pid": 0,
+                    "x_parent_names": [
+                       "systemd"
+                    ]
                 },
                 "8": {
                     "type": "user-account",
@@ -1219,6 +1237,8 @@ execute sysdig sysdig "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-4
         "from=1698252206000000000&to=1699202606003000064&filter=(severity!=2)andsource!=\"auditTrail\""
     ]
 }
+```
+```json
 {
     "type": "bundle",
     "id": "bundle--e0cc0a4d-13f7-4746-bf1c-5448679f68da",
@@ -1330,7 +1350,8 @@ execute sysdig sysdig "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-4
             "last_observed": "2023-11-01T17:15:14.635115435Z",
             "number_observed": 1
         }
-
+    ]
+}
 ```
 
 ### Limitations

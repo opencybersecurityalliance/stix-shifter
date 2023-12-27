@@ -66,7 +66,11 @@ class TestsysdigConnection(unittest.TestCase):
                                        "user.loginname": "",
                                        "user.loginuid": "-1",
                                        "user.name": "root",
-                                       "user.uid": "0"
+                                       "user.uid": "0",
+                                       "proc.anames": [
+                                           "containerd-shim",
+                                           "systemd"
+                                       ]
                                    },
                                    "internalRuleName": "Contact",
                                    "matchedOnDefault": "false",
@@ -221,7 +225,11 @@ class TestsysdigConnection(unittest.TestCase):
                                                "user.loginname": "",
                                                "user.loginuid": "-1",
                                                "user.name": "root",
-                                               "user.uid": "0"
+                                               "user.uid": "0",
+                                               "proc.anames": [
+                                                   "containerd-shim",
+                                                   "systemd"
+                                               ]
                                            },
                                            "internalRuleName": "Contact",
                                            "matchedOnDefault": "false",

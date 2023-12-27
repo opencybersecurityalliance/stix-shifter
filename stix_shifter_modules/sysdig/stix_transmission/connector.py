@@ -180,6 +180,9 @@ class Connector(BaseJsonSyncConnector):
                 else:
                     event["l4protocol"] = "tcp"
 
+            # Adding ancestor names in list
+            fields["proc.anames"] = [val for key, val in fields.items() if 'proc.aname' in key and len(val) > 0]
+
     async def ping_connection(self):
         """
         Ping the endpoint
