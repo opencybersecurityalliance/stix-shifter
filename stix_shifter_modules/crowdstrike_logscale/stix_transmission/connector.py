@@ -124,7 +124,7 @@ class Connector(BaseJsonSyncConnector):
         unflatten_json = unflatten(flatten_json, separator='.')
         # Format array indexed keys to proper json format
         unflatten_json = self.format_indexed_keys(unflatten_json)
-        res = res | unflatten_json
+        res.update(unflatten_json)
         res['finding_type'] = 'alert'
         return res
 
