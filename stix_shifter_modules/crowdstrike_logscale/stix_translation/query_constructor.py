@@ -589,7 +589,7 @@ class QueryStringPatternTranslator:
         elif isinstance(expression, ObservationExpression):
             return self._eval_observation_exp(expression, combined_observation, qualifier)
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
-            self._parse_expression(expression.observation_expression, expression.qualifier)
+            self._parse_expression(expression.observation_expression, expression.qualifier, combined_observation)
         elif isinstance(expression, CombinedObservationExpression):
             self._eval_combined_observation_exp(expression, qualifier)
         elif isinstance(expression, Pattern):
