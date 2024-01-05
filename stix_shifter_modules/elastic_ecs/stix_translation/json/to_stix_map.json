@@ -2619,12 +2619,14 @@
   "email": {
     "subject": {
       "key": "email-message.subject",
+      "unwrap": true,
       "object": "mail"
     },
     "from": {
       "address": [
         {
           "key": "email-addr.value",
+          "unwrap": true,
           "object": "emailfrom"
         },
         {
@@ -2666,7 +2668,30 @@
       "file": {
         "name": {
           "key": "file.name",
+          "transformer": "UnlistIfList",
           "object": "attachment"
+        },
+        "hash": {
+          "md5": {
+            "key": "file.hashes.MD5",
+            "transformer": "UnlistIfList",
+            "object": "attachment"
+          },
+          "sha1": {
+            "key": "file.hashes.SHA-1",
+            "transformer": "UnlistIfList",
+            "object": "attachment"
+          },
+          "sha256": {
+            "key": "file.hashes.SHA-256",
+            "transformer": "UnlistIfList",
+            "object": "attachment"
+          },
+          "sha512": {
+            "key": "file.hashes.SHA-512",
+            "transformer": "UnlistIfList",
+            "object": "attachment"
+          }
         }
       }
     }

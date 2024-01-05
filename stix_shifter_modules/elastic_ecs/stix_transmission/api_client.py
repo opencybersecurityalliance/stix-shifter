@@ -66,7 +66,7 @@ class APIClient():
             "_source": {
                 "includes": ["@timestamp", "source.*", "destination.*", "event.*", "client.*", "server.*", "observer.*",
                              "host.*", "network.*", "process.*", "user.*", "file.*", "url.*", "registry.*", "dns.*",
-                             "tags"]
+                             "email.*", "tags"]
             },
             "size": length,
             "query": {
