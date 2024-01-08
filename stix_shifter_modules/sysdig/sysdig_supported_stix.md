@@ -113,7 +113,6 @@
 | network-traffic | l4protocol | protocols |
 | network-traffic | clientPort | src_port |
 | network-traffic | serverPort | dst_port |
-| network-traffic | direction | x_direction |
 | network-traffic | serverIpv4 | dst_ref |
 | network-traffic | clientIpv4 | src_ref |
 | file | proc.name | name |

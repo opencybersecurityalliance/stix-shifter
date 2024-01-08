@@ -3,8 +3,8 @@ from stix_shifter_utils.utils import logger
 import re
 from datetime import datetime
 
-
 LOGGER = logger.set_logger(__name__)
+connector = __name__.split('.')[1]
 
 
 class TimestampConversion(ValueTransformer):
@@ -22,7 +22,7 @@ class TimestampConversion(ValueTransformer):
                 converted_date = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S%z")
                 timestamp = datetime.strftime(converted_date, "%Y-%m-%dT%H:%M:%S.%f")[:-3] + 'Z'
         except:
-            LOGGER.error('Cannot convert this timestamp %s', timestamp)
+            LOGGER.error(f'{connector} connector error cannot convert this timestamp %s', timestamp)
         return timestamp
 
 
@@ -31,12 +31,14 @@ class SeverityToScore(ValueTransformer):
     @staticmethod
     def transform(severity):
         """
-        sysdig severity values levels 1-10 :
-        High: 0-3, Medium: 4-5, Low: 6, Info: 7-10
-        converting sysdig severity values 1-10 to 1-100
+        sysdig severity values levels 0-7 :
+        High: 0-3, Medium: 4-5, Low: 6, Info: 7
+        converting sysdig severity values 0-7 to 1-100
         Example :
             High: sysdig severity : 0, after conversion : 100
             Low : sysdig severity : 6, after conversion : 40
+        Reference :
+        Sysdig Docs https://docs.sysdig.com/en/docs/sysdig-secure/secure-events/event-forwarding/#policy-event-severity
         """
         try:
             # value transformer to convert severity value on a scale of 1-100
@@ -44,7 +46,7 @@ class SeverityToScore(ValueTransformer):
                 return (10 - int(severity)) * 10
             return severity
         except KeyError:
-            LOGGER.error("Cannot convert severity scale value")
+            LOGGER.error(f'{connector} connector error cannot convert severity scale value')
 
 
 class HostnameToIpAddress(ValueTransformer):
@@ -61,4 +63,4 @@ class HostnameToIpAddress(ValueTransformer):
                 return extracted_ip.replace('-', '.')
             return address
         except KeyError:
-            LOGGER.error("Cannot convert ip value")
+            LOGGER.error(f'{connector} connector error cannot convert ip value')

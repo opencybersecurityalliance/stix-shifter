@@ -142,7 +142,7 @@ class Connector(BaseJsonSyncConnector):
             if "timeout_error" in str(ex):
                 response_dict['code'] = 408
             response_dict['message'] = str(ex)
-            self.logger.error('error when getting search results: %s', ex)
+            self.logger.error(f'{self.connector} connector error when getting search results: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'],
                                       connector=self.connector)
         return return_obj
@@ -167,12 +167,6 @@ class Connector(BaseJsonSyncConnector):
             if fields.get("evt.type") and fields["evt.type"] == "connect":
                 if "->" in fields["fd.name"]:
                     source, destination = fields["fd.name"].split('->')
-                    event["direction"] = "out"
-                    event["clientIpv4"], event["clientPort"] = source.split(":")
-                    event["serverIpv4"], event["serverPort"] = destination.split(":")
-                elif "<-" in fields["fd.name"]:
-                    destination, source = fields["fd.name"].split('<-')
-                    event["direction"] = "in"
                     event["clientIpv4"], event["clientPort"] = source.split(":")
                     event["serverIpv4"], event["serverPort"] = destination.split(":")
                 if fields.get('fd.l4proto'):
@@ -199,7 +193,7 @@ class Connector(BaseJsonSyncConnector):
                 return_obj = self.exception_response(response_code, 'cannot verify credentials')
         except Exception as ex:
             response_dict['message'] = ex
-            self.logger.error('error while pinging: %s', ex)
+            self.logger.error(f'{self.connector} connector error while pinging: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'],
                                       connector=self.connector)
         return return_obj

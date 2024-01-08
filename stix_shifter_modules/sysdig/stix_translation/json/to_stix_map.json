@@ -34,10 +34,6 @@
     "object": "network",
     "transformer": "ToInteger"
   },
-  "direction": {
-    "key": "network-traffic.x_direction",
-    "object": "network"
-  },
   "serverIpv4": [
     {
       "key": "ipv4-addr.value",

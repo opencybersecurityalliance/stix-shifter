@@ -623,7 +623,6 @@ results
                 },
                 "13": {
                     "type": "network-traffic",
-                    "x_direction": "out",
                     "src_ref": "14",
                     "src_port": 10000,
                     "dst_ref": "15",
