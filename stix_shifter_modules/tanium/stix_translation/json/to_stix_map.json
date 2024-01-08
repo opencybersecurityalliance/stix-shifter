@@ -1,393 +1,1013 @@
 {
-    "id":
-    [{
-        "key":"x-ibm-finding.finding_type",
-        "object":"alert",
-        "transformer":"ReturnAlertTransformer"
+    "id": 
+    [
+        {
+            "key": "x-ibm-finding.finding_type",
+            "object": "alert",
+            "transformer": "ReturnAlertTransformer"
+        },
+        {
+            "key": "x-ibm-finding.alert_id",
+            "object": "alert"
+        }
+    ],
+    "eid": 
+    {
+        "key": "x-tanium-alert.eid",
+        "object": "tanium-alert"
     },
+    "type":
     {
-        "key":"x-ibm-finding.alert_id",
-        "object":"alert"
-    }],
-    "computerIpAddress":
-    [{
-        "key": "ipv4-addr.value",
-        "object": "target-ip"
+        "key": "x-tanium-alert.type",
+        "object": "tanium-alert"
     },
+    "guid":
     {
-        "key": "x-ibm-finding.dst_ip_ref",
-        "object": "alert",
-        "references": "target-ip"
+        "key": "x-tanium-alert.guid",
+        "object": "tanium-alert"
     },
+    "priority":
     {
-        "key": "x-oca-event.ip_refs",
-        "object": "event",
-        "references": ["ip"]
+        "key": "x-tanium-alert.priority",
+        "object": "tanium-alert"
     },
+    "intelDocId":
     {
-        "key": "x-oca-asset.ip_refs",
-        "object": "target-asset",
-        "references": ["target-ip"]
-    }],
-    "computerName":
-    [{
-        "key": "x-oca-asset.hostname",
-        "object": "target-asset"
+        "key": "x-tanium-alert.intel_doc_id",
+        "object": "tanium-alert"
     },
+    "groupingId":
     {
-        "key": "x-oca-event.host_ref",
-        "object": "event",
-        "references": "target-asset"
-    }],
-    "state":
+        "key": "x-tanium-alert.grouping_id",
+        "object": "tanium-alert"
+    },
+    "intelDocRevisionId":
     {
+        "key": "x-tanium-alert.intel_doc_revision_id",
+        "object": "tanium-alert"
+    },
+    "scanConfigId":
+    {
+        "key": "x-tanium-alert.scan_config_id",
+        "object": "tanium-alert"
+    },
+    "scanConfigRevisionId":
+    {
+        "key": "x-tanium-alert.scan_config_revision_id",
+        "object": "tanium-alert"
+    },
+    "path":
+    {
+        "key": "x-tanium-alert.path",
+        "object": "tanium-alert"
+    },
+    "receivedAt":
+    {
+        "key": "x-tanium-alert.received_at",
+        "object": "tanium-alert"
+    },
+    "suppressedAt":
+    {
+        "key": "x-tanium-alert.suppressed_at",
+        "object": "tanium-alert"
+    },
+    "findingId":
+    {
+        "key": "x-tanium-alert.finding_id",
+        "object": "tanium-alert"
+    },
+    "ackedAt":
+    {
+        "key": "x-tanium-alert.acked_at",
+        "object": "tanium-alert"
+    },
+    "firstEIDResolutionAttempt":
+    {
+        "key": "x-tanium-alert.first_eid_resolution_attempt",
+        "object": "tanium-alert"
+    },
+    "lastEIDResolutionAttempt":
+    {
+        "key": "x-tanium-alert.last_eid_resolution_attempt",
+        "object": "tanium-alert"
+    },
+    "createdAt": [
+        {
+            "key": "x-ibm-finding.time_observed",
+            "object": "alert"
+        },
+        {
+            "key": "first_observed"
+        }
+    ],
+    "updatedAt":
+    {
+        "key": "last_observed"
+    },
+    "computerIpAddress": [
+        {
+            "key": "ipv4-addr.value",
+            "object": "target-ip",
+            "transformer": "CheckIPv4"
+        },
+        {
+            "key": "ipv6-addr.value",
+            "object": "target-ip",
+            "transformer": "CheckIPv6"
+        },
+        {
+            "key": "x-ibm-finding.dst_ip_ref",
+            "object": "alert",
+            "references": "target-ip"
+        },
+        {
+            "key": "x-oca-event.ip_refs",
+            "object": "event",
+            "references": [
+                "ip"
+            ]
+        },
+        {
+            "key": "x-oca-asset.ip_refs",
+            "object": "target-asset",
+            "references": [
+                "target-ip"
+            ]
+        }
+    ],
+    "computerName": [
+        {
+            "key": "x-oca-asset.hostname",
+            "object": "target-asset"
+        },
+        {
+            "key": "x-oca-event.host_ref",
+            "object": "event",
+            "references": "target-asset"
+        }
+    ],
+    "state": {
         "key": "x-oca-event.outcome",
         "object": "event"
     },
-    "severity":
-    [{
-        "key": "x-ibm-finding.severity",
-        "object": "alert",
-        "transformer": "ConvertTextSeverityToNumberValue"
-    },
-    {
-        "key": "x-oca-event.severity",
-        "object": "event",
-        "transformer": "ConvertTextSeverityToNumberValue"
-    }],
-    "details":
-    {
-        "match":
+    "severity": [
         {
-            "properties":
-            {
-                "pid":
-                [{
-                    "key": "process.pid",
-                    "object": "process"
-                },
-                {
-                    "key":"x-oca-event.process_ref",
-                    "object":"event",
-                    "references":"process"
-                }],
-                "start_time":
-                {
-                    "key": "process.created",
-                    "object": "process"
-                },
-                "args":
-                {
-                    "key": "process.args",
-                    "object": "process",
-                    "transformer":"ProcessArgsTransformer"
-                },
-                "name":
-                [{
-                    "key": "process.name",
-                    "object": "process",
-                    "transformer":"ProcessNameTransformer"
-                },
-                {
-                    "key": "process.cwd",
-                    "object": "process",
-                    "transformer":"ProcessCWDPathTransformer"
-                }]
-            }
+            "key": "x-ibm-finding.severity",
+            "object": "alert",
+            "transformer": "ConvertTextSeverityToNumberValue"
         },
-        "finding":
         {
-            "whats":
+            "key": "x-oca-event.severity",
+            "object": "event",
+            "transformer": "ConvertTextSeverityToNumberValue"
+        }
+    ],
+    "details": {
+        "match": {
+            "hash": {
+                "key": "x-tanium-artifact.hash",
+                "object": "x-tanium-matching-artifact"
+            },
+            "type": {
+                "key": "x-tanium-artifact.type",
+                "object": "x-tanium-matching-artifact"
+            },
+            "source": {
+                "key": "x-tanium-artifact.source",
+                "object": "x-tanium-matching-artifact"
+            },
+            "version": {
+                "key": "x-tanium-artifact.version",
+                "object": "x-tanium-matching-artifact"
+            },
+            "contexts": 
             {
-                "artifact_activity":
+                "file": 
                 {
-                    "acting_artifact":
+                    "uniqueEventId": 
                     {
-                        "process":
+                        "key": "x-tanium-artifact.unique_event_id",
+                        "object": "x-tanium-matching-artifact"
+                    }
+                },
+                "event":
+                {
+                    "fileCreate": 
+                    {
+                        "path": 
                         {
-                            "user":
-                            {
-                                "user":
-                                {
-                                    "user_id":
-                                    [{
-                                        "key": "user-account.user_id",
-                                        "object": "source-user"
-                                    },
-                                    {
-                                        "key": "process.creator_user_ref",
-                                        "object": "process",
-                                        "references":"source-user"
-                                    },
-                                    {
-                                        "key": "x-ibm-finding.dst_os_user_ref",
-                                        "object": "alert",
-                                        "references":"source-user"
-                                    },
-                                    {
-                                        "key": "x-oca-event.user_ref",
-                                        "object": "event",
-                                        "references":"source-user"
-                                    }],
-                                    "name":
-                                    {
-                                        "key": "user-account.display_name",
-                                        "object": "source-user"
-                                    },
-                                    "domain":
-                                    {
-                                        "key": "user-account.is_service_account",
-                                        "object": "source-user",
-                                        "transformer":"ProcessUserDaemonTransformer"
-                                    }
-                                }
-                            },
-                            "file":
-                            {
-                                "file":
-                                {
-                                    "hash":
-                                    {
-                                        "key": "file.hashes",
-                                        "object": "processFile"
-                                    },
-                                    "path":
-                                    [{
-                                        "key": "file.name",
-                                        "object": "processFile",
-                                        "transformer": "ProcessNameTransformer"
-                                    },
-                                    {
-                                        "key": "directory.path",
-                                        "object": "processFileDirectory",
-                                        "transformer": "ProcessCWDPathTransformer"
-                                    },
-                                    {
-                                        "key": "file.parent_directory_ref",
-                                        "object": "processFile",
-                                        "references": "processFileDirectory"
-                                    },
-                                    {
-                                        "key": "process.binary_ref",
-                                        "object": "process",
-                                        "references": "processFile"
-                                    },
-                                    {
-                                        "key":"x-oca-event.file_ref",
-                                        "object":"event",
-                                        "references":"processFile"
-                                    }],
-                                    "signature_data":
-                                    {
-                                        "issuer":
-                                        {
-                                            "key": "x509-certificate.issuer",
-                                            "object": "certificate"
-                                        },
-                                        "subject":
-                                        {
-                                            "key": "x509-certificate.subject",
-                                            "object": "certificate"
-                                        }
-                                    }
-                                }
-                            },
-                            "parent":
-                            {
-                                "process":
-                                {
-                                    "pid":
-                                    [{
-                                        "key": "process.pid",
-                                        "object": "parent-process"
-                                    },
-                                    {
-                                       "key": "process.parent_ref" ,
-                                       "object": "process",
-                                       "references": "parent-process"
-                                    },
-                                    {
-                                        "key":"x-oca-event.parent_process_ref",
-                                        "object":"event",
-                                        "references":"process"
-                                    }],
-                                    "arguments":
-                                    {
-                                        "key": "process.args",
-                                        "object": "parent-process",
-                                        "transformer":"ProcessArgsTransformer"
-                                    },
-                                    "start_time":
-                                    {
-                                        "key": "process.created",
-                                        "object": "parent-process"
-                                    },
-                                    "user":
-                                    {
-                                        "user":
-                                        {
-                                            "user_id":
-                                            {
-                                                "key": "user-account.user_id",
-                                                "object": "parent-source-user"
-                                            },
-                                            "name":
-                                            {
-                                                "key": "user-account.display_name",
-                                                "object": "parent-source-user"
-                                            },
-                                            "domain":
-                                            [{
-                                                "key": "user-account.is_service_account",
-                                                "object": "parent-source-user",
-                                                "transformer":"ProcessUserDaemonTransformer"
-                                            },
-                                            {
-                                                "key": "process.creator_user_ref",
-                                                "object": "parent-process",
-                                                "references":"parent-source-user"
-                                            }]
-                                        }
-                                    },
-                                    "file":
-                                    {
-                                        "file":
-                                        {
-                                            "hash":
-                                            {
-                                                "key": "file.hashes",
-                                                "object": "parent-processFile"
-                                            },
-                                            "path":
-                                            [{
-                                                "key": "file.name",
-                                                "object": "parent-processFile",
-                                                "transformer": "ProcessNameTransformer"
-                                            },
-                                            {
-                                                "key": "directory.path",
-                                                "object": "parent-processFile",
-                                                "transformer": "ProcessCWDPathTransformer"
-                                            },
-                                            {
-                                                "key": "file.parent_directory_ref",
-                                                "object": "parent-processFile",
-                                                "references": "processFileDirectory"
-                                            },
-                                            {
-                                                "key": "process.binary_ref",
-                                                "object": "parent-process",
-                                                "references": "parent-processFile"
-                                            }],
-                                            "signature_data":
-                                            {
-                                                "issuer":
-                                                {
-                                                    "key": "x509-certificate.issuer",
-                                                    "object": "parent-processFile-certificate"
-                                                },
-                                                "subject":
-                                                {
-                                                    "key": "x509-certificate.subject",
-                                                    "object": "parent-processFile-certificate"
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            "key": "x-tanium-artifact.path",
+                            "object": "x-tanium-matching-artifact"
+                        },
+                        "timestampMs": 
+                        {
+                            "key": "x-tanium-artifact.timestamp",
+                            "object": "x-tanium-matching-artifact"
                         }
                     }
                 }
             },
-            "system_info":
+            "properties": 
             {
-                "os":
+                "pid": [
+                    {
+                        "key": "process.pid",
+                        "object": "matching-process"
+                    },
+                    {
+                        "key": "x-tanium-matching-artifact.process_ref",
+                        "object": "x-tanium-matching-artifact",
+                        "references": "matching-process"
+                    }
+                ],
+                "file":
+                {
+                    "hash":
+                    {
+                        "key": "file.hash",
+                        "object": "tanium-alert-match-file"
+                    },
+                    "fullpath":
+                    [
+                        {
+                            "key": "file.name",
+                            "object": "tanium-alert-match-file",
+                            "transformer": "ProcessNameTransformer"
+                        },
+                        {
+                            "key": "directory.path",
+                            "object": "tanium-alert-match-directory",
+                            "transformer": "ProcessCWDPathTransformer"
+                        },
+                        {
+                            "key": "file.parent_directory_ref",
+                            "object": "tanium-alert-match-file",
+                            "references": "tanium-alert-match-directory"
+                        },
+                        {
+                            "key": "process.binary_ref",
+                            "object": "matching-process",
+                            "references": "tanium-alert-match-file"
+                        }
+                    ]
+                },
+                "ppid":
                 [{
-                    "key": "software.name",
-                    "object": "target-operating-system"
+                    "key": "process.pid",
+                    "object": "matching-parent-process"
                 },
                 {
-                    "key": "x-ibm-finding.dst_os_ref",
-                    "object": "alert",
-                    "references": "target-operating-system"
+                    "key": "process.parent_ref",
+                    "object": "matching-process",
+                    "references": "matching-parent-process"
                 }],
-                "patch_level":
+                "start_time": {
+                    "key": "process.created",
+                    "object": "matching-process"
+                },
+                "args": {
+                    "key": "process.arguments",
+                    "object": "matching-process",
+                    "transformer": "ProcessArgsTransformer"
+                },
+                "user":
+                [
+                    {
+                        "key": "user-account.user_id",
+                        "object": "matching-user"
+                    },
+                    {
+                        "key": "process.creator_user_ref",
+                        "object": "matching-process",
+                        "references": "matching-user"
+                    }
+                ],
+                "name": [
+                    {
+                        "key": "process.name",
+                        "object": "matching-process",
+                        "transformer": "ProcessNameTransformer"
+                    },
+                    {
+                        "key": "process.cwd",
+                        "object": "matching-process",
+                        "transformer": "ProcessCWDPathTransformer"
+                    }
+                ],
+                "recorder_unique_id":
+                {
+                    "key": "x-tanium-alert-match.recorder_id",
+                    "object": "x-tanium-matching-artifact"
+                }
+            }
+        },
+        "finding": 
+        {
+            "whats": 
+            {
+                "source_name":
+                {
+                    "key": "x-tanium-alert-finding.source_name",
+                    "object": "x-tanium-alert-finding"
+                },
+                "intel_intra_ids":
+                {
+                    "key": "x-tanium-alert-finding.intel_intra_ids",
+                    "object": "x-tanium-alert-finding"
+                },
+                "artifact_activity": 
+                {
+                    "acting_artifact": 
+                    {
+                        "process": 
+                        {
+                            "pid": [
+                                {
+                                    "key": "process.pid",
+                                    "object": "process"
+                                },
+                                {
+                                    "key": "x-oca-event.process_ref",
+                                    "object": "event",
+                                    "references": "process"
+                                },
+                                {
+                                    "key": "x-tanium-alert-finding.process_ref",
+                                    "object": "x-tanium-alert-finding",
+                                    "references": "process"
+                                }
+                            ],
+                            "user": {
+                                "user": {
+                                    "user_id": [
+                                        {
+                                            "key": "user-account.user_id",
+                                            "object": "source-user"
+                                        },
+                                        {
+                                            "key": "process.creator_user_ref",
+                                            "object": "process",
+                                            "references": "source-user"
+                                        },
+                                        {
+                                            "key": "x-ibm-finding.dst_os_user_ref",
+                                            "object": "alert",
+                                            "references": "source-user"
+                                        },
+                                        {
+                                            "key": "x-oca-event.user_ref",
+                                            "object": "event",
+                                            "references": "source-user"
+                                        }
+                                    ],
+                                    "name": {
+                                        "key": "user-account.display_name",
+                                        "object": "source-user"
+                                    },
+                                    "domain": {
+                                        "key": "user-account.is_service_account",
+                                        "object": "source-user",
+                                        "transformer": "ProcessUserDaemonTransformer"
+                                    }
+                                }
+                            },
+                            "file": {
+                                "file": {
+                                    "hash": {
+                                        "key": "file.hashes",
+                                        "object": "processFile"
+                                    },
+                                    "path": [
+                                        {
+                                            "key": "file.name",
+                                            "object": "processFile",
+                                            "transformer": "ProcessNameTransformer"
+                                        },
+                                        {
+                                            "key": "directory.path",
+                                            "object": "processFileDirectory",
+                                            "transformer": "ProcessCWDPathTransformer"
+                                        },
+                                        {
+                                            "key": "file.parent_directory_ref",
+                                            "object": "processFile",
+                                            "references": "processFileDirectory"
+                                        },
+                                        {
+                                            "key": "process.binary_ref",
+                                            "object": "process",
+                                            "references": "processFile"
+                                        },
+                                        {
+                                            "key": "x-oca-event.file_ref",
+                                            "object": "event",
+                                            "references": "processFile"
+                                        }
+                                    ],
+                                    "signature_data": {
+                                        "issuer": {
+                                            "key": "x509-certificate.issuer",
+                                            "object": "certificate"
+                                        },
+                                        "subject": {
+                                            "key": "x509-certificate.subject",
+                                            "object": "certificate"
+                                        },
+                                        "status":
+                                        {
+                                            "key": "x-tanium-alert-finding.file_certificate_status",
+                                            "object": "x-tanium-alert-finding"
+                                        }
+                                    }
+                                },
+                                "artifact_hash":
+                                [
+                                    {
+                                        "key":"x-tanium-alert-additional-file-properties.artifact_hash",
+                                        "object":"process-additional-file-properties-process"
+                                    },
+                                    {
+                                        "key":"x-tanium-alert-additional-file-properties.related_file",
+                                        "object":"process-additional-file-properties-process",
+                                        "references":"processFile"
+                                    }
+                                ],
+                                "instance_hash":
+                                [
+                                    {
+                                        "key":"x-tanium-alert-additional-file-properties.instance_hash",
+                                        "object":"process-additional-file-properties-process"
+                                    }
+                                ]
+                            },
+                            "parent": {
+                                "process": {
+                                    "pid": [
+                                        {
+                                            "key": "process.pid",
+                                            "object": "parent-process"
+                                        },
+                                        {
+                                            "key": "process.parent_ref",
+                                            "object": "process",
+                                            "references": "parent-process"
+                                        },
+                                        {
+                                            "key": "x-oca-event.parent_process_ref",
+                                            "object": "event",
+                                            "references": "process"
+                                        }
+                                    ],
+                                    "arguments": {
+                                        "key": "process.arguments",
+                                        "object": "parent-process",
+                                        "transformer": "ProcessArgsTransformer"
+                                    },
+                                    "start_time": {
+                                        "key": "process.created",
+                                        "object": "parent-process"
+                                    },
+                                    "user": {
+                                        "user": {
+                                            "user_id": {
+                                                "key": "user-account.user_id",
+                                                "object": "parent-source-user"
+                                            },
+                                            "name": {
+                                                "key": "user-account.display_name",
+                                                "object": "parent-source-user"
+                                            },
+                                            "domain": [
+                                                {
+                                                    "key": "user-account.is_service_account",
+                                                    "object": "parent-source-user",
+                                                    "transformer": "ProcessUserDaemonTransformer"
+                                                },
+                                                {
+                                                    "key": "process.creator_user_ref",
+                                                    "object": "parent-process",
+                                                    "references": "parent-source-user"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "file": {
+                                        "file": {
+                                            "hash": {
+                                                "key": "file.hashes",
+                                                "object": "parent-processFile"
+                                            },
+                                            "path": [
+                                                {
+                                                    "key": "file.name",
+                                                    "object": "parent-processFile",
+                                                    "transformer": "ProcessNameTransformer"
+                                                },
+                                                {
+                                                    "key": "directory.path",
+                                                    "object": "parent-processFileDirectory",
+                                                    "transformer": "ProcessCWDPathTransformer"
+                                                },
+                                                {
+                                                    "key": "file.parent_directory_ref",
+                                                    "object": "parent-processFile",
+                                                    "references": "parent-processFileDirectory"
+                                                },
+                                                {
+                                                    "key": "process.binary_ref",
+                                                    "object": "parent-process",
+                                                    "references": "parent-processFile"
+                                                }
+                                            ],
+                                            "signature_data": {
+                                                "issuer": {
+                                                    "key": "x509-certificate.issuer",
+                                                    "object": "parent-processFile-certificate"
+                                                },
+                                                "subject": {
+                                                    "key": "x509-certificate.subject",
+                                                    "object": "parent-processFile-certificate"
+                                                },
+                                                "status":
+                                                {
+                                                    "key": "x-tanium-alert-finding.parent_file_certificate_status",
+                                                    "object": "x-tanium-alert-finding"
+                                                }
+                                            }
+                                        },
+                                        "artifact_hash":
+                                        [
+                                            {
+                                                "key":"x-tanium-alert-additional-file-properties.artifact_hash",
+                                                "object":"process-additional-file-properties-parent-process"
+                                            },
+                                            {
+                                                "key":"x-tanium-alert-additional-file-properties.related_file",
+                                                "object":"process-additional-file-properties-parent-process",
+                                                "references":"processFile"
+                                            }
+                                        ],
+                                        "instance_hash":
+                                        [
+                                            {
+                                                "key":"x-tanium-alert-additional-file-properties.instance_hash",
+                                                "object":"process-additional-file-properties-parent-process"
+                                            }
+                                        ]
+                                    },
+                                    "handles":
+                                    {
+                                        "key": "x-tanium-alert-finding.parent_process_unique_id",
+                                        "object": "x-tanium-alert-finding"
+                                    },
+                                    "tanium_unique_id": 
+                                    {
+                                        "key": "x-tanium-alert-finding.parent_process_unique_id",
+                                        "object": "x-tanium-alert-finding"
+                                    }
+                                },
+                                "artifact_hash":
+                                {
+                                    "key":"x-tanium-alert-additional-file-properties.parent_artifact_hash",
+                                    "object":"process-additional-file-properties-process"
+                                },
+                                "instance_hash":
+                                {
+                                    "key":"x-tanium-alert-additional-file-properties.parent_instance_hash",
+                                    "object":"process-additional-file-properties-process"
+                                }
+                            },
+                            "handles":
+                            {
+                                "key": "x-tanium-alert-finding.process_unique_id",
+                                "object": "x-tanium-alert-finding"
+                            },
+                            "arguments": {
+                                "key": "process.arguments",
+                                "object": "process",
+                                "transformer": "ProcessArgsTransformer"
+                            },
+                            "start_time": {
+                                "key": "process.created",
+                                "object": "process"
+                            },
+                            "tanium_unique_id": {
+                                "key": "x-tanium-alert-finding.process_unique_id",
+                                "object": "x-tanium-alert-finding"
+                            }
+                        },
+                        "artifact_hash":
+                        {
+                            "key":"x-tanium-alert-additional-file-properties.artifact_hash",
+                            "object":"process-additional-file-properties-process"
+                        },
+                        "instance_hash":
+                        {
+                            "key":"x-tanium-alert-additional-file-properties.instance_hash",
+                            "object":"process-additional-file-properties-process"
+                        },
+                        "is_intel_target":
+                        {
+                            "key":"x-tanium-alert-additional-file-properties.instance_hash",
+                            "object":"process-additional-file-properties-process"
+                        }
+                    },
+                    "relevant_actions":
+                    {
+                        "verb":
+                        {
+                            "key":"x-tanium-action.verb",
+                            "object":"x-tanium-action"
+                        },
+                        "target":
+                        {
+                            "file":
+                            {
+                                "path":
+                                [
+                                    {
+                                        "key": "file.name",
+                                        "object": "file-action",
+                                        "transformer": "ProcessNameTransformer"
+                                    },
+                                    {
+                                        "key": "directory.path",
+                                        "object": "file-directory-action",
+                                        "transformer": "ProcessCWDPathTransformer"
+                                    },
+                                    {
+                                        "key": "file.parent_directory_ref",
+                                        "object": "file-action",
+                                        "references": "file-directory-action"
+                                    },
+                                    {
+                                        "key": "x-tanium-action.binary_ref",
+                                        "object": "x-tanium-action",
+                                        "references": "file-action"
+                                    }
+                                ]
+                            },
+                            "artifact_hash":
+                            {
+                                "key":"x-tanium-action.artifact_hash",
+                                "object":"x-tanium-action"
+                            },
+                            "instance_hash":
+                            {
+                                "key":"x-tanium-action.instance_hash",
+                                "object":"x-tanium-action"
+                            }
+                        },
+                        "timestamp":
+                        {
+                            "key":"x-tanium-action.timestamp",
+                            "object":"x-tanium-action"
+                        },
+                        "tanium_recorder_context":
+                        {
+                            "file":
+                            {
+                                "unique_event_id":
+                                {
+                                    "key":"x-tanium-action.event_id",
+                                    "object":"x-tanium-action"
+                                }
+                            },
+                            "event":
+                            {
+                                "file_create":
+                                {
+                                    "path":
+                                    [
+                                        {
+                                            "key": "file.name",
+                                            "object": "file-action",
+                                            "transformer": "ProcessNameTransformer"
+                                        },
+                                        {
+                                            "key": "directory.path",
+                                            "object": "file-directory-action",
+                                            "transformer": "ProcessCWDPathTransformer"
+                                        },
+                                        {
+                                            "key": "file.parent_directory_ref",
+                                            "object": "file-action",
+                                            "references": "file-directory-action"
+                                        },
+                                        {
+                                            "key": "x-tanium-action.binary_ref",
+                                            "object": "x-tanium-action",
+                                            "references": "file-action"
+                                        }
+                                    ]
+                                },
+                                "timestamp_ms":
+                                {
+                                    "key":"x-tanium-action.timestamp_ms",
+                                    "object":"x-tanium-action"
+                                }
+                            }
+                        },
+                        "tanium_recorder_event_table_id":
+                        {
+                            "key":"x-tanium-action.tanium_recorder_event_table_id",
+                            "object":"x-tanium-action"
+                        }
+                    }
+                }
+            },
+            "domain":
+            {
+                "key":"x-tanium-finding.domain",
+                "object":"x-tanium-finding"
+            },
+            "hunt_id":
+            {
+                "key":"x-tanium-finding.hunt_id",
+                "object":"x-tanium-finding"
+            },
+            "intel_id":
+            {
+                "key":"x-tanium-finding.intel_id",
+                "object":"x-tanium-finding"
+            },
+            "last_seen":
+            {
+                "key":"x-tanium-finding.last_seen",
+                "object":"x-tanium-finding"
+            },
+            "threat_id":
+            {
+                "key":"x-tanium-finding.threat_id",
+                "object":"x-tanium-finding"
+            },
+            "finding_id":
+            {
+                "key":"x-tanium-finding.finding_id",
+                "object":"x-tanium-finding"
+            },
+            "first_seen":
+            {
+                "key":"x-tanium-finding.first_seen",
+                "object":"x-tanium-finding"
+            },
+            "source_name":
+            {
+                "key":"x-tanium-finding.source_name",
+                "object":"x-tanium-finding"
+            },
+            "reporting_id":
+            {
+                "key":"x-tanium-finding.reporting_id",
+                "object":"x-tanium-finding"
+            },
+            "system_info": 
+            {
+                "os": 
+                [
+                    {
+                        "key": "software.name",
+                        "object": "target-operating-system"
+                    },
+                    {
+                        "key": "x-ibm-finding.dst_os_ref",
+                        "object": "alert",
+                        "references": "target-operating-system"
+                    }
+                ],
+                "patch_level": 
                 {
                     "key": "software.version",
                     "object": "target-operating-system"
                 }
             }
+        },
+        "intel_id":
+        {
+            "key":"x-tanium-finding.intel_id",
+            "object":"x-tanium-finding"
+        },
+        "config_id":
+        {
+            "key":"x-tanium-finding.config_id",
+            "object":"x-tanium-finding"
+        },
+        "config_rev_id":
+        {
+            "key":"x-tanium-finding.config_rev_id",
+            "object":"x-tanium-finding"
         }
     },
-    "matchType":
-    {
+    "matchType": {
         "key": "x-oca-event.category",
         "object": "event"
     },
-    "alertedAt":
-    [{
-        "key": "x-oca-event.created",
-        "object": "event"
-    },
-    {
-        "key": "x-ibm-finding.time_observed",
-        "object": "alert"
-    }],
-    "intelDoc":
-    {
-        "name":
-        [{
-            "key":"x-ibm-finding.action",
-            "object":"alert"
-        },
+    "alertedAt": [
         {
-            "key":"x-oca-event.action",
-            "object":"event"
-        }],
-        "description":
-        [{
-            "key":"x-ibm-finding.description",
-            "object":"alert"
-        },
-        {
-            "key":"x-oca-event.description",
-            "object":"event"
-        }],
-        "type":
-        {
-            "key":"x-oca-event.provider",
-            "object":"event"
-        },
-        "mitreAttack":
-        {
-            "techniques":
+            "key": "x-tanium-alert.alertedAt",
+            "object": "tanium-alert"
+        }
+    ],
+    "intelDoc": {
+        "id":
+        [
             {
-                "name":
-                [{
-                    "key": "x-ibm-ttp-tagging.name",
-                    "object": "mitre-tag"
-                },
-                {
-                    "key": "x-ibm-ttp-tagging.extensions.technique_name",
-                    "object": "mitre-tag"
-                },
-                {
-                    "key": "x-ibm-finding.ttp_tagging_refs",
-                    "object": "alert",
-                    "references": "mitre-tag"
-                },
-                {
-                    "key": "x-ibm-ttp-tagging.extensions.tactic_name",
-                    "object": "mitre-tag",
-                    "transformer": "ReturnEmpty"
-                }],
-                "id":
-                {
+                "key": "intel-document.intel_doc_id",
+                "object": "intel-document"
+            },
+            {
+                "key": "x-tanium-alert.intel_doc_ref",
+                "object": "tanium-alert",
+                "references": "intel-document"
+            }
+        ],
+        "typeVersion":
+        {
+            "key": "intel-document.type_version",
+            "object": "intel-document"
+        },
+        "md5":
+        {
+            "key": "intel-document.md5",
+            "object": "intel-document"
+        },
+        "blobId":
+        {
+            "key": "intel-document.blob_id",
+            "object": "intel-document"
+        },
+        "revisionId":
+        {
+            "key": "intel-document.revision_id",
+            "object": "intel-document"
+        },
+        "size":
+        {
+            "key": "intel-document.size",
+            "object": "intel-document"
+        },
+        "compiled":
+        {
+          "terms":
+          {
+            "condition":
+            {
+                "key": "intel-document.terms_condition",
+                "object": "intel-document"
+            },
+            "negate":
+            {
+                "key": "intel-document.terms_negate",
+                "object": "intel-document"
+            },
+            "value":
+            {
+                "key": "intel-document.terms_value",
+                "object": "intel-document"
+            },
+            "object":
+            {
+                "key": "intel-document.terms_object",
+                "object": "intel-document"
+            },
+            "property":
+            {
+                "key": "intel-document.terms_property",
+                "object": "intel-document"
+            }
+          },
+          "operator":
+          {
+            "key": "intel-document.operator",
+            "object": "intel-document"
+          },
+          "text":
+          {
+            "key": "intel-document.text",
+            "object": "intel-document"           
+          },
+          "syntax_version":
+          {
+            "key": "intel-document.syntax_version",
+            "object": "intel-document"           
+          }
+        },
+        "name": [
+            {
+                "key": "x-ibm-finding.action",
+                "object": "alert"
+            },
+            {
+                "key": "x-oca-event.action",
+                "object": "event"
+            }
+        ],
+        "description": [
+            {
+                "key": "x-ibm-finding.description",
+                "object": "alert"
+            },
+            {
+                "key": "x-oca-event.description",
+                "object": "event"
+            }
+        ],
+        "type": {
+            "key": "x-oca-event.provider",
+            "object": "event"
+        },
+        "mitreAttack": {
+            "techniques": {
+                "name": [
+                    {
+                        "key": "x-ibm-ttp-tagging.name",
+                        "object": "mitre-tag"
+                    },
+                    {
+                        "key": "x-ibm-ttp-tagging.extensions.technique_name",
+                        "object": "mitre-tag"
+                    },
+                    {
+                        "key": "x-ibm-finding.ttp_tagging_refs",
+                        "object": "alert",
+                        "references": "mitre-tag"
+                    },
+                    {
+                        "key": "x-oca-event.ttp_tagging_refs",
+                        "object": "event",
+                        "references": "mitre-tag"
+                    },
+                    {
+                        "key": "x-ibm-ttp-tagging.extensions.tactic_name",
+                        "object": "mitre-tag",
+                        "transformer": "ReturnEmpty"
+                    }
+                ],
+                "id": {
                     "key": "x-ibm-ttp-tagging.extensions.technique_id",
                     "object": "mitre-tag"
                 }
             }
+        },
+        "isSchemaValid":
+        {
+            "key": "intel-document.isSchemaValid",
+            "object": "intel-document"   
+        },
+        "sourceId":
+        {
+            "key": "intel-document.sourceId",
+            "object": "intel-document"    
+        },
+        "alertCount":
+        {
+            "key": "x-ibm-finding.event_count",
+            "object": "alert"     
+        },
+        "unresolvedAlertCount":
+        {
+            "key": "intel-document.unresolvedAlertCount",
+            "object": "intel-document"
+        },
+        "customHash":
+        {
+            "key": "intel-document.customHash",
+            "object": "intel-document"     
+        },
+        "throttledFindingCount":
+        {
+            "key": "intel-document.throttledFindingCount",
+            "object": "intel-document"   
+        },
+        "allowAutoDisable":
+        {
+            "key": "intel-document.allowAutoDisable",
+            "object": "intel-document"
+        },
+        "disabled":
+        {
+            "key": "intel-document.disabled",
+            "object": "intel-document" 
+        },
+        "disabledEndpointCount":
+        {
+            "key": "intel-document.disabledEndpointCount",
+            "object": "intel-document"    
+        },
+        "firstDeploymentTimestamp":
+        {
+            "key": "intel-document.firstDeploymentTimestamp",
+            "object": "intel-document"
+        },
+        "lastDeploymentTimestamp":
+        {
+            "key": "intel-document.lastDeploymentTimestamp",
+            "object": "intel-document"  
+        },
+        "status":
+        {
+            "key": "intel-document.status",
+            "object": "intel-document"  
         }
     }
 }

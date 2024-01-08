@@ -41,12 +41,13 @@ class Connector(BaseJsonSyncConnector):
         self.return_obj['success'] = False
         self.return_obj["data"] = {}
         offset = int(offset)
-        limit = int(limit)
+        limit = int(limit) + 1
         #Initalize values
         self.current_offset = offset
-        per_query_limit = 100
+        #This can be any value up to 500.
+        max_per_query_limit = 500
         
-        if(limit < per_query_limit):
+        if(limit < max_per_query_limit):
             per_query_limit = limit
         
         try:
@@ -68,7 +69,7 @@ class Connector(BaseJsonSyncConnector):
         if(query != ""):
             current_query = "%s%s&limit=%s&offset=%s&expand=intelDoc" % (self._QUERY_ENDPOINT, query, per_query_limit, current_offset)
         else:
-            current_query = "limit=%s&offset=%s&expand=intelDoc" % (self._QUERY_ENDPOINT, per_query_limit, current_offset)
+            current_query = "limit=%s&offset=%s&expand=intelDoc" % (per_query_limit, current_offset)
             
         response_data = await self.query_tanium_api(current_query)
         response_data_as_json = json.loads(response_data.content.decode('utf-8'))
@@ -78,6 +79,8 @@ class Connector(BaseJsonSyncConnector):
     def _add_results_to_final_dataset(self, current_query_results):
         for batch_of_results in current_query_results:
             batch_of_results["details"] = json.loads(batch_of_results["details"])
+            temp_file = batch_of_results["details"]["match"]["properties"]["file"]
+            batch_of_results["details"]["match"]["properties"]["file"]["hash"] = {"md5": temp_file["md5"], "sha1": temp_file["sha1"], "sha256": temp_file["sha256"]}
             self.final_results.append(batch_of_results)
         self.current_offset = self.current_offset + len(current_query_results)
             
