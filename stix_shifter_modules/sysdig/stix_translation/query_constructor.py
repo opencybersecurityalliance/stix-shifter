@@ -56,16 +56,17 @@ class QueryStringPatternTranslator:
         except FileNotFoundException as ex:
             raise FileNotFoundError(f'{rel_path_of_file} not found') from ex
 
-    def _format_set(self, values, mapped_field_type):
+    def _format_set(self, values, mapped_field_type, mapped_fields_array):
         """
         Formats value in the event of set operation
         :param values
         :param mapped_field_type: str
+        :param mapped_fields_array: list
         :return formatted value
         """
         gen = values.element_iterator()
         formatted_value = ','.join(QueryStringPatternTranslator._escape_value(
-            self._format_value_type(value, mapped_field_type), mapped_field_type)
+            self._format_value_type(value, mapped_field_type, mapped_fields_array), mapped_field_type)
                                    for value in gen)
         return f'({formatted_value})'
 
@@ -91,11 +92,46 @@ class QueryStringPatternTranslator:
             value = f'\"{value}\"'
         return str(value)
 
-    def _format_value_type(self, value, mapped_field_type):
+    @staticmethod
+    def _field_severity(value):
+        """
+        convert severity 1-100 to data source value 0-7
+        High: 0-3, Medium: 4-5, Low: 6, Info: 7
+        param value
+        return value(int)
+        examples:
+            severity is 100, after conversion is 0.
+            severity is 30, after conversion is 7.
+        Reference :
+        Sysdig Docs https://docs.sysdig.com/en/docs/sysdig-secure/secure-events/event-forwarding/#policy-event-severity
+        """
+        value = int(value)
+        if 91 <= value <= 100:
+            value = 0
+        elif 81 <= value <= 90:
+            value = 1
+        elif 71 <= value <= 80:
+            value = 2
+        elif 61 <= value <= 70:
+            value = 3
+        elif 51 <= value <= 60:
+            value = 4
+        elif 41 <= value <= 50:
+            value = 5
+        elif 31 <= value <= 40:
+            value = 6
+        elif 1 <= value <= 30:
+            value = 7
+        else:
+            raise NotImplementedError('only 1-100 integer values are supported with this field')
+        return value
+
+    def _format_value_type(self, value, mapped_field_type, mapped_fields_array):
         """
         check input value format that matches with the mapped field value type
         :param value
         :param mapped_field_type: str
+        :param mapped_fields_array: list
         :return formatted value
         """
         converted_value = str(value)
@@ -107,6 +143,8 @@ class QueryStringPatternTranslator:
             if not converted_value.isdigit():
                 raise NotImplementedError(f'string type input - {converted_value} is not supported for '
                                           f'integer type fields')
+            if mapped_fields_array[0] == "severity":
+                value = self._field_severity(value)
             converted_value = str(value)
         return converted_value
 
@@ -262,17 +300,18 @@ class QueryStringPatternTranslator:
         operator = self.comparator_lookup[str(expression_operator)]
         return operator
 
-    def _eval_comparison_value(self, expression, mapped_field_type):
+    def _eval_comparison_value(self, expression, mapped_field_type, mapped_fields_array):
         """
         Function for parsing comparison expression value
         :param expression: expression object
         :param mapped_field_type:str
+        :param mapped_fields_array: list
         :return: formatted expression value
         """
         if expression.comparator == ComparisonComparators.In:
-            value = self._format_set(expression.value, mapped_field_type)
+            value = self._format_set(expression.value, mapped_field_type, mapped_fields_array)
         elif expression.comparator not in [ComparisonComparators.Like, ComparisonComparators.Matches]:
-            value = self._format_value_type(expression.value, mapped_field_type)
+            value = self._format_value_type(expression.value, mapped_field_type, mapped_fields_array)
             self._check_value_comparator_support(expression.comparator, mapped_field_type)
             value = self._format_equality(value, mapped_field_type)
         else:
@@ -330,8 +369,7 @@ class QueryStringPatternTranslator:
             if expression.negated:
                 comparator = QueryStringPatternTranslator._format_negate(comparator)
             mapped_field_type = self._check_mapped_field_type(mapped_fields_array)
-            value = self._eval_comparison_value(expression, mapped_field_type)
-
+            value = self._eval_comparison_value(expression, mapped_field_type, mapped_fields_array)
             comparison_string = self._parse_mapped_fields(value, comparator, mapped_fields_array)
             return comparison_string
 
@@ -409,7 +447,6 @@ class QueryStringPatternTranslator:
                 split_format_query = query.split('filter=')
                 query_list.append(f'{split_format_query[0]}filter=({split_format_query[1]}){remove_audit}')
         return query_list
-
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     """

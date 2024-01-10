@@ -134,24 +134,24 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_x_ibm_finding_int_type_query(self):
-        stix_pattern = "[x-ibm-finding:severity > 2]"
+        stix_pattern = "[x-ibm-finding:severity > 100]"
         query = translation.translate('sysdig', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["from=1695646240753999872&to=1695646540753999872&filter=(severity>2)andsource!=\"auditTrail\""]
+        queries = ["from=1695646240753999872&to=1695646540753999872&filter=(severity>0)andsource!=\"auditTrail\""]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_multiple_comparison(self):
-        stix_pattern = "[x-sysdig-policy:policy_id = 77777777] AND [x-ibm-finding:severity != 2]"
+        stix_pattern = "[x-sysdig-policy:policy_id = 77777777] AND [x-ibm-finding:severity != 100]"
         query = translation.translate('sysdig', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["from=1698317811217999872&to=1698318111217999872&filter=(policyId=77777777 or "
-                   "severity!=2)andsource!=\"auditTrail\""]
+                   "severity!=0)andsource!=\"auditTrail\""]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_combined_comparison(self):
-        stix_pattern = "[x-sysdig-policy:policy_id > 77777777 AND x-ibm-finding:severity <= 2]"
+        stix_pattern = "[x-sysdig-policy:policy_id > 77777777 AND x-ibm-finding:severity <= 80]"
         query = translation.translate('sysdig', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["from=1698317511743000064&to=1698317811743000064&filter=(severity<=2andpolicyId>77777777)"
@@ -248,13 +248,13 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_multiple_observation_by_AND_operator(self):
-        stix_pattern = "[x-ibm-finding:severity <= 2] AND [x-sysdig-deployment:name = 'app-manager'] AND " \
+        stix_pattern = "[x-ibm-finding:severity <= 100] AND [x-sysdig-deployment:name = 'app-manager'] AND " \
                        "[x-sysdig-cluster:namespace = 'ap5s']START t'2023-09-01T08:43:10.003Z'STOP " \
                        "t'2023-09-10T10:43:10.005Z'"
         query = translation.translate('sysdig', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [
-            "from=1699442518569999872&to=1699442818569999872&filter=(severity<=2 or kubernetes.deployment.name="
+            "from=1699442518569999872&to=1699442818569999872&filter=(severity<=0 or kubernetes.deployment.name="
             "\"app-manager\")andsource!=\"auditTrail\"",
             "from=1693557790003000064&to=1694342590004999936&filter=(kubernetes.namespace.name=\"ap5s\")"
             "andsource!=\"auditTrail\""
@@ -263,7 +263,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_multiple_observation_combined_by_AND_OR_operators(self):
-        stix_pattern = "[x-ibm-finding:severity >= 2 AND x-sysdig-deployment:name = 'app-manager']" \
+        stix_pattern = "[x-ibm-finding:severity >= 50 AND x-sysdig-deployment:name = 'app-manager']" \
                        "START t'2023-09-15T08:43:10.003Z'STOP t'2023-09-25T10:43:10.005Z' OR " \
                        "[x-sysdig-cluster:namespace = 'cluster'] AND [mac-addr:value IN " \
                        "('00:aa:dd:99:22:00','00:55:88:99:11:dd') OR x-ibm-finding:x_threat_source = 'syscall']" \
@@ -271,7 +271,7 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('sysdig', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ["from=1694767390003000064&to=1695638590004999936&filter=(kubernetes.deployment.name=\"app-manager\""
-                   "andseverity>=2)andsource!=\"auditTrail\"",
+                   "andseverity>=5)andsource!=\"auditTrail\"",
                    "from=1699442789169999872&to=1699443089169999872&filter=(kubernetes.namespace.name=\"cluster\")"
                    "andsource!=\"auditTrail\"",
                    "from=1693557790003000064&to=1694342590004999936&filter=(source=\"syscall\"ormachineId in "
@@ -282,12 +282,12 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_multiple_comparison_with_OR_query(self):
-        stix_pattern = "[x-ibm-finding:severity >= 2] OR [x-sysdig-deployment:name = 'app-manager'] OR " \
+        stix_pattern = "[x-ibm-finding:severity >= 100] OR [x-sysdig-deployment:name = 'app-manager'] OR " \
                        "[x-sysdig-cluster:namespace = 'cluster']START t'2023-09-01T08:43:10.003Z' STOP " \
                        "t'2023-09-10T10:43:10.005Z'"
         query = translation.translate('sysdig', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["from=1698304848484999936&to=1698305148484999936&filter=(severity>=2 or "
+        queries = ["from=1698304848484999936&to=1698305148484999936&filter=(severity>=0 or "
                    "kubernetes.deployment.name=\"app-manager\")andsource!=\"auditTrail\"",
                    "from=1693557790003000064&to=1694342590004999936&filter=(kubernetes.namespace.name=\"cluster\")"
                    "andsource!=\"auditTrail\""
@@ -301,6 +301,13 @@ class TestQueryTranslator(unittest.TestCase):
         assert result['success'] is False
         assert "not_implemented" == result['code']
         assert "sysdig is not supported for integer type fields" in result['error']
+
+    def test_invalid_severity_value(self):
+        stix_pattern = "[x-ibm-finding:severity = 200]"
+        result = translation.translate('sysdig', 'query', '{}', stix_pattern)
+        assert result['success'] is False
+        assert "not_implemented" == result['code']
+        assert "only 1-100 integer values are supported with this field" in result['error']
 
     def test_with_greater_time_stamp_type(self):
         stix_pattern = "[x-sysdig-deployment:name = 'app-manager'] START t'2023-10-01T08:43:10.003Z' " \
@@ -318,14 +325,14 @@ class TestQueryTranslator(unittest.TestCase):
         assert "Unable to map the following STIX objects and properties" in result['error']
 
     def test_not_supported_operator_MATCHES(self):
-        stix_pattern = "[x-ibm-finding:severity MATCHES '2']"
+        stix_pattern = "[x-ibm-finding:severity MATCHES '100']"
         result = translation.translate('sysdig', 'query', '{}', stix_pattern)
         assert result['success'] is False
         assert "mapping_error" == result['code']
         assert "Unable to map the following STIX Operators" in result['error']
 
     def test_not_supported_operator_LIKE(self):
-        stix_pattern = "[x-ibm-finding:severity LIKE 2]"
+        stix_pattern = "[x-ibm-finding:severity LIKE 100]"
         result = translation.translate('sysdig', 'query', '{}', stix_pattern)
         assert result['success'] is False
         assert "mapping_error" == result['code']

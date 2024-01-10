@@ -66,7 +66,7 @@ results
       "source": "syscall",
       "name": "Sysdig Runtime Notable Events",
       "description": "This Notable Events policy contains rules which may indicate undesired behavior including security threats. The rules are more generalized than Threat Detection policies and may result in more noise. Tuning will likely be required for the events generated from this policy.",
-      "severity": 5,
+      "severity": 30,
       "agentId": 111111,
       "containerId": "1010101010",
       "machineId": "10:10:10:10:10:aa",
@@ -351,7 +351,7 @@ results
       "source": "syscall",
       "name": "sysdig custom",
       "description": "updated network rules with network tag",
-      "severity": 0,
+      "severity": 60,
       "agentId": 111111,
       "containerId": "1010101010",
       "machineId": "11:11:1b:11:11:11",
@@ -711,7 +711,7 @@ results
             "source": "syscall",
             "name": "Sysdig Runtime Notable",
             "description": "This Notable Events policy contains rules which may indicate undesired behavior including security threats.",
-            "severity": 4,
+            "severity": 60,
             "agentId":11111111,
             "containerId": "1010101010",
             "machineId": "00:00:aa:a0:a0:0a",
@@ -851,7 +851,7 @@ results
             "source": "syscall",
             "name": "Sysdig Runtime Activity Logs",
             "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
-            "severity": 7,
+            "severity": 70,
             "agentId": 5555555,
             "containerId": "10101010",
             "machineId": "11:aa:1a:1a:1a:1a",
@@ -1225,7 +1225,7 @@ results
 
 #### STIX Execute query
 ```shell
-execute sysdig sysdig "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"sysdig\",\"identity_class\":\"events\", \"created\":\"2022-05-22T13:22:50.336Z\",\"modified\":\"2022-05-25T13:22:50.336Z\"}" "{\"host\":\"dummyhost\"}" "{\"auth\":{\"token\":\"abcdefghijkl\"}}" "[x-ibm-finding:severity!=2]START t'2023-10-25T16:43:26.000Z' STOP t'2023-11-05T16:43:26.003Z'"
+execute sysdig sysdig "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"sysdig\",\"identity_class\":\"events\", \"created\":\"2022-05-22T13:22:50.336Z\",\"modified\":\"2022-05-25T13:22:50.336Z\"}" "{\"host\":\"dummyhost\"}" "{\"auth\":{\"token\":\"abcdefghijkl\"}}" "[x-ibm-finding:severity!=100]START t'2023-10-25T16:43:26.000Z' STOP t'2023-11-05T16:43:26.003Z'"
 
 ```
 
@@ -1233,7 +1233,7 @@ execute sysdig sysdig "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-4
 ```json
 {
     "queries": [
-        "from=1698252206000000000&to=1699202606003000064&filter=(severity!=2)andsource!=\"auditTrail\""
+        "from=1698252206000000000&to=1699202606003000064&filter=(severity!=0)andsource!=\"auditTrail\""
     ]
 }
 ```
@@ -1263,7 +1263,7 @@ execute sysdig sysdig "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-4
                     "x_category": "runtime",
                     "x_threat_source": "syscall",
                     "x_policy_ref": "1",
-                    "severity": 50,
+                    "severity": 30,
                     "x_agent_id": 101010,
                     "name": "Launch Sensitive",
                     "x_cluster_ref": "10",
