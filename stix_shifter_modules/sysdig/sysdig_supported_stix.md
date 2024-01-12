@@ -23,7 +23,6 @@
 | <br>              |                      |
 ### Searchable STIX objects and properties
 | STIX Object and Property | Mapped Data Source Fields |
-
 |--|--|
 | **mac-addr**:value | machineId |
 | **x-oca-asset**:hostname | host.hostName |
@@ -54,7 +53,6 @@
 | <br> | |
 ### Supported STIX Objects and Properties for Query Results
 | STIX Object | STIX Property | Data Source Field |
-
 |--|--|--|
 | mac-addr | value | host.mac |
 | x-oca-asset | extensions.x-oca-container-ext.container_id | containerId |
