@@ -94,7 +94,7 @@
 | x-cloud-provider | name | cloudProvider.name |
 | x-cloud-provider | region | aws.region |
 | x-cloud-resource | aws_instance_id | aws.instanceId |
-| process | command_line | proc.cmdline | proc.pcmdline |
+| process | command_line | proc.cmdline, proc.pcmdline |
 | process | name | proc.name |
 | process | pid |proc.pid |
 | process | x_pid |proc.sid |
