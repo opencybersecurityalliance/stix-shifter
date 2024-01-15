@@ -17,6 +17,13 @@
                 "type": "number",
                 "previous": "connection.resultSizeLimit"
             },
+            "batchsize": {
+                "default": 2000,
+                "min": 1,
+                "max": 10000,
+                "type": "number",
+                "optional": true
+            },
             "time_range": {
                 "default": 5,
                 "min": 1,
