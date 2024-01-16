@@ -92,35 +92,54 @@
                                 },
                                 "relevant_actions": [
                                     {
-                                        "verb": 7,
-                                        "origin": {
-                                            "file": {
-                                                "path": "C:\\Users\\username\\Downloads\\ded2b98d-52fb-4b4a-832e-d09664b8099a.tmp"
-                                            },
-                                            "artifact_hash": "642322984173040938",
-                                            "instance_hash": "642322984173040938"
-                                        },
-                                        "target": {
-                                            "file": {
-                                                "path": "C:\\Users\\username\\Downloads\\eicar_com (2).zip.crdownload"
-                                            },
-                                            "artifact_hash": "11534804092509109490",
-                                            "instance_hash": "11534804092509109490"
-                                        },
-                                        "timestamp": "2023-10-16T12:26:18.000Z",
-                                        "tanium_recorder_context": {
-                                            "file": {
-                                                "unique_event_id": "4611686018427965350"
-                                            },
-                                            "event": {
-                                                "file_move": {
-                                                    "src_path": "C:\\Users\\username\\Downloads\\ded2b98d-52fb-4b4a-832e-d09664b8099a.tmp",
-                                                    "dest_path": "C:\\Users\\username\\Downloads\\eicar_com (2).zip.crdownload"
+                                        "verb": 6,
+                                        "target": 
+                                        {
+                                            "file": 
+                                            {
+                                                "path": "C:\\Users\\user\\AppData\\Local\\Temp\\gfw-install-CZejgRlL.exe",
+                                                "hash": 
+                                                {
+                                                    "md5": "d41d8cd98f00b204e9800998ecf8427e",
+                                                    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                                                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
                                                 },
-                                                "timestamp_ms": "1697459178054"
-                                            }
+                                                "size_bytes": 
+                                                {  
+                                                },
+                                                "modification_time": "2022-06-10T23:19:37.000Z",
+                                                "instance_hash_salt": "132993767777627641"
+                                            },
+                                            "instance_hash": "8639093369865776459",
+                                            "artifact_hash": "15425104092171844481"
                                         },
-                                        "tanium_recorder_event_table_id": "4611686018427965350"
+                                        "timestamp": "2022-06-10T23:19:37.000Z",
+                                        "tanium_recorder_event_table_id": "4611686018468280136"
+                                    },
+                                    {
+                                        "verb": 6,
+                                        "target": 
+                                        {
+                                            "file": 
+                                            {
+                                                "path": "C:\\Users\\user\\AppData\\Local\\Temp\\gfw-install-CZejgRlL.exe",
+                                                "hash": 
+                                                {
+                                                    "md5": "d41d8cd98f00b204e9800998ecf8427e",
+                                                    "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                                                    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                                                },
+                                                "size_bytes": 
+                                                {
+                                                },
+                                                "modification_time": "2022-06-10T23:19:37.000Z",
+                                                "instance_hash_salt": "132993767777627641"
+                                            },
+                                            "instance_hash": "8639093369865776459",
+                                            "artifact_hash": "15425104092171844481"
+                                        },
+                                        "timestamp": "2022-06-10T23:19:37.000Z",
+                                        "tanium_recorder_event_table_id": "4611686018468280136"
                                     }
                                 ]
                             }
