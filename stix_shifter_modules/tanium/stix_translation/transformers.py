@@ -13,10 +13,9 @@ class ProcessArgsTransformer(ValueTransformer):
         try:
             arguments_list = shlex.split(data)
             return arguments_list
-        except ValueError:
-            LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
         except Exception as err:
             LOGGER.error(err)
+            LOGGER.error("Unable to perform shlex split on the data {} to <transformed format>".format(data))
 
 class ProcessNameTransformer(ValueTransformer):
     @staticmethod
@@ -27,11 +26,9 @@ class ProcessNameTransformer(ValueTransformer):
             converted_file = data.replace('\\', '/')
             pathObject = pathlib.Path(converted_file)
             return pathObject.name
-            
-        except ValueError:
-            LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
         except Exception as err:
             LOGGER.error(err)
+            LOGGER.error("Unable to separate the path from the process name for data {} to <transformed format>".format(data))
             
 class ProcessCWDPathTransformer(ValueTransformer):
     @staticmethod
@@ -42,10 +39,9 @@ class ProcessCWDPathTransformer(ValueTransformer):
             converted_file = data.replace('\\', '/')
             pathObject = pathlib.Path(converted_file)
             return pathObject.parent.as_posix()
-        except ValueError:
-            LOGGER.error("Cannot convert data value {} to <transformed format>".format(data))
         except Exception as err:
             LOGGER.error(err)
+            LOGGER.error("Unable to separate the path from the process name for data {} to <transformed format>".format(data))
             
 class ProcessUserDaemonTransformer(ValueTransformer):
     @staticmethod
@@ -56,12 +52,11 @@ class ProcessUserDaemonTransformer(ValueTransformer):
         else:
             return False
         
-class ReturnAlertTransformer(ValueTransformer):
+class ReturnEmptyTransformer(ValueTransformer):
     @staticmethod
     def transform(data): 
-        #The type of the alert isn't returned as an object in the data.
-        #Thus I had to set it to always return it as an alert.
-        return "alert"
+        #The tactic name needs to be set to something and leaving it empty made the most sense.
+        return ""
                 
 class ConvertTextSeverityToNumberValue(ValueTransformer):
     @staticmethod
@@ -79,9 +74,18 @@ class ConvertTextSeverityToNumberValue(ValueTransformer):
             return 80
         else:
             return 50
-        
-class ReturnEmpty(ValueTransformer):
+    
+    
+class HashTransformer(ValueTransformer):
     @staticmethod
-    def transform(data):
-        #This is used because the mitre extension requires an empty tactic value if an actual value doesn't exist.
-        return ""
+    def transform(data): 
+        renamedData = dict()
+        for item in data.items():
+            if(item[0] == "md5"):
+                renamedData["MD5"] = item[1]
+            elif(item[0] == "sha1"):
+                renamedData["SHA-1"] = item[1]
+            elif(item[0] == "sha256"):
+                renamedData["SHA-256"] = item[1]
+            #not a known hash. Leaving as is.
+        return renamedData

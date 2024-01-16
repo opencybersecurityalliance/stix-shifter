@@ -1,6 +1,31 @@
 {
     "connection": {
+        "host": 
+        {
+            "label": "Host IP address or hostname",
+            "description": "Specify the IP address or hostname of the data source"
+        },
+        "port": 
+        {
+            "label": "Host port",
+            "description": "Set the port number that is associated with the hostname or IP address."
+        },
+        "options": {
+            "unmapped_fallback": {
+                "label": "Enable Unmapped Fallback",
+                "description": "Enable unmapped fallback to capture unmapped fields."
+            }
+        }
     },
-    "configuration": {
+    "configuration": 
+    {
+        "auth":
+        {
+            "accessToken": 
+            {
+                "label": "Access Token",
+                "description": "An access token for the Tanium Threat Response API."
+            }
+        }
     }
 }

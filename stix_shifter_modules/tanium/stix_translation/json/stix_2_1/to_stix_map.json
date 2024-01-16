@@ -4,7 +4,7 @@
         {
             "key": "x-ibm-finding.finding_type",
             "object": "alert",
-            "value":"alert"
+            "value": "alert"
         },
         {
             "key": "x-ibm-finding.alert_id",
@@ -230,8 +230,9 @@
                 {
                     "hash":
                     {
-                        "key": "file.hash",
-                        "object": "match-file"
+                        "key": "file.hashes",
+                        "object": "match-file",
+                        "transformer": "HashTransformer"
                     },
                     "fullpath":
                     [
@@ -256,7 +257,7 @@
                             "references": ["match-file"]
                         },
                         {
-                            "key": "process.binary_ref",
+                            "key": "process.image_ref",
                             "object": "match-process",
                             "references": "match-file"
                         }
@@ -271,20 +272,20 @@
                     "key": "process.parent_ref",
                     "object": "match-process",
                     "references": "match-parent-process"
-                },
+                },                
                 {
                     "key": "process.child_ref",
                     "object": "match-parent-process",
                     "references": "match-process"
-                }],
+                }
+            ],
                 "start_time": {
-                    "key": "process.created",
+                    "key": "process.created_time",
                     "object": "match-process"
                 },
                 "args": {
-                    "key": "process.arguments",
-                    "object": "match-process",
-                    "transformer": "ProcessArgsTransformer"
+                    "key": "process.command_line",
+                    "object": "match-process"
                 },
                 "user":
                 [
@@ -391,7 +392,9 @@
                                 "file": {
                                     "hash": {
                                         "key": "file.hashes",
-                                        "object": "processFile"
+                                        "object": "processFile",
+                                        "transformer": "HashTransformer"
+
                                     },
                                     "path": [
                                         {
@@ -415,7 +418,7 @@
                                             "references": "processFileDirectory"
                                         },
                                         {
-                                            "key": "process.binary_ref",
+                                            "key": "process.image_ref",
                                             "object": "process",
                                             "references": "processFile"
                                         },
@@ -468,7 +471,7 @@
                                             "key": "x-oca-event.parent_process_ref",
                                             "object": "event",
                                             "references": "process"
-                                        },               
+                                        },
                                         {
                                             "key": "process.child_ref",
                                             "object": "parent-process",
@@ -476,12 +479,11 @@
                                         }
                                     ],
                                     "arguments": {
-                                        "key": "process.arguments",
-                                        "object": "parent-process",
-                                        "transformer": "ProcessArgsTransformer"
+                                        "key": "process.command_line",
+                                        "object": "parent-process"
                                     },
                                     "start_time": {
-                                        "key": "process.created",
+                                        "key": "process.created_time",
                                         "object": "parent-process"
                                     },
                                     "user": {
@@ -510,9 +512,10 @@
                                     },
                                     "file": {
                                         "file": {
-                                            "hash": {
+                                            "hashes": {
                                                 "key": "file.hashes",
-                                                "object": "parent-processFile"
+                                                "object": "parent-processFile",
+                                                "transformer": "HashTransformer"
                                             },
                                             "path": [
                                                 {
@@ -536,7 +539,7 @@
                                                     "references": "parent-processFileDirectory"
                                                 },
                                                 {
-                                                    "key": "process.binary_ref",
+                                                    "key": "process.image_ref",
                                                     "object": "parent-process",
                                                     "references": "parent-processFile"
                                                 }
@@ -597,13 +600,12 @@
                             },
                             "arguments": 
                             {
-                                "key": "process.arguments",
-                                "object": "process",
-                                "transformer": "ProcessArgsTransformer"
+                                "key": "process.command_line",
+                                "object": "process"
                             },
                             "start_time": 
                             {
-                                "key": "process.created",
+                                "key": "process.created_time",
                                 "object": "process"
                             },
                             "tanium_unique_id": 

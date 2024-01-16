@@ -10,6 +10,11 @@
             "min": 1,
             "max": 65535,
             "optional": false
+        },
+        "options": {
+            "unmapped_fallback": {
+                "default": false
+            }
         }
     },
     "configuration": {
