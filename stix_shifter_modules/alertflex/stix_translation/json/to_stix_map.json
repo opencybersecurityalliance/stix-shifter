@@ -10,21 +10,21 @@
     }
   ],
   "srcip":
-  [
-      {
-          "key": "ipv4-addr.value",
-          "object": "src_ip"
-      },
-      {
-          "key": "ipv6-addr.value",
-          "object": "src_ip"
-      },
-      {
-          "key": "network-traffic.src_ref",
-          "object": "nt",
-          "references": "src_ip"
-      }
-  ],
+        [
+            {
+                "key": "ipv4-addr.value",
+                "object": "src_ip"
+            },
+            {
+                "key": "ipv6-addr.value",
+                "object": "src_ip"
+            },
+            {
+                "key": "network-traffic.src_ref",
+                "object": "nt",
+                "references": "src_ip"
+            }
+        ],
   "dstip": [
       {
       "key": "ipv4-addr.value",
