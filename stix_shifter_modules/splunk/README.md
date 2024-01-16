@@ -1,4 +1,4 @@
-#Splunk Enterprise
+# Splunk Enterprise
 
 ## Supported STIX Mappings
 
