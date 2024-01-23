@@ -137,31 +137,20 @@
     ],
     "computerName": [
         {
-            "key": "x-oca-asset.hostname",
+            "key": "x-oca-asset.name",
             "object": "target-asset"
-        },
-        {
-            "key": "x-oca-event.host_ref",
-            "object": "event",
-            "references": "target-asset"
         }
     ],
     "state": {
         "key": "x-oca-event.outcome",
         "object": "event"
     },
-    "severity": [
-        {
-            "key": "x-ibm-finding.severity",
-            "object": "alert",
-            "transformer": "ConvertTextSeverityToNumberValue"
-        },
-        {
-            "key": "x-oca-event.severity",
-            "object": "event",
-            "transformer": "ConvertTextSeverityToNumberValue"
-        }
-    ],
+    "severity":
+    {
+        "key": "x-ibm-finding.severity",
+        "object": "alert",
+        "transformer": "ConvertTextSeverityToNumberValue"
+    },
     "details": 
     {
         "match": 
@@ -204,12 +193,25 @@
                         {
                             "key": "x-ibm-finding.x_match_path",
                             "object": "alert"
-                        },
-                        "timestampMs": 
+                        }
+                    },
+                    "fileMove": 
+                    {
+                        "srcPath": 
                         {
-                            "key": "x-ibm-finding.x_match_timestamp",
+                            "key": "x-ibm-finding.x_match_srcpath",
+                            "object": "alert"
+                        },
+                        "destPath": 
+                        {
+                            "key": "x-ibm-finding.x_match_dstpath",
                             "object": "alert"
                         }
+                    },
+                    "timestampMs": 
+                    {
+                        "key": "x-ibm-finding.x_match_timestamp",
+                        "object": "alert"
                     }
                 }
             },
@@ -218,95 +220,100 @@
                 "pid": [
                     {
                         "key": "process.pid",
-                        "object": "match-process"
+                        "object": "process"
                     },
                     {
                         "key": "x-ibm-finding.x_match_process_ref",
                         "object": "alert",
-                        "references": "match-process"
+                        "references": "process"
+                    },
+                    {
+                        "key": "x-oca-event.process_ref",
+                        "object": "event",
+                        "references": "process"
                     }
                 ],
                 "file":
                 {
-                    "hash":
+                    "hashes":
                     {
-                        "key": "file.hash",
-                        "object": "match-file"
+                        "key": "file.hashes",
+                        "object": "processFile"
                     },
                     "fullpath":
                     [
                         {
                             "key": "file.name",
-                            "object": "match-file",
+                            "object": "processFile",
                             "transformer": "ProcessNameTransformer"
                         },
                         {
                             "key": "directory.path",
-                            "object": "match-directory",
+                            "object": "processFileDirectory",
                             "transformer": "ProcessCWDPathTransformer"
                         },
                         {
                             "key": "file.parent_directory_ref",
-                            "object": "match-file",
-                            "references": "match-directory"
+                            "object": "processFile",
+                            "references": "processFileDirectory"
                         },
                         {
                             "key": "directory.contains_refs",
-                            "object": "match-directory",
-                            "references": ["match-file"]
+                            "object": "processFileDirectory",
+                            "references": ["processFile"]
                         },
                         {
                             "key": "process.binary_ref",
-                            "object": "match-process",
-                            "references": "match-file"
+                            "object": "process",
+                            "references": "processFile"
                         }
                     ]
                 },
                 "ppid":
                 [{
                     "key": "process.pid",
-                    "object": "match-parent-process"
+                    "object": "parent-process"
                 },
                 {
                     "key": "process.parent_ref",
-                    "object": "match-process",
-                    "references": "match-parent-process"
+                    "object": "process",
+                    "references": "parent-process"
                 },
                 {
                     "key": "process.child_ref",
-                    "object": "match-parent-process",
-                    "references": "match-process"
+                    "object": "parent-process",
+                    "references": "process"
                 }],
                 "start_time": {
                     "key": "process.created",
-                    "object": "match-process"
+                    "object": "process"
                 },
                 "args": {
                     "key": "process.arguments",
-                    "object": "match-process",
+                    "object": "process",
                     "transformer": "ProcessArgsTransformer"
                 },
                 "user":
                 [
                     {
-                        "key": "user-account.user_id",
-                        "object": "match-user"
+                        "key": "user-account.x_full_username",
+                        "object": "source-user"
                     },
                     {
                         "key": "process.creator_user_ref",
-                        "object": "match-process",
-                        "references": "match-user"
+                        "object": "process",
+                        "references": "source-user"
                     }
                 ],
                 "name": [
                     {
                         "key": "process.name",
-                        "object": "match-process",
+                        "object": "process",
                         "transformer": "ProcessNameTransformer"
                     },
                     {
                         "key": "process.cwd",
-                        "object": "match-process",
+                        "object": "process",
                         "transformer": "ProcessCWDPathTransformer"
                     }
                 ],
@@ -632,7 +639,7 @@
                     {
                         "verb":
                         {
-                            "key": "x-action.verb",
+                            "key": "x-tanium-action.verb",
                             "object": "action"
                         },
                         "target":
@@ -662,26 +669,46 @@
                                         "references": "file-directory-action"
                                     },
                                     {
-                                        "key": "x-action.binary_ref",
+                                        "key": "x-tanium-action.binary_ref",
                                         "object": "action",
                                         "references": "file-action"
                                     }
-                                ]
+                                ],
+                                "hash":
+                                {
+                                    "key": "file.hashes",
+                                    "object": "match-file"
+                                },
+                                "size_bytes":
+                                {
+                                    "key": "file.x_size_bytes",
+                                    "object": "match-file"
+                                },
+                                "modification_time":
+                                {
+                                    "key": "file.atime",
+                                    "object": "match-file"
+                                },
+                                "instance_hash_salt":
+                                {
+                                    "key": "file.x_instance_hash_salt",
+                                    "object": "match-file"
+                                }
                             },
                             "artifact_hash":
                             {
-                                "key": "x-action.artifact_hash",
+                                "key": "x-tanium-action.artifact_hash",
                                 "object": "action"
                             },
                             "instance_hash":
                             {
-                                "key": "x-action.instance_hash",
+                                "key": "x-tanium-action.instance_hash",
                                 "object": "action"
                             }
                         },
                         "timestamp":
                         {
-                            "key": "x-action.timestamp",
+                            "key": "x-tanium-action.timestamp",
                             "object": "action"
                         },
                         "tanium_recorder_context":
@@ -690,7 +717,7 @@
                             {
                                 "unique_event_id":
                                 {
-                                    "key": "x-action.event_id",
+                                    "key": "x-tanium-action.event_id",
                                     "object": "action"
                                 }
                             },
@@ -721,7 +748,7 @@
                                             "references": "file-directory-action"
                                         },
                                         {
-                                            "key": "x-action.binary_ref",
+                                            "key": "x-tanium-action.binary_ref",
                                             "object": "action",
                                             "references": "file-action"
                                         }
@@ -729,14 +756,14 @@
                                 },
                                 "timestamp_ms":
                                 {
-                                    "key": "x-action.timestamp_ms",
+                                    "key": "x-tanium-action.timestamp_ms",
                                     "object": "action"
                                 }
                             }
                         },
                         "tanium_recorder_event_table_id":
                         {
-                            "key": "x-action.recorder_event_table_id",
+                            "key": "x-tanium-action.recorder_event_table_id",
                             "object": "action"
                         },
                         "actionGroup":
@@ -814,6 +841,21 @@
                 "patch_level": 
                 {
                     "key": "software.version",
+                    "object": "target-operating-system"
+                },
+                "bits":
+                {
+                    "key": "software.x_bits",
+                    "object": "target-operating-system"
+                },
+                "build_number":
+                {
+                    "key": "software.x_build_number",
+                    "object": "target-operating-system"
+                },
+                "platform":
+                {
+                    "key": "software.x_platform_list",
                     "object": "target-operating-system"
                 }
             }
@@ -981,11 +1023,6 @@
                         "key": "x-oca-event.ttp_tagging_refs",
                         "object": "event",
                         "references": "mitre-tag"
-                    },
-                    {
-                        "key": "x-ibm-ttp-tagging.extensions.tactic_name",
-                        "object": "mitre-tag",
-                        "transformer": "ReturnEmptyTransformer"
                     }
                 ],
                 "id": {
@@ -993,6 +1030,21 @@
                     "object": "mitre-tag"
                 }
             }
+        },
+        "createdAt":
+        {
+            "key": "x-tanium-inteldocument.x_created",
+            "object": "intel-document"
+        },
+        "updatedAt":
+        {
+            "key": "x-tanium-inteldocument.x_updated",
+            "object": "intel-document"
+        },
+        "platforms":
+        {
+            "key": "x-tanium-inteldocument.x_platform_list",
+            "object": "intel-document"
         },
         "isSchemaValid":
         {

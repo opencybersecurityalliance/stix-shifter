@@ -33,7 +33,7 @@ class Connector(BaseJsonSyncConnector):
             await self.query_tanium_api(self._QUERY_ENDPOINT)
             self.return_obj['success'] = True
         except Exception:
-            self.logger.error('error when pinging Tanium datasource {}:'.format(self.return_obj["error"]))
+            self.logger.error(f'error when pinging Tanium datasource {self.return_obj["error"]}:')
         return self.return_obj
         
 
@@ -61,15 +61,15 @@ class Connector(BaseJsonSyncConnector):
             self.return_obj['metadata'] = self.return_obj['metadata'] = {"next_offset": self.current_offset, "total_result_count": len(self.final_results)}
             
         except Exception as err:
-            self.logger.error('error when connecting to the Tanium datasource {}:'.format(self.return_obj["error"]))
+            self.logger.error(f'error when connecting to the Tanium datasource {self.return_obj["error"]}:')
         return self.return_obj
         
     async def get_results(self, per_query_limit, query, current_offset):
         #Create initial query
         if(query != ""):
-            current_query = "%s%s&limit=%s&offset=%s&expand=intelDoc" % (self._QUERY_ENDPOINT, query, per_query_limit, current_offset)
+            current_query = f"{self._QUERY_ENDPOINT}{query}&limit={per_query_limit}&offset={current_offset}&expand=intelDoc" 
         else:
-            current_query = "limit=%s&offset=%s&expand=intelDoc" % (per_query_limit, current_offset)
+            current_query = f"limit={per_query_limit}&offset={current_offset}&expand=intelDoc"
             
         response_data = await self.query_tanium_api(current_query)
         response_data_as_json = json.loads(response_data.content.decode('utf-8'))
@@ -110,12 +110,12 @@ class Connector(BaseJsonSyncConnector):
         
     def _handle_exceptions(self, response_dict, content_as_dict):
         if("code" in self.return_obj and self.return_obj["code"] == "unknown"):
-            error_message = "tanium connector error => Error code|message : " + str(response_dict.code) + "|" + str(responses[response_dict.code])
+            error_message = f"tanium connector error => Error code|message : {str(response_dict.code)} | {str(responses[response_dict.code])}"
             if("Message" in content_as_dict):
-                error_message = error_message + ". Request message : " + content_as_dict["Message"] + "."
+                error_message = f"{error_message}. Request message : {content_as_dict['Message']}."
                 self.return_obj["error"] = error_message
             elif("errors" in content_as_dict):
-                error_message = error_message + ". Request message : " + content_as_dict["errors"][0]["description"] + "."
+                error_message = f"{error_message}. Request message : {content_as_dict['errors'][0]['description']}."
                 self.return_obj["error"] = error_message
             
             if(response_dict.code == 401 or response_dict.code == 407):

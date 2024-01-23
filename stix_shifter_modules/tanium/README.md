@@ -1,6 +1,10 @@
 # Tanium Threat Response Alerts
 
 ## Table of Contents
+- [Cisco Secure Email API Endpoints](#cisco-secure-email-api-endpoints)
+- [Pattern expression with STIX and CUSTOM attributes - Single Observation](#single-observation)
+- [Pattern expression with STIX and CUSTOM attributes - Multiple Observation](#multiple-observation)
+- [STIX Execute Query](#stix-execute-query)
 
 ### Tanium Connector Module Overview
 The Tanium Connector Module is a connector that uses the Tanium Threat Response API to obtain a list of Alerts.
@@ -210,33 +214,443 @@ The [hostname] is provided by the user.
 The [currentOffset] is provided by the user.
 The [limit] is the lower of the user provided limit or the default (500). IE: If the user provides 600, it will be 500. If the user provides 20, it will be 20.
 
-### STIX Shifter translate
-Takes the input STIX formatted request and converts it to a valid Tanium Threat Response output 
-
-NOTE: The API only supports "&" as an operator and "=" as a comparison. The "=' acts a contains, for example putting in "field = tes" would return all the values in "field" that contain "tes".
-
-CLI Input
-translate tanium query "{}" "[x-oca-event:host_ref.ip_ref.value = '1.1.1.1'] START t'2023-01-01T11:00:00.000Z' STOP t'2023-03-08T11:00:00.003Z'"
-
-CLI Output
-{
-    "queries": [
-        "computerIpAddress=1.1.1.1&alertedAtFrom=2023-01-01T11:00:00.000Z&alertedAtUntil=2023-03-08T11:00:00.003Z"
-    ]
-}
-
-
-### STIX Shifter ping
-
-CLI Input
-transmit tanium '{"host":"tk-ibmlab-api.titankube.com","port":443}' '{"auth":{"accessToken":"[TOKEN]"}}' ping
-
-CLI Output
-{
-    "success": true
-}
-
 ### STIX Shifter 
 
-### TODO: 
-4. Finish this document
+#### Single Observation
+
+#### STIX Translate query to fetch the messages from a specific ipaddress
+```shell
+translate 
+tanium 
+query 
+{} 
+"[ipv4-addr:value='1.1.1.1'] START t'2023-12-01T11:00:00.000Z' STOP t'2024-01-31T21:00:00.003Z'"
+```
+#### STIX Translate query - output
+```json
+{
+    "queries": [
+        "computerIpAddress=1.1.1.1&alertedAtFrom=2023-12-01T11:00:00.000Z&alertedAtUntil=2024-01-31T21:00:00.003Z"
+    ]
+}
+```
+
+#### STIX Transmit results 
+
+```shell
+transmit 
+tanium 
+'{"host":"tk-ibmlab-api.titankube.com","port":443}'
+'{"auth":{"accessToken":"token-XXXXXXX"}}'
+ results 
+ "computerIpAddress=1.1.1.1&alertedAtFrom=2023-12-01T11:00:00.000Z&alertedAtUntil=2024-01-31T21:00:00.003Z" 
+ 0 
+ 1
+```
+
+#### STIX Transmit results - output
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 67,
+            "eid": 1003,
+            "state": "unresolved",
+            "type": "detect.match",
+            "guid": "00000000-0000-0000-625e-1335991c35da",
+            "priority": "high",
+            "severity": "info",
+            "details": {},
+            "intelDocId": 700,
+            "groupingId": 2,
+            "intelDocRevisionId": 1,
+            "scanConfigId": 2,
+            "scanConfigRevisionId": 1,
+            "computerName": "EndpointDevice-",
+            "computerIpAddress": "1.1.1.1",
+            "matchType": "process",
+            "path": "C:\\Windows\\explorer.exe",
+            "receivedAt": "2024-01-03T17:22:29.404Z",
+            "suppressedAt": null,
+            "alertedAt": "2024-01-03T15:50:10.000Z",
+            "findingId": "7088123984450696666",
+            "ackedAt": "2024-01-03T17:46:59.598Z",
+            "firstEIDResolutionAttempt": "2024-01-03T17:22:39.256Z",
+            "lastEIDResolutionAttempt": "2024-01-03T17:22:39.256Z",
+            "createdAt": "2024-01-03T17:22:29.596Z",
+            "updatedAt": "2024-01-03T17:46:59.608Z",
+            "intelDoc": {
+                "id": 700,
+                "type": "tanium-signal",
+                "typeVersion": "1.0",
+                "md5": "b5050a54c2556267931541b944ab0481",
+                "blobId": "4ef7353d-ae4c-4eac-9c0b-75522592b438",
+                "revisionId": 1,
+                "intrinsicId": null,
+                "name": "Testing eicar",
+                "description": "Alerting on eicar file present on windows system",
+                "size": 276,
+                "compiled": {
+                    "expressions": [],
+                    "terms": [
+                        {
+                            "condition": "contains",
+                            "negate": false,
+                            "value": "eicar",
+                            "object": "file",
+                            "property": "path"
+                        }
+                    ],
+                    "operator": "or",
+                    "text": "file.path contains 'eicar'",
+                    "syntax_version": 6
+                },
+                "isSchemaValid": true,
+                "sourceId": 2,
+                "alertCount": 1,
+                "unresolvedAlertCount": 1,
+                "customHash": null,
+                "mitreAttack": {
+                    "techniques": [
+                        {
+                            "id": "T1134.002",
+                            "name": "Access Token Manipulation Mitigation: Create Process with Token"
+                        }
+                    ]
+                },
+                "platforms": [
+                    "windows"
+                ],
+                "createdAt": "2023-10-11T19:47:06.485Z",
+                "updatedAt": "2024-01-10T19:22:23.966Z",
+                "throttledFindingCount": 0,
+                "allowAutoDisable": true,
+                "disabled": false,
+                "disabledEndpointCount": 0,
+                "firstDeploymentTimestamp": "2023-10-13T19:28:05.584Z",
+                "lastDeploymentTimestamp": "2024-01-10T19:22:23.931Z",
+                "status": "HIGH_FIDELITY"
+            }
+        }
+    ],
+    "metadata": {
+        "next_offset": 1,
+        "total_result_count": 1
+    }
+}
+```
+
+
+#### STIX execute results
+```shell
+transmit 
+tanium 
+'{"host":"tk-ibmlab-api.titankube.com","port":443}'
+'{"auth":{"accessToken":"token-XXXXXXX"}}'
+ results 
+ "computerIpAddress=1.1.1.1&alertedAtFrom=2023-12-01T11:00:00.000Z&alertedAtUntil=2024-01-31T21:00:00.003Z" 
+ 0 
+ 1
+```
+
+#### STIX Transmit results - output
+```json
+{
+    "type": "bundle",
+    "id": "bundle--2c1844d5-7e75-4a6c-8dbf-71ad73cb8b5c",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "name": "Tanium",
+            "identity_class": "events"
+        },
+        {
+            "id": "observed-data--485f64bb-e201-4535-9b80-c33e51576c55",
+            "type": "observed-data",
+            "created_by_ref": "identity--3532c56d-ea72-48be-a2ad-1a53f4c9c6d3",
+            "created": "2024-01-18T13:50:45.957Z",
+            "modified": "2024-01-18T13:50:45.957Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "finding_type": "alert",
+                    "alert_id": 67,
+                    "x_eid": 1003,
+                    "x_type": "detect.match",
+                    "x_guid": "00000000-0000-0000-625e-1335991c35da",
+                    "x_priority": "high",
+                    "severity": 0,
+                    "x_match_hash": "4271502581873229387",
+                    "x_match_type": "process",
+                    "x_match_source": "recorder",
+                    "x_match_version": 1,
+                    "x_match_unique_event_id": "4611686018457109193",
+                    "x_match_path": "C:\\Users\\user\\Desktop\\eicar - Copy",
+                    "x_match_timestamp": "1704296770143",
+                    "x_match_process_ref": "2",
+                    "x_match_recorder_id": "13121309559364419859",
+                    "x_finding_source_name": "recorder",
+                    "x_finding_intel_intra_ids": [
+                        {
+                            "id_v2": "901388892329936882"
+                        }
+                    ],
+                    "x_finding_process_ref": "2",
+                    "dst_os_user_ref": "6",
+                    "x_action": [
+                        "12"
+                    ],
+                    "x_finding_domain": "threatresponse",
+                    "x_finding_hunt_id": "2",
+                    "x_finding_intel_id": "700:1:8ebe28bf-1acb-41b7-9f30-7b40a9145b1d",
+                    "x_finding_last_seen": "2024-01-03T15:50:10.000Z",
+                    "x_finding_threat_id": "901388892329936882",
+                    "x_finding_finding_id": "7088123984450696666",
+                    "x_finding_first_seen": "2024-01-03T15:50:10.000Z",
+                    "dst_os_ref": "15",
+                    "x_finding_reporting_id": "reporting-id-placeholder",
+                    "x_intel_id": 700,
+                    "x_config_id": 2,
+                    "x_config_rev_id": 1,
+                    "x_intel_doc_id": 700,
+                    "x_grouping_id": 2,
+                    "x_intel_doc_revision_id": 1,
+                    "x_scan_config_id": 2,
+                    "x_scan_config_revision_id": 1,
+                    "dst_ip_ref": "17",
+                    "x_path": "C:\\Windows\\explorer.exe",
+                    "x_received_at": "2024-01-03T17:22:29.404Z",
+                    "x_alertedAt": "2024-01-03T15:50:10.000Z",
+                    "x_finding_id": "7088123984450696666",
+                    "x_acked_at": "2024-01-03T17:46:59.598Z",
+                    "x_first_eid_resolution_attempt": "2024-01-03T17:22:39.256Z",
+                    "x_last_eid_resolution_attempt": "2024-01-03T17:22:39.256Z",
+                    "time_observed": "2024-01-03T17:22:29.596Z",
+                    "x_intel_doc_ref": "18",
+                    "name": "Testing eicar",
+                    "description": "Alerting on eicar file present on windows system",
+                    "event_count": 1,
+                    "ttp_tagging_refs": "20"
+                },
+                "1": {
+                    "type": "x-oca-event",
+                    "outcome": "unresolved",
+                    "severity": 0,
+                    "process_ref": "2",
+                    "file_ref": "3",
+                    "user_ref": "6",
+                    "parent_process_ref": "2",
+                    "host_ref": "16",
+                    "category": "process",
+                    "provider": "tanium-signal",
+                    "action": "Testing eicar",
+                    "description": "Alerting on eicar file present on windows system",
+                    "ttp_tagging_refs": "20"
+                },
+                "2": {
+                    "type": "process",
+                    "pid": 17148,
+                    "arguments": [
+                        "explorer.exe"
+                    ],
+                    "binary_ref": "3",
+                    "name": "explorer.exe",
+                    "cwd": "C:/Windows",
+                    "parent_ref": "5",
+                    "creator_user_ref": "6",
+                    "created": "2024-01-03T15:11:39.000Z",
+                    "x_unique_id": "13121309559364419859",
+                    "x_artifact_hash": "4271502581873229387",
+                    "x_instance_hash": "14467857814682859733",
+                    "x_intel_target": true
+                },
+                "3": {
+                    "type": "file",
+                    "name": "explorer.exe",
+                    "parent_directory_ref": "4",
+                    "hashes": {
+                        "md5": "c8a00f2fd7f7a580a8638e8a08270dd3",
+                        "sha1": "3db68ccbfdd35f8bce7202d48d81b0da2f803b1c",
+                        "sha256": "bfedd99ac382f96707ae8ee95664c1ef47c8504ff0933411dcf1a68ea77f8e1d"
+                    },
+                    "x_artifact_hash": "4668134681718746372",
+                    "x_instance_hash": "4668134681718746372"
+                },
+                "4": {
+                    "type": "directory",
+                    "path": "C:/Windows",
+                    "contains_refs": [
+                        "3"
+                    ]
+                },
+                "5": {
+                    "type": "process",
+                    "pid": 4148,
+                    "child_ref": "2",
+                    "binary_ref": "8",
+                    "creator_user_ref": "11",
+                    "arguments": [
+                        "winlogon.exe"
+                    ],
+                    "created": "2023-10-13T14:45:56.000Z",
+                    "x_unique_id": "11929269699007748715",
+                    "x_artifact_hash": "15202984064548280121",
+                    "x_instance_hash": "11058433479713752051"
+                },
+                "6": {
+                    "type": "user-account",
+                    "x_full_username": "EndpointDevice-\\user",
+                    "display_name": "user",
+                    "is_service_account": true,
+                    "user_id": "id"
+                },
+                "7": {
+                    "type": "x509-certificate",
+                    "issuer": "Microsoft Windows Production PCA 2011",
+                    "x_status": 1,
+                    "subject": "Microsoft Windows"
+                },
+                "8": {
+                    "type": "file",
+                    "hashes": {
+                        "md5": "576637f6cfe9601ad0a40a6373c2c232",
+                        "sha1": "cbde2a666a20cbd9c9b3ab1f85b7ba9f0fa04170",
+                        "sha256": "3ff7ad170b2b232d8cfce26dbfc98229b1755c8faeee1b8ed71ba6ced9ddf194"
+                    },
+                    "name": "winlogon.exe",
+                    "parent_directory_ref": "9",
+                    "x_artifact_hash": "13433015920877340112"
+                },
+                "9": {
+                    "type": "directory",
+                    "path": "C:/Windows/System32",
+                    "contains_refs": [
+                        "8"
+                    ]
+                },
+                "10": {
+                    "type": "x509-certificate",
+                    "issuer": "Microsoft Windows Production PCA 2011",
+                    "x_status": 1,
+                    "subject": "Microsoft Windows"
+                },
+                "11": {
+                    "type": "user-account",
+                    "display_name": "user",
+                    "is_service_account": true,
+                    "user_id": "id"
+                },
+                "12": {
+                    "type": "x-action",
+                    "verb": 6,
+                    "binary_ref": "13",
+                    "artifact_hash": "2199692353440625464",
+                    "instance_hash": "2199692353440625464",
+                    "timestamp": "2024-01-03T15:46:10.000Z",
+                    "event_id": "4611686018457109193",
+                    "timestamp_ms": "1704296770143",
+                    "recorder_event_table_id": "4611686018457109193"
+                },
+                "13": {
+                    "type": "file",
+                    "name": "eicar - Copy",
+                    "parent_directory_ref": "14"
+                },
+                "14": {
+                    "type": "directory",
+                    "path": "C:/Users/user/Desktop",
+                    "contains_refs": [
+                        "13"
+                    ]
+                },
+                "15": {
+                    "type": "software",
+                    "name": "Microsoft Windows 11 Pro",
+                    "x_bits": 64,
+                    "x_platform_list": "Windows",
+                    "version": "10.0.22621.0.0",
+                    "x_build_number": "22621"
+                },
+                "16": {
+                    "type": "x-oca-asset",
+                    "hostname": "EndpointDevice-",
+                    "ip_refs": [
+                        "17"
+                    ]
+                },
+                "17": {
+                    "type": "ipv4-addr",
+                    "value": "1.1.1.1"
+                },
+                "18": {
+                    "type": "x-tanium-inteldocument",
+                    "intel_doc_id": 700,
+                    "type_version": "1.0",
+                    "md5": "b5050a54c2556267931541b944ab0481",
+                    "blob_id": "4ef7353d-ae4c-4eac-9c0b-75522592b438",
+                    "revision_id": 1,
+                    "size": 276,
+                    "x_compiled_terms": [
+                        "19"
+                    ],
+                    "operator": "or",
+                    "text": "file.path contains 'eicar'",
+                    "syntax_version": 6,
+                    "is_schema_valid": true,
+                    "source_id": 2,
+                    "unresolvedAlertCount": 1,
+                    "x_platform_list": [
+                        "windows"
+                    ],
+                    "x_created": "2023-10-11T19:47:06.485Z",
+                    "x_updated": "2024-01-10T19:22:23.966Z",
+                    "throttledFindingCount": 0,
+                    "allowAutoDisable": true,
+                    "disabled": false,
+                    "disabledEndpointCount": 0,
+                    "firstDeploymentTimestamp": "2023-10-13T19:28:05.584Z",
+                    "lastDeploymentTimestamp": "2024-01-10T19:22:23.931Z",
+                    "status": "HIGH_FIDELITY"
+                },
+                "19": {
+                    "type": "x-compiled-terms",
+                    "condition": "contains",
+                    "negate": false,
+                    "value": "eicar",
+                    "object": "file",
+                    "property": "path"
+                },
+                "20": {
+                    "type": "x-ibm-ttp-tagging",
+                    "extensions": {
+                        "technique_id": "T1134.002",
+                        "technique_name": "Access Token Manipulation Mitigation: Create Process with Token",
+                        "tactic_name": ""
+                    },
+                    "name": "Access Token Manipulation Mitigation: Create Process with Token"
+                }
+            },
+            "first_observed": "2024-01-03T17:22:29.596Z",
+            "last_observed": "2024-01-03T17:46:59.608Z",
+            "number_observed": 1
+        }
+    ],
+    "spec_version": "2.0"
+}
+```
+
+### Observations
+- AND is the only supported operator
+- AND in this case can act as an "OR" however this only applies when the fields are the same (or share the same field in the API). For example [x-oca-event:host_ref.ip_refs.value = '1.1.1.1'] AND [x-oca-event:host_ref.ip_refs.value = '1.1.1.2'] works as an OR (either 1.1.1.1 or 1.1.1.2).  [x-oca-event:host_ref.ip_refs.value = '1.1.1.1'] AND [x-oca-event:action = 'test'] works as an AND.
+
+### Limitations
+- Only the AND operatr is supported.
+- There are likely unmapped fields in the "Details" field, however due to the nature of how flexible it is, some observations may not be mapped as you'd expect. Use the unmapped_fallback : "true" option to map these fields.
+
+### References
+- Most documentation requires a Tanium account to access.
+- The API Documentation is specific to your Tanium Instance. For access, discuss it with your Tanium support representitive. 
+- https://help.tanium.com/bundle/ug_threat_response_cloud/page/threat_response/reference_alert_data.html provides some information on the "details field.
+- For obtaining your Tanium API Key (session token) refer to Taniums support documentation https://help.tanium.com 

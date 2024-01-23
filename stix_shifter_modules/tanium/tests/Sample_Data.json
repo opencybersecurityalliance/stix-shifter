@@ -33,9 +33,12 @@
                         "pid": 9080,
                         "args": "\"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe\" --no-startup-window --continue-active-setup",
                         "file": {
-                            "md5": "d193ea4b8d102d020c02dc45af23ff0d",
-                            "sha1": "469e259b884043aedac879a96356fb741f82daa8",
-                            "sha256": "9ba39dd15eff718ff357db346d0fda3a12c9dbb216511cbb41050fb0d6b3d9c9",
+                            "hashes":
+                            {
+                                "md5": "d193ea4b8d102d020c02dc45af23ff0d",
+                                "sha1": "469e259b884043aedac879a96356fb741f82daa8",
+                                "sha256": "9ba39dd15eff718ff357db346d0fda3a12c9dbb216511cbb41050fb0d6b3d9c9"
+                            },
                             "fullpath": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"
                         },
                         "name": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
@@ -244,7 +247,7 @@
             "type": "detect.match",
             "guid": "00000000-0000-0000-bdf6-df210532ced8",
             "priority": "high",
-            "severity": "info",
+            "severity": "low",
             "details": {
                 "match": {
                     "hash": "8410425647933057258",
@@ -502,7 +505,7 @@
             "type": "detect.match",
             "guid": "00000000-0000-0000-8958-5f55a8a115b9",
             "priority": "high",
-            "severity": "info",
+            "severity": "high",
             "details": {
                 "match": {
                     "hash": "1458178127429295894",

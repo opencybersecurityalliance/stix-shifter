@@ -79,10 +79,11 @@ class TestQueryTranslator(unittest.TestCase, object):
         stix_pattern = f"[x-oca-event:action = 'Outlook Spawned Process Creating DLL Files']" \
                             " START t'2022-07-01T00:00:00.000Z'" \
                             " STOP t'2024-07-27T00:05:00.000Z'"
+                            
         expectedQueryList = [f"intelDocName={default_values_oca_event.get('x-oca-event:action')}" \
                              f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
                              f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
-        
+
         _test_stix_to_json(stix_pattern, expectedQueryList)
         
     def test_event_oca_query(self):
@@ -111,6 +112,7 @@ class TestQueryTranslator(unittest.TestCase, object):
                              f"&mitreId={default_values_oca_event.get('x-oca-event:x_ttp_tagging_refs.name')}" \
                              f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
                              f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
+        
         _test_stix_to_json(stix_pattern, expectedQueryList)
         
     def test_ibm_finding(self):
@@ -130,7 +132,6 @@ class TestQueryTranslator(unittest.TestCase, object):
                         " AND [x-ibm-finding:x_details = 'te']" \
                         " START t'2022-07-01T00:00:00.000Z'" \
                         " STOP t'2024-07-27T00:05:00.000Z'"
-        
         
         expectedQueryList = [f"computerIpAddress={default_values_ibm_finding.get('x-ibm-finding:dst_ip_ref.value')}" \
                              f"&intelDocName={default_values_ibm_finding.get('x-ibm-finding:action')}" \
@@ -156,7 +157,6 @@ class TestQueryTranslator(unittest.TestCase, object):
                         " START t'2022-07-01T00:00:00.000Z'" \
                         " STOP t'2024-07-27T00:05:00.000Z'"
         
-        
         expectedQueryList = [f"computerIpAddress={default_values_IPV4.get('ipv4-addr:value')}" \
                              f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
                              f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
@@ -168,18 +168,16 @@ class TestQueryTranslator(unittest.TestCase, object):
                         " START t'2022-07-01T00:00:00.000Z'" \
                         " STOP t'2024-07-27T00:05:00.000Z'"
         
-        
         expectedQueryList = [f"computerIpAddress={default_values_IPV6.get('ipv6-addr:value')}" \
                             f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
                             f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
         
         _test_stix_to_json(stix_pattern, expectedQueryList)
-        
+            
     def test_ipv6(self):
         stix_pattern = "([ipv6-addr:value = '10.0.0.4']" \
                         " START t'2022-07-01T00:00:00.000Z'" \
                         " STOP t'2024-07-27T00:05:00.000Z'"
-        
         
         expectedQueryList = [f"computerIpAddress={default_values_IPV6.get('ipv6-addr:value')}" \
                             f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
@@ -195,7 +193,6 @@ class TestQueryTranslator(unittest.TestCase, object):
                         " START t'2022-07-01T00:00:00.000Z'" \
                         " STOP t'2024-07-27T00:05:00.000Z'"
         
-        
         expectedQueryList = [f"computerName={default_values_oca_asset.get('x-oca-asset:hostname')}" \
                             f"&computerIpAddress={default_values_oca_asset.get('x-oca-asset:ip_refs.value')}" \
                             f"&platform={default_values_oca_asset.get('x-oca-asset:os_ref.name')}" \
@@ -209,29 +206,159 @@ class TestQueryTranslator(unittest.TestCase, object):
                         " START t'2022-07-01T00:00:00.000Z'" \
                         " STOP t'2024-07-27T00:05:00.000Z'"
         
-        
         expectedQueryList = [f"platform={default_values_software.get('software:name')}" \
                             f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
                             f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
         
         _test_stix_to_json(stix_pattern, expectedQueryList)
         
-    def test_multiple_of_same_field(self):
-        stix_pattern = "([software:name = 'windows']" \
-                       " AND [software:name = 'linux']" \
+    def test_invalid_and_only_2_fields(self):
+        expected_results = 'tanium connector error => STIX translation error: The translation is not valid as this API does not support AND queries between the same field.'
+        stix_pattern = "[software:name = 'windows'" \
+                    " AND software:name = 'linux']" \
+                    " START t'2022-07-01T00:00:00.000Z'" \
+                    " STOP t'2024-07-27T00:05:00.000Z'"
+        results = _translate_query(stix_pattern, test_options)
+        assert expected_results == results["error"]
+    
+    def test_alternating_and_or_valid_observation(self):
+        stix_pattern = "([x-ibm-finding:dst_ip_ref.value = '10.0.0.4']" \
+                        " OR [x-ibm-finding:dst_ip_ref.value = '10.0.0.2']" \
+                        " OR [x-ibm-finding:dst_ip_ref.value = '10.0.0.1']" \
+                        " AND [x-ibm-finding:dst_os_ref.name = 'windows']" \
+                        " OR [x-ibm-finding:dst_os_ref.name = 'osx']" \
+                        " OR [x-ibm-finding:dst_os_ref.name = 'linux']" \
+                        " AND [x-ibm-finding:x_priority = 'high']" \
+                        " OR [x-ibm-finding:x_priority = 'low']" \
+                        " AND [x-ibm-finding:x_scan_config_id = '2']" \
+                        " OR [x-ibm-finding:x_scan_config_id = '3']" \
+                        " OR [x-ibm-finding:x_scan_config_id = '4']" \
+                        " OR [x-ibm-finding:x_scan_config_id = '5']" \
+                        " AND [x-ibm-finding:x_label_name = 't']" \
+                        " AND [x-ibm-finding:x_details = 'te']" \
                         " START t'2022-07-01T00:00:00.000Z'" \
                         " STOP t'2024-07-27T00:05:00.000Z'"
         
-        
-        expectedQueryList = [f"platform={default_values_software.get('software:name')}" \
-                            f"&platform={'linux'}" \
-                            f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
-                            f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
+        expectedQueryList = [f"computerIpAddress=10.0.0.4" \
+                             f"&computerIpAddress=10.0.0.2" \
+                             f"&computerIpAddress=10.0.0.1" \
+                             f"&platform=windows" \
+                             f"&platform=osx" \
+                             f"&platform=linux" \
+                             f"&priority=high" \
+                             f"&priority=low" \
+                             f"&scanConfigId=2" \
+                             f"&scanConfigId=3" \
+                             f"&scanConfigId=4" \
+                             f"&scanConfigId=5" \
+                             f"&labelName=t" \
+                             f"&details=te" \
+                             f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
+                             f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
+       
+        _test_stix_to_json(stix_pattern, expectedQueryList)
+
+    def test_alternating_and_or_valid_comparison(self):
+        stix_pattern = "[(x-ibm-finding:dst_ip_ref.value = '10.0.0.4'" \
+                        " OR x-ibm-finding:dst_ip_ref.value = '10.0.0.2'" \
+                        " OR x-ibm-finding:dst_ip_ref.value = '10.0.0.1')" \
+                        " AND (x-ibm-finding:dst_os_ref.name = 'windows'" \
+                        " OR x-ibm-finding:dst_os_ref.name = 'osx'" \
+                        " OR x-ibm-finding:dst_os_ref.name = 'linux')" \
+                        " AND (x-ibm-finding:x_priority = 'high'" \
+                        " OR x-ibm-finding:x_priority = 'low')" \
+                        " AND (x-ibm-finding:x_scan_config_id = '2'" \
+                        " OR x-ibm-finding:x_scan_config_id = '3'" \
+                        " OR x-ibm-finding:x_scan_config_id = '4'" \
+                        " OR x-ibm-finding:x_scan_config_id = '5')" \
+                        " AND (x-ibm-finding:x_label_name = 't')" \
+                        " AND (x-ibm-finding:x_details = 'te')]" \
+                        " START t'2022-07-01T00:00:00.000Z'" \
+                        " STOP t'2024-07-27T00:05:00.000Z'"
+
+        expectedQueryList = [f"computerIpAddress=10.0.0.4" \
+                             f"&computerIpAddress=10.0.0.2" \
+                             f"&computerIpAddress=10.0.0.1" \
+                             f"&platform=windows" \
+                             f"&platform=osx" \
+                             f"&platform=linux" \
+                             f"&priority=high" \
+                             f"&priority=low" \
+                             f"&scanConfigId=2" \
+                             f"&scanConfigId=3" \
+                             f"&scanConfigId=4" \
+                             f"&scanConfigId=5" \
+                             f"&labelName=t" \
+                             f"&details=te" \
+                             f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
+                             f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
         
         _test_stix_to_json(stix_pattern, expectedQueryList)
+        
+    def test_alternating_and_invalid_comparison(self):
+        #This one fails because there are two AND's involving the scan_config_id. This isn't possible in the API.
+        expected_results = 'tanium connector error => STIX translation error: The translation is not valid as this API does not support AND queries between the same field.'
+        stix_pattern = "[x-ibm-finding:dst_ip_ref.value = '10.0.0.4'" \
+                        " OR x-ibm-finding:dst_ip_ref.value = '10.0.0.2'" \
+                        " OR x-ibm-finding:dst_ip_ref.value = '10.0.0.1'" \
+                        " AND x-ibm-finding:dst_os_ref.name = 'windows'" \
+                        " OR x-ibm-finding:dst_os_ref.name = 'osx'" \
+                        " OR x-ibm-finding:dst_os_ref.name = 'linux'" \
+                        " AND x-ibm-finding:x_scan_config_id = '1'" \
+                        " AND x-ibm-finding:x_priority = 'high'" \
+                        " OR x-ibm-finding:x_priority = 'low'" \
+                        " AND x-ibm-finding:x_scan_config_id = '2'" \
+                        " OR x-ibm-finding:x_scan_config_id = '3'" \
+                        " OR x-ibm-finding:x_scan_config_id = '4'" \
+                        " OR x-ibm-finding:x_scan_config_id = '5'" \
+                        " AND x-ibm-finding:x_label_name = 't'" \
+                        " AND x-ibm-finding:x_details = 'te']" \
+                        " START t'2022-07-01T00:00:00.000Z'" \
+                        " STOP t'2024-07-27T00:05:00.000Z'"
+        results = _translate_query(stix_pattern, test_options)
+        assert expected_results == results["error"] 
+        
+    def test_alternating_or_invalid_comparison(self):
+        #This test should fail. The order is important here. All of the AND are combined togather, than the OR are checked with the combined ANDs.
+        #This is a fail because your first check of an OR is (ip=1.0.0.4 OR ip=1.0.0.2) OR (ip=1.0.0.1 AND platform=windows)
+        #This is invalid because you cannot do this with the API. 
+        expected_results = 'tanium connector error => STIX translation error: The translation is not valid as this API does not support OR queries between different fields.'
+        stix_pattern = "[x-ibm-finding:dst_ip_ref.value = '10.0.0.4'" \
+                        " OR x-ibm-finding:dst_ip_ref.value = '10.0.0.2'" \
+                        " OR x-ibm-finding:dst_ip_ref.value = '10.0.0.1'" \
+                        " AND x-ibm-finding:dst_os_ref.name = 'windows'" \
+                        " OR x-ibm-finding:dst_os_ref.name = 'osx'" \
+                        " OR x-ibm-finding:dst_os_ref.name = 'linux'" \
+                        " AND x-ibm-finding:x_priority = 'high'" \
+                        " OR x-ibm-finding:x_priority = 'low'" \
+                        " AND x-ibm-finding:x_scan_config_id = '2'" \
+                        " OR x-ibm-finding:x_scan_config_id = '3'" \
+                        " OR x-ibm-finding:x_scan_config_id = '4'" \
+                        " OR x-ibm-finding:x_scan_config_id = '5'" \
+                        " AND x-ibm-finding:x_label_name = 't'" \
+                        " OR x-ibm-finding:dst_ip_ref.value = '10.0.0.2'" \
+                        " AND x-ibm-finding:x_details = 'te']" \
+                        " START t'2022-07-01T00:00:00.000Z'" \
+                        " STOP t'2024-07-27T00:05:00.000Z'"
+        results = _translate_query(stix_pattern, test_options)
+        assert expected_results == results["error"]                       
+            
+    def test_in_operator(self):
+        stix_pattern = f"[x-oca-event:action IN ('test1','test2','test3')]" \
+                            " START t'2022-07-01T00:00:00.000Z'" \
+                            " STOP t'2024-07-27T00:05:00.000Z'"
+                            
+        expectedQueryList = [f"intelDocName=test1" \
+                             f"&intelDocName=test2" \
+                             f"&intelDocName=test3" \
+                             f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
+                             f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
+        
+        _test_stix_to_json(stix_pattern, expectedQueryList)
+            
     
-    def test_get_observed_data_objects(self):
-        assert True
+    # def test_get_observed_data_objects(self):
+    #     assert True
         # result_bundle = json_to_stix_translator.convert_to_stix(
         #     data_source, map_data, [SAMPLE_DATA_DICT], get_module_transformers(MODULE), options)
         # result_bundle_objects = result_bundle['objects']
