@@ -118,58 +118,11 @@ class QueryStringPatternTranslator:
                 for index2 in range(0, len(field2) - 1,  +2):
                     if(field1[index1] != field2[index2]):
                         raise RuntimeError(f"The translation is not valid as this API does not support OR queries between different fields.")
-        
-        # if(operator.name == "Or"):
-            # if(field2[0] not in fieldList):
-            #     fieldList.append(field2[0])
-            #     return True
-            # else:
-            #     raise RuntimeError(f"The translation is not valid as this API does not support AND queries between the same field.")
-
-
-        
-        #The ordering is important in the STIX query. For example if you do field1 & field2 | field1 the actual request is
-        #(field1 | field2) or field1. This is not valid in the API. The API can only interpret (field1|field1) & field2.
-        #That is, like fields are ALWAYS bundled togather as an OR and unlike fields are always intepreted as AND.
-        # if(field1[len(field1)-2] != field2[0] and operator.name == "And"):
-        #     return True
-        # elif(field1[len(field1)-2] == field2[0] and operator.name == "Or"):
-        #     return True
-        # else:
-        #     raise RuntimeError(f"The translation is not valid as this API does not support AND queries between the same field.")
-                
-        # #If it's a single compare in field1 and 2, than just check them.
-        # if(len(field1) == 2 and len(field2) == 2):
-        #     #If first and second expression both contain the same field and it's an AND. This is not possible with this API.
-        #     if(field1[0] == field2[0] and operator.name == "And"):
-        #         raise RuntimeError(f"The translation is not valid as this API does not support AND queries between the same field.")
-        #     #If first and second expression contain separate fields and it's an OR. This is not possible with this API
-        #     if(field1[0] != field2[0] and operator.name == "Or"):
-        #         raise RuntimeError(f"The translation is not valid as this API does not support OR queries between different fields.")
-        # else:
-        #     #Check each field in the first expression against each field in the second expression.
-        #     #I know this is slow and isn't a good solution (it's probably checking things it doesn't have to). 
-        #     for field_1_Index in range(0,len(field1),+2):
-        #         for field_2_Index in range(0,len(field2),+2):
-        #             #If the field_2_Index is 0, than use the current operator 
-        #             current_operator = operator.name
-        #             if(field_2_Index != 0):
-        #                 current_operator = operator2[field_2_Index // 2 - 1] 
-                    
-        #             if(field1[field_1_Index] == field2[field_2_Index] and current_operator == "And"):
-        #                 raise RuntimeError(f"The translation is not valid as this API does not support AND queries between the same field.")
-        #             elif(field1[field_1_Index] != field2[field_2_Index] and current_operator == "Or"):
-        #                 raise RuntimeError(f"The translation is not valid as this API does not support OR queries between different fields.")
-
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     try:
         query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
     except Exception as err:
         raise err
-        
-    # This sample return statement is in an SQL format. This should be changed to the native data source query language.
-    # If supported by the query language, a limit on the number of results should be added to the query as defined by options['result_limit'].
-    # Translated patterns must be returned as a list of one or more native query strings.
-    # A list is returned because some query languages require the STIX pattern to be split into multiple query strings.        
-    return ["%s" % (query)]
+              
+    return [f"{query}"]
