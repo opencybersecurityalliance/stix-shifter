@@ -51,12 +51,6 @@ class ProcessUserDaemonTransformer(ValueTransformer):
             return True
         else:
             return False
-        
-class ReturnEmptyTransformer(ValueTransformer):
-    @staticmethod
-    def transform(data): 
-        #The tactic name needs to be set to something and leaving it empty made the most sense.
-        return ""
                 
 class ConvertTextSeverityToNumberValue(ValueTransformer):
     @staticmethod

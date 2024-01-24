@@ -295,6 +295,41 @@ class TestQueryTranslator(unittest.TestCase, object):
         
         _test_stix_to_json(stix_pattern, expectedQueryList)
         
+    def test_alternating_and_or_valid_comparison_with_in(self):
+        stix_pattern = "[(x-ibm-finding:dst_ip_ref.value = '10.0.0.4'" \
+                        " OR x-ibm-finding:dst_ip_ref.value = '10.0.0.2'" \
+                        " OR x-ibm-finding:dst_ip_ref.value = '10.0.0.1')" \
+                        " AND (x-ibm-finding:dst_os_ref.name IN ('windows','osx','linux'))" \
+                        " AND (x-ibm-finding:x_priority = 'high'" \
+                        " OR x-ibm-finding:x_priority = 'low')" \
+                        " AND (x-ibm-finding:x_scan_config_id = '2'" \
+                        " OR x-ibm-finding:x_scan_config_id = '3'" \
+                        " OR x-ibm-finding:x_scan_config_id = '4'" \
+                        " OR x-ibm-finding:x_scan_config_id = '5')" \
+                        " AND (x-ibm-finding:x_label_name = 't')" \
+                        " AND (x-ibm-finding:x_details = 'te')]" \
+                        " START t'2022-07-01T00:00:00.000Z'" \
+                        " STOP t'2024-07-27T00:05:00.000Z'"
+
+        expectedQueryList = [f"computerIpAddress=10.0.0.4" \
+                             f"&computerIpAddress=10.0.0.2" \
+                             f"&computerIpAddress=10.0.0.1" \
+                             f"&platform=windows" \
+                             f"&platform=osx" \
+                             f"&platform=linux" \
+                             f"&priority=high" \
+                             f"&priority=low" \
+                             f"&scanConfigId=2" \
+                             f"&scanConfigId=3" \
+                             f"&scanConfigId=4" \
+                             f"&scanConfigId=5" \
+                             f"&labelName=t" \
+                             f"&details=te" \
+                             f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
+                             f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
+    
+        _test_stix_to_json(stix_pattern, expectedQueryList)
+    
     def test_alternating_and_invalid_comparison(self):
         #This one fails because there are two AND's involving the scan_config_id. This isn't possible in the API.
         expected_results = 'tanium connector error => STIX translation error: The translation is not valid as this API does not support AND queries between the same field.'

@@ -214,6 +214,50 @@ The [hostname] is provided by the user.
 The [currentOffset] is provided by the user.
 The [limit] is the lower of the user provided limit or the default (500). IE: If the user provides 600, it will be 500. If the user provides 20, it will be 20.
 
+### Observations
+- Only supports AND/OR and IN operator
+- AND can only be used with different fields
+- OR can only be used with the same fields
+- IN acts as multiple OR operators
+
+For example : 
+"[(x-ibm-finding:dst_ip_ref.value = '10.0.0.4'" \
+  " OR x-ibm-finding:dst_ip_ref.value = '10.0.0.2'" \
+  " OR x-ibm-finding:dst_ip_ref.value = '10.0.0.1')" \
+  " AND (x-ibm-finding:dst_os_ref.name IN ('windows','osx','linux'))" \
+  " AND (x-ibm-finding:x_priority = 'high'" \
+  " OR x-ibm-finding:x_priority = 'low')" \
+  " AND (x-ibm-finding:x_scan_config_id = '2'" \
+  " OR x-ibm-finding:x_scan_config_id = '3'" \
+  " OR x-ibm-finding:x_scan_config_id = '4'" \
+  " OR x-ibm-finding:x_scan_config_id = '5')" \
+  " AND (x-ibm-finding:x_label_name = 't')" \
+  " AND (x-ibm-finding:x_details = 'te')]" \
+  " START t'2022-07-01T00:00:00.000Z'" \
+  " STOP t'2024-07-27T00:05:00.000Z'"
+
+is valid because all of the AND's are between different fields and all of the OR's are between the same field.
+
+Be aware that if the query does not match the above rules, than it may return false results that do not match the query.
+If a query does not work, the Connector will try to throw an exception. If it does not, than it will simply batch all the terms as
+field1&field2&field3 etc. As mentioned, the API can only support "&" which acts as both AND and OR.
+
+### Limitations
+- There are likely unmapped fields in the "Details" field, however due to the nature of how flexible it is, some observations may not be mapped as you'd expect. Use the unmapped_fallback : "true" option to map these fields.
+- Regex is not supported in any query. All values will be interpreted literally.
+- MATCH and LIKE are not supported
+- Greater than (>, >=) and Less than (>, >=) are not supported.
+- NOT (!) is not supported
+- "=" is not an exact match, but a contains. It will return all values that contain the value.
+- Observation expressions do not currently check for invalid request that are not possible with this API. 
+- Comparison expressions should check for invalid request.
+
+### References
+- Most documentation requires a Tanium account to access.
+- The API Documentation is specific to your Tanium Instance. For access, discuss it with your Tanium support representitive. 
+- https://help.tanium.com/bundle/ug_threat_response_cloud/page/threat_response/reference_alert_data.html provides some information on the "details field.
+- For obtaining your Tanium API Key (session token) refer to Taniums support documentation https://help.tanium.com 
+
 ### STIX Shifter 
 
 #### Single Observation
@@ -640,17 +684,3 @@ tanium
     "spec_version": "2.0"
 }
 ```
-
-### Observations
-- AND is the only supported operator
-- AND in this case can act as an "OR" however this only applies when the fields are the same (or share the same field in the API). For example [x-oca-event:host_ref.ip_refs.value = '1.1.1.1'] AND [x-oca-event:host_ref.ip_refs.value = '1.1.1.2'] works as an OR (either 1.1.1.1 or 1.1.1.2).  [x-oca-event:host_ref.ip_refs.value = '1.1.1.1'] AND [x-oca-event:action = 'test'] works as an AND.
-
-### Limitations
-- Only the AND operatr is supported.
-- There are likely unmapped fields in the "Details" field, however due to the nature of how flexible it is, some observations may not be mapped as you'd expect. Use the unmapped_fallback : "true" option to map these fields.
-
-### References
-- Most documentation requires a Tanium account to access.
-- The API Documentation is specific to your Tanium Instance. For access, discuss it with your Tanium support representitive. 
-- https://help.tanium.com/bundle/ug_threat_response_cloud/page/threat_response/reference_alert_data.html provides some information on the "details field.
-- For obtaining your Tanium API Key (session token) refer to Taniums support documentation https://help.tanium.com 
