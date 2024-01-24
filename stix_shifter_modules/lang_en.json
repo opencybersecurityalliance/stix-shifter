@@ -8,6 +8,10 @@
                 "label": "Result size limit",
                 "description": "The maximum number of entries or objects that are returned by search query.  Valid input range is {{min}} to {{max}}."
             },
+            "batch_size": {
+                "label": "Result length for datasource request",
+                "description": "The maximum results retrive in single API request to the datasource. This is not results limit. This value is mainly used for pagination."
+            },
             "time_range": {
                 "label": "Query time range",
                 "description": "Time range for the search, in minutes, represented as last x minutes.  Valid input range is {{min}} to {{max}}."
