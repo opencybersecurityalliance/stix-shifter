@@ -1,9 +1,7 @@
 import ast
-from http.client import responses
 import json
 from stix_shifter_modules.tanium.stix_transmission.tanium_config import TaniumConfig
 
-from stix_shifter_utils.utils.error_response import ErrorCode
 
 from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
@@ -41,7 +39,7 @@ class Connector(BaseJsonSyncConnector):
         self.return_obj['success'] = False
         self.return_obj["data"] = {}
         offset = int(offset)
-        limit = int(limit) + 1
+        limit = int(limit)
         #Initalize values
         self.current_offset = offset
         #This can be any value up to 500.
@@ -93,41 +91,13 @@ class Connector(BaseJsonSyncConnector):
             ErrorResponder.fill_error(self.return_obj, message=str(err), connector=self.connector)
             raise
 
-        try:
-            response_code = response_dict.code
-            if response_code == 200:
-                return response_dict
-            else:
-                content_as_dict = ast.literal_eval(response_dict.content.decode("utf-8"))
-                if("Message" in content_as_dict):
-                    ErrorResponder.fill_error(self.return_obj, message=content_as_dict["Message"], connector=self.connector)
-                elif("errors" in content_as_dict):
-                    ErrorResponder.fill_error(self.return_obj, message=content_as_dict["errors"][0]["description"], connector=self.connector)
-                raise
-        except Exception:
-            self._handle_exceptions(response_dict, content_as_dict)
-            raise
-        
-    def _handle_exceptions(self, response_dict, content_as_dict):
-        if("code" in self.return_obj and self.return_obj["code"] == "unknown"):
-            error_message = f"tanium connector error => Error code|message : {str(response_dict.code)} | {str(responses[response_dict.code])}"
+        response_code = response_dict.code
+        if response_code == 200:
+            return response_dict
+        else:
+            content_as_dict = ast.literal_eval(response_dict.content.decode("utf-8"))
             if("Message" in content_as_dict):
-                error_message = f"{error_message}. Request message : {content_as_dict['Message']}."
-                self.return_obj["error"] = error_message
+                ErrorResponder.fill_error(self.return_obj, response_dict, message=content_as_dict["Message"], connector=self.connector)
             elif("errors" in content_as_dict):
-                error_message = f"{error_message}. Request message : {content_as_dict['errors'][0]['description']}."
-                self.return_obj["error"] = error_message
-            
-            if(response_dict.code == 401 or response_dict.code == 407):
-                self.return_obj["code"] = ErrorCode.TRANSMISSION_AUTH_CREDENTIALS.value
-            elif(response_dict.code == 403):
-                self.return_obj["code"] = ErrorCode.TRANSMISSION_FORBIDDEN.value
-            elif(response_dict.code == 500 or response_dict.code == 501 or response_dict.code == 502  or response_dict.code == 503  or response_dict.code == 504):
-                self.return_obj["code"] = ErrorCode.TRANSMISSION_CONNECT.value
-            elif(response_dict.code == 400 or response_dict.code == 404 or response_dict.code == 405  or response_dict.code == 411):
-                self.return_obj["code"] = ErrorCode.TRANSMISSION_QUERY_LOGICAL_ERROR.value
-            elif(response_dict.code == 429):
-                self.return_obj["code"] = ErrorCode.TRANSMISSION_TOO_MANY_REQUESTS.value
-        elif("code" not in self.return_obj):
-            self.return_obj["error"] = "An unexpected format was returned by the API."
-            self.return_obj["code"] = ErrorCode.TRANSMISSION_UNKNOWN.value
+                ErrorResponder.fill_error(self.return_obj, response_dict, message=content_as_dict["errors"][0]["description"], connector=self.connector)
+            raise

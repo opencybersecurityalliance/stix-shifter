@@ -13,7 +13,7 @@
         },
         "options": {
             "unmapped_fallback": {
-                "default": false
+                "default": true
             }
         }
     },

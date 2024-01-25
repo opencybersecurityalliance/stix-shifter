@@ -47,7 +47,7 @@ class ProcessUserDaemonTransformer(ValueTransformer):
     @staticmethod
     def transform(data):    
         #This method just checks if a domain was provided for the user. If it does, than it's true. Otherwise it's false.
-        if (data is not None and data is not ""):
+        if (data):
             return True
         else:
             return False

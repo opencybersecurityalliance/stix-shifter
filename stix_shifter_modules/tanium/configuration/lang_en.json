@@ -9,12 +9,6 @@
         {
             "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address."
-        },
-        "options": {
-            "unmapped_fallback": {
-                "label": "Enable Unmapped Fallback",
-                "description": "Enable unmapped fallback to capture unmapped fields."
-            }
         }
     },
     "configuration": 
