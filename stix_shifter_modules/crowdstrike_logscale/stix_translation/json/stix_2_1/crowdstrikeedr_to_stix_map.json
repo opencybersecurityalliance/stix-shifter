@@ -1,5 +1,5 @@
 {
-  "crowdstrike_edr": {
+  "crowdstrikeedr": {
     "behaviors": {
       "alleged_filetype": {
         "key": "file.x_extension",

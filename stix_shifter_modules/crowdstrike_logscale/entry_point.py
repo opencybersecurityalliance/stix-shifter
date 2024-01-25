@@ -10,4 +10,4 @@ class EntryPoint(BaseEntryPoint):
         self.set_async(False)
         if connection:
             self.setup_transmission_basic(connection, configuration)
-        self.setup_translation_simple(dialect_default='crowdstrike_edr')
+        self.setup_translation_simple(dialect_default='crowdstrikeedr')

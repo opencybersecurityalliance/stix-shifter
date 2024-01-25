@@ -1,5 +1,5 @@
 {
-  "crowdstrike_edr":
+  "crowdstrikeedr":
   {
     "integer_fields": [
       "behaviors[*].severity",

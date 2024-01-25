@@ -16,7 +16,7 @@ data_source = {
 options = {}
 
 logscale_sample_response = {
-    'crowdstrike_edr': {
+    'crowdstrikeedr': {
         '@timestamp': 1700059736377,
         '@timestamp.nanos': '312000',
         '#repo': 'TestRepository',

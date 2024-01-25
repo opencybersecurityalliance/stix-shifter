@@ -10,6 +10,7 @@ See the [table of mappings](crowdstrike_logscale_supported_stix.md) for the STIX
 - [Pattern expression with STIX attributes and CUSTOM attributes - Single Observation](#single-observation)
 - [Pattern expression with STIX and CUSTOM attributes - Multiple Observation](#multiple-observation)
 - [STIX Execute Query](#stix-execute-query)
+- [Connector Extension](#connector-extension)
 - [Recommendations](#recommendations)
 - [Limitations](#limitations)
 - [References](#references)
@@ -41,19 +42,19 @@ translate crowdstrike_logscale query "{}" "[process:name IN ('cmd.exe','calc.exe
 {
     "queries": [
         {
-            "source": "crowdstrike_edr",
+            "source": "crowdstrikeedr",
             "queryString": "device.local_ip =~ cidr(subnet=\"1.1.1.1/32\") | tail(10000)",
             "start": 1702598400000,
             "end": 1703203200000
         },
         {
-            "source": "crowdstrike_edr",
+            "source": "crowdstrikeedr",
             "queryString": "device.external_ip =~ cidr(subnet=\"1.1.1.1/32\") | tail(10000)",
             "start": 1702598400000,
             "end": 1703203200000
         },
         {
-            "source": "crowdstrike_edr",
+            "source": "crowdstrikeedr",
             "queryString": "(device.hostname = /EC2/i and @rawstring = /\"behaviors\"\\s*:\\s*\\[.*\"filename\"\\s*:\\s*(\"cmd\\.exe\"|\"calc\\.exe\")/) | tail(10000)",
             "start": 1702598400000,
             "end": 1703203200000
@@ -68,7 +69,7 @@ crowdstrike_logscale
 "{\"host\":\"xxx\"}"
 "{\"auth\":{\"repository\":\"TestRepository\",\"api_token\": \"123\"}}"
 results
-"{ \"source\": \"crowdstrike_edr\", \"queryString\": \"device.local_ip =~ cidr(subnet=\\"1.1.1.1/32\\") | tail(10000)\", \"start\": 1702598400000, \"end\": 1703203200000 }"
+"{ \"source\": \"crowdstrikeedr\", \"queryString\": \"device.local_ip =~ cidr(subnet=\\"1.1.1.1/32\\") | tail(10000)\", \"start\": 1702598400000, \"end\": 1703203200000 }"
 0
 1
 
@@ -79,7 +80,7 @@ results
   "success": true,
   "data": [
     {
-      "crowdstrike_edr": {
+      "crowdstrikeedr": {
         "@timestamp": 1703137747000,
         "@timestamp.nanos": "0",
         "#repo": "TestRepository",
@@ -450,7 +451,7 @@ translate crowdstrike_logscale query {}
 {
     "queries": [
         {
-            "source": "crowdstrike_edr",
+            "source": "crowdstrikeedr",
             "queryString": "((device.local_ip = \"4.4.4.4\" or device.external_ip = \"4.4.4.4\") or @rawstring = /\"behaviors\"\\s*:\\s*\\[.*\"technique\"\\s*:\\s*\"Indicator\\ of\\ Attack\"/) or ((@rawstring = /\"behaviors\"\\s*:\\s*\\[.*\"parent_details\"\\s*:\\s*\\{.*\"parent_md5\"\\s*:\\s*\"e7a6babc90f4\"/ or @rawstring = /\"behaviors\"\\s*:\\s*\\[.*\"md5\"\\s*:\\s*\"e7a6babc90f4\"/) and (max_severity > 30 and device.instance_id = \"i-0123\")) | tail(10000)",
             "start": 1703004206000,
             "end": 1703395346003
@@ -692,9 +693,18 @@ crowdstrike_logscale
 }
 ```
 
+### Connector Extension
+- As Logscale doesn't have unified data schema, separate mapping files(from_stix_map.json, to_stix_map.json) needs to be 
+  created for each log source(eg: okta, aws_guardduty) that are newly added to this connector module.
+- The structure of log source data ingest into logscale should be of type JSON .
+- The Json data which has been ingested into logscale should be inserted without new line and should be inserted as raw data.
+- The mapping of list (list of values/list of dictionary) fields in from_stix_map should be mentioned with [\*] suffix. 
+  Example, behaviors[\*].id.  Here 'behaviors' is a list of dictionaries with id as attribute key inside behaviors.
+
 ### Recommendations
 
 - For connector usage, it is recommended to maintain logs from single log source per repository in Crowdstrike Logscale. 
+  Example Okta logs could be stored in repository_1 and aws_guardduty logs in repository_2.
 - Make sure, there is no parsing error during ingestion of logs into Crowdstrike Logscale.
 
 ### Limitations
