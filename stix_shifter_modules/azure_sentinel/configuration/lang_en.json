@@ -8,6 +8,10 @@
             "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
+        "login_host": {
+            "label": "Microsoft Entra authentication endpoint",
+            "description": "Replace the default value with the correct Microsoft Entra authentication endpoint for national clouds. For example, specify login.microsoftonline.us for US Government"
+        },
         "help": {
             "label": "Need additional help?",
             "description": "More details on the data source setting can be found in the specified link"
