@@ -56,7 +56,7 @@ class Connector(BaseJsonSyncConnector):
                 
             self.return_obj["data"] = self.final_results
             self.return_obj['success'] = True
-            self.return_obj['metadata'] = self.return_obj['metadata'] = {"next_offset": self.current_offset, "total_result_count": len(self.final_results)}
+            self.return_obj['metadata'] = self.return_obj['metadata'] = {"next_offset": self.current_offset}
             
         except Exception as err:
             self.logger.error(f'error when connecting to the Tanium datasource {self.return_obj["error"]}:')
