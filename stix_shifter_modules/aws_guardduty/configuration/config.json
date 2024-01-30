@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "displayName": "AWS GuardDuty",
+            "displayName": "Amazon GuardDuty",
             "group": "aws"
         },
         "region": {
