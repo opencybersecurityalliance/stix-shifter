@@ -16,6 +16,10 @@ By default connector can be used to search Legacy Alerts. User can search newer 
 
 **Note:** New Alert V2 can be used to search limited properties because $filter parameter can be used on limited properties: ***assignedTo, classification, determination, createdDateTime, lastUpdateDateTime, severity, serviceSource and status***. See [List Alert](https://learn.microsoft.com/en-us/graph/api/security-list-alerts_v2?view=graph-rest-1.0&tabs=http) for more details
 
+### Authentication endpoint(login_host)
+
+The default endpoint to aquire authentication token is set as `login.microsoftonline.com` in `login_host` parameter inside `/configuration/config.json`. Replace the default value with the correct Microsoft Entra authentication endpoint if your environment is hosted in one of the national cloud stated in [token services endpoint](https://learn.microsoft.com/en-us/graph/deployments#app-registration-and-token-service-root-endpoints).
+
 #### Microsoft Graph API (v1.0)
 List security alerts (GET call) https://graph.microsoft.com/v1.0/security/ <br/>
 `Ref: https://learn.microsoft.com/en-us/graph/api/resources/alert?view=graph-rest-1.0`
