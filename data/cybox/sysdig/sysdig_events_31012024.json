@@ -1,1008 +1,461 @@
 {
-    "type": "bundle",
-    "id": "bundle--bb757499-ae29-498e-b635-5c6ee96bbcca",
-    "objects": [
-        {
-            "type": "identity",
-            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "name": "sysdig",
-            "identity_class": "events",
-            "created": "2023-04-11T16:11:11.878Z",
-            "modified": "2023-11-10T16:11:11.878Z"
+  "type": "bundle",
+  "id": "bundle--bb757499-ae29-498e-b635-5c6ee96bbcca",
+  "objects": [
+    {
+      "type": "identity",
+      "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+      "name": "sysdig",
+      "identity_class": "events",
+      "created": "2023-04-11T16:11:11.878Z",
+      "modified": "2023-11-10T16:11:11.878Z"
+    },
+    {
+      "id": "observed-data--54ad9586-0885-4b91-942f-6e1d078267bc",
+      "type": "observed-data",
+      "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+      "created": "2024-01-31T11:44:56.095Z",
+      "modified": "2024-01-31T11:44:56.095Z",
+      "objects": {
+        "0": {
+          "type": "x-ibm-finding",
+          "x_threat_originator": "policy",
+          "x_category": "runtime",
+          "x_threat_source": "syscall",
+          "x_policy_ref": "1",
+          "severity": 30,
+          "x_agent_id": 12345678,
+          "name": "Write below root",
+          "x_cluster_ref": "9",
+          "finding_type": "threat"
         },
-        {
-            "id": "observed-data--54ad9586-0885-4b91-942f-6e1d078267bc",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2024-01-31T11:44:56.095Z",
-            "modified": "2024-01-31T11:44:56.095Z",
-            "objects": {
-                "0": {
-                    "type": "x-ibm-finding",
-                    "x_threat_originator": "policy",
-                    "x_category": "runtime",
-                    "x_threat_source": "syscall",
-                    "x_policy_ref": "1",
-                    "severity": 30,
-                    "x_agent_id": 12345678,
-                    "name": "Write below root",
-                    "x_cluster_ref": "9",
-                    "finding_type": "threat"
-                },
-                "1": {
-                    "type": "x-sysdig-policy",
-                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
-                    "policy_id": 10101010,
-                    "rule_name": "Write below root",
-                    "rule_subtype": 0,
-                    "rule_type": 6
-                },
-                "2": {
-                    "type": "process",
-                    "command_line": "exe / /var/data/criorootstorage/overlay/12345678910/diff",
-                    "cwd": "/",
-                    "name": "exe",
-                    "binary_ref": "4",
-                    "pid": 1,
-                    "parent_ref": "5",
-                    "x_sid": "2222",
-                    "creator_user_ref": "7"
-                },
-                "3": {
-                    "type": "directory",
-                    "path": "/proc/self/exe"
-                },
-                "4": {
-                    "type": "file",
-                    "parent_directory_ref": "3",
-                    "name": "exe"
-                },
-                "5": {
-                    "type": "process",
-                    "command_line": "crio",
-                    "name": "crio",
-                    "binary_ref": "6",
-                    "pid": 11111,
-                    "x_parent_names": [
-                        "systemd"
-                    ]
-                },
-                "6": {
-                    "type": "file",
-                    "name": "crio"
-                },
-                "7": {
-                    "type": "user-account",
-                    "x_loginuid": "-1",
-                    "display_name": "root",
-                    "user_id": "0"
-                },
-                "8": {
-                    "type": "x-oca-asset",
-                    "hostname": "kube-12345-abcdefgh-default-000001cc.iks.ibm",
-                    "ip_refs": [
-                        "10"
-                    ]
-                },
-                "9": {
-                    "type": "x-sysdig-cluster",
-                    "name": "cp4s-cluster",
-                    "x_node_ref": "8"
-                },
-                "10": {
-                    "type": "ipv4-addr",
-                    "value": "10.100.10.100"
-                }
-            },
-            "first_observed": "2023-11-18T00:10:40.1110282Z",
-            "last_observed": "2023-11-18T00:10:40.1110282Z",
-            "number_observed": 1
+        "1": {
+          "type": "x-sysdig-policy",
+          "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
+          "policy_id": 10101010,
+          "rule_name": "Write below root",
+          "rule_subtype": 0,
+          "rule_type": 6
         },
-        {
-            "id": "observed-data--4ea486af-ca07-49e5-a5d6-2feee9058c72",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2024-01-31T11:44:56.097Z",
-            "modified": "2024-01-31T11:44:56.097Z",
-            "objects": {
-                "0": {
-                    "type": "x-ibm-finding",
-                    "x_threat_originator": "policy",
-                    "x_category": "runtime",
-                    "x_threat_source": "syscall",
-                    "x_policy_ref": "1",
-                    "severity": 30,
-                    "x_agent_id": 12345678,
-                    "name": "Write below root",
-                    "x_cluster_ref": "9",
-                    "finding_type": "threat"
-                },
-                "1": {
-                    "type": "x-sysdig-policy",
-                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
-                    "policy_id": 10101010,
-                    "rule_name": "Write below root",
-                    "rule_subtype": 0,
-                    "rule_type": 6
-                },
-                "2": {
-                    "type": "process",
-                    "command_line": "exe / /var/data/criorootstorage/overlay/12345678910/diff",
-                    "cwd": "/",
-                    "name": "exe",
-                    "binary_ref": "4",
-                    "pid": 12345,
-                    "parent_ref": "5",
-                    "x_sid": "1122",
-                    "creator_user_ref": "7"
-                },
-                "3": {
-                    "type": "directory",
-                    "path": "/proc/self/exe"
-                },
-                "4": {
-                    "type": "file",
-                    "parent_directory_ref": "3",
-                    "name": "exe"
-                },
-                "5": {
-                    "type": "process",
-                    "command_line": "crio",
-                    "name": "crio",
-                    "binary_ref": "6",
-                    "pid": 12345,
-                    "x_parent_names": [
-                        "systemd"
-                    ]
-                },
-                "6": {
-                    "type": "file",
-                    "name": "crio"
-                },
-                "7": {
-                    "type": "user-account",
-                    "x_loginuid": "-1",
-                    "display_name": "root",
-                    "user_id": "0"
-                },
-                "8": {
-                    "type": "x-oca-asset",
-                    "hostname": "kube-12345-abcdefgh-default-000001cc.iks.ibm",
-                    "ip_refs": [
-                        "10"
-                    ]
-                },
-                "9": {
-                    "type": "x-sysdig-cluster",
-                    "name": "cp4s-cluster",
-                    "x_node_ref": "8"
-                },
-                "10": {
-                    "type": "ipv4-addr",
-                    "value": "10.100.10.100"
-                }
-            },
-            "first_observed": "2023-11-18T00:10:40.110793122Z",
-            "last_observed": "2023-11-18T00:10:40.110793122Z",
-            "number_observed": 1
+        "2": {
+          "type": "process",
+          "command_line": "exe / /var/data/criorootstorage/overlay/12345678910/diff",
+          "cwd": "/",
+          "name": "exe",
+          "binary_ref": "4",
+          "pid": 1,
+          "parent_ref": "5",
+          "x_sid": "2222",
+          "creator_user_ref": "7"
         },
-        {
-            "id": "observed-data--8d9ddcda-2b67-4131-bf9d-3bb9ff27cd2c",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2024-01-31T11:44:56.098Z",
-            "modified": "2024-01-31T11:44:56.098Z",
-            "objects": {
-                "0": {
-                    "type": "x-ibm-finding",
-                    "x_threat_originator": "policy",
-                    "x_category": "runtime",
-                    "x_threat_source": "syscall",
-                    "x_policy_ref": "1",
-                    "severity": 30,
-                    "name": "Write below root",
-                    "x_cluster_ref": "9",
-                    "finding_type": "threat"
-                },
-                "1": {
-                    "type": "x-sysdig-policy",
-                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
-                    "policy_id": 10101010,
-                    "rule_name": "Write below root",
-                    "rule_subtype": 0,
-                    "rule_type": 6
-                },
-                "2": {
-                    "type": "process",
-                    "command_line": "exe / /var/data/criorootstorage/overlay/12345abcde/diff",
-                    "cwd": "/",
-                    "name": "exe",
-                    "binary_ref": "4",
-                    "pid": 11223,
-                    "parent_ref": "5",
-                    "x_sid": "2222",
-                    "creator_user_ref": "7"
-                },
-                "3": {
-                    "type": "directory",
-                    "path": "/proc/self/exe"
-                },
-                "4": {
-                    "type": "file",
-                    "parent_directory_ref": "3",
-                    "name": "exe"
-                },
-                "5": {
-                    "type": "process",
-                    "command_line": "crio",
-                    "name": "crio",
-                    "binary_ref": "6",
-                    "pid": 7777,
-                    "x_parent_names": [
-                        "systemd"
-                    ]
-                },
-                "6": {
-                    "type": "file",
-                    "name": "crio"
-                },
-                "7": {
-                    "type": "user-account",
-                    "x_loginuid": "-1",
-                    "display_name": "root",
-                    "user_id": "0"
-                },
-                "8": {
-                    "type": "x-oca-asset",
-                    "hostname": "kube-12345-abcdefgh-default-000001cc.iks.ibm",
-                    "ip_refs": [
-                        "10"
-                    ]
-                },
-                "9": {
-                    "type": "x-sysdig-cluster",
-                    "name": "cp4s-cluster",
-                    "x_node_ref": "8"
-                },
-                "10": {
-                    "type": "ipv4-addr",
-                    "value": "10.100.10.100"
-                }
-            },
-            "first_observed": "2023-11-18T00:09:29.352609972Z",
-            "last_observed": "2023-11-18T00:09:29.352609972Z",
-            "number_observed": 1
+        "3": {
+          "type": "directory",
+          "path": "/proc/self/exe"
         },
-        {
-            "id": "observed-data--a8a0dab7-7295-4096-a44e-e3bd7e89b530",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2024-01-31T11:44:56.098Z",
-            "modified": "2024-01-31T11:44:56.098Z",
-            "objects": {
-                "0": {
-                    "type": "x-ibm-finding",
-                    "x_threat_originator": "policy",
-                    "x_category": "runtime",
-                    "x_threat_source": "syscall",
-                    "x_policy_ref": "1",
-                    "severity": 30,
-                    "name": "Write below root",
-                    "x_cluster_ref": "9",
-                    "finding_type": "threat"
-                },
-                "1": {
-                    "type": "x-sysdig-policy",
-                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
-                    "policy_id": 10101010,
-                    "rule_name": "Write below root",
-                    "rule_subtype": 0,
-                    "rule_type": 6
-                },
-                "2": {
-                    "type": "process",
-                    "command_line": "exe / /var/data/criorootstorage/overlay/12345abcde/diff",
-                    "cwd": "/",
-                    "name": "exe",
-                    "binary_ref": "4",
-                    "pid": 11111,
-                    "parent_ref": "5",
-                    "x_sid": "2222",
-                    "creator_user_ref": "7"
-                },
-                "3": {
-                    "type": "directory",
-                    "path": "/proc/self/exe"
-                },
-                "4": {
-                    "type": "file",
-                    "parent_directory_ref": "3",
-                    "name": "exe"
-                },
-                "5": {
-                    "type": "process",
-                    "command_line": "crio",
-                    "name": "crio",
-                    "binary_ref": "6",
-                    "pid": 1234,
-                    "x_parent_names": [
-                        "systemd"
-                    ]
-                },
-                "6": {
-                    "type": "file",
-                    "name": "crio"
-                },
-                "7": {
-                    "type": "user-account",
-                    "x_loginuid": "-1",
-                    "display_name": "root",
-                    "user_id": "0"
-                },
-                "8": {
-                    "type": "x-oca-asset",
-                    "hostname": "kube-12345-abcdefgh-default-000001cc.iks.ibm",
-                    "ip_refs": [
-                        "10"
-                    ]
-                },
-                "9": {
-                    "type": "x-sysdig-cluster",
-                    "name": "cp4s-cluster",
-                    "x_node_ref": "8"
-                },
-                "10": {
-                    "type": "ipv4-addr",
-                    "value": "10.100.10.100"
-                }
-            },
-            "first_observed": "2023-11-18T00:09:29.352418361Z",
-            "last_observed": "2023-11-18T00:09:29.352418361Z",
-            "number_observed": 1
+        "4": {
+          "type": "file",
+          "parent_directory_ref": "3",
+          "name": "exe"
         },
-        {
-            "id": "observed-data--a90c0b9a-73f5-4992-94bb-3b19ee914b77",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2024-01-31T11:44:56.099Z",
-            "modified": "2024-01-31T11:44:56.099Z",
-            "objects": {
-                "0": {
-                    "type": "x-ibm-finding",
-                    "x_threat_originator": "policy",
-                    "x_category": "runtime",
-                    "x_threat_source": "syscall",
-                    "x_policy_ref": "1",
-                    "severity": 50,
-                    "x_agent_id": 12345678,
-                    "name": "Launch Sensitive Mount Container",
-                    "x_cluster_ref": "8",
-                    "x_workload_name": "ibmcloud-block-storage-driver",
-                    "x_workload_type": "daemonset",
-                    "finding_type": "threat"
-                },
-                "1": {
-                    "type": "x-sysdig-policy",
-                    "description": "This Notable Events policy contains rules which may indicate undesired behavior including security threats. The rules are more generalized than Threat Detection policies and may result in more noise. Tuning will likely be required for the events generated from this policy.",
-                    "policy_id": 11223344,
-                    "rule_name": "Launch Sensitive Mount Container",
-                    "rule_subtype": 0,
-                    "rule_type": 6
-                },
-                "2": {
-                    "type": "x-oca-asset",
-                    "extensions": {
-                        "x-oca-container-ext": {
-                            "container_id": "11aa22bb33cc",
-                            "x_digest": "sha256:11aa22bb33cc12345abced",
-                            "image_id": "1234abcd",
-                            "x_repo": "au.icr.io/armada-master/ibmcloud-block-storage-driver",
-                            "x_tag": "v2.4.12",
-                            "name": "ibmcloud-block-storage-driver-container"
-                        },
-                        "x-oca-pod-ext": {
-                            "pod_name": "ibmcloud-block-storage-driver-sfjkf",
-                            "x_namespace": "kube-system"
-                        }
-                    },
-                    "hostname": "kube-12345-abcdefgh-default-000001cc.iks.ibm",
-                    "mac_refs": [
-                        "7"
-                    ],
-                    "ip_refs": [
-                        "9"
-                    ]
-                },
-                "3": {
-                    "type": "process",
-                    "command_line": "container:11aa22bb33cc",
-                    "name": "container:11aa22bb33cc",
-                    "binary_ref": "4",
-                    "pid": -1,
-                    "x_sid": "-1",
-                    "creator_user_ref": "6"
-                },
-                "4": {
-                    "type": "file",
-                    "name": "container:11aa22bb33cc"
-                },
-                "5": {
-                    "type": "process",
-                    "pid": -1
-                },
-                "6": {
-                    "type": "user-account",
-                    "x_loginuid": "0",
-                    "display_name": "0",
-                    "user_id": "0"
-                },
-                "7": {
-                    "type": "mac-addr",
-                    "value": "11:a1:aa:a1:a1:1a"
-                },
-                "8": {
-                    "type": "x-sysdig-cluster",
-                    "name": "cp4s-cluster",
-                    "x_node_ref": "2",
-                    "daemonset": "ibmcloud-block-storage-driver",
-                    "namespace": "kube-system"
-                },
-                "9": {
-                    "type": "ipv4-addr",
-                    "value": "10.100.10.100"
-                }
-            },
-            "first_observed": "2023-11-18T00:07:44.83943173Z",
-            "last_observed": "2023-11-18T00:07:44.83943173Z",
-            "number_observed": 1
+        "5": {
+          "type": "process",
+          "command_line": "crio",
+          "name": "crio",
+          "binary_ref": "6",
+          "pid": 11111,
+          "x_parent_names": [
+            "systemd"
+          ]
         },
-        {
-            "id": "observed-data--33d61380-5547-437c-866e-b18301d59fed",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2024-01-31T11:44:56.099Z",
-            "modified": "2024-01-31T11:44:56.099Z",
-            "objects": {
-                "0": {
-                    "type": "x-ibm-finding",
-                    "x_threat_originator": "policy",
-                    "x_category": "runtime",
-                    "x_threat_source": "syscall",
-                    "x_policy_ref": "1",
-                    "severity": 50,
-                    "x_agent_id": 12345678,
-                    "name": "Launch Root User Container",
-                    "x_cluster_ref": "8",
-                    "x_workload_name": "ibm-keepalived-watcher",
-                    "x_workload_type": "daemonset",
-                    "finding_type": "threat"
-                },
-                "1": {
-                    "type": "x-sysdig-policy",
-                    "description": "This Notable Events policy contains rules which may indicate undesired behavior including security threats. The rules are more generalized than Threat Detection policies and may result in more noise. Tuning will likely be required for the events generated from this policy.",
-                    "policy_id": 11223344,
-                    "rule_name": "Launch Root User Container",
-                    "rule_subtype": 0,
-                    "rule_type": 6
-                },
-                "2": {
-                    "type": "x-oca-asset",
-                    "extensions": {
-                        "x-oca-container-ext": {
-                            "container_id": "a1b1c1d1",
-                            "x_digest": "sha256:12345abcde",
-                            "image_id": "12ab34ed",
-                            "x_repo": "jp.icr.io/armada-master/keepalived-watcher",
-                            "x_tag": "1111",
-                            "name": "keepalived-init"
-                        },
-                        "x-oca-pod-ext": {
-                            "pod_name": "ibm-keepalived-watcher-fb8ws",
-                            "x_namespace": "kube-system"
-                        }
-                    },
-                    "hostname": "kube-12345-abcdefgh-default-000001cc.iks.ibm",
-                    "mac_refs": [
-                        "7"
-                    ],
-                    "ip_refs": [
-                        "9"
-                    ]
-                },
-                "3": {
-                    "type": "process",
-                    "command_line": "container:a1b1c1d1",
-                    "name": "container:a1b1c1d1",
-                    "binary_ref": "4",
-                    "pid": -1,
-                    "x_sid": "-1",
-                    "creator_user_ref": "6"
-                },
-                "4": {
-                    "type": "file",
-                    "name": "container:a1b1c1d1"
-                },
-                "5": {
-                    "type": "process",
-                    "pid": -1
-                },
-                "6": {
-                    "type": "user-account",
-                    "x_loginuid": "0",
-                    "display_name": "0",
-                    "user_id": "0"
-                },
-                "7": {
-                    "type": "mac-addr",
-                    "value": "11:a1:aa:a1:a1:1a"
-                },
-                "8": {
-                    "type": "x-sysdig-cluster",
-                    "name": "cp4s-cluster",
-                    "x_node_ref": "2",
-                    "daemonset": "ibm-keepalived-watcher",
-                    "namespace": "kube-system"
-                },
-                "9": {
-                    "type": "ipv4-addr",
-                    "value": "10.100.10.100"
-                }
-            },
-            "first_observed": "2023-11-18T00:07:23.428896821Z",
-            "last_observed": "2023-11-18T00:07:23.428896821Z",
-            "number_observed": 1
+        "6": {
+          "type": "file",
+          "name": "crio"
         },
-        {
-            "id": "observed-data--8b104264-9c2c-4447-aa61-6e5023cd273f",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2024-01-31T11:44:56.100Z",
-            "modified": "2024-01-31T11:44:56.100Z",
-            "objects": {
-                "0": {
-                    "type": "x-ibm-finding",
-                    "x_threat_originator": "policy",
-                    "x_category": "runtime",
-                    "x_threat_source": "syscall",
-                    "x_policy_ref": "1",
-                    "severity": 30,
-                    "x_agent_id": 12345678,
-                    "name": "Write below etc",
-                    "x_cluster_ref": "10",
-                    "x_workload_name": "calico-node",
-                    "x_workload_type": "daemonset",
-                    "finding_type": "threat"
-                },
-                "1": {
-                    "type": "x-sysdig-policy",
-                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
-                    "policy_id": 10101010,
-                    "rule_name": "Write below etc",
-                    "rule_subtype": 0,
-                    "rule_type": 6
-                },
-                "2": {
-                    "type": "x-oca-asset",
-                    "extensions": {
-                        "x-oca-container-ext": {
-                            "container_id": "123456abcd",
-                            "x_digest": "sha256:12345abcde",
-                            "image_id": "12345abcde",
-                            "x_repo": "au.icr.io/armada-master/calico/node",
-                            "x_tag": "v3.26.3",
-                            "name": "calico-node"
-                        },
-                        "x-oca-pod-ext": {
-                            "pod_name": "calico-node-bklfs",
-                            "x_namespace": "calico-system"
-                        }
-                    },
-                    "hostname": "kube-12345-abcdefgh-default-000001cc.iks.ibm",
-                    "mac_refs": [
-                        "9"
-                    ],
-                    "ip_refs": [
-                        "11"
-                    ]
-                },
-                "3": {
-                    "type": "process",
-                    "command_line": "cp --coreutils-abcd /12345/bin/cp -a /etc/service/available/cni /etc/service/enabled/",
-                    "cwd": "/",
-                    "name": "cp",
-                    "binary_ref": "5",
-                    "pid": 101010,
-                    "parent_ref": "6",
-                    "x_sid": "1010",
-                    "creator_user_ref": "8"
-                },
-                "4": {
-                    "type": "directory",
-                    "path": "/usr/bin/cp"
-                },
-                "5": {
-                    "type": "file",
-                    "parent_directory_ref": "4",
-                    "name": "cp"
-                },
-                "6": {
-                    "type": "process",
-                    "command_line": "start_runit /1234/abcd",
-                    "name": "start_runit",
-                    "binary_ref": "7",
-                    "pid": 12345,
-                    "x_parent_names": [
-                        "start_runit",
-                        "conmon",
-                        "systemd"
-                    ]
-                },
-                "7": {
-                    "type": "file",
-                    "name": "start_runit"
-                },
-                "8": {
-                    "type": "user-account",
-                    "x_loginuid": "-1",
-                    "display_name": "root",
-                    "user_id": "0"
-                },
-                "9": {
-                    "type": "mac-addr",
-                    "value": "11:a1:aa:a1:a1:1a"
-                },
-                "10": {
-                    "type": "x-sysdig-cluster",
-                    "name": "cp4s-cluster",
-                    "x_node_ref": "2",
-                    "daemonset": "calico-node",
-                    "namespace": "calico-system"
-                },
-                "11": {
-                    "type": "ipv4-addr",
-                    "value": "10.100.10.1000"
-                }
-            },
-            "first_observed": "2023-11-18T00:07:11.500773387Z",
-            "last_observed": "2023-11-18T00:07:11.500773387Z",
-            "number_observed": 1
+        "7": {
+          "type": "user-account",
+          "x_loginuid": "-1",
+          "display_name": "root",
+          "user_id": "0"
         },
-        {
-            "id": "observed-data--ddd38663-40e9-4ab7-9404-0bed14117264",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2024-01-31T11:44:56.100Z",
-            "modified": "2024-01-31T11:44:56.100Z",
-            "objects": {
-                "0": {
-                    "type": "x-ibm-finding",
-                    "x_threat_originator": "policy",
-                    "x_category": "runtime",
-                    "x_threat_source": "syscall",
-                    "x_policy_ref": "1",
-                    "severity": 30,
-                    "x_agent_id": 12345678,
-                    "name": "Write below etc",
-                    "x_cluster_ref": "10",
-                    "x_workload_name": "calico-node",
-                    "x_workload_type": "daemonset",
-                    "finding_type": "threat"
-                },
-                "1": {
-                    "type": "x-sysdig-policy",
-                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
-                    "policy_id": 10101010,
-                    "rule_name": "Write below etc",
-                    "rule_subtype": 0,
-                    "rule_type": 6
-                },
-                "2": {
-                    "type": "x-oca-asset",
-                    "extensions": {
-                        "x-oca-container-ext": {
-                            "container_id": "123456abcd",
-                            "x_digest": "sha256:12345abcde",
-                            "image_id": "12345abcde",
-                            "x_repo": "au.icr.io/armada-master/calico/node",
-                            "x_tag": "v3.26.3",
-                            "name": "calico-node"
-                        },
-                        "x-oca-pod-ext": {
-                            "pod_name": "calico-node-bklfs",
-                            "x_namespace": "calico-system"
-                        }
-                    },
-                    "hostname": "kube-12345-abcdefgh-default-000001cc.iks.ibm",
-                    "mac_refs": [
-                        "9"
-                    ],
-                    "ip_refs": [
-                        "11"
-                    ]
-                },
-                "3": {
-                    "type": "process",
-                    "command_line": "cp --coreutils-abcd /12345/bin/cp -a /etc/service/available/cni /etc/service/enabled/",
-                    "cwd": "/",
-                    "name": "cp",
-                    "binary_ref": "5",
-                    "pid": 101010,
-                    "parent_ref": "6",
-                    "x_sid": "1010",
-                    "creator_user_ref": "8"
-                },
-                "4": {
-                    "type": "directory",
-                    "path": "/usr/bin/cp"
-                },
-                "5": {
-                    "type": "file",
-                    "parent_directory_ref": "4",
-                    "name": "cp"
-                },
-                "6": {
-                    "type": "process",
-                    "command_line": "start_runit /1234/abcd",
-                    "name": "start_runit",
-                    "binary_ref": "7",
-                    "pid": 12345,
-                    "x_parent_names": [
-                        "start_runit",
-                        "conmon",
-                        "systemd"
-                    ]
-                },
-                "7": {
-                    "type": "file",
-                    "name": "start_runit"
-                },
-                "8": {
-                    "type": "user-account",
-                    "x_loginuid": "-1",
-                    "display_name": "root",
-                    "user_id": "0"
-                },
-                "9": {
-                    "type": "mac-addr",
-                    "value": "11:a1:aa:a1:a1:1a"
-                },
-                "10": {
-                    "type": "x-sysdig-cluster",
-                    "name": "cp4s-cluster",
-                    "x_node_ref": "2",
-                    "daemonset": "calico-node",
-                    "namespace": "calico-system"
-                },
-                "11": {
-                    "type": "ipv4-addr",
-                    "value": "10.100.10.100"
-                }
-            },
-            "first_observed": "2023-11-18T00:07:11.500065695Z",
-            "last_observed": "2023-11-18T00:07:11.500065695Z",
-            "number_observed": 1
+        "8": {
+          "type": "x-oca-asset",
+          "hostname": "kube-12345-abcdefgh-default-000001cc.iks.ibm",
+          "ip_refs": [
+            "10"
+          ]
         },
-        {
-            "id": "observed-data--1b4856b7-50cb-4e99-b148-09da55d5a181",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2024-01-31T11:44:56.101Z",
-            "modified": "2024-01-31T11:44:56.101Z",
-            "objects": {
-                "0": {
-                    "type": "x-ibm-finding",
-                    "x_threat_originator": "policy",
-                    "x_category": "runtime",
-                    "x_threat_source": "syscall",
-                    "x_policy_ref": "1",
-                    "severity": 30,
-                    "x_agent_id": 12345678,
-                    "name": "Write below etc",
-                    "x_cluster_ref": "10",
-                    "x_workload_name": "calico-node",
-                    "x_workload_type": "daemonset",
-                    "finding_type": "threat"
-                },
-                "1": {
-                    "type": "x-sysdig-policy",
-                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
-                    "policy_id": 10101010,
-                    "rule_name": "Write below etc",
-                    "rule_subtype": 0,
-                    "rule_type": 6
-                },
-                "2": {
-                    "type": "x-oca-asset",
-                    "extensions": {
-                        "x-oca-container-ext": {
-                            "container_id": "123456abcd",
-                            "x_digest": "sha256:12345abcde",
-                            "image_id": "12345abcde",
-                            "x_repo": "au.icr.io/armada-master/calico/node",
-                            "x_tag": "v3.26.3",
-                            "name": "calico-node"
-                        },
-                        "x-oca-pod-ext": {
-                            "pod_name": "calico-node-bklfs",
-                            "x_namespace": "calico-system"
-                        }
-                    },
-                    "hostname": "kube-12345-abcdefgh-default-000001cc.iks.ibm",
-                    "mac_refs": [
-                        "9"
-                    ],
-                    "ip_refs": [
-                        "11"
-                    ]
-                },
-                "3": {
-                    "type": "process",
-                    "command_line": "cp --coreutils-prog-sheba/etc/service/enabled/",
-                    "cwd": "/",
-                    "name": "cp",
-                    "binary_ref": "5",
-                    "pid": 12345,
-                    "parent_ref": "6",
-                    "x_sid": "1010",
-                    "creator_user_ref": "8"
-                },
-                "4": {
-                    "type": "directory",
-                    "path": "/usr/bin/cp"
-                },
-                "5": {
-                    "type": "file",
-                    "parent_directory_ref": "4",
-                    "name": "cp"
-                },
-                "6": {
-                    "type": "process",
-                    "command_line": "start_runit /1234/abcd",
-                    "name": "start_runit",
-                    "binary_ref": "7",
-                    "pid": 12345,
-                    "x_parent_names": [
-                        "start_runit",
-                        "conmon",
-                        "systemd"
-                    ]
-                },
-                "7": {
-                    "type": "file",
-                    "name": "start_runit"
-                },
-                "8": {
-                    "type": "user-account",
-                    "x_loginuid": "-1",
-                    "display_name": "root",
-                    "user_id": "0"
-                },
-                "9": {
-                    "type": "mac-addr",
-                    "value": "11:a1:aa:a1:a1:1a"
-                },
-                "10": {
-                    "type": "x-sysdig-cluster",
-                    "name": "cp4s-cluster",
-                    "x_node_ref": "2",
-                    "daemonset": "calico-node",
-                    "namespace": "calico-system"
-                },
-                "11": {
-                    "type": "ipv4-addr",
-                    "value": "10.100.10.100"
-                }
-            },
-            "first_observed": "2023-11-18T00:07:11.495825952Z",
-            "last_observed": "2023-11-18T00:07:11.495825952Z",
-            "number_observed": 1
+        "9": {
+          "type": "x-sysdig-cluster",
+          "name": "cp4s-cluster",
+          "x_node_ref": "8"
         },
-        {
-            "id": "observed-data--6ef06c8d-b959-4843-b6de-4cf88f83a92b",
-            "type": "observed-data",
-            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2024-01-31T11:50:00.261Z",
-            "modified": "2024-01-31T11:50:00.261Z",
-            "objects": {
-                "0": {
-                    "type": "x-ibm-finding",
-                    "x_threat_originator": "policy",
-                    "x_category": "runtime",
-                    "x_threat_source": "syscal",
-                    "x_policy_ref": "1",
-                    "severity": 50,
-                    "x_agent_id": 12345678,
-                    "name": "Run shell untrusted",
-                    "x_cluster_ref": "9",
-                    "finding_type": "threat"
-                },
-                "1": {
-                    "type": "x-sysdig-policy",
-                    "description": "This Notable Events policy contains rules which may indicate undesired behavior including security threats. The rules are more generalized than Threat Detection policies and may result in more noise. Tuning will likely be required for the events generated from this policy.",
-                    "policy_id": 11223344,
-                    "rule_name": "Run shell untrusted",
-                    "rule_subtype": 0,
-                    "rule_type": 6
-                },
-                "2": {
-                    "type": "x-oca-asset",
-                    "extensions": {
-                        "x-oca-container-ext": {
-                            "container_id": "1234abcd",
-                            "x_digest": "sha256:12345abcde",
-                            "image_id": "1a1a1a1a",
-                            "x_repo": "cp.icr.io/cp/opencontent-rabbitmq-3",
-                            "name": "ibm-rabbitmq-udi-rabbit-ibm-rabbitmq"
-                        },
-                        "x-oca-pod-ext": {
-                            "pod_name": "ibm-rabbitmq-udi-rabbit-ss-1",
-                            "x_namespace": "cp4s"
-                        }
-                    },
-                    "hostname": "kube-abcd-000003f3.iks.ibm",
-                    "mac_refs": [
-                        "8"
-                    ],
-                    "ip_refs": [
-                        "10"
-                    ]
-                },
-                "3": {
-                    "type": "process",
-                    "command_line": "sh -c \"/usr/local/lib/abcd/1234",
-                    "name": "sh",
-                    "binary_ref": "4",
-                    "pid": 112233,
-                    "parent_ref": "5",
-                    "x_sid": "-1",
-                    "creator_user_ref": "7"
-                },
-                "4": {
-                    "type": "file",
-                    "name": "sh"
-                },
-                "5": {
-                    "type": "process",
-                    "command_line": "erl /usr/local/lib-123456-noinput -s erlang halt",
-                    "name": "erl",
-                    "binary_ref": "6",
-                    "pid": 123456,
-                    "x_parent_names": [
-                        "erl_child_setup",
-                        "beam.smp",
-                        "rabbitmq-server",
-                        "conmon",
-                        "systemd"
-                    ]
-                },
-                "6": {
-                    "type": "file",
-                    "name": "erl"
-                },
-                "7": {
-                    "type": "user-account",
-                    "x_loginuid": "-1",
-                    "user_id": "1000640000"
-                },
-                "8": {
-                    "type": "mac-addr",
-                    "value": "11:11:a1:11:a1:a1"
-                },
-                "9": {
-                    "type": "x-sysdig-cluster",
-                    "name": "cp4s-cluster",
-                    "x_node_ref": "2",
-                    "namespace": "cp4s"
-                },
-                "10": {
-                    "type": "ipv4-addr",
-                    "value": "11.111.11.111"
-                }
-            },
-            "first_observed": "2023-11-18T08:57:49.41576017Z",
-            "last_observed": "2023-11-18T08:57:49.41576017Z",
-            "number_observed": 1
+        "10": {
+          "type": "ipv4-addr",
+          "value": "10.100.10.100"
         }
-    ],
-    "spec_version": "2.0"
+      },
+      "first_observed": "2023-11-18T00:10:40.1110282Z",
+      "last_observed": "2023-11-18T00:10:40.1110282Z",
+      "number_observed": 1
+    },
+    {
+      "id": "observed-data--4ea486af-ca07-49e5-a5d6-2feee9058c72",
+      "type": "observed-data",
+      "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+      "created": "2024-01-31T11:44:56.097Z",
+      "modified": "2024-01-31T11:44:56.097Z",
+      "objects": {
+        "0": {
+          "type": "x-ibm-finding",
+          "x_threat_originator": "policy",
+          "x_category": "runtime",
+          "x_threat_source": "syscall",
+          "x_policy_ref": "1",
+          "severity": 30,
+          "x_agent_id": 12345678,
+          "name": "Write below root",
+          "x_cluster_ref": "9",
+          "finding_type": "threat"
+        },
+        "1": {
+          "type": "x-sysdig-policy",
+          "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
+          "policy_id": 10101010,
+          "rule_name": "Write below root",
+          "rule_subtype": 0,
+          "rule_type": 6
+        },
+        "2": {
+          "type": "process",
+          "command_line": "exe / /var/data/criorootstorage/overlay/12345678910/diff",
+          "cwd": "/",
+          "name": "exe",
+          "binary_ref": "4",
+          "pid": 12345,
+          "parent_ref": "5",
+          "x_sid": "1122",
+          "creator_user_ref": "7"
+        },
+        "3": {
+          "type": "directory",
+          "path": "/proc/self/exe"
+        },
+        "4": {
+          "type": "file",
+          "parent_directory_ref": "3",
+          "name": "exe"
+        },
+        "5": {
+          "type": "process",
+          "command_line": "crio",
+          "name": "crio",
+          "binary_ref": "6",
+          "pid": 12345,
+          "x_parent_names": [
+            "systemd"
+          ]
+        },
+        "6": {
+          "type": "file",
+          "name": "crio"
+        },
+        "7": {
+          "type": "user-account",
+          "x_loginuid": "-1",
+          "display_name": "root",
+          "user_id": "0"
+        },
+        "8": {
+          "type": "x-oca-asset",
+          "hostname": "kube-12345-abcdefgh-default-000001cc.iks.ibm",
+          "ip_refs": [
+            "10"
+          ]
+        },
+        "9": {
+          "type": "x-sysdig-cluster",
+          "name": "cp4s-cluster",
+          "x_node_ref": "8"
+        },
+        "10": {
+          "type": "ipv4-addr",
+          "value": "10.100.10.100"
+        }
+      },
+      "first_observed": "2023-11-18T00:10:40.110793122Z",
+      "last_observed": "2023-11-18T00:10:40.110793122Z",
+      "number_observed": 1
+    },
+    {
+      "id": "observed-data--8d9ddcda-2b67-4131-bf9d-3bb9ff27cd2c",
+      "type": "observed-data",
+      "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+      "created": "2024-01-31T11:44:56.098Z",
+      "modified": "2024-01-31T11:44:56.098Z",
+      "objects": {
+        "0": {
+          "type": "x-ibm-finding",
+          "x_threat_originator": "policy",
+          "x_category": "runtime",
+          "x_threat_source": "syscall",
+          "x_policy_ref": "1",
+          "severity": 30,
+          "name": "Write below root",
+          "x_cluster_ref": "9",
+          "finding_type": "threat"
+        },
+        "1": {
+          "type": "x-sysdig-policy",
+          "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
+          "policy_id": 10101010,
+          "rule_name": "Write below root",
+          "rule_subtype": 0,
+          "rule_type": 6
+        },
+        "2": {
+          "type": "process",
+          "command_line": "exe / /var/data/criorootstorage/overlay/12345abcde/diff",
+          "cwd": "/",
+          "name": "exe",
+          "binary_ref": "4",
+          "pid": 11223,
+          "parent_ref": "5",
+          "x_sid": "2222",
+          "creator_user_ref": "7"
+        },
+        "3": {
+          "type": "directory",
+          "path": "/proc/self/exe"
+        },
+        "4": {
+          "type": "file",
+          "parent_directory_ref": "3",
+          "name": "exe"
+        },
+        "5": {
+          "type": "process",
+          "command_line": "crio",
+          "name": "crio",
+          "binary_ref": "6",
+          "pid": 7777,
+          "x_parent_names": [
+            "systemd"
+          ]
+        },
+        "6": {
+          "type": "file",
+          "name": "crio"
+        },
+        "7": {
+          "type": "user-account",
+          "x_loginuid": "-1",
+          "display_name": "root",
+          "user_id": "0"
+        },
+        "8": {
+          "type": "x-oca-asset",
+          "hostname": "kube-12345-abcdefgh-default-000001cc.iks.ibm",
+          "ip_refs": [
+            "10"
+          ]
+        },
+        "9": {
+          "type": "x-sysdig-cluster",
+          "name": "cp4s-cluster",
+          "x_node_ref": "8"
+        },
+        "10": {
+          "type": "ipv4-addr",
+          "value": "10.100.10.100"
+        }
+      },
+      "first_observed": "2023-11-18T00:09:29.352609972Z",
+      "last_observed": "2023-11-18T00:09:29.352609972Z",
+      "number_observed": 1
+    },
+    {
+      "id": "observed-data--a8a0dab7-7295-4096-a44e-e3bd7e89b530",
+      "type": "observed-data",
+      "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+      "created": "2024-01-31T11:44:56.098Z",
+      "modified": "2024-01-31T11:44:56.098Z",
+      "objects": {
+        "0": {
+          "type": "x-ibm-finding",
+          "x_threat_originator": "policy",
+          "x_category": "runtime",
+          "x_threat_source": "syscall",
+          "x_policy_ref": "1",
+          "severity": 30,
+          "name": "Write below root",
+          "x_cluster_ref": "9",
+          "finding_type": "threat"
+        },
+        "1": {
+          "type": "x-sysdig-policy",
+          "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
+          "policy_id": 10101010,
+          "rule_name": "Write below root",
+          "rule_subtype": 0,
+          "rule_type": 6
+        },
+        "2": {
+          "type": "process",
+          "command_line": "exe / /var/data/criorootstorage/overlay/12345abcde/diff",
+          "cwd": "/",
+          "name": "exe",
+          "binary_ref": "4",
+          "pid": 11111,
+          "parent_ref": "5",
+          "x_sid": "2222",
+          "creator_user_ref": "7"
+        },
+        "3": {
+          "type": "directory",
+          "path": "/proc/self/exe"
+        },
+        "4": {
+          "type": "file",
+          "parent_directory_ref": "3",
+          "name": "exe"
+        },
+        "5": {
+          "type": "process",
+          "command_line": "crio",
+          "name": "crio",
+          "binary_ref": "6",
+          "pid": 1234,
+          "x_parent_names": [
+            "systemd"
+          ]
+        },
+        "6": {
+          "type": "file",
+          "name": "crio"
+        },
+        "7": {
+          "type": "user-account",
+          "x_loginuid": "-1",
+          "display_name": "root",
+          "user_id": "0"
+        },
+        "8": {
+          "type": "x-oca-asset",
+          "hostname": "kube-12345-abcdefgh-default-000001cc.iks.ibm",
+          "ip_refs": [
+            "10"
+          ]
+        },
+        "9": {
+          "type": "x-sysdig-cluster",
+          "name": "cp4s-cluster",
+          "x_node_ref": "8"
+        },
+        "10": {
+          "type": "ipv4-addr",
+          "value": "10.100.10.100"
+        }
+      },
+      "first_observed": "2023-11-18T00:09:29.352418361Z",
+      "last_observed": "2023-11-18T00:09:29.352418361Z",
+      "number_observed": 1
+    },
+    {
+      "id": "observed-data--a90c0b9a-73f5-4992-94bb-3b19ee914b77",
+      "type": "observed-data",
+      "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+      "created": "2024-01-31T11:44:56.099Z",
+      "modified": "2024-01-31T11:44:56.099Z",
+      "objects": {
+        "0": {
+          "type": "x-ibm-finding",
+          "x_threat_originator": "policy",
+          "x_category": "runtime",
+          "x_threat_source": "syscall",
+          "x_policy_ref": "1",
+          "severity": 50,
+          "x_agent_id": 12345678,
+          "name": "Launch Sensitive Mount Container",
+          "x_cluster_ref": "8",
+          "x_workload_name": "ibmcloud-block-storage-driver",
+          "x_workload_type": "daemonset",
+          "finding_type": "threat"
+        },
+        "1": {
+          "type": "x-sysdig-policy",
+          "description": "This Notable Events policy contains rules which may indicate undesired behavior including security threats. The rules are more generalized than Threat Detection policies and may result in more noise. Tuning will likely be required for the events generated from this policy.",
+          "policy_id": 11223344,
+          "rule_name": "Launch Sensitive Mount Container",
+          "rule_subtype": 0,
+          "rule_type": 6
+        },
+        "2": {
+          "type": "x-oca-asset",
+          "extensions": {
+            "x-oca-container-ext": {
+              "container_id": "11aa22bb33cc",
+              "x_digest": "sha256:11aa22bb33cc12345abced",
+              "image_id": "1234abcd",
+              "x_repo": "au.icr.io/armada-master/ibmcloud-block-storage-driver",
+              "x_tag": "v2.4.12",
+              "name": "ibmcloud-block-storage-driver-container"
+            },
+            "x-oca-pod-ext": {
+              "pod_name": "ibmcloud-block-storage-driver-sfjkf",
+              "x_namespace": "kube-system"
+            }
+          },
+          "hostname": "kube-12345-abcdefgh-default-000001cc.iks.ibm",
+          "mac_refs": [
+            "7"
+          ],
+          "ip_refs": [
+            "9"
+          ]
+        },
+        "3": {
+          "type": "process",
+          "command_line": "container:11aa22bb33cc",
+          "name": "container:11aa22bb33cc",
+          "binary_ref": "4",
+          "pid": -1,
+          "x_sid": "-1",
+          "creator_user_ref": "6"
+        },
+        "4": {
+          "type": "file",
+          "name": "container:11aa22bb33cc"
+        },
+        "5": {
+          "type": "process",
+          "pid": -1
+        },
+        "6": {
+          "type": "user-account",
+          "x_loginuid": "0",
+          "display_name": "0",
+          "user_id": "0"
+        },
+        "7": {
+          "type": "mac-addr",
+          "value": "11:a1:aa:a1:a1:1a"
+        },
+        "8": {
+          "type": "x-sysdig-cluster",
+          "name": "cp4s-cluster",
+          "x_node_ref": "2",
+          "daemonset": "ibmcloud-block-storage-driver",
+          "namespace": "kube-system"
+        },
+        "9": {
+          "type": "ipv4-addr",
+          "value": "10.100.10.100"
+        }
+      },
+      "first_observed": "2023-11-18T00:07:44.83943173Z",
+      "last_observed": "2023-11-18T00:07:44.83943173Z",
+      "number_observed": 1
+    }
+  ],
+  "spec_version": "2.0"
 }
