@@ -1,0 +1,1189 @@
+{
+    "type": "bundle",
+    "id": "bundle--bb757499-ae29-498e-b635-5c6ee96bbcca",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "name": "sysdig",
+            "identity_class": "events",
+            "created": "2023-04-11T16:11:11.878Z",
+            "modified": "2023-11-10T16:11:11.878Z"
+        },
+        {
+            "id": "observed-data--54297683-1292-43ab-ae52-b4324bc647c6",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-01-31T11:57:05.637Z",
+            "modified": "2024-01-31T11:57:05.637Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "x_threat_originator": "policy",
+                    "x_category": "runtime",
+                    "x_threat_source": "syscall",
+                    "x_policy_ref": "1",
+                    "severity": 30,
+                    "x_agent_id": 55743992,
+                    "name": "Non sudo setuid",
+                    "x_cluster_ref": "12",
+                    "finding_type": "threat"
+                },
+                "1": {
+                    "type": "x-sysdig-policy",
+                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
+                    "policy_id": 10101010,
+                    "rule_name": "Non sudo setuid",
+                    "rule_subtype": 0,
+                    "rule_type": 6
+                },
+                "2": {
+                    "type": "x-oca-asset",
+                    "extensions": {
+                        "x-oca-container-ext": {
+                            "container_id": "897eae74ac07",
+                            "x_digest": "sha256:4a3396ae573c44932d06ba33f8696db4429c419da87cbdc82965ee96a37dd0af",
+                            "image_id": "e5da26576817",
+                            "x_repo": "docker.io/curlimages/curl",
+                            "x_tag": "latest",
+                            "name": "curl-test1"
+                        },
+                        "x-oca-pod-ext": {
+                            "pod_name": "curl-test1",
+                            "x_namespace": "default"
+                        }
+                    },
+                    "hostname": "ip-111-111-11-111.ec2.internal",
+                    "mac_refs": [
+                        "11"
+                    ],
+                    "ip_refs": [
+                        "13"
+                    ]
+                },
+                "3": {
+                    "type": "process",
+                    "command_line": "entrypoint.sh /entrypoint.sh bash",
+                    "cwd": "/home/curl_user/",
+                    "name": "entrypoint.sh",
+                    "binary_ref": "5",
+                    "pid": 1358430,
+                    "parent_ref": "6",
+                    "x_sid": "1",
+                    "creator_user_ref": "8"
+                },
+                "4": {
+                    "type": "directory",
+                    "path": "/entrypoint.sh"
+                },
+                "5": {
+                    "type": "file",
+                    "parent_directory_ref": "4",
+                    "name": "entrypoint.sh"
+                },
+                "6": {
+                    "type": "process",
+                    "command_line": "containerd-shim -namespace k8s.io -id 8b954b20440bb9a1306d6d3c4ba33e8acdfa21bca3613b7c832a6ed07ffc4f03 -address /run/containerd/containerd.sock",
+                    "name": "containerd-shim",
+                    "binary_ref": "7",
+                    "pid": 52610,
+                    "x_parent_names": [
+                        "systemd"
+                    ]
+                },
+                "7": {
+                    "type": "file",
+                    "name": "containerd-shim"
+                },
+                "8": {
+                    "type": "user-account",
+                    "x_loginuid": "-1",
+                    "display_name": "curl_user",
+                    "user_id": "100"
+                },
+                "9": {
+                    "type": "x-cloud-provider",
+                    "account_id": "12345678910",
+                    "region": "us-east-1",
+                    "name": "aws"
+                },
+                "10": {
+                    "type": "x-cloud-resource",
+                    "aws_instance_id": "i-12345abcd"
+                },
+                "11": {
+                    "type": "mac-addr",
+                    "value": "11:ee:1e:1e:1e:1e"
+                },
+                "12": {
+                    "type": "x-sysdig-cluster",
+                    "name": "sysdig-eks-cluster",
+                    "x_node_ref": "2",
+                    "namespace": "default"
+                },
+                "13": {
+                    "type": "ipv4-addr",
+                    "value": "222.222.22.222"
+                }
+            },
+            "first_observed": "2023-11-24T18:36:38.862464199Z",
+            "last_observed": "2023-11-24T18:36:38.862464199Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--f1d5d904-9d66-464c-966b-2f204825622c",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-01-31T11:57:05.637Z",
+            "modified": "2024-01-31T11:57:05.637Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "x_threat_originator": "policy",
+                    "x_category": "runtime",
+                    "x_threat_source": "syscall",
+                    "x_policy_ref": "1",
+                    "severity": 30,
+                    "x_agent_id": 55743992,
+                    "name": "Non sudo setuid",
+                    "x_cluster_ref": "12",
+                    "finding_type": "threat"
+                },
+                "1": {
+                    "type": "x-sysdig-policy",
+                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
+                    "policy_id": 10101010,
+                    "rule_name": "Non sudo setuid",
+                    "rule_subtype": 0,
+                    "rule_type": 6
+                },
+                "2": {
+                    "type": "x-oca-asset",
+                    "extensions": {
+                        "x-oca-container-ext": {
+                            "container_id": "2b49559e66c1",
+                            "x_digest": "sha256:4a3396ae573c44932d06ba33f8696db4429c419da87cbdc82965ee96a37dd0af",
+                            "image_id": "e5da26576817",
+                            "x_repo": "docker.io/curlimages/curl",
+                            "x_tag": "latest",
+                            "name": "curl-test1"
+                        },
+                        "x-oca-pod-ext": {
+                            "pod_name": "curl-test1",
+                            "x_namespace": "default"
+                        }
+                    },
+                    "hostname": "ip-111-111-11-111.ec2.internal",
+                    "mac_refs": [
+                        "11"
+                    ],
+                    "ip_refs": [
+                        "13"
+                    ]
+                },
+                "3": {
+                    "type": "process",
+                    "command_line": "entrypoint.sh /entrypoint.sh bash",
+                    "cwd": "/home/curl_user/",
+                    "name": "entrypoint.sh",
+                    "binary_ref": "5",
+                    "pid": 1356401,
+                    "parent_ref": "6",
+                    "x_sid": "1",
+                    "creator_user_ref": "8"
+                },
+                "4": {
+                    "type": "directory",
+                    "path": "/entrypoint.sh"
+                },
+                "5": {
+                    "type": "file",
+                    "parent_directory_ref": "4",
+                    "name": "entrypoint.sh"
+                },
+                "6": {
+                    "type": "process",
+                    "command_line": "containerd-shim -namespace k8s.io -id 8b954b20440bb9a1306d6d3c4ba33e8acdfa21bca3613b7c832a6ed07ffc4f03 -address /run/containerd/containerd.sock",
+                    "name": "containerd-shim",
+                    "binary_ref": "7",
+                    "pid": 52610,
+                    "x_parent_names": [
+                        "systemd"
+                    ]
+                },
+                "7": {
+                    "type": "file",
+                    "name": "containerd-shim"
+                },
+                "8": {
+                    "type": "user-account",
+                    "x_loginuid": "-1",
+                    "display_name": "curl_user",
+                    "user_id": "100"
+                },
+                "9": {
+                    "type": "x-cloud-provider",
+                    "account_id": "12345678910",
+                    "region": "us-east-1",
+                    "name": "aws"
+                },
+                "10": {
+                    "type": "x-cloud-resource",
+                    "aws_instance_id": "i-12345abcd"
+                },
+                "11": {
+                    "type": "mac-addr",
+                    "value": "11:ee:1e:1e:1e:1e"
+                },
+                "12": {
+                    "type": "x-sysdig-cluster",
+                    "name": "sysdig-eks-cluster",
+                    "x_node_ref": "2",
+                    "namespace": "default"
+                },
+                "13": {
+                    "type": "ipv4-addr",
+                    "value": "222.222.22.222"
+                }
+            },
+            "first_observed": "2023-11-24T18:31:25.866470438Z",
+            "last_observed": "2023-11-24T18:31:25.866470438Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--74f0161c-7df9-4a92-ac93-9311cb0bc647",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-01-31T11:57:05.638Z",
+            "modified": "2024-01-31T11:57:05.638Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "x_threat_originator": "policy",
+                    "x_category": "runtime",
+                    "x_threat_source": "syscall",
+                    "x_policy_ref": "1",
+                    "severity": 30,
+                    "x_agent_id": 55743992,
+                    "name": "Non sudo setuid",
+                    "x_cluster_ref": "12",
+                    "finding_type": "threat"
+                },
+                "1": {
+                    "type": "x-sysdig-policy",
+                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
+                    "policy_id": 10101010,
+                    "rule_name": "Non sudo setuid",
+                    "rule_subtype": 0,
+                    "rule_type": 6
+                },
+                "2": {
+                    "type": "x-oca-asset",
+                    "extensions": {
+                        "x-oca-container-ext": {
+                            "container_id": "6d80484a6296",
+                            "x_digest": "sha256:4a3396ae573c44932d06ba33f8696db4429c419da87cbdc82965ee96a37dd0af",
+                            "image_id": "e5da26576817",
+                            "x_repo": "docker.io/curlimages/curl",
+                            "x_tag": "latest",
+                            "name": "curl-test1"
+                        },
+                        "x-oca-pod-ext": {
+                            "pod_name": "curl-test1",
+                            "x_namespace": "default"
+                        }
+                    },
+                    "hostname": "ip-111-111-11-111.ec2.internal",
+                    "mac_refs": [
+                        "11"
+                    ],
+                    "ip_refs": [
+                        "13"
+                    ]
+                },
+                "3": {
+                    "type": "process",
+                    "command_line": "entrypoint.sh /entrypoint.sh bash",
+                    "cwd": "/home/curl_user/",
+                    "name": "entrypoint.sh",
+                    "binary_ref": "5",
+                    "pid": 1354465,
+                    "parent_ref": "6",
+                    "x_sid": "1",
+                    "creator_user_ref": "8"
+                },
+                "4": {
+                    "type": "directory",
+                    "path": "/entrypoint.sh"
+                },
+                "5": {
+                    "type": "file",
+                    "parent_directory_ref": "4",
+                    "name": "entrypoint.sh"
+                },
+                "6": {
+                    "type": "process",
+                    "command_line": "containerd-shim -namespace k8s.io -id 8b954b20440bb9a1306d6d3c4ba33e8acdfa21bca3613b7c832a6ed07ffc4f03 -address /run/containerd/containerd.sock",
+                    "name": "containerd-shim",
+                    "binary_ref": "7",
+                    "pid": 52610,
+                    "x_parent_names": [
+                        "systemd"
+                    ]
+                },
+                "7": {
+                    "type": "file",
+                    "name": "containerd-shim"
+                },
+                "8": {
+                    "type": "user-account",
+                    "x_loginuid": "-1",
+                    "display_name": "curl_user",
+                    "user_id": "100"
+                },
+                "9": {
+                    "type": "x-cloud-provider",
+                    "account_id": "12345678910",
+                    "region": "us-east-1",
+                    "name": "aws"
+                },
+                "10": {
+                    "type": "x-cloud-resource",
+                    "aws_instance_id": "i-12345abcd"
+                },
+                "11": {
+                    "type": "mac-addr",
+                    "value": "11:ee:1e:1e:1e:1e"
+                },
+                "12": {
+                    "type": "x-sysdig-cluster",
+                    "name": "sysdig-eks-cluster",
+                    "x_node_ref": "2",
+                    "namespace": "default"
+                },
+                "13": {
+                    "type": "ipv4-addr",
+                    "value": "222.222.22.222"
+                }
+            },
+            "first_observed": "2023-11-24T18:26:24.859692856Z",
+            "last_observed": "2023-11-24T18:26:24.859692856Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--b448ce5e-517c-42c4-8f26-56332763c90b",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-01-31T11:57:05.639Z",
+            "modified": "2024-01-31T11:57:05.639Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "x_threat_originator": "policy",
+                    "x_category": "runtime",
+                    "x_threat_source": "syscall",
+                    "x_policy_ref": "1",
+                    "severity": 30,
+                    "x_agent_id": 55743992,
+                    "name": "Non sudo setuid",
+                    "x_cluster_ref": "12",
+                    "finding_type": "threat"
+                },
+                "1": {
+                    "type": "x-sysdig-policy",
+                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
+                    "policy_id": 10101010,
+                    "rule_name": "Non sudo setuid",
+                    "rule_subtype": 0,
+                    "rule_type": 6
+                },
+                "2": {
+                    "type": "x-oca-asset",
+                    "extensions": {
+                        "x-oca-container-ext": {
+                            "container_id": "ed17d0cc4c02",
+                            "x_digest": "sha256:4a3396ae573c44932d06ba33f8696db4429c419da87cbdc82965ee96a37dd0af",
+                            "image_id": "e5da26576817",
+                            "x_repo": "docker.io/curlimages/curl",
+                            "x_tag": "latest",
+                            "name": "curl-test1"
+                        },
+                        "x-oca-pod-ext": {
+                            "pod_name": "curl-test1",
+                            "x_namespace": "default"
+                        }
+                    },
+                    "hostname": "ip-111-111-11-111.ec2.internal",
+                    "mac_refs": [
+                        "11"
+                    ],
+                    "ip_refs": [
+                        "13"
+                    ]
+                },
+                "3": {
+                    "type": "process",
+                    "command_line": "entrypoint.sh /entrypoint.sh bash",
+                    "cwd": "/home/curl_user/",
+                    "name": "entrypoint.sh",
+                    "binary_ref": "5",
+                    "pid": 1352467,
+                    "parent_ref": "6",
+                    "x_sid": "1",
+                    "creator_user_ref": "8"
+                },
+                "4": {
+                    "type": "directory",
+                    "path": "/entrypoint.sh"
+                },
+                "5": {
+                    "type": "file",
+                    "parent_directory_ref": "4",
+                    "name": "entrypoint.sh"
+                },
+                "6": {
+                    "type": "process",
+                    "command_line": "containerd-shim -namespace k8s.io -id 8b954b20440bb9a1306d6d3c4ba33e8acdfa21bca3613b7c832a6ed07ffc4f03 -address /run/containerd/containerd.sock",
+                    "name": "containerd-shim",
+                    "binary_ref": "7",
+                    "pid": 52610,
+                    "x_parent_names": [
+                        "systemd"
+                    ]
+                },
+                "7": {
+                    "type": "file",
+                    "name": "containerd-shim"
+                },
+                "8": {
+                    "type": "user-account",
+                    "x_loginuid": "-1",
+                    "display_name": "curl_user",
+                    "user_id": "100"
+                },
+                "9": {
+                    "type": "x-cloud-provider",
+                    "account_id": "12345678910",
+                    "region": "us-east-1",
+                    "name": "aws"
+                },
+                "10": {
+                    "type": "x-cloud-resource",
+                    "aws_instance_id": "i-12345abcd"
+                },
+                "11": {
+                    "type": "mac-addr",
+                    "value": "11:ee:1e:1e:1e:1e"
+                },
+                "12": {
+                    "type": "x-sysdig-cluster",
+                    "name": "sysdig-eks-cluster",
+                    "x_node_ref": "2",
+                    "namespace": "default"
+                },
+                "13": {
+                    "type": "ipv4-addr",
+                    "value": "222.222.22.222"
+                }
+            },
+            "first_observed": "2023-11-24T18:21:17.878092011Z",
+            "last_observed": "2023-11-24T18:21:17.878092011Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--43ad548f-e621-469f-a751-728901f3ab06",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-01-31T11:57:05.639Z",
+            "modified": "2024-01-31T11:57:05.639Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "x_threat_originator": "policy",
+                    "x_category": "runtime",
+                    "x_threat_source": "syscall",
+                    "x_policy_ref": "1",
+                    "severity": 30,
+                    "x_agent_id": 55743992,
+                    "name": "Non sudo setuid",
+                    "x_cluster_ref": "12",
+                    "finding_type": "threat"
+                },
+                "1": {
+                    "type": "x-sysdig-policy",
+                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
+                    "policy_id": 10101010,
+                    "rule_name": "Non sudo setuid",
+                    "rule_subtype": 0,
+                    "rule_type": 6
+                },
+                "2": {
+                    "type": "x-oca-asset",
+                    "extensions": {
+                        "x-oca-container-ext": {
+                            "container_id": "a9a3da31262f",
+                            "x_digest": "sha256:4a3396ae573c44932d06ba33f8696db4429c419da87cbdc82965ee96a37dd0af",
+                            "image_id": "e5da26576817",
+                            "x_repo": "docker.io/curlimages/curl",
+                            "x_tag": "latest",
+                            "name": "curl-test1"
+                        },
+                        "x-oca-pod-ext": {
+                            "pod_name": "curl-test1",
+                            "x_namespace": "default"
+                        }
+                    },
+                    "hostname": "ip-111-111-11-111.ec2.internal",
+                    "mac_refs": [
+                        "11"
+                    ],
+                    "ip_refs": [
+                        "13"
+                    ]
+                },
+                "3": {
+                    "type": "process",
+                    "command_line": "entrypoint.sh /entrypoint.sh bash",
+                    "cwd": "/home/curl_user/",
+                    "name": "entrypoint.sh",
+                    "binary_ref": "5",
+                    "pid": 1350500,
+                    "parent_ref": "6",
+                    "x_sid": "1",
+                    "creator_user_ref": "8"
+                },
+                "4": {
+                    "type": "directory",
+                    "path": "/entrypoint.sh"
+                },
+                "5": {
+                    "type": "file",
+                    "parent_directory_ref": "4",
+                    "name": "entrypoint.sh"
+                },
+                "6": {
+                    "type": "process",
+                    "command_line": "containerd-shim -namespace k8s.io -id 8b954b20440bb9a1306d6d3c4ba33e8acdfa21bca3613b7c832a6ed07ffc4f03 -address /run/containerd/containerd.sock",
+                    "name": "containerd-shim",
+                    "binary_ref": "7",
+                    "pid": 52610,
+                    "x_parent_names": [
+                        "systemd"
+                    ]
+                },
+                "7": {
+                    "type": "file",
+                    "name": "containerd-shim"
+                },
+                "8": {
+                    "type": "user-account",
+                    "x_loginuid": "-1",
+                    "display_name": "curl_user",
+                    "user_id": "100"
+                },
+                "9": {
+                    "type": "x-cloud-provider",
+                    "account_id": "12345678910",
+                    "region": "us-east-1",
+                    "name": "aws"
+                },
+                "10": {
+                    "type": "x-cloud-resource",
+                    "aws_instance_id": "i-12345abcd"
+                },
+                "11": {
+                    "type": "mac-addr",
+                    "value": "11:ee:1e:1e:1e:1e"
+                },
+                "12": {
+                    "type": "x-sysdig-cluster",
+                    "name": "sysdig-eks-cluster",
+                    "x_node_ref": "2",
+                    "namespace": "default"
+                },
+                "13": {
+                    "type": "ipv4-addr",
+                    "value": "222.222.22.222"
+                }
+            },
+            "first_observed": "2023-11-24T18:16:15.869218679Z",
+            "last_observed": "2023-11-24T18:16:15.869218679Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--1523f760-8f59-4197-ad50-304799a6fe8d",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-01-31T11:57:05.640Z",
+            "modified": "2024-01-31T11:57:05.640Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "x_threat_originator": "policy",
+                    "x_category": "runtime",
+                    "x_threat_source": "syscall",
+                    "x_policy_ref": "1",
+                    "severity": 30,
+                    "x_agent_id": 55743992,
+                    "name": "Non sudo setuid",
+                    "x_cluster_ref": "12",
+                    "finding_type": "threat"
+                },
+                "1": {
+                    "type": "x-sysdig-policy",
+                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
+                    "policy_id": 10101010,
+                    "rule_name": "Non sudo setuid",
+                    "rule_subtype": 0,
+                    "rule_type": 6
+                },
+                "2": {
+                    "type": "x-oca-asset",
+                    "extensions": {
+                        "x-oca-container-ext": {
+                            "container_id": "31f49176c590",
+                            "x_digest": "sha256:4a3396ae573c44932d06ba33f8696db4429c419da87cbdc82965ee96a37dd0af",
+                            "image_id": "e5da26576817",
+                            "x_repo": "docker.io/curlimages/curl",
+                            "x_tag": "latest",
+                            "name": "curl-test1"
+                        },
+                        "x-oca-pod-ext": {
+                            "pod_name": "curl-test1",
+                            "x_namespace": "default"
+                        }
+                    },
+                    "hostname": "ip-111-111-11-111.ec2.internal",
+                    "mac_refs": [
+                        "11"
+                    ],
+                    "ip_refs": [
+                        "13"
+                    ]
+                },
+                "3": {
+                    "type": "process",
+                    "command_line": "entrypoint.sh /entrypoint.sh bash",
+                    "cwd": "/home/curl_user/",
+                    "name": "entrypoint.sh",
+                    "binary_ref": "5",
+                    "pid": 1348519,
+                    "parent_ref": "6",
+                    "x_sid": "1",
+                    "creator_user_ref": "8"
+                },
+                "4": {
+                    "type": "directory",
+                    "path": "/entrypoint.sh"
+                },
+                "5": {
+                    "type": "file",
+                    "parent_directory_ref": "4",
+                    "name": "entrypoint.sh"
+                },
+                "6": {
+                    "type": "process",
+                    "command_line": "containerd-shim -namespace k8s.io -id 8b954b20440bb9a1306d6d3c4ba33e8acdfa21bca3613b7c832a6ed07ffc4f03 -address /run/containerd/containerd.sock",
+                    "name": "containerd-shim",
+                    "binary_ref": "7",
+                    "pid": 52610,
+                    "x_parent_names": [
+                        "systemd"
+                    ]
+                },
+                "7": {
+                    "type": "file",
+                    "name": "containerd-shim"
+                },
+                "8": {
+                    "type": "user-account",
+                    "x_loginuid": "-1",
+                    "display_name": "curl_user",
+                    "user_id": "100"
+                },
+                "9": {
+                    "type": "x-cloud-provider",
+                    "account_id": "12345678910",
+                    "region": "us-east-1",
+                    "name": "aws"
+                },
+                "10": {
+                    "type": "x-cloud-resource",
+                    "aws_instance_id": "i-12345abcd"
+                },
+                "11": {
+                    "type": "mac-addr",
+                    "value": "11:ee:1e:1e:1e:1e"
+                },
+                "12": {
+                    "type": "x-sysdig-cluster",
+                    "name": "sysdig-eks-cluster",
+                    "x_node_ref": "2",
+                    "namespace": "default"
+                },
+                "13": {
+                    "type": "ipv4-addr",
+                    "value": "222.222.22.222"
+                }
+            },
+            "first_observed": "2023-11-24T18:11:14.878788742Z",
+            "last_observed": "2023-11-24T18:11:14.878788742Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--1210448c-d717-412a-884d-3fb715945c19",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-01-31T11:57:05.641Z",
+            "modified": "2024-01-31T11:57:05.641Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "x_threat_originator": "policy",
+                    "x_category": "runtime",
+                    "x_threat_source": "syscall",
+                    "x_policy_ref": "1",
+                    "severity": 30,
+                    "x_agent_id": 55743992,
+                    "name": "Non sudo setuid",
+                    "x_cluster_ref": "12",
+                    "finding_type": "threat"
+                },
+                "1": {
+                    "type": "x-sysdig-policy",
+                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
+                    "policy_id": 10101010,
+                    "rule_name": "Non sudo setuid",
+                    "rule_subtype": 0,
+                    "rule_type": 6
+                },
+                "2": {
+                    "type": "x-oca-asset",
+                    "extensions": {
+                        "x-oca-container-ext": {
+                            "container_id": "8547fe0b23d1",
+                            "x_digest": "sha256:4a3396ae573c44932d06ba33f8696db4429c419da87cbdc82965ee96a37dd0af",
+                            "image_id": "e5da26576817",
+                            "x_repo": "docker.io/curlimages/curl",
+                            "x_tag": "latest",
+                            "name": "curl-test1"
+                        },
+                        "x-oca-pod-ext": {
+                            "pod_name": "curl-test1",
+                            "x_namespace": "default"
+                        }
+                    },
+                    "hostname": "ip-111-111-11-111.ec2.internal",
+                    "mac_refs": [
+                        "11"
+                    ],
+                    "ip_refs": [
+                        "13"
+                    ]
+                },
+                "3": {
+                    "type": "process",
+                    "command_line": "entrypoint.sh /entrypoint.sh bash",
+                    "cwd": "/home/curl_user/",
+                    "name": "entrypoint.sh",
+                    "binary_ref": "5",
+                    "pid": 1346500,
+                    "parent_ref": "6",
+                    "x_sid": "1",
+                    "creator_user_ref": "8"
+                },
+                "4": {
+                    "type": "directory",
+                    "path": "/entrypoint.sh"
+                },
+                "5": {
+                    "type": "file",
+                    "parent_directory_ref": "4",
+                    "name": "entrypoint.sh"
+                },
+                "6": {
+                    "type": "process",
+                    "command_line": "containerd-shim -namespace k8s.io -id 8b954b20440bb9a1306d6d3c4ba33e8acdfa21bca3613b7c832a6ed07ffc4f03 -address /run/containerd/containerd.sock",
+                    "name": "containerd-shim",
+                    "binary_ref": "7",
+                    "pid": 52610,
+                    "x_parent_names": [
+                        "systemd"
+                    ]
+                },
+                "7": {
+                    "type": "file",
+                    "name": "containerd-shim"
+                },
+                "8": {
+                    "type": "user-account",
+                    "x_loginuid": "-1",
+                    "display_name": "curl_user",
+                    "user_id": "100"
+                },
+                "9": {
+                    "type": "x-cloud-provider",
+                    "account_id": "12345678910",
+                    "region": "us-east-1",
+                    "name": "aws"
+                },
+                "10": {
+                    "type": "x-cloud-resource",
+                    "aws_instance_id": "i-12345abcd"
+                },
+                "11": {
+                    "type": "mac-addr",
+                    "value": "11:ee:1e:1e:1e:1e"
+                },
+                "12": {
+                    "type": "x-sysdig-cluster",
+                    "name": "sysdig-eks-cluster",
+                    "x_node_ref": "2",
+                    "namespace": "default"
+                },
+                "13": {
+                    "type": "ipv4-addr",
+                    "value": "222.222.22.222"
+                }
+            },
+            "first_observed": "2023-11-24T18:06:09.904454682Z",
+            "last_observed": "2023-11-24T18:06:09.904454682Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--780a7a8e-6d79-4d83-92b8-a94e28564fc8",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-01-31T11:57:05.641Z",
+            "modified": "2024-01-31T11:57:05.641Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "x_threat_originator": "policy",
+                    "x_category": "runtime",
+                    "x_threat_source": "syscall",
+                    "x_policy_ref": "1",
+                    "severity": 30,
+                    "x_agent_id": 55743992,
+                    "name": "Non sudo setuid",
+                    "x_cluster_ref": "12",
+                    "finding_type": "threat"
+                },
+                "1": {
+                    "type": "x-sysdig-policy",
+                    "description": "This policy contains rules which provide a greater insight into general activities occuring on the system. They are very noisy, but useful in threat hunting situations if you are looking for specific actions being taken during runtime. It is not recommended to use this policy for detection purposes unless tuning is enabled.  Additional manual tuning will likely be required.",
+                    "policy_id": 10101010,
+                    "rule_name": "Non sudo setuid",
+                    "rule_subtype": 0,
+                    "rule_type": 6
+                },
+                "2": {
+                    "type": "x-oca-asset",
+                    "extensions": {
+                        "x-oca-container-ext": {
+                            "container_id": "34fbb6f93c0c",
+                            "x_digest": "sha256:4a3396ae573c44932d06ba33f8696db4429c419da87cbdc82965ee96a37dd0af",
+                            "image_id": "e5da26576817",
+                            "x_repo": "docker.io/curlimages/curl",
+                            "x_tag": "latest",
+                            "name": "curl-test1"
+                        },
+                        "x-oca-pod-ext": {
+                            "pod_name": "curl-test1",
+                            "x_namespace": "default"
+                        }
+                    },
+                    "hostname": "ip-111-111-11-111.ec2.internal",
+                    "mac_refs": [
+                        "11"
+                    ],
+                    "ip_refs": [
+                        "13"
+                    ]
+                },
+                "3": {
+                    "type": "process",
+                    "command_line": "entrypoint.sh /entrypoint.sh bash",
+                    "cwd": "/home/curl_user/",
+                    "name": "entrypoint.sh",
+                    "binary_ref": "5",
+                    "pid": 1344535,
+                    "parent_ref": "6",
+                    "x_sid": "1",
+                    "creator_user_ref": "8"
+                },
+                "4": {
+                    "type": "directory",
+                    "path": "/entrypoint.sh"
+                },
+                "5": {
+                    "type": "file",
+                    "parent_directory_ref": "4",
+                    "name": "entrypoint.sh"
+                },
+                "6": {
+                    "type": "process",
+                    "command_line": "containerd-shim -namespace k8s.io -id 8b954b20440bb9a1306d6d3c4ba33e8acdfa21bca3613b7c832a6ed07ffc4f03 -address /run/containerd/containerd.sock",
+                    "name": "containerd-shim",
+                    "binary_ref": "7",
+                    "pid": 52610,
+                    "x_parent_names": [
+                        "systemd"
+                    ]
+                },
+                "7": {
+                    "type": "file",
+                    "name": "containerd-shim"
+                },
+                "8": {
+                    "type": "user-account",
+                    "x_loginuid": "-1",
+                    "display_name": "curl_user",
+                    "user_id": "100"
+                },
+                "9": {
+                    "type": "x-cloud-provider",
+                    "account_id": "12345678910",
+                    "region": "us-east-1",
+                    "name": "aws"
+                },
+                "10": {
+                    "type": "x-cloud-resource",
+                    "aws_instance_id": "i-12345abcd"
+                },
+                "11": {
+                    "type": "mac-addr",
+                    "value": "11:ee:1e:1e:1e:1e"
+                },
+                "12": {
+                    "type": "x-sysdig-cluster",
+                    "name": "sysdig-eks-cluster",
+                    "x_node_ref": "2",
+                    "namespace": "default"
+                },
+                "13": {
+                    "type": "ipv4-addr",
+                    "value": "222.222.22.222"
+                }
+            },
+            "first_observed": "2023-11-24T18:01:08.87050676Z",
+            "last_observed": "2023-11-24T18:01:08.87050676Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--db9d04fe-6bad-4a22-a0ff-8600b6e3c4e4",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-01-31T11:59:00.841Z",
+            "modified": "2024-01-31T11:59:00.841Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "x_threat_originator": "policy",
+                    "x_category": "runtime",
+                    "x_threat_source": "syscall",
+                    "x_policy_ref": "1",
+                    "severity": 50,
+                    "x_agent_id": 12345678,
+                    "name": "Terminal shell in container",
+                    "x_cluster_ref": "9",
+                    "x_deployment_ref": "10",
+                    "x_workload_name": "cp4s-sequences-operator",
+                    "x_workload_type": "deployment",
+                    "finding_type": "threat"
+                },
+                "1": {
+                    "type": "x-sysdig-policy",
+                    "description": "This Notable Events policy contains rules which may indicate undesired behavior including security threats. The rules are more generalized than Threat Detection policies and may result in more noise. Tuning will likely be required for the events generated from this policy.",
+                    "policy_id": 11223344,
+                    "rule_name": "Terminal shell in container",
+                    "rule_subtype": 0,
+                    "rule_type": 6
+                },
+                "2": {
+                    "type": "x-oca-asset",
+                    "extensions": {
+                        "x-oca-container-ext": {
+                            "container_id": "658ad13d11fe",
+                            "x_digest": "sha256:7bf17bbf960a89b6528ee88a17c04f92bf11e31aeb183ad493b9adc5cf93bb6d",
+                            "image_id": "95503e0f0e68",
+                            "x_repo": "icr.io/cpopen/cp4s-sequences-operator",
+                            "name": "manager"
+                        },
+                        "x-oca-pod-ext": {
+                            "pod_name": "cp4s-sequences-operator-7d89f8bddd-lrbx9",
+                            "x_namespace": "cp4s"
+                        }
+                    },
+                    "hostname": "kube-abcd-000003f3.iks.ibm",
+                    "mac_refs": [
+                        "8"
+                    ],
+                    "ip_refs": [
+                        "11"
+                    ]
+                },
+                "3": {
+                    "type": "process",
+                    "command_line": "sh -c ( umask 77 && mkdir -p \"` echo /opt/ansible/.ansible/tmp `\"&& mkdir \"` echo /opt/ansible/.ansible/tmp/ansible-tmp-1700290553.5545046-79706-55918935646838 `\" && echo ansible-tmp-1700290553.5545046-79706-55918935646838=\"` echo /opt/ansible/.ansible/tmp/ansible-tmp-1700290553.5545046-79706-55918935646838 `\" ) && sleep 0",
+                    "name": "sh",
+                    "binary_ref": "4",
+                    "pid": 84005,
+                    "parent_ref": "5",
+                    "x_sid": "-1",
+                    "creator_user_ref": "7"
+                },
+                "4": {
+                    "type": "file",
+                    "name": "sh"
+                },
+                "5": {
+                    "type": "process",
+                    "command_line": "systemd --switched-root --system --deserialize 18",
+                    "name": "systemd",
+                    "binary_ref": "6",
+                    "pid": 1
+                },
+                "6": {
+                    "type": "file",
+                    "name": "systemd"
+                },
+                "7": {
+                    "type": "user-account",
+                    "x_loginuid": "-1",
+                    "display_name": "1000640000",
+                    "user_id": "1000640000"
+                },
+                "8": {
+                    "type": "mac-addr",
+                    "value": "11:11:a1:11:a1:a1"
+                },
+                "9": {
+                    "type": "x-sysdig-cluster",
+                    "name": "cp4s-cluster",
+                    "x_node_ref": "2",
+                    "namespace": "cp4s"
+                },
+                "10": {
+                    "type": "x-sysdig-deployment",
+                    "name": "cp4s-sequences-operator"
+                },
+                "11": {
+                    "type": "ipv4-addr",
+                    "value": "11.111.11.111"
+                }
+            },
+            "first_observed": "2023-11-18T06:55:53.568881531Z",
+            "last_observed": "2023-11-18T06:55:53.568881531Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--b73bbf13-0ac2-4aba-954d-21dc02f7aeb2",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-01-31T11:59:00.845Z",
+            "modified": "2024-01-31T11:59:00.845Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "x_threat_originator": "policy",
+                    "x_category": "runtime",
+                    "x_threat_source": "syscall",
+                    "x_policy_ref": "1",
+                    "severity": 50,
+                    "x_agent_id": 12345678,
+                    "name": "Terminal shell in container",
+                    "x_cluster_ref": "9",
+                    "x_deployment_ref": "10",
+                    "x_workload_name": "cp4s-sequences-operator",
+                    "x_workload_type": "deployment",
+                    "finding_type": "threat"
+                },
+                "1": {
+                    "type": "x-sysdig-policy",
+                    "description": "This Notable Events policy contains rules which may indicate undesired behavior including security threats. The rules are more generalized than Threat Detection policies and may result in more noise. Tuning will likely be required for the events generated from this policy.",
+                    "policy_id": 11223344,
+                    "rule_name": "Terminal shell in container",
+                    "rule_subtype": 0,
+                    "rule_type": 6
+                },
+                "2": {
+                    "type": "x-oca-asset",
+                    "extensions": {
+                        "x-oca-container-ext": {
+                            "container_id": "658ad13d11fe",
+                            "x_digest": "sha256:7bf17bbf960a89b6528ee88a17c04f92bf11e31aeb183ad493b9adc5cf93bb6d",
+                            "image_id": "95503e0f0e68",
+                            "x_repo": "icr.io/cpopen/cp4s-sequences-operator",
+                            "name": "manager"
+                        },
+                        "x-oca-pod-ext": {
+                            "pod_name": "cp4s-sequences-operator-7d89f8bddd-lrbx9",
+                            "x_namespace": "cp4s"
+                        }
+                    },
+                    "hostname": "kube-abcd-000003f3.iks.ibm",
+                    "mac_refs": [
+                        "8"
+                    ],
+                    "ip_refs": [
+                        "11"
+                    ]
+                },
+                "3": {
+                    "type": "process",
+                    "command_line": "sh -c /bin/sh -c 'echo ~1000640000 && sleep 0'",
+                    "name": "sh",
+                    "binary_ref": "4",
+                    "pid": 84001,
+                    "parent_ref": "5",
+                    "x_sid": "-1",
+                    "creator_user_ref": "7"
+                },
+                "4": {
+                    "type": "file",
+                    "name": "sh"
+                },
+                "5": {
+                    "type": "process",
+                    "command_line": "systemd --switched-root --system --deserialize 18",
+                    "name": "systemd",
+                    "binary_ref": "6",
+                    "pid": 1
+                },
+                "6": {
+                    "type": "file",
+                    "name": "systemd"
+                },
+                "7": {
+                    "type": "user-account",
+                    "x_loginuid": "-1",
+                    "display_name": "1000640000",
+                    "user_id": "1000640000"
+                },
+                "8": {
+                    "type": "mac-addr",
+                    "value": "11:11:a1:11:a1:a1"
+                },
+                "9": {
+                    "type": "x-sysdig-cluster",
+                    "name": "cp4s-cluster",
+                    "x_node_ref": "2",
+                    "namespace": "cp4s"
+                },
+                "10": {
+                    "type": "x-sysdig-deployment",
+                    "name": "cp4s-sequences-operator"
+                },
+                "11": {
+                    "type": "ipv4-addr",
+                    "value": "11.111.11.111"
+                }
+            },
+            "first_observed": "2023-11-18T06:55:53.536125304Z",
+            "last_observed": "2023-11-18T06:55:53.536125304Z",
+            "number_observed": 1
+        }
+    ],
+    "spec_version": "2.0"
+}
