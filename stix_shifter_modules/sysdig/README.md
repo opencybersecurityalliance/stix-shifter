@@ -1356,6 +1356,15 @@ execute sysdig sysdig "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-4
 ### Limitations
 - Query timestamp range should be upto maximum of 14 days
 - Sysdig does not support LIKE, MATCHES operators
+- Sysdig have limited search fields, Please find below steps to get the search fields
+   ```
+   1.Login to Sysdig SECURE console
+   2.From the left side bottom of the navigation menu, go to Secure Operations
+   3.From the Secure Operations, go to Current API Docs under Help
+   4.From the Current API Docs, Please select the 'Secure Events' option from the left side of the navigation menu.
+  Note: The list of supported fields for query search is limited and can be obtained from api/v1/secureEvents/scopeFilters endpoint.
+   ```
+
 
 ### References
 - [Sysdig] (https://docs.sysdig.com/en/docs/sysdig-secure/)
