@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "displayName": "Azure Log Analytics",
+            "displayName": "Microsoft Azure Log Analytics",
             "group": "azure"
         },
         "host": {
