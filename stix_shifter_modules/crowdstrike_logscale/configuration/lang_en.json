@@ -7,17 +7,17 @@
         "help": {
             "label": "Need additional help?",
             "description": "More details on the data source setting can be found in the specified link"
+        },
+        "repository": {
+            "label": "Repository",
+            "description": "The container in which log events collected from various data sources are stored."
         }
     },
     "configuration": {
         "auth": {
-            "repository": {
-                "label": "Repository",
-                "description": "LogScale repo for search API"
-            },
             "api_token": {
                 "label": "API token",
-                "description": "LogScale repo API token to authenticate requests for APIs"
+                "description": "LogScale API token to authenticate requests for APIs"
             }
         }
     }

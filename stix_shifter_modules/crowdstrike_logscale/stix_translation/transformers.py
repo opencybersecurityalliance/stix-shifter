@@ -10,14 +10,13 @@ class FormatMacAddress(ValueTransformer):
     def transform(mac_value):
         """correcting mac address presentation, it should be 6 octate separated
          by only colon (:) not by any other special character """
-        mac_value = re.sub("[^A-Fa-f0-9]", "", mac_value)
-        mac_length = len(mac_value)
-        if mac_length < 12:
-            for i in range(mac_length, 12):
-                mac_value = "0" + mac_value
-
-        value = ':'.join([mac_value[i:i + 2] for i in range(0, len(mac_value), 2)])
-        return value.lower()
+        mac_value = re.sub("[^A-Fa-f0-9]", ":", mac_value)
+        mac_split = mac_value.split(":")
+        formatted_split = ["0" + mac if len(mac) < 2 else mac for mac in mac_split]
+        while len(formatted_split) < 6:
+            formatted_split.insert(0,"00")
+        mac_value = ":".join(formatted_split)
+        return mac_value.lower()
 
 
 class LogscaleToTimestamp(ValueTransformer):

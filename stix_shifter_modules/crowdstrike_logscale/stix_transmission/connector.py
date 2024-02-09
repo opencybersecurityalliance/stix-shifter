@@ -82,17 +82,13 @@ class Connector(BaseJsonSyncConnector):
                     return_obj['data'] = []
 
         except json.decoder.JSONDecodeError as ex:
-            response_dict['code'] = 100
-            response_dict['message'] = str(ex)
             self.logger.error('error while fetching results: %s', ex)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            return_obj = self.exception_response(100, str(ex))
 
         except Exception as ex:
-            if "timeout_error" in str(ex):
-                response_dict['code'] = 408
-            response_dict['message'] = str(ex)
             self.logger.error('error while fetching results: %s', ex)
-            ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+            code = 408 if "timeout_error" in str(ex) else None
+            return_obj = self.exception_response(code, str(ex))
         return return_obj
 
     def exception_response(self, code, response_txt):
@@ -103,7 +99,7 @@ class Connector(BaseJsonSyncConnector):
         :return: return_obj, dict
         """
         return_obj = {}
-        response_dict = {'code': code, 'message': str(response_txt)}
+        response_dict = {'code': code, 'message': str(response_txt)} if code else {'message': str(response_txt)}
         ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
 
@@ -136,7 +132,7 @@ class Connector(BaseJsonSyncConnector):
         """
         res = {}
         for key, value in event.items():
-            match = re.search(r'(.*)\[(\d)\]$', key)
+            match = re.search(r'(.*)\[(\d+)\]$', key)
             if match:
                 indexed_key, _ = match.groups()
                 val = res.get(indexed_key, {}) or []
@@ -144,10 +140,12 @@ class Connector(BaseJsonSyncConnector):
                     response = self.format_indexed_keys(value)
                     val.append(response)
                 else:
-                    val.append(value)
+                    if value != {} and value != '' and value != [] and value is not None:
+                        val.append(value)
                 res[indexed_key] = val
             else:
                 if isinstance(value, dict):
                     value = self.format_indexed_keys(value)
-                res[key] = value
+                if value != {} and value != '' and value != [] and value is not None:
+                    res[key] = value
         return res

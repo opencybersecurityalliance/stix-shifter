@@ -30,6 +30,7 @@ class QueryStringPatternTranslator:
         self.options = options
         self.all_queries = []
         self.comparator_lookup = self.dmm.map_comparator()
+        self.current_observation_operator = ""
         self.source = self.dmm.dialect
         self.parse_expression(pattern)
         self.translated_query = self._create_formatted_query()
@@ -380,7 +381,7 @@ class QueryStringPatternTranslator:
         """
         combined_obs_operator = self._lookup_comparison_operator(expression.operator)
         self._parse_expression(expression.expr1, qualifier, combined_observation=True)
-        self.comparator_lookup["current_observation_operator"] = combined_obs_operator
+        self.current_observation_operator = combined_obs_operator
         self._parse_expression(expression.expr2, qualifier, combined_observation=True)
 
     def _parse_mapped_fields(self, list_of_dict_value, value, expression, mapped_fields_array):
@@ -542,8 +543,7 @@ class QueryStringPatternTranslator:
 
         time_range_list = QueryStringPatternTranslator._parse_time_range(qualifier, self.options["time_range"])
         converted_time_range = QueryStringPatternTranslator._check_time_range_values(time_range_list)
-        obs_operator = self.comparator_lookup[
-            "current_observation_operator"] if "current_observation_operator" in self.comparator_lookup else "or"
+        obs_operator = self.current_observation_operator if self.current_observation_operator else "or"
 
         if combined_observation:
             if self.query_list:

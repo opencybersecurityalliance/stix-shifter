@@ -131,15 +131,16 @@ class TestCrowdStrikeLogscaleConnection(unittest.TestCase, object):
     @staticmethod
     def connection():
         """format for connection"""
-        return {"host": "hostbla"}
+        return {"host": "hostbla",
+                "repository": "testrepo"
+                }
 
     @staticmethod
     def configuration():
         """format for configuration"""
         return {
             "auth": {
-                "api_token": "abcxxxxxyz",
-                "repository": "testrepo"
+                "api_token": "abcxxxxxyz"
             }
         }
 

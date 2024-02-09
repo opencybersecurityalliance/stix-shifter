@@ -6,10 +6,12 @@ See the [table of mappings](crowdstrike_logscale_supported_stix.md) for the STIX
 
 **Table of Contents**
 - [Crowdstrike Logscale API Endpoints](#crowdstrike-logscale-api-endpoints)
+- [Curl Command to test the API Endpoints](#curl-command-to-test-api-endpoints)
 - [Format of calling Stix shifter from Command Line](#format-for-calling-stix-shifter-from-the-command-line)
 - [Pattern expression with STIX attributes and CUSTOM attributes - Single Observation](#single-observation)
 - [Pattern expression with STIX and CUSTOM attributes - Multiple Observation](#multiple-observation)
 - [STIX Execute Query](#stix-execute-query)
+- [Types of Attributes](#type-of-attributes)
 - [Connector Extension](#connector-extension)
 - [Recommendations](#recommendations)
 - [Limitations](#limitations)
@@ -22,6 +24,26 @@ See the [table of mappings](crowdstrike_logscale_supported_stix.md) for the STIX
    | Ping Endpoint    | Status API - api/v1/status        | GET    |
    | Results Endpoint | Search API - api/v1/repositories  | POST   |
 
+
+### CURL command to test API Endpoints
+#### Ping 
+```
+curl --location 'https://{hostname}/api/v1/status' \
+--header 'Accept: application/json' \
+--header 'Authorization: Bearer {API token}'
+```
+#### Results
+```
+curl --location 'https://{hostname}/api/v1/repositories/TestRepository/query' \
+--header 'Accept: application/json' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {API token}' \
+--data '{
+    "queryString": "device.local_ip =~ cidr(subnet=\"1.1.1.1/32\") | tail(10)",
+    "start": 1702598400000,
+    "end": 1707461040000
+}'
+```
 
 ### Format for calling stix-shifter from the command line
 ```
@@ -66,8 +88,8 @@ translate crowdstrike_logscale query "{}" "[process:name IN ('cmd.exe','calc.exe
 ```shell
 transmit
 crowdstrike_logscale
-"{\"host\":\"xxx\"}"
-"{\"auth\":{\"repository\":\"TestRepository\",\"api_token\": \"123\"}}"
+"{\"host\":\"xxx\",\"repository\":\"TestRepository\"}"
+"{\"auth\":{\"api_token\": \"123\"}}"
 results
 "{ \"source\": \"crowdstrikeedr\", \"queryString\": \"device.local_ip =~ cidr(subnet=\\"1.1.1.1/32\\") | tail(10000)\", \"start\": 1702598400000, \"end\": 1703203200000 }"
 0
@@ -201,9 +223,6 @@ results
         },
         "email_sent": "false",
         "first_behavior": "2023-12-21T05:48:28Z",
-        "hostinfo": {
-          "domain": ""
-        },
         "last_behavior": "2023-12-21T05:48:28Z",
         "max_confidence": "100",
         "max_severity": "50",
@@ -466,8 +485,8 @@ execute
 crowdstrike_logscale
 crowdstrike_logscale
 "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"crowdstrike_logscale\",\"identity_class\":\"system\",\"created\":\"2023-12-24T13:22:50.336Z\",\"modified\":\"2022-12-24T13:22:50.336Z\"}"
-"{\"host\":\"xyz\"}"
-"{\"auth\":{\"repository\":\"TestRepository\",\"api_token\":  \"123\"}}" 
+"{\"host\":\"xyz\",\"repository\":\"TestRepository\"}"
+"{\"auth\":{\"api_token\":  \"123\"}}" 
 "[ipv4-addr:value = '3.4.5.6' AND software:version = 'Windows Server 2022' OR x-oca-asset:host_type = 'Server' OR x-crowdstrike-detection-behavior:control_graph_id IN (2048,10240)] START t'2023-12-15T00:00:00.000Z' STOP t'2023-12-22T00:00:00.000Z'"
 ```
 
@@ -692,19 +711,35 @@ crowdstrike_logscale
     "spec_version": "2.0"
 }
 ```
+### Type of Attributes
+
+   | Type                      | Description                     | Example |
+   |---------------------------|---------------------------------|-----|
+   | List of dictionary fields | A list containing one or more dictionaries  | "behaviors": [{"alleged_filetype": "exe"}, {"alleged_filetype": "txt"}] |
+   | List of values fields/Array fields | A list containing one or more values | "behaviors_processed": ["123","abc"] |
+
+
+### Current connector Features
+- It has mappings which supports only Crowdstrike Falcon EDR detection logs.
+- The Input repository which is provided to the connector should contain only Crowdstrike Falcon EDR detection logs in JSON format.
 
 ### Connector Extension
+Recommendations to be followed to add new log source to the connector
+
+- The structure of log source data which is ingested into logscale should be of type JSON .
+- The JSON data which has been ingested into logscale should be inserted without new line and should be inserted as raw data.
 - As Logscale doesn't have unified data schema, separate mapping files(from_stix_map.json, to_stix_map.json) needs to be 
-  created for each log source(eg: okta, aws_guardduty) that are newly added to this connector module.
-- The structure of log source data ingest into logscale should be of type JSON .
-- The Json data which has been ingested into logscale should be inserted without new line and should be inserted as raw data.
-- The mapping of list (list of values/list of dictionary) fields in from_stix_map should be mentioned with [\*] suffix. 
+  created for each log source that are newly added to this connector module.
+  Example: 
+    - Okta Log source : okta_from_stix_map.json, okta_to_stix_map.json
+    - AWS GuardDuty Log source : awsguardduty_from_stix_map.json, awsguardduty_to_stix_map.json
+- The mapping of list (list of values/list of dictionary) fields in from_stix_map should be mentioned with [\*] suffix.
   Example, behaviors[\*].id.  Here 'behaviors' is a list of dictionaries with id as attribute key inside behaviors.
 
 ### Recommendations
 
 - For connector usage, it is recommended to maintain logs from single log source per repository in Crowdstrike Logscale. 
-  Example Okta logs could be stored in repository_1 and aws_guardduty logs in repository_2.
+  Example Crowdstrike Falcon EDR detection logs could be stored in repository_1 and Okta logs in repository_2.
 - Make sure, there is no parsing error during ingestion of logs into Crowdstrike Logscale.
 
 ### Limitations
