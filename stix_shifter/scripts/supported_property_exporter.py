@@ -41,7 +41,7 @@ SCO_CONNECTORS = {
     "onelogin": "OneLogin",
     "paloalto": "PaloAlto Cortex XDR",
     "proofpoint": "Proofpoint (SIEM API)",
-    "qradar": "IBM QRadar",
+    "qradar": "IBM Security QRadar SIEM",
     "reaqta": "IBM Security QRadar EDR",
     "rhacs": "Red Hat Advanced Cluster Security for Kubernetes",
     "secretserver": "IBM Security Verify Privilege Vault",
@@ -50,7 +50,8 @@ SCO_CONNECTORS = {
     "splunk": "Splunk Enterprise Security",
     "sumologic": "Sumo Logic",
     "trendmicro_vision_one": "Trend Micro Vision One",
-    "vectra": "Vectra NDR"
+    "vectra": "Vectra NDR",
+    "sysdig": "Sysdig"
 }
 
 SDO_CONNECTORS = {

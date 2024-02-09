@@ -15,6 +15,29 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 *List the dependecy upgrade or downgrade.*
 
 --------------------------------------
+## 7.0.2 (2024-01-25)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+*  Graph Security: Add login_host for national cloud authentication endpoint [#1641](https://github.com/opencybersecurityalliance/stix-shifter/pull/1641)
+*  AWS Athena: Make access ids optional and remove verify false from boto client [#1629](https://github.com/opencybersecurityalliance/stix-shifter/pull/1629)
+*  Add query batchsize(length) in common config.json [#1637](https://github.com/opencybersecurityalliance/stix-shifter/pull/1637)
+*  QRadar: change START / STOP regex to include <= year 2000 [#1640](https://github.com/opencybersecurityalliance/stix-shifter/pull/1640)
+*  Update machine ID field in QRadar module [#1634](https://github.com/opencybersecurityalliance/stix-shifter/pull/1634)
+*  New Sysdig connector [#1630](https://github.com/opencybersecurityalliance/stix-shifter/pull/1630)
+*  second half of email.* mapping for elastic_ecs [#1632](https://github.com/opencybersecurityalliance/stix-shifter/pull/1632)
+
+### Fixes:
+
+*  GCP: remove delete in result connector for chronicle [#1638](https://github.com/opencybersecurityalliance/stix-shifter/pull/1638)
+
+### Dependency update:
+
+--------------------------------------
 
 ## 7.0.1 (2023-12-11)
 
