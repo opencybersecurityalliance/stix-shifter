@@ -2,7 +2,7 @@
     "connection": {
         "host": {
             "label": "Management IP address or hostname",
-            "description": "Specify the IP address or hostname of the data source"
+            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
         },
         "quota_threshold": {
             "label": "The quota limit for the API",

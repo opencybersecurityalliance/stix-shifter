@@ -2,20 +2,19 @@
     "connection": {
         "host": {
             "label": "Management IP address or hostname",
-            "placeholder": "192.168.1.1",
-            "description": "Specify the data source IP address or hostname."
+            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
         },
         "port": {
             "label": "Host port",
             "placeholder": "443",
-            "description": "Specify the associated port number of the data source."
+            "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
             "label": "Need additional help?"
         },
         "selfSignedCert": {
-            "label": "IBM Security Verify certificate",
-            "placeholder": "Paste your certificate"
+            "label": "PEM Formatted SSL certificate(s)",
+            "description": "Provide a self-signed or CA-signed certificate to securely communication with the data source."
         }
     },
     "configuration": {

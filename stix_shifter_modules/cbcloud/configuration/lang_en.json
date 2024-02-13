@@ -2,8 +2,7 @@
     "connection": {
         "host": {
             "label": "Management IP address or hostname",
-            "placeholder": "192.168.1.10",
-            "description": "Specify the IP address or hostname of the data source"
+            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
         },
         "port": {
             "label": "Host port",
@@ -21,8 +20,8 @@
                 "description": "Organization key"
             },
             "token": {
-                "label": "Token",
-                "description": "API token"
+                "label": "API token",
+                "description": "API token of the data source"
             }
         }
     }

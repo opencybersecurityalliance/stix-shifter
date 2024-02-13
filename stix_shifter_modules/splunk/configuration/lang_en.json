@@ -1,9 +1,8 @@
 {
     "connection": {
         "host": {
-            "label": "Host IP address or hostname",
-            "placeholder": "192.168.1.10",
-            "description": "Specify the IP address or hostname of the data source"
+            "label": "Management IP address or hostname",
+            "description": "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
         },
         "port": {
             "label": "Host port",
@@ -14,8 +13,8 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "Splunk connection certificate",
-            "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate for secure communication between web reports or REST API server and the authorized user"
+            "label": "PEM Formatted SSL certificate(s)",
+            "description": "Provide a self-signed or CA-signed certificate to securely communication with the data source."
         },
         "options": {
             "index": {
