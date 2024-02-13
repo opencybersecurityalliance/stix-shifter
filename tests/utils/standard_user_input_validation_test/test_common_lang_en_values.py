@@ -21,7 +21,7 @@ class Test_Language_EN_Confirmation():
             
     def _confirm_standard_hostname_text(self, lang_en_json):
         standard_label = "Management IP address or hostname"
-        standard_description = "Specify the IP address or  hostname of the data source so that IBM Cloud Pak for Security can communicate with it"
+        standard_description = "Specify the IP address or hostname of the data source"
             
         if("connection" in lang_en_json and "host" in lang_en_json["connection"]):
             assert lang_en_json["connection"]["host"]["label"] == standard_label
