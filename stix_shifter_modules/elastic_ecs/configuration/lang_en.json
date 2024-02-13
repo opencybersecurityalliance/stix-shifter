@@ -19,7 +19,7 @@
         },
         "selfSignedCert": {
             "label": "PEM Formatted SSL certificate(s)",
-            "description": "Provide a self-signed or CA-signed certificate to securely communication with the data source."
+            "description": "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
         }
     },
     "configuration": {

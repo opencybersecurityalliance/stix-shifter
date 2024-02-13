@@ -37,7 +37,7 @@ class Test_Language_EN_Confirmation():
             
     def _confirm_standard_certificate_text(self, lang_en_json):
         standard_label = "PEM Formatted SSL certificate(s)"
-        standard_description = "Provide a self-signed or CA-signed certificate to securely communication with the data source."
+        standard_description = "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
             
         if("connection" in lang_en_json and "selfSignedCert" in lang_en_json["connection"]):
             assert lang_en_json["connection"]["selfSignedCert"]["label"] == standard_label
