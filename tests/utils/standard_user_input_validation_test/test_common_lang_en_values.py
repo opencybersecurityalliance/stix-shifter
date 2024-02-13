@@ -7,32 +7,17 @@ class Test_Language_EN_Confirmation():
     def test_lang_en_host(self):
         list_of_lang_en_files = self._get_list_of_files("lang_en.json")
         for file in list_of_lang_en_files:
-            try:
-                self._confirm_standard_hostname_text(json.loads(file))
-            except Exception as e:
-                print()
-                print(e)
-                raise e
+            self._confirm_standard_hostname_text(json.loads(file))
             
     def test_lang_en_port(self):
         list_of_lang_en_files = self._get_list_of_files("lang_en.json")
         for file in list_of_lang_en_files:
-            try:
-                self._confirm_standard_port_text(json.loads(file))
-            except Exception as e:
-                print()
-                print(e)
-                raise e
+            self._confirm_standard_port_text(json.loads(file))
                  
     def test_lang_en_certificate(self):
         list_of_lang_en_files = self._get_list_of_files("lang_en.json")
         for file in list_of_lang_en_files:
-            try:
-                self._confirm_standard_certificate_text(json.loads(file))
-            except Exception as e:
-                print()
-                print(e)
-                raise e
+            self._confirm_standard_certificate_text(json.loads(file))
             
     def _confirm_standard_hostname_text(self, lang_en_json):
         standard_label = "Management IP address or hostname"

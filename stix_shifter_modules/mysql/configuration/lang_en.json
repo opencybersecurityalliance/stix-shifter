@@ -6,7 +6,6 @@
         },
         "port": {
             "label": "Host port",
-            "placeholder": "3306",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "database": {

@@ -9,15 +9,11 @@ class Test_Config_Confirmation():
         host_exclusion_file_list = ["datadog","reversinglabs"]
         list_of_config_files = self._get_list_of_files("config.json", host_exclusion_file_list)
         for file in list_of_config_files:
-                try:
-                    self._confirm_standard_host_status(json.loads(file))
-                except Exception as e:
-                    print(e)
-                    raise e
+            self._confirm_standard_host_status(json.loads(file))
     
     def _confirm_standard_host_status(self, lang_en_json):
         standard_type = "text"
-        standard_regex = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$|^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
+        standard_regex = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$|^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
         if("connection" in lang_en_json and "host" in lang_en_json["connection"]):
             assert lang_en_json["connection"]["host"]["type"] == standard_type
             assert lang_en_json["connection"]["host"]["regex"] == standard_regex
@@ -26,31 +22,23 @@ class Test_Config_Confirmation():
         port_exclusion_file_list = []
         list_of_config_files = self._get_list_of_files("config.json", port_exclusion_file_list)
         for file in list_of_config_files:
-                try:
-                    self._confirm_standard_port_status(json.loads(file))
-                except Exception as e:
-                    print(e)
-                    raise e
+            self._confirm_standard_port_status(json.loads(file))
 
     def _confirm_standard_port_status(self, lang_en_json):
         standard_type = "number"
         standard_min = 1
         standard_max = 65535
-       
         if("connection" in lang_en_json and "port" in lang_en_json["connection"]):
             assert lang_en_json["connection"]["port"]["type"] == standard_type
             assert lang_en_json["connection"]["port"]["min"] == standard_min
             assert lang_en_json["connection"]["port"]["max"] == standard_max
+            assert "placeholder" not in lang_en_json["connection"]["host"]
             
     def test_config_self_signed(self):
         port_exclusion_file_list = []
         list_of_config_files = self._get_list_of_files("config.json", port_exclusion_file_list)
         for file in list_of_config_files:
-                try:
-                    self._confirm_standard_self_signed_status(json.loads(file))
-                except Exception as e:
-                    print(e)
-                    raise e
+            self._confirm_standard_self_signed_status(json.loads(file))
 
     def _confirm_standard_self_signed_status(self, lang_en_json):
         standard_type = "password"
