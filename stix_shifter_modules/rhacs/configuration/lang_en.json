@@ -20,8 +20,8 @@
   "configuration": {
     "auth": {
       "token": {
-        "label": "API token",
-        "description": "Token with readonly access to the alert API"
+          "label": "API token",
+          "description": "Token required for data source authentication"
       }
     }
   }

@@ -18,11 +18,11 @@
         "auth": {
             "username": {
                 "label": "Username",
-                "description": "Username with access to the search API"
+                "description": "Username required for data source authentication"
             },
             "password": {
                 "label": "Password",
-                "description": "Password of the user with access to the search API"
+                "description": "Password required for data source authentication"
             }
         }
     }

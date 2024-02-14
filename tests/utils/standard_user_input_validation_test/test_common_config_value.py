@@ -13,7 +13,7 @@ class Test_Config_Confirmation():
     
     def _confirm_standard_host_status(self, lang_en_json):
         standard_type = "text"
-        standard_regex = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$|^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
+        standard_regex = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$"
         if("connection" in lang_en_json and "host" in lang_en_json["connection"]):
             assert lang_en_json["connection"]["host"]["type"] == standard_type
             assert lang_en_json["connection"]["host"]["regex"] == standard_regex
