@@ -586,3 +586,16 @@ class TestsysdigConnection(unittest.TestCase):
         assert result_response is not None
         assert result_response['success'] is False
         assert result_response['code'] == 'invalid_query'
+
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
+    def test_invalid_time_range(self, mock_result_response):
+        """ test error result response"""
+        mocked_return_value = json.dumps({'message': 'bad request', 'requestId': '17afa79e7261f353e3d6f9fc1da805ff'})
+        query = "from=1698796800000000000&to=1700089200000000000&filter=kubernetes.cluster.name=\"cp5s-cluster\""
+        mock_result_response.return_value = sysdigMockResponse(400, mocked_return_value)
+        transmission = stix_transmission.StixTransmission('sysdig', self.connection(), self.configuration())
+        result_response = transmission.results(query, offset=0, length=1)
+        assert result_response is not None
+        assert result_response['success'] is False
+        assert result_response['error'] == 'sysdig connector error => Query time range can be maximum up to 14 days or'\
+                                           ' The given query is invalid'
