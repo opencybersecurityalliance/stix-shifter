@@ -21,7 +21,7 @@
     "auth": {
       "token": {
           "label": "API token",
-          "description": "Token required for data source authentication"
+          "description": "Token with readonly access required for data source authentication"
       }
     }
   }

@@ -17,7 +17,7 @@
         "auth": {
             "principle": {
                 "label": "Principle",
-                "description": "Principle required for data source authentication"
+                "description": "Principle with access to the SIEM API"
             },
             "secret": {
                 "label": "Secret",
