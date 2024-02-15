@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Demo Sample"
+            "displayName": "Demo Sample",
+            "group": "demo_sample"
         },
         "host": {
             "type": "text",

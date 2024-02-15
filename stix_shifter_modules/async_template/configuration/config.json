@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Async Sample"
+            "displayName": "Async Sample",
+            "group":"async_sample"
         },
         "host": {
             "type": "text",

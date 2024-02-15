@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Sync Sample"
+            "displayName": "Sync Sample",
+            "group":"sync_sample"
         },
         "host": {
             "type": "text",
