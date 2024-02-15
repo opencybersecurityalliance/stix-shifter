@@ -3,7 +3,8 @@
         "type": {
             "id": "ReversingLabs_Connector",
             "displayName": "ReversingLabs",
-            "description": "Enrich IP addresses, domains, hashes and URLs with the ReversingLabs threat intelligence service."
+            "description": "Enrich IP addresses, domains, hashes and URLs with the ReversingLabs threat intelligence service.",
+            "group":"reversing_labs"
         },
         "help": {
             "default": "www.ibm.com",

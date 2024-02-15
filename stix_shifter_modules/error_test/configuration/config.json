@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Error test"
+            "displayName": "Error test",
+            "group": "error_test"
         },
         "url": {
             "type": "text",
