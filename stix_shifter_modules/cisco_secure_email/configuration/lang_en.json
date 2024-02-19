@@ -13,8 +13,8 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "Cisco Secure Email HTTPS connection certificate",
-            "description": "Use self-signed Security Sockets Layer (SSL) or CA certificate for HTTPS services"
+            "label": "PEM Formatted SSL certificate(s)",
+            "description": "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
         }
     },
     "configuration": {

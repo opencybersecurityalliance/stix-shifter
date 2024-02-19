@@ -12,12 +12,12 @@
     "configuration": {
         "auth": {
             "client_email": {
-                "label": "Client Email",
-                "description": "Client Email used in authentication to make API calls"
+                "label": "Client email address",
+                "description": "Client email address required for data source authentication"
             },
             "private_key": {
                 "label": "Private Key",
-                "description": "Private Key is a authentication parameter used to communicate with the GCP Chronicle security datasource."
+                "description": "Private Key is a mandatory authentication parameter to communicate with the data source."
             }
         }
     }
