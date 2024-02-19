@@ -240,9 +240,12 @@ class TestLogScaleResultsToStix(unittest.TestCase):
         """
         objects = TestLogScaleResultsToStix.get_observed_data_objects(logscale_sample_response)
         ipv4_obj = TestLogScaleResultsToStix.get_first_of_type(objects.values(), 'ipv4-addr')
+        ipv6_obj = TestLogScaleResultsToStix.get_first_of_type(objects.values(), 'ipv6-addr')
         assert (ipv4_obj is not None), 'ipv4 object type not found'
         assert ipv4_obj['type'] == 'ipv4-addr'
         assert ipv4_obj['value'] == '1.1.2.2'
+        assert ipv6_obj is None
+
 
     def test_file_json_to_stix(self):
         """

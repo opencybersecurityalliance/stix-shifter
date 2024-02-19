@@ -10,7 +10,7 @@
         },
         "repository": {
             "label": "Repository",
-            "description": "The container in which log events collected from various data sources are stored."
+            "description": "A container storing log events collected from various data source."
         }
     },
     "configuration": {

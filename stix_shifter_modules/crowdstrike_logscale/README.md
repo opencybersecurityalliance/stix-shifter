@@ -12,10 +12,10 @@ See the [table of mappings](crowdstrike_logscale_supported_stix.md) for the STIX
 - [Pattern expression with STIX and CUSTOM attributes - Multiple Observation](#multiple-observation)
 - [STIX Execute Query](#stix-execute-query)
 - [Types of Attributes](#type-of-attributes)
-- [Connector Extension](#connector-extension)
 - [Recommendations](#recommendations)
 - [Limitations](#limitations)
 - [References](#references)
+- [Appendix](#appendix)
 
 ### Crowdstrike Logscale API Endpoints
 
@@ -723,19 +723,6 @@ crowdstrike_logscale
 - It has mappings which supports only Crowdstrike Falcon EDR detection logs.
 - The Input repository which is provided to the connector should contain only Crowdstrike Falcon EDR detection logs in JSON format.
 
-### Connector Extension
-Recommendations to be followed to add new log source to the connector
-
-- The structure of log source data which is ingested into logscale should be of type JSON .
-- The JSON data which has been ingested into logscale should be inserted without new line and should be inserted as raw data.
-- As Logscale doesn't have unified data schema, separate mapping files(from_stix_map.json, to_stix_map.json) needs to be 
-  created for each log source that are newly added to this connector module.
-  Example: 
-    - Okta Log source : okta_from_stix_map.json, okta_to_stix_map.json
-    - AWS GuardDuty Log source : awsguardduty_from_stix_map.json, awsguardduty_to_stix_map.json
-- The mapping of list (list of values/list of dictionary) fields in from_stix_map should be mentioned with [\*] suffix.
-  Example, behaviors[\*].id.  Here 'behaviors' is a list of dictionaries with id as attribute key inside behaviors.
-
 ### Recommendations
 
 - For connector usage, it is recommended to maintain logs from single log source per repository in Crowdstrike Logscale. 
@@ -754,3 +741,117 @@ Recommendations to be followed to add new log source to the connector
 - [Health Check API | Integrations](https://library.humio.com/integrations/api-health-check.html)
 - [FalconLogScaleCollector | Falcon LogScaleCollector 1.3.0-1.5.1](https://library.humio.com/falcon-logscale-collector/log-shippers-log-collector.html)
 - [Crowdstrike EDR Log injestion through log shippers](https://github.com/CrowdStrike/HEC-Log-Shipper/tree/main)
+
+### Appendix
+List of fields that available in schema of Crowdstrike Falcon EDR detection logs
+
+   | Data source Field                                                      | Data Type                | Mapped STIX field                                                                                                |
+   |------------------------------------------------------------------------|--------------------------|------------------------------------------------------------------------------------------------------------------|
+   | behaviors.alleged_filetype                                             | List of Dictionary field | file:x_extension                                                                                                 |
+   | behaviors.behavior_id                                                  | List of Dictionary field | x-ibm-finding:x_behavior_refs.behavior_id                                                                        |
+   | behaviors.cmdline                                                      | List of Dictionary field | process:command_line                                                                                             |
+   | behaviors.confidence                                                   | List of Dictionary field | x-crowdstrike-detection-behavior:confidence                                                                      |
+   | behaviors.control_graph_id                                             | List of Dictionary field | x-crowdstrike-detection-behavior:control_graph_id                                                                |
+   | behaviors.description                                                  | List of Dictionary field | x-crowdstrike-detection-behavior:description                                                                     |
+   | behaviors.device_id                                                    | List of Dictionary field |                                                                                                                  |
+   | behaviors.display_name                                                 | List of Dictionary field | x-crowdstrike-detection-behavior:display_name                                                                    |
+   | behaviors.filename                                                     | List of Dictionary field | file:name, process:name, process: binary_ref.name,x-crowdstrike-detection-behavior:process_ref.name              |
+   | behaviors.filepath                                                     | List of Dictionary field | file:x_path, file:parent_directory_ref.path, directory:path                                                      |
+   | behaviors.ioc_description                                              | List of Dictionary field | x-crowdstrike-detection-behavior:ioc_description                                                                 |
+   | behaviors.ioc_source                                                   | List of Dictionary field | x-crowdstrike-detection-behavior:ioc_source                                                                      |
+   | behaviors.ioc_type                                                     | List of Dictionary field | x-crowdstrike-detection-behavior:ioc_type                                                                        |
+   | behaviors.ioc_value                                                    | List of Dictionary field | x-crowdstrike-detection-behavior:ioc_value                                                                       |
+   | behaviors.md5                                                          | List of Dictionary field | process: binary_ref.hashes.MD5 , file:hashes.MD5                                                                 |
+   | behaviors.objective                                                    | List of Dictionary field | x-crowdstrike-detection-behavior:objective                                                                       |
+   | behaviors.parent_details.parent_cmdline                                | List of Dictionary field | process: parent_ref.command_line                                                                                 |
+   | behaviors.parent_details.parent_md5                                    | List of Dictionary field | file:hashes.MD5                                                                                                  |
+   | behaviors.parent_details.parent_process_graph_id                       | List of Dictionary field | process:parent_ref.x_process_graph_id                                                                            |
+   | behaviors.parent_details.parent_sha256                                 | List of Dictionary field | file:hashes.'SHA-256'                                                                                            |
+   | behaviors.pattern_disposition                                          | List of Dictionary field | x-crowdstrike-detection-behavior:pattern_disposition                                                             |
+   | behaviors.pattern_disposition_details.blocking_unsupported_or_disabled | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.bootup_safeguard_enabled         | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.critical_process_disabled        | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.detect                           | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.fs_operation_blocked             | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.handle_operation_downgraded      | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.inddet_mask                      | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.indicator                        | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.kill_action_failed               | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.kill_parent                      | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.kill_process                     | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.kill_subprocess                  | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.operation_blocked                | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.policy_disabled                  | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.process_blocked                  | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.quarantine_file                  | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.quarantine_machine               | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.registry_operation_blocked       | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.rooting                          | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.sensor_only                      | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.suspend_parent                   | List of Dictionary field |                                                                                                                  |
+   | behaviors.pattern_disposition_details.suspend_process                  | List of Dictionary field |                                                                                                                  |
+   | behaviors.rule_instance_id                                             | List of Dictionary field | x-crowdstrike-detection-behavior:rule_instance_id                                                                |
+   | behaviors.rule_instance_version                                        | List of Dictionary field | x-crowdstrike-detection-behavior:rule_instance_version                                                           |
+   | behaviors.scenario                                                     | List of Dictionary field | x-crowdstrike-detection-behavior:scenario                                                                        |
+   | behaviors.severity                                                     | List of Dictionary field | x-crowdstrike-detection-behavior:severity                                                                        |
+   | behaviors.sha256                                                       | List of Dictionary field | process:binary_ref.hashes.'SHA-256', file:hashes.'SHA-256'                                                       |
+   | behaviors.tactic                                                       | List of Dictionary field | x-ibm-finding:ttp_tagging_refs.name,x-crowdstrike-detection-behavior:ttp_tagging_ref.name,x-ibm-ttp-tagging:name |
+   | behaviors.tactic_id                                                    | List of Dictionary field | x-ibm-ttp-tagging:extensions.'mitre-attack-ext'.tactic_id                                                        |
+   | behaviors.technique                                                    | List of Dictionary field | x-ibm-ttp-tagging:extensions.'mitre-attack-ext'.technique_name                                                   |
+   | behaviors.technique_id                                                 | List of Dictionary field | x-ibm-ttp-tagging:extensions.'mitre-attack-ext'.technique_id                                                     |
+   | behaviors.template_instance_id                                         | List of Dictionary field | x-crowdstrike-detection-behavior:template_instance_id                                                            |
+   | behaviors.timestamp                                                    | List of Dictionary field | x-crowdstrike-detection-behavior:created_time                                                                    |
+   | behaviors.triggering_process_graph_id                                  | List of Dictionary field | process:x_process_graph_id                                                                                       |
+   | behaviors.user_id                                                      | List of Dictionary field | process:creator_user_ref.user_id, user-account:user_id,x-crowdstrike-detection-behavior:user_ref.user_id         |
+   | behaviors.user_name                                                    | List of Dictionary field | user-account:display_name                                                                                        |
+   | behaviors_processed                                                    | List field               | x-ibm-finding:x_behaviors_processed                                                                              |
+   | cid                                                                    | Dictionary field         | x-oca-asset:x_cid                                                                                                |                                                                                       |
+   | created_timestamp                                                      | Dictionary field         | x-ibm-finding:time_observed                                                                                      |  
+   | date_updated                                                           | Dictionary field         | x-ibm-finding:x_last_updated                                                                                     | 
+   | detection_id                                                           | Dictionary field         | x-ibm-finding:name                                                                                               |
+   | device.agent_load_flags                                                | Dictionary field         |                                                                                                                  |
+   | device.agent_local_time                                                | Dictionary field         | x-crowdstrike-edr-agent:local_time                                                                               |                                                                        
+   | device.agent_version                                                   | Dictionary field         | x-oca-asset:x_agent_ref.version,x-crowdstrike-edr-agent:version                                                  |                                               
+   | device.bios_manufacturer                                               | Dictionary field         | x-oca-asset:x_bios_manufacturer                                                                                  |                                              
+   | device.bios_version                                                    | Dictionary field         | x-oca-asset:x_bios_version                                                                                       |                                             
+   | device.cid                                                             | Dictionary field         | x-oca-asset:x_cid                                                                                                |                                            
+   | device.config_id_base                                                  | Dictionary field         | x-crowdstrike-edr-agent:config_id_base                                                                           |                                           
+   | device.config_id_build                                                 | Dictionary field         | x-crowdstrike-edr-agent:config_id_build                                                                          |                                          
+   | device.config_id_platform                                              | Dictionary field         | x-crowdstrike-edr-agent:config_id_platform                                                                       |                                         
+   | device.device_id                                                       | Dictionary field         | x-oca-asset:device_id                                                                                            |                                        
+   | device.external_ip                                                     | Dictionary field         | ipv4-addr:value, ipv6-addr:value,x-ibm-finding:src_ip_ref.value                                                  |                                       |
+   | device.first_seen                                                      | Dictionary field         | x-oca-asset:x_first_seen                                                                                         |                                        
+   | device.groups                                                          | List Field               | x-oca-asset:x_device_groups                                                                                      |                                       
+   | device.hostname                                                        | Dictionary field         | x-oca-asset:hostname                                                                                             |                                      
+   | device.instance_id                                                     | Dictionary field         | x-oca-asset:x_instance_id                                                                                        |                                                           
+   | device.last_login_timestamp                                            | Dictionary field         |                                                                                                                  |
+   | device.last_login_user                                                 | Dictionary field         |                                                                                                                  |
+   | device.last_seen                                                       | Dictionary field         | x-oca-asset:x_last_seen                                                                                          |                                                           
+   | device.local_ip                                                        | Dictionary field         | ipv4-addr:value, ipv6-addr:value                                                                                 |                                                          | 
+   | device.mac_address                                                     | Dictionary field         | mac-addr:value                                                                                                   |                                                                       |
+   | device.major_version                                                   | Dictionary field         | software:x_major_version                                                                                         |                                                                      |
+   | device.minor_version                                                   | Dictionary field         | software:x_minor_version                                                                                         |                                                                     |
+   | device.modified_timestamp                                              | Dictionary field         | x-oca-asset:x_last_modified                                                                                      |                                                                    
+   | device.os_version                                                      | Dictionary field         | software:version                                                                                                 |                                                                   |
+   | device.platform_id                                                     | Dictionary field         | software:x_id                                                                                                    |                                                                  |
+   | device.platform_name                                                   | Dictionary field         | software:name,x-oca-asset:os_ref.name,x-ibm-finding:src_os_ref.name                                              |                                    |
+   | device.product_type                                                    | Dictionary field         | x-oca-asset:x_host_type_number                                                                                   |                                   
+   | device.product_type_desc                                               | Dictionary field         | x-oca-asset:host_type                                                                                            |                                  
+   | device.service_provider                                                | Dictionary field         | x-oca-asset:x_service_provider                                                                                   |                                 
+   | device.service_provider_account_id                                     | Dictionary field         | x-oca-asset:x_service_account_id                                                                                 |                                
+   | device.status                                                          | Dictionary field         | x-oca-asset:x_status                                                                                             |                               
+   | device.system_manufacturer                                             | Dictionary field         | x-oca-asset:x_system_manufacturer                                                                                |                              
+   | device.system_product_name                                             | Dictionary field         | x-oca-asset:x_system_product_name                                                                                |                             
+   | email_sent                                                             | Dictionary field         |                                                                                                                  |
+   | first_behavior                                                         | Dictionary field         | x-ibm-finding:x_first_behavior_observed                                                                          |                                                                
+   | hostinfo.domain                                                        | Dictionary field         | domain-name:value                                                                                                |                                                               |
+   | last_behavior                                                          | Dictionary field         | x-ibm-finding:x_last_behavior_observed                                                                           |                                                              
+   | max_confidence                                                         | Dictionary field         | x-ibm-finding:confidence                                                                                         |                                                             
+   | max_severity                                                           | Dictionary field         | x-ibm-finding:severity                                                                                           |                                                            
+   | max_severity_displayname                                               | Dictionary field         | x-ibm-finding:x_severity_name                                                                                    |                                                           
+   | seconds_to_resolved                                                    | Dictionary field         |                                                                                                                  |
+   | seconds_to_triaged                                                     | Dictionary field         |                                                                                                                  |
+   | show_in_ui                                                             | Dictionary field         |                                                                                                                  |
+   | status                                                                 | Dictionary field         | x-ibm-finding:x_status                                                                                           |                                                                                   
+   
+

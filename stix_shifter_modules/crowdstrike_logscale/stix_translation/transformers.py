@@ -8,15 +8,10 @@ LOGGER = logger.set_logger(__name__)
 class FormatMacAddress(ValueTransformer):
     @staticmethod
     def transform(mac_value):
-        """correcting mac address presentation, it should be 6 octate separated
-         by only colon (:) not by any other special character """
-        mac_value = re.sub("[^A-Fa-f0-9]", ":", mac_value)
-        mac_split = mac_value.split(":")
-        formatted_split = ["0" + mac if len(mac) < 2 else mac for mac in mac_split]
-        while len(formatted_split) < 6:
-            formatted_split.insert(0,"00")
-        mac_value = ":".join(formatted_split)
-        return mac_value.lower()
+        """correcting mac address presentation. The mac address should be separated
+        by only colon (:) not by any other special character """
+        colon_converted = re.sub("[^A-Fa-f0-9]", ":", mac_value)
+        return colon_converted.lower()
 
 
 class LogscaleToTimestamp(ValueTransformer):
