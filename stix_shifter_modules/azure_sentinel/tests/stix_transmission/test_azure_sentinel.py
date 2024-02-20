@@ -24,7 +24,7 @@ class TestAzureSentinalConnection(TestCase):
         return {
                 "port": 443,
                 "options": {
-                        "alert": True
+                        "alert_resources": "alerts"
                     }
                 }
 
