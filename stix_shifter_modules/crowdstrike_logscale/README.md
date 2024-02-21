@@ -12,6 +12,8 @@ See the [table of mappings](crowdstrike_logscale_supported_stix.md) for the STIX
 - [Pattern expression with STIX and CUSTOM attributes - Multiple Observation](#multiple-observation)
 - [STIX Execute Query](#stix-execute-query)
 - [Types of Attributes](#type-of-attributes)
+- [Current Connector Features](#current-connector-features)
+- [Connector Extension](#connector-extension)
 - [Recommendations](#recommendations)
 - [Limitations](#limitations)
 - [References](#references)
@@ -722,6 +724,16 @@ crowdstrike_logscale
 ### Current connector Features
 - It has mappings which supports only Crowdstrike Falcon EDR detection logs.
 - The Input repository which is provided to the connector should contain only Crowdstrike Falcon EDR detection logs in JSON format.
+
+### Connector Extension
+Recommendations to be followed to add new log source to the connector
+- The structure of log source data which is ingested into logscale should be of type JSON .
+- The JSON data which has been ingested into logscale should be inserted without new line and should be inserted as raw data.
+- As Logscale doesn't have unified data schema, separate mapping files(from_stix_map.json, to_stix_map.json) needs to 
+  be created for each log source that are newly added to this connector module. 
+  Example: {custom}_from_stix_map.json, {custom}_to_stix_map.json
+- The mapping of list (list of values/list of dictionary) fields in from_stix_map should be mentioned with [*] suffix. 
+  Example, behaviors[*].id. Here 'behaviors' is a list of dictionaries with id as attribute key inside behaviors.
 
 ### Recommendations
 

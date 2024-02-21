@@ -54,7 +54,6 @@ class Connector(BaseJsonSyncConnector):
         """
         return_obj = {}
         data = []
-        response_dict = {}
         offset = int(offset)
         length = int(length)
         try:
