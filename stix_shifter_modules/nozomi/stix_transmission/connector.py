@@ -32,6 +32,7 @@ class Connector(BaseJsonSyncConnector):
         response_dict = {}
         jwt_token = None
         local_result_count = 0
+        token_generated = False
         try:
             if metadata:
                 if isinstance(metadata, dict) and metadata.get('jwtToken'):
@@ -63,8 +64,10 @@ class Connector(BaseJsonSyncConnector):
                     else:
                         query_url = f'{query}&page=1&count={page_size}'
                     response_wrapper = await self.api_client.get_search_results(query_url, jwt_token)
+                    response = response_wrapper.read().decode('utf-8')
+                    if response:
+                        response_dict = json.loads(response)
                     if response_wrapper.code == 200:
-                        response_dict = json.loads(response_wrapper.read().decode('utf-8'))
                         # Handling invalid query exception
                         if 'Query is not valid' in response_dict.get('error', ''):
                             return_obj = self.exception_response(response_wrapper.code, response_dict.get('error'))
@@ -95,12 +98,14 @@ class Connector(BaseJsonSyncConnector):
                         else:
                             page_size = remaining_records
                     # Handling expired token
-                    elif response_wrapper.code == 401 and response_dict.get('error', {}).get('message', '') in \
-                            ['ExpiredSignatureError.', 'InvalidTokenError.']:
+                    elif response_wrapper.code == 401 and not token_generated and \
+                            (response == '' or
+                             'Signature has expired' in response_dict.get('error', {}).get('message', '')):
                         jwt_token = await self.get_token()
+                        token_generated = True
                         continue
                     else:
-                        error = response_dict.get('error')
+                        error = response_dict.get('error', '')
                         if response_wrapper.code == 403:
                             error = 'Query length is too long or Invalid Query'
                         return_obj = self.exception_response(response_wrapper.code, error)
