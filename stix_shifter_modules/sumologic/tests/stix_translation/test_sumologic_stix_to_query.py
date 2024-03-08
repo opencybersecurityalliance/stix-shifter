@@ -157,3 +157,11 @@ class TestStixToQuery(unittest.TestCase, object):
         queries = "{\"query\": \"lastLoginTimestamp = \\\"2021-10-04T13:51:09.958Z\\\"\", \"fromTime\": \"%s\", " \
                   "\"toTime\": \"%s\"}" % (from_time, to_time)
         _test_query_assertions(query, queries)
+
+    def test_negation(self):
+        stix_pattern = "[domain-name:value != 'example.com'] " \
+                       "START t'2021-09-01T00:00:00.000Z' STOP t'2021-09-26T10:16:00.000Z'"
+        query = translation.translate('sumologic', 'query', 'sumologic', stix_pattern, options={"result_limit": 100})
+        queries = "{\"query\": \"NOT (_sourcehost = \\\"example.com\\\")\", " \
+                  "\"fromTime\": \"20210901T000000\", \"toTime\": \"20210926T101600\"}"
+        _test_query_assertions(query, queries)
