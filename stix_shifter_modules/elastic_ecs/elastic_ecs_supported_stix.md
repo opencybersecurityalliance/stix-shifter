@@ -1,4 +1,4 @@
-##### Updated on 10/25/23
+##### Updated on 01/25/24
 ## Elasticsearch ECS
 ### Results STIX Domain Objects
 * Identity
@@ -50,16 +50,16 @@
 | **network-traffic**:x_forwarded_ip | network.forwarded_ip |
 | **network-traffic**:x_community_id | network.community_id |
 | **artifact**:payload_bin | event.original |
-| **file**:name | file.name, dll.name, file.path, process.name, process.executable, process.parent.name, process.parent.executable |
+| **file**:name | file.name, dll.name, file.path, process.name, process.executable, process.parent.name, process.parent.executable, email.attachments.file.name |
 | **file**:created | file.created, file.ctime |
 | **file**:modified | file.mtime |
 | **file**:accessed | file.accessed |
 | **file**:size | file.size |
 | **file**:mime_type | file.mime_type |
-| **file**:hashes.MD5 | file.hash.md5 |
-| **file**:hashes.'SHA-1' | file.hash.sha1 |
-| **file**:hashes.'SHA-256' | file.hash.sha256 |
-| **file**:hashes.'SHA-512' | file.hash.sha512 |
+| **file**:hashes.MD5 | file.hash.md5, email.attachments.file.hash.md5 |
+| **file**:hashes.'SHA-1' | file.hash.sha1, email.attachments.file.hash.sha1 |
+| **file**:hashes.'SHA-256' | file.hash.sha256, email.attachments.file.hash.256 |
+| **file**:hashes.'SHA-512' | file.hash.sha512, email.attachments.file.hash.512 |
 | **file**:parent_directory_ref.path | file.directory |
 | **file**:x_attributes | file.attributes |
 | **file**:x_extension | file.extension |
@@ -130,7 +130,11 @@
 | **software**:x_description | process.pe.description, file.pe.description, dll.pe.description |
 | **autonomous-system**:value | client.as.organization.name, server.as.organization.name, source.as.organization.name, destination.as.organization.name |
 | **autonomous-system**:number | client.as.number, server.as.number, source.as.number, destination.as.number |
-| **email-addr**:value | user.email |
+| **email-addr**:value | user.email, email.from.address, email.to.address |
+| **email-message**:subject | email.subject |
+| **email-message**:from_ref.value | email.from.address |
+| **email-message**:to_refs[*].value | email.to.address |
+| **email-message**:cc_refs[*].value | email.to.address |
 | **x-oca-event**:action | event.action |
 | **x-oca-event**:event_id | event.id |
 | **x-oca-event**:category | event.category, event.type, event.kind |
@@ -330,16 +334,16 @@
 | **network-traffic**:x_forwarded_ip | network.forwarded_ip.keyword |
 | **network-traffic**:x_community_id | network.community_id.keyword |
 | **artifact**:payload_bin | event.original |
-| **file**:name | file.name, dll.name, file.path, process.name.keyword, process.executable.keyword, process.parent.name.keyword, process.parent.executable.keyword |
+| **file**:name | file.name, dll.name, file.path, process.name.keyword, process.executable.keyword, process.parent.name.keyword, process.parent.executable.keyword, email.attachments.file.name |
 | **file**:created | file.created, file.ctime |
 | **file**:modified | file.mtime |
 | **file**:accessed | file.accessed |
 | **file**:size | file.size |
 | **file**:mime_type | file.mime_type |
-| **file**:hashes.MD5 | file.hash.md5 |
-| **file**:hashes.'SHA-1' | file.hash.sha1 |
-| **file**:hashes.'SHA-256' | file.hash.sha256 |
-| **file**:hashes.'SHA-512' | file.hash.sha512 |
+| **file**:hashes.MD5 | file.hash.md5, email.attachments.file.hash.md5 |
+| **file**:hashes.'SHA-1' | file.hash.sha1, email.attachments.file.hash.sha1 |
+| **file**:hashes.'SHA-256' | file.hash.sha256, email.attachments.file.hash.256 |
+| **file**:hashes.'SHA-512' | file.hash.sha512, email.attachments.file.hash.512 |
 | **file**:parent_directory_ref.path | file.directory |
 | **file**:x_attributes | file.attributes |
 | **file**:x_extension | file.extension |
@@ -606,6 +610,12 @@
 | <br> | | |
 | email-addr | value | email |
 | email-addr | belongs_to_ref | email |
+| email-addr | value | address |
+| <br> | | |
+| email-message | subject | subject |
+| email-message | from_ref | address |
+| email-message | to_refs | address |
+| email-message | cc_refs | address |
 | <br> | | |
 | file | name | executable |
 | file | parent_directory_ref | executable |

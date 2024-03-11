@@ -122,7 +122,6 @@ Below example json is the language translation file of the above QRadar config j
     "connection": {
         "host": {
             "label": "Management IP address or Hostname",
-            "placeholder": "192.168.1.10",
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {

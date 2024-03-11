@@ -5,9 +5,9 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "region": {
-            "label": "Region",
+            "label": "AWS Region Name",
             "placeholder": "us-east-2",
-            "description": "Specify the region of the CloudWatch Logs for the data source"
+            "description": "Specify the region the data source is located in."
         },
         "log_group_names": {
             "label": "Log group names",

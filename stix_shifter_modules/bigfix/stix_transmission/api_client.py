@@ -53,6 +53,6 @@ class APIClient:
     def get_api_client(self):
         api_client = RestApiClientAsync(self.connection.get('host'),
                                    self.connection.get('port'),
-                                   self.headers, cert_verify=self.connection.get('selfSignedCert', True)
+                                   self.headers, cert_verify=self.connection.get('selfSignedCert')
                                    )
         return api_client

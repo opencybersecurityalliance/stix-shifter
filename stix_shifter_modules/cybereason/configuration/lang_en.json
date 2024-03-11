@@ -2,7 +2,6 @@
     "connection": {
         "host": {
             "label": "Management IP address or hostname",
-            "placeholder": "192.168.1.10",
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
@@ -19,11 +18,11 @@
         "auth": {
             "username": {
                 "label": "Username",
-                "description": "Username with access to the search API"
+                "description": "Username required for data source authentication"
             },
             "password": {
                 "label": "Password",
-                "description": "Password of the user with access to the search API"
+                "description": "Password required for data source authentication"
             }
         }
     }
