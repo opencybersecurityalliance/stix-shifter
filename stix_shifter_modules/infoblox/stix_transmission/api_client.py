@@ -204,7 +204,7 @@ class APIClient:
         response_payload = json.loads(resp.read())
         for i in response_payload["results"]:
             for j in i["data"]["threat"]:
-                restructure_payload = {'job': {'create_time': response_payload['job']['create_time']},'results': [{'data': {'items': [j]}}]}
+                restructure_payload = {'job': {'create_time': response_payload['job']['create_time']},'results': [{'data': {'threat': [j]}}]}
                 resp_dict["data"].append({"dossierData": restructure_payload})
 
         # Trim result set based on min/max range values
