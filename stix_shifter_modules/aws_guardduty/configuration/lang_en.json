@@ -1,8 +1,9 @@
 {
     "connection": {
         "region": {
-            "label": "AWS GuardDuty Region Name",
-            "description": "Specify the region name of the GuardDuty data source"
+            "label": "AWS Region Name",
+            "placeholder": "us-east-2",
+            "description": "Specify the region the data source is located in."
         },
         "help": {
             "label": "Need additional help?",

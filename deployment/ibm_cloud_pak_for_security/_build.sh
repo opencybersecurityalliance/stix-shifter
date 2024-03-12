@@ -192,7 +192,7 @@ echo "Pushing image..."
 # "tls: failed to verify certificate" exception may occur while pusing the image
 # To resolve, Use `--tls-verify=false` if you use internal trusted registry
 # Otherwise, make sure the TLS verification is done.
-podman push ${IMAGE_PUSH_URL} 
+podman push --tls-verify=false ${IMAGE_PUSH_URL} 
 
 CR_FILENAME=udi-${PROJECT_NAME}-NEW.yaml
 BACKUP_FOLDER=backup_${TIMESTAMP}

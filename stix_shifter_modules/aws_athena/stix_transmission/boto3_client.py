@@ -9,9 +9,6 @@ class BOTO3Client:
         self.connection = connection
         self.configuration = configuration
         self.session = None
-        # TODO: verify
-        self.verify = False
-
 
     async def getSession(self):
         if self.session is None: 
@@ -28,8 +25,7 @@ class BOTO3Client:
                     session = aioboto3.Session()
                     async with session.client('sts',
                                         aws_access_key_id=aws_access_key_id,
-                                        aws_secret_access_key=aws_secret_access_key,
-                                        verify=self.verify
+                                        aws_secret_access_key=aws_secret_access_key
                                         ) as client:
                         role_to_assume_arn = auth.get('aws_iam_role')
                         assume_role_external_id = auth.get('aws_assume_role_external_id')
@@ -72,7 +68,7 @@ class BOTO3Client:
     async def makeRequest(self, api_name, method, **kwargs):
         response = None
         session = await self.getSession()
-        async with session.client(api_name, verify=self.verify) as cl:
+        async with session.client(api_name) as cl:
             call = getattr(cl, method.lower())
             response = await call(**kwargs)
 
@@ -81,7 +77,7 @@ class BOTO3Client:
     async def getPaginatedResult(self, api_name, method, **kwargs):
         result_response_list = []
         session = await self.getSession()
-        async with session.client(api_name, verify=self.verify) as cl:
+        async with session.client(api_name) as cl:
             paginator = cl.get_paginator(method)
             get_query_response = paginator.paginate(**kwargs)
             async for page in get_query_response:

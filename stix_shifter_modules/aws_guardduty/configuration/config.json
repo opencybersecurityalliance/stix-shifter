@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "displayName": "AWS GuardDuty",
+            "displayName": "Amazon GuardDuty",
             "group": "aws"
         },
         "region": {
@@ -20,14 +20,16 @@
         "auth": {
             "type" : "fields",
             "aws_access_key_id": {
-                "type": "password"
+                "type": "password",
+                "optional": true
             },
             "aws_iam_role": {
                 "type": "password",
                 "optional": true
             },
             "aws_secret_access_key": {
-                "type": "password"
+                "type": "password",
+                "optional": true
             }
         }
     }

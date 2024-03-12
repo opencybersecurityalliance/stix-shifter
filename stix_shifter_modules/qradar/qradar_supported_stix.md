@@ -1,5 +1,5 @@
-##### Updated on 10/25/23
-## IBM QRadar
+##### Updated on 01/25/24
+## IBM Security QRadar SIEM
 ### Results STIX Domain Objects
 * Identity
 * Observed Data
@@ -98,13 +98,13 @@
 | **x-oca-event**:parent_process_ref.binary_ref.name | ParentImage |
 | **x-oca-event**:domain_ref.value | "DNS Request Domain", UrlHost |
 | **x-oca-event**:file_ref.name | Filename |
-| **x-oca-event**:host_ref.hostname | identityhostname, "Machine ID" |
+| **x-oca-event**:host_ref.hostname | identityhostname, "Machine Identifier" |
 | **x-oca-event**:host_ref.ip_refs[*].value | identityip, sourceaddress |
 | **x-oca-event**:registry_ref.key | ObjectName, "Registry Key" |
 | **x-oca-event**:user_ref.user_id | username |
 | **x-oca-event**:url_ref.value | URL |
 | **x-oca-event**:original_ref.payload_bin | UTF8(payload), Message |
-| **x-oca-asset**:hostname | identityhostname, "Machine ID" |
+| **x-oca-asset**:hostname | identityhostname, "Machine Identifier" |
 | **x-oca-asset**:ip_refs[*].value | identityip, sourceaddress |
 | **x-oca-asset**:mac_refs[*].value | sourcemac |
 | **windows-registry-key**:key | ObjectName, "Registry Key" |
@@ -292,7 +292,7 @@
 | x-oca-asset | hostname | identityhostname |
 | x-oca-asset | ip_refs | sourceaddress |
 | x-oca-asset | mac_refs | sourcemac |
-| x-oca-asset | hostname | "Machine ID" |
+| x-oca-asset | hostname | "Machine Identifier" |
 | <br> | | |
 | x-oca-event | user_ref | username |
 | x-oca-event | outcome | CATEGORYNAME(category) |
@@ -325,7 +325,7 @@
 | x-oca-event | registry_ref | "Registry Value Name" |
 | x-oca-event | original_ref | Message |
 | x-oca-event | original | Message |
-| x-oca-event | host_ref | "Machine ID" |
+| x-oca-event | host_ref | "Machine Identifier" |
 | <br> | | |
 | x-qradar | category_id | category |
 | x-qradar | high_level_category_id | highlevelcategory |
