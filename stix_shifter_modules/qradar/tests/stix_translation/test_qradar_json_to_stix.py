@@ -5,6 +5,7 @@ from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.utils.async_utils import run_in_thread
+from stix_shifter_modules.qradar.stix_transmission.results_connector import ResultsConnector
 
 MODULE = 'qradar'
 RESULTS = 'results'
@@ -102,6 +103,8 @@ class TestTransform(object):
                 "sourceport": "3000", "destinationport": 2000, "filename": file_name, "filehash": filehash, "md5hash": md5hash, "sha1hash": sha1hash, "sha256hash": sha256hash,
                 "dnsdomainname": domain, "sourcemac": source_mac, "destinationmac": destination_mac, "Image": process_image, "ParentImage": process_parent_image, 
                 "ProcessCommandLine": process_command_line, "ParentCommandLine": process_parent_command_line, "LoadedImage": process_loaded_image }]
+
+        ResultsConnector.modify_result(data)
 
         result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
 
@@ -649,6 +652,8 @@ class TestTransform(object):
             "sourceport": "1234",
             "destinationport": "1234"
         }]
+
+        ResultsConnector.modify_result(data)
 
         result_bundle = run_in_thread(entry_point.translate_results, DATA_SOURCE, data)
         observed_data = result_bundle['objects'][1]

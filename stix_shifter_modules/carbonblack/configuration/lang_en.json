@@ -2,7 +2,6 @@
     "connection": {
         "host": {
             "label": "Management IP address or hostname",
-            "placeholder": "192.168.1.10",
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
@@ -14,12 +13,8 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "CB Response connection certificate",
-            "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate for secure communication"
-        },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
+            "label": "PEM Formatted SSL certificate(s)",
+            "description": "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
         },
         "options": {
             "events_mode": {
@@ -33,7 +28,7 @@
             "type": "fields",
             "token": {
                 "label": "API token",
-                "description": "API token of the CarbonBlack response account"
+                "description": "API token of the data source"
             }
         }
     }

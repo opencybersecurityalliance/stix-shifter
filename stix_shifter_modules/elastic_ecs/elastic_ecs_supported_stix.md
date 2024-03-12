@@ -1,4 +1,4 @@
-##### Updated on 05/15/23
+##### Updated on 01/25/24
 ## Elasticsearch ECS
 ### Results STIX Domain Objects
 * Identity
@@ -9,8 +9,8 @@
 
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND (Comparision) | AND |
-| OR (Comparision) | OR |
+| AND (Comparison) | AND |
+| OR (Comparison) | OR |
 | > | :> |
 | >= | :>= |
 | < | :< |
@@ -50,16 +50,16 @@
 | **network-traffic**:x_forwarded_ip | network.forwarded_ip |
 | **network-traffic**:x_community_id | network.community_id |
 | **artifact**:payload_bin | event.original |
-| **file**:name | file.name, dll.name, file.path, process.name, process.executable, process.parent.name, process.parent.executable |
+| **file**:name | file.name, dll.name, file.path, process.name, process.executable, process.parent.name, process.parent.executable, email.attachments.file.name |
 | **file**:created | file.created, file.ctime |
 | **file**:modified | file.mtime |
 | **file**:accessed | file.accessed |
 | **file**:size | file.size |
 | **file**:mime_type | file.mime_type |
-| **file**:hashes.MD5 | file.hash.md5 |
-| **file**:hashes.'SHA-1' | file.hash.sha1 |
-| **file**:hashes.'SHA-256' | file.hash.sha256 |
-| **file**:hashes.'SHA-512' | file.hash.sha512 |
+| **file**:hashes.MD5 | file.hash.md5, email.attachments.file.hash.md5 |
+| **file**:hashes.'SHA-1' | file.hash.sha1, email.attachments.file.hash.sha1 |
+| **file**:hashes.'SHA-256' | file.hash.sha256, email.attachments.file.hash.256 |
+| **file**:hashes.'SHA-512' | file.hash.sha512, email.attachments.file.hash.512 |
 | **file**:parent_directory_ref.path | file.directory |
 | **file**:x_attributes | file.attributes |
 | **file**:x_extension | file.extension |
@@ -100,7 +100,7 @@
 | **process**:parent_ref.pid | process.ppid, process.parent.ppid |
 | **process**:parent_ref.name | process.parent.name |
 | **process**:parent_ref.x_exit_code | process.parent.exit_code |
-| **process**:parent_ref.pgid | process.parent.pgid |
+| **process**:parent_ref.x_pgid | process.parent.pgid |
 | **process**:parent_ref.x_window_title | process.parent.title |
 | **process**:parent_ref.x_thread_id | process.parent.thread.id |
 | **process**:parent_ref.x_uptime | process.parent.uptime |
@@ -116,9 +116,10 @@
 | **process**:x_window_title | process.title |
 | **process**:x_exit_code | process.exit_code |
 | **process**:x_thread_id | process.thread.id |
-| **process**:x_ttp_tags | tags |
+| **process**:x_tags | tags |
 | **process**:x_unique_id | process.entity_id, process.parent.entity_id |
 | **process**:x_uptime | process.uptime |
+| **process**:x_pgid | process.pgid |
 | **url**:value | url.original |
 | **domain-name**:value | url.domain, dns.question.name, dns.question.registered_domain, host.hostname, source.domain, destination.domain, server.domain, client.domain, source.registered_domain, destination.registered_domain, server.registered_domain, client.registered_domain, source.top_level_domain, destination.top_level_domain, server.top_level_domain, client.top_level_domain |
 | **windows-registry-key**:key | registry.key |
@@ -129,10 +130,14 @@
 | **software**:x_description | process.pe.description, file.pe.description, dll.pe.description |
 | **autonomous-system**:value | client.as.organization.name, server.as.organization.name, source.as.organization.name, destination.as.organization.name |
 | **autonomous-system**:number | client.as.number, server.as.number, source.as.number, destination.as.number |
-| **email-addr**:name | user.email |
+| **email-addr**:value | user.email, email.from.address, email.to.address |
+| **email-message**:subject | email.subject |
+| **email-message**:from_ref.value | email.from.address |
+| **email-message**:to_refs[*].value | email.to.address |
+| **email-message**:cc_refs[*].value | email.to.address |
 | **x-oca-event**:action | event.action |
-| **x-oca-event**:id | event.id |
-| **x-oca-event**:category | event.category |
+| **x-oca-event**:event_id | event.id |
+| **x-oca-event**:category | event.category, event.type, event.kind |
 | **x-oca-event**:code | event.code |
 | **x-oca-event**:created | event.created |
 | **x-oca-event**:dataset | event.dataset |
@@ -140,7 +145,6 @@
 | **x-oca-event**:end | event.end |
 | **x-oca-event**:hash | event.hash |
 | **x-oca-event**:ingested | event.ingested |
-| **x-oca-event**:kind | event.kind |
 | **x-oca-event**:module | event.module |
 | **x-oca-event**:outcome | event.outcome |
 | **x-oca-event**:provider | event.provider |
@@ -150,7 +154,6 @@
 | **x-oca-event**:severity | event.severity |
 | **x-oca-event**:start | event.start |
 | **x-oca-event**:timezone | event.timezone |
-| **x-oca-event**:type | event.type |
 | **x-oca-event**:url | event.url |
 | **x-oca-event**:original | message, powershell.file.script_block_text |
 | **x-oca-event**:process_ref.pid | process.pid |
@@ -180,7 +183,7 @@
 | **x-ecs-dns**:answers_ttl | dns.answers.ttl |
 | **x-ecs-dns**:answers_type | dns.answers.type |
 | **x-ecs-dns**:header_flags | dns.header_flags |
-| **x-ecs-dns**:id | dns.id |
+| **x-ecs-dns**:dns_id | dns.id |
 | **x-ecs-dns**:op_code | dns.op_code |
 | **x-ecs-dns**:question_class | dns.question.class |
 | **x-ecs-dns**:question_name | dns.question.name |
@@ -190,24 +193,23 @@
 | **x-ecs-dns**:question_type | dns.question.type |
 | **x-ecs-dns**:resolved_ip | dns.resolved_ip |
 | **x-ecs-dns**:response_code | dns.response_code |
-| **x-ecs-dns**:type | dns.type |
+| **x-ecs-dns**:dns_type | dns.type |
 | **x-ecs**:version | ecs.version |
 | **x-ecs-error**:code | error.code |
-| **x-ecs-error**:id | error.id |
+| **x-ecs-error**:error_id | error.id |
 | **x-ecs-error**:message | error.message |
 | **x-ecs-error**:stack_trace | error.stack_trace |
-| **x-ecs-error**:type | error.type |
+| **x-ecs-error**:error_type | error.type |
 | **x-ecs-group**:domain | group.domain |
-| **x-ecs-group**:id | group.id |
+| **x-ecs-group**:group_id | group.id |
 | **x-ecs-group**:name | group.name |
 | **x-oca-asset**:architecture | host.architecture |
 | **x-oca-asset**:domain | host.domain |
-| **x-oca-asset**:hostname | host.hostname, observer.hostname |
-| **x-oca-asset**:id | host.id, observer.serial_number |
+| **x-oca-asset**:hostname | host.hostname, observer.hostname, host.name, observer.name |
+| **x-oca-asset**:device_id | host.id, observer.serial_number |
 | **x-oca-asset**:ip | host.ip, observer.ip |
 | **x-oca-asset**:mac | host.mac, observer.mac |
-| **x-oca-asset**:name | host.name, observer.name |
-| **x-oca-asset**:type | host.type, observer.type |
+| **x-oca-asset**:host_type | host.type, observer.type |
 | **x-oca-asset**:ingress.zone | observer.ingress.zone |
 | **x-oca-asset**:ingress.interface.alias | observer.ingress.interface.alias |
 | **x-oca-asset**:ingress.interface.id | observer.ingress.interface.id |
@@ -217,7 +219,7 @@
 | **x-oca-asset**:egress.interface.id | observer.egress.interface.id |
 | **x-oca-asset**:egress.interface.name | observer.egress.interface.name |
 | **x-oca-asset**:uptime | host.uptime |
-| **x-oca-asset**:os_ref.name | host.os.name, observer.os.name, observer.product |
+| **x-oca-asset**:os_ref.name | host.os.name, os.name, os.type, observer.os.name, observer.product |
 | **x-oca-asset**:os_ref.vendor | host.os.platform, observer.os.platform, observer.vendor |
 | **x-oca-asset**:os_ref.version | host.os.version, observer.os.version, observer.version |
 | **x-oca-asset**:container.id | container.id |
@@ -255,7 +257,7 @@
 | **x-ecs-log**:syslog_priority | log.syslog.priority |
 | **x-ecs-log**:severity_syslog_code | log.syslog.severity.code |
 | **x-ecs-log**:severity_syslog_name | log.syslog.severity.name |
-| **x-ecs-organization**:id | organization.id |
+| **x-ecs-organization**:organization_id | organization.id |
 | **x-ecs-organization**:name | organization.name |
 | **x-ecs-pe**:company | dll.pe.company, process.pe.company, file.pe.company |
 | **x-ecs-pe**:description | dll.pe.description, process.pe.description, file.pe.description |
@@ -268,17 +270,17 @@
 | **x-ecs-rule**:author | rule.author |
 | **x-ecs-rule**:category | rule.category |
 | **x-ecs-rule**:description | rule.description |
-| **x-ecs-rule**:id | rule.id |
+| **x-ecs-rule**:rule_id | rule.id |
 | **x-ecs-rule**:license | rule.license |
 | **x-ecs-rule**:name | rule.name |
 | **x-ecs-rule**:reference | rule.reference |
 | **x-ecs-rule**:ruleset | rule.ruleset |
 | **x-ecs-rule**:uuid | rule.uuid |
 | **x-ecs-rule**:version | rule.version |
-| **x-ecs-service**:id | service.id |
+| **x-ecs-service**:service_id | service.id |
 | **x-ecs-service**:name | service.name |
 | **x-ecs-service**:state | service.state |
-| **x-ecs-service**:type | service.type |
+| **x-ecs-service**:service_type | service.type |
 | **x-ecs-service**:version | service.version |
 | **x-ecs-threat**:framework | threat.framework |
 | **x-ecs-threat**:tactic_id | threat.tactic.id |
@@ -287,8 +289,8 @@
 | **x-ecs-threat**:technique_id | threat.technique.id |
 | **x-ecs-threat**:technique_name | threat.technique.name |
 | **x-ecs-threat**:technique_reference | threat.technique.reference |
-| **x-ecs-trace**:id | trace.id |
-| **x-ecs-transaction**:id | transaction.id |
+| **x-ecs-trace**:trace_id | trace.id |
+| **x-ecs-transaction**:transaction_id | transaction.id |
 | **x-ecs-user-agent**:name | user_agent.name |
 | **x-ecs-user-agent**:original | user_agent.original |
 | **x-ecs-user-agent**:version | user_agent.version |
@@ -297,7 +299,7 @@
 | **x-ecs-vulnerability**:classification | vulnerability.classification |
 | **x-ecs-vulnerability**:description | vulnerability.description |
 | **x-ecs-vulnerability**:enumeration | vulnerability.enumeration |
-| **x-ecs-vulnerability**:id | vulnerability.id |
+| **x-ecs-vulnerability**:vulnerability_id | vulnerability.id |
 | **x-ecs-vulnerability**:reference | vulnerability.reference |
 | **x-ecs-vulnerability**:report_id | vulnerability.report_id |
 | **x-ecs-vulnerability**:severity | vulnerability.severity |
@@ -332,16 +334,16 @@
 | **network-traffic**:x_forwarded_ip | network.forwarded_ip.keyword |
 | **network-traffic**:x_community_id | network.community_id.keyword |
 | **artifact**:payload_bin | event.original |
-| **file**:name | file.name, dll.name, file.path, process.name.keyword, process.executable.keyword, process.parent.name.keyword, process.parent.executable.keyword |
+| **file**:name | file.name, dll.name, file.path, process.name.keyword, process.executable.keyword, process.parent.name.keyword, process.parent.executable.keyword, email.attachments.file.name |
 | **file**:created | file.created, file.ctime |
 | **file**:modified | file.mtime |
 | **file**:accessed | file.accessed |
 | **file**:size | file.size |
 | **file**:mime_type | file.mime_type |
-| **file**:hashes.MD5 | file.hash.md5 |
-| **file**:hashes.'SHA-1' | file.hash.sha1 |
-| **file**:hashes.'SHA-256' | file.hash.sha256 |
-| **file**:hashes.'SHA-512' | file.hash.sha512 |
+| **file**:hashes.MD5 | file.hash.md5, email.attachments.file.hash.md5 |
+| **file**:hashes.'SHA-1' | file.hash.sha1, email.attachments.file.hash.sha1 |
+| **file**:hashes.'SHA-256' | file.hash.sha256, email.attachments.file.hash.256 |
+| **file**:hashes.'SHA-512' | file.hash.sha512, email.attachments.file.hash.512 |
 | **file**:parent_directory_ref.path | file.directory |
 | **file**:x_attributes | file.attributes |
 | **file**:x_extension | file.extension |
@@ -382,7 +384,7 @@
 | **process**:parent_ref.pid | process.ppid, process.parent.ppid |
 | **process**:parent_ref.name | process.parent.name.keyword |
 | **process**:parent_ref.x_exit_code | process.parent.exit_code |
-| **process**:parent_ref.pgid | process.parent.pgid |
+| **process**:parent_ref.x_pgid | process.parent.pgid |
 | **process**:parent_ref.x_window_title | process.parent.title.keyword |
 | **process**:parent_ref.x_thread_id | process.parent.thread.id |
 | **process**:parent_ref.x_uptime | process.parent.uptime |
@@ -398,9 +400,10 @@
 | **process**:x_window_title | process.title |
 | **process**:x_exit_code | process.exit_code |
 | **process**:x_thread_id | process.thread.id |
-| **process**:x_ttp_tags | tags |
+| **process**:x_tags | tags |
 | **process**:x_unique_id | process.entity_id.keyword, process.parent.entity_id.keyword |
 | **process**:x_uptime | process.uptime |
+| **process**:x_pgid | process.pgid |
 | **url**:value | url.original |
 | **domain-name**:value | url.domain, dns.question.name, dns.question.registered_domain, host.hostname.keyword, source.domain, destination.domain, server.domain, client.domain, source.registered_domain, destination.registered_domain, server.registered_domain, client.registered_domain, source.top_level_domain, destination.top_level_domain, server.top_level_domain, client.top_level_domain |
 | **windows-registry-key**:key | registry.key |
@@ -411,10 +414,10 @@
 | **software**:x_description | process.pe.description.keyword, file.pe.description.keyword, dll.pe.description.keyword |
 | **autonomous-system**:value | client.as.organization.name, server.as.organization.name, source.as.organization.name, destination.as.organization.name |
 | **autonomous-system**:number | client.as.number, server.as.number, source.as.number, destination.as.number |
-| **email-addr**:name | user.email |
+| **email-addr**:value | user.email |
 | **x-oca-event**:action | event.action.keyword |
-| **x-oca-event**:id | event.id |
-| **x-oca-event**:category | event.category.keyword |
+| **x-oca-event**:event_id | event.id |
+| **x-oca-event**:category | event.category.keyword, event.type.keyword, event.kind.keyword |
 | **x-oca-event**:code | event.code |
 | **x-oca-event**:created | event.created |
 | **x-oca-event**:dataset | event.dataset |
@@ -422,7 +425,6 @@
 | **x-oca-event**:end | event.end |
 | **x-oca-event**:hash | event.hash |
 | **x-oca-event**:ingested | event.ingested |
-| **x-oca-event**:kind | event.kind.keyword |
 | **x-oca-event**:module | event.module.keyword |
 | **x-oca-event**:outcome | event.outcome.keyword |
 | **x-oca-event**:provider | event.provider.keyword |
@@ -432,7 +434,6 @@
 | **x-oca-event**:severity | event.severity |
 | **x-oca-event**:start | event.start |
 | **x-oca-event**:timezone | event.timezone |
-| **x-oca-event**:type | event.type.keyword |
 | **x-oca-event**:url | event.url |
 | **x-oca-event**:original | message, powershell.file.script_block_text.keyword |
 | **x-oca-event**:process_ref.pid | process.pid |
@@ -462,7 +463,7 @@
 | **x-ecs-dns**:answers_ttl | dns.answers.ttl |
 | **x-ecs-dns**:answers_type | dns.answers.type |
 | **x-ecs-dns**:header_flags | dns.header_flags |
-| **x-ecs-dns**:id | dns.id |
+| **x-ecs-dns**:dns_id | dns.id |
 | **x-ecs-dns**:op_code | dns.op_code |
 | **x-ecs-dns**:question_class | dns.question.class |
 | **x-ecs-dns**:question_name | dns.question.name |
@@ -472,24 +473,23 @@
 | **x-ecs-dns**:question_type | dns.question.type |
 | **x-ecs-dns**:resolved_ip | dns.resolved_ip |
 | **x-ecs-dns**:response_code | dns.response_code |
-| **x-ecs-dns**:type | dns.type |
+| **x-ecs-dns**:dns_type | dns.type |
 | **x-ecs**:version | ecs.version.keyword |
 | **x-ecs-error**:code | error.code |
-| **x-ecs-error**:id | error.id |
+| **x-ecs-error**:error_id | error.id |
 | **x-ecs-error**:message | error.message |
 | **x-ecs-error**:stack_trace | error.stack_trace |
-| **x-ecs-error**:type | error.type |
+| **x-ecs-error**:error_type | error.type |
 | **x-ecs-group**:domain | group.domain |
-| **x-ecs-group**:id | group.id |
+| **x-ecs-group**:group_id | group.id |
 | **x-ecs-group**:name | group.name |
 | **x-oca-asset**:architecture | host.architecture.keyword |
 | **x-oca-asset**:domain | host.domain |
-| **x-oca-asset**:hostname | host.hostname.keyword, observer.hostname.keyword |
-| **x-oca-asset**:id | host.id.keyword, observer.serial_number.keyword |
+| **x-oca-asset**:hostname | host.hostname.keyword, observer.hostname.keyword, host.name.keyword, observer.name.keyword |
+| **x-oca-asset**:device_id | host.id.keyword, observer.serial_number.keyword |
 | **x-oca-asset**:ip | host.ip.keyword, observer.ip.keyword |
 | **x-oca-asset**:mac | host.mac.keyword, observer.mac.keyword |
-| **x-oca-asset**:name | host.name.keyword, observer.name.keyword |
-| **x-oca-asset**:type | host.type, observer.type |
+| **x-oca-asset**:host_type | host.type, observer.type |
 | **x-oca-asset**:ingress.zone | observer.ingress.zone |
 | **x-oca-asset**:ingress.interface.alias | observer.ingress.interface.alias |
 | **x-oca-asset**:ingress.interface.id | observer.ingress.interface.id |
@@ -537,7 +537,7 @@
 | **x-ecs-log**:syslog_priority | log.syslog.priority |
 | **x-ecs-log**:severity_syslog_code | log.syslog.severity.code |
 | **x-ecs-log**:severity_syslog_name | log.syslog.severity.name |
-| **x-ecs-organization**:id | organization.id |
+| **x-ecs-organization**:organization_id | organization.id |
 | **x-ecs-organization**:name | organization.name |
 | **x-ecs-pe**:company | dll.pe.company, process.pe.company.keyword, file.pe.company |
 | **x-ecs-pe**:description | dll.pe.description, process.pe.description.keyword, file.pe.description |
@@ -550,17 +550,17 @@
 | **x-ecs-rule**:author | rule.author |
 | **x-ecs-rule**:category | rule.category |
 | **x-ecs-rule**:description | rule.description |
-| **x-ecs-rule**:id | rule.id |
+| **x-ecs-rule**:rule_id | rule.id |
 | **x-ecs-rule**:license | rule.license |
 | **x-ecs-rule**:name | rule.name |
 | **x-ecs-rule**:reference | rule.reference |
 | **x-ecs-rule**:ruleset | rule.ruleset |
 | **x-ecs-rule**:uuid | rule.uuid |
 | **x-ecs-rule**:version | rule.version |
-| **x-ecs-service**:id | service.id |
+| **x-ecs-service**:service_id | service.id |
 | **x-ecs-service**:name | service.name |
 | **x-ecs-service**:state | service.state |
-| **x-ecs-service**:type | service.type |
+| **x-ecs-service**:service_type | service.type |
 | **x-ecs-service**:version | service.version |
 | **x-ecs-threat**:framework | threat.framework |
 | **x-ecs-threat**:tactic_id | threat.tactic.id |
@@ -569,8 +569,8 @@
 | **x-ecs-threat**:technique_id | threat.technique.id |
 | **x-ecs-threat**:technique_name | threat.technique.name |
 | **x-ecs-threat**:technique_reference | threat.technique.reference |
-| **x-ecs-trace**:id | trace.id |
-| **x-ecs-transaction**:id | transaction.id |
+| **x-ecs-trace**:trace_id | trace.id |
+| **x-ecs-transaction**:transaction_id | transaction.id |
 | **x-ecs-user-agent**:name | user_agent.name |
 | **x-ecs-user-agent**:original | user_agent.original |
 | **x-ecs-user-agent**:version | user_agent.version |
@@ -579,7 +579,7 @@
 | **x-ecs-vulnerability**:classification | vulnerability.classification |
 | **x-ecs-vulnerability**:description | vulnerability.description |
 | **x-ecs-vulnerability**:enumeration | vulnerability.enumeration |
-| **x-ecs-vulnerability**:id | vulnerability.id |
+| **x-ecs-vulnerability**:vulnerability_id | vulnerability.id |
 | **x-ecs-vulnerability**:reference | vulnerability.reference |
 | **x-ecs-vulnerability**:report_id | vulnerability.report_id |
 | **x-ecs-vulnerability**:severity | vulnerability.severity |
@@ -593,7 +593,7 @@
 | STIX Object | STIX Property | Data Source Field |
 |--|--|--|
 | artifact | payload_bin | original |
-| artifact | mime_type | mime_type_event |
+| artifact | mime_type | original |
 | <br> | | |
 | autonomous-system | number | number |
 | autonomous-system | name | name |
@@ -601,17 +601,21 @@
 | directory | path | executable |
 | directory | path | directory |
 | <br> | | |
+| domain-name | resolves_to_refs | ip |
 | domain-name | value | domain |
-| domain-name | resolves_to_refs | domain |
 | domain-name | value | registered_domain |
-| domain-name | resolves_to_refs | registered_domain |
 | domain-name | value | top_level_domain |
-| domain-name | resolves_to_refs | top_level_domain |
 | domain-name | value | url |
 | domain-name | value | name |
 | <br> | | |
 | email-addr | value | email |
 | email-addr | belongs_to_ref | email |
+| email-addr | value | address |
+| <br> | | |
+| email-message | subject | subject |
+| email-message | from_ref | address |
+| email-message | to_refs | address |
+| email-message | cc_refs | address |
 | <br> | | |
 | file | name | executable |
 | file | parent_directory_ref | executable |
@@ -625,9 +629,7 @@
 | file | name | name |
 | file | dll_ref | name |
 | file | x_path | path |
-| file | x_software_ref.vendor | company |
-| file | x_software_ref.version | file_version |
-| file | x_software_ref.name | original_file_name |
+| file | x_software_ref | company |
 | file | x_code_signature.exists | exists |
 | file | x_code_signature.subject_name | subject_name |
 | file | created | created |
@@ -658,6 +660,7 @@
 | <br> | | |
 | ipv6-addr | value | ip |
 | ipv6-addr | resolves_to_refs | mac |
+| ipv6-addr | belongs_to_refs | number |
 | ipv6-addr | value | resolved_ip |
 | <br> | | |
 | mac-addr | value | mac |
@@ -709,17 +712,16 @@
 | process | x_unique_id | entity_id |
 | process | x_exit_code | exit_code |
 | process | parent_ref | name |
-| process | parent_ref.pgid | pgid |
+| process | pid | pgid |
+| process | group_leader_ref | pgid |
 | process | parent_ref | pid |
-| process | parent_ref.ppid | ppid |
 | process | x_thread_id | id |
 | process | x_window_title | title |
 | process | x_uptime | uptime |
 | process | cwd | working_directory |
-| process | x_exit_code | pgid |
 | process | creator_user_ref | name |
 | process | creator_user_ref | id |
-| process | x_ttp_tags | tags |
+| process | x_tags | tags |
 | <br> | | |
 | software | vendor | company |
 | software | version | file_version |
@@ -732,6 +734,8 @@
 | software | vendor | platform |
 | software | name | product |
 | software | vendor | vendor |
+| <br> | | |
+| source-autonomous-system | name | name |
 | <br> | | |
 | url | value | original |
 | <br> | | |
@@ -750,8 +754,6 @@
 | <br> | | |
 | x-ecs | version | version |
 | <br> | | |
-| x-ecs-client | address | address |
-| <br> | | |
 | x-ecs-cloud | account_id | id |
 | x-ecs-cloud | availability_zone | availability_zone |
 | x-ecs-cloud | instance_id | id |
@@ -759,8 +761,6 @@
 | x-ecs-cloud | machine_type | type |
 | x-ecs-cloud | provider | provider |
 | x-ecs-cloud | region | region |
-| <br> | | |
-| x-ecs-destination | address | address |
 | <br> | | |
 | x-ecs-error | code | code |
 | x-ecs-error | error_id | id |
@@ -820,8 +820,6 @@
 | x-ecs-rule | ruleset | ruleset |
 | x-ecs-rule | uuid | uuid |
 | x-ecs-rule | version | version |
-| <br> | | |
-| x-ecs-server | address | address |
 | <br> | | |
 | x-ecs-service | service_id | id |
 | x-ecs-service | name | name |
@@ -915,6 +913,7 @@
 | x-oca-asset | ingress.interface.name | name |
 | x-oca-asset | ingress.vlan.id | id |
 | x-oca-asset | ingress.vlan.name | name |
+| x-oca-asset | hostname | name |
 | x-oca-asset | os_ref | product |
 | x-oca-asset | device_id | serial_number |
 | x-oca-asset | os_ref | vendor |
@@ -933,7 +932,7 @@
 | x-oca-event | end | end |
 | x-oca-event | hash | hash |
 | x-oca-event | ingested | ingested |
-| x-oca-event | kind | kind |
+| x-oca-event | category | kind |
 | x-oca-event | module | module |
 | x-oca-event | outcome | outcome |
 | x-oca-event | provider | provider |
@@ -944,7 +943,7 @@
 | x-oca-event | severity | severity |
 | x-oca-event | start | start |
 | x-oca-event | timezone | timezone |
-| x-oca-event | event_type | type |
+| x-oca-event | category | type |
 | x-oca-event | url | url |
 | x-oca-event | domain_ref | url |
 | x-oca-event | url_ref | original |

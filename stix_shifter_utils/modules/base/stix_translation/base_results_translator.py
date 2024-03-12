@@ -12,19 +12,35 @@ class BaseResultTranslator(object, metaclass=ABCMeta):
         self.options = options
         self.callback = callback
         self.module_name = base_file_path.split(os.sep)[-2]
-        self.map_data = {}
         self.logger = logger.set_logger(__name__)
-        stix_2_0_mapping_directory_path = os.path.join(base_file_path, 'json')
-        stix_2_1_mapping_directory_path = os.path.join(base_file_path, 'json/stix_2_1')
-        if options.get("stix_2.1") and os.path.isdir(stix_2_1_mapping_directory_path):
-            filepath = os.path.abspath(os.path.join(stix_2_1_mapping_directory_path, "to_stix_map.json"))
-        else:
-            filepath = os.path.abspath(os.path.join(stix_2_0_mapping_directory_path, "to_stix_map.json"))
-        self.map_data = self.read_json(filepath, options)
+        self.map_data = self.fetch_mapping(base_file_path, dialect, options)
         self.transformers = get_module_transformers(self.module_name)
 
     def read_json(self, filepath, options):
         return helper_read_json(filepath, options)
+
+    def fetch_mapping(self, basepath, dialect, options):
+        """
+        Fetches datasource-to-STIX mapping JSON from the module's <DIALECT>_to_stix_map.json file
+        :param basepath: path of data source translation module
+        :type basepath: str
+        """
+        stix_2_0_mapping_directory_path = os.path.join(basepath, 'json')
+        stix_2_1_mapping_directory_path = os.path.join(basepath, 'json/stix_2_1')
+        mapping_file = f'{dialect}_to_stix_map.json'
+        to_stix_path = os.path.join(basepath, 'json', mapping_file)
+        if not os.path.isfile(to_stix_path):
+            # use default mapping file since 'default_stix_map.json' isn't a real dialect
+            mapping_file = 'to_stix_map.json'
+        if options.get("stix_2.1") and os.path.isdir(stix_2_1_mapping_directory_path):
+            to_stix_path = os.path.join(stix_2_1_mapping_directory_path, mapping_file)
+        else:
+            to_stix_path = os.path.join(stix_2_0_mapping_directory_path, mapping_file)
+
+        if os.path.isdir(stix_2_0_mapping_directory_path) and not os.path.isfile(to_stix_path):
+            raise Exception('BaseResultTranslator Error: ' + to_stix_path + ' is not found for dialect ' + dialect)
+
+        return self.read_json(to_stix_path, options)
 
     @abstractmethod
     def translate_results(self, data_source, data):

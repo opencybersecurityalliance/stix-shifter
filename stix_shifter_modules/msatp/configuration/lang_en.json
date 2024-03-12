@@ -2,7 +2,6 @@
     "connection": {
         "host": {
             "label": "Management IP address or hostname",
-            "placeholder": "192.168.1.10",
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
@@ -14,12 +13,8 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "Microsoft Defender for Endpoint certificate",
-            "description": "Use self-signed Security Sockets Layer (SSL) certificate only if Microsoft Defender for Endpoint is configured with a self-signed SSL certificate"
-        },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
+            "label": "PEM Formatted SSL certificate(s)",
+            "description": "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
         },
         "options": {
             "includeAlerts": {
@@ -44,17 +39,17 @@
         "auth": {
             "type" : "fields",
             "tenant": {
-                "label": "Tenant",
-                "description": "Tenant ID of Azure Active directory Application with access to the Microsoft Graph API"
-            },
-            "clientId": {
+                "label": "Tenant ID",
+                "description": "Tenant ID of Azure Active directory Application with access to the data source"
+              },
+              "clientId": {
                 "label": "Client ID",
-                "description": "Client ID of Azure Active directory Application with access to the Microsoft Graph API"
-            },
-            "clientSecret": {
+                "description": "Client ID of Azure Active directory Application with access to the data source"
+              },
+              "clientSecret": {
                 "label": "Client secret",
-                "description": "Client Secret of Azure Active directory Application with access to the Microsoft Graph API"
-            }
+                "description": "Client Secret of Azure Active directory Application with access to the data source"
+              }
         }
     }
 }

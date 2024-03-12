@@ -1,11 +1,12 @@
 {
     "connection": {
         "type": {
-            "displayName": "Alertflex"
+            "displayName": "Alertflex",
+            "group": "alertflex"
         },
         "host": {
             "type": "text",
-            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$"
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$"
         },
         "port": {
             "default": 8181,
@@ -16,10 +17,6 @@
         "help": {
             "default": "https://alertflex.github.io/doc/pages/integration.html",
             "type": "link"
-        },
-        "sni": {
-            "type": "text",
-            "optional": true
         },
         "selfSignedCert": {
             "type": "password",

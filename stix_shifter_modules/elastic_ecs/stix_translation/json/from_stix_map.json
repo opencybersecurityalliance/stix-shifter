@@ -43,16 +43,16 @@
   },
   "file": {
     "fields": {
-      "name": ["file.name", "dll.name", "file.path", "process.name", "process.executable", "process.parent.name", "process.parent.executable"],
+      "name": ["file.name", "dll.name", "file.path", "process.name", "process.executable", "process.parent.name", "process.parent.executable", "email.attachments.file.name"],
       "created": ["file.created", "file.ctime"],
       "modified": ["file.mtime"],
       "accessed": ["file.accessed"],
       "size": ["file.size"],
       "mime_type": ["file.mime_type"],
-      "hashes.MD5": ["file.hash.md5"],
-      "hashes.'SHA-1'": ["file.hash.sha1"],
-      "hashes.'SHA-256'": ["file.hash.sha256"],
-      "hashes.'SHA-512'": ["file.hash.sha512"],
+      "hashes.MD5": ["file.hash.md5", "email.attachments.file.hash.md5"],
+      "hashes.'SHA-1'": ["file.hash.sha1", "email.attachments.file.hash.sha1"],
+      "hashes.'SHA-256'": ["file.hash.sha256", "email.attachments.file.hash.256"],
+      "hashes.'SHA-512'": ["file.hash.sha512", "email.attachments.file.hash.512"],
       "parent_directory_ref.path": ["file.directory"],
       "x_attributes": ["file.attributes"],
       "x_extension": ["file.extension"],
@@ -105,7 +105,7 @@
       "parent_ref.pid": ["process.ppid", "process.parent.ppid"],
       "parent_ref.name": ["process.parent.name"],
       "parent_ref.x_exit_code": ["process.parent.exit_code"],
-      "parent_ref.pgid": ["process.parent.pgid"],
+      "parent_ref.x_pgid": ["process.parent.pgid"],
       "parent_ref.x_window_title": ["process.parent.title"],
       "parent_ref.x_thread_id": ["process.parent.thread.id"],
       "parent_ref.x_uptime": ["process.parent.uptime"],
@@ -121,9 +121,10 @@
       "x_window_title": ["process.title"],
       "x_exit_code": ["process.exit_code"],
       "x_thread_id": ["process.thread.id"],
-      "x_ttp_tags": ["tags"],
+      "x_tags": ["tags"],
       "x_unique_id": ["process.entity_id", "process.parent.entity_id"],
-      "x_uptime": ["process.uptime"]
+      "x_uptime": ["process.uptime"],
+      "x_pgid": ["process.pgid"]
     }
   },
   "url": {
@@ -158,14 +159,22 @@
   },
   "email-addr": {
     "fields": {
-      "name": ["user.email"]
+      "value": ["user.email", "email.from.address", "email.to.address"]
+    }
+  },
+  "email-message": {
+    "fields": {
+      "subject": ["email.subject"],
+      "from_ref.value": ["email.from.address"],
+      "to_refs[*].value": ["email.to.address"],
+      "cc_refs[*].value": ["email.to.address"]
     }
   },
   "x-oca-event": {
     "fields": {
       "action": ["event.action"],
-      "id": ["event.id"],
-      "category": ["event.category"],
+      "event_id": ["event.id"],
+      "category": ["event.category", "event.type", "event.kind"],
       "code": ["event.code"],
       "created": ["event.created"],
       "dataset": ["event.dataset"],
@@ -173,7 +182,6 @@
       "end": ["event.end"],
       "hash": ["event.hash"],
       "ingested": ["event.ingested"],
-      "kind": ["event.kind"],
       "module": ["event.module"],
       "outcome": ["event.outcome"],
       "provider": ["event.provider"],
@@ -183,7 +191,6 @@
       "severity": ["event.severity"],
       "start": ["event.start"],
       "timezone": ["event.timezone"],
-      "type": ["event.type"],
       "url": ["event.url"],
       "original": ["message", "powershell.file.script_block_text"],
       "process_ref.pid": ["process.pid"],
@@ -221,7 +228,7 @@
       "answers_ttl": ["dns.answers.ttl"],
       "answers_type": ["dns.answers.type"],
       "header_flags": ["dns.header_flags"],
-      "id": ["dns.id"],
+      "dns_id": ["dns.id"],
       "op_code": ["dns.op_code"],
       "question_class": ["dns.question.class"],
       "question_name": ["dns.question.name"],
@@ -231,7 +238,7 @@
       "question_type": ["dns.question.type"],
       "resolved_ip": ["dns.resolved_ip"],
       "response_code": ["dns.response_code"],
-      "type": ["dns.type"]
+      "dns_type": ["dns.type"]
     }
   },
   "x-ecs": {
@@ -242,16 +249,16 @@
   "x-ecs-error": {
     "fields": {
       "code": ["error.code"],
-      "id": ["error.id"],
+      "error_id": ["error.id"],
       "message": ["error.message"],
       "stack_trace": ["error.stack_trace"],
-      "type": ["error.type"]
+      "error_type": ["error.type"]
     }
   },
   "x-ecs-group": {
     "fields": {
       "domain": ["group.domain"],
-      "id": ["group.id"],
+      "group_id": ["group.id"],
       "name": ["group.name"]
     }
   },
@@ -259,12 +266,11 @@
     "fields": {
       "architecture": ["host.architecture"],
       "domain": ["host.domain"],
-      "hostname": ["host.hostname", "observer.hostname"],
-      "id": ["host.id", "observer.serial_number"],
+      "hostname": ["host.hostname", "observer.hostname", "host.name", "observer.name"],
+      "device_id": ["host.id", "observer.serial_number"],
       "ip": ["host.ip", "observer.ip"],
       "mac": ["host.mac", "observer.mac"],
-      "name": ["host.name", "observer.name"],
-      "type": ["host.type", "observer.type"],
+      "host_type": ["host.type", "observer.type"],
       "ingress.zone": ["observer.ingress.zone"],
       "ingress.interface.alias": ["observer.ingress.interface.alias"],
       "ingress.interface.id": ["observer.ingress.interface.id"],
@@ -274,7 +280,7 @@
       "egress.interface.id": ["observer.egress.interface.id"],
       "egress.interface.name": ["observer.egress.interface.name"],
       "uptime": ["host.uptime"],
-      "os_ref.name": ["host.os.name", "observer.os.name", "observer.product"],
+      "os_ref.name": ["host.os.name", "os.name", "os.type", "observer.os.name", "observer.product"],
       "os_ref.vendor": ["host.os.platform", "observer.os.platform", "observer.vendor"],
       "os_ref.version": ["host.os.version", "observer.os.version", "observer.version"],
       "container.id": ["container.id"],
@@ -328,7 +334,7 @@
   },
   "x-ecs-organization": {
     "fields": {
-      "id": ["organization.id"],
+      "organization_id": ["organization.id"],
       "name": ["organization.name"]
     }
   },
@@ -353,7 +359,7 @@
       "author": ["rule.author"],
       "category": ["rule.category"],
       "description": ["rule.description"],
-      "id": ["rule.id"],
+      "rule_id": ["rule.id"],
       "license": ["rule.license"],
       "name": ["rule.name"],
       "reference": ["rule.reference"],
@@ -364,10 +370,10 @@
   },
   "x-ecs-service": {
     "fields": {
-      "id": ["service.id"],
+      "service_id": ["service.id"],
       "name": ["service.name"],
       "state": ["service.state"],
-      "type": ["service.type"],
+      "service_type": ["service.type"],
       "version": ["service.version"]
     }
   },
@@ -384,12 +390,12 @@
   },
   "x-ecs-trace": {
     "fields": {
-      "id": ["trace.id"]
+      "trace_id": ["trace.id"]
     }
   },
   "x-ecs-transaction": {
     "fields": {
-      "id": ["transaction.id"]
+      "transaction_id": ["transaction.id"]
     }
   },
   "x-ecs-user-agent": {
@@ -406,7 +412,7 @@
       "classification": ["vulnerability.classification"],
       "description": ["vulnerability.description"],
       "enumeration": ["vulnerability.enumeration"],
-      "id": ["vulnerability.id"],
+      "vulnerability_id": ["vulnerability.id"],
       "reference": ["vulnerability.reference"],
       "report_id": ["vulnerability.report_id"],
       "severity": ["vulnerability.severity"],

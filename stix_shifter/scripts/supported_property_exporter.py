@@ -11,43 +11,47 @@ from datetime import datetime
 current_dir = path.abspath(path.dirname(__file__))
 
 CONNECTOR_MODULE_PATH = path.abspath(path.join(current_dir, "../../stix_shifter_modules"))
-ADAPTER_GUIDE_PATH = path.abspath(path.join(current_dir, '../../adapter-guide'))
+TABLE_CONTENTS_PATH = path.abspath(path.join(current_dir, '../../docs/supported-mappings.md'))
 
 # Add new connectors to this dictionary as they become available. The key must match the name of the translation module.
 # Comment out any connectors you wish to ommit.
 SCO_CONNECTORS = {
-    "qradar": "IBM QRadar", 
-    "splunk": "Splunk Enterprise Security", 
-    "bigfix": "HCL BigFix", 
-    "carbonblack": "Carbon Black CB Response",
-    "cbcloud": "Carbon Black Cloud", 
-    "elastic_ecs": "Elasticsearch ECS", 
-    "msatp": "Microsoft Defender for Endpoint",
-    # "security_advisor": "IBM Cloud Security Advisor",
-    "guardium": "IBM Guardium Data Protection",
-    "aws_cloud_watch_logs": "Amazon CloudWatch Logs",
-    # "azure_sentinel": "Microsoft Graph Security",
     "alertflex": "Alertflex",
     "arcsight": "Micro Focus ArcSight",
     "aws_athena": "Amazon Athena",
-    "crowdstrike": 'CrowdStrike Falcon',
-    "trendmicro_vision_one": "Trend Micro Vision One",
-    "onelogin": "OneLogin",
-    "secretserver": "IBM Security Verify Privilege Vault",
-    "sumologic": "Sumo Logic",
-    "datadog": "Datadog",
-    "proofpoint": "Proofpoint (SIEM API)",
-    # "infoblox": "Infoblox BloxOne Threat Defense",
-    "cybereason": "Cybereason",
-    "paloalto": "PaloAlto Cortex XDR",
-    "sentinelone": "SentinelOne",
-    "reaqta": "IBM Security ReaQta",
-    "darktrace": "Darktrace",
-    "rhacs": "Red Hat Advanced Cluster Security for Kubernetes (StackRox)",
-    "ibm_security_verify": "IBM Security Verify",
-    "gcp_chronicle": "GCP Chronicle",
+    "aws_cloud_watch_logs": "Amazon CloudWatch Logs",
+    "aws_guardduty": "Amazon GuardDuty",
     "azure_log_analytics": "Azure Log Analytics",
-    "okta": "Okta"
+    "azure_sentinel": "Microsoft Graph Security", #
+    "bigfix": "HCL BigFix",
+    "carbonblack": "Carbon Black CB Response",
+    "cbcloud": "Carbon Black Cloud", 
+    "cisco_secure_email": "Cisco Secure Email",
+    "crowdstrike": 'CrowdStrike Falcon',
+    "cybereason": "Cybereason",
+    "darktrace": "Darktrace",
+    "datadog": "Datadog",
+    "elastic_ecs": "Elasticsearch ECS",
+    "gcp_chronicle": "GCP Chronicle",
+    "guardium": "IBM Guardium Data Protection",
+    "ibm_security_verify": "IBM Security Verify",
+    # "infoblox": "Infoblox BloxOne Threat Defense",
+    "msatp": "Microsoft Defender for Endpoint",
+    "okta": "Okta",
+    "onelogin": "OneLogin",
+    "paloalto": "PaloAlto Cortex XDR",
+    "proofpoint": "Proofpoint (SIEM API)",
+    "qradar": "IBM Security QRadar SIEM",
+    "reaqta": "IBM Security QRadar EDR",
+    "rhacs": "Red Hat Advanced Cluster Security for Kubernetes",
+    "secretserver": "IBM Security Verify Privilege Vault",
+    # "security_advisor": "IBM Cloud Security Advisor",
+    "sentinelone": "SentinelOne",
+    "splunk": "Splunk Enterprise Security",
+    "sumologic": "Sumo Logic",
+    "trendmicro_vision_one": "Trend Micro Vision One",
+    "vectra": "Vectra NDR",
+    "sysdig": "Sysdig"
 }
 
 SDO_CONNECTORS = {
@@ -64,23 +68,28 @@ SDO_CONNECTORS = {
 
 DEFAULT_DIALECT = "default"
 
-DIALECTS = {
-    "qradar": ["events", "flows"],
+FROM_STIX_DIALECTS = {
     "aws_athena": ["guardduty", "ocsf", "vpcflow"],
     "aws_cloud_watch_logs": ["guardduty", "vpcflow"],
+    "azure_log_analytics": ["SecurityAlert", "SecurityEvent", "SecurityIncident"],
+    "azure_sentinel": ["alert", "alertV2"],
     "datadog": ["events", "processes"],
+    "elastic_ecs": [DEFAULT_DIALECT, "beats"],
     "guardium": ["qsearch", "report"],
     "infoblox": ["dnsEventData", "dossierData", "tideDbData"],
     "paloalto": ["xdr_data"],
+    "qradar": ["events", "flows"],
     "secretserver": ["event"],
-    "trendmicro_vision_one": ["endpointActivityData", "messageActivityData"],
-    "azure_log_analytics": ["SecurityAlert", "SecurityEvent", "SecurityIncident"],
-    "elastic_ecs": [DEFAULT_DIALECT, "beats"]
+    "trendmicro_vision_one": ["endpointActivityData", "messageActivityData"]
+}
+
+TO_STIX_DIALECTS = {
+    "aws_athena" : ["guardduty", "ocsf", "vpcflow"]
 }
 
 STIX_OPERATORS = {
-    "ComparisonExpressionOperators.And": "AND (Comparision)",
-    "ComparisonExpressionOperators.Or": "OR (Comparision)",
+    "ComparisonExpressionOperators.And": "AND (Comparison)",
+    "ComparisonExpressionOperators.Or": "OR (Comparison)",
     "ComparisonComparators.GreaterThan": ">",
     "ComparisonComparators.GreaterThanOrEqual": ">=",
     "ComparisonComparators.LessThan": "<",
@@ -125,8 +134,8 @@ def __main__():
     table_of_contents += "## Supported data sources\n\n"
     table_of_contents += "Stix-shifter currently offers connector support for the following cybersecurity products. Click on a data source to see a list of STIX attributes and properties it supports.\n\n"
 
-    table_of_contents_file_path = path.abspath(path.join(ADAPTER_GUIDE_PATH, "supported-mappings.md"))
-    table_of_contents_file = open(table_of_contents_file_path, "w")
+    # table_of_contents_file_path = TABLE_CONTENTS_PATH
+    table_of_contents_file = open(TABLE_CONTENTS_PATH, "w")
 
     for _, (key, module) in enumerate(CONNECTORS.items()):
 
@@ -168,8 +177,8 @@ def __main__():
         try:
             # TODO: Dynamically fetch dialects and wrap in loop to capture all dialects
             dialects = [DEFAULT_DIALECT]
-            if key in DIALECTS:
-                dialects = DIALECTS[key]
+            if key in FROM_STIX_DIALECTS:
+                dialects = FROM_STIX_DIALECTS[key]
             for dialect in dialects:
                 if dialect == DEFAULT_DIALECT:
                     dialect = ""
@@ -188,10 +197,23 @@ def __main__():
         # TO-STIX 
         if not args.sdo:
             try:
-                filepath = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "stix_translation/json", "to_stix_map.json"))    
-                to_stix_json_file = open(filepath) 
-                output_string = _generate_to_stix_table(key, to_stix_json_file, data_field_alias_mapping, output_string)
-                to_stix_json_file.close()
+
+                dialects = [DEFAULT_DIALECT]
+                if key in TO_STIX_DIALECTS:
+                    dialects = TO_STIX_DIALECTS[key]
+                for dialect in dialects:
+                    if dialect == DEFAULT_DIALECT:
+                        dialect = ""
+                        output_string += "### Supported STIX Objects and Properties for Query Results\n"
+                        filepath = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "stix_translation/json", "to_stix_map.json"))
+                    else:
+                        output_string += "### Supported STIX Objects and Properties for Query Results from {} dialect\n".format(dialect.capitalize())
+                        filepath = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "stix_translation/json", "{}to_stix_map.json".format(dialect + "_")))
+
+                    # filepath = path.abspath(path.join(CONNECTOR_MODULE_PATH, key, "stix_translation/json", "to_stix_map.json"))    
+                    to_stix_json_file = open(filepath) 
+                    output_string = _generate_to_stix_table(key, to_stix_json_file, data_field_alias_mapping, output_string)
+                    to_stix_json_file.close()
             except Exception as e:
                 print("Error constructing to-STIX mapping table for {} module: {}".format(key, e))
                 continue
@@ -257,7 +279,7 @@ def _generate_to_stix_table(key, to_stix_json_file, data_field_alias_mapping, ou
     stix_attribute_collection = _parse_attributes(loaded_to_stix_json, key, {})
     sorted_attribute_objects = json.dumps(stix_attribute_collection, sort_keys=True)
     sorted_attribute_objects = json.loads(sorted_attribute_objects)
-    output_string += "### Supported STIX Objects and Properties for Query Results\n"
+    # output_string += "### Supported STIX Objects and Properties for Query Results\n"
     output_string += "| STIX Object | STIX Property | Data Source Field |\n"
     output_string += "|--|--|--|\n"
     for stix_object, property_list in sorted_attribute_objects.items():

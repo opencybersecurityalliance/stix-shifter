@@ -380,6 +380,55 @@ observer_data = {
     }
 }
 
+email_data = {
+    "email": {
+        "attachments": [
+            { "file": { "name": "tabby.html", "mime_type": "text/html" } },
+            { "file": { "name": "tabby.zip", "mime_type": "application/zip" } }
+        ],
+        "subject": "Check out this picture of a cat!",
+        "from": { "address": "from@address.com" },
+        "to": {
+            "address": [
+                "to1@address.com",
+                "to2@address.com"
+            ]
+        },
+        "cc": {
+            "address": [
+                "cc1@address.com",
+                "cc2@address.com"
+            ]
+        }
+    }
+}
+
+email_data2 = {
+    "email": {
+        "attachments": [
+            { "file": { "name": [ "tabby.html" ]
+                      , "mime_type": [ "text/html" ]
+                      , "hash": { "md5": [ "5fbb1f4a0b7f798bb3f74e64bfeaeea2" ]
+                                , "sha256": [ "29952af0823274dd686f8969968f07d618579dbb0159a8f8f9ca2a6e35dd9a98" ]
+                                }
+                      }
+            },
+            { "file": { "name": [ "tabby.zip" ]
+                      , "mime_type": [ "application/zip" ]
+                      , "hash": { "md5": [ "187e31980d3368428c88d7a4e8da4572" ]
+                                , "sha256": [ "08756f43e5536eaa1500ea10adb88e67816f5586a5dde1d2a4f77c814d8abc57" ]
+                                }
+                      }
+            }
+        ],
+        "subject": [ "Check out this picture of a cat!" ],
+        "from": { "address": [ "from@address.com" ] },
+        "to": { "address": [ "to@address.com" ] },
+        "cc": { "address": [ "cc@address.com" ] }
+    }
+}
+
+
 class TestElasticEcsTransform(unittest.TestCase, object):
     @staticmethod
     def get_first(itr, constraint):
@@ -848,4 +897,58 @@ class TestElasticEcsTransform(unittest.TestCase, object):
           observer_ip and 
           observer_ip.get("type") == "ipv4-addr" and
           observer_ip.get("value") == "10.0.0.101" 
+        )
+
+    def test_email(self):
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [email_data])
+        assert (result_bundle['type'] == 'bundle')
+        translation_objects = result_bundle.get('objects')
+        assert (translation_objects and len(translation_objects) == 2)
+        observed_data = translation_objects[1]
+        stix_objects = observed_data.get("objects")
+        assert len(stix_objects) == 8
+        emailmsg = stix_objects.get("2")
+        assert (
+            emailmsg and emailmsg.get("type") == "email-message" and
+            emailmsg.get("subject") == "Check out this picture of a cat!"
+        )
+        from_email = stix_objects.get(emailmsg.get("from_ref"))
+        assert from_email and from_email.get("value") == "from@address.com"
+        to_emails = {stix_objects.get(ref).get("value") for ref in emailmsg.get("to_refs")}
+        assert to_emails == {"to1@address.com", "to2@address.com"}
+        filenames = {stix_objects[str(ref)]["name"] for ref in range(len(stix_objects)) if stix_objects[str(ref)] and stix_objects[str(ref)]["type"] == "file"}
+        assert filenames == {"tabby.zip", "tabby.html"}
+
+    def test_email2(self):
+        result_bundle = run_in_thread(entry_point.translate_results, data_source, [email_data2])
+        assert (result_bundle['type'] == 'bundle')
+        translation_objects = result_bundle.get('objects')
+        assert (translation_objects and len(translation_objects) == 2)
+        observed_data = translation_objects[1]
+        stix_objects = observed_data.get("objects")
+        assert len(stix_objects) == 6
+        emailmsg = stix_objects.get("2")
+        assert (
+            emailmsg and emailmsg.get("type") == "email-message" and
+            emailmsg.get("subject") == "Check out this picture of a cat!"
+        )
+        from_email = stix_objects.get(emailmsg.get("from_ref"))
+        assert from_email and from_email.get("value") == "from@address.com"
+        to_emails = [stix_objects.get(ref).get("value") for ref in emailmsg.get("to_refs")]
+        assert to_emails == ["to@address.com"]
+        to_emails = [stix_objects.get(ref).get("value") for ref in emailmsg.get("cc_refs")]
+        assert to_emails == ["cc@address.com"]
+        file0 = stix_objects.get("0")
+        assert (
+            file0 and file0.get("type") == "file" and
+            file0.get("name") == "tabby.html" and
+            file0.get("hashes").get("MD5") == "5fbb1f4a0b7f798bb3f74e64bfeaeea2" and
+            file0.get("hashes").get("SHA-256") == "29952af0823274dd686f8969968f07d618579dbb0159a8f8f9ca2a6e35dd9a98"
+        )
+        file1 = stix_objects.get("1")
+        assert (
+            file1 and file1.get("type") == "file" and
+            file1.get("name") == "tabby.zip" and
+            file1.get("hashes").get("MD5") == "187e31980d3368428c88d7a4e8da4572" and
+            file1.get("hashes").get("SHA-256") == "08756f43e5536eaa1500ea10adb88e67816f5586a5dde1d2a4f77c814d8abc57"
         )

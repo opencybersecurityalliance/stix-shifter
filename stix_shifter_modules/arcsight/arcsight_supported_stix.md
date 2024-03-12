@@ -1,4 +1,4 @@
-##### Updated on 05/15/23
+##### Updated on 10/25/23
 ## Micro Focus ArcSight
 ### Results STIX Domain Objects
 * Identity
@@ -9,8 +9,8 @@
 
 | STIX Operator | Data Source Operator |
 |--|--|
-| AND (Comparision) | AND |
-| OR (Comparision) | OR |
+| AND (Comparison) | AND |
+| OR (Comparison) | OR |
 | > | > |
 | >= | >= |
 | < | < |

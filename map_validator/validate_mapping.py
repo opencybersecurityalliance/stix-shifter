@@ -101,22 +101,24 @@ def main():
     for mapping in get_mapping(to_stix_map):
         #TODO: make each "check" a function?
 
-        # Check cybox flag
-        cybox = mapping.get('cybox', True)
-        if not isinstance(cybox, bool):  # Note: this could be checked by pydantic
-            log_error(mapping, '"cybox" is not a boolean')
+        # "object" is an optional name for target SCO
         obj = mapping.get('object')
-        if not obj and cybox:
-            log_warning(mapping, 'no "object"')
+        if obj is not None:
+            if not isinstance(obj, str):
+                log_error(mapping, '"object" is not a string')
+                continue  # This is "fatal" for this mapping
 
         # Validate key
         key = mapping['key']
         if not isinstance(key, str):
             log_error(mapping, '"key" is not a string')
             continue  # This is "fatal" for this mapping
+
         otype, _, rest = key.partition('.')
         if not rest:
+            # No SCO type, so it's an observed-data property
             rest, otype = otype, rest
+            obs_props.add(rest)
         if otype and obj:
             prev_otype = objects.get(obj)
             if (prev_otype and
@@ -126,15 +128,6 @@ def main():
                 log_error(mapping, f'conflicting types for {objects[obj]} {obj}')
             else:
                 objects[obj] = otype
-        if not otype:
-            if cybox is not False:
-                log_error(mapping, 'No type in "key" and "cybox" is not False')
-            obs_props.add(rest)
-        if cybox is False and otype:
-            if '-' in otype:
-                log_error(mapping, f'"key" type is {otype} but "cybox" is False')
-            elif rest:
-                log_warning(mapping, f'dict {otype} as observed-data property')
 
         # Check refs
         if '_ref.' in rest:

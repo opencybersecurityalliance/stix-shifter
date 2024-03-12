@@ -1,16 +1,12 @@
-#  ReaQta
+#  IBM Security QRadar EDR Connector
 
-Reaqta is an AI-powered, automated endpoint security platform. ReaQta Connector can be used to search security events and alerts generated in ReaQta platform.
-
-## Supported STIX Mappings
-
-See the [table of mappings](reaqta_supported_stix.md) for the STIX objects and operators supported by this connector.
+IBM Security® QRadar® EDR, formerly ReaQta, is an AI-powered, automated endpoint security platform. This connector can be used to search security events and alerts generated in the IBM Security® QRadar® EDR platform.
 
 ## API and Query Language
 
-Connector uses Reaqta Hunt API. Endpoint Path: `/1/events/hunt`
+The connector uses the Hunt API. Endpoint Path: `/1/events/hunt`
 
-For search, the connector uses HunQ: The ReaQta-Hive Hunt Query Language. The query is similar to the WHERE clause of a SQL query.
+For search, the connector uses HunQ: The Hive Hunt Query Language. The query is similar to the WHERE clause of a SQL query.
 
 
 ### Format for making STIX translation calls via the CLI
@@ -89,7 +85,7 @@ python main.py transmit reaqta '{"host":"<reaqta_host>"}' '{ "auth": { "app_id":
         }
 ```
 
-##  ReaQta response results to STIX objects
+##  Response results to STIX objects
 
 ### Translate command
 ``` 

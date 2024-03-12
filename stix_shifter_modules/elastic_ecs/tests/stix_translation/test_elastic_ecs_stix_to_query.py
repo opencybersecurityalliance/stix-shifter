@@ -1,5 +1,10 @@
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter_utils.utils.error_response import ErrorCode
+from stix_shifter_modules.elastic_ecs.stix_translation.query_constructor import (
+    _unfold_plaintext_ci_chars,
+    _unfold_ci_chars_in_bracket,
+    _unfold_case_insensitive_regex,
+)
 import unittest
 import datetime
 import re
@@ -35,6 +40,40 @@ def _remove_timestamp_from_query(queries):
 
 
 class TestStixtoQuery(unittest.TestCase, object):
+
+    def test_case_insensitive_unfold_chars(self):
+        input_output_pairs = [ ("a", "[aA]")
+                             , ("ab", "[aA][bB]")
+                             , ("ab7#*c((D))", "[aA][bB]7#*[cC](([dD]))")
+                             ]
+        for (x,y) in input_output_pairs:
+            assert y == _unfold_plaintext_ci_chars(x)
+
+    def test_unfold_ci_chars_in_bracket(self):
+        iopairs = [ ("abD", "[aAbBdD]")
+                  , ("a-z0-9", "[a-zA-Z0-9]")
+                  , ("-ef-z", "[-eEf-zF-Z]")
+                  , ("ab-", "[aAbB-]")
+                  , ("a-zA-Z0-9", "[a-zA-Z0-9]")
+                  ]
+        for (x,y) in iopairs:
+            assert y == _unfold_ci_chars_in_bracket(x)
+
+    def test_case_insensitive_unfold_regex(self):
+        iopairs = [ ("http://z[abc]83m li", "http://z[abc]83m li")
+                  , ("(?i)virus", "[vV][iI][rR][uU][sS]")
+                  , ("(?i)virus[ s]", "[vV][iI][rR][uU][sS][ sS]")
+                  , ("(?i)virus[ s] bin [c3b]", "[vV][iI][rR][uU][sS][ sS] [bB][iI][nN] [cC3bB]")
+                  , (r"(?i)virus\[ s\]", r"[vV][iI][rR][uU][sS]\[ [sS]\]")
+                  , (r"(?i)virus\\[ s\\]", r"[vV][iI][rR][uU][sS]\\[ sS\\]")
+                  , ("(?i)http://z83m li", "[hH][tT][tT][pP]://[zZ]83[mM] [lL][iI]")
+                  , ("(?i)http://z[abc]83m li", "[hH][tT][tT][pP]://[zZ][aAbBcC]83[mM] [lL][iI]")
+                  , ("http://(?i)z[abc]83m li", "http://[zZ][aAbBcC]83[mM] [lL][iI]")
+                  , ("http://(?i)z[a-z]83m li", "http://[zZ][a-zA-Z]83[mM] [lL][iI]")
+                  , ("http://(?i)z[a-z0-9A-Z]83m li", "http://[zZ][a-zA-Z0-9]83[mM] [lL][iI]")
+                  ]
+        for (x,y) in iopairs:
+            assert y == _unfold_case_insensitive_regex(x)
 
     def test_ipv4_query(self):
         stix_pattern = "[ipv4-addr:value = '192.168.122.83' OR ipv4-addr:value = '192.168.122.84']"
@@ -82,7 +121,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "[file:name = 'some_file.exe']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['(file.name : "some_file.exe" OR dll.name : "some_file.exe" OR file.path : "some_file.exe" OR process.name : "some_file.exe" OR process.executable : "some_file.exe" OR process.parent.name : "some_file.exe" OR process.parent.executable : "some_file.exe")']
+        test_query = ['(file.name : "some_file.exe" OR dll.name : "some_file.exe" OR file.path : "some_file.exe" OR process.name : "some_file.exe" OR process.executable : "some_file.exe" OR process.parent.name : "some_file.exe" OR process.parent.executable : "some_file.exe" OR email.attachments.file.name : "some_file.exe")']
         _test_query_assertions(translated_query, test_query)
 
     def test_complex_query(self):
@@ -98,7 +137,7 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = "[file:name != 'some_file.exe']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['((NOT file.name : "some_file.exe" AND file.name:*) OR (NOT dll.name : "some_file.exe" AND dll.name:*) OR (NOT file.path : "some_file.exe" AND file.path:*) OR (NOT process.name : "some_file.exe" AND process.name:*) OR (NOT process.executable : "some_file.exe" AND process.executable:*) OR (NOT process.parent.name : "some_file.exe" AND process.parent.name:*) OR (NOT process.parent.executable : "some_file.exe" AND process.parent.executable:*))']
+        test_query = ['((NOT file.name : "some_file.exe" AND file.name:*) OR (NOT dll.name : "some_file.exe" AND dll.name:*) OR (NOT file.path : "some_file.exe" AND file.path:*) OR (NOT process.name : "some_file.exe" AND process.name:*) OR (NOT process.executable : "some_file.exe" AND process.executable:*) OR (NOT process.parent.name : "some_file.exe" AND process.parent.name:*) OR (NOT process.parent.executable : "some_file.exe" AND process.parent.executable:*) OR (NOT email.attachments.file.name : "some_file.exe" AND email.attachments.file.name:*))']
         _test_query_assertions(translated_query, test_query)
 
     def test_port_queries(self):
@@ -278,6 +317,13 @@ class TestStixtoQuery(unittest.TestCase, object):
         test_query = ['(process.name : /cmd\\.exe/ OR process.parent.name : /cmd\\.exe/)']
         _test_query_assertions(translated_query, test_query)
 
+    def test_match_operator_case_sensitive(self):
+        stix_pattern = r"[process:name MATCHES '(?i)virus\\.exe']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = ['(process.name : /[vV][iI][rR][uU][sS]\\.[eE][xX][eE]/ OR process.parent.name : /[vV][iI][rR][uU][sS]\\.[eE][xX][eE]/)']
+        _test_query_assertions(translated_query, test_query)
+
     def test_match_operator_with_backslash(self):
         # STIX uses backslash as escape, so to match a literal . in RE you need double-backslash
         stix_pattern = r"[process:name MATCHES '^cmd\\.exe .*']"
@@ -330,3 +376,28 @@ class TestStixtoQuery(unittest.TestCase, object):
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
         test_query = ['(process.parent.name : "node" OR (process.executable : "node" OR process.parent.executable : "node"))']
         _test_query_assertions(translated_query, test_query)
+
+    def test_start_comparison(self):
+        stix_pattern = "[x-oca-event:start<='2023-12-12T00:00:00.000Z']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        test_query = ['(event.start:[* TO "2023-12-12T00:00:00.000Z"])']
+        _test_query_assertions(translated_query, test_query)
+
+    def test_email_query(self):
+        stix_pattern = "[email-addr:value = 'ccc@gmail.com']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        translated_query["queries"] == ['(user.email : "ccc@gmail.com" OR email.from.address : "ccc@gmail.com" OR email.to.address : "ccc@gmail.com")']
+
+    def test_email_from(self):
+        stix_pattern = "[email-message:from_ref.value = 'fm@gmail.com']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        translated_query["queries"] == ['(email.from.address : "fm@gmail.com")']
+
+    def test_email_to(self):
+        stix_pattern = "[email-message:to_refs[*].value = 'to1@gmail.com']"
+        translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
+        translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
+        translated_query["queries"] == ['(email.to.address : "to1@gmail.com")']

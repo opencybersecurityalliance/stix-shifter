@@ -16,7 +16,7 @@ class APIClient():
             headers['Authorization'] = "Basic %s" % token.decode('ascii')
         self.client = RestApiClientAsync(connection.get('host'),
                                     port=None,
-                                    headers=headers, url_modifier_function=None, cert_verify=True, sni=None, auth=None
+                                    headers=headers, url_modifier_function=None, auth=None
                                     )
 
     async def ping_data_source(self):

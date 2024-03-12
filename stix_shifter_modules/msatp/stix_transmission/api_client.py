@@ -36,9 +36,7 @@ class APIClient:
                                          self.connection.get('port', None),
                                          headers,
                                          url_modifier_function=url_modifier_function,
-                                         cert_verify=self.connection.get(
-                                             'selfSignedCert', True),
-                                         sni=self.connection.get('sni', None)
+                                         cert_verify=self.connection.get('selfSignedCert')
                                          )
         return self.client
 

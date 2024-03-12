@@ -63,6 +63,7 @@ class QueryStringPatternTranslator:
         value = re.sub(r"([^\\])\\S", r"\1[^ \t\n\r\f\v]", value)
         value = re.sub(r"([^\\])\\w", r"\1[a-zA-Z0-9_]", value)
         value = re.sub(r"([^\\])\\W", r"\1[^a-zA-Z0-9_]", value)
+        value = _unfold_case_insensitive_regex(value)
         return '/{}/'.format(value)
 
     @staticmethod
@@ -126,12 +127,8 @@ class QueryStringPatternTranslator:
             # Resolve the comparison symbol to use in the query string (usually just ':')
             comparator = self.comparator_lookup[str(expression.comparator)]
 
-            if stix_field == 'start' or stix_field == 'end':
-                transformer = TimestampToMilliseconds()
-                expression.value = transformer.transform(expression.value)
-
             # Some values are formatted differently based on how they're being compared
-            elif expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
+            if expression.comparator == ComparisonComparators.Matches:  # needs forward slashes
                 value = self._format_match(expression.value)
             # should be (x, y, z, ...)
             elif expression.comparator == ComparisonComparators.In:
@@ -306,6 +303,105 @@ def _format_translated_queries(query_array):
             formatted_queries.append(query)
 
     return formatted_queries
+
+
+def _unfold_case_insensitive_regex(regex_pattern):
+    # this function should be executed after "\s" unfolding
+
+    if "(?i)" in regex_pattern:
+
+        escaped_left_bracket_symbol = "辶"
+        escaped_right_bracket_symbol = "廴"
+        escaped_backslash = "彳"
+
+        p = regex_pattern
+        p = p.replace(r"\\", escaped_backslash)
+        p = p.replace(r"\[", escaped_left_bracket_symbol)
+        p = p.replace(r"\]", escaped_right_bracket_symbol)
+
+        if p.count("[") != p.count("]"):
+            raise RuntimeError(f"regex /{regex_pattern}/ has odd number of brackets.")
+        else:
+            xs = re.split(r"[\[\]]", p)
+
+            # ci_index: case insensitive index (first appearance)
+            ci_index = -1
+            for i, x in enumerate(xs):
+                if i % 2 == 0 and "(?i)" in x:
+                    ci_index = i
+                    break
+
+            if ci_index > -1:
+
+                # xsb: xs inside bracket
+                xsb = xs[1::2]
+                xsb[ci_index//2:] = [_unfold_ci_chars_in_bracket(x) for x in xsb[ci_index//2:]]
+                xs[1::2] = xsb
+
+                # xsob: xs outside bracket
+                xsob = xs[0::2]
+                xsob_s_h, *xsob_s_t = xsob[ci_index//2].split("(?i)")
+                xsob_s_t = [_unfold_plaintext_ci_chars(x) for x in xsob_s_t]
+                xsob[ci_index//2] = "".join([xsob_s_h] + xsob_s_t)
+                xsob[ci_index//2+1:] = [_unfold_plaintext_ci_chars(x.replace("(?i)", "")) for x in xsob[ci_index//2+1:]]
+                xs[0::2] = xsob
+
+                p_unfolded = "".join(xs)
+                p_unfolded = p_unfolded.replace(escaped_right_bracket_symbol, r"\]")
+                p_unfolded = p_unfolded.replace(escaped_left_bracket_symbol, r"\[")
+                p_unfolded = p_unfolded.replace(escaped_backslash, r"\\")
+                return p_unfolded
+
+            else:
+                # fake case insensitive flag in square bracket
+                return regex_pattern
+
+    else:
+        # no case insensitive flag
+        return regex_pattern
+
+
+def _unfold_plaintext_ci_chars(regex_pattern_segment):
+    return "".join([f"[{x.lower()}{x.upper()}]" if x.isascii() and x.isalpha() else x for x in regex_pattern_segment])
+
+
+def _unfold_ci_chars_in_bracket(regex_pattern_in_bracket):
+    # split segments
+    segs = [""]
+    # effective i that knows skipped indexes/chars
+    ie = 0
+    for i, x in enumerate(regex_pattern_in_bracket):
+        if i < ie:
+            continue
+        if i < len(regex_pattern_in_bracket)-2:
+            if x.isascii():
+                ahead1 = regex_pattern_in_bracket[i+1]
+                ahead2 = regex_pattern_in_bracket[i+2]
+                if ahead1 == "-" and ahead2.isascii():
+                    segs.append(regex_pattern_in_bracket[i:i+3])
+                    segs.append("")
+                    ie = i+3
+                else:
+                    segs[-1] = segs[-1] + x
+            else:
+                segs[-1] = segs[-1] + x
+        else:
+            segs.append(regex_pattern_in_bracket[i:len(regex_pattern_in_bracket)])
+            break
+    segs_new = []
+    for seg in segs:
+        if len(seg) == 3 and seg[1] == "-" and seg[0].isascii() and seg[0].isalpha() and seg[2].isascii() and seg[2].isalpha():
+            lower = f"{seg[0].lower()}-{seg[2].lower()}"
+            if lower not in segs_new:
+                segs_new.append(lower)
+            upper = f"{seg[0].upper()}-{seg[2].upper()}"
+            if upper not in segs_new:
+                segs_new.append(upper)
+        else:
+            new = "".join([x.lower()+x.upper() if x.isascii() and x.isalpha() else x for x in seg])
+            if new not in segs_new:
+                segs_new.append(new)
+    return "[" + "".join(segs_new) + "]"
 
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):

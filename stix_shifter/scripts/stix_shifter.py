@@ -339,7 +339,8 @@ def main():
         options['validate_pattern'] = True
         result = translation.translate(args.module, 'results', args.data_source, results, translation_options)
         log.info('STIX Results (written to stdout):\n')
-        print(json.dumps(result, indent=4, sort_keys=False))
+        # added default=str to json.dumps inorder to handle serialization failure of datetime.datetime object
+        print(json.dumps(result, indent=4, sort_keys=False, default=str))
         exit(0)
 
     elif args.command == TRANSLATE:
@@ -349,8 +350,6 @@ def main():
             for line in sys.stdin:
                 data_lines.append(line)
             data = '\n'.join(data_lines)
-        if args.stix_validator:
-            options['stix_validator'] = args.stix_validator
         recursion_limit = args.recursion_limit if args.recursion_limit else 1000
         translation = stix_translation.StixTranslation()
         result = translation.translate(
@@ -374,8 +373,8 @@ def main():
                 result[m] = translation.translate(m, stix_translation.CONFIGS, None, None)
     elif args.command == TRANSMIT:
         result = transmit(args)  # stix_transmission
-
-    print(json.dumps(result, indent=4, sort_keys=False))
+    # added default=str to json.dumps inorder to handle serialization failure of datetime.datetime object
+    print(json.dumps(result, indent=4, sort_keys=False, default=str))
     exit(0)
 
 
@@ -418,7 +417,10 @@ def transmit(args):
         search_id = args.search_id
         offset = args.offset
         length = args.length
-        result = transmission.results(search_id, offset, length, metadata=None)
+        if args.metadata:
+            result = transmission.results(search_id, offset, length, metadata=metadata)
+        else:
+            result = transmission.results(search_id, offset, length, metadata=None)
     elif operation_command == stix_transmission.RESULTS_STIX:
         search_id = args.search_id
         offset = args.offset

@@ -84,7 +84,7 @@ class TestTransmission(unittest.TestCase):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         ping_response = transmission.ping()
-        self.assertEqual(ping_response, {'code': 'unknown', 'connector': 'infoblox', 'error': "infoblox connector error => Failed to establish a new connection", 'success': False})
+        self.assertEqual(ping_response, {'code': 'service_unavailable', 'connector': 'infoblox', 'error': "infoblox connector error => Failed to establish a new connection", 'success': False})
 
     ###############################
     ## QUERY
@@ -316,7 +316,7 @@ class TestDnsEventTransmission(unittest.TestCase):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(), 4, 3)
-        self.assertEqual(results_response, {"success": False,'connector': 'infoblox',"error": "infoblox connector error => Failed to establish a new connection","code": "unknown"})
+        self.assertEqual(results_response, {"success": False,'connector': 'infoblox',"error": "infoblox connector error => Failed to establish a new connection","code": "service_unavailable"})
 
 class TestDossierTransmission(unittest.TestCase):
     def get_dialect(self):
@@ -487,7 +487,7 @@ class TestDossierTransmission(unittest.TestCase):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(threat_type="host"), 4, 3)
-        self.assertEqual(results_response, {"success": False,'connector': 'infoblox',"error": "infoblox connector error => Failed to establish a new connection","code": "unknown"})
+        self.assertEqual(results_response, {"success": False,'connector': 'infoblox',"error": "infoblox connector error => Failed to establish a new connection","code": "service_unavailable"})
 
 class TestTideDbTransmission(unittest.TestCase):
     def get_dialect(self):
@@ -672,4 +672,4 @@ class TestTideDbTransmission(unittest.TestCase):
         mock_ping.side_effect = ConnectionError("Failed to establish a new connection")
         transmission = StixTransmission(MODULE, CONNECTION, CONFIG)
         results_response = transmission.results(self._get_query(threat_type="host"), 4, 3)
-        self.assertEqual(results_response, {"success": False,'connector': 'infoblox',"error": "infoblox connector error => Failed to establish a new connection","code": "unknown"})
+        self.assertEqual(results_response, {"success": False,'connector': 'infoblox',"error": "infoblox connector error => Failed to establish a new connection","code": "service_unavailable"})

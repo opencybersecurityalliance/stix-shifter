@@ -6,11 +6,12 @@ class APIClient:
     """API Client to handle all calls."""
     credential = None
     
-    def __init__(self, base_uri, connection, configuration):
+    def __init__(self, connection, configuration):
         """Initialization.
         :param connection: dict, connection dict
         :param configuration: dict,config dict"""
-        self.host = base_uri
+        self.host = connection['host']
+        self.login_host = connection['login_host']
         self.connection = connection
         self.configuration = configuration
         self.timeout = connection['options'].get('timeout')
@@ -22,9 +23,12 @@ class APIClient:
             self.access_token = self.configuration["auth"]['access_token']
             headers['Authorization'] = "Bearer " + self.access_token
         else:
+            # Reference: https://learn.microsoft.com/en-us/python/api/azure-identity/azure.identity.aio.clientsecretcredential?view=azure-python
             self.credential = ClientSecretCredential(tenant_id=self.configuration["auth"]["tenant"],
                                                     client_id=self.configuration["auth"]["clientId"],
-                                                    client_secret=self.configuration["auth"]["clientSecret"])
+                                                    client_secret=self.configuration["auth"]["clientSecret"],
+                                                    authority=self.login_host) 
+
             async with self.credential:
                 self.access_token = await self.credential.get_token("https://{host}/.default".format(host=self.host))
                 headers['Authorization'] = "Bearer " + self.access_token.token
@@ -32,8 +36,7 @@ class APIClient:
         self.client = RestApiClientAsync(self.host,
                                     self.connection.get('port', None),
                                     headers,
-                                    cert_verify=self.connection.get('selfSignedCert', True),
-                                    sni=self.connection.get('sni', None)
+                                    cert_verify=self.connection.get('selfSignedCert')
                                     )
         return self.client
 
