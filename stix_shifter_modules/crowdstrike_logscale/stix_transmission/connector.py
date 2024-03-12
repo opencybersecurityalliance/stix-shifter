@@ -39,7 +39,7 @@ class Connector(BaseJsonSyncConnector):
             if "timeout_error" in str(ex):
                 response_dict['code'] = 408
             response_dict['message'] = str(ex)
-            self.logger.error('error while pinging: %s', ex)
+            self.logger.error('error while pinging in Crowdstrike Falcon Logscale: %s', ex)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
 
@@ -85,9 +85,10 @@ class Connector(BaseJsonSyncConnector):
             return_obj = self.exception_response(100, str(ex))
 
         except Exception as ex:
-            self.logger.error('error while fetching results: %s', ex)
+            self.logger.error('error while fetching results in Crowdstrike Falcon Logscale: %s', ex)
             code = 408 if "timeout_error" in str(ex) else None
             return_obj = self.exception_response(code, str(ex))
+
         return return_obj
 
     def exception_response(self, code, response_txt):
