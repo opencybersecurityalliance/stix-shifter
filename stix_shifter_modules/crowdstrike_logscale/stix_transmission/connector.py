@@ -85,7 +85,7 @@ class Connector(BaseJsonSyncConnector):
             return_obj = self.exception_response(100, str(ex))
 
         except Exception as ex:
-            self.logger.error('error while fetching results in Crowdstrike Falcon Logscale: %s', ex)
+            self.logger.error('Error while fetching results from CrowdStrike Falcon Logscale API: %s', ex)
             code = 408 if "timeout_error" in str(ex) else None
             return_obj = self.exception_response(code, str(ex))
 
