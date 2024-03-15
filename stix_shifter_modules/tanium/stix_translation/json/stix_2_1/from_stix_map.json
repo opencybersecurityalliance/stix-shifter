@@ -1,0 +1,116 @@
+{
+  "x-oca-event": {
+    "fields": {
+      "outcome": [
+        "state"
+      ],
+      "severity": [
+        "severity"
+      ],
+      "category": [
+        "matchType"
+      ],
+      "provider": [
+        "intelType"
+      ],
+      "action": [
+        "intelDocName"
+      ],
+      "host_ref.hostname": [
+        "computerName"
+      ],
+      "host_ref.ip_refs.value": [
+        "computerIpAddress"
+      ],
+      "host_ref.os_ref.name": [
+        "platform"
+      ],
+      "file_ref.parent_directory_ref.path": [
+        "path"
+      ],
+      "x_ttp_tagging_refs.technique_id": [
+        "mitreId"
+      ]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "dst_ip_ref.value": [
+        "computerIpAddress"
+      ],
+      "name": [
+        "intelDocName"
+      ],
+      "severity": [
+        "severity"
+      ],
+      "dst_os_ref.name": [
+        "platform"
+      ],
+      "x_ttp_tagging_refs.technique_id": [
+        "mitreId"
+      ],
+      "x_guid": [
+        "guid"
+      ],
+      "x_priority": [
+        "priority"
+      ],
+      "x_intel_doc_id": [
+        "intelDocId"
+      ],
+      "x_scan_config_id": [
+        "scanConfigId"
+      ],
+      "x_path": [
+        "path"
+      ],
+      "x_type": [
+        "type"
+      ],
+      "x_source": [
+        "intelSource"
+      ],
+      "x_label_name": [
+        "labelName"
+      ],
+      "x_details": [
+        "details"
+      ]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "computerIpAddress"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": [
+        "computerIpAddress"
+      ]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": [
+        "computerName"
+      ],
+      "ip_refs.value": [
+        "computerIpAddress"
+      ],
+      "os_ref.name": [
+        "platform"
+      ]
+    }
+  },
+  "software": {
+    "fields": {
+      "name": [
+        "platform"
+      ]
+    }
+  }
+}

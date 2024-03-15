@@ -1,0 +1,29 @@
+{
+    "connection": {
+        "host": {
+            "type": "text",
+            "optional": false
+        },
+        "port": {
+            "type": "number",
+            "default": 443,
+            "min": 1,
+            "max": 65535,
+            "optional": false
+        },
+        "options": {
+            "unmapped_fallback": {
+                "default": true
+            }
+        }
+    },
+    "configuration": {
+        "auth":
+        {
+            "accessToken": {
+                "type": "password",
+                "optional": false
+            }
+        }
+    }
+}
