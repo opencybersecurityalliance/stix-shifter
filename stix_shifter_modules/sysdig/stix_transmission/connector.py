@@ -128,6 +128,8 @@ class Connector(BaseJsonSyncConnector):
                     else:
                         response_dict = json.loads(response_wrapper.read())
                         message = response_dict.get('message')
+                        if response_code == 400 and message == 'bad request':
+                            message = 'Query time range can be maximum up to 14 days or The given query is invalid'
                     return_obj = self.exception_response(response_wrapper.code, message)
             else:
                 return_obj['success'] = True

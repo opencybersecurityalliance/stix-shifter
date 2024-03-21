@@ -188,13 +188,19 @@ class QueryStringPatternTranslator:
         return negate_comparator[comparator]
 
     @staticmethod
-    def _check_time_range_values(converted_timestamp):
+    def _check_time_range_values(from_epoch, to_epoch):
         """
         checks for valid start and stop time
-        :param converted_timestamp: list
+        :param from_epoch: int
+        :param to_epoch: int
         """
-        if converted_timestamp[0] > converted_timestamp[1]:
+        if from_epoch > to_epoch:
             raise StartStopQualifierValueException('Start time should be lesser than Stop time')
+
+        no_of_days = (to_epoch - from_epoch)/86400000000000       # converting nano seconds to days
+        max_day = 14                                              # time range maximum up to 14 days
+        if max_day < no_of_days:
+            logger.warning('Sysdig connector query time range can be maximum up to 14 days')
 
     @staticmethod
     def _parse_time_range(qualifier, time_range):
@@ -246,9 +252,9 @@ class QueryStringPatternTranslator:
         """
         converted_timestamp = \
             QueryStringPatternTranslator._parse_time_range(qualifier, self.options["time_range"])
-        QueryStringPatternTranslator._check_time_range_values(converted_timestamp)
         from_epoch = self.get_epoch_time(converted_timestamp[0])
         to_epoch = self.get_epoch_time(converted_timestamp[1])
+        QueryStringPatternTranslator._check_time_range_values(from_epoch, to_epoch)
         final_query = f'from={from_epoch}&to={to_epoch}&filter={query}'
         return final_query
 
