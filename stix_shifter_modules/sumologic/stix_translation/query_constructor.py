@@ -110,11 +110,14 @@ class QueryStringPatternTranslator:
                         continue
                     comparison_string += parsed_reference
                 else:
-                    comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field,
-                                                                                      comparator=comparator, value=value)
+                    format_string = "{mapped_field} {comparator} {value}"
+                    if expression.comparator == ComparisonComparators.NotEqual:
+                        format_string = self._negate_comparison(format_string)
+                    comparison_string += format_string.format(mapped_field=mapped_field,
+                                                              comparator=comparator, value=value)
 
             if mapped_fields_count > 1:
-                comparison_string += " OR "
+                comparison_string += " AND " if expression.comparator == ComparisonComparators.NotEqual else " OR "
                 mapped_fields_count -= 1
 
         return comparison_string
