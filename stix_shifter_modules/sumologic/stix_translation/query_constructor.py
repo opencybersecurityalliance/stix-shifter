@@ -60,7 +60,7 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _format_like(value) -> str:
-        value = "'%{value}%'".format(value=value)
+        value = value.replace('%', '*').replace('_', '?')
         return QueryStringPatternTranslator._escape_value(value)
 
     @staticmethod
