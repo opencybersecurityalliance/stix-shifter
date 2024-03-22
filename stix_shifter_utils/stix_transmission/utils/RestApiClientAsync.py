@@ -62,7 +62,8 @@ class RestApiClientAsync:
         self.server_ip = server_ip
 
         # default ssl context is used based on https://docs.python.org/3.9/library/ssl.html#ssl.create_default_context
-        self.ssl_context = ssl.create_default_context(purpose=ssl.Purpose.CLIENT_AUTH)
+        #SERVER_AUTH is for authenticating servers (IE: Client would use this to communicate with a server).
+        self.ssl_context = ssl.create_default_context(purpose=ssl.Purpose.SERVER_AUTH)
         ssl_cert_file = os.environ.get('SSL_CERT_FILE')
         if ssl_cert_file:
             # library reference https://docs.python.org/3.9/library/ssl.html#ssl.SSLContext.load_verify_locations
