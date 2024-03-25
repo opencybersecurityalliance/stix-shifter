@@ -1,0 +1,15 @@
+{
+    "ComparisonExpressionOperators.And": "|",
+    "ComparisonExpressionOperators.Or": "OR",
+    "ComparisonComparators.Equal": "==",
+    "ComparisonComparators.NotEqual": "!=",
+    "ComparisonComparators.GreaterThan": ">",
+    "ComparisonComparators.LessThan": "<",
+    "ComparisonComparators.GreaterThanOrEqual": ">=",
+    "ComparisonComparators.LessThanOrEqual": "<=",
+    "ComparisonComparators.Like": "include?",
+    "ComparisonComparators.In": "in?",
+    "ComparisonComparators.IsSubSet": "in_subnet?",
+    "ObservationOperators.Or": "OR",
+    "ObservationOperators.And": "OR"
+}

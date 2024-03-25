@@ -1,0 +1,563 @@
+{
+    "type": "bundle",
+    "id": "bundle--9e7bdaca-d33f-4b5f-88be-45420adb8bf2",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "name": "Nozomi",
+            "identity_class": "events",
+            "created": "2023-04-11T16:11:11.878Z",
+            "modified": "2023-04-11T16:11:11.878Z"
+        },
+        {
+            "id": "observed-data--974f9397-2340-4009-8fb8-94536ccd97cd",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-02-22T06:51:20.235Z",
+            "modified": "2024-02-22T06:51:20.235Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "alert_id": "12ee457d-ca1c-4d98-9430-96b56afc9f76",
+                    "x_is_acknowledged": false,
+                    "severity": 80,
+                    "time_observed": "2023-12-12T07:10:57.012Z",
+                    "src_ip_ref": "1",
+                    "x_alert_status": "open",
+                    "name": "Sigma rule match",
+                    "x_cause": "Rule-dependent. A suspicious local event has been detected on a machine.",
+                    "ioc_refs": [
+                        "10"
+                    ],
+                    "x_solution": "Rule-dependent. Verify the device configuration and status, and the possible presence of malicious processes.",
+                    "description": "The following suspicious local event was detected on this host: \"Detects the execution of renamed PuTTY Plink to perform data exfiltration through tunnel port forwarding\".",
+                    "x_is_incident_alert": false,
+                    "x_is_cybersecurity_alert": true,
+                    "finding_type": "alert",
+                    "start": "2023-12-12T07:10:57.012Z",
+                    "rule_names": [
+                        "sigma_rules"
+                    ],
+                    "x_sensor_host": "EC2AMAZ-XXXXX",
+                    "x_alert_type_id": "SIGN:SIGMA-RULE",
+                    "x_rule_id": "5f9b24dd-fa05-401c-ad21-240b3f761c9f"
+                },
+                "1": {
+                    "type": "ipv4-addr",
+                    "value": "1.1.1.1",
+                    "x_nozomi_info_ref": "3"
+                },
+                "2": {
+                    "type": "network-traffic",
+                    "src_ref": "1",
+                    "protocols": [
+                        "unknown"
+                    ]
+                },
+                "3": {
+                    "type": "x-nozomi-info",
+                    "label": "EC2AMAZ-XXXXX",
+                    "is_public": false
+                },
+                "4": {
+                    "type": "process",
+                    "pid": 1512,
+                    "creator_user_ref": "5",
+                    "parent_ref": "8",
+                    "binary_ref": "10",
+                    "command_line": "pip  install -r requirements-dev.txt"
+                },
+                "5": {
+                    "type": "user-account",
+                    "user_id": "Administrator@EC2AMAZ-XXXXX"
+                },
+                "6": {
+                    "type": "directory",
+                    "path": "C:\\Windows\\System32"
+                },
+                "7": {
+                    "type": "file",
+                    "name": "cmd.exe",
+                    "parent_directory_ref": "6"
+                },
+                "8": {
+                    "type": "process",
+                    "command_line": "C:\\Windows\\System32\\cmd.exe",
+                    "binary_ref": "7"
+                },
+                "9": {
+                    "type": "directory",
+                    "path": "C:\\UDI automation\\venv\\Scripts"
+                },
+                "10": {
+                    "type": "file",
+                    "name": "pip.exe",
+                    "parent_directory_ref": "9",
+                    "hashes": {
+                        "SHA-256": "4C5C1FDC22565CE3B9C881A322CF3F24E3CB31DBEFD8E0271EXXXXX"
+                    }
+                },
+                "11": {
+                    "type": "file",
+                    "hashes": {
+                        "SHA-256": "4C5C1FDC22565CE3B9C881A322CF3F24E3CB31DBEFD8E0271EXXXXX"
+                    }
+                }
+            },
+            "first_observed": "2023-12-12T07:10:57.012Z",
+            "last_observed": "2023-12-12T07:10:57.012Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--77e9a3d1-5afc-48dd-ad03-7c578ede8ff7",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-02-22T06:51:20.238Z",
+            "modified": "2024-02-22T06:51:20.238Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "alert_id": "69f609c3-6564-4d16-aa8e-1dc8746f41e1",
+                    "x_is_acknowledged": false,
+                    "severity": 90,
+                    "time_observed": "2023-12-14T09:14:39.802Z",
+                    "dst_ip_ref": "1",
+                    "src_ip_ref": "3",
+                    "x_alert_status": "open",
+                    "name": "Bad IP reputation (new node)",
+                    "x_cause": "An IP address which is known to be malicious has appeared in the network. Likely some kind of malware is attempting to perform malicious activity",
+                    "ioc_refs": [
+                        "8"
+                    ],
+                    "x_solution": "Get in touch with the local site to make sure that any kind of malware is removed from the involved Assets.",
+                    "ttp_tagging_refs": [
+                        "9",
+                        "10"
+                    ],
+                    "description": "New IP node 109.205.213.34 has appeared, that is known to have bad reputation [RDP bruteforce]",
+                    "x_is_incident_alert": false,
+                    "x_is_cybersecurity_alert": true,
+                    "x_threat_name": "RDP bruteforce",
+                    "finding_type": "threat",
+                    "start": "2023-12-14T09:14:39.802Z",
+                    "x_sensor_host": "EC2AMAZ-XXXXX",
+                    "x_sensor_interface": "remote_capture",
+                    "x_alert_type_id": "VI:NEW-NODE:MALICIOUS-IP"
+                },
+                "1": {
+                    "type": "ipv4-addr",
+                    "value": "2.2.2.2",
+                    "resolves_to_refs": [
+                        "4"
+                    ],
+                    "x_nozomi_info_ref": "6"
+                },
+                "2": {
+                    "type": "network-traffic",
+                    "dst_ref": "1",
+                    "src_ref": "3",
+                    "dst_port": 3389,
+                    "src_port": 43938,
+                    "protocols": [
+                        "tcp",
+                        "tcp"
+                    ]
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "3.3.3.3",
+                    "resolves_to_refs": [
+                        "5"
+                    ],
+                    "x_nozomi_info_ref": "7"
+                },
+                "4": {
+                    "type": "mac-addr",
+                    "value": "12:xx:de:xx:84:e5",
+                    "x_nozomi_info_ref": "6"
+                },
+                "5": {
+                    "type": "mac-addr",
+                    "value": "12:xx:9a:xx:a5:96",
+                    "x_nozomi_info_ref": "7"
+                },
+                "6": {
+                    "type": "x-nozomi-info",
+                    "zone": "1.1.1.1/21",
+                    "roles": "other",
+                    "label": "EC2AMAZ-XXXXX",
+                    "is_public": false,
+                    "is_node_learned": true,
+                    "is_reputation_bad": false
+                },
+                "7": {
+                    "type": "x-nozomi-info",
+                    "zone": "Internet",
+                    "roles": "other",
+                    "is_public": true,
+                    "is_node_learned": true,
+                    "is_reputation_bad": true
+                },
+                "8": {
+                    "type": "ipv4-addr",
+                    "value": "4.4.4.4"
+                },
+                "9": {
+                    "type": "x-ibm-ttp-tagging",
+                    "extensions": {
+                        "mitre-attack-ext": {
+                            "technique_id": "T1071",
+                            "technique_name": "Application Layer Protocol",
+                            "tactic_name": "Command and Control"
+                        }
+                    },
+                    "name": "Application Layer Protocol",
+                    "kill_chain_phases": [
+                        {
+                            "kill_chain_name": "mitre-attack",
+                            "phase_name": "Command and Control"
+                        }
+                    ]
+                },
+                "10": {
+                    "type": "x-ibm-ttp-tagging",
+                    "extensions": {
+                        "mitre-attack-ext": {
+                            "technique_id": "T1095",
+                            "technique_name": "Non-Application Layer Protocol",
+                            "tactic_name": "Command and Control"
+                        }
+                    },
+                    "name": "Non-Application Layer Protocol",
+                    "kill_chain_phases": [
+                        {
+                            "kill_chain_name": "mitre-attack",
+                            "phase_name": "Command and Control"
+                        }
+                    ]
+                }
+            },
+            "first_observed": "2023-12-14T09:14:39.802Z",
+            "last_observed": "2023-12-14T09:14:39.802Z",
+            "number_observed": 1
+        },
+		{
+            "id": "observed-data--d7670487-3811-4e16-95f5-333f82b94a74",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-02-22T06:51:20.243Z",
+            "modified": "2024-02-22T06:51:20.243Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "alert_id": "201445c6-a120-5ab9-9703-cb2119d55f23",
+                    "x_is_acknowledged": false,
+                    "severity": 93,
+                    "time_observed": "2024-01-09T09:19:18.000Z",
+                    "dst_ip_ref": "1",
+                    "src_ip_ref": "3",
+                    "x_alert_status": "open",
+                    "name": "Packet rule match",
+                    "x_cause": "Activity was detected related to an exploit at the SMB protocol - Eternal Blue. The SMBv1 server in Microsoft Windows Vista SP2, Windows Server 2008 SP2 and R2 SP1, Windows 7 SP1, Windows 8.1, Windows Server 2012 Gold and R2, Windows RT 8.1, and Windows 10 Gold, 1511, and 1607, and Windows Server 2016 allows remote attackers to execute arbitrary code via crafted packets.",
+                    "x_message": "Microsoft Windows SMB remote code execution attempt.",
+                    "ioc_refs": [
+                        "8"
+                    ],
+                    "x_solution": "Investigate the involved Assets and IPs to check their status and ensure that the system is not compromised.",
+                    "x_cve_references": [
+                        "2017-0144",
+                        "2017-0146"
+                    ],
+                    "description": "A suspicious packet was sent [sid:41978] -- Microsoft Windows SMB remote code execution attempt. Activity was detected related to an exploit at the SMB protocol - Eternal Blue. The SMBv1 server in Microsoft Windows Vista SP2, Windows Server 2008 SP2 and R2 SP1, Windows 7 SP1, Windows 8.1, Windows Server 2012 Gold and R2, Windows RT 8.1, and Windows 10 Gold, 1511, and 1607, and Windows Server 2016 allows remote attackers to execute arbitrary code via crafted packets.",
+                    "x_is_incident_alert": false,
+                    "x_is_cybersecurity_alert": true,
+                    "finding_type": "alert",
+                    "start": "2024-01-09T09:19:18.000Z",
+                    "rule_names": [
+                        "packet_rules"
+                    ],
+                    "x_sensor_host": "Demo Sensor standard 4959963c",
+                    "x_sensor_interface": "em1",
+                    "x_alert_type_id": "SIGN:PACKET-RULE",
+                    "x_rule_id": "41978"
+                },
+                "1": {
+                    "type": "ipv4-addr",
+                    "value": "1.1.1.1",
+                    "resolves_to_refs": [
+                        "4"
+                    ],
+                    "x_nozomi_info_ref": "6"
+                },
+                "2": {
+                    "type": "network-traffic",
+                    "dst_ref": "1",
+                    "src_ref": "3",
+                    "dst_port": 445,
+                    "src_port": 34543,
+                    "protocols": [
+                        "smb",
+                        "tcp"
+                    ]
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "4.4.4.4",
+                    "resolves_to_refs": [
+                        "5"
+                    ],
+                    "x_nozomi_info_ref": "7"
+                },
+                "4": {
+                    "type": "mac-addr",
+                    "value": "00:04:xx:e0:xx:1c",
+                    "x_nozomi_info_ref": "6"
+                },
+                "5": {
+                    "type": "mac-addr",
+                    "value": "00:xx:29:28:xx:c5",
+                    "x_nozomi_info_ref": "7"
+                },
+                "6": {
+                    "type": "x-nozomi-info",
+                    "zone": "ProdNet-A",
+                    "roles": "consumer, terminal",
+                    "is_public": false,
+                    "is_node_learned": true,
+                    "is_reputation_bad": false
+                },
+                "7": {
+                    "type": "x-nozomi-info",
+                    "zone": "ProdNet-A",
+                    "roles": "other",
+                    "is_public": false,
+                    "is_node_learned": true,
+                    "is_reputation_bad": false
+                },
+                "8": {
+                    "type": "ipv4-addr",
+                    "value": "1.1.1.1"
+                }
+            },
+            "first_observed": "2024-01-09T09:19:18.000Z",
+            "last_observed": "2024-01-09T09:19:18.000Z",
+            "number_observed": 1
+        },
+		{
+            "id": "observed-data--8e22ced6-7f5c-4253-b211-1eaebf00dafa",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-02-22T06:51:20.244Z",
+            "modified": "2024-02-22T06:51:20.244Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "alert_id": "d2831312-17a9-53f2-b394-059e1de2202f",
+                    "x_is_acknowledged": false,
+                    "severity": 50,
+                    "time_observed": "2024-01-09T09:19:33.000Z",
+                    "dst_ip_ref": "1",
+                    "src_ip_ref": "3",
+                    "x_alert_status": "open",
+                    "name": "New global MAC vendor",
+                    "ioc_refs": [
+                        "8"
+                    ],
+                    "ttp_tagging_refs": [
+                        "9"
+                    ],
+                    "description": "A new Private MAC Address has been found in the network -- 52:xx:00:12:xx:02",
+                    "x_is_incident_alert": false,
+                    "x_is_cybersecurity_alert": true,
+                    "finding_type": "alert",
+                    "start": "2024-01-09T09:19:33.000Z",
+                    "x_sensor_host": "Demo Sensor standard 4959963c",
+                    "x_sensor_interface": "em1",
+                    "x_alert_type_id": "VI:GLOBAL:NEW-MAC-VENDOR"
+                },
+                "1": {
+                    "type": "ipv4-addr",
+                    "value": "5.5.5.5",
+                    "resolves_to_refs": [
+                        "4"
+                    ],
+                    "x_nozomi_info_ref": "6"
+                },
+                "2": {
+                    "type": "network-traffic",
+                    "dst_ref": "1",
+                    "src_ref": "3",
+                    "dst_port": 22,
+                    "src_port": 49739,
+                    "protocols": [
+                        "ssh",
+                        "tcp"
+                    ]
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "1.1.1.1",
+                    "resolves_to_refs": [
+                        "5"
+                    ],
+                    "x_nozomi_info_ref": "7"
+                },
+                "4": {
+                    "type": "mac-addr",
+                    "value": "52:xx:00:12:xx:02",
+                    "x_nozomi_info_ref": "6"
+                },
+                "5": {
+                    "type": "mac-addr",
+                    "value": "08:xx:27:85:xx:cd",
+                    "x_nozomi_info_ref": "7"
+                },
+                "6": {
+                    "type": "x-nozomi-info",
+                    "zone": "ProdNet-A",
+                    "roles": "producer",
+                    "label": "plc163.ACME0.corporationnet.com",
+                    "is_public": false,
+                    "is_node_learned": true,
+                    "is_reputation_bad": false
+                },
+                "7": {
+                    "type": "x-nozomi-info",
+                    "zone": "ProdNet-A",
+                    "roles": "consumer",
+                    "is_public": false,
+                    "is_node_learned": true,
+                    "is_reputation_bad": false
+                },
+                "8": {
+                    "type": "mac-addr",
+                    "value": "52:xx:00:12:xx:02"
+                },
+                "9": {
+                    "type": "x-ibm-ttp-tagging",
+                    "extensions": {
+                        "mitre-attack-ext": {
+                            "technique_id": "T1200",
+                            "technique_name": "Hardware Additions",
+                            "tactic_name": "Initial Access"
+                        }
+                    },
+                    "name": "Hardware Additions",
+                    "kill_chain_phases": [
+                        {
+                            "kill_chain_name": "mitre-attack",
+                            "phase_name": "Initial Access"
+                        }
+                    ]
+                }
+            },
+            "first_observed": "2024-01-09T09:19:33.000Z",
+            "last_observed": "2024-01-09T09:19:33.000Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--cb5f268e-73b8-4a39-82a2-67d87d8ce62b",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-02-22T06:51:20.244Z",
+            "modified": "2024-02-22T06:51:20.244Z",
+            "objects": {
+                "0": {
+                    "type": "x-ibm-finding",
+                    "alert_id": "57ee3f7d-80eb-54db-aabf-8199d3b872d8",
+                    "x_is_acknowledged": false,
+                    "severity": 70,
+                    "time_observed": "2024-01-09T09:17:29.000Z",
+                    "dst_ip_ref": "1",
+                    "src_ip_ref": "3",
+                    "x_alert_status": "open",
+                    "name": "Malformed traffic",
+                    "ttp_tagging_refs": [
+                        "8"
+                    ],
+                    "description": "The UDP header in the packet contains a wrong data length. 1404 bytes are advertised, but 1380 bytes are found in the payload.",
+                    "x_is_incident_alert": false,
+                    "x_is_cybersecurity_alert": true,
+                    "finding_type": "alert",
+                    "start": "2024-01-09T09:17:29.000Z",
+                    "x_sensor_host": "Demo Sensor standard 4959963c",
+                    "x_sensor_interface": "em1",
+                    "x_alert_type_id": "SIGN:MALFORMED-TRAFFIC",
+                    "x_rule_id": "udp.wrong-length"
+                },
+                "1": {
+                    "type": "ipv4-addr",
+                    "value": "7.7.7.7",
+                    "resolves_to_refs": [
+                        "4"
+                    ],
+                    "x_nozomi_info_ref": "6"
+                },
+                "2": {
+                    "type": "network-traffic",
+                    "dst_ref": "1",
+                    "src_ref": "3",
+                    "protocols": [
+                        "unknown"
+                    ]
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "8.8.8.8",
+                    "resolves_to_refs": [
+                        "5"
+                    ],
+                    "x_nozomi_info_ref": "7"
+                },
+                "4": {
+                    "type": "mac-addr",
+                    "value": "ff:ff:xx:ff:ff:ff",
+                    "x_nozomi_info_ref": "6"
+                },
+                "5": {
+                    "type": "mac-addr",
+                    "value": "00:xx:24:25:xx:f2",
+                    "x_nozomi_info_ref": "7"
+                },
+                "6": {
+                    "type": "x-nozomi-info",
+                    "zone": "Broadcast",
+                    "roles": "other",
+                    "is_public": false,
+                    "is_node_learned": true,
+                    "is_reputation_bad": false
+                },
+                "7": {
+                    "type": "x-nozomi-info",
+                    "zone": "PlantSmartDevices",
+                    "roles": "other",
+                    "is_public": false,
+                    "is_node_learned": true,
+                    "is_reputation_bad": false
+                },
+                "8": {
+                    "type": "x-ibm-ttp-tagging",
+                    "extensions": {
+                        "mitre-attack-ext": {
+                            "technique_id": "T1565",
+                            "technique_name": "Data Manipulation",
+                            "tactic_name": "Impact"
+                        }
+                    },
+                    "name": "Data Manipulation",
+                    "kill_chain_phases": [
+                        {
+                            "kill_chain_name": "mitre-attack",
+                            "phase_name": "Impact"
+                        }
+                    ]
+                }
+            },
+            "first_observed": "2024-01-09T09:17:29.000Z",
+            "last_observed": "2024-01-09T09:17:29.000Z",
+            "number_observed": 1
+        }        
+    ],
+    "spec_version": "2.0"
+}

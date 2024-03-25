@@ -1,0 +1,108 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["ip_src", "ip_dst"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["ip_src", "ip_dst"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_ref.value": ["ip_src"],
+      "dst_ref.value": ["ip_dst"],
+      "dst_port": ["port_dst"],
+      "src_port": ["port_src"],
+      "protocols[*]": ["protocol", "transport_protocol"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["mac_src", "mac_dst"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["properties/details_yara_file/value", "properties/process/image_path"],
+      "hashes.'SHA-256'": ["properties/details_hash_SHA256/value", "properties/process/image_hash_sha256"],
+      "hashes.'SHA-1'": ["properties/details_hash_SHA1/value"],
+      "hashes.MD5": ["properties/details_hash_MD5/value"],
+      "size": ["properties/details_file_size/value"],
+      "parent_directory_ref.path": ["properties/process/image_path"]
+    }
+  },
+  "process": {
+    "fields": {
+      "pid": ["properties/process/pid"],
+      "command_line": ["properties/process/command_line"],
+      "creator_user_ref.user_id": ["properties/process/user"],
+      "binary_ref.name": ["properties/process/image_path"],
+      "binary_ref.parent_directory_ref.path": ["properties/process/image_path"],
+      "parent_ref.command_line": ["properties/process/ancestry"],
+      "parent_ref.image_ref.name": ["properties/process/ancestry"],
+      "parent_ref.image_ref.parent_directory_ref.path": ["properties/process/ancestry"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["properties/process/user"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": [
+        "properties/process/image_path"
+      ]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "alert_id": ["id"],
+      "finding_type": ["threat_name"],
+      "name": ["type_name"],
+      "description": ["description"],
+      "time_observed": ["time"],
+      "start": ["created_time"],
+      "end": ["closed_time"],
+      "x_severity": ["risk"],
+      "src_ip_ref": ["ip_src"],
+      "dst_ip_ref": ["ip_dst"],
+      "rule_names[*]": ["trigger_type"],
+      "x_alert_type_id": ["type_id"],
+      "x_is_cybersecurity_alert": ["is_security"],
+      "x_is_incident_alert": ["is_incident"],
+      "x_sensor_host": ["appliance_host"],
+      "x_sensor_interface": ["capture_device"],
+      "x_threat_name": ["threat_name"],
+      "x_rule_id": ["trigger_id"],
+      "x_is_acknowledged": ["ack"],
+      "x_alert_status": ["status"],
+      "x_user_note": ["note"],
+      "x_cause" : ["properties/cause"],
+      "x_solution": ["properties/solution"],
+      "x_message": ["properties/message"],
+      "x_cve_references": ["properties/cve_references"],
+      "x_network_learnable": ["properties/network_learnable"]
+    }
+  },
+  "x-ibm-ttp-tagging": {
+    "fields":{
+      "name": ["properties"],
+      "extensions.'mitre-attack-ext'.technique_id" : ["properties", "mitre_attack_techniques"],
+      "extensions.'mitre-attack-ext'.technique_name" : ["properties"],
+      "extensions.'mitre-attack-ext'.tactic_name" : ["properties", "mitre_attack_tactics"]
+    }
+  },
+  "x-nozomi-info": {
+    "fields": {
+      "zone": ["zone_dst", "zone_src"],
+      "roles": ["dst_roles", "src_roles"],
+      "label": ["label_src", "label_dst"],
+      "is_public": ["properties/is_dst_public", "properties/is_src_public"],
+      "is_node_learned": ["properties/is_dst_node_learned", "properties/is_src_node_learned"],
+      "is_reputation_bad": ["properties/is_dst_reputation_bad", "properties/is_src_reputation_bad"]
+    }
+  }
+}
