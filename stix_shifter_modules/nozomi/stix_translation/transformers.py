@@ -8,8 +8,11 @@ connector = __name__.split('.')[1]
 
 
 class ChainNameValue(ValueTransformer):
-    """A value transformer to add default 'kill_chain_name' as 'mitre-attack' with obj"""
-
+    """A value transformer to add default 'kill_chain_name' as 'mitre-attack' with obj
+    Example:
+        Input: 'Command and Control'
+        Output: [{'kill_chain_name': 'mitre-attack', 'phase_name': 'Command and Control'}]
+    """
     @staticmethod
     def transform(obj):
         try:
@@ -22,8 +25,11 @@ class ChainNameValue(ValueTransformer):
 
 
 class ValidateMacAddr(ValueTransformer):
-    """Regex to check valid MAC address"""
-
+    """Regex to check valid MAC address
+    Example:
+        Input: Invalid mac address
+        Output: None
+    """
     @staticmethod
     def transform(obj):
         try:
@@ -37,8 +43,11 @@ class ValidateMacAddr(ValueTransformer):
 
 
 class ToFindingType(ValueTransformer):
-    """A value transformer for expected finding_type value"""
-
+    """A value transformer for expected finding_type value
+    Example:
+        Input: empty string or other than empty string
+        Output: alert or threat
+    """
     @staticmethod
     def transform(obj):
         try:
@@ -51,8 +60,11 @@ class ToFindingType(ValueTransformer):
 
 
 class ToSeverityValue(ValueTransformer):
-    """A value transformer for converting severity value"""
-
+    """A value transformer for converting severity value
+    Example:
+        Input: 9.0 or 9 or '9.0'
+        Output: 90
+    """
     @staticmethod
     def transform(obj):
         try:
@@ -69,8 +81,11 @@ class ToSeverityValue(ValueTransformer):
 
 
 class SizeToInteger(ValueTransformer):
-    """A value transformer for converting value to integer value"""
-
+    """A value transformer for converting value to integer value
+    Example:
+        Input: '19261 bytes'
+        Output: 19261
+    """
     @staticmethod
     def transform(obj):
         try:
@@ -83,8 +98,11 @@ class SizeToInteger(ValueTransformer):
 
 
 class ToProtocolValue(ValueTransformer):
-    """A value transformer for converting value to protocol value"""
-
+    """A value transformer for converting value to protocol value
+    Example:
+        Input: 'tcp/3389' or 'unknown'
+        Output: [tcp] or [tcp]
+    """
     @staticmethod
     def transform(obj):
         try:
@@ -102,8 +120,11 @@ class ToProtocolValue(ValueTransformer):
 
 
 class EpochToTimestampConversion(ValueTransformer):
-    """A value transformer for the 13-digit timestamps"""
-
+    """A value transformer for the 13-digit timestamps
+    Example:
+        Input: 1698836400000
+        Output: '2023-11-01T11:00:00.000Z'
+    """
     @staticmethod
     def transform(obj):
         try:
