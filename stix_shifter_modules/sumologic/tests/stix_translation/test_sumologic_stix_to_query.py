@@ -185,6 +185,6 @@ class TestStixToQuery(unittest.TestCase, object):
         stix_pattern = "[domain-name:value LIKE '%example%'] " \
                        "START t'2021-09-01T00:00:00.000Z' STOP t'2021-09-26T10:16:00.000Z'"
         query = translation.translate('sumologic', 'query', 'sumologic', stix_pattern, options={"result_limit": 100})
-        queries = "{\"query\": \"_sourcehost = \\*example*\\\", " \
+        queries = "{\"query\": \"_sourcehost = *example*\", " \
                  "\"fromTime\": 1630454400000, \"toTime\": 1632651360000}"
         _test_query_assertions(query, queries)
