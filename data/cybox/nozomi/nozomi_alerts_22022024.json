@@ -39,7 +39,7 @@
                     "rule_names": [
                         "sigma_rules"
                     ],
-                    "x_sensor_host": "EC2AMAZ-XXXXX",
+                    "x_sensor_host": "Hostname",
                     "x_alert_type_id": "SIGN:SIGMA-RULE",
                     "x_rule_id": "5f9b24dd-fa05-401c-ad21-240b3f761c9f"
                 },
@@ -57,7 +57,7 @@
                 },
                 "3": {
                     "type": "x-nozomi-info",
-                    "label": "EC2AMAZ-XXXXX",
+                    "label": "Hostname",
                     "is_public": false
                 },
                 "4": {
@@ -70,7 +70,7 @@
                 },
                 "5": {
                     "type": "user-account",
-                    "user_id": "Administrator@EC2AMAZ-XXXXX"
+                    "user_id": "username@Hostname"
                 },
                 "6": {
                     "type": "directory",
@@ -88,20 +88,20 @@
                 },
                 "9": {
                     "type": "directory",
-                    "path": "C:\\UDI automation\\venv\\Scripts"
+                    "path": "C:\\Program Files\\Scripts"
                 },
                 "10": {
                     "type": "file",
                     "name": "pip.exe",
                     "parent_directory_ref": "9",
                     "hashes": {
-                        "SHA-256": "4C5C1FDC22565CE3B9C881A322CF3F24E3CB31DBEFD8E0271EXXXXX"
+                        "SHA-256": "0101010101010101010101010101010101010101010101010101010101010101"
                     }
                 },
                 "11": {
                     "type": "file",
                     "hashes": {
-                        "SHA-256": "4C5C1FDC22565CE3B9C881A322CF3F24E3CB31DBEFD8E0271EXXXXX"
+                        "SHA-256": "0101010101010101010101010101010101010101010101010101010101010101"
                     }
                 }
             },
@@ -135,13 +135,13 @@
                         "9",
                         "10"
                     ],
-                    "description": "New IP node 109.205.213.34 has appeared, that is known to have bad reputation [RDP bruteforce]",
+                    "description": "New IP node 2.2.2.2 has appeared, that is known to have bad reputation [RDP bruteforce]",
                     "x_is_incident_alert": false,
                     "x_is_cybersecurity_alert": true,
                     "x_threat_name": "RDP bruteforce",
                     "finding_type": "threat",
                     "start": "2023-12-14T09:14:39.802Z",
-                    "x_sensor_host": "EC2AMAZ-XXXXX",
+                    "x_sensor_host": "Hostname",
                     "x_sensor_interface": "remote_capture",
                     "x_alert_type_id": "VI:NEW-NODE:MALICIOUS-IP"
                 },
@@ -174,19 +174,19 @@
                 },
                 "4": {
                     "type": "mac-addr",
-                    "value": "12:xx:de:xx:84:e5",
+                    "value": "01:01:01:01:01:01",
                     "x_nozomi_info_ref": "6"
                 },
                 "5": {
                     "type": "mac-addr",
-                    "value": "12:xx:9a:xx:a5:96",
+                    "value": "01:01:01:01:01:01",
                     "x_nozomi_info_ref": "7"
                 },
                 "6": {
                     "type": "x-nozomi-info",
                     "zone": "1.1.1.1/21",
                     "roles": "other",
-                    "label": "EC2AMAZ-XXXXX",
+                    "label": "Hostname",
                     "is_public": false,
                     "is_node_learned": true,
                     "is_reputation_bad": false
@@ -269,7 +269,7 @@
                         "2017-0144",
                         "2017-0146"
                     ],
-                    "description": "A suspicious packet was sent [sid:41978] -- Microsoft Windows SMB remote code execution attempt. Activity was detected related to an exploit at the SMB protocol - Eternal Blue. The SMBv1 server in Microsoft Windows Vista SP2, Windows Server 2008 SP2 and R2 SP1, Windows 7 SP1, Windows 8.1, Windows Server 2012 Gold and R2, Windows RT 8.1, and Windows 10 Gold, 1511, and 1607, and Windows Server 2016 allows remote attackers to execute arbitrary code via crafted packets.",
+                    "description": "A suspicious packet was sent [sid:01010] -- Microsoft Windows SMB remote code execution attempt. Activity was detected related to an exploit at the SMB protocol - Eternal Blue. The SMBv1 server in Microsoft Windows Vista SP2, Windows Server 2008 SP2 and R2 SP1, Windows 7 SP1, Windows 8.1, Windows Server 2012 Gold and R2, Windows RT 8.1, and Windows 10 Gold, 1511, and 1607, and Windows Server 2016 allows remote attackers to execute arbitrary code via crafted packets.",
                     "x_is_incident_alert": false,
                     "x_is_cybersecurity_alert": true,
                     "finding_type": "alert",
@@ -311,12 +311,12 @@
                 },
                 "4": {
                     "type": "mac-addr",
-                    "value": "00:04:xx:e0:xx:1c",
+                    "value": "01:01:01:01:01:01",
                     "x_nozomi_info_ref": "6"
                 },
                 "5": {
                     "type": "mac-addr",
-                    "value": "00:xx:29:28:xx:c5",
+                    "value": "01:01:01:01:01:01",
                     "x_nozomi_info_ref": "7"
                 },
                 "6": {
@@ -367,7 +367,7 @@
                     "ttp_tagging_refs": [
                         "9"
                     ],
-                    "description": "A new Private MAC Address has been found in the network -- 52:xx:00:12:xx:02",
+                    "description": "A new Private MAC Address has been found in the network -- 01:01:01:01:01:01",
                     "x_is_incident_alert": false,
                     "x_is_cybersecurity_alert": true,
                     "finding_type": "alert",
@@ -405,19 +405,19 @@
                 },
                 "4": {
                     "type": "mac-addr",
-                    "value": "52:xx:00:12:xx:02",
+                    "value": "01:01:01:01:01:01",
                     "x_nozomi_info_ref": "6"
                 },
                 "5": {
                     "type": "mac-addr",
-                    "value": "08:xx:27:85:xx:cd",
+                    "value": "01:01:01:01:01:01",
                     "x_nozomi_info_ref": "7"
                 },
                 "6": {
                     "type": "x-nozomi-info",
                     "zone": "ProdNet-A",
                     "roles": "producer",
-                    "label": "plc163.ACME0.corporationnet.com",
+                    "label": "label.com",
                     "is_public": false,
                     "is_node_learned": true,
                     "is_reputation_bad": false
@@ -432,7 +432,7 @@
                 },
                 "8": {
                     "type": "mac-addr",
-                    "value": "52:xx:00:12:xx:02"
+                    "value": "01:01:01:01:01:01"
                 },
                 "9": {
                     "type": "x-ibm-ttp-tagging",
@@ -512,12 +512,12 @@
                 },
                 "4": {
                     "type": "mac-addr",
-                    "value": "ff:ff:xx:ff:ff:ff",
+                    "value": "01:01:01:01:01:01",
                     "x_nozomi_info_ref": "6"
                 },
                 "5": {
                     "type": "mac-addr",
-                    "value": "00:xx:24:25:xx:f2",
+                    "value": "01:01:01:01:01:01",
                     "x_nozomi_info_ref": "7"
                 },
                 "6": {

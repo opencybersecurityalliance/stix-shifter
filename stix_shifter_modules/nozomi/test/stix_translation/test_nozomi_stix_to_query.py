@@ -101,12 +101,12 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_LIKE_operator(self):
-        stix_pattern = "[mac-addr:value LIKE '11:aa:aa:11:11:11'] START t'2023-11-01T11:00:00.000Z' " \
+        stix_pattern = "[mac-addr:value LIKE '01:01:01:01:01:01'] START t'2023-11-01T11:00:00.000Z' " \
                        "STOP t'2023-12-06T11:54:00.000Z'"
         query = translation.translate('nozomi', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["query=alerts | where mac_src include? \"11:aa:aa:11:11:11\" OR mac_dst include? "
-                   "\"11:aa:aa:11:11:11\" |"
+        queries = ["query=alerts | where mac_src include? \"01:01:01:01:01:01\" OR mac_dst include? "
+                   "\"01:01:01:01:01:01\" |"
                    "where record_created_at>=1698836400000 | where record_created_at<=1701863640000"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -153,24 +153,24 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_combined_comparison_AND_operator(self):
         stix_pattern = "[network-traffic:dst_port = '445' AND (process:pid = '1010' AND user-account:user_id LIKE " \
-                       "'Administrator@EC2AMAZ-VQ7JPU2')]START " \
+                       "'user@Hostname')]START " \
                        "t'2023-12-01T00:00:00.000Z' STOP t'2024-01-01T11:00:00.000Z'"
         query = translation.translate('nozomi', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = ['query=alerts | where properties/process/user include? '
-                   '"Administrator@EC2AMAZ-VQ7JPU2" | where properties/process/pid=="1010" | '
+                   '"user@Hostname" | where properties/process/pid=="1010" | '
                    'where port_dst=="445" ']
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_combined_comparison_OR_operator(self):
-        stix_pattern = "[process:pid = '1010' OR user-account:user_id LIKE 'Administrator@ABCD']START " \
+        stix_pattern = "[process:pid = '1010' OR user-account:user_id LIKE 'user@Hostname']START " \
                        "t'2023-12-01T00:00:00.000Z' STOP t'2024-01-01T11:00:00.000Z'"
         query = translation.translate('nozomi', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [
             "query=alerts | where properties/process/pid==\"1010\" OR properties/process/user include? "
-            "\"Administrator@ABCD\" | where record_created_at>=1701388800000 | where record_created_at<=1704106800000"
+            "\"user@Hostname\" | where record_created_at>=1701388800000 | where record_created_at<=1704106800000"
         ]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -355,11 +355,11 @@ class TestQueryTranslator(unittest.TestCase):
     def test_multiple_observation_with_combined_comparison(self):
         stix_pattern = "[x-nozomi-info:is_public = 'true' AND x-alert-properties:x_cause != 'Rule-dependent. " \
                        "A suspicious local event has been detected on a machine.'] OR [mac-addr:value LIKE " \
-                       "'11:aa:aa:11:11:11']START t'2023-12-01T01:56:00.000Z' STOP t'2024-01-01T01:57:00.003Z'"
+                       "'01:01:01:01:01:01']START t'2023-12-01T01:56:00.000Z' STOP t'2024-01-01T01:57:00.003Z'"
         query = translation.translate('nozomi', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = ["query=alerts | where mac_src include? \"11:aa:aa:11:11:11\" OR mac_dst include?"
-                   " \"11:aa:aa:11:11:11\" | where record_created_at>=1701395760000 "
+        queries = ["query=alerts | where mac_src include? \"01:01:01:01:01:01\" OR mac_dst include?"
+                   " \"01:01:01:01:01:01\" | where record_created_at>=1701395760000 "
                    "| where record_created_at<=1704074220003"]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)

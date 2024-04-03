@@ -21,11 +21,11 @@
     "auth": {
       "key_name": {
         "label": "Key Name",
-        "description": "A unique value that identifies this key and is used like a user name"
+        "description": "The name of the API key. Nozomi Vantage generates this name when you create the API key."
       },
       "key_token": {
         "label": "Key Token",
-        "description": "A unique value that is used like a password"
+        "description": "A user generated access token used to authenticate with the API"
       }
     }
   }

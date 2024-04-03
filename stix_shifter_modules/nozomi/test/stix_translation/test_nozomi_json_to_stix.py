@@ -34,14 +34,14 @@ nozomi_sample_response = [{
     'ip_dst': '',
     'ip_dst:info': None,
     'status': 'open',
-    'mac_src': '22:2b:2a:22:a2:22',
-    'mac_dst': '11:11:11:11:1b:1b',
+    'mac_src': '01:01:01:01:01:01',
+    'mac_dst': '02:02:02:02:02:02',
     'port_dst': 1122,
     'port_src': 2233,
     'protocol': 'tcp/1122',
     'transport_protocol': 'tcp',
     'severity': 0,
-    'zone_dst': '123.45.67.8/910',
+    'zone_dst': '123.01.01.0/910',
     'zone_src': 'other',
     'dst_roles': 'other',
     'src_roles': 'ABCD',
@@ -54,13 +54,13 @@ nozomi_sample_response = [{
             'pid': '1234',
             'user': 'Administrator@ABCD',
             'ancestry': 'C:\\Windows\\System32\\cmd.exe',
-            'image_path': 'C:\\UDI automation\\venv\\Scripts\\pip.exe',
+            'image_path': 'C:\\Program Files\\Scripts\\pip.exe',
             'command_line': 'pip  install -r requirements-dev.txt',
-            'image_hash_sha256': 'ABCDE12345'
+            'image_hash_sha256': '0101010101010101010101010101010101010101010101010101010101010101'
         },
         'solution': 'Rule-dependent. Verify the device configuration and status, and the possible presence of '
                     'malicious processes.',
-        'bad_actor': '11:11:11:11:1b:1b',
+        'bad_actor': '01:01:01:01:01:01',
         'raised_by': 'n2os_ids',
         'is_src_public': False,
         'src_logged_in:info': {
@@ -72,10 +72,10 @@ nozomi_sample_response = [{
         },
         'details_hash_SHA256': {
             'label': 'SHA256',
-            'value': 'ABCDE12345'
+            'value': '0101010101010101010101010101010101010101010101010101010101010101'
         },
         'src_logged_in_users': [
-            'Administrator@ABCD'
+            'user@Hostname'
         ]
     },
     'closed_time': 1698836400000,
@@ -109,8 +109,8 @@ nozomi_sample_response_2 = [
         'protocol': '',
         'transport_protocol': 'unknown',
         'severity': '',
-        'mac_src': '22:2b:2a:22:a2:22',
-        'mac_dst': '11:11:11:11:1b:1b',
+        'mac_src': '01:01:01:01:01:01',
+        'mac_dst': '02:02:02:02:02:02',
         'properties': {
             'sandbox_filename': '/var/sandbox/000012_CVcontrolEngineerdocx_2.dir/content',
             'details_file_size': {
@@ -119,7 +119,7 @@ nozomi_sample_response_2 = [
             },
             'details_hash_SHA1': {
                 'label': 'SHA1',
-                'value': '12345'
+                'value': '0101010101010101010101010101010101010101010101010101010101010101'
             },
             'bad_actor': '',
             'details_operation': {
@@ -194,7 +194,7 @@ class TestNozomiResultsToStix(unittest.TestCase):
         assert mac_addr_obj is not None
         assert (mac_addr_obj.keys() == {'type', 'value'})
         assert mac_addr_obj['type'] == 'mac-addr'
-        assert mac_addr_obj['value'] == '22:2b:2a:22:a2:22'
+        assert mac_addr_obj['value'] == '01:01:01:01:01:01'
 
     def test_file_json_to_stix(self):
         """test file stix object properties"""
@@ -303,5 +303,5 @@ class TestNozomiResultsToStix(unittest.TestCase):
         assert x_nozomi_info_obj is not None
         assert (x_nozomi_info_obj.keys() == {'type', 'zone', 'roles'})
         assert x_nozomi_info_obj['type'] == 'x-nozomi-info'
-        assert x_nozomi_info_obj['zone'] == '123.45.67.8/910'
+        assert x_nozomi_info_obj['zone'] == '123.01.01.0/910'
         assert x_nozomi_info_obj['roles'] == 'other'

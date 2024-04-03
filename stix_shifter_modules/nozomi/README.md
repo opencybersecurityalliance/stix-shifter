@@ -65,7 +65,7 @@ translate nozomi query {} "[ipv4-addr:value='1.1.1.1'] START t'2024-01-01T11:00:
 #### STIX Transmit results 
 
 ```shell
-transmit nozomi "{\"host\":\"nozomi-xxxxxxxxx.vantage.nozominetworks.io\", \"port\":443}" "{\"auth\":{\"key_name\":\"AK3xxxx9\", \"key_token\":\"206762@3l3455c3xxxxxxxx037724Ef0\"}}" results "query=alerts | where ip_src==\"1.1.1.1\" OR ip_dst==\"1.1.1.1\" | where record_created_at>=1704106800000 | where record_created_at<=1704844800000"
+transmit nozomi "{\"host\":\"nozomi-xxxxxxxxx.vantage.nozominetworks.io\", \"port\":443}" "{\"auth\":{\"key_name\":\"XXXXXXX\", \"key_token\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxx\"}}" results "query=alerts | where ip_src==\"1.1.1.1\" OR ip_dst==\"1.1.1.1\" | where record_created_at>=1704106800000 | where record_created_at<=1704844800000"
 0
 1
 ```
@@ -307,7 +307,7 @@ nozomi
 nozomi 
 "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"Nozomi\",\"identity_class\":\"events\", \"created\": \"2023-04-11T16:11:11.878Z\",\"modified\": \"2023-04-11T16:11:11.878Z\"}" 
 "{\"host\":\"nozomi-xxxxxxx.vantage.nozominetworks.io\", \"port\":443}" 
-"{\"auth\":{\"key_name\":\"AK3xxxc9\", \"key_token\":\"206762@3l346xxxxxxx33456d037724Ef0\"}}" 
+"{\"auth\":{\"key_name\":\"XXXXXXX\", \"key_token\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxx\"}}" 
 "[(ipv4-addr:value = '1.1.1.1' AND network-traffic:dst_port == 22) OR network-traffic:protocols[*] == 'ssh'] START t'2024-01-01T00:00:00.000Z' STOP t'2024-01-16T11:54:00.000Z'"
 ```
 
@@ -386,19 +386,19 @@ nozomi
                 },
                 "4": {
                     "type": "mac-addr",
-                    "value": "08:00:27:85:c5:cd",
+                    "value": "01:01:01:01:01:01",
                     "x_nozomi_info_ref": "7"
                 },
                 "5": {
                     "type": "mac-addr",
-                    "value": "52:54:00:12:35:02",
+                    "value": "02:02:02:02:02:02",
                     "x_nozomi_info_ref": "6"
                 },
                 "6": {
                     "type": "x-nozomi-info",
                     "zone": "ProdNet-A",
                     "roles": "producer",
-                    "label": "plc163.ACME0.corporationnet.com",
+                    "label": "label.com",
                     "is_public": false,
                     "is_node_learned": true,
                     "is_reputation_bad": false
@@ -413,7 +413,7 @@ nozomi
                 },
                 "8": {
                     "type": "mac-addr",
-                    "value": "52:54:00:12:35:02"
+                    "value": "02:02:02:02:02:02"
                 },
                 "9": {
                     "type": "x-ibm-ttp-tagging",

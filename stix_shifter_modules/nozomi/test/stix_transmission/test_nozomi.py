@@ -116,11 +116,11 @@ class TestNozomiConnection(unittest.TestCase, object):
                     "cause": "Rule-dependent. A suspicious local event has been detected on a machine.",
                     "process": {
                         "pid": "1010",
-                        "user": "Administrator@ABCD",
+                        "user": "user@Hostname",
                         "ancestry": "C:\\Windows\\System32\\cmd.exe",
-                        "image_path": "C:\\Pre\\autoenv\\Scripts\\pip.exe",
+                        "image_path": "C:\\Program Files\\Scripts\\pip.exe",
                         "command_line": "pip  install -r requirements-dev.txt",
-                        "image_hash_sha256": "12345ABCDE"
+                        "image_hash_sha256": "0101010101010101010101010101010101010101010101010101010101010101"
                     },
                     "solution": "Rule-dependent. Verify the device configuration and status, and the possible "
                                 "presence of malicious processes.",
@@ -131,10 +131,10 @@ class TestNozomiConnection(unittest.TestCase, object):
                     },
                     "details_hash_SHA256": {
                         "label": "SHA256",
-                        "value": "12345ABCDE"
+                        "value": "0101010101010101010101010101010101010101010101010101010101010101"
                     },
                     "src_logged_in_users": [
-                        "Administrator@ABCD"
+                        "user@Hostname"
                     ]
                 },
                 "closed_time": 0,
@@ -150,7 +150,7 @@ class TestNozomiConnection(unittest.TestCase, object):
                 "mitre_attack_tactics": "null",
                 "playbook_contents": "null",
                 "trace_status": "state_not_created",
-                "appliance_host": "ABCD",
+                "appliance_host": "HOST",
                 "record_created_at": 1702445039912,
                 "sensor:host": "null",
                 "site:name": "null",
@@ -256,7 +256,7 @@ class TestNozomiConnection(unittest.TestCase, object):
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_success_query_results(self, mock_result_response):
         """ test success result response"""
-        query = "alerts | where properties/process/user include? \"Administrator@ABCD\" OR " \
+        query = "alerts | where properties/process/user include? \"user@Hostname\" OR " \
                 "port_dst==\"444\" | where properties/process/pid==\"1010\" OR port_dst==\"444\" | where " \
                 "record_created_at>=1701388800000 | where record_created_at<=1704106800000"
         mock_result_response.side_effect = [
@@ -340,7 +340,7 @@ class TestNozomiConnection(unittest.TestCase, object):
                                        "error": "nozomi connector error => Invalid Authentication: {'key_name': ['is "
                                                 "invalid'], 'key_token': ['is invalid']}",
                                        "code": "authentication_fail"}})
-        query = "alerts | where properties/process/user include? \"Administrator@ABCD\" OR " \
+        query = "alerts | where properties/process/user include? \"user@Hostname\" OR " \
                 "port_dst==\"444\" | where properties/process/pid==\"1010\" OR port_dst==\"444\" | where " \
                 "record_created_at>=1701388800000 | where record_created_at<=1704106800000"
         mock_results_response.return_value = get_mock_response(401, error, 'byte')
@@ -363,7 +363,7 @@ class TestNozomiConnection(unittest.TestCase, object):
                                                 "nozomi-sales-engineering-tpnovovqcustomers.us1.vantage"
                                                 ".nozominetworks.io:443 ssl:True [getaddrinfo failed])",
                                        "code": "service_unavailable"}})
-        query = "alerts | where properties/process/user include? \"Administrator@ABCD\" OR " \
+        query = "alerts | where properties/process/user include? \"user@Hostname\" OR " \
                 "port_dst==\"444\" | where properties/process/pid==\"1010\" OR port_dst==\"444\" | where " \
                 "record_created_at>=1701388800000 | where record_created_at<=1704106800000"
         mock_results_response.return_value = get_mock_response(401, error, 'byte')
@@ -379,7 +379,7 @@ class TestNozomiConnection(unittest.TestCase, object):
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_invalid_query(self, mock_result_response):
         """Test invalid query for results"""
-        query = "alerts | where properties/process/user include? \"Administrator@ABCD\" OR " \
+        query = "alerts | where properties/process/user include? \"user@Hostname\" OR " \
                 "port_dst==\"444\" | where properties/process/pid==\"1010\" OR port_dst==\"444\" | where " \
                 "record_created_at=1701388800000 | where record_created_at<=1704106800000"
         mock_result_response.side_effect = [
@@ -404,7 +404,7 @@ class TestNozomiConnection(unittest.TestCase, object):
                                                 "\"https://engineering-tpnovovq.customers.us1.vantage.nozominetworks"
                                                 ".io\". Please contact Customer Support for assistance']}",
                                        "code": "service_unavailable"}})
-        query = "alerts | where properties/process/user include? \"Administrator@ABCD\" OR " \
+        query = "alerts | where properties/process/user include? \"user@Hostname\" OR " \
                 "port_dst==\"444\" | where properties/process/pid==\"1010\" OR port_dst==\"444\" | where " \
                 "record_created_at=1701388800000 | where record_created_at<=1704106800000"
 
@@ -427,7 +427,7 @@ class TestNozomiConnection(unittest.TestCase, object):
                                        "code": "invalid_query"}})
         query = "query=alerts | where risk<=\"1.0\" OR properties/cause==\"An IP address which is known to be " \
                 "malicious has appeared in the network. Likely some kind of malware is attempting to perform " \
-                "malicious activity\" | where appliance_host include? \"EC2AMAZ-VQ7JPU2\" OR properties/cause==\"An " \
+                "malicious activity\" | where appliance_host include? \"Hostname\" OR properties/cause==\"An " \
                 "IP address which is known to be malicious has appeared in the network. Likely some kind of malware " \
                 "is attempting to perform malicious activity\" | where trigger_id==\"null\" OR " \
                 "properties/cause==\"An " \
@@ -462,7 +462,7 @@ class TestNozomiConnection(unittest.TestCase, object):
     def test_time_out_exception_for_results(self, mock_result_response):
         """Test timeout exception for results"""
         mock_result_response.side_effect = Exception("timeout_error")
-        query = "alerts | where properties/process/user include? \"Administrator@ABCD\" OR " \
+        query = "alerts | where properties/process/user include? \"user@Hostname\" OR " \
                 "port_dst==\"444\" | where properties/process/pid==\"1010\" OR port_dst==\"444\" | where " \
                 "record_created_at>=1701388800000 | where record_created_at<=1704106800000"
         transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
@@ -478,7 +478,7 @@ class TestNozomiConnection(unittest.TestCase, object):
     def test_server_time_out_exception_for_results(self, mock_result_response):
         """Test timeout exception for results"""
         mock_result_response.side_effect = Exception("server timeout_error (2 sec)")
-        query = "alerts | where properties/process/user include? \"Administrator@ABCD\" OR " \
+        query = "alerts | where properties/process/user include? \"user@Hostname\" OR " \
                 "port_dst==\"444\" | where properties/process/pid==\"1010\" OR port_dst==\"444\" | where " \
                 "record_created_at>=1701388800000 | where record_created_at<=1704106800000"
         transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
@@ -526,7 +526,7 @@ class TestNozomiConnection(unittest.TestCase, object):
     def test_with_invalid_metadata_parameter(self, mock_result_response):
         """ test invalid metadata parameter"""
         metadata = {'next_page_token': '123a'}
-        query = "alerts | where properties/process/user include? \"Administrator@ABCD\" OR " \
+        query = "alerts | where properties/process/user include? \"user@Hostname\" OR " \
                 "port_dst==\"444\" | where properties/process/pid==\"1010\" OR port_dst==\"444\" | where " \
                 "record_created_at>=1701388800000 | where record_created_at<=1704106800000"
         mock_result_response.side_effect = [

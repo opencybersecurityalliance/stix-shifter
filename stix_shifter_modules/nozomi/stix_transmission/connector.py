@@ -3,7 +3,7 @@ from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 from .api_client import APIClient
 import json
-import re
+import regex
 
 
 class InvalidMetadataException(Exception):
@@ -55,7 +55,7 @@ class Connector(BaseJsonSyncConnector):
                 page_size = Connector.NOZOMI_MAX_PAGE_SIZE
 
             if not jwt_token:
-                jwt_token = await self.get_token()
+                jwt_token = await self.__get_token()
 
             if (result_count == 0 and next_url is None) or (next_url and result_count < self.api_client.result_limit):
                 while result_count < total_records:
@@ -83,8 +83,8 @@ class Connector(BaseJsonSyncConnector):
                             next_url = None
                             break
                         # parsing the next_url
-                        page = re.findall(r'page=([^>]*?)&', query_url)[0]
-                        next_url = re.sub(r'page=([^>]*?)&', f'page={str(int(page) + 1)}&', query_url)
+                        page = regex.findall(r'page=([^>]*?)&', query_url)[0]
+                        next_url = regex.sub(r'page=([^>]*?)&', f'page={str(int(page) + 1)}&', query_url)
 
                         if not metadata and result_count < total_records:
                             remaining_records = total_records - result_count
@@ -101,7 +101,7 @@ class Connector(BaseJsonSyncConnector):
                     elif response_wrapper.code == 401 and not token_generated and \
                             (response == '' or
                              'Signature has expired' in response_dict.get('error', {}).get('message', '')):
-                        jwt_token = await self.get_token()
+                        jwt_token = await self.__get_token()
                         token_generated = True
                         continue
                     else:
@@ -143,7 +143,7 @@ class Connector(BaseJsonSyncConnector):
         """
         return_obj = {}
         try:
-            token = await self.get_token()
+            token = await self.__get_token()
             response = await self.api_client.ping_data_source(token)
             response_code = response.code
             response_dict = json.loads(response.read().decode('utf-8'))
@@ -155,12 +155,11 @@ class Connector(BaseJsonSyncConnector):
             return_obj = self.exception_response(None, str(ex))
         return return_obj
 
-    async def get_token(self):
+    async def __get_token(self):
         """ Generate new token"""
         response = await self.api_client.generate_token()
         response_code = response.code
-        response_txt = response.read().decode('utf-8')
-        response_json = json.loads(response_txt)
+        response_json = json.loads(response.read().decode('utf-8'))
         if response_code == 200:
             response_header = response.headers
             if 'Authorization' in response_header:
