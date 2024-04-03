@@ -1,6 +1,7 @@
 import argparse
 import json
 import logging
+import re
 
 
 # create logging formatter
@@ -113,6 +114,11 @@ def main():
         if not isinstance(key, str):
             log_error(mapping, '"key" is not a string')
             continue  # This is "fatal" for this mapping
+        if "'" in key:
+            log_error(mapping, 'single quotes are not allowed in "key"')
+        if ".extensions." in key:
+            if re.match(r"^.*\.extensions\.[a-z]*$", key):
+                log_error(mapping, 'missing extension name in "key"')
 
         otype, _, rest = key.partition('.')
         if not rest:
