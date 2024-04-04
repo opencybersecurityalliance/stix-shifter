@@ -187,7 +187,7 @@ class APIClient:
         start = range_start if range_start else 0
         end = range_end if range_end else 0
 
-        params = {'wait': 'true','source': 'pdns'}
+        params = {'wait': 'true','source': 'atp'}
 
         # NOTE: Dossier does not support pagination via multiple requests. All results returned in the response.
         resp = await self.client.call_api(endpoint + "/" + payload["threat_type"] + "?" + payload["query"], 'GET', urldata=params, headers=headers, timeout=self.timeout)
@@ -203,8 +203,8 @@ class APIClient:
 
         response_payload = json.loads(resp.read())
         for i in response_payload["results"]:
-            for j in i["data"]["items"]:
-                restructure_payload = {'job': {'create_time': response_payload['job']['create_time']},'results': [{'data': {'items': [j]}}]}
+            for j in i["data"]["threat"]:
+                restructure_payload = {'job': {'create_time': response_payload['job']['create_time']},'results': [{'data': {'threat': [j]}}]}
                 resp_dict["data"].append({"dossierData": restructure_payload})
 
         # Trim result set based on min/max range values
