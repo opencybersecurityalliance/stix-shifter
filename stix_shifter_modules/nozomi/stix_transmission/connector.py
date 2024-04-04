@@ -70,7 +70,7 @@ class Connector(BaseJsonSyncConnector):
                     if response_wrapper.code == 200:
                         # Handling invalid query exception
                         if 'Query is not valid' in response_dict.get('error', ''):
-                            return_obj = self.exception_response(response_wrapper.code, response_dict.get('error'))
+                            return_obj = self.handle_api_exception(response_wrapper.code, response_dict.get('error'))
                             data = []
                             break
 
@@ -108,7 +108,7 @@ class Connector(BaseJsonSyncConnector):
                         error = response_dict.get('error', '')
                         if response_wrapper.code == 403:
                             error = 'Query length is too long or Invalid Query'
-                        return_obj = self.exception_response(response_wrapper.code, error)
+                        return_obj = self.handle_api_exception(response_wrapper.code, error)
                         data = []
                         break
 
@@ -130,15 +130,16 @@ class Connector(BaseJsonSyncConnector):
                 return_obj['data'] = []
 
         except InvalidMetadataException as ex:
-            return_obj = self.exception_response(422, f'Invalid metadata: {str(ex)}')
+            return_obj = self.handle_api_exception(422, f'Invalid metadata: {str(ex)}')
 
         except Exception as ex:
-            return_obj = self.exception_response(None, str(ex))
+            return_obj = self.handle_api_exception(None, str(ex))
         return return_obj
 
     async def ping_connection(self):
         """
         Ping the endpoint
+        Connects to the health_logs API endpoint and confirms connectivity and authentication to the product
         :return: return_object, dict
         """
         return_obj = {}
@@ -150,9 +151,9 @@ class Connector(BaseJsonSyncConnector):
             if response_code == 200:
                 return_obj['success'] = True
             else:
-                return_obj = self.exception_response(response_code, response_dict.get('errorSummary', ''))
+                return_obj = self.handle_api_exception(response_code, response_dict.get('errorSummary', ''))
         except Exception as ex:
-            return_obj = self.exception_response(None, str(ex))
+            return_obj = self.handle_api_exception(None, str(ex))
         return return_obj
 
     async def __get_token(self):
@@ -160,14 +161,14 @@ class Connector(BaseJsonSyncConnector):
         response = await self.api_client.generate_token()
         response_code = response.code
         response_json = json.loads(response.read().decode('utf-8'))
-        if response_code == 200:
-            response_header = response.headers
-            if 'Authorization' in response_header:
-                token = response_header.get('Authorization')
-            return token
-        raise Exception(response_json['errors'])
+        if response_code != 200:
+            raise Exception(response_json['errors'])
+        response_header = response.headers
+        if 'Authorization' in response_header:
+            token = response_header.get('Authorization')
+        return token
 
-    def exception_response(self, code=None, response_txt=''):
+    def handle_api_exception(self, code=None, response_txt=''):
         """
         create the exception response
         :param code, int
@@ -211,6 +212,6 @@ class Connector(BaseJsonSyncConnector):
         """
         for record in response:
             # threat_name is None or '' means finding type is alert"
-            if record.get('threat_name') is None:
+            if record.get('threat_name') is (None or ''):
                 record['threat_name'] = 'alert'
         return response
