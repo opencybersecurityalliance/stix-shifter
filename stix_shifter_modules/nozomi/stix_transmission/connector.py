@@ -180,7 +180,6 @@ class Connector(BaseJsonSyncConnector):
 
         if 'Query is not valid' in response_txt:
             code = 400
-            message = 'Query is not valid'
 
         if code == 401 and not response_txt:
             message = 'Authentication failed'
