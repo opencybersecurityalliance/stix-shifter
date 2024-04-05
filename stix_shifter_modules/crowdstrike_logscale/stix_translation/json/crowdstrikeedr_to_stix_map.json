@@ -514,6 +514,14 @@
         }
       ]
     },
+    "@id": {
+      "key": "x-ibm-finding.x_logscale_event_id",
+      "object": "finding"
+    },
+    "#repo": {
+      "key": "x-ibm-finding.x_logscale_repository",
+      "object": "finding"
+    },
     "@timestamp": {
       "key": "last_observed",
       "transformer": "EpochToTimestamp"

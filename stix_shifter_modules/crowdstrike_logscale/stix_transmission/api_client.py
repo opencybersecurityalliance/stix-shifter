@@ -1,8 +1,8 @@
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
+import json
 
 PING_ENDPOINT = 'api/v1/status'
-QUERY_ENDPOINT = 'api/v1/repositories'
-
+JOB_ENDPOINT = 'api/v1/repositories'
 
 class APIClient:
 
@@ -13,20 +13,54 @@ class APIClient:
         self.client = RestApiClientAsync(connection.get('host'), headers=self.headers)
         self.timeout = connection['options'].get('timeout')
         self.result_limit = connection['options'].get('result_limit')
-        self.api_endpoint = f"{QUERY_ENDPOINT}/{connection.get('repository')}/query"
+        self.api_endpoint = f"{JOB_ENDPOINT}/{connection.get('repository')}/queryjobs"
 
     async def ping_data_source(self):
         """
-        Ping the Data Source
-        :return: Response Object
+        Pings the data source
+        :return: response object
         """
         return await self.client.call_api(PING_ENDPOINT, 'GET', headers=self.headers, data={})
 
-    async def get_search_results(self, query):
+    async def create_search(self, query_expression):
         """
-        Get results from Data Source
-        :param query: Data Source Query
-        :return: Response Object
+        Create an Enterprise search for the input query
+        :param query_expression: dict
+        :return: response object
         """
-        return await self.client.call_api(self.api_endpoint, 'POST', headers=self.headers, data=query,
+
+        return await self.client.call_api(self.api_endpoint, 'POST', headers=self.headers,
+                                          data=json.dumps(query_expression),
                                           timeout=self.timeout)
+
+    async def get_search_status(self, search_id):
+        """
+         Fetch the status of the search
+         :param search_id: str
+         :return: response object
+         """
+        poll_endpoint = f'{self.api_endpoint}/{search_id}'
+        return await self.client.call_api(poll_endpoint, 'GET', headers=self.headers,
+                                          timeout=self.timeout)
+
+    async def get_search_results(self, search_id):
+        """
+        Fetch the results of the search
+        :param search_id: str
+        :return: response object
+        """
+
+        poll_endpoint = f'{self.api_endpoint}/{search_id}'
+        return await self.client.call_api(poll_endpoint, 'GET', headers=self.headers,
+                                          timeout=self.timeout)
+
+    async def delete_search(self, search_id):
+        """
+        Delete the corresponding search
+        :param search_id: str
+        :return: response object
+        """
+        poll_endpoint = f'{self.api_endpoint}/{search_id}'
+        return await self.client.call_api(poll_endpoint, 'DELETE', headers=self.headers,
+                                          timeout=self.timeout)
+

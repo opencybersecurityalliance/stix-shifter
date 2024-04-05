@@ -187,6 +187,9 @@
   },
   "x-ibm-finding": {
     "fields": {
+      "x_logscale_event_id": [
+        "@id"
+      ],
       "confidence": [
         "max_confidence"
       ],

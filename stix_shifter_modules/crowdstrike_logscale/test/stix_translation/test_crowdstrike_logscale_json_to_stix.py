@@ -346,7 +346,8 @@ class TestLogScaleResultsToStix(unittest.TestCase):
                                        'time_observed', 'x_last_updated', 'src_os_ref',
                                        'src_ip_ref', 'x_is_email_sent', 'x_first_behavior_observed',
                                        'x_last_behavior_observed', 'confidence', 'severity',
-                                       'x_severity_name', 'x_seconds_to_resolved', 'x_seconds_to_triaged', 'x_status'})
+                                       'x_severity_name', 'x_seconds_to_resolved', 'x_seconds_to_triaged', 'x_status',
+                                       'x_logscale_repository','x_logscale_event_id'})
         assert (finding_obj is not None), 'x-ibm-finding object type not found'
         assert finding_obj['type'] == 'x-ibm-finding'
         assert finding_obj['name'] == 'ldt:7adbxxxxxxxx0d49:103079284165'

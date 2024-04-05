@@ -11,6 +11,7 @@ START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
 logger = logging.getLogger(__name__)
 CONFIG_MAP_PATH = "json/config_map.json"
 STOP_TIME = datetime.utcnow()
+LOGSCALE_MAXIMUM_TAIL_LIMIT = 10000 # Maximum value of tail function as per logscale data source
 
 
 class FileNotFoundException(Exception):
@@ -139,8 +140,9 @@ class QueryStringPatternTranslator:
         :param comparator, value: int
         :return: value,int
         """
-        if not isinstance(value, int):
-            raise NotImplementedError(f'{comparator} operator is not supported string type value: {value}')
+        if isinstance(value,str):
+            if not value.isdigit():
+                raise NotImplementedError(f'{comparator} operator is not supported for string type value: {value}')
         return value
 
     def _create_formatted_query(self):
@@ -169,8 +171,7 @@ class QueryStringPatternTranslator:
                     merged_queries.append(queries)
 
         for queries in merged_queries:
-            result_query_string = f'{queries["query"]} | tail({self.options["result_limit"]})' \
-                if self.options["result_limit"] <= 10000 else queries["query"]
+            result_query_string = f'{queries["query"]} | tail({LOGSCALE_MAXIMUM_TAIL_LIMIT})'
             formatted_query = {
                 "source": self.source,
                 "queryString": result_query_string,

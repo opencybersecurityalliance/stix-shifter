@@ -21,30 +21,39 @@ See the [table of mappings](crowdstrike_logscale_supported_stix.md) for the STIX
 
 ### Crowdstrike Logscale API Endpoints
 
-   | Connector Method | Crowdstrike Logscale API Endpoint | Method |
-   |------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------|--------|
-   | Ping Endpoint    | Status API - api/v1/status        | GET    |
-   | Results Endpoint | Search API - api/v1/repositories  | POST   |
+   | Connector Method | Crowdstrike Logscale API Endpoint                                              | Method |
+   |------------------|--------------------------------------------------------------------------------|--------|
+   | Ping Endpoint    | Status API - api/v1/status                                                     | GET    |
+   | Query Endpoint   | Query Job API - api/v1/repositories/{respository}/queryjobs                                 | POST   |
+   | Status Endpoint  | Query Job Poll API - api/v1/repositories/{respository}/queryjobs/{Query Job id} | GET    |
+   | Results Endpoint | Query Job Poll API - api/v1/repositories/{respository}/queryjobs/{Query Job id}                                       | GET    |
+   | Delete Endpoint  | Query Job Poll API - api/v1/repositories/{respository}/queryjobs/{Query Job id}                                       | DELETE |
 
 
 ### CURL command to test API Endpoints
 #### Ping 
 ```
 curl --location 'https://{hostname}/api/v1/status' \
---header 'Accept: application/json' \
---header 'Authorization: Bearer {API token}'
+--header 'Accept: application/json'
 ```
-#### Results
+#### Query
 ```
-curl --location 'https://{hostname}/api/v1/repositories/TestRepository/query' \
+curl --location 'https://{hostname}/api/v1/repositories/{repository_name}/queryjobs' \
 --header 'Accept: application/json' \
 --header 'Content-Type: application/json' \
---header 'Authorization: Bearer {API token}' \
+--header 'Authorization: Bearer {Repository API token}' \
 --data '{
     "queryString": "device.local_ip =~ cidr(subnet=\"1.1.1.1/32\") | tail(10)",
     "start": 1702598400000,
     "end": 1707461040000
 }'
+```
+
+#### Results
+```
+curl --location 'https://{hostname}/api/v1/repositories/{repository_name}/queryjobs/{id}' \
+--header 'Accept: application/json' \
+--header 'Authorization: Bearer {Repository API token}'
 ```
 
 ### Format for calling stix-shifter from the command line
@@ -59,7 +68,7 @@ python main.py `<translator_module>` `<query or result>` `<STIX identity object>
 
 #### STIX Translate query 
 ```shell
-translate crowdstrike_logscale query "{}" "[process:name IN ('cmd.exe','calc.exe') AND x-oca-asset:hostname LIKE 'EC2' OR ipv4-addr:value ISSUBSET '1.1.1.1/32'] START t'2023-12-15T00:00:00.000Z' STOP t'2023-12-22T00:00:00.000Z'"
+translate crowdstrike_logscale query "{}" "[process:name IN ('cmd.exe','calc.exe') AND x-oca-asset:hostname LIKE 'EC2' OR ipv4-addr:value ISSUBSET '1.1.1.1/32'] START t'2024-03-20T00:00:00.000Z' STOP t'2024-04-01T00:00:00.000Z'"
 ```
 #### STIX Translate query - Output
 ```json
@@ -68,175 +77,216 @@ translate crowdstrike_logscale query "{}" "[process:name IN ('cmd.exe','calc.exe
         {
             "source": "crowdstrikeedr",
             "queryString": "device.local_ip =~ cidr(subnet=\"1.1.1.1/32\") | tail(10000)",
-            "start": 1702598400000,
-            "end": 1703203200000
+            "start": 1710892800000,
+            "end": 1711929600000
         },
         {
             "source": "crowdstrikeedr",
             "queryString": "device.external_ip =~ cidr(subnet=\"1.1.1.1/32\") | tail(10000)",
-            "start": 1702598400000,
-            "end": 1703203200000
+            "start": 1710892800000,
+            "end": 1711929600000
         },
         {
             "source": "crowdstrikeedr",
             "queryString": "(device.hostname = /EC2/i and @rawstring = /\"behaviors\"\\s*:\\s*\\[.*\"filename\"\\s*:\\s*(\"cmd\\.exe\"|\"calc\\.exe\")/) | tail(10000)",
-            "start": 1702598400000,
-            "end": 1703203200000
+            "start": 1710892800000,
+            "end": 1711929600000
         }
     ]
 }
 ```
-#### STIX Transmit results - Query
+#### STIX Transmit Query
 ```shell
 transmit
 crowdstrike_logscale
 "{\"host\":\"xxx\",\"repository\":\"TestRepository\"}"
 "{\"auth\":{\"api_token\": \"123\"}}"
 results
-"{ \"source\": \"crowdstrikeedr\", \"queryString\": \"device.local_ip =~ cidr(subnet=\\"1.1.1.1/32\\") | tail(10000)\", \"start\": 1702598400000, \"end\": 1703203200000 }"
+"{ \"source\": \"crowdstrikeedr\", \"queryString\": \"device.external_ip =~ cidr(subnet=\\"1.1.1.1/32\\") | tail(10000)\", \"start\": 1710892800000, \"end\": 1711929600000 }"
 0
 1
-
 ```
-#### STIX Transmit results - Output
+#### STIX Transmit Query - Output
+
 ```json
 {
-  "success": true,
-  "data": [
-    {
-      "crowdstrikeedr": {
-        "@timestamp": 1703137747000,
-        "@timestamp.nanos": "0",
-        "#repo": "TestRepository",
-        "#type": "CrowdStrike_Spotlight",
-        "@id": "2WHBHU5SGtAkborKxZbfdFiV_0_1_1703137747",
-        "@ingesttimestamp": "1703156586706",
-        "@rawstring": "{\"cid\": \"ef2175xxyyzz440d\", \"created_timestamp\": \"2023-12-21T05:48:35.582580046Z\", \"detection_id\": \"ldt:7xyz:180393699382\", \"device\": {\"device_id\": \"7xyz\", \"cid\": \"ef2175xxyyzz440d\", \"agent_load_flags\": \"1\", \"agent_local_time\": \"2023-12-21T05:47:27.598Z\", \"agent_version\": \"7.05.17706.0\", \"bios_manufacturer\": \"Xen\", \"bios_version\": \"4.11.amazon\", \"config_id_base\": \"65994763\", \"config_id_build\": \"17706\", \"config_id_platform\": \"3\", \"external_ip\": \"1.2.3.4\", \"hostname\": \"EC2123\", \"first_seen\": \"2023-05-16T05:10:55Z\", \"last_login_timestamp\": \"2023-12-20T05:54:17Z\", \"last_login_user\": \"Administrator\", \"last_seen\": \"2023-12-21T05:47:37Z\", \"local_ip\": \"2.2.2.2\", \"mac_address\": \"12-34-56-78-6b-9b\", \"major_version\": \"10\", \"minor_version\": \"0\", \"os_version\": \"Windows Server 2022\", \"platform_id\": \"0\", \"platform_name\": \"Windows\", \"product_type\": \"3\", \"product_type_desc\": \"Server\", \"status\": \"normal\", \"system_manufacturer\": \"Xen\", \"system_product_name\": \"HVM domU\", \"groups\": [\"97350feebe4541e8a615c0d3f18acdf3\", \"bb1e1190b46348e69e10785030e8b23d\"], \"modified_timestamp\": \"2023-12-21T05:47:38Z\", \"instance_id\": \"i-0123\", \"service_provider\": \"AWS_EC2_V2\", \"service_provider_account_id\": \"12345678\"}, \"behaviors\": [{\"device_id\": \"7xyz\", \"timestamp\": \"2023-12-21T05:48:28Z\", \"template_instance_id\": \"3\", \"behavior_id\": \"41002\", \"filename\": \"cmd.exe\", \"filepath\": \"\\\\Device\\\\HarddiskVolume1\\\\Windows\\\\System32\\\\cmd.exe\", \"alleged_filetype\": \"exe\", \"cmdline\": \"C:\\\\Windows\\\\system32\\\\cmd.exe /c C:\\\\Windows\\\\system32\\\\reg.exe query hklm\\\\software\\\\microsoft\\\\windows\\\\softwareinventorylogging /v collectionstate /reg:64\", \"scenario\": \"suspicious_activity\", \"objective\": \"Falcon Detection Method\", \"tactic\": \"Custom Intelligence\", \"tactic_id\": \"CSTA0005\", \"technique\": \"Indicator of Attack\", \"technique_id\": \"CST0004\", \"display_name\": \"CustomIOAWinMedium\", \"description\": \"A process triggered a medium severity custom rule.\", \"severity\": 50, \"confidence\": 100, \"ioc_type\": \"hash_sha256\", \"ioc_value\": \"eb71xxxxx08\", \"ioc_source\": \"library_load\", \"ioc_description\": \"\\\\Device\\\\HarddiskVolume1\\\\Windows\\\\System32\\\\cmd.exe\", \"user_name\": \"EC2AMAZ-CROWDST$\", \"user_id\": \"S-1-5-18\", \"control_graph_id\": \"ctg:7xyz:180393699382\", \"triggering_process_graph_id\": \"pid:7xyz:184878679367\", \"sha256\": \"eb71xxxxx08\", \"md5\": \"e7a6babc90f4\", \"parent_details\": {\"parent_sha256\": \"eb71xxxxx08\", \"parent_md5\": \"e7a6babc90f4\", \"parent_cmdline\": \"\\\"C:\\\\Windows\\\\system32\\\\cmd.exe\\\" /d /c C:\\\\Windows\\\\system32\\\\silcollector.cmd configure\", \"parent_process_graph_id\": \"pid:7xyz:184873610105\"}, \"pattern_disposition\": 2048, \"pattern_disposition_details\": {\"indicator\": false, \"detect\": false, \"inddet_mask\": false, \"sensor_only\": false, \"rooting\": false, \"kill_process\": false, \"kill_subprocess\": false, \"quarantine_machine\": false, \"quarantine_file\": false, \"policy_disabled\": false, \"kill_parent\": false, \"operation_blocked\": false, \"process_blocked\": true, \"registry_operation_blocked\": false, \"critical_process_disabled\": false, \"bootup_safeguard_enabled\": false, \"fs_operation_blocked\": false, \"handle_operation_downgraded\": false, \"kill_action_failed\": false, \"blocking_unsupported_or_disabled\": false, \"suspend_process\": false, \"suspend_parent\": false}, \"rule_instance_id\": \"3\", \"rule_instance_version\": 3}], \"email_sent\": false, \"first_behavior\": \"2023-12-21T05:48:28Z\", \"last_behavior\": \"2023-12-21T05:48:28Z\", \"max_confidence\": 100, \"max_severity\": 50, \"max_severity_displayname\": \"Medium\", \"show_in_ui\": true, \"status\": \"new\", \"hostinfo\": {\"domain\": \"\"}, \"seconds_to_triaged\": 0, \"seconds_to_resolved\": 0, \"behaviors_processed\": [\"pid:7xyz:184878679367:41002\"], \"date_updated\": \"2023-12-21T05:49:07Z\"}",
-        "@timezone": "Z",
-        "behaviors": [
-          {
-            "alleged_filetype": "exe",
-            "behavior_id": "41002",
-            "cmdline": "C:\\Windows\\system32\\cmd.exe /c C:\\Windows\\system32\\reg.exe query hklm\\software\\microsoft\\windows\\softwareinventorylogging /v collectionstate /reg:64",
-            "confidence": "100",
-            "control_graph_id": "ctg:7xyz:180393699382",
-            "description": "A process triggered a medium severity custom rule.",
-            "device_id": "7xyz",
-            "display_name": "CustomIOAWinMedium",
-            "filename": "cmd.exe",
-            "filepath": "\\Device\\HarddiskVolume1\\Windows\\System32\\cmd.exe",
-            "ioc_description": "\\Device\\HarddiskVolume1\\Windows\\System32\\cmd.exe",
-            "ioc_source": "library_load",
-            "ioc_type": "hash_sha256",
-            "ioc_value": "eb71xxxxx08",
-            "md5": "e7a6babc90f4",
-            "objective": "Falcon Detection Method",
-            "parent_details": {
-              "parent_cmdline": "\"C:\\Windows\\system32\\cmd.exe\" /d /c C:\\Windows\\system32\\silcollector.cmd configure",
-              "parent_md5": "e7a6babc90f4",
-              "parent_process_graph_id": "pid:7xyz:184873610105",
-              "parent_sha256": "eb71xxxxx08"
-            },
-            "pattern_disposition": "2048",
-            "pattern_disposition_details": {
-              "blocking_unsupported_or_disabled": "false",
-              "bootup_safeguard_enabled": "false",
-              "critical_process_disabled": "false",
-              "detect": "false",
-              "fs_operation_blocked": "false",
-              "handle_operation_downgraded": "false",
-              "inddet_mask": "false",
-              "indicator": "false",
-              "kill_action_failed": "false",
-              "kill_parent": "false",
-              "kill_process": "false",
-              "kill_subprocess": "false",
-              "operation_blocked": "false",
-              "policy_disabled": "false",
-              "process_blocked": "true",
-              "quarantine_file": "false",
-              "quarantine_machine": "false",
-              "registry_operation_blocked": "false",
-              "rooting": "false",
-              "sensor_only": "false",
-              "suspend_parent": "false",
-              "suspend_process": "false"
-            },
-            "rule_instance_id": "3",
-            "rule_instance_version": "3",
-            "scenario": "suspicious_activity",
-            "severity": "50",
-            "sha256": "eb71xxxxx08",
-            "tactic": "Custom Intelligence",
-            "tactic_id": "CSTA0005",
-            "technique": "Indicator of Attack",
-            "technique_id": "CST0004",
-            "template_instance_id": "3",
-            "timestamp": "2023-12-21T05:48:28Z",
-            "triggering_process_graph_id": "pid:7xyz:184878679367",
-            "user_id": "S-1-5-18",
-            "user_name": "EC2123"
-          }
-        ],
-        "behaviors_processed": [
-          "pid:7xyz:184878679367:41002"
-        ],
-        "cid": "ef2175xxyyzz440d",
-        "created_timestamp": "2023-12-21T05:48:35.582580046Z",
-        "date_updated": "2023-12-21T05:49:07Z",
-        "detection_id": "ldt:7xyz:180393699382",
-        "device": {
-          "agent_load_flags": "1",
-          "agent_local_time": "2023-12-21T05:47:27.598Z",
-          "agent_version": "7.05.17706.0",
-          "bios_manufacturer": "Xen",
-          "bios_version": "4.11.amazon",
-          "cid": "ef2175xxyyzz440d",
-          "config_id_base": "65994763",
-          "config_id_build": "17706",
-          "config_id_platform": "3",
-          "device_id": "7xyz",
-          "external_ip": "1.2.3.4",
-          "first_seen": "2023-05-16T05:10:55Z",
-          "groups": [
-            "97350feebe4541e8a615c0d3f18acdf3",
-            "bb1e1190b46348e69e10785030e8b23d"
-          ],
-          "hostname": "EC2123",
-          "instance_id": "i-0123",
-          "last_login_timestamp": "2023-12-20T05:54:17Z",
-          "last_login_user": "Administrator",
-          "last_seen": "2023-12-21T05:47:37Z",
-          "local_ip": "1.1.1.1",
-          "mac_address": "12-34-56-78-6b-9b",
-          "major_version": "10",
-          "minor_version": "0",
-          "modified_timestamp": "2023-12-21T05:47:38Z",
-          "os_version": "Windows Server 2022",
-          "platform_id": "0",
-          "platform_name": "Windows",
-          "product_type": "3",
-          "product_type_desc": "Server",
-          "service_provider": "AWS_EC2_V2",
-          "service_provider_account_id": "12345678",
-          "status": "normal",
-          "system_manufacturer": "Xen",
-          "system_product_name": "HVM domU"
+    "success": true,
+    "search_id": "P7-xxxxxxxxx:crowdstrikeedr"
+}
+```
+#### STIX Transmit Status
+```shell
+transmit
+crowdstrike_logscale
+"{\"host\":\"xxx\",\"repository\":\"TestRepository\"}"
+"{\"auth\":{\"api_token\": \"123\"}}"
+status "P7-xxxxxxxxx:crowdstrikeedr"
+```
+
+#### STIX Transmit Status - Output
+
+```json
+{
+    "success": true,
+    "status": "COMPLETED",
+    "progress": 100
+}
+```
+#### STIX Transmit Results
+```shell
+transmit
+crowdstrike_logscale
+"{\"host\":\"xxx\",\"repository\":\"TestRepository\"}"
+"{\"auth\":{\"api_token\": \"123\"}}"
+results "P7-xxxxxxxxx:crowdstrikeedr" 0 1
+```
+
+#### STIX Transmit Results - Output
+```json
+{
+    "success": true,
+    "metadata": {
+        "query": {
+            "queryString": "cidr(subnet=\"1.1.1.1/32\",field=device.external_ip)",
+            "start": 1710892800000,
+            "end": 1711549348062,
+            "around": {
+                "eventId": "ATzrtyg4xCKOqQnD9NodpvsY_363_125_1711549348",
+                "numberOfEventsAfter": 0,
+                "numberOfEventsBefore": 0,
+                "timestamp": 1711549348062
+            }
         },
-        "email_sent": "false",
-        "first_behavior": "2023-12-21T05:48:28Z",
-        "last_behavior": "2023-12-21T05:48:28Z",
-        "max_confidence": "100",
-        "max_severity": "50",
-        "max_severity_displayname": "Medium",
-        "seconds_to_resolved": "0",
-        "seconds_to_triaged": "0",
-        "show_in_ui": "true",
-        "status": "new",
-        "finding_type": "alert"
-      }
-    }
-  ]
+        "source": "crowdstrikeedr"
+    },
+    "data": [
+        {
+            "crowdstrikeedr": {
+                "@timestamp": 1711549348062,
+                "@timestamp.nanos": "194000",
+                "#repo": "TestRepository",
+                "#type": "CrowdStrike_Spotlight",
+                "@id": "ATzrtyg4xCKOqQnD9NodpvsY_363_125_1711549348",
+                "@ingesttimestamp": "1711549348586",
+                "@rawstring": "{\"cid\": \"123\", \"created_timestamp\": \"2024-01-23T12:33:15.170758259Z\", \"detection_id\": \"ldt:xyz:123\", \"device\": {\"device_id\": \"7adb123\", \"cid\": \"123\", \"agent_load_flags\": \"1\", \"agent_local_time\": \"2024-01-23T12:32:59.287Z\", \"agent_version\": \"7.05.17706.0\", \"bios_manufacturer\": \"Xen\", \"bios_version\": \"4.11.amazon\", \"config_id_base\": \"65994763\", \"config_id_build\": \"17706\", \"config_id_platform\": \"3\", \"external_ip\": \"1.1.1.1\", \"hostname\": \"host\", \"first_seen\": \"2023-05-16T05:10:55Z\", \"last_login_timestamp\": \"2024-01-04T06:12:09Z\", \"last_login_user\": \"Administrator\", \"last_seen\": \"2024-01-23T12:33:10Z\", \"local_ip\": \"2.2.2.2\", \"mac_address\": \"01-01-01-01-01-01\", \"major_version\": \"10\", \"minor_version\": \"0\", \"os_version\": \"Windows Server 2022\", \"platform_id\": \"0\", \"platform_name\": \"Windows\", \"product_type\": \"3\", \"product_type_desc\": \"Server\", \"status\": \"normal\", \"system_manufacturer\": \"Xen\", \"system_product_name\": \"HVM domU\", \"groups\": [\"97350feebe4541e8a615c0d3f18acdf3\", \"bb1e1190b46348e69e10785030e8b23d\"], \"modified_timestamp\": \"2024-01-23T12:33:13Z\", \"instance_id\": \"i-123\", \"service_provider\": \"AWS_EC2_V2\", \"service_provider_account_id\": \"98765\"}, \"behaviors\": [{\"device_id\": \"7adb123\", \"timestamp\": \"2024-01-23T12:33:07Z\", \"template_instance_id\": \"3\", \"behavior_id\": \"41002\", \"filename\": \"conhost.exe\", \"filepath\": \"\\\\Device\\\\conhost.exe\", \"alleged_filetype\": \"exe\", \"cmdline\": \"C:\\\\conhost.exe 0xffffffff -ForceV1\", \"scenario\": \"suspicious_activity\", \"objective\": \"Falcon Detection Method\", \"tactic\": \"Custom Intelligence\", \"tactic_id\": \"CSTA0005\", \"technique\": \"Indicator of Attack\", \"technique_id\": \"CST0004\", \"display_name\": \"CustomIOAWinMedium\", \"description\": \"A process triggered a medium severity custom rule.\", \"severity\": 50, \"confidence\": 100, \"ioc_type\": \"\", \"ioc_value\": \"\", \"ioc_source\": \"\", \"ioc_description\": \"\", \"user_name\": \"user1\", \"user_id\": \"S-1-5-18\", \"control_graph_id\": \"ctg:xyz:123\", \"triggering_process_graph_id\": \"pid:7adb:123\", \"sha256\": \"1010101010101010101010100101100101010101010101010101010101010100\", \"md5\": \"11111111111111111111111111111111\", \"parent_details\": {\"parent_sha256\": \"\", \"parent_md5\": \"\", \"parent_cmdline\": \"\", \"parent_process_graph_id\": \"pid:xyz:123\"}, \"pattern_disposition\": 10240, \"pattern_disposition_details\": {\"indicator\": false, \"detect\": false, \"inddet_mask\": false, \"sensor_only\": false, \"rooting\": false, \"kill_process\": false, \"kill_subprocess\": false, \"quarantine_machine\": false, \"quarantine_file\": false, \"policy_disabled\": false, \"kill_parent\": false, \"operation_blocked\": false, \"process_blocked\": true, \"registry_operation_blocked\": false, \"critical_process_disabled\": true, \"bootup_safeguard_enabled\": false, \"fs_operation_blocked\": false, \"handle_operation_downgraded\": false, \"kill_action_failed\": false, \"blocking_unsupported_or_disabled\": false, \"suspend_process\": false, \"suspend_parent\": false}, \"rule_instance_id\": \"3\", \"rule_instance_version\": 3}], \"email_sent\": false, \"first_behavior\": \"2024-01-23T12:33:07Z\", \"last_behavior\": \"2024-01-23T12:33:07Z\", \"max_confidence\": 100, \"max_severity\": 50, \"max_severity_displayname\": \"Medium\", \"show_in_ui\": true, \"status\": \"new\", \"hostinfo\": {\"domain\": \"\"}, \"seconds_to_triaged\": 0, \"seconds_to_resolved\": 0, \"behaviors_processed\": [\"pid:7adb:123:41002\"], \"date_updated\": \"2024-03-27T14:22:28.062194Z\"}",
+                "@timezone": "Z",
+                "behaviors": [
+                    {
+                        "alleged_filetype": "exe",
+                        "behavior_id": "41002",
+                        "cmdline": "C:\\conhost.exe 0xffffffff -ForceV1",
+                        "confidence": "100",
+                        "control_graph_id": "ctg:xyz:123",
+                        "description": "A process triggered a medium severity custom rule.",
+                        "device_id": "7adb123",
+                        "display_name": "CustomIOAWinMedium",
+                        "filename": "conhost.exe",
+                        "filepath": "\\Device\\conhost.exe",
+                        "md5": "11111111111111111111111111111111",
+                        "objective": "Falcon Detection Method",
+                        "parent_details": {
+                            "parent_process_graph_id": "pid:xyz:123"
+                        },
+                        "pattern_disposition": "10240",
+                        "pattern_disposition_details": {
+                            "blocking_unsupported_or_disabled": "false",
+                            "bootup_safeguard_enabled": "false",
+                            "critical_process_disabled": "true",
+                            "detect": "false",
+                            "fs_operation_blocked": "false",
+                            "handle_operation_downgraded": "false",
+                            "inddet_mask": "false",
+                            "indicator": "false",
+                            "kill_action_failed": "false",
+                            "kill_parent": "false",
+                            "kill_process": "false",
+                            "kill_subprocess": "false",
+                            "operation_blocked": "false",
+                            "policy_disabled": "false",
+                            "process_blocked": "true",
+                            "quarantine_file": "false",
+                            "quarantine_machine": "false",
+                            "registry_operation_blocked": "false",
+                            "rooting": "false",
+                            "sensor_only": "false",
+                            "suspend_parent": "false",
+                            "suspend_process": "false"
+                        },
+                        "rule_instance_id": "3",
+                        "rule_instance_version": "3",
+                        "scenario": "suspicious_activity",
+                        "severity": "50",
+                        "sha256": "1010101010101010101010100101100101010101010101010101010101010100",
+                        "tactic": "Custom Intelligence",
+                        "tactic_id": "CSTA0005",
+                        "technique": "Indicator of Attack",
+                        "technique_id": "CST0004",
+                        "template_instance_id": "3",
+                        "timestamp": "2024-01-23T12:33:07Z",
+                        "triggering_process_graph_id": "pid:7adb:123",
+                        "user_id": "S-1-5-18",
+                        "user_name": "user1"
+                    }
+                ],
+                "behaviors_processed": [
+                    "pid:7adb:123:41002"
+                ],
+                "cid": "123",
+                "created_timestamp": "2024-01-23T12:33:15.170758259Z",
+                "date_updated": "2024-03-27T14:22:28.062194Z",
+                "detection_id": "ldt:xyz:123",
+                "device": {
+                    "agent_load_flags": "1",
+                    "agent_local_time": "2024-01-23T12:32:59.287Z",
+                    "agent_version": "7.05.17706.0",
+                    "bios_manufacturer": "Xen",
+                    "bios_version": "4.11.amazon",
+                    "cid": "123",
+                    "config_id_base": "65994763",
+                    "config_id_build": "17706",
+                    "config_id_platform": "3",
+                    "device_id": "7adb123",
+                    "external_ip": "1.1.1.1",
+                    "first_seen": "2023-05-16T05:10:55Z",
+                    "groups": [
+                        "97350feebe4541e8a615c0d3f18acdf3",
+                        "bb1e1190b46348e69e10785030e8b23d"
+                    ],
+                    "hostname": "host",
+                    "instance_id": "i-123",
+                    "last_login_timestamp": "2024-01-04T06:12:09Z",
+                    "last_login_user": "Administrator",
+                    "last_seen": "2024-01-23T12:33:10Z",
+                    "local_ip": "2.2.2.2",
+                    "mac_address": "01-01-01-01-01-01",
+                    "major_version": "10",
+                    "minor_version": "0",
+                    "modified_timestamp": "2024-01-23T12:33:13Z",
+                    "os_version": "Windows Server 2022",
+                    "platform_id": "0",
+                    "platform_name": "Windows",
+                    "product_type": "3",
+                    "product_type_desc": "Server",
+                    "service_provider": "AWS_EC2_V2",
+                    "service_provider_account_id": "98765",
+                    "status": "normal",
+                    "system_manufacturer": "Xen",
+                    "system_product_name": "HVM domU"
+                },
+                "email_sent": "false",
+                "first_behavior": "2024-01-23T12:33:07Z",
+                "last_behavior": "2024-01-23T12:33:07Z",
+                "max_confidence": "100",
+                "max_severity": "50",
+                "max_severity_displayname": "Medium",
+                "seconds_to_resolved": "0",
+                "seconds_to_triaged": "0",
+                "show_in_ui": "true",
+                "status": "new",
+                "finding_type": "alert"
+            }
+        }
+    ]
 }
 ```
 
@@ -244,52 +294,48 @@ results
 ```json
 {
     "type": "bundle",
-    "id": "bundle--2aaa88a7-013f-4b65-9fff-d44a9c9a6c6a",
+    "id": "bundle--fc54a014-447c-4cde-88ee-129a4083ca24",
     "objects": [
         {
             "type": "identity",
             "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
             "name": "crowdstrike_logscale",
             "identity_class": "events",
-            "created": "2022-01-22T13:22:50.336Z",
-            "modified": "2023-04-22T13:22:50.336Z"
+            "created": "2024-04-02T13:22:50.336Z",
+            "modified": "2024-04-02T13:22:50.336Z"
         },
         {
-            "id": "observed-data--9156fe87-a216-4cef-84a1-31bf8a9cde73",
+            "id": "observed-data--3a204585-59bc-481b-898b-a065965f82e5",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2023-12-25T05:40:47.449Z",
-            "modified": "2023-12-25T05:40:47.449Z",
+            "created": "2024-04-03T13:24:07.549Z",
+            "modified": "2024-04-03T13:24:07.549Z",
             "objects": {
                 "0": {
                     "type": "file",
                     "x_extension": "exe",
-                    "name": "cmd.exe",
-                    "x_path": "\\Device\\HarddiskVolume1\\Windows\\System32\\cmd.exe",
+                    "name": "conhost.exe",
+                    "x_path": "\\Device\\conhost.exe",
                     "parent_directory_ref": "3",
                     "hashes": {
-                        "MD5": "e7a6babc90f4",
-                        "SHA-256": "eb71xxxxx08"
+                        "MD5": "11111111111111111111111111111111",
+                        "SHA-256": "1010101010101010101010100101100101010101010101010101010101010100"
                     }
                 },
                 "1": {
                     "type": "x-crowdstrike-detection-behavior",
                     "behavior_id": "41002",
                     "confidence": 100,
-                    "control_graph_id": "ctg:7xyz:180393699382",
+                    "control_graph_id": "ctg:xyz:123",
                     "description": "A process triggered a medium severity custom rule.",
-                    "name": "CustomIOAWinMedium",
+                    "display_name": "CustomIOAWinMedium",
                     "process_ref": "2",
-                    "ioc_description": "\\Device\\HarddiskVolume1\\Windows\\System32\\cmd.exe",
-                    "ioc_source": "library_load",
-                    "ioc_type": "hash_sha256",
-                    "ioc_value": "eb71xxxxx08",
                     "objective": "Falcon Detection Method",
-                    "pattern_disposition": 2048,
+                    "pattern_disposition": 10240,
                     "pattern_disposition_details": {
                         "blocking_unsupported_or_disabled": "false",
                         "bootup_safeguard_enabled": "false",
-                        "critical_process_disabled": "false",
+                        "critical_process_disabled": "true",
                         "detect": "false",
                         "fs_operation_blocked": "false",
                         "handle_operation_downgraded": "false",
@@ -314,38 +360,29 @@ results
                     "rule_instance_version": "3",
                     "scenario": "suspicious_activity",
                     "severity": 50,
-                    "ttp_tagging_ref": "6",
+                    "ttp_tagging_ref": "5",
                     "template_instance_id": "3",
-                    "created_time": "2023-12-21T05:48:28Z",
-                    "user_ref": "7"
+                    "created_time": "2024-01-23T12:33:07Z",
+                    "user_ref": "6"
                 },
                 "2": {
                     "type": "process",
-                    "command_line": "C:\\Windows\\system32\\cmd.exe /c C:\\Windows\\system32\\reg.exe query hklm\\software\\microsoft\\windows\\softwareinventorylogging /v collectionstate /reg:64",
-                    "name": "cmd.exe",
+                    "command_line": "C:\\conhost.exe 0xffffffff -ForceV1",
+                    "name": "conhost.exe",
                     "binary_ref": "0",
                     "parent_ref": "4",
-                    "x_process_graph_id": "pid:7xyz:184878679367",
-                    "creator_user_ref": "7"
+                    "x_process_graph_id": "pid:7adb:123",
+                    "creator_user_ref": "6"
                 },
                 "3": {
                     "type": "directory",
-                    "path": "\\Device\\HarddiskVolume1\\Windows\\System32"
+                    "path": "\\Device"
                 },
                 "4": {
                     "type": "process",
-                    "command_line": "\"C:\\Windows\\system32\\cmd.exe\" /d /c C:\\Windows\\system32\\silcollector.cmd configure",
-                    "binary_ref": "5",
-                    "x_process_graph_id": "pid:7xyz:184873610105"
+                    "x_process_graph_id": "pid:xyz:123"
                 },
                 "5": {
-                    "type": "file",
-                    "hashes": {
-                        "MD5": "e7a6babc90f4",
-                        "SHA-256": "eb71xxxxx08"
-                    }
-                },
-                "6": {
                     "type": "x-ibm-ttp-tagging",
                     "name": "Custom Intelligence",
                     "extensions": {
@@ -356,30 +393,32 @@ results
                         }
                     }
                 },
-                "7": {
+                "6": {
                     "type": "user-account",
                     "user_id": "S-1-5-18",
-                    "display_name": "EC2123"
+                    "display_name": "user1"
                 },
-                "8": {
+                "7": {
                     "type": "x-ibm-finding",
+                   "x_logscale_repository": "TestRepository",
+                    "x_logscale_event_id": "ATzrtyg4xCKOqQnD9NodpvsY_363_125_1711549348",
                     "x_behavior_refs": [
                         "1"
                     ],
                     "ttp_tagging_refs": [
-                        "6"
+                        "5"
                     ],
                     "x_behaviors_processed": [
-                        "pid:7xyz:184878679367:41002"
+                        "pid:7adb:123:41002"
                     ],
-                    "time_observed": "2023-12-21T05:48:35.582Z",
-                    "x_last_updated": "2023-12-21T05:49:07Z",
-                    "name": "ldt:7xyz:180393699382",
-                    "src_ip_ref": "11",
-                    "src_os_ref": "14",
+                    "time_observed": "2024-01-23T12:33:15.170Z",
+                    "x_last_updated": "2024-03-27T14:22:28.062194Z",
+                    "name": "ldt:xyz:123",
+                    "src_ip_ref": "10",
+                    "src_os_ref": "13",
                     "x_is_email_sent": "false",
-                    "x_first_behavior_observed": "2023-12-21T05:48:28Z",
-                    "x_last_behavior_observed": "2023-12-21T05:48:28Z",
+                    "x_first_behavior_observed": "2024-01-23T12:33:07Z",
+                    "x_last_behavior_observed": "2024-01-23T12:33:07Z",
                     "confidence": 100,
                     "severity": 50,
                     "x_severity_name": "Medium",
@@ -388,63 +427,63 @@ results
                     "x_status": "new",
                     "finding_type": "alert"
                 },
-                "9": {
+                "8": {
                     "type": "x-oca-asset",
-                    "x_cid": "ef2175xxyyzz440d",
-                    "x_agent_ref": "10",
+                    "x_cid": "123",
+                    "x_agent_ref": "9",
                     "x_bios_manufacturer": "Xen",
                     "x_bios_version": "4.11.amazon",
-                    "device_id": "7xyz",
+                    "device_id": "7adb123",
                     "ip_refs": [
-                        "11",
-                        "12"
+                        "10",
+                        "11"
                     ],
                     "x_first_seen": "2023-05-16T05:10:55Z",
                     "x_device_groups": [
                         "97350feebe4541e8a615c0d3f18acdf3",
                         "bb1e1190b46348e69e10785030e8b23d"
                     ],
-                    "hostname": "EC2123",
-                    "x_instance_id": "i-0123",
-                    "x_last_seen": "2023-12-21T05:47:37Z",
+                    "hostname": "host",
+                    "x_instance_id": "i-123",
+                    "x_last_seen": "2024-01-23T12:33:10Z",
                     "mac_refs": [
-                        "13"
+                        "12"
                     ],
-                    "x_last_modified": "2023-12-21T05:47:38Z",
-                    "os_ref": "14",
+                    "x_last_modified": "2024-01-23T12:33:13Z",
+                    "os_ref": "13",
                     "x_host_type_number": "3",
                     "host_type": "Server",
                     "x_service_provider": "AWS_EC2_V2",
-                    "x_service_account_id": "1234",
+                    "x_service_account_id": "98765",
                     "x_status": "normal",
                     "x_system_manufacturer": "Xen",
                     "x_system_product_name": "HVM domU"
                 },
-                "10": {
+                "9": {
                     "type": "x-crowdstrike-edr-agent",
                     "load_flags": "1",
-                    "local_time": "2023-12-21T05:47:27.598Z",
+                    "local_time": "2024-01-23T12:32:59.287Z",
                     "version": "7.05.17706.0",
                     "config_id_base": "65994763",
                     "config_id_build": "17706",
                     "config_id_platform": "3"
                 },
+                "10": {
+                    "type": "ipv4-addr",
+                    "value": "1.1.1.1"
+                },
                 "11": {
                     "type": "ipv4-addr",
-                    "value": "1.2.3.4"
-                },
-                "12": {
-                    "type": "ipv4-addr",
-                    "value": "1.1.1.1",
+                    "value": "2.2.2.2",
                     "resolves_to_refs": [
-                        "13"
+                        "12"
                     ]
                 },
-                "13": {
+                "12": {
                     "type": "mac-addr",
-                    "value": "12:34:56:78:6b:9b"
+                    "value": "01:01:01:01:01:01"
                 },
-                "14": {
+                "13": {
                     "type": "software",
                     "x_major_version": "10",
                     "x_minor_version": "0",
@@ -453,8 +492,8 @@ results
                     "name": "Windows"
                 }
             },
-            "last_observed": "2023-12-21T05:49:07.000Z",
-            "first_observed": "2023-12-21T05:48:35.582Z",
+            "last_observed": "2024-03-27T14:22:28.062Z",
+            "first_observed": "2024-01-23T12:33:15.170Z",
             "number_observed": 1
         }
     ],
@@ -489,14 +528,14 @@ crowdstrike_logscale
 "{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"crowdstrike_logscale\",\"identity_class\":\"system\",\"created\":\"2023-12-24T13:22:50.336Z\",\"modified\":\"2022-12-24T13:22:50.336Z\"}"
 "{\"host\":\"xyz\",\"repository\":\"TestRepository\"}"
 "{\"auth\":{\"api_token\":  \"123\"}}" 
-"[ipv4-addr:value = '3.4.5.6' AND software:version = 'Windows Server 2022' OR x-oca-asset:host_type = 'Server' OR x-crowdstrike-detection-behavior:control_graph_id IN (2048,10240)] START t'2023-12-15T00:00:00.000Z' STOP t'2023-12-22T00:00:00.000Z'"
+"[ipv4-addr:value = '3.4.5.6' AND software:version = 'Windows Server 2022' OR x-oca-asset:host_type = 'Server' OR x-crowdstrike-detection-behavior:control_graph_id IN ('ctg:654','ctg:123')] START t'2024-04-01T00:00:00.000Z' STOP t'2024-04-03T11:00:00.000Z'"
 ```
 
 #### STIX Execute query - Output
 ```json
 {
     "type": "bundle",
-    "id": "bundle--85f7a9d6-9ed4-479f-a218-0ca6defc7a36",
+    "id": "bundle--44b07b95-fd6f-43b3-86a6-b98e8b9c1e01",
     "objects": [
         {
             "type": "identity",
@@ -507,41 +546,37 @@ crowdstrike_logscale
             "modified": "2023-12-24T13:22:50.336Z"
         },
         {
-            "id": "observed-data--91568bc1-74ec-4141-bbc1-d34d8acb72c0",
+            "id": "observed-data--5f3a0294-527a-4a68-adee-a7d93799a801",
             "type": "observed-data",
             "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "created": "2023-12-25T06:49:11.126Z",
-            "modified": "2023-12-25T06:49:11.126Z",
+            "created": "2024-04-03T14:11:53.817Z",
+            "modified": "2024-04-03T14:11:53.817Z",
             "objects": {
                 "0": {
                     "type": "file",
                     "x_extension": "exe",
-                    "name": "winver.exe",
-                    "x_path": "\\Device\\HarddiskVolume1\\Windows\\System32\\winver.exe",
+                    "name": "conhost.exe",
+                    "x_path": "\\Device\\conhost.exe",
                     "parent_directory_ref": "3",
                     "hashes": {
-                        "MD5": "e18a8xxxxxxxxxxxxxxxxxxx9732873",
-                        "SHA-256": "02b9af2aaxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx951b10879"
+                        "MD5": "1010101010101101010100101101010",
+                        "SHA-256": "1111111111111111111111111111111111111111111111111111111111111111"
                     }
                 },
                 "1": {
                     "type": "x-crowdstrike-detection-behavior",
                     "behavior_id": "41002",
                     "confidence": 100,
-                    "control_graph_id": "ctg:7xyz:180400197374",
+                    "control_graph_id": "ctg:123",
                     "description": "A process triggered a medium severity custom rule.",
-                    "name": "CustomIOAWinMedium",
+                    "display_name": "CustomIOAWinMedium",
                     "process_ref": "2",
-                    "ioc_description": "\\Device\\HarddiskVolume1\\Windows\\System32\\winver.exe",
-                    "ioc_source": "library_load",
-                    "ioc_type": "hash_sha256",
-                    "ioc_value": "02b9af2aaxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx951b10879",
                     "objective": "Falcon Detection Method",
-                    "pattern_disposition": 2048,
+                    "pattern_disposition": 10240,
                     "pattern_disposition_details": {
                         "blocking_unsupported_or_disabled": "false",
                         "bootup_safeguard_enabled": "false",
-                        "critical_process_disabled": "false",
+                        "critical_process_disabled": "true",
                         "detect": "false",
                         "fs_operation_blocked": "false",
                         "handle_operation_downgraded": "false",
@@ -568,16 +603,16 @@ crowdstrike_logscale
                     "severity": 50,
                     "ttp_tagging_ref": "6",
                     "template_instance_id": "3",
-                    "created_time": "2023-12-21T10:48:26Z",
+                    "created_time": "2024-01-25T07:06:28Z",
                     "user_ref": "7"
                 },
                 "2": {
                     "type": "process",
-                    "command_line": "winver",
-                    "name": "winver.exe",
+                    "command_line": "C:\\Windows\\system32\\conhost.exe 0xffffffff -ForceV1",
+                    "name": "conhost.exe",
                     "binary_ref": "0",
                     "parent_ref": "4",
-                    "x_process_graph_id": "pid:7xyz:186025680478",
+                    "x_process_graph_id": "pid:7adb:232202950915",
                     "creator_user_ref": "7"
                 },
                 "3": {
@@ -586,15 +621,15 @@ crowdstrike_logscale
                 },
                 "4": {
                     "type": "process",
-                    "command_line": "\"C:\\Windows\\system32\\cmd.exe\" ",
+                    "command_line": "\"C:\\Windows\\System32\\cmd.exe\"  /c \"\"C:\\Program Files\\Amazon\\EC2Launch\\EC2Launch.exe\" wallpaper --path=\"C:\\ProgramData\\Amazon\\EC2Launch\\wallpaper\\Ec2Wallpaper.jpg\" --attributes=\"hostName,instanceId,privateIpAddress,publicIpAddress,instanceSize,availabilityZone,architecture,memory,network\" \"",
                     "binary_ref": "5",
-                    "x_process_graph_id": "pid:7xyz:184941492793"
+                    "x_process_graph_id": "pid:7adb:232200947972"
                 },
                 "5": {
                     "type": "file",
                     "hashes": {
-                        "MD5": "e7a6babc90f4",
-                        "SHA-256": "eb71xxxxx08"
+                        "MD5": "e7a6b1f51efb405287a8048cfa4690f4",
+                        "SHA-256": "eb71ea69dd19f728ab9240565e8c7efb59821e19e3788e289301e1e74940c208"
                     }
                 },
                 "6": {
@@ -610,11 +645,13 @@ crowdstrike_logscale
                 },
                 "7": {
                     "type": "user-account",
-                    "user_id": "S-1-5-21-949",
+                    "user_id": "S-1-5-21-9490108-1672845815-3129397136-500",
                     "display_name": "Administrator"
                 },
                 "8": {
                     "type": "x-ibm-finding",
+                   "x_logscale_repository": "TestRepository",
+                    "x_logscale_event_id": "x456",
                     "x_behavior_refs": [
                         "1"
                     ],
@@ -622,16 +659,16 @@ crowdstrike_logscale
                         "6"
                     ],
                     "x_behaviors_processed": [
-                        "pid:7xyz:186025680478:41002"
+                        "pid:7adb:232202950915:41002"
                     ],
-                    "time_observed": "2023-12-21T10:48:33.774Z",
-                    "x_last_updated": "2023-12-21T10:49:06Z",
-                    "name": "ldt:7xyz:180400197374",
+                    "time_observed": "2024-01-25T07:06:36.831Z",
+                    "x_last_updated": "2024-04-03T10:40:49.669334Z",
+                    "name": "ldt:123",
                     "src_ip_ref": "11",
                     "src_os_ref": "14",
                     "x_is_email_sent": "false",
-                    "x_first_behavior_observed": "2023-12-21T10:48:26Z",
-                    "x_last_behavior_observed": "2023-12-21T10:48:26Z",
+                    "x_first_behavior_observed": "2024-01-25T07:06:28Z",
+                    "x_last_behavior_observed": "2024-01-25T07:06:28Z",
                     "confidence": 100,
                     "severity": 50,
                     "x_severity_name": "Medium",
@@ -642,10 +679,10 @@ crowdstrike_logscale
                 },
                 "9": {
                     "type": "x-oca-asset",
-                    "x_cid": "ef2175xxyyzz440d",
+                    "x_cid": "id123",
                     "x_agent_ref": "10",
                     "x_bios_manufacturer": "Xen",
-                    "x_bios_version": "4.11.amazon",
+                    "x_bios_version": "4.2.amazon",
                     "device_id": "7adb",
                     "ip_refs": [
                         "11",
@@ -653,21 +690,21 @@ crowdstrike_logscale
                     ],
                     "x_first_seen": "2023-05-16T05:10:55Z",
                     "x_device_groups": [
-                        "973f",
-                        "bb1e1"
+                        "97350feebe4541e8a615c0d3f18acdf3",
+                        "bb1e1190b46348e69e10785030e8b23d"
                     ],
-                    "hostname": "EC2AMA123",
-                    "x_instance_id": "i-01234",
-                    "x_last_seen": "2023-12-21T10:23:35Z",
+                    "hostname": "host",
+                    "x_instance_id": "i-123",
+                    "x_last_seen": "2024-01-25T06:51:54Z",
                     "mac_refs": [
                         "13"
                     ],
-                    "x_last_modified": "2023-12-21T10:44:51Z",
+                    "x_last_modified": "2024-01-25T07:06:13Z",
                     "os_ref": "14",
                     "x_host_type_number": "3",
                     "host_type": "Server",
                     "x_service_provider": "AWS_EC2_V2",
-                    "x_service_account_id": "1234",
+                    "x_service_account_id": "978657",
                     "x_status": "normal",
                     "x_system_manufacturer": "Xen",
                     "x_system_product_name": "HVM domU"
@@ -675,7 +712,7 @@ crowdstrike_logscale
                 "10": {
                     "type": "x-crowdstrike-edr-agent",
                     "load_flags": "1",
-                    "local_time": "2023-12-21T05:47:27.598Z",
+                    "local_time": "2024-01-25T06:51:42.661Z",
                     "version": "7.05.17706.0",
                     "config_id_base": "65994763",
                     "config_id_build": "17706",
@@ -683,18 +720,18 @@ crowdstrike_logscale
                 },
                 "11": {
                     "type": "ipv4-addr",
-                    "value": "3.4.5.6"
+                    "value": "5.6.7.8"
                 },
                 "12": {
                     "type": "ipv4-addr",
-                    "value": "6.7.8.9",
+                    "value": "2.3.4.5",
                     "resolves_to_refs": [
                         "13"
                     ]
                 },
                 "13": {
                     "type": "mac-addr",
-                    "value": "12:85:26:67:6c:9"
+                    "value": "10:10:10:10:10:10"
                 },
                 "14": {
                     "type": "software",
@@ -705,11 +742,10 @@ crowdstrike_logscale
                     "name": "Windows"
                 }
             },
-            "last_observed": "2023-12-21T10:49:06.000Z",
-            "first_observed": "2023-12-21T10:48:33.774Z",
+            "last_observed": "2024-04-03T10:40:49.669Z",
+            "first_observed": "2024-01-25T07:06:36.831Z",
             "number_observed": 1
-        }
-    ],
+        }],
     "spec_version": "2.0"
 }
 ```

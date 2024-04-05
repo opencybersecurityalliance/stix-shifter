@@ -16,8 +16,9 @@ error_mapping = {
 
 
 class ErrorMapper:
-    logger = logger.set_logger(__name__)
+
     DEFAULT_ERROR = ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR
+    logger = logger.set_logger(__name__)
 
     @staticmethod
     def set_error_code(json_data, return_obj, connector=None):

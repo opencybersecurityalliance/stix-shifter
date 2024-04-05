@@ -398,7 +398,7 @@ class TestQueryTranslator(unittest.TestCase):
         result = translation.translate('crowdstrike_logscale', 'query', '{}', stix_pattern)
         assert result['success'] is False
         assert "not_implemented" == result['code']
-        assert 'ComparisonComparators.LessThan operator is not supported string type value: fifty' in result['error']
+        assert 'ComparisonComparators.LessThan operator is not supported for string type value: fifty' in result['error']
 
     def test_unsupported_like_field(self):
         stix_pattern = "[process:name LIKE 'test']"

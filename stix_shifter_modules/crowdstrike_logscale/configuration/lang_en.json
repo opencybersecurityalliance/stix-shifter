@@ -16,8 +16,8 @@
     "configuration": {
         "auth": {
             "api_token": {
-                "label": "API token",
-                "description": "LogScale API token to authenticate requests for APIs"
+                "label": "Repository API token",
+                "description": "The API token of a Repository to access the repository related API's"
             }
         }
     }
