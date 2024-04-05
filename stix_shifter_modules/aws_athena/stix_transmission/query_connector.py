@@ -114,8 +114,8 @@ class QueryConnector(BaseQueryConnector):
         #If the query is successful (or the exception isn't column related) than it's considered a success and exits.
         #If 10 columns are not found or it fails to replace a column 10 times, than it exits (to prevent endless loops).
         #If the query is not successful, than it will retry the query with the modified query.
-        if(modified_query == "CONNECTOR_FACTORY_SUCCESS" or self.total_try_count > 10):
-            logger.debug(f"The total attempt count was {self.total_try_count}")
+        if(modified_query == True or self.total_try_count > 10):
+            logger.debug(f"The number of attempts to remove missing columns was {self.total_try_count}")
             if(self.total_try_count >= 10):
                 logger.warn("There were 10 failed exceptions related to columns. This could be because there were more invalid columns than 10, \
                              or alternatively that the replacement failed to remove the offending column.")

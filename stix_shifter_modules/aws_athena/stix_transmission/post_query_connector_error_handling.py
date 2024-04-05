@@ -5,9 +5,9 @@ import time
 from stix_shifter_modules.aws_athena.stix_transmission import status_connector
 
 class PostQueryConnectorErrorHandler():
-    async def check_status_for_missing_column(client, search_id, query):
+    async def check_status_for_missing_column(client, search_id, query) -> None:
         """Creates a status check loop to see if the query fails with a column doesn't exist exception. If it does, return the query with the offending column removed.
-            If it does not, return with "CONNECTOR_FACTORY_SUCCESS"
+            If it does not, return with True
 
         Args:
             client (RestApiClientAsync) 
@@ -39,7 +39,7 @@ class PostQueryConnectorErrorHandler():
             return PostQueryConnectorErrorHandler._remove_invalid_column_table(column_to_delete, query)
         else:
             #May not always be successful, just that no column error is occurring.
-            return "CONNECTOR_FACTORY_SUCCESS"
+            return True
        
     
     def _remove_invalid_column_table(column_to_remove, query):

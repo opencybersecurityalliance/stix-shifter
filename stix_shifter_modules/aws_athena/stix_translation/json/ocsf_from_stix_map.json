@@ -637,19 +637,19 @@
         "identity.authorizations.policy.desc"
       ],
       "authorizations.policy_group_desc": [
-        "'identity.authorizations.policy.group.desc'"
+        "identity.authorizations.policy.group.desc"
       ],
       "authorizations.policy_group_namee": [
-        "'identity.authorizations.policy.group.name'"
+        "identity.authorizations.policy.group.name"
       ],
       "authorizations.policy_group_privileges": [
-        "'identity.authorizations.policy.group.privileges'"
+        "identity.authorizations.policy.group.privileges"
       ],
       "authorizations.policy_group_type": [
-        "'identity.authorizations.policy.group.type'"
+        "identity.authorizations.policy.group.type"
       ],
       "authorizations.policy_group_uid": [
-        "'identity.authorizations.policy.group.uid'"
+        "identity.authorizations.policy.group.uid"
       ],
       "authorizations.uid": [
         "identity.authorizations.policy.uid"
