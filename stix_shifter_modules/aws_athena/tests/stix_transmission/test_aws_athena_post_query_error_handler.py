@@ -60,7 +60,7 @@ class TestAWSConnection(unittest.IsolatedAsyncioTestCase):
         test_query = "test"
         query_response = await PostQueryConnectorErrorHandler.check_status_for_missing_column(client, "1", test_query)
 
-        assert query_response == "CONNECTOR_FACTORY_SUCCESS"
+        assert query_response == True
     
     @staticmethod
     @patch('time.sleep')
@@ -72,7 +72,7 @@ class TestAWSConnection(unittest.IsolatedAsyncioTestCase):
         test_query = "test"
         query_response = await PostQueryConnectorErrorHandler.check_status_for_missing_column(client, "1", test_query)
 
-        assert query_response == "CONNECTOR_FACTORY_SUCCESS"
+        assert query_response == True
 
     #----Test Against the _remove_invalid_column_table method
     @staticmethod
