@@ -60,7 +60,7 @@ class QueryStringPatternTranslator:
 
     @staticmethod
     def _format_like(value) -> str:
-        value = "'%{value}%'".format(value=value)
+        value = value.replace('%', '*').replace('_', '?')
         return QueryStringPatternTranslator._escape_value(value)
 
     @staticmethod
@@ -110,11 +110,14 @@ class QueryStringPatternTranslator:
                         continue
                     comparison_string += parsed_reference
                 else:
-                    comparison_string += "{mapped_field} {comparator} {value}".format(mapped_field=mapped_field,
-                                                                                      comparator=comparator, value=value)
+                    format_string = "{mapped_field} {comparator} {value}"
+                    if expression.comparator == ComparisonComparators.NotEqual:
+                        format_string = self._negate_comparison(format_string)
+                    comparison_string += format_string.format(mapped_field=mapped_field,
+                                                              comparator=comparator, value=value)
 
             if mapped_fields_count > 1:
-                comparison_string += " OR "
+                comparison_string += " AND " if expression.comparator == ComparisonComparators.NotEqual else " OR "
                 mapped_fields_count -= 1
 
         return comparison_string
@@ -224,26 +227,32 @@ class QueryStringPatternTranslator:
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
-    query = re.sub("START", "START ", query)
-    query = re.sub("STOP", " STOP ", query)
     query, from_time, to_time = convert_timestamp(query)
     query_dict = {"query": query.replace("'", "\""), "fromTime": from_time, "toTime": to_time}
     query_str = json.dumps(query_dict)
     return [query_str]
 
 
+def to_datetime(value):
+    if '.' in value:
+        time_pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
+    else:
+        time_pattern = '%Y-%m-%dT%H:%M:%SZ'
+    return datetime.datetime.strptime(value, time_pattern).replace(tzinfo=datetime.timezone.utc)
+
+
+def to_epoch_ms(value):
+    return int(value.timestamp() * 1000)
+
+
 def convert_timestamp(query):
     if ('START' and 'STOP') in query:
-        x = re.search('(.*)(?= START )(.*)(?<=STOP )(.*)', query)
-        query = x.group(1)
-        from_time = x.group(2).replace(' START ', "").replace(" STOP ", "")
-        to_time = x.group(3)
-        from_time = datetime.datetime.strptime(from_time, "t'%Y-%m-%dT%H:%M:%S.%fZ'").strftime("%Y%m%dT%H%M%S")
-        to_time = datetime.datetime.strptime(to_time, "t'%Y-%m-%dT%H:%M:%S.%fZ'").strftime("%Y%m%dT%H%M%S")
+        x = re.search(r"(.*)\s*START\s*t'(.*)'\s*STOP\s*t'(.*)'", query)
+        query = x.group(1).strip(' ')
+        from_time = to_datetime(x.group(2))
+        to_time = to_datetime(x.group(3))
     else:
         to_time = datetime.datetime.utcnow()
         from_time = (to_time - datetime.timedelta(minutes=15))
-        to_time = to_time.strftime("%Y%m%dT%H%M%S")
-        from_time = from_time.strftime("%Y%m%dT%H%M%S")
 
-    return query, from_time, to_time
+    return query, to_epoch_ms(from_time), to_epoch_ms(to_time)

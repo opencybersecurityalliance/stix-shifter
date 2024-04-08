@@ -2,6 +2,8 @@
     "ComparisonExpressionOperators.And": "AND",
     "ComparisonExpressionOperators.Or": "OR",
     "ComparisonComparators.Equal": "=",
+    "ComparisonComparators.NotEqual": "=",
+    "ComparisonComparators.Like": "=",
     "ComparisonComparators.In": "OR",
     "ObservationOperators.Or": "OR",
     "ObservationOperators.And": "AND"

@@ -17,8 +17,8 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "Microsoft Azure Sentinel certificate",
-            "description": "Use SSL certificate for Microsoft Azure Sentinel."
+            "label": "PEM Formatted SSL certificate(s)",
+            "description": "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
         },
         "options": {
             "alert": {
