@@ -56,6 +56,8 @@ class StatusConnector(BaseStatusConnector):
             return_obj['status'] = self._getstatus(response_dict.get('QueryExecution', 'FAILED').
                                                    get('Status', 'FAILED').
                                                    get('State', 'FAILED'))
+            if (response_dict != None and "QueryExecution" in response_dict and "Status" in response_dict["QueryExecution"] and "StateChangeReason" in response_dict["QueryExecution"]["Status"]):
+                return_obj['message'] = response_dict["QueryExecution"]["Status"]["StateChangeReason"]
             if return_obj['status'] == 'COMPLETED':
                 return_obj['progress'] = 100
             elif return_obj['status'] == 'RUNNING':
