@@ -9,7 +9,10 @@ class FormatMacAddress(ValueTransformer):
     @staticmethod
     def transform(mac_value):
         """correcting mac address presentation. The mac address should be separated
-        by only colon (:) not by any other special character """
+        by only colon (:) not by any other special character.
+        Example:
+            Input: 10-10-10-10-10-10  Output: 10:10:10:10:10:10
+        """
         try:
             colon_converted = re.sub("[^A-Fa-f0-9]", ":", mac_value)
             return colon_converted.lower()
@@ -20,7 +23,10 @@ class FormatMacAddress(ValueTransformer):
 
 
 class LogscaleToTimestamp(ValueTransformer):
-    """A value transformer to truncate milliseconds"""
+    """A value transformer to truncate milliseconds
+       Example:
+           Input : 2024-01-23T12:33:15.170758259Z  Output: 2024-01-23T12:33:15.170Z
+    """
 
     @staticmethod
     def transform(value):
