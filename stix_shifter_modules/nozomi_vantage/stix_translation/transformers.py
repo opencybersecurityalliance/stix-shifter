@@ -1,7 +1,7 @@
 import re
 from stix_shifter_utils.utils import logger
-from datetime import datetime, timezone
 from stix_shifter_utils.stix_translation.src.utils.transformers import ValueTransformer
+from stix_shifter_utils.stix_translation.src.utils.transformers import EpochToTimestamp
 
 LOGGER = logger.set_logger(__name__)
 connector = __name__.split('.')[1]
@@ -76,7 +76,7 @@ class ToSeverityValue(ValueTransformer):
                 return int(float(obj) * 10)
             return None
         except ValueError:
-            LOGGER.error("%s connector error, cannot convert input : %s", connector, obj)
+            LOGGER.error("%s connector error, cannot convert field into a severity rating : %s", connector, obj)
             raise
 
 
@@ -93,7 +93,7 @@ class SizeToInteger(ValueTransformer):
                 return int(str(obj).replace(" bytes", ""))
             return None
         except ValueError:
-            LOGGER.error("%s connector error, cannot convert input : %s", connector, obj)
+            LOGGER.error("%s connector error, failed to convert byte size to integer : %s", connector, obj)
             raise
 
 
@@ -108,19 +108,19 @@ class ToProtocolValue(ValueTransformer):
         try:
             if obj:
                 if '/' in obj:
-                    protocol = obj.split("/")[0]
+                    protocol = obj.split("/")[0].lower()
                     return [protocol]
                 if obj == 'unknown':
                     return ['tcp']
                 return [obj.lower()]
             return None
         except ValueError:
-            LOGGER.error("%s connector error, cannot convert input : %s", connector, obj)
+            LOGGER.error("%s connector error, cannot convert input into protocol value : %s", connector, obj)
             raise
 
 
 class EpochToTimestampConversion(ValueTransformer):
-    """A value transformer for the 13-digit timestamps
+    """A value transformer for the 13-digit timestamps with check on input value
     Example:
         Input: 1698836400000
         Output: '2023-11-01T11:00:00.000Z'
@@ -129,7 +129,7 @@ class EpochToTimestampConversion(ValueTransformer):
     def transform(obj):
         try:
             if obj:
-                return datetime.fromtimestamp(int(obj)/1000, timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+                return EpochToTimestamp.transform(obj)
             return None
         except ValueError:
             LOGGER.error("%s connector error, cannot convert epoch value %s to timestamp", connector, obj)

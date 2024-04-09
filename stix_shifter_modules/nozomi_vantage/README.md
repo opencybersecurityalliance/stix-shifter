@@ -2,7 +2,7 @@
 
 ## Supported STIX Mappings
 
-See the [table of mappings](nozomi_supported_stix.md) for the STIX objects and operators supported by this connector.
+See the [table of mappings](nozomi_vantage_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 
 **Table of Contents**
@@ -51,7 +51,7 @@ python main.py `<translator_module>` `<query or result>` `<STIX identity object>
 
 #### STIX Translate query to fetch the messages from a specific ipaddress
 ```shell
-translate nozomi query {} "[ipv4-addr:value='1.1.1.1'] START t'2024-01-01T11:00:00.000Z' STOP t'2024-01-10T00:00:00.000Z'"
+translate nozomi_vantage query {} "[ipv4-addr:value='1.1.1.1'] START t'2024-01-01T11:00:00.000Z' STOP t'2024-01-10T00:00:00.000Z'"
 ```
 #### STIX Translate query - output
 ```json
@@ -65,7 +65,7 @@ translate nozomi query {} "[ipv4-addr:value='1.1.1.1'] START t'2024-01-01T11:00:
 #### STIX Transmit results 
 
 ```shell
-transmit nozomi "{\"host\":\"nozomi-xxxxxxxxx.vantage.nozominetworks.io\", \"port\":443}" "{\"auth\":{\"key_name\":\"XXXXXXX\", \"key_token\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxx\"}}" results "query=alerts | where ip_src==\"1.1.1.1\" OR ip_dst==\"1.1.1.1\" | where record_created_at>=1704106800000 | where record_created_at<=1704844800000"
+transmit nozomi_vantage "{\"host\":\"nozomi-server.vantage.nozominetworks.io\", \"port\":443}" "{\"auth\":{\"key_name\":\"KEY NAME\", \"key_token\":\"KEY TOKEN\"}}" results "query=alerts | where ip_src==\"1.1.1.1\" OR ip_dst==\"1.1.1.1\" | where record_created_at>=1704106800000 | where record_created_at<=1704844800000"
 0
 1
 ```
@@ -93,8 +93,8 @@ transmit nozomi "{\"host\":\"nozomi-xxxxxxxxx.vantage.nozominetworks.io\", \"por
             "ip_dst": "2.2.2.2",
             "ip_dst:info": null,
             "status": "open",
-            "mac_src": "00:d0:24:25:f9:54",
-            "mac_dst": "ff:ff:ff:ff:ff:ff",
+            "mac_src": "01:01:01:01:01:01",
+            "mac_dst": "02:02:02:02:02:02",
             "port_dst": null,
             "port_src": null,
             "protocol": "",
@@ -132,7 +132,7 @@ transmit nozomi "{\"host\":\"nozomi-xxxxxxxxx.vantage.nozominetworks.io\", \"por
                         }
                     ]
                 },
-                "incident_key_confidence:AnomalousPackets_10.80.68.90-255.255.255.255-": 1.0
+                "incident_key_confidence:AnomalousPacket": 1.0
             },
             "closed_time": 0,
             "close_option": null,
@@ -231,12 +231,12 @@ transmit nozomi "{\"host\":\"nozomi-xxxxxxxxx.vantage.nozominetworks.io\", \"por
                 },
                 "4": {
                     "type": "mac-addr",
-                    "value": "00:d0:24:25:f9:54",
+                    "value": "01:01:01:01:01:01",
                     "x_nozomi_info_ref": "7"
                 },
                 "5": {
                     "type": "mac-addr",
-                    "value": "ff:ff:ff:ff:ff:ff",
+                    "value": "02:02:02:02:02:02",
                     "x_nozomi_info_ref": "6"
                 },
                 "6": {
@@ -286,7 +286,7 @@ transmit nozomi "{\"host\":\"nozomi-xxxxxxxxx.vantage.nozominetworks.io\", \"por
 
 ```shell
 translate 
-nozomi 
+nozomi_vantage 
 query {} 
 "[(ipv4-addr:value = '1.1.1.1' AND network-traffic:dst_port == 22) OR network-traffic:protocols[*] == 'ssh'] START t'2024-01-01T00:00:00.000Z' STOP t'2024-01-16T11:54:00.000Z'"
 ```
@@ -303,11 +303,11 @@ query {}
 ### STIX Execute query
 ```shell
 execute 
-nozomi 
-nozomi 
-"{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"Nozomi\",\"identity_class\":\"events\", \"created\": \"2023-04-11T16:11:11.878Z\",\"modified\": \"2023-04-11T16:11:11.878Z\"}" 
-"{\"host\":\"nozomi-xxxxxxx.vantage.nozominetworks.io\", \"port\":443}" 
-"{\"auth\":{\"key_name\":\"XXXXXXX\", \"key_token\":\"xxxxxxxxxxxxxxxxxxxxxxxxxxxx\"}}" 
+nozomi_vantage 
+nozomi_vantage 
+"{\"type\":\"identity\",\"id\":\"identity--f431f809-377b-45e0-aa1c-6a4751cae5ff\",\"name\":\"Nozomi Vantage\",\"identity_class\":\"events\", \"created\": \"2023-04-11T16:11:11.878Z\",\"modified\": \"2023-04-11T16:11:11.878Z\"}" 
+"{\"host\":\"nozomi-server.vantage.nozominetworks.io\", \"port\":443}" 
+"{\"auth\":{\"key_name\":\"KEY NAME\", \"key_token\":\"KEY TOKEN\"}}" 
 "[(ipv4-addr:value = '1.1.1.1' AND network-traffic:dst_port == 22) OR network-traffic:protocols[*] == 'ssh'] START t'2024-01-01T00:00:00.000Z' STOP t'2024-01-16T11:54:00.000Z'"
 ```
 
@@ -320,7 +320,7 @@ nozomi
         {
             "type": "identity",
             "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-            "name": "Nozomi",
+            "name": "Nozomi Vantage",
             "identity_class": "events",
             "created": "2023-04-11T16:11:11.878Z",
             "modified": "2023-04-11T16:11:11.878Z"
@@ -338,7 +338,7 @@ nozomi
                     "time_observed": "2024-01-09T09:19:33.000Z",
                     "name": "New global MAC vendor",
                     "finding_type": "alert",
-                    "description": "A new Private MAC Address has been found in the network -- 52:54:00:12:35:02",
+                    "description": "A new Private MAC Address has been found in the network -- 02:02:02:02:02:02",
                     "x_is_acknowledged": false,
                     "severity": 50,
                     "src_ip_ref": "1",
@@ -461,10 +461,8 @@ nozomi
 - The maximum allowable page number is 1,000. Requests for pages beyond this limit will result in an error response Bad request.
 
 ### References
-- [Nozomi Product Overview](https://www.nozominetworks.com/products/vantage)
-- [Vantage Overview | Help and documentation](https://help.vantage.nozominetworks.io/docs/)
-- [Online User Manual](https://technicaldocs.nozominetworks.com/n2os-ol-um-intro.html)
-- [User Manual SDK](https://technicaldocs.nozominetworks.com/n2os-ol-sdk-intro.html)
+- [API Documentation](https://technicaldocs.nozominetworks.com/products/n2os/sdk/open-api-index.html)
+- [Query endpoint](https://technicaldocs.nozominetworks.com/products/n2os/sdk/open-api-query.html)
 
 ### Appendix
 List of fields that is available in schema of Nozomi alert logs

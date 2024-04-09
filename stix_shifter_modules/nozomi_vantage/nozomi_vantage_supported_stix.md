@@ -1,5 +1,5 @@
 ##### Updated on 01/22/24
-## Nozomi
+## Nozomi Vantage
 ### Results STIX Domain Objects
 * Identity
 * Observed Data

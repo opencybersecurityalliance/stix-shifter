@@ -28,7 +28,7 @@ class QueryStringPatternTranslator:
 
     def __init__(self, pattern: Pattern, data_model_mapper, options):
 
-        logger.info("Nozomi Connector")
+        logger.info("Nozomi Vantage Connector")
         self.dmm = data_model_mapper
         self.comparator_lookup = self.dmm.map_comparator()
         self.config_map = self.load_json(CONFIG_MAP_PATH)
@@ -190,7 +190,7 @@ class QueryStringPatternTranslator:
                                                  ComparisonComparators.GreaterThanOrEqual,
                                                  ComparisonComparators.LessThanOrEqual,
                                                  ComparisonComparators.IsSubSet):
-            raise NotImplementedError('Nozomi is not supported for NOT <, NOT >, NOT <=, NOT >=, NOT ISSUBSET'
+            raise NotImplementedError('Nozomi Vantage is not supported for NOT <, NOT >, NOT <=, NOT >=, NOT ISSUBSET'
                                       ' operators')
 
         if mapped_field_type == "bytes" and comparator in (ComparisonComparators.Equal, ComparisonComparators.NotEqual,
@@ -219,19 +219,13 @@ class QueryStringPatternTranslator:
         :param mapped_fields_array: list object
         :return: formatted expression value
         """
-        if expression.comparator == ComparisonComparators.Like:
-            value = self._check_value_comparator_support(expression.value, expression.comparator, mapped_field_type,
-                                                         mapped_fields_array, expression)
-            value = self._format_value(value)
-        elif expression.comparator == ComparisonComparators.In:
+        if expression.comparator == ComparisonComparators.In:
             value = self._format_set(expression.value, mapped_field_type, expression, mapped_fields_array)
-        elif expression.comparator in [ComparisonComparators.GreaterThan, ComparisonComparators.GreaterThanOrEqual,
+        elif expression.comparator in [ComparisonComparators.Like,
+                                       ComparisonComparators.GreaterThan, ComparisonComparators.GreaterThanOrEqual,
                                        ComparisonComparators.LessThan, ComparisonComparators.LessThanOrEqual,
-                                       ComparisonComparators.Equal, ComparisonComparators.NotEqual]:
-            value = self._check_value_comparator_support(expression.value, expression.comparator, mapped_field_type,
-                                                         mapped_fields_array, expression)
-            value = self._format_value(value)
-        elif expression.comparator == ComparisonComparators.IsSubSet:
+                                       ComparisonComparators.Equal, ComparisonComparators.NotEqual,
+                                       ComparisonComparators.IsSubSet]:
             value = self._check_value_comparator_support(expression.value, expression.comparator, mapped_field_type,
                                                          mapped_fields_array, expression)
             value = self._format_value(value)
@@ -334,11 +328,15 @@ class QueryStringPatternTranslator:
         :param query_02: str
         :return query_01_without_timestamp str, query_02_without_timestamp str, timestamp str
         """
-        # Last 81 characters in the query string contains timestamp value
-        if query_01[-81:] == query_02[-81:]:
-            timestamp = query_02[-81:]
-            query_01_without_timestamp = query_01[:-81]
-            query_02_without_timestamp = query_02[:-81]
+        # Find the index where timestamp starts in the query string
+        query_01_timestamp_index = query_01.find('| where record_created_at>=')
+        query_02_timestamp_index = query_02.find('| where record_created_at>=')
+
+        # Check if the substrings from the index in both query strings are equal.
+        if query_01[query_01_timestamp_index:] == query_02[query_02_timestamp_index:]:
+            timestamp = query_02[query_02_timestamp_index:]
+            query_01_without_timestamp = query_01[:query_01_timestamp_index]
+            query_02_without_timestamp = query_02[:query_02_timestamp_index]
             return query_01_without_timestamp, query_02_without_timestamp, timestamp
         return query_01, query_02, None
 
@@ -538,7 +536,7 @@ class QueryStringPatternTranslator:
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options) -> list:
     """
-    Conversion of ANTLR pattern to nozomi query
+    Conversion of ANTLR pattern to nozomi vantage query
     :param pattern: expression object, ANTLR parsed expression object
     :param data_model_mapping: DataMapper object, mapping object obtained by parsing json
     :param options: dict, time_range defaults to 5

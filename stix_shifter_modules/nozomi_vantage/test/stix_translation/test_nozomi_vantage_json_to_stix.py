@@ -1,16 +1,16 @@
-""" test script to perform unit test case for nozomi translate results """
+""" test script to perform unit test case for nozomi vantage translate results """
 import unittest
-from stix_shifter_modules.nozomi.entry_point import EntryPoint
+from stix_shifter_modules.nozomi_vantage.entry_point import EntryPoint
 from stix_shifter_utils.stix_translation.src.json_to_stix import json_to_stix_translator
 from stix_shifter_utils.stix_translation.src.utils.transformer_utils import get_module_transformers
 
-MODULE = "nozomi"
+MODULE = "nozomi_vantage"
 entry_point = EntryPoint()
 map_data = entry_point.get_results_translator().map_data
 data_source = {
     "type": "identity",
     "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
-    "name": "nozomi",
+    "name": "nozomi_vantage",
     "identity_class": "events"
 }
 options = {}
@@ -140,7 +140,7 @@ nozomi_sample_response_2 = [
 
 class TestNozomiResultsToStix(unittest.TestCase):
     """
-    class to perform unit test case for nozomi translate results
+    class to perform unit test case for nozomi vantage translate results
     """
 
     @staticmethod

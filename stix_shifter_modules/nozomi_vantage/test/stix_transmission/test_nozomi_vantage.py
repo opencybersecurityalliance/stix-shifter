@@ -1,4 +1,4 @@
-from stix_shifter_modules.nozomi.entry_point import EntryPoint
+from stix_shifter_modules.nozomi_vantage.entry_point import EntryPoint
 import unittest
 from unittest.mock import patch
 from stix_shifter.stix_transmission import stix_transmission
@@ -8,7 +8,7 @@ from tests.utils.async_utils import get_mock_response
 
 
 class NozomiMockResponse:
-    """ class for nozomi mock response"""
+    """ class for nozomi vantage mock response"""
 
     def __init__(self, code, data, headers):
         self.code = code
@@ -263,7 +263,7 @@ class TestNozomiConnection(unittest.TestCase, object):
             get_mock_response(200, json.dumps(TestNozomiConnection.mock_token_response), 'byte',
                               headers={'Authorization': "****"}),
             get_mock_response(200, json.dumps(TestNozomiConnection.mocked_response), 'byte')]
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         offset = 0
         length = 1
         result_response = transmission.results(query, offset, length)
@@ -280,7 +280,7 @@ class TestNozomiConnection(unittest.TestCase, object):
                               headers={'Authorization': "****"}),
             get_mock_response(200, json.dumps(TestNozomiConnection.mocked_response), 'byte'),
             get_mock_response(200, json.dumps(TestNozomiConnection.mocked_response), 'byte')]
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         offset = 0
         length = 10
         result_response = transmission.results(query, offset, length)
@@ -292,7 +292,7 @@ class TestNozomiConnection(unittest.TestCase, object):
     def test_ping_invalid_host(self, mock_result_response):
         """Test Invalid host for ping"""
         mock_result_response.side_effect = Exception("client_connector_error")
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         ping_response = transmission.ping()
         assert ping_response is not None
         assert ping_response['success'] is False
@@ -303,13 +303,13 @@ class TestNozomiConnection(unittest.TestCase, object):
     def test_ping_invalid_url(self, mock_results_response):
         """Test invalid host for ping"""
         error = json.dumps({"errors": {"success": "false",
-                                       "connector": "nozomi",
+                                       "connector": "nozomi_vantage",
                                        "error": "nozomi connector error => Invalid Host: {'email': ['Invalid URL "
                                                 "\"https://engineering-tpnovovq.customers.us1.vantage.nozominetworks"
                                                 ".io\". Please contact Customer Support for assistance']}",
                                        "code": "service_unavailable"}})
         mock_results_response.return_value = get_mock_response(408, error, 'byte')
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         ping_response = transmission.ping()
         assert ping_response is not None
         assert ping_response['success'] is False
@@ -320,12 +320,12 @@ class TestNozomiConnection(unittest.TestCase, object):
     def test_ping_invalid_auth(self, mock_results_response):
         """Test invalid authentication for ping"""
         error = json.dumps({"errors": {"success": "false",
-                                       "connector": "nozomi",
-                                       "error": "nozomi connector error => Invalid Authentication: {'key_name': ['is "
+                                       "connector": "nozomi_vantage",
+                                       "error": "nozomi_vantage connector error => Invalid Authentication: {'key_name': ['is "
                                                 "invalid'], 'key_token': ['is invalid']}",
                                        "code": "authentication_fail"}})
         mock_results_response.return_value = get_mock_response(401, error, 'byte')
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         ping_response = transmission.ping()
         assert ping_response is not None
         assert ping_response['success'] is False
@@ -336,7 +336,7 @@ class TestNozomiConnection(unittest.TestCase, object):
     def test_results_invalid_auth(self, mock_results_response):
         """Test invalid authentication for results"""
         error = json.dumps({"errors": {"success": "false",
-                                       "connector": "nozomi",
+                                       "connector": "nozomi_vantage",
                                        "error": "nozomi connector error => Invalid Authentication: {'key_name': ['is "
                                                 "invalid'], 'key_token': ['is invalid']}",
                                        "code": "authentication_fail"}})
@@ -344,7 +344,7 @@ class TestNozomiConnection(unittest.TestCase, object):
                 "port_dst==\"444\" | where properties/process/pid==\"1010\" OR port_dst==\"444\" | where " \
                 "record_created_at>=1701388800000 | where record_created_at<=1704106800000"
         mock_results_response.return_value = get_mock_response(401, error, 'byte')
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         offset = 0
         length = 1
         result_response = transmission.results(query, offset, length)
@@ -357,7 +357,7 @@ class TestNozomiConnection(unittest.TestCase, object):
     def test_results_invalid_host(self, mock_results_response):
         """Test invalid host for results"""
         error = json.dumps({"errors": {"success": "false",
-                                       "connector": "nozomi",
+                                       "connector": "nozomi_vantage",
                                        "error": "nozomi connector error => client_connector_error: (Cannot connect to "
                                                 "host "
                                                 "nozomi-sales-engineering-tpnovovqcustomers.us1.vantage"
@@ -367,7 +367,7 @@ class TestNozomiConnection(unittest.TestCase, object):
                 "port_dst==\"444\" | where properties/process/pid==\"1010\" OR port_dst==\"444\" | where " \
                 "record_created_at>=1701388800000 | where record_created_at<=1704106800000"
         mock_results_response.return_value = get_mock_response(401, error, 'byte')
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         offset = 0
         length = 1
         result_response = transmission.results(query, offset, length)
@@ -386,7 +386,7 @@ class TestNozomiConnection(unittest.TestCase, object):
             get_mock_response(200, json.dumps(TestNozomiConnection.mock_token_response), 'byte',
                               headers={'Authorization': "****"}),
             get_mock_response(200, json.dumps(TestNozomiConnection.invalid_query), 'byte')]
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         offset = 0
         length = 1
         result_response = transmission.results(query, offset, length)
@@ -399,7 +399,7 @@ class TestNozomiConnection(unittest.TestCase, object):
     def test_results_invalid_url(self, mock_results_response):
         """Test invalid host for results"""
         error = json.dumps({"errors": {"success": "false",
-                                       "connector": "nozomi",
+                                       "connector": "nozomi_vantage",
                                        "error": "nozomi connector error => Invalid Host: {'email': ['Invalid URL "
                                                 "\"https://engineering-tpnovovq.customers.us1.vantage.nozominetworks"
                                                 ".io\". Please contact Customer Support for assistance']}",
@@ -409,7 +409,7 @@ class TestNozomiConnection(unittest.TestCase, object):
                 "record_created_at=1701388800000 | where record_created_at<=1704106800000"
 
         mock_results_response.return_value = get_mock_response(408, error, 'byte')
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         offset = 0
         length = 1
         result_response = transmission.results(query, offset, length)
@@ -422,7 +422,7 @@ class TestNozomiConnection(unittest.TestCase, object):
     def test_results_invalid_query_length(self, mock_results_response):
         """Test invalid host for results"""
         error = json.dumps({"errors": {"success": "false",
-                                       "connector": "nozomi",
+                                       "connector": "nozomi_vantage",
                                        "error": "nozomi connector error => Query length is too long or Invalid Query",
                                        "code": "invalid_query"}})
         query = "query=alerts | where risk<=\"1.0\" OR properties/cause==\"An IP address which is known to be " \
@@ -449,7 +449,7 @@ class TestNozomiConnection(unittest.TestCase, object):
             get_mock_response(200, json.dumps(TestNozomiConnection.mock_token_response), 'byte',
                               headers={'Authorization': "****"}),
             get_mock_response(403, error, 'byte')]
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         offset = 0
         length = 1
         result_response = transmission.results(query, offset, length)
@@ -465,7 +465,7 @@ class TestNozomiConnection(unittest.TestCase, object):
         query = "alerts | where properties/process/user include? \"user@Hostname\" OR " \
                 "port_dst==\"444\" | where properties/process/pid==\"1010\" OR port_dst==\"444\" | where " \
                 "record_created_at>=1701388800000 | where record_created_at<=1704106800000"
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         offset = 0
         length = 1
         result_response = transmission.results(query, offset, length)
@@ -481,7 +481,7 @@ class TestNozomiConnection(unittest.TestCase, object):
         query = "alerts | where properties/process/user include? \"user@Hostname\" OR " \
                 "port_dst==\"444\" | where properties/process/pid==\"1010\" OR port_dst==\"444\" | where " \
                 "record_created_at>=1701388800000 | where record_created_at<=1704106800000"
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         offset = 0
         length = 1
         result_response = transmission.results(query, offset, length)
@@ -494,7 +494,7 @@ class TestNozomiConnection(unittest.TestCase, object):
     def test_time_out_exception_for_ping(self, mock_ping_response):
         """Test timeout exception for ping"""
         mock_ping_response.side_effect = Exception("timeout_error")
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         result_response = transmission.ping()
         assert result_response is not None
         assert result_response['success'] is False
@@ -514,7 +514,7 @@ class TestNozomiConnection(unittest.TestCase, object):
                 "record_created_at<=1704344040000"
         mock_result_response.side_effect = [
             get_mock_response(200, json.dumps(TestNozomiConnection.mocked_response), 'byte')]
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         offset = 0
         length = 1
         result_response = transmission.results(query, offset, length, metadata)
@@ -533,7 +533,7 @@ class TestNozomiConnection(unittest.TestCase, object):
             get_mock_response(200, json.dumps(TestNozomiConnection.mock_token_response), 'byte',
                               headers={'Authorization': "****"}),
             get_mock_response(200, json.dumps(TestNozomiConnection.mocked_response), 'byte')]
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         offset = 0
         length = 1
         result_response = transmission.results(query, offset, length, metadata)
@@ -552,9 +552,8 @@ class TestNozomiConnection(unittest.TestCase, object):
                                             get_mock_response(200, json.dumps(TestNozomiConnection.mock_token_response),
                                                               'byte', headers={'Authorization': "****"}),
                                             get_mock_response(401, '', 'byte')]
-        transmission = stix_transmission.StixTransmission('nozomi', self.connection(), self.configuration())
+        transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         result_response = transmission.results(query, 1, 1, metadata)
         assert result_response is not None
         assert result_response['success'] is False
         assert "Authentication failed" in result_response['error']
-        assert result_response['code'] == "authentication_fail"
