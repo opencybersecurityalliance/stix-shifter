@@ -557,3 +557,4 @@ class TestNozomiConnection(unittest.TestCase, object):
         assert result_response is not None
         assert result_response['success'] is False
         assert "Authentication failed" in result_response['error']
+
