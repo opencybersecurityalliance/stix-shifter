@@ -16,6 +16,7 @@ class APIClient():
         url_modifier_function = None
         auth = configuration.get('auth')
         self.indices = connection.get('indices', None)
+        self.pagination_enabled = connection.get('pagination', True)
 
         if self.indices and type(self.indices) == str:
             self.indices = self.indices.split(",")
@@ -58,7 +59,7 @@ class APIClient():
     async def ping_box(self):
         return await self.client.call_api(self.PING_ENDPOINT, 'GET', timeout=self.timeout)
 
-    async def search_pagination(self, query_expression, lastsortvalue=None, length=DEFAULT_LIMIT):
+    async def search(self, query_expression, lastsortvalue=None, length=DEFAULT_LIMIT):
         headers = dict()
         headers['Content-Type'] = 'application/json'
 
@@ -73,14 +74,14 @@ class APIClient():
                 "query_string": {
                     "query": query_expression
                 }
-            },
-            "sort": [
-                {"@timestamp": "asc"},
-            ]
+            }
         }
 
-        if lastsortvalue:
-            data["search_after"] = lastsortvalue
+        if self.pagination_enabled:
+            data["sort"] = [ {"@timestamp": "asc"}, ]
+
+            if lastsortvalue:
+                data["search_after"] = lastsortvalue
 
         self.logger.debug("URL endpoint: " + self.endpoint)
         self.logger.debug("URL data: " + json.dumps(data))
