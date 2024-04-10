@@ -453,11 +453,12 @@ nozomi_vantage
    Example: [x-ibm-ttp-tagging:name != 'Execution'] translates to query=alerts | where properties !include? \"Execution\"
 - The JWT token expires 30 minutes after being created.
 - It is observed that Nozomi API fails if translated query string length is more than MAX_QUERY_LENGTH. To avoid this failure, query is split at 'OR' conditions and multiple requests are made to Nozomi to get the result. However, the part of query joined by 'AND' operator won't be split and 'Query length is too long or Invalid Query' error is returned if the length of that part is beyond MAX_QUERY_LENGTH.
-
+- Since data source query doesn't support combining an AND comparison with an OR comparison like (v1 AND v2) OR v3 so we use the following way to break the such queries. Illustration:
+  (v1 AND v2) OR v3 -> (v1 or v3) AND (v2 or v3)
+  However this can lead to a large query size.
 
 ### Limitations
-- The page param is the page number to return, and count is the page dimension. If count is not provided, the default value is 10,000; if page is not provided, the default page number is 1.
-- If the provided count value is higher than 10,000, no more than 10,000 items are returned.
+- The page param is the page number to return, and count is the page dimension. As per data source recommendation, count(nozomi_max_pagesize) is set to 1000.
 - The maximum allowable page number is 1,000. Requests for pages beyond this limit will result in an error response Bad request.
 
 ### References
