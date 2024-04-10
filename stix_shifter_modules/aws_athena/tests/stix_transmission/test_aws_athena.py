@@ -223,6 +223,47 @@ class AWSMockJsonResponse:
             }
         }
         return json_response
+    
+    @staticmethod
+    def get_query_execution_running_status(**kwargs):
+        json_response = {
+            'QueryExecution': {
+                'QueryExecutionId': '3fdb8f84-6ad6-4f7c-8e9e-7bf3db87c274',
+                'Query': 'SELECT * FROM logs_db.vpc_flow_logs limit 1',
+                'StatementType': 'DML',
+                'ResultConfiguration': {
+                    'OutputLocation': 's3://queryresults-athena-s3/3fdb8f84-6ad6-4f7c-8e9e-7bf3db87c274.csv'
+                },
+                'QueryExecutionContext': {},
+                'Status': {
+                    'State': 'RUNNING',
+                    'SubmissionDateTime': datetime.datetime(2020, 9, 30, 13, 31, 28, 856000, tzinfo=tzlocal()),
+                    'CompletionDateTime': datetime.datetime(2020, 9, 30, 13, 31, 31, 313000, tzinfo=tzlocal())
+                },
+                'Statistics': {
+                    'EngineExecutionTimeInMillis': 2280,
+                    'DataScannedInBytes': 1493800,
+                    'TotalExecutionTimeInMillis': 2457,
+                    'QueryQueueTimeInMillis': 117,
+                    'QueryPlanningTimeInMillis': 1819,
+                    'ServiceProcessingTimeInMillis': 60
+                },
+                'WorkGroup': 'primary'
+            },
+            'ResponseMetadata': {
+                'RequestId': '870cfb1e-734f-40b2-bab0-cc44affa21d4',
+                'HTTPStatusCode': 200,
+                'HTTPHeaders': {
+                    'content-type': 'application/x-amz-json-1.1',
+                    'date': 'Wed, 30 Sep 2020 08:10:16 GMT',
+                    'x-amzn-requestid': '870cfb1e-734f-40b2-bab0-cc44affa21d4',
+                    'content-length': '1275',
+                    'connection': 'keep-alive'
+                },
+                'RetryAttempts': 0
+            }
+        }
+        return json_response
 
 class MockStatusResponseRunning:
 
@@ -393,7 +434,6 @@ class MockExceptionResponse:
         response = {'Error': {'Code': 'authentication_fail', 'Message': 'Unable to access the data'}}
         return ClientError(response, 'test4')
 
-
 class TestAWSConnection(unittest.TestCase):
     @staticmethod
     def test_is_async():
@@ -402,10 +442,11 @@ class TestAWSConnection(unittest.TestCase):
         assert check_async
 
     @staticmethod
+    @patch('stix_shifter_modules.aws_athena.stix_transmission.post_query_connector_error_handling.PostQueryConnectorErrorHandler.check_status_for_missing_column')
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.makeRequest')
-    def test_create_query_connection(mock_start_query):
+    def test_create_query_connection(mock_start_query, mock_status_query):
         mock_start_query.return_value = get_aws_mock_response(AWSMockJsonResponse.start_query_execution(**{}))
-        
+        mock_status_query.return_value = "CONNECTOR_FACTORY_SUCCESS"
         query = """{"vpcflow": "endtime >= 1588310653 AND starttime BETWEEN 1588322590 AND 1604054590"}"""
         transmission = stix_transmission.StixTransmission('aws_athena', CONNECTION, CONFIGURATION)
         query_response = transmission.query(query)
@@ -415,6 +456,23 @@ class TestAWSConnection(unittest.TestCase):
         assert query_response['success'] is True
         assert 'search_id' in query_response
         assert query_response['search_id'] == "4214e100-9990-4161-9038-b431ec45661a:vpcflow"
+        
+    @staticmethod
+    @patch('stix_shifter_modules.aws_athena.stix_transmission.post_query_connector_error_handling.PostQueryConnectorErrorHandler.check_status_for_missing_column')
+    @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.makeRequest')
+    def test_create_query_connection_missing_column(mock_start_query, mock_status_query):
+        mock_start_query.return_value = get_aws_mock_response(AWSMockJsonResponse.start_query_execution(**{}))
+        mock_status_query.return_value = "KEEP_TRYING_QUERY"
+        query = """{"vpcflow": "endtime >= 1588310653 AND starttime BETWEEN 1588322590 AND 1604054590"}"""
+        transmission = stix_transmission.StixTransmission('aws_athena', CONNECTION, CONFIGURATION)
+        query_response = transmission.query(query)
+
+        assert query_response is not None
+        assert 'success' in query_response
+        assert query_response['success'] is True
+        assert 'search_id' in query_response
+        assert query_response['search_id'] == "4214e100-9990-4161-9038-b431ec45661a:vpcflow"
+
 
     @staticmethod
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.makeRequest')
@@ -431,9 +489,11 @@ class TestAWSConnection(unittest.TestCase):
         assert query_response['code'] == "authentication_fail"
 
     @staticmethod
+    @patch('stix_shifter_modules.aws_athena.stix_transmission.post_query_connector_error_handling.PostQueryConnectorErrorHandler.check_status_for_missing_column')
     @patch('stix_shifter_modules.aws_athena.stix_transmission.boto3_client.BOTO3Client.makeRequest')
-    def test_iam_create_query_connection(mock_start_query):
+    def test_iam_create_query_connection(mock_start_query, mock_status_query):
         mock_start_query.return_value = get_aws_mock_response(AWSMockJsonResponse.start_query_execution(**{}))
+        mock_status_query.return_value = "CONNECTOR_FACTORY_SUCCESS"
         query = """{
             "vpcflow": "(CAST(destinationport AS varchar) IN ('38422', '38420') AND starttime BETWEEN 1603975773 AND \
             1603976073 LIMIT 100) UNION (CAST(destinationport AS varchar) = '32791' AND starttime BETWEEN 1603975773 \
