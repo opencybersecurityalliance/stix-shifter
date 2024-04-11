@@ -3,7 +3,6 @@ from stix_shifter_utils.utils.error_response import ErrorResponder
 from stix_shifter_utils.utils import logger
 from .api_client import APIClient
 import json
-import regex
 
 
 class InvalidMetadataException(Exception):
@@ -11,12 +10,13 @@ class InvalidMetadataException(Exception):
 
 
 class Connector(BaseJsonSyncConnector):
-    NOZOMI_MAX_PAGE_SIZE = 10000
+    NOZOMI_MAX_PAGE_SIZE = 1000
 
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
         self.logger = logger.set_logger(__name__)
         self.connector = __name__.split('.')[1]
+        self.expired_token_count = 0
 
     async def create_results_connection(self, query, offset, length, metadata=None):
         """
@@ -27,104 +27,55 @@ class Connector(BaseJsonSyncConnector):
         :param metadata: dict
         :return: return_obj, dict
         """
-        return_obj = {}
         data = []
-        response_dict = {}
-        jwt_token = None
-        local_result_count = 0
-        token_generated = False
         try:
-            if metadata:
-                if isinstance(metadata, dict) and metadata.get('jwtToken'):
-                    jwt_token = metadata.get('jwtToken')
-                    next_url = metadata.get('next_url')
-                    result_count = int(metadata.get('result_count'))
-                else:
-                    # raise exception when metadata doesnt contain jwtToken token
-                    raise InvalidMetadataException(metadata)
-            else:
-                result_count, next_url = 0, None
+            result_count, total_records, page_number, page_size = self.handle_metadata_and_page_size(offset, length,
+                                                                                                     metadata)
+            # Generating jwt token
+            jwt_token, return_obj = await self.__get_token()
+            if return_obj:
+                return return_obj
 
-            total_records = int(offset) + int(length)
-            if self.api_client.result_limit < total_records:
-                total_records = self.api_client.result_limit
+            if (result_count == 0 and page_number == 1) or \
+                    (page_number and result_count < self.api_client.result_limit):
 
-            if total_records <= Connector.NOZOMI_MAX_PAGE_SIZE:
-                page_size = total_records
-            else:
-                page_size = Connector.NOZOMI_MAX_PAGE_SIZE
-
-            if not jwt_token:
-                jwt_token = await self.__get_token()
-
-            if (result_count == 0 and next_url is None) or (next_url and result_count < self.api_client.result_limit):
                 while result_count < total_records:
-                    if next_url:
-                        query_url = next_url
-                    else:
-                        query_url = f'{query}&page=1&count={page_size}'
+                    query_url = f'{query}&page={page_number}&count={page_size}'
                     response_wrapper = await self.api_client.get_search_results(query_url, jwt_token)
-                    response = response_wrapper.read().decode('utf-8')
-                    if response:
-                        response_dict = json.loads(response)
-                    if response_wrapper.code == 200:
-                        # Handling invalid query exception
-                        if 'Query is not valid' in response_dict.get('error', ''):
-                            return_obj = self.handle_api_exception(response_wrapper.code, response_dict.get('error'))
-                            data = []
-                            break
+                    response_dict, return_obj = self.handle_api_response(response_wrapper)
 
-                        return_obj['success'] = True
-                        data += response_dict['result']
-                        result_count += len(response_dict['result'])
-                        local_result_count += len(response_dict['result'])
+                    if return_obj:
+                        return return_obj
 
-                        if response_dict['total'] <= result_count or len(response_dict['result']) == 0:
-                            next_url = None
-                            break
-                        # parsing the next_url
-                        page = regex.findall(r'page=([^>]*?)&', query_url)[0]
-                        next_url = regex.sub(r'page=([^>]*?)&', f'page={str(int(page) + 1)}&', query_url)
-
-                        if not metadata and result_count < total_records:
-                            remaining_records = total_records - result_count
-                        elif metadata and local_result_count < total_records:
-                            remaining_records = total_records - local_result_count
-                        else:
-                            break
-
-                        if remaining_records > Connector.NOZOMI_MAX_PAGE_SIZE:
-                            page_size = Connector.NOZOMI_MAX_PAGE_SIZE
-                        else:
-                            page_size = remaining_records
-                    # Handling expired token
-                    elif response_wrapper.code == 401 and not token_generated and \
-                            (response == '' or
-                             'Signature has expired' in response_dict.get('error', {}).get('message', '')):
-                        jwt_token = await self.__get_token()
-                        token_generated = True
+                    # Generate a new token only the token_generated_count is 1.
+                    # If it is more than one, it has already been generated.
+                    if self.expired_token_count == 1:
+                        jwt_token, return_obj = await self.__get_token()
+                        self.expired_token_count += 1
+                        if return_obj:
+                            return return_obj
                         continue
-                    else:
-                        error = response_dict.get('error', '')
-                        if response_wrapper.code == 403:
-                            error = 'Query length is too long or Invalid Query'
-                        return_obj = self.handle_api_exception(response_wrapper.code, error)
-                        data = []
+
+                    return_obj['success'] = True
+                    data += response_dict['result']
+                    result_count += len(response_dict['result'])
+
+                    if response_dict['total'] <= result_count or len(data) == 0:
+                        page_number = None
                         break
 
-                if data:
-                    data = self.get_results_data(data)
-                    if metadata:
-                        return_obj['data'] = data if data else []
-                    else:
-                        return_obj['data'] = data[int(offset): total_records] if data else []
-                    if jwt_token and next_url and result_count < self.api_client.result_limit:
-                        return_obj['metadata'] = {"result_count": result_count, "jwtToken": jwt_token,
-                                                  "next_url": next_url}
-                else:
-                    if not return_obj.get('error') and return_obj.get('success') is not False:
-                        return_obj['success'] = True
-                        return_obj['data'] = []
+                    remaining_records, page_size = self.get_page_size(result_count, total_records, page_size)
+                    if not remaining_records:
+                        break
+
+                    page_number += 1
+
+                return_obj = self.handle_data(data, metadata, offset, total_records, return_obj)
+
+                if return_obj.get('data'):
+                    if page_number and result_count < self.api_client.result_limit:
+                        return_obj['metadata'] = {"result_count": result_count, "page_number": page_number+1,
+                                                  "page_size": page_size}
             else:
                 return_obj['success'] = True
                 return_obj['data'] = []
@@ -142,9 +93,10 @@ class Connector(BaseJsonSyncConnector):
         Connects to the health_logs API endpoint and confirms connectivity and authentication to the product
         :return: return_object, dict
         """
-        return_obj = {}
         try:
-            token = await self.__get_token()
+            token, return_obj = await self.__get_token()
+            if return_obj:
+                return return_obj
             response = await self.api_client.ping_data_source(token)
             response_code = response.code
             response_dict = json.loads(response.read().decode('utf-8'))
@@ -157,16 +109,23 @@ class Connector(BaseJsonSyncConnector):
         return return_obj
 
     async def __get_token(self):
-        """ Generate new token"""
+        """
+        Generate new token
+        :return: token, string
+                 return_obj, dict
+        """
+        return_obj = {}
+        token = None
         response = await self.api_client.generate_token()
         response_code = response.code
         response_json = json.loads(response.read().decode('utf-8'))
         if response_code != 200:
-            raise Exception(response_json['errors'])
-        response_header = response.headers
-        if 'Authorization' in response_header:
-            token = response_header.get('Authorization')
-        return token
+            return_obj = self.handle_api_exception(response_code, response_json.get('errors', ''))
+        else:
+            response_header = response.headers
+            if 'Authorization' in response_header:
+                token = response_header.get('Authorization')
+        return token, return_obj
 
     def handle_api_exception(self, code=None, response_txt=''):
         """
@@ -178,21 +137,11 @@ class Connector(BaseJsonSyncConnector):
         return_obj = {}
         message = None
 
-        if 'Query is not valid' in response_txt:
-            code = 400
+        if "'key_name': ['is invalid']" in str(response_txt):
+            message = "Invalid Authentication: " + str(response_txt)
 
-        if code == 401 and not response_txt:
-            message = 'Authentication failed'
-
-        if not code:
-            if "'key_name': ['is invalid']" in response_txt:
-                code = 401
-                message = "Invalid Authentication: " + response_txt
-            elif "timeout_error" in response_txt:
-                code = 408
-            elif 'Invalid URL' in response_txt:
-                code = 408
-                message = "Invalid Host: " + response_txt
+        if 'Invalid URL' in str(response_txt):
+            message = "Invalid Host: " + str(response_txt)
 
         if not message:
             message = str(response_txt)
@@ -200,6 +149,113 @@ class Connector(BaseJsonSyncConnector):
         response_dict = {'code': code, 'message': message}
         self.logger.error('%s error while fetching results: %s', self.connector, message)
         ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+        return return_obj
+
+    def handle_metadata_and_page_size(self, offset, length, metadata):
+        """
+        Processing metadata information and page size
+        :param offset, int
+        :param length, int
+        :param metadata, dict
+        :return: return_obj, dict
+        """
+        result_count = 0
+        page_size = 0
+        page_number = 1
+
+        if metadata:
+            if isinstance(metadata, dict) and metadata.get('page_number'):
+                result_count = int(metadata.get('result_count', 0))
+                page_number = int(metadata.get('page_number', 1))
+                page_size = int(metadata.get('page_size', 0))
+            else:
+                # raise exception when metadata doesnt contain jwtToken token
+                raise InvalidMetadataException(metadata)
+
+        total_records = int(offset) + int(length)
+
+        if self.api_client.result_limit < total_records:
+            total_records = self.api_client.result_limit
+
+        if not metadata:
+            if total_records <= Connector.NOZOMI_MAX_PAGE_SIZE:
+                page_size = total_records
+            else:
+                page_size = Connector.NOZOMI_MAX_PAGE_SIZE
+
+        return result_count, total_records, page_number, page_size
+
+    def handle_api_response(self, response_wrapper):
+        """
+        Handling response codes
+        :param response_wrapper, object
+        :return: response_dict, dict
+                 return_obj, dict
+        """
+        response_dict = {}
+        return_obj = {}
+        response = response_wrapper.read().decode('utf-8')
+        if response.startswith('{') and response.endswith('}'):
+            response_dict = json.loads(response)
+
+        if response_wrapper.code == 200:
+            # Handling invalid query exception
+            if 'Query is not valid' in response_dict.get('error', ''):
+                return_obj = self.handle_api_exception(400, response_dict.get('error'))  # changing response code to 400
+            # Handling expired token
+        elif response_wrapper.code == 401 and not self.expired_token_count and \
+                (response == '' or 'Signature has expired' in response_dict.get('error', {}).get('message', '')):
+            self.expired_token_count += 1
+        else:
+            error = response_dict.get('error', '')
+            if response_wrapper.code == 403:
+                error = 'Query length is too long or Invalid Query.' + error
+            return_obj = self.handle_api_exception(response_wrapper.code, error)
+        return response_dict, return_obj
+
+    @staticmethod
+    def get_page_size(result_count, total_records, page_size):
+        """
+        Finding page size based on remaining records
+        :param result_count, int
+        :param total_records, int
+        :param page_size, int
+        :return: remaining_records, int
+                 page_size, int
+        """
+        if result_count < total_records:
+            remaining_records = total_records - result_count
+        else:
+            return 0, page_size
+
+        if remaining_records > Connector.NOZOMI_MAX_PAGE_SIZE:
+            page_size = Connector.NOZOMI_MAX_PAGE_SIZE
+        else:
+            page_size = remaining_records
+
+        return remaining_records, page_size
+
+    @staticmethod
+    def handle_data(data, metadata, offset, total_records, return_obj):
+        """
+         Process the data
+        :param data, list
+        :param metadata, dict
+        :param offset, int
+        :param total_records, int
+        :param return_obj, dict
+        :return: return_obj, dict
+        """
+        if data:
+            data = Connector.get_results_data(data)
+            if metadata:
+                return_obj['data'] = data if data else []
+            else:
+                return_obj['data'] = data[int(offset): total_records] if data else []
+        else:
+            if not return_obj.get('error') and return_obj.get('success') is not False:
+                return_obj['success'] = True
+                return_obj['data'] = []
         return return_obj
 
     @staticmethod

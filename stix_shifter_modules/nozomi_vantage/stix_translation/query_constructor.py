@@ -41,8 +41,8 @@ class QueryStringPatternTranslator:
     @staticmethod
     def load_json(rel_path_of_file) -> dict:
         """ Consumes a json file and returns a dictionary
-        :param rel_path_of_file: str
-        :return: dict """
+        :param rel_path_of_file: (str) json file path
+        :return: json: (dict) loaded json """
         _json_path = path.dirname(path.realpath(__file__)) + "/" + rel_path_of_file
         try:
             if path.exists(_json_path):
@@ -55,11 +55,11 @@ class QueryStringPatternTranslator:
     def _format_set(self, values, mapped_field_type, expression, mapped_fields_array) -> str:
         """
         Formats value in the event of set operation
-        :param values: list
-        :param mapped_field_type: str
-        :param expression: object
-        :param mapped_fields_array: object
-        :return formatted value
+        :param values: (list) list of values
+        :param mapped_field_type: (str) type of the field
+        :param expression: (object) ANTLR parsed expression object
+        :param mapped_fields_array: (list) list of mapped fields
+        :return formatted value: (string) formatted value for the IN operator
         """
         gen = values.element_iterator()
         formatted_list = []
@@ -83,8 +83,8 @@ class QueryStringPatternTranslator:
     def _format_value(value) -> str:
         """
         Formats value in the event of equality, like, subset operation
-        :param value
-        :return formatted value
+        :param value: (str) input value
+        :return formatted value: (str) formatted value for other than IN operator
         """
         return f'\"{value}\"'
 
@@ -92,8 +92,8 @@ class QueryStringPatternTranslator:
     def _format_datetime(value) -> int:
         """
          Converts timestamp to epoch
-        :param: value
-        :return: converted epoch value, int
+        :param value: (str) UTC timestamp
+        :return: converted_time: (int) epoch value
         """
         try:
             time_pattern = '%Y-%m-%dT%H:%M:%S.%fZ'
@@ -109,7 +109,9 @@ class QueryStringPatternTranslator:
     def _parse_time_range(qualifier, time_range) -> list:
         """
         Converts qualifier timestamp to epoch
-        return: list of converted epoch values
+        :param qualifier: (str) UTC timestamp
+        :param time_range: (int) time range in minutes
+        return: converted_timestamp: (int) list of converted epoch values
         """
         try:
             compile_timestamp_regex = re.compile(START_STOP_PATTERN)
@@ -133,8 +135,8 @@ class QueryStringPatternTranslator:
     def _get_mapped_field_type(self, mapped_field_array) -> str:
         """
         Returns the type of mapped field array
-        :param mapped_field_array: list
-        :return: str
+        :param mapped_field_array: (list) list of mapped fields
+        :return: mapped_field_type: (str) type of the field
         """
         mapped_field = mapped_field_array[0]
         mapped_field_type = "string"
@@ -149,13 +151,14 @@ class QueryStringPatternTranslator:
     def _check_value_comparator_support(self, value, comparator, mapped_field_type, mapped_fields_array,
                                         expression) -> str:
         """
-        checks the comparator and value support
-        :param value
-        :param comparator
-        :param mapped_field_type: str
-        :param mapped_fields_array: list
-        :param expression: object
-        :return value: str
+        checks the comparator and value support.
+        raise the error for unsupported fields and operators.
+        :param value: (str) input value
+        :param comparator: (object) comparison operator
+        :param mapped_field_type: (str) type of field
+        :param mapped_fields_array: (list) list of mapped fields
+        :param expression: (object) ANTLR parsed expression object
+        :return value: (str) processed/formatted input value
         """
         if mapped_field_type == "int":
             if not str(value).isdigit():
@@ -202,8 +205,8 @@ class QueryStringPatternTranslator:
     def _lookup_comparison_operator(self, expression_operator) -> str:
         """
         lookup operators support in nozomi
-        :param expression_operator:object
-        :return str
+        :param expression_operator: (object) contains comparison operator
+        :return (str) comparator
         """
         if str(expression_operator) not in self.comparator_lookup:
             raise NotImplementedError(
@@ -214,10 +217,10 @@ class QueryStringPatternTranslator:
     def _eval_comparison_value(self, expression, mapped_field_type, mapped_fields_array) -> str:
         """
         Function for parsing comparison expression value
-        :param expression: expression object
-        :param mapped_field_type: str
-        :param mapped_fields_array: list object
-        :return: formatted expression value
+        :param expression: (object) ANTLR parsed expression object
+        :param mapped_field_type: (str) type of field
+        :param mapped_fields_array: (list) list of mapped fields
+        :return value: (str) processed/formatted input value
         """
         if expression.comparator == ComparisonComparators.In:
             value = self._format_set(expression.value, mapped_field_type, expression, mapped_fields_array)
@@ -236,9 +239,9 @@ class QueryStringPatternTranslator:
     def _add_qualifier(self, query, qualifier) -> list:
         """
         Convert the qualifier into epoch time and append in the query.
-        params: query : list
-        params: qualifier
-        return: query : list
+        params: query: (list) list of queries
+        params: qualifier: (str) start and stop UTC timestamp
+        return: query: (list) list of queries attached with timestamp
         """
         query_qualifier = []
         time_range = QueryStringPatternTranslator._parse_time_range(qualifier, self.options['time_range'])
@@ -253,9 +256,10 @@ class QueryStringPatternTranslator:
         Handle threat name search
         if threat_name = 'threat' means threat_name != ""
         if threat_name == 'alert' means threat_name == ""
-        params: formatted_value : str
-        params: comparator : str
-        return: formatted_value , comparator
+        params: formatted_value: (str) input value
+        params: comparator: (str) comparison operator
+        return: formatted_value : (str) input value
+                comparator: (str) comparison operator
         """
         reverse_comparator = {'==': '!=', '!=': '=='}
         if formatted_value == '"threat"':
@@ -266,11 +270,11 @@ class QueryStringPatternTranslator:
     def _parse_mapped_fields(self, formatted_value, mapped_fields_array, mapped_field_type, expression) -> list:
         """
         parse mapped fields into boolean expression
-        :param formatted_value: str
-        :param mapped_fields_array: list
-        :param mapped_field_type:str
-        :param expression: expression object
-        :return: list
+        :param formatted_value: (str) input value
+        :param mapped_fields_array: (list) list of mapped fields
+        :param mapped_field_type: (str) type of field
+        :param expression: (object) ANTLR parsed expression object
+        :return: (list) formatted query
         """
         comparator = self._lookup_comparison_operator(expression.comparator)
 
@@ -324,9 +328,11 @@ class QueryStringPatternTranslator:
     def check_common_timestamp(query_01, query_02):
         """
         Check the queries contains same timestamp
-        :param query_01: str
-        :param query_02: str
-        :return query_01_without_timestamp str, query_02_without_timestamp str, timestamp str
+        :param query_01: (str) first query
+        :param query_02: (str) second query
+        :return query_01_without_timestamp: (str) first query without timestamp
+                query_02_without_timestamp: (str) second query without timestamp
+                timestamp: (str) common timestamp from query
         """
         # Find the index where timestamp starts in the query string
         query_01_timestamp_index = query_01.find('| where record_created_at>=')
@@ -338,19 +344,24 @@ class QueryStringPatternTranslator:
             query_01_without_timestamp = query_01[:query_01_timestamp_index]
             query_02_without_timestamp = query_02[:query_02_timestamp_index]
             return query_01_without_timestamp, query_02_without_timestamp, timestamp
+        # If queries do not have a common timestamp, return None.
         return query_01, query_02, None
 
     @staticmethod
     def _split_and_query_combine_by_or(query_01, query_02):
         """
         Combine AND constructed query with OR operator
-        :param query_01: str
-        :param query_02: str
-        :return query_list: list
+        :param query_01: (str) first query
+        :param query_02: (str) second query
+        :return query_list: (list) first and second query combined by OR operator
         """
+        # split the query using the AND operator
         query_01_split_query = query_01.split(' | ')
         query_02_split_query = query_02.split(' | ')
         query_list = []
+
+        # combine using the OR operator
+        # ex:(v1 AND v2) OR v3 -> (v1 or v3) AND (v2 or v3)
         for q1 in query_01_split_query:
             for q2 in query_02_split_query:
                 query_list.append(f'{q1.strip()} OR {q2.replace("where ", "").strip()}')
@@ -360,18 +371,22 @@ class QueryStringPatternTranslator:
     def _check_max_query_length(query_01, query_02, combined_query, query_list):
         """
         Check the combined query its less than max_query_length
-        :param query_01: str
-        :param query_02: str
-        :param combined_query: str
-        :param query_list: list
-        :return query_list: list
+        :param query_01: (str) first query
+        :param query_02: (str) second query
+        :param combined_query: (str) first and second query combined
+        :param query_list: (list) query list contains processed queries
+        :return query_list: (list) query list contains processed queries
         """
         if len(combined_query) > MAX_QUERY_LENGTH:
+            # If the combined query length is greater than the maximum query length,
+            # will treat each query as a separate query.
             if query_01 not in query_list:
                 query_list.append(query_01)
             if query_02 not in query_list:
                 query_list.append(query_02)
         else:
+            # If the combined query length is less than the maximum query length,
+            # will add it to the processed query list.
             query_list.append(combined_query)
         return query_list
 
@@ -382,10 +397,10 @@ class QueryStringPatternTranslator:
         otherwise will treat each query as separate query.
         ex: A , B are two queries. If A OR B is less than max query length returns A OR B
             If A OR B is more than max query length returns [ A , B ]
-        :param expression_01: expression object
-        :param expression_02: expression object
-        :param operator: str
-        :return query list
+        :param expression_01: (list) first query
+        :param expression_02: (list) second query
+        :param operator: (str) operator
+        :return query: (list) list of combined queries
         """
         query_list = []
 
@@ -395,11 +410,14 @@ class QueryStringPatternTranslator:
         for row_01 in expression_01:
             combined_flag = False
             for row_02 in expression_02:
+                # combine the query length is less than the max query length
                 if len(row_01) + len(row_02) < MAX_QUERY_LENGTH and not combined_flag:
                     combined_flag = True
+                    # Queries have a timestamp.
                     if 'record_created_at' in row_01 and 'record_created_at' in row_02:
                         row_01_without_timestamp, row_02_without_timestamp, common_timestamp = \
                             self.check_common_timestamp(row_01, row_02)
+                        # Queries have a common timestamp.
                         if common_timestamp:
                             split_query_list = self._split_and_query_combine_by_or(row_01_without_timestamp,
                                                                                    row_02_without_timestamp)
@@ -409,6 +427,7 @@ class QueryStringPatternTranslator:
                             if row_01 not in query_list:
                                 query_list.append(row_01)
                             query_list.append(row_02)
+                    # Query contains the AND operator.
                     elif ' | ' in row_01 or ' | ' in row_02:
                         split_query_list = self._split_and_query_combine_by_or(row_01, row_02)
                         combined_query = ' | '.join(split_query_list)
@@ -427,16 +446,19 @@ class QueryStringPatternTranslator:
     def combine_and_queries(self, expression_01, expression_02, operator) -> list:
         """
         combine the queries using and operator
-        :param expression_01: expression object
-        :param expression_02: expression object
-        :param operator: string
-        :return query list
+        :param expression_01: (list) first query
+        :param expression_02: (list) second query
+        :param operator: (str) operator
+        :return query: (list) list of combined queries
         """
         query_list = []
 
         for row_01 in expression_01:
             for row_02 in expression_02:
+                # combine the query using the AND operator
                 combined_query = f'{row_01} {operator} {row_02}'
+                # combined query, if the query length exceeds the maximum query length,
+                # will treat each query as a separate query
                 if len(combined_query) > MAX_QUERY_LENGTH and not self.logged:
                     self.logged = True
                     logger.info('Unable to split the query. Query length is more than maximum length. '
@@ -447,7 +469,7 @@ class QueryStringPatternTranslator:
     def _eval_combined_comparison_exp(self, expression) -> str:
         """
         Function for parsing combined comparison expression
-        :param expression: expression object
+        :param expression: (object) ANTLR parsed expression object
         """
         query = []
         operator = self._lookup_comparison_operator(expression.operator)
@@ -466,8 +488,8 @@ class QueryStringPatternTranslator:
     def _eval_combined_observation_exp(self, expression, qualifier=None) -> str:
         """
         Function for parsing combined observation expression
-        :param expression: expression object
-        :param qualifier: qualifier
+        :param expression: (object) ANTLR parsed expression object
+        :param qualifier: (object) timestamp object
         """
         expression_01 = self._parse_expression(expression.expr1, qualifier)
         expression_02 = self._parse_expression(expression.expr2, qualifier)

@@ -506,13 +506,14 @@ class TestNozomiConnection(unittest.TestCase, object):
         """ test success result response with metadata parameter"""
         metadata = {
             "result_count": 1,
-            "jwtToken": "Bearer abcd1234",
-            "next_url": "query=alerts | where threat_name==\"\" | where record_created_at>=1698836400000 | where "
-                        "record_created_at<=1704344040000&page=2&count=1"
+            "page_number": 2,
+            "page_size": 1
         }
         query = "query=alerts | where threat_name==\"\" | where record_created_at>=1698836400000 | where " \
                 "record_created_at<=1704344040000"
         mock_result_response.side_effect = [
+            get_mock_response(200, json.dumps(TestNozomiConnection.mock_token_response), 'byte',
+                              headers={'Authorization': "****"}),
             get_mock_response(200, json.dumps(TestNozomiConnection.mocked_response), 'byte')]
         transmission = stix_transmission.StixTransmission('nozomi_vantage', self.connection(), self.configuration())
         offset = 0
@@ -545,10 +546,12 @@ class TestNozomiConnection(unittest.TestCase, object):
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_with_expired_jwt_token(self, mock_result_response):
         """ test expired jwt token"""
-        metadata = {'result_count': '1', 'jwtToken': 'token', 'next_url': 'test.com'}
+        metadata = {'result_count': '1', "page_number": 2, "page_size": 1}
         query = "alerts | where port_dst>\"22\" | where record_created_at>=1701388800000 | where " \
                 "record_created_at<=1704106800000 "
-        mock_result_response.side_effect = [get_mock_response(401, '', 'byte'),
+        mock_result_response.side_effect = [get_mock_response(200, json.dumps(TestNozomiConnection.mock_token_response),
+                                                              'byte', headers={'Authorization': "****"}),
+                                            get_mock_response(401, '', 'byte'),
                                             get_mock_response(200, json.dumps(TestNozomiConnection.mock_token_response),
                                                               'byte', headers={'Authorization': "****"}),
                                             get_mock_response(401, '', 'byte')]
@@ -556,5 +559,4 @@ class TestNozomiConnection(unittest.TestCase, object):
         result_response = transmission.results(query, 1, 1, metadata)
         assert result_response is not None
         assert result_response['success'] is False
-        assert "Authentication failed" in result_response['error']
-
+        assert result_response['code'] == "authentication_fail"
