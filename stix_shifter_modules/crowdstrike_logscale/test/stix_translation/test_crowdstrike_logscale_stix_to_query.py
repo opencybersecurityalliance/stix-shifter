@@ -39,7 +39,7 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('crowdstrike_logscale', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'source': 'crowdstrikeedr', 'queryString': 'device.local_ip = \"111.111.11.111\" or '
-                                                                'device.external_ip = \"111.111.11.111\" | tail(10000)',
+                                                                'device.external_ip = \"111.111.11.111\" | tail()',
                     'start': 1700213537397, 'end': 1700213837397}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -49,7 +49,7 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('crowdstrike_logscale', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'source': 'crowdstrikeedr', 'queryString': '@rawstring = /\"behaviors\"\\s*:\\s*\\[.*\"filename\"'
-                                                                '\\s*:\\s*\"cmd\\.exe\"/ | tail(10000)',
+                                                                '\\s*:\\s*\"cmd\\.exe\"/ | tail()',
                     'start': 1700213537397, 'end': 1700213837397}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -59,7 +59,7 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('crowdstrike_logscale', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'source': 'crowdstrikeedr', 'queryString': '@rawstring != /\"behaviors\"\\s*:\\s*\\[.*\"filename\"'
-                                                                '\\s*:\\s*\"cmd\\.exe\"/ | tail(10000)',
+                                                                '\\s*:\\s*\"cmd\\.exe\"/ | tail()',
                     'start': 1700213537397, 'end': 1700213837397}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -69,7 +69,7 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('crowdstrike_logscale', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'source': 'crowdstrikeedr', 'queryString': 'device.hostname != \"EC2AMAZ\" '
-                                                                'and device.hostname = \"*\" | tail(10000)',
+                                                                'and device.hostname = \"*\" | tail()',
                     'start': 1700213537397, 'end': 1700213837397}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -78,7 +78,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-ibm-finding:severity > 50]"
         query = translation.translate('crowdstrike_logscale', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
-        queries = [{'source': 'crowdstrikeedr', 'queryString': 'max_severity > 50 | tail(10000)',
+        queries = [{'source': 'crowdstrikeedr', 'queryString': 'max_severity > 50 | tail()',
                     'start': 1700214399519, 'end': 1700214699519}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -88,7 +88,7 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('crowdstrike_logscale', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'source': 'crowdstrikeedr', 'queryString': 'not max_severity < 50 and max_severity = \"*\"'
-                                                                ' | tail(10000)',
+                                                                ' | tail()',
                     'start': 1700214399519, 'end': 1700214699519}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -100,7 +100,7 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'source': 'crowdstrikeedr', 'queryString': '@rawstring = /"behaviors"\\s*:\\s*\\['
                                                                 '.*"filename"\\s*:\\s*("mstsc\\.exe"|"test\\.exe")/ | '
-                                                                'tail(10000)', 'start': 1699116206000,
+                                                                'tail()', 'start': 1699116206000,
                     'end': 1699749806003}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -110,7 +110,7 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('crowdstrike_logscale', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'source': 'crowdstrikeedr', 'queryString': 'detection_id = \"123\" or detection_id = '
-                                                                '\"456\" | tail(10000)', 'start': 1699116206000,
+                                                                '\"456\" | tail()', 'start': 1699116206000,
                     'end': 1699749806003}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -122,7 +122,7 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'source': 'crowdstrikeedr', 'queryString': 'not @rawstring = /\"behaviors\"\\s*:\\s*\\'
                                                                 '[.*\"filename\"\\s*:\\s*(\"mstsc\\.exe\"|\"test\\.exe'
-                                                                '\")/ | tail(10000)', 'start': 1699116206000,
+                                                                '\")/ | tail()', 'start': 1699116206000,
                     'end': 1699749806003}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -136,7 +136,7 @@ class TestQueryTranslator(unittest.TestCase):
                                    '(not device.local_ip = \"2.2.2.2\" and device.local_ip = \"*\")) or '
                                    '((not device.external_ip = \"1.1.1.1\" and device.external_ip = \"*\") '
                                    'and (not device.external_ip = \"2.2.2.2\" and device.external_ip = \"*\")) '
-                                   '| tail(10000)', 'start': 1699116206000,
+                                   '| tail()', 'start': 1699116206000,
                     'end': 1699749806003}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -146,7 +146,7 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('crowdstrike_logscale', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'source': 'crowdstrikeedr',
-                    'queryString': 'device.mac_address = /11-22-28-67.*/i | tail(10000)',
+                    'queryString': 'device.mac_address = /11-22-28-67.*/i | tail()',
                     'start': 1700215236531, 'end': 1700215536531}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -157,7 +157,7 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'source': 'crowdstrikeedr',
                     'queryString': 'not device.device_id = /^7adb1f5eb5164fde90279ab0a1600d49/i and '
-                                   'device.device_id = \"*\" | tail(10000)',
+                                   'device.device_id = \"*\" | tail()',
                     'start': 1700215742090, 'end': 1700216042090}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -167,10 +167,10 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('crowdstrike_logscale', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'source': 'crowdstrikeedr',
-                    'queryString': 'device.local_ip =~ !cidr(subnet="1.2.3.4/30") | tail(10000)',
+                    'queryString': 'device.local_ip =~ !cidr(subnet="1.2.3.4/30") | tail()',
                     'start': 1700216196932, 'end': 1700216496932},
                    {'source': 'crowdstrikeedr',
-                    'queryString': 'device.external_ip =~ !cidr(subnet="1.2.3.4/30") | tail(10000)',
+                    'queryString': 'device.external_ip =~ !cidr(subnet="1.2.3.4/30") | tail()',
                     'start': 1700216196932, 'end': 1700216496932}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -181,7 +181,7 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'source': 'crowdstrikeedr',
                     'queryString': 'array:contains(array=\"behaviors_processed[]\",value = '
-                                   '\"123\") | tail(10000)',
+                                   '\"123\") | tail()',
                     'start': 1700216196932, 'end': 1700216496932}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -192,7 +192,7 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'source': 'crowdstrikeedr',
                     'queryString': 'array:regex(array=\"device.groups[]\",regex = \"97350feebe4541e8a615c0d3f18acdf3\"'
-                                   ', flags=i) | tail(10000)',
+                                   ', flags=i) | tail()',
                     'start': 1700216196932, 'end': 1700216496932}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -203,7 +203,7 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'source': 'crowdstrikeedr',
                     'queryString': '!array:contains(array=\"device.groups[]\",value = '
-                                   '\"97350feebe4541e8a615c0d3f18acdf3\") | tail(10000)',
+                                   '\"97350feebe4541e8a615c0d3f18acdf3\") | tail()',
                     'start': 1700216196932, 'end': 1700216496932}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -215,7 +215,7 @@ class TestQueryTranslator(unittest.TestCase):
         queries = [{'source': 'crowdstrikeedr',
                     'queryString': 'not array:regex(array=\"device.groups[]\",regex = '
                                    '\"97350feebe4541e8a615c0d3f18acdf3\"'
-                                   ', flags=i) | tail(10000)',
+                                   ', flags=i) | tail()',
                     'start': 1700216196932, 'end': 1700216496932}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -233,7 +233,7 @@ class TestQueryTranslator(unittest.TestCase):
                                    '\"11111111114a00996a9f5aaf9c0db84b\"/) or device.mac_address = '
                                    '\"11-11-11-11-1a-1b\") and ((device.local_ip = \"11.111.111.111\" or '
                                    'device.external_ip = \"11.111.111.111\") or @rawstring != /\"behaviors\"\\s*:'
-                                   '\\s*\\[.*\"technique\"\\s*:\\s*\"test\"/) | tail(10000)',
+                                   '\\s*\\[.*\"technique\"\\s*:\\s*\"test\"/) | tail()',
                     'start': 1700559682224, 'end': 1700559982224}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -248,7 +248,7 @@ class TestQueryTranslator(unittest.TestCase):
                     'queryString': '(@rawstring = /\"behaviors\"\\s*:\\s*\\[.*\"severity\"\\s*:\\s*(50|30)/) '
                                    'or (@rawstring != /\"behaviors\"\\s*:\\s*\\[.*\"filepath\"\\s*:\\s*\"\\\\\\\\'
                                    'Device\\\\\\\\HarddiskVolume1\\\\\\\\Windows\\\\\\\\System32\\\\\\\\cmd\\.exe\"/) '
-                                   '| tail(10000)',
+                                   '| tail()',
                     'start': 1700012606000, 'end': 1700441006000}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -261,12 +261,12 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{
             'source': 'crowdstrikeedr',
-            'queryString': 'device.platform_name = \"Windows\" | tail(10000)',
+            'queryString': 'device.platform_name = \"Windows\" | tail()',
             "start": 1700012606000,
             "end": 1700441006000
         }, {
             'source': 'crowdstrikeedr',
-            'queryString': 'device.minor_version = \"0\" | tail(10000)',
+            'queryString': 'device.minor_version = \"0\" | tail()',
             "start": 1702172606000,
             "end": 1702172606000
         }]
@@ -287,7 +287,7 @@ class TestQueryTranslator(unittest.TestCase):
                            '\\s*:\\s*\"\\\\\"C:\\\\\\\\Windows\\\\\\\\system32\\\\\\\\cmd\\.exe\\\\\"\\ \\/d\\ '
                            '\\/c\\ C:\\\\\\\\Windows\\\\\\\\system32\\\\\\\\silcollector\\.cmd\\ configure\"/ '
                            'and (@rawstring = /\"behaviors\"\\s*:\\s*\\[.*\"user_id\"\\s*:\\s*\"S\\-1\\-5\\-18\"/) '
-                           '| tail(10000)',
+                           '| tail()',
             'start': 1702172606000,
             'end': 1702687406000
         }, {
@@ -297,7 +297,7 @@ class TestQueryTranslator(unittest.TestCase):
                            '\\s*:\\s*\"\\\\\"C:\\\\\\\\Windows\\\\\\\\system32\\\\\\\\cmd\\.exe\\\\\"\\ \\/d\\ '
                            '\\/c\\ C:\\\\\\\\Windows\\\\\\\\system32\\\\\\\\silcollector\\.cmd\\ configure\"/ and '
                            '(@rawstring = /\"behaviors\"\\s*:\\s*\\[.*\"user_id\"\\s*:\\s*\"S\\-1\\-5\\-18\"/) '
-                           '| tail(10000)',
+                           '| tail()',
             'start': 1702172606000,
             'end': 1702687406000
         }]
@@ -314,19 +314,19 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{
             'source': 'crowdstrikeedr',
-            'queryString': 'not array:regex(array=\"behaviors_processed[]\",regex = \"123\", flags=i) | tail(10000)',
+            'queryString': 'not array:regex(array=\"behaviors_processed[]\",regex = \"123\", flags=i) | tail()',
             'start': 1702172606000,
             'end': 1702687406000
         },
             {
                 'source': 'crowdstrikeedr',
-                'queryString': 'device.local_ip =~ cidr(subnet=\"1.2.3.4/32\") | tail(10000)',
+                'queryString': 'device.local_ip =~ cidr(subnet=\"1.2.3.4/32\") | tail()',
                 'start': 1702172606000,
                 'end': 1702687406000
             },
             {
                 'source': 'crowdstrikeedr',
-                'queryString': 'device.external_ip =~ cidr(subnet=\"1.2.3.4/32\") | tail(10000)',
+                'queryString': 'device.external_ip =~ cidr(subnet=\"1.2.3.4/32\") | tail()',
                 'start': 1702172606000,
                 'end': 1702687406000
             },
@@ -336,7 +336,7 @@ class TestQueryTranslator(unittest.TestCase):
                                '{.*\"parent_cmdline\"\\s*:\\s*\"\\\\\"C:\\\\\\\\Windows\\\\\\\\system32\\\\\\\\cmd\\.'
                                'exe\\\\\"\\ \\/d\\ \\/c\\ C:\\\\\\\\Windows\\\\\\\\system32\\\\\\\\silcollector\\.'
                                'cmd\\ configure\"/ and (@rawstring = /\"behaviors\"\\s*:\\s*\\[.*\"user_id\"\\s*:\\'
-                               's*\"S\\-1\\-5\\-18\"/)) | tail(10000)',
+                               's*\"S\\-1\\-5\\-18\"/)) | tail()',
                 'start': 1702172606000,
                 'end': 1702687406000
             }]
@@ -360,7 +360,7 @@ class TestQueryTranslator(unittest.TestCase):
                            '\\s*\"\\\\\"C:\\\\\\\\Windows\\\\\\\\system32\\\\\\\\cmd\\.exe\\\\\"\\ \\/d\\ \\/c\\ '
                            'C:\\\\\\\\Windows\\\\\\\\system32\\\\\\\\silcollector\\.cmd\\ configure\"/ and '
                            '(@rawstring = /\"behaviors\"\\s*:\\s*\\[.*\"user_id\"\\s*:\\s*\"S\\-1\\-5\\-18\"/) |'
-                           ' tail(10000)',
+                           ' tail()',
             'start': 1702172606000,
             'end': 1702687406000
         },
@@ -372,7 +372,7 @@ class TestQueryTranslator(unittest.TestCase):
                                'Windows\\\\\\\\system32\\\\\\\\cmd\\.exe\\\\\"\\ \\/d\\ \\/c\\ C:\\\\\\\\Windows'
                                '\\\\\\\\'
                                'system32\\\\\\\\silcollector\\.cmd\\ configure\"/ and (@rawstring = /\"behaviors\"\\s*:'
-                               '\\s*\\[.*\"user_id\"\\s*:\\s*\"S\\-1\\-5\\-18\"/) | tail(10000)',
+                               '\\s*\\[.*\"user_id\"\\s*:\\s*\"S\\-1\\-5\\-18\"/) | tail()',
                 'start': 1702172606000,
                 'end': 1702687406000
             },
@@ -380,13 +380,13 @@ class TestQueryTranslator(unittest.TestCase):
                 'source': 'crowdstrikeedr',
                 'queryString': 'array:regex(array=\"behaviors_processed[]\",regex = '
                                '\"pid:84f9f480747a43469228f876063b0ece'
-                               ':38864991970:41002\", flags=i) | tail(10000)',
+                               ':38864991970:41002\", flags=i) | tail()',
                 'start': 1702830883582,
                 'end': 1702831183582
             },
             {
                 'source': 'crowdstrikeedr',
-                'queryString': 'device.hostname = \"EC2AMAZ\" | tail(10000)',
+                'queryString': 'device.hostname = \"EC2AMAZ\" | tail()',
                 'start': 1702830883582,
                 'end': 1702831183582
             }]
