@@ -4,6 +4,7 @@ from stix_shifter_utils.utils import logger
 
 error_mapping = {
     100: ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR,
+    101: ErrorCode.TRANSMISSION_INVALID_PARAMETER,
     408: ErrorCode.TRANSMISSION_CONNECT,
     400: ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR,
     401: ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,

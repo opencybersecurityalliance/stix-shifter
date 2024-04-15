@@ -23,7 +23,7 @@ class DeleteConnector(BaseDeleteConnector):
             if response_code == 204:
                 return_obj['success'] = True
             else:
-                return_obj = self.handle_api_exception(response_code, response_content)
+                return_obj = self.handle_api_exception(response_code, response_content,response.response.reason)
 
         except Exception as ex:
             self.logger.error('error while Deleting Query Job Id in Crowdstrike Falcon Logscale: %s', ex)
@@ -32,18 +32,18 @@ class DeleteConnector(BaseDeleteConnector):
 
         return return_obj
 
-    def handle_api_exception(self, code, response_txt):
+    def handle_api_exception(self, code, response_txt, client_response=None):
         """
         create the exception response
         :param code, int
         :param response_txt, dict
+        :param client_response, str
         :return: return_obj, dict
         """
         return_obj = {}
         if code == 404 and str(response_txt) == "":
-            response_txt = "Search Id not found"
+            response_txt = "404: Resource not found" if client_response == "Not Found" else  f'404: {client_response}'
+
         response_dict = {'code': code, 'message': str(response_txt)} if code else {'message': str(response_txt)}
         ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
-
-

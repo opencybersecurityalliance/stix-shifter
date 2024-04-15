@@ -1,5 +1,4 @@
 {
-  "crowdstrikeedr": {
     "behaviors": {
       "alleged_filetype": {
         "key": "file.x_extension",
@@ -552,5 +551,4 @@
       "key": "x-ibm-finding.x_seconds_to_triaged",
       "object": "finding"
     }
-  }
 }

@@ -28,28 +28,16 @@ class APIClient:
         :param query_expression: dict
         :return: response object
         """
-
         return await self.client.call_api(self.api_endpoint, 'POST', headers=self.headers,
                                           data=json.dumps(query_expression),
                                           timeout=self.timeout)
 
-    async def get_search_status(self, search_id):
+    async def poll_query_job(self, search_id):
         """
-         Fetch the status of the search
+         Fetch the status and results of the query job
          :param search_id: str
          :return: response object
          """
-        poll_endpoint = f'{self.api_endpoint}/{search_id}'
-        return await self.client.call_api(poll_endpoint, 'GET', headers=self.headers,
-                                          timeout=self.timeout)
-
-    async def get_search_results(self, search_id):
-        """
-        Fetch the results of the search
-        :param search_id: str
-        :return: response object
-        """
-
         poll_endpoint = f'{self.api_endpoint}/{search_id}'
         return await self.client.call_api(poll_endpoint, 'GET', headers=self.headers,
                                           timeout=self.timeout)

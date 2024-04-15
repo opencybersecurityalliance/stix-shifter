@@ -11,7 +11,6 @@ START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
 logger = logging.getLogger(__name__)
 CONFIG_MAP_PATH = "json/config_map.json"
 STOP_TIME = datetime.utcnow()
-LOGSCALE_MAXIMUM_TAIL_LIMIT = 10000 # Maximum value of tail function as per logscale data source
 
 
 class FileNotFoundException(Exception):
@@ -171,7 +170,7 @@ class QueryStringPatternTranslator:
                     merged_queries.append(queries)
 
         for queries in merged_queries:
-            result_query_string = f'{queries["query"]} | tail({LOGSCALE_MAXIMUM_TAIL_LIMIT})'
+            result_query_string = f'{queries["query"]} | tail()'
             formatted_query = {
                 "source": self.source,
                 "queryString": result_query_string,

@@ -146,18 +146,11 @@ results "P7-xxxxxxxxx:crowdstrikeedr" 0 1
 {
     "success": true,
     "metadata": {
-        "query": {
-            "queryString": "cidr(subnet=\"1.1.1.1/32\",field=device.external_ip)",
+            "input_query_string": "cidr(subnet=\"1.1.1.1/32\",field=device.external_ip)",
             "start": 1710892800000,
-            "end": 1711549348062,
-            "around": {
-                "eventId": "ATzrtyg4xCKOqQnD9NodpvsY_363_125_1711549348",
-                "numberOfEventsAfter": 0,
-                "numberOfEventsBefore": 0,
-                "timestamp": 1711549348062
-            }
-        },
-        "source": "crowdstrikeedr"
+             "last_event_id": "ATzrtyg4xCKOqQnD9NodpvsY_363_125_1711549348",
+             "last_event_timestamp": 1711549348062,
+             "record_count": 1
     },
     "data": [
         {

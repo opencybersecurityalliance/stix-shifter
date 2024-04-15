@@ -14,6 +14,12 @@ class TestCrowdstrikeLogscaleConnection(unittest.TestCase, object):
                 "host": "hostbla",
                 "repository": "testrepo",
                 }
+    def connection_with_result_limit(self):
+        return {
+            "host": "hostbla",
+            "repository": "testrepo",
+            "options": {"result_limit": 2}
+        }
 
     def configuration(self):
         return {
@@ -326,50 +332,78 @@ class TestCrowdstrikeLogscaleConnection(unittest.TestCase, object):
     def test_results_success_response(self, mock_results_response):
         """ test results with success response"""
         search_id = "P3-ohFBXrfxvfy3U1xk28PLFJKL:edr"
-        mock_results_response.return_value = \
-            get_mock_response(200, json.dumps(TestCrowdstrikeLogscaleConnection.mocked_result_response), 'byte')
+        mock_delete_job_id_response = get_mock_response(204, "", 'byte')
+        query_response = get_mock_response(200, '{"hashedQueryOnView": "123ac", "id": "P3-ohFBXrfxvfy3U1xk28PLFJKL"}', 'byte')
+        first_response = get_mock_response(200, json.dumps(TestCrowdstrikeLogscaleConnection.mocked_result_response), 'byte')
+        second_response = get_mock_response(200, json.dumps(TestCrowdstrikeLogscaleConnection.mocked_result_response_2), 'byte')
+        mock_results_response.side_effect = [first_response, query_response, second_response, second_response, mock_delete_job_id_response]
+
         entry_point = EntryPoint(self.connection(), self.configuration())
-        results_response = run_in_thread(entry_point.create_results_connection, search_id, 0, 10000)
+        results_response = run_in_thread(entry_point.create_results_connection, search_id, 0, 2)
         success = results_response["success"]
         assert success
         data = results_response["data"]
         assert data
         assert (results_response['metadata'] ==
-                {'query': {'queryString': 'behaviors[0].filename="cmd.exe" OR '
-                                          'behaviors[0].filename="conhost.exe"',
-                           'start': 1710921332365, 'end': 1711549347952,
-                           'around': {'eventId': 'ATzrtyg4xCKOqQnD9NodpvsY_363_23_1711549347',
-                                      'numberOfEventsAfter': 0, 'numberOfEventsBefore': 0,
-                                      'timestamp': 1711549347952}}, 'source': 'edr'})
+                {'input_query_string': 'behaviors[0].filename="cmd.exe" OR '
+                                       'behaviors[0].filename="conhost.exe"',
+                 'last_event_id': 'ATzrtyg4xCKOqQnD9NodpvsY_363_21_1711549347',
+                 'last_event_timestamp': 1711549342830,
+                 'start': 1710921332365,
+                 'record_count': 2})
 
+
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
+    def test_results_success_response_with_result_limit_less_than_length(self, mock_results_response):
+        """ test results with success response"""
+        search_id = "P3-ohFBXrfxvfy3U1xk28PLFJKL:edr"
+        mock_delete_job_id_response = get_mock_response(204, "", 'byte')
+        query_response = get_mock_response(200, '{"hashedQueryOnView": "123ac", "id": "P3-ohFBXrfxvfy3U1xk28PLFJKL"}', 'byte')
+        first_response = get_mock_response(200, json.dumps(TestCrowdstrikeLogscaleConnection.mocked_result_response), 'byte')
+        second_response = get_mock_response(200, json.dumps(TestCrowdstrikeLogscaleConnection.mocked_result_response_2), 'byte')
+        mock_results_response.side_effect = [first_response, query_response, second_response, second_response, mock_delete_job_id_response]
+
+        entry_point = EntryPoint(self.connection_with_result_limit(), self.configuration())
+        results_response = run_in_thread(entry_point.create_results_connection, search_id, 0, 5)
+        success = results_response["success"]
+        assert success
+        data = results_response["data"]
+        assert data
+        assert len(data) == 2
+        assert (results_response['metadata'] ==
+                {'input_query_string': 'behaviors[0].filename="cmd.exe" OR '
+                                       'behaviors[0].filename="conhost.exe"',
+                 'last_event_id': 'ATzrtyg4xCKOqQnD9NodpvsY_363_21_1711549347',
+                 'last_event_timestamp': 1711549342830,
+                 'start': 1710921332365,
+                 'record_count': 2})
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_results_success_response_using_metadata_for_next_iteration(self, mock_results_response):
         """ test success response for results with metadata as input to be used for next iteration"""
         search_id = "P3-ohFBXrfxvfy3U1xk28PLFJKL:edr"
-        metadata = {'query': {'queryString': 'behaviors[0].filename="cmd.exe" OR '
+        metadata = {'input_query_string': 'behaviors[0].filename="cmd.exe" OR '
                                           'behaviors[0].filename="conhost.exe"',
-                           'start': 1710921332365, 'end': 1711549347952,
-                           'around': {'eventId': 'ATzrtyg4xCKOqQnD9NodpvsY_363_23_1711549347',
-                                      'numberOfEventsAfter': 0, 'numberOfEventsBefore': 0,
-                                      'timestamp': 1711549347952}}, 'source': 'edr'}
+                           'start': 1710921332365,
+                           'last_event_id': 'ATzrtyg4xCKOqQnD9NodpvsY_363_23_1711549347',
+                                      'last_event_timestamp': 1711549347952, 'record_count': 3}
         mock_delete_job_id_response = get_mock_response(204, "", 'byte')
         mock_query_job_id_response = get_mock_response(200, json.dumps({"hashedQueryOnView": "456ac", "id": "P6-o1FbXrfxvfy3U1xk28PLFijk"}), 'byte')
         mock_query_poll_response = get_mock_response(200, json.dumps(TestCrowdstrikeLogscaleConnection.mocked_result_response_2), 'byte')
         mock_results_response.side_effect = [mock_query_job_id_response,mock_query_poll_response, mock_delete_job_id_response]
-        entry_point = EntryPoint(self.connection(), self.configuration())
-        results_response = run_in_thread(entry_point.create_results_connection, search_id, 2000, 1, metadata)
+
+        entry_point = EntryPoint(self.connection_with_result_limit(), self.configuration())
+        results_response = run_in_thread(entry_point.create_results_connection, search_id, 0, 1, metadata)
         success = results_response["success"]
         assert success
         data = results_response["data"]
         assert data
         assert (results_response['metadata'] ==
-                {'query': {'queryString': 'behaviors[0].filename="cmd.exe" OR '
+                {'input_query_string': 'behaviors[0].filename="cmd.exe" OR '
                                           'behaviors[0].filename="conhost.exe"',
-                           'start': 1710921332365, 'end': 1711549342830,
-                           'around': {'eventId': 'ATzrtyg4xCKOqQnD9NodpvsY_363_21_1711549347',
-                                      'numberOfEventsAfter': 0, 'numberOfEventsBefore': 0,
-                                      'timestamp': 1711549342830}}, 'source': 'edr'})
+                           'start': 1710921332365,
+                           'last_event_id': 'ATzrtyg4xCKOqQnD9NodpvsY_363_21_1711549347',
+                            'last_event_timestamp': 1711549342830,'record_count': 4})
 
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
@@ -389,12 +423,11 @@ class TestCrowdstrikeLogscaleConnection(unittest.TestCase, object):
                       "start": 1710921332365}},
             "warnings": []}
 
-        metadata = {'query': {'queryString': 'behaviors[0].filename="cmd.exe" OR '
+        metadata = {'input_query_string': 'behaviors[0].filename="cmd.exe" OR '
                                           'behaviors[0].filename="conhost.exe"',
-                           'start': 1710921332365, 'end': 1711549347952,
-                           'around': {'eventId': 'ATzrtyg4xCKOqQnD9NodpvsY_363_23_1711549347',
-                                      'numberOfEventsAfter': 0, 'numberOfEventsBefore': 0,
-                                      'timestamp': 1711549347952}}, 'source': 'edr'}
+                           'start': 1710921332365,
+                           'last_event_id': 'ATzrtyg4xCKOqQnD9NodpvsY_363_23_1711549347',
+                    'last_event_timestamp': 1711549347952,'record_count':2}
 
         mock_delete_job_id_response = get_mock_response(204, "", 'byte')
         mock_query_job_id_response = get_mock_response(200, json.dumps({"hashedQueryOnView": "456ac", "id": "P6-o1FbXrfxvfy3U1xk28PLFijk"}), 'byte')
@@ -403,18 +436,18 @@ class TestCrowdstrikeLogscaleConnection(unittest.TestCase, object):
 
         mock_results_response.side_effect = [mock_query_job_id_response,mock_query_poll_running_response,mock_query_poll_running_response,mock_query_poll_response,mock_query_poll_response,mock_delete_job_id_response]
         entry_point = EntryPoint(self.connection(), self.configuration())
-        results_response = run_in_thread(entry_point.create_results_connection, search_id, 2000, 1, metadata)
+        results_response = run_in_thread(entry_point.create_results_connection, search_id, 0, 1, metadata)
         success = results_response["success"]
         assert success
         data = results_response["data"]
         assert data
         assert (results_response['metadata'] ==
-                {'query': {'queryString': 'behaviors[0].filename="cmd.exe" OR '
+                {'input_query_string': 'behaviors[0].filename="cmd.exe" OR '
                                           'behaviors[0].filename="conhost.exe"',
-                           'start': 1710921332365, 'end': 1711549342830,
-                           'around': {'eventId': 'ATzrtyg4xCKOqQnD9NodpvsY_363_21_1711549347',
-                                      'numberOfEventsAfter': 0, 'numberOfEventsBefore': 0,
-                                      'timestamp': 1711549342830}}, 'source': 'edr'})
+                           'start': 1710921332365,
+                           'last_event_id': 'ATzrtyg4xCKOqQnD9NodpvsY_363_21_1711549347',
+                                      'last_event_timestamp': 1711549342830,
+                                        'record_count':3})
 
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
@@ -434,20 +467,18 @@ class TestCrowdstrikeLogscaleConnection(unittest.TestCase, object):
                       "start": 1710921332365}},
             "warnings": []}
 
-        metadata = {'query': {'queryString': 'behaviors[0].filename="cmd.exe" OR '
+        metadata = {'input_query_string': 'behaviors[0].filename="cmd.exe" OR '
                                           'behaviors[0].filename="conhost.exe"',
-                           'start': 1710921332365, 'end': 1711549347952,
-                           'around': {'eventId': 'ATzrtyg4xCKOqQnD9NodpvsY_363_23_1711549347',
-                                      'numberOfEventsAfter': 0, 'numberOfEventsBefore': 0,
-                                      'timestamp': 1711549347952}}, 'source': 'edr'}
+                           'start': 1710921332365,
+                           'last_event_id': 'ATzrtyg4xCKOqQnD9NodpvsY_363_23_1711549347',
+                             'last_event_timestamp': 1711549347952,
+                    'record_count':10}
 
         mock_delete_job_id_response = get_mock_response(204, "", 'byte')
         mock_query_job_id_response = get_mock_response(200, json.dumps({"hashedQueryOnView": "456ac", "id": "P6-o1FbXrfxvfy3U1xk28PLFijk"}), 'byte')
-        mock_query_poll_response = get_mock_response(200, json.dumps(TestCrowdstrikeLogscaleConnection.mocked_result_response_2), 'byte')
         mock_query_poll_running_response = get_mock_response(200, json.dumps(mocked_running_result_response), 'byte')
-
-        mock_results_response.side_effect = [mock_query_job_id_response,mock_query_poll_running_response,mock_query_poll_running_response,Exception("timeout_error"),mock_query_poll_response,mock_query_poll_response,mock_delete_job_id_response]
-        entry_point = EntryPoint(self.connection(), self.configuration())
+        mock_results_response.side_effect = [mock_query_job_id_response,mock_query_poll_running_response,mock_query_poll_running_response,Exception("timeout_error"),mock_delete_job_id_response]
+        entry_point = EntryPoint(self.connection_with_result_limit(), self.configuration())
         results_response = run_in_thread(entry_point.create_results_connection, search_id, 2000, 1, metadata)
         assert results_response["success"] is False
         assert 'timeout_error' in results_response['error']
@@ -480,26 +511,42 @@ class TestCrowdstrikeLogscaleConnection(unittest.TestCase, object):
                       "start": 1710921332365}},
             "warnings": []}
 
-        metadata = {'query': {'queryString': 'behaviors[0].filename="cmd.exe" OR '
+        metadata = {'input_query_string': 'behaviors[0].filename="cmd.exe" OR '
                                           'behaviors[0].filename="conhost.exe"',
-                           'start': 1710921332365, 'end': 1711549347952,
-                           'around': {'eventId': 'ATzrtyg4xCKOqQnD9NodpvsY_363_23_1711549347',
-                                      'numberOfEventsAfter': 0, 'numberOfEventsBefore': 0,
-                                      'timestamp': 1711549347952}}, 'source': 'edr'}
-
-
+                           'start': 1710921332365,
+                           'last_event_id': 'ATzrtyg4xCKOqQnD9NodpvsY_363_23_1711549347',
+                             'last_event_timestamp': 1711549347952,
+                    'record_count':7}
 
         mock_delete_job_id_response = get_mock_response(204, "", 'byte')
         mock_query_job_id_response = get_mock_response(200, json.dumps({"hashedQueryOnView": "456ac", "id": "P6-o1FbXrfxvfy3U1xk28PLFijk"}), 'byte')
-        mock_query_poll_response = get_mock_response(200, json.dumps(TestCrowdstrikeLogscaleConnection.mocked_result_response_2), 'byte')
         mock_query_poll_running_response = get_mock_response(200, json.dumps(mocked_running_result_response), 'byte')
         mock_status_cancelled_response = get_mock_response(200, json.dumps(mocked_cancelled_result_response), 'byte')
 
-        mock_results_response.side_effect = [mock_query_job_id_response,mock_query_poll_running_response,mock_query_poll_running_response,mock_status_cancelled_response,mock_query_poll_response,mock_query_poll_response,mock_delete_job_id_response]
-        entry_point = EntryPoint(self.connection(), self.configuration())
+        mock_results_response.side_effect = [mock_query_job_id_response,mock_query_poll_running_response,mock_query_poll_running_response,mock_status_cancelled_response,mock_delete_job_id_response]
+        entry_point = EntryPoint(self.connection_with_result_limit(), self.configuration())
         results_response = run_in_thread(entry_point.create_results_connection, search_id, 2000, 1, metadata)
         assert results_response["success"] is True
         assert results_response["data"] == []
+
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
+    def test_results_with_failure_response_during_job_id_creation_with_metadata(self, mock_results_response):
+        """ test failure response for results when query job id creation failed when metadata is passed"""
+        search_id = "P3-ohFBXrfxvfy3U1xk28PLFJKL:edr"
+        mock_results_response.return_value = \
+            get_mock_response(401, "The supplied authentication is invalid", 'byte')
+
+        metadata = {'input_query_string': 'behaviors[0].filename="cmd.exe" OR '
+                                          'behaviors[0].filename="conhost.exe"',
+                    'start': 1710921332365,
+                    'last_event_id': 'ATzrtyg4xCKOqQnD9NodpvsY_363_23_1711549347',
+                    'last_event_timestamp': 1711549347952,
+                    'record_count': 5}
+        entry_point = EntryPoint(self.connection_with_result_limit(), self.configuration())
+        results_response = run_in_thread(entry_point.create_results_connection, search_id, 2000, 1, metadata)
+        assert results_response["success"] is False
+        assert "The supplied authentication is invalid" in results_response["error"]
+        assert results_response["code"] == "authentication_fail"
 
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')

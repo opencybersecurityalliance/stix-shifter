@@ -16,7 +16,6 @@ data_source = {
 options = {}
 
 logscale_sample_response = {
-    'crowdstrikeedr': {
         '@timestamp': 1700059736377,
         '@timestamp.nanos': '312000',
         '#repo': 'TestRepository',
@@ -198,7 +197,6 @@ logscale_sample_response = {
         'seconds_to_triaged': '0',
         'show_in_ui': 'true',
         'status': 'new'
-    }
 }
 
 

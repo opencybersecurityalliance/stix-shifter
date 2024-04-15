@@ -38,7 +38,7 @@ class StatusConnector(BaseStatusConnector):
         try:
             search_id = search_id.split(":")[0]
 
-            response = await self.api_client.get_search_status(search_id)
+            response = await self.api_client.poll_query_job(search_id)
             response_code = response.code
             response_content = response.read().decode('utf-8')
 
