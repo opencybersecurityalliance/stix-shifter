@@ -105,7 +105,7 @@ nozomi_sample_response_2 = [
         'time': 1704792066000,
         'name': 'Malware detection',
         'threat_name': 'threat',
-        'risk': '',
+        'risk': '9.0',
         'protocol': '',
         'transport_protocol': 'unknown',
         'severity': '',
@@ -172,7 +172,7 @@ class TestNozomiResultsToStix(unittest.TestCase):
         ipv4_obj = TestNozomiResultsToStix.get_first_of_type(objects.values(), 'ipv4-addr')
         ipv6_obj = TestNozomiResultsToStix.get_first_of_type(objects.values(), 'ipv6-addr')
         assert ipv4_obj is not None
-        assert (ipv4_obj.keys() == {'type', 'value', 'resolves_to_refs', 'x_nozomi_info_ref'})
+        assert (ipv4_obj.keys() == {'type', 'value', 'x_nozomi_info_ref'})
         assert ipv4_obj['type'] == 'ipv4-addr'
         assert ipv4_obj['value'] == '11.111.11.11'
         assert ipv6_obj is None
@@ -305,3 +305,29 @@ class TestNozomiResultsToStix(unittest.TestCase):
         assert x_nozomi_info_obj['type'] == 'x-nozomi-info'
         assert x_nozomi_info_obj['zone'] == '123.01.01.0/910'
         assert x_nozomi_info_obj['roles'] == 'other'
+
+    def test_x_ibm_finding_obj_severity(self):
+        """test x-ibm-finding object severity values"""
+        # risk value is float
+        nozomi_sample_response[0]['risk'] = 9.0
+        objects = TestNozomiResultsToStix.get_observed_data_objects(nozomi_sample_response)
+        x_ibm_finding_obj = TestNozomiResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
+        assert x_ibm_finding_obj['severity'] == 90
+
+        # risk value is string contains float value
+        nozomi_sample_response[0]['risk'] = '9.0'
+        objects = TestNozomiResultsToStix.get_observed_data_objects(nozomi_sample_response)
+        x_ibm_finding_obj = TestNozomiResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
+        assert x_ibm_finding_obj['severity'] == 90
+
+        # risk value is string contains int value
+        nozomi_sample_response[0]['risk'] = '9'
+        objects = TestNozomiResultsToStix.get_observed_data_objects(nozomi_sample_response)
+        x_ibm_finding_obj = TestNozomiResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
+        assert x_ibm_finding_obj['severity'] == 90
+
+        # risk value is int
+        nozomi_sample_response[0]['risk'] = 9
+        objects = TestNozomiResultsToStix.get_observed_data_objects(nozomi_sample_response)
+        x_ibm_finding_obj = TestNozomiResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
+        assert x_ibm_finding_obj['severity'] == 90

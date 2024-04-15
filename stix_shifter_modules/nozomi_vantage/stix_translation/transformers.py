@@ -111,7 +111,7 @@ class ToProtocolValue(ValueTransformer):
                     protocol = obj.split("/")[0].lower()
                     return [protocol]
                 if obj == 'unknown':
-                    return ['tcp']
+                    return None
                 return [obj.lower()]
             return None
         except ValueError:

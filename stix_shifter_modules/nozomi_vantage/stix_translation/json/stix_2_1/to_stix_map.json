@@ -9,11 +9,6 @@
       "object": "src_ip"
     },
     {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "src_ip"
-    },
-    {
       "key": "x-ibm-finding.src_ip_ref",
       "object": "alert",
       "references": "src_ip"
@@ -29,11 +24,6 @@
       "object": "dst_ip"
     },
     {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "dst_ip"
-    },
-    {
       "key": "x-ibm-finding.dst_ip_ref",
       "object": "alert",
       "references": "dst_ip"
@@ -43,34 +33,12 @@
     {
       "key": "mac-addr.value",
       "object": "mac_addr_src"
-    },
-    {
-      "key": "network-traffic.src_ref",
-      "object": "nt",
-      "references": "mac_addr_src"
-    },
-    {
-      "key": "ipv4-addr.resolves_to_refs",
-      "object": "src_ip",
-      "references": ["mac_addr_src"],
-      "group": true
     }
   ],
   "mac_dst": [
     {
       "key": "mac-addr.value",
       "object": "mac_addr_dst"
-    },
-    {
-      "key": "network-traffic.dst_ref",
-      "object": "nt",
-      "references": "mac_addr_dst"
-    },
-    {
-      "key": "ipv4-addr.resolves_to_refs",
-      "object": "dst_ip",
-      "references": ["mac_addr_dst"],
-      "group": true
     }
   ],
   "port_dst": {
@@ -81,18 +49,62 @@
     "key": "network-traffic.src_port",
     "object": "nt"
   },
-  "protocol": {
-    "key": "network-traffic.protocols",
-    "object": "nt",
-    "group": true,
-    "transformer": "ToProtocolValue"
-  },
-  "transport_protocol": {
-    "key": "network-traffic.protocols",
-    "object": "nt",
-    "group": true,
-    "transformer": "ToProtocolValue"
-  },
+  "protocol": [
+    {
+      "key": "network-traffic.protocols",
+      "object": "nt",
+      "group": true,
+      "transformer": "ToProtocolValue"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "mac_addr_dst"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "mac_addr_src"
+    }
+  ],
+  "transport_protocol": [
+    {
+      "key": "network-traffic.protocols",
+      "object": "nt",
+      "group": true,
+      "transformer": "ToProtocolValue"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "mac_addr_dst"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "mac_addr_src"
+    }
+  ],
   "id": {
     "key": "x-ibm-finding.alert_id",
     "object": "alert"

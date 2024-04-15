@@ -10,7 +10,6 @@ class InvalidMetadataException(Exception):
 
 
 class Connector(BaseJsonSyncConnector):
-    NOZOMI_MAX_PAGE_SIZE = 1000
 
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
@@ -36,49 +35,51 @@ class Connector(BaseJsonSyncConnector):
             if return_obj:
                 return return_obj
 
-            if (result_count == 0 and page_number == 1) or \
-                    (page_number and result_count < self.api_client.result_limit):
+            remaining_record_count = 0
 
-                while result_count < total_records:
-                    query_url = f'{query}&page={page_number}&count={page_size}'
-                    response_wrapper = await self.api_client.get_search_results(query_url, jwt_token)
-                    response_dict, return_obj = self.handle_api_response(response_wrapper)
+            while result_count < total_records:
+                query_url = f'{query}&page={page_number}&count={page_size}'
+                response_wrapper = await self.api_client.get_search_results(query_url, jwt_token)
+                response_dict, return_obj = self.handle_api_response(response_wrapper)
 
+                if return_obj:
+                    return return_obj
+
+                # Generate a new token only the token_generated_count is 1.
+                # If it is more than one, it has already been generated.
+                if self.expired_token_count == 1:
+                    jwt_token, return_obj = await self.__get_token()
+                    self.expired_token_count += 1
                     if return_obj:
                         return return_obj
+                    continue
 
-                    # Generate a new token only the token_generated_count is 1.
-                    # If it is more than one, it has already been generated.
-                    if self.expired_token_count == 1:
-                        jwt_token, return_obj = await self.__get_token()
-                        self.expired_token_count += 1
-                        if return_obj:
-                            return return_obj
-                        continue
-
-                    return_obj['success'] = True
+                return_obj['success'] = True
+                # remaining records value is less than fetched records.
+                if remaining_record_count and remaining_record_count < len(response_dict['result']):
+                    data += response_dict['result'][:remaining_record_count]
+                    result_count += len(response_dict['result'][:remaining_record_count])
+                else:
                     data += response_dict['result']
                     result_count += len(response_dict['result'])
 
-                    if response_dict['total'] <= result_count or len(data) == 0:
-                        page_number = None
-                        break
+                if len(response_dict['result']) < page_size:
+                    page_number = None
+                    break
 
-                    remaining_records, page_size = self.get_page_size(result_count, total_records, page_size)
-                    if not remaining_records:
-                        break
+                # calculating remaining records count
+                if result_count < total_records:
+                    remaining_record_count = total_records - result_count
+                else:   # if doesn't have remaining records
+                    break
 
-                    page_number += 1
+                page_number += 1
 
-                return_obj = self.handle_data(data, metadata, offset, total_records, return_obj)
+            return_obj = self.handle_data(data, metadata, offset, total_records, return_obj)
 
-                if return_obj.get('data'):
-                    if page_number and result_count < self.api_client.result_limit:
-                        return_obj['metadata'] = {"result_count": result_count, "page_number": page_number+1,
-                                                  "page_size": page_size}
-            else:
-                return_obj['success'] = True
-                return_obj['data'] = []
+            if return_obj.get('data'):
+                if page_number and result_count < self.api_client.result_limit:
+                    return_obj['metadata'] = {"result_count": result_count, "page_number": page_number+1}
 
         except InvalidMetadataException as ex:
             return_obj = self.handle_api_exception(422, f'Invalid metadata: {str(ex)}')
@@ -160,28 +161,24 @@ class Connector(BaseJsonSyncConnector):
         :return: return_obj, dict
         """
         result_count = 0
-        page_size = 0
         page_number = 1
 
         if metadata:
             if isinstance(metadata, dict) and metadata.get('page_number'):
                 result_count = int(metadata.get('result_count', 0))
                 page_number = int(metadata.get('page_number', 1))
-                page_size = int(metadata.get('page_size', 0))
             else:
                 # raise exception when metadata doesnt contain jwtToken token
                 raise InvalidMetadataException(metadata)
 
         total_records = int(offset) + int(length)
+        page_size = int(length)
 
         if self.api_client.result_limit < total_records:
             total_records = self.api_client.result_limit
 
-        if not metadata:
-            if total_records <= Connector.NOZOMI_MAX_PAGE_SIZE:
-                page_size = total_records
-            else:
-                page_size = Connector.NOZOMI_MAX_PAGE_SIZE
+        if self.api_client.max_page_size < page_size:
+            page_size = self.api_client.max_page_size
 
         return result_count, total_records, page_number, page_size
 
@@ -212,28 +209,6 @@ class Connector(BaseJsonSyncConnector):
                 error = 'Query length is too long or Invalid Query.' + error
             return_obj = self.handle_api_exception(response_wrapper.code, error)
         return response_dict, return_obj
-
-    @staticmethod
-    def get_page_size(result_count, total_records, page_size):
-        """
-        Finding page size based on remaining records
-        :param result_count, int
-        :param total_records, int
-        :param page_size, int
-        :return: remaining_records, int
-                 page_size, int
-        """
-        if result_count < total_records:
-            remaining_records = total_records - result_count
-        else:
-            return 0, page_size
-
-        if remaining_records > Connector.NOZOMI_MAX_PAGE_SIZE:
-            page_size = Connector.NOZOMI_MAX_PAGE_SIZE
-        else:
-            page_size = remaining_records
-
-        return remaining_records, page_size
 
     @staticmethod
     def handle_data(data, metadata, offset, total_records, return_obj):

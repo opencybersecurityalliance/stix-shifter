@@ -360,9 +360,6 @@ nozomi_vantage
                 "1": {
                     "type": "ipv4-addr",
                     "value": "1.1.1.1",
-                    "resolves_to_refs": [
-                        "4"
-                    ],
                     "x_nozomi_info_ref": "7"
                 },
                 "2": {
@@ -379,9 +376,6 @@ nozomi_vantage
                 "3": {
                     "type": "ipv4-addr",
                     "value": "2.2.2.2",
-                    "resolves_to_refs": [
-                        "5"
-                    ],
                     "x_nozomi_info_ref": "6"
                 },
                 "4": {

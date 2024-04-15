@@ -52,7 +52,7 @@
                     "type": "network-traffic",
                     "src_ref": "1",
                     "protocols": [
-                        "unknown"
+                        "tcp"
                     ]
                 },
                 "3": {
@@ -148,9 +148,6 @@
                 "1": {
                     "type": "ipv4-addr",
                     "value": "2.2.2.2",
-                    "resolves_to_refs": [
-                        "4"
-                    ],
                     "x_nozomi_info_ref": "6"
                 },
                 "2": {
@@ -167,9 +164,6 @@
                 "3": {
                     "type": "ipv4-addr",
                     "value": "3.3.3.3",
-                    "resolves_to_refs": [
-                        "5"
-                    ],
                     "x_nozomi_info_ref": "7"
                 },
                 "4": {
@@ -285,9 +279,6 @@
                 "1": {
                     "type": "ipv4-addr",
                     "value": "1.1.1.1",
-                    "resolves_to_refs": [
-                        "4"
-                    ],
                     "x_nozomi_info_ref": "6"
                 },
                 "2": {
@@ -304,9 +295,6 @@
                 "3": {
                     "type": "ipv4-addr",
                     "value": "4.4.4.4",
-                    "resolves_to_refs": [
-                        "5"
-                    ],
                     "x_nozomi_info_ref": "7"
                 },
                 "4": {
@@ -379,9 +367,6 @@
                 "1": {
                     "type": "ipv4-addr",
                     "value": "5.5.5.5",
-                    "resolves_to_refs": [
-                        "4"
-                    ],
                     "x_nozomi_info_ref": "6"
                 },
                 "2": {
@@ -398,9 +383,6 @@
                 "3": {
                     "type": "ipv4-addr",
                     "value": "1.1.1.1",
-                    "resolves_to_refs": [
-                        "5"
-                    ],
                     "x_nozomi_info_ref": "7"
                 },
                 "4": {
@@ -489,9 +471,6 @@
                 "1": {
                     "type": "ipv4-addr",
                     "value": "7.7.7.7",
-                    "resolves_to_refs": [
-                        "4"
-                    ],
                     "x_nozomi_info_ref": "6"
                 },
                 "2": {
@@ -499,15 +478,12 @@
                     "dst_ref": "1",
                     "src_ref": "3",
                     "protocols": [
-                        "unknown"
+                        "tcp"
                     ]
                 },
                 "3": {
                     "type": "ipv4-addr",
                     "value": "8.8.8.8",
-                    "resolves_to_refs": [
-                        "5"
-                    ],
                     "x_nozomi_info_ref": "7"
                 },
                 "4": {
