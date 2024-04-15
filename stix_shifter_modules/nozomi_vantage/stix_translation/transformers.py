@@ -101,7 +101,7 @@ class ToProtocolValue(ValueTransformer):
     """A value transformer for converting value to protocol value
     Example:
         Input: 'tcp/3389' or 'unknown'
-        Output: [tcp] or [tcp]
+        Output: [tcp] or None
     """
     @staticmethod
     def transform(obj):
