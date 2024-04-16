@@ -43,7 +43,7 @@
   },
   "file": {
     "fields": {
-      "name": ["file.name", "dll.name", "file.path", "process.name", "process.executable", "process.parent.name", "process.parent.executable", "email.attachments.file.name"],
+      "name": ["file.name", "dll.name", "file.path", "process.name", "process.parent.name", "email.attachments.file.name"],
       "created": ["file.created", "file.ctime"],
       "modified": ["file.mtime"],
       "accessed": ["file.accessed"],
@@ -110,7 +110,7 @@
       "parent_ref.x_thread_id": ["process.parent.thread.id"],
       "parent_ref.x_uptime": ["process.parent.uptime"],
       "parent_ref.cwd": ["process.parent.working_directory"],
-      "parent_ref.binary_ref.path": ["process.parent.executable"],
+      "parent_ref.binary_ref.name": ["process.parent.executable"],
       "parent_ref.binary_ref.parent_directory_ref.path": ["process.parent.executable"],
       "binary_ref.name": ["process.executable", "process.parent.executable"],
       "binary_ref.parent_directory_ref.path": ["process.executable", "process.parent.executable"],
