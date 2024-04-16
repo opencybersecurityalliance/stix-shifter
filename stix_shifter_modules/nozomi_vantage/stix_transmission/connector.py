@@ -28,8 +28,8 @@ class Connector(BaseJsonSyncConnector):
         """
         data = []
         try:
-            result_count, total_records, page_number, page_size = self.handle_metadata_and_page_size(offset, length,
-                                                                                                     metadata)
+            result_count, total_records, page_number, page_size = self.handle_metadata_and_page_size(int(offset),
+                                                                                                int(length), metadata)
             # Generating jwt token
             jwt_token, return_obj = await self.__get_token()
             if return_obj:
@@ -79,7 +79,7 @@ class Connector(BaseJsonSyncConnector):
 
             if return_obj.get('data'):
                 if page_number and result_count < self.api_client.result_limit:
-                    return_obj['metadata'] = {"result_count": result_count, "page_number": page_number+1}
+                    return_obj['metadata'] = {"page_number": page_number+1}
 
         except InvalidMetadataException as ex:
             return_obj = self.handle_api_exception(422, f'Invalid metadata: {str(ex)}')
@@ -160,25 +160,26 @@ class Connector(BaseJsonSyncConnector):
         :param metadata, dict
         :return: return_obj, dict
         """
-        result_count = 0
         page_number = 1
 
         if metadata:
             if isinstance(metadata, dict) and metadata.get('page_number'):
-                result_count = int(metadata.get('result_count', 0))
                 page_number = int(metadata.get('page_number', 1))
             else:
                 # raise exception when metadata doesnt contain jwtToken token
                 raise InvalidMetadataException(metadata)
 
-        total_records = int(offset) + int(length)
-        page_size = int(length)
+        total_records = offset + length
+        page_size = length
 
         if self.api_client.result_limit < total_records:
             total_records = self.api_client.result_limit
 
         if self.api_client.max_page_size < page_size:
             page_size = self.api_client.max_page_size
+
+        # for the first api call result_count is zero
+        result_count = page_size * (page_number - 1)
 
         return result_count, total_records, page_number, page_size
 

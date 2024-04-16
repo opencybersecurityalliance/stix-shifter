@@ -18,8 +18,8 @@
     },
     "options": {
       "api_page_size": {
-        "label": "API page size",
-        "description": "Number of records per API call. Data source recommended value is 1000 per API call. Valid input range is {{min}} to {{max}}."
+        "label": "API Page Size",
+        "description": "Number of records per API call. Data source recommended value should be kept below or equal to 1000 per API call. Valid input range is {{min}} to {{max}}."
       }
     }
   },
