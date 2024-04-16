@@ -15,6 +15,31 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 *List the dependecy upgrade or downgrade.*
 
 --------------------------------------
+## 7.0.6 (2024-04-16)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+*  adding support for LIKE operator in SumoLogic Module [#1670](https://github.com/opencybersecurityalliance/stix-shifter/pull/1670)
+*  Infoblox connector source changes [#1660](https://github.com/opencybersecurityalliance/stix-shifter/pull/1660)
+*  sumologic: use milliseconds since epoch for timestamps [#1668](https://github.com/opencybersecurityalliance/stix-shifter/pull/1668)
+*  sumologic: add support for != [#1658](https://github.com/opencybersecurityalliance/stix-shifter/pull/1658)
+*  map validator: additional checks for single quotes and extensions properties [#1667](https://github.com/opencybersecurityalliance/stix-shifter/pull/1667)
+
+
+### Fixes:
+*  Amazon athena resolve column not found exception [#1673](https://github.com/opencybersecurityalliance/stix-shifter/pull/1673)
+*  Updated requirements and changed SSL purpose [#1664](https://github.com/opencybersecurityalliance/stix-shifter/pull/1664)
+
+### Dependency update:
+*  Bump json-fix from 0.5.2 to 1.0.0 in /stix_shifter [#1672](https://github.com/opencybersecurityalliance/stix-shifter/pull/1672)
+*  Bump colorlog from 6.8.0 to 6.8.2 in /stix_shifter [#1671](https://github.com/opencybersecurityalliance/stix-shifter/pull/1671)
+*  Bump regex from 2023.10.3 to 2023.12.25 in /stix_shifter [#1663](https://github.com/opencybersecurityalliance/stix-shifter/pull/1663)
+
+--------------------------------------
 ## 7.0.4 (2024-03-14)
 
 ### Breaking changes:
