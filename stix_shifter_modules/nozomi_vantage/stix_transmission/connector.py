@@ -28,17 +28,19 @@ class Connector(BaseJsonSyncConnector):
         """
         data = []
         try:
-            result_count, total_records, page_number, page_size = self.handle_metadata_and_page_size(int(offset),
-                                                                                                int(length), metadata)
+            offset = int(offset)
+            length = int(length)
+            result_count = offset
+            total_records, page_number, offset = self.handle_metadata(offset, length, metadata)
+            expected_result_count = offset + length
+
             # Generating jwt token
             jwt_token, return_obj = await self.__get_token()
             if return_obj:
                 return return_obj
 
-            remaining_record_count = 0
-
             while result_count < total_records:
-                query_url = f'{query}&page={page_number}&count={page_size}'
+                query_url = f'{query}&page={page_number}&count={self.api_client.api_page_size}'
                 response_wrapper = await self.api_client.get_search_results(query_url, jwt_token)
                 response_dict, return_obj = self.handle_api_response(response_wrapper)
 
@@ -55,31 +57,23 @@ class Connector(BaseJsonSyncConnector):
                     continue
 
                 return_obj['success'] = True
-                # remaining records value is less than fetched records.
-                if remaining_record_count and remaining_record_count < len(response_dict['result']):
-                    data += response_dict['result'][:remaining_record_count]
-                    result_count += len(response_dict['result'][:remaining_record_count])
-                else:
-                    data += response_dict['result']
-                    result_count += len(response_dict['result'])
+                data += response_dict['result']
+                local_result_count = len(response_dict['result'])
+                result_count += local_result_count
 
-                if len(response_dict['result']) < page_size:
+                if len(response_dict['result']) < self.api_client.api_page_size:
                     page_number = None
                     break
 
-                # calculating remaining records count
-                if result_count < total_records:
-                    remaining_record_count = total_records - result_count
-                else:   # if doesn't have remaining records
-                    break
+                # Incrementing the next page when the fetched results are fully utilized.
+                if local_result_count <= expected_result_count:
+                    page_number += 1
 
-                page_number += 1
-
-            return_obj = self.handle_data(data, metadata, offset, total_records, return_obj)
+            return_obj = self.handle_data(data, offset, expected_result_count, return_obj)
 
             if return_obj.get('data'):
                 if page_number and result_count < self.api_client.result_limit:
-                    return_obj['metadata'] = {"page_number": page_number+1}
+                    return_obj['metadata'] = {"page_number": page_number}
 
         except InvalidMetadataException as ex:
             return_obj = self.handle_api_exception(422, f'Invalid metadata: {str(ex)}')
@@ -152,36 +146,33 @@ class Connector(BaseJsonSyncConnector):
         ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
 
-    def handle_metadata_and_page_size(self, offset, length, metadata):
+    def handle_metadata(self, offset, length, metadata):
         """
-        Processing metadata information and page size
+        Processing metadata information
         :param offset, int
         :param length, int
         :param metadata, dict
-        :return: return_obj, dict
+        :return: total_records, int
+                 page_number, int
+                 offset, int
         """
         page_number = 1
+
+        # calculating the overall record count
+        total_records = offset + length
+        if self.api_client.result_limit < total_records:
+            total_records = self.api_client.result_limit
 
         if metadata:
             if isinstance(metadata, dict) and metadata.get('page_number'):
                 page_number = int(metadata.get('page_number', 1))
+                # overwrite the offset for current batch.
+                offset = abs(offset - ((page_number - 1) * self.api_client.api_page_size))
             else:
                 # raise exception when metadata doesnt contain jwtToken token
                 raise InvalidMetadataException(metadata)
 
-        total_records = offset + length
-        page_size = length
-
-        if self.api_client.result_limit < total_records:
-            total_records = self.api_client.result_limit
-
-        if self.api_client.max_page_size < page_size:
-            page_size = self.api_client.max_page_size
-
-        # for the first api call result_count is zero
-        result_count = page_size * (page_number - 1)
-
-        return result_count, total_records, page_number, page_size
+        return total_records, page_number, offset
 
     def handle_api_response(self, response_wrapper):
         """
@@ -212,22 +203,18 @@ class Connector(BaseJsonSyncConnector):
         return response_dict, return_obj
 
     @staticmethod
-    def handle_data(data, metadata, offset, total_records, return_obj):
+    def handle_data(data, offset, expected_result_count, return_obj):
         """
          Process the data
         :param data, list
-        :param metadata, dict
         :param offset, int
-        :param total_records, int
+        :param expected_result_count, int
         :param return_obj, dict
         :return: return_obj, dict
         """
         if data:
             data = Connector.get_results_data(data)
-            if metadata:
-                return_obj['data'] = data if data else []
-            else:
-                return_obj['data'] = data[int(offset): total_records] if data else []
+            return_obj['data'] = data[offset: expected_result_count] if data else []
         else:
             if not return_obj.get('error') and return_obj.get('success') is not False:
                 return_obj['success'] = True

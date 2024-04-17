@@ -29,18 +29,14 @@
       "references": "dst_ip"
     }
   ],
-  "mac_src": [
-    {
-      "key": "mac-addr.value",
-      "object": "mac_addr_src"
-    }
-  ],
-  "mac_dst": [
-    {
-      "key": "mac-addr.value",
-      "object": "mac_addr_dst"
-    }
-  ],
+  "mac_src": {
+    "key": "mac-addr.value",
+    "object": "mac_addr_src"
+  },
+  "mac_dst": {
+    "key": "mac-addr.value",
+    "object": "mac_addr_dst"
+  },
   "port_dst": {
     "key": "network-traffic.dst_port",
     "object": "nt"
