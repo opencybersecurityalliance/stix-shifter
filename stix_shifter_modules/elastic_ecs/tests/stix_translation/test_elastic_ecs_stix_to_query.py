@@ -353,14 +353,14 @@ class TestStixtoQuery(unittest.TestCase, object):
         stix_pattern = r"[process:command_line MATCHES 'cmd\\.exe .*']"
         translated_query = translation.translate('elastic_ecs:beats', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['(process.command_line.keyword : /cmd\\.exe .*/ OR powershell.command.value : /cmd\\.exe .*/)']
+        test_query = ['(process.command_line.keyword : /cmd\\.exe .*/)']
         _test_query_assertions(translated_query, test_query)
 
     def test_like_operator(self):
         stix_pattern = "[process:command_line LIKE 'cmd.exe /_ %']"
         translated_query = translation.translate('elastic_ecs', 'query', '{}', stix_pattern)
         translated_query['queries'] = _remove_timestamp_from_query(translated_query['queries'])
-        test_query = ['(process.command_line : "cmd.exe /? *" OR powershell.command.value : "cmd.exe /? *")']
+        test_query = ['(process.command_line : "cmd.exe /? *")']
         _test_query_assertions(translated_query, test_query)
 
     def test_like_operator_with_backslash(self):
