@@ -2,7 +2,6 @@
     "connection": {
         "host": {
             "label": "Management IP address or hostname",
-            "placeholder": "192.168.1.10",
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
@@ -14,8 +13,8 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "Alertflex connection certificate",
-            "description": "Use self-signed SSL certificate and CA content(root and intermediate) of data source"
+            "label": "PEM Formatted SSL certificate(s)",
+            "description": "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
         }
     },
     "configuration": {
