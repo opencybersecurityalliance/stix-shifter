@@ -12,6 +12,7 @@ class InvalidSearchIdException(Exception):
 class InvalidMetadataException(Exception):
     pass
 
+
 # LogScale event fields starts with @timestamp and @error_msg will be overwritten while un-flattening.
 # These fields are excluded while un flattening
 DS_FLATTEN_KEY_EXCLUDE = ["@timestamp", "@error_msg"]
@@ -25,7 +26,7 @@ class ResultsConnector(BaseJsonResultsConnector):
 
     async def create_results_connection(self, search_id, offset, length, metadata=None):
         """
-        Poll/create the query Job to fetch the results of the search
+        Fetch the results of the search by creating and polling the query job
         :param search_id:  str
         :param offset: str
         :param length: str
@@ -34,30 +35,38 @@ class ResultsConnector(BaseJsonResultsConnector):
         """
         response_dict = {}
         return_obj = {}
+        response_query_status_details = {}
         try:
             offset = int(offset)
             length = int(length)
-
-            job_id = await self.fetch_query_job_id(metadata, length, search_id)
-            if isinstance(job_id,dict):
-                return job_id
-            return_obj, response_query_status_details = await self.fetch_query_job_response(job_id, metadata)
-            if not response_query_status_details.get('done') and return_obj['success']:
-                return_obj, response_query_status_details = await self.fetch_status_and_response(search_id, length)
-            if return_obj.get('data'):
-                return_obj, new_response_query_status_details = await (self.fetch_remaining_data_and_format_results
-                                                                   (return_obj, offset,length, response_query_status_details, metadata, search_id))
-                if new_response_query_status_details:
-                    return_obj['metadata'] = ResultsConnector.prepare_metadata(return_obj['data'], new_response_query_status_details)
-                else:
-                    return_obj['metadata'] = ResultsConnector.prepare_metadata(return_obj['data'],
-                                                                               response_query_status_details)
+            data = []
+            total_records = self.fetch_total_records(metadata, offset, length)
+            first_iteration = False
+            if not metadata:
+                first_iteration = True   # setting the variable to apply offset and length on data when metadata is not passed as input
+                return_obj, data, metadata, response_query_status_details = await self.process_first_query_job(search_id, data, total_records)
             if metadata:
-                if return_obj.get('metadata'):
-                    return_obj['metadata']['record_count'] += metadata.get('record_count',0)
-                # deleting the internal query jobs that has been created for pagination
-                delete_obj = DeleteConnector(self.api_client)
-                await delete_obj.delete_query_connection(job_id)
+                while len(data) < total_records:
+                    job_id = await self.fetch_query_job_id(metadata, self.api_client.api_page_size)
+                    if isinstance(job_id,dict):
+                        return job_id
+                    return_obj, response_query_status_details = await self.fetch_status_and_response(job_id, length)
+                    if not return_obj.get('success'):
+                        break
+                    if return_obj.get('data'):
+                        data.extend(return_obj['data'])
+                        #prepare metadata for next iteration
+                        metadata = ResultsConnector.prepare_metadata(return_obj['data'], response_query_status_details)
+                    else:
+                        break
+                    # deleting the internal query jobs that has been created for pagination
+                    delete_obj = DeleteConnector(self.api_client)
+                    await delete_obj.delete_query_connection(job_id)
+
+            if data:
+                return_obj = await self.format_results(data, offset,total_records, first_iteration)
+                if (offset + len(return_obj['data'])) < self.api_client.result_limit:
+                    return_obj['metadata'] = ResultsConnector.prepare_metadata(return_obj['data'], response_query_status_details)
 
         except InvalidSearchIdException:
             return_obj = self.handle_api_exception(404,"Invalid Search Id")
@@ -76,7 +85,7 @@ class ResultsConnector(BaseJsonResultsConnector):
 
     def handle_api_exception(self, code, response_txt):
         """
-        create the exception response
+        Create the exception response
         :param code, int
         :param response_txt, dict
         :return: return_obj, dict
@@ -86,88 +95,93 @@ class ResultsConnector(BaseJsonResultsConnector):
         ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
 
-    async def fetch_remaining_data_and_format_results(self, return_obj, offset,length, response_query_status_details, metadata, search_id):
+    async def process_first_query_job(self, search_id, data, total_records):
         """
-        Fetch the remaining records if the records are less than length and process the results
-        :param return_obj: dict
-        :param offset: int
-        :param length: int
-        :param response_query_status_details: dict
-        :param metadata: dict
+        Fetch the response of the First Query Job Id
         :param search_id: str
+        :param data: list
+        :param total_records: int
         :return: dict
         """
-        next_response_query_status_details = {}
-        # If the records fetched is less than total records, create a new job id, and fetch the next set of results
-        # using the event id of the last data which is fetched until now.
+        metadata = {}
+        if ":" not in search_id:
+            raise InvalidSearchIdException
+        # split the input search id which is in the format job_id:source into individual fields for fetching results
+        job_id = search_id.split(":")[0]
+        return_obj, response_query_status_details = await self.fetch_query_job_response(job_id)
+        if return_obj['success']:
+            if return_obj.get('data'):
+                data.extend(return_obj['data'])
+                if len(return_obj['data']) < total_records:
+                    metadata = ResultsConnector.prepare_metadata(return_obj['data'], response_query_status_details)
+        else:
+            return return_obj, data, metadata, response_query_status_details
+        return {}, data, metadata, response_query_status_details
+    async def format_results(self, data, offset, total_records, first_iteration):
+        """
+        Slice the records and format the results
+        :param data: dict
+        :param offset: int
+        :param total_records: int
+        :param first_iteration: bool
+        :return: dict
+        """
+        if first_iteration:
+            formatted_data = [self.unflatten_json(event) for event in data[offset: total_records]]
+        else:
+            formatted_data = [self.unflatten_json(event) for event in data[:total_records]]
 
+        return_obj = {'success': True, 'data': formatted_data}
+        return return_obj
+
+    def fetch_total_records(self,metadata, offset, length):
+        """
+        Calculate the value of total records to be fetched based on metadata
+        :param metadata: dict
+        :param offset: int
+        :param length: int
+        :return: int
+        """
         if not metadata:
             total_records = offset + length
-            if total_records > self.api_client.result_limit:
+            if self.api_client.result_limit < total_records:
                 total_records = self.api_client.result_limit
-            if len(return_obj['data']) < total_records:
-                new_metadata = ResultsConnector.prepare_metadata(return_obj['data'], response_query_status_details)
-                job_id = await self.fetch_query_job_id(new_metadata, total_records - len(return_obj['data']), search_id)
-                if isinstance(job_id, dict):
-                    return job_id # return the dictionary in case of negative response
-                next_return_object, next_response_query_status_details = await self.fetch_status_and_response(job_id, length)
-                if next_return_object.get('success'):
-                    return_obj['data'].extend(next_return_object['data'])
-                else:
-                    return next_return_object
-                # delete the intermediate job id
-                delete_obj = DeleteConnector(self.api_client)
-                await delete_obj.delete_query_connection(job_id)
-
-        if metadata:
-            formatted_data = [self.unflatten_json(event) for event in return_obj['data']]
         else:
-            formatted_data = [self.unflatten_json(event) for event in
-                              return_obj['data'][offset: total_records]]
-
-        return_obj['data'] = formatted_data
-        return return_obj, next_response_query_status_details
-
-    async def fetch_query_job_id(self,metadata, length, search_id):
+            records_fetched = offset
+            total_records = length
+            if abs(self.api_client.result_limit - records_fetched) < total_records:
+                total_records = abs(self.api_client.result_limit - records_fetched)
+        return total_records
+    async def fetch_query_job_id(self,metadata, length):
         """
-        Fetch the existing job id from search id or create a new job id using metadata
-        :param metadata:
-        :param length:
-        :param search_id:
-        :return:
+        Create a new job id using metadata
+        :param metadata: dict
+        :param length: int
+        :return: dict/str
         """
-        if metadata:
-            # Fetch the input details from metadata and create a new job id to fetch the next set of results through pagination
-            if isinstance(metadata, str):
-                metadata = json.loads(metadata)
-            if (metadata.get('last_event_id') and metadata.get('last_event_timestamp') and
-                    metadata.get('input_query_string') and metadata.get('start') and metadata.get('record_count')):
-                remaining_records = abs(self.api_client.result_limit - metadata['record_count'])
-                if length > remaining_records:
-                    length = remaining_records
-                search_query = {
-                    'queryString': metadata['input_query_string'],
-                    'around': {"eventId" : metadata['last_event_id'],
-                               "numberOfEventsAfter" : 0,
-                               "numberOfEventsBefore" : length,
-                               "timestamp" : metadata['last_event_timestamp']},
-                    'start': metadata['start'],
-                    'end': metadata['last_event_timestamp']
-                }
-                query_response = await self.api_client.create_search(search_query)
-                query_response_content = query_response.read().decode('utf-8')
-                if query_response.code == 200:
-                    query_response_text = json.loads(query_response_content)
-                    job_id = query_response_text['id']
-                else:
-                    return self.handle_api_exception(query_response.code, query_response_content)
+        # Fetch the input details from metadata and create a new job id to fetch the next set of results through pagination
+        if isinstance(metadata, str):
+            metadata = json.loads(metadata)
+        if (metadata.get('last_event_id') and metadata.get('last_event_timestamp') and
+                metadata.get('input_query_string') and metadata.get('start')):
+            search_query = {
+                'queryString': metadata['input_query_string'],
+                'around': {"eventId" : metadata['last_event_id'],
+                           "numberOfEventsAfter" : 0,
+                           "numberOfEventsBefore" : length,
+                           "timestamp" : metadata['last_event_timestamp']},
+                'start': metadata['start'],
+                'end': metadata['last_event_timestamp']
+            }
+            query_response = await self.api_client.create_search(search_query)
+            query_response_content = query_response.read().decode('utf-8')
+            if query_response.code == 200:
+                query_response_text = json.loads(query_response_content)
+                job_id = query_response_text['id']
             else:
-                raise InvalidMetadataException
+                return self.handle_api_exception(query_response.code, query_response_content)
         else:
-            if ":" not in search_id:
-                raise InvalidSearchIdException
-            # When metadata is None, split the input search id which is in the format job_id:source into individual fields for fetching results
-            job_id = search_id.split(":")[0]
+            raise InvalidMetadataException
         return job_id
 
     async def fetch_status_and_response(self, search_id, length):
@@ -175,7 +189,7 @@ class ResultsConnector(BaseJsonResultsConnector):
         Fetch the status and results of the intermediate query job
         :param search_id: str
         :param length: int
-        :return: return_obj, dict: data, list
+        :return: dict,dict
         """
         return_obj = {}
         status_obj = StatusConnector(self.api_client)
@@ -221,12 +235,13 @@ class ResultsConnector(BaseJsonResultsConnector):
     @staticmethod
     def prepare_metadata(data, response_query_status_details):
         """
-        Format the data and create/update the metadata
+        Create the metadata
         :param data: list
         :param response_query_status_details: dict
         :return: return_obj, dict
         """
         metadata = {}
+
         querystring = response_query_status_details.get('filterQuery').get('queryString')
         tail_index = querystring.find("| tail")
         formatted_query = querystring[:tail_index] if tail_index != -1 else querystring
@@ -234,7 +249,6 @@ class ResultsConnector(BaseJsonResultsConnector):
         metadata['last_event_timestamp'] = data[-1]['@timestamp']
         metadata['input_query_string'] = formatted_query
         metadata['start'] = response_query_status_details['filterQuery']['start']
-        metadata['record_count'] = len(data)
         return metadata
 
     def unflatten_json(self, flatten_json):

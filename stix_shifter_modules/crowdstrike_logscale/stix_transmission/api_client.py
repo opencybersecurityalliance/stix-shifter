@@ -13,6 +13,7 @@ class APIClient:
         self.client = RestApiClientAsync(connection.get('host'), headers=self.headers)
         self.timeout = connection['options'].get('timeout')
         self.result_limit = connection['options'].get('result_limit')
+        self.api_page_size = connection['options'].get('api_page_size')
         self.api_endpoint = f"{JOB_ENDPOINT}/{connection.get('repository')}/queryjobs"
 
     async def ping_data_source(self):

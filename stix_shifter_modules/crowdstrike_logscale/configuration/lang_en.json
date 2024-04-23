@@ -11,6 +11,12 @@
         "repository": {
             "label": "Repository",
             "description": "A container storing log events collected from various data source."
+        },
+        "options": {
+            "api_page_size": {
+                "label": "API Page Size",
+                "description": "Number of records per API call. Recommended value is above or equal to 2000"
+            }
         }
     },
     "configuration": {
