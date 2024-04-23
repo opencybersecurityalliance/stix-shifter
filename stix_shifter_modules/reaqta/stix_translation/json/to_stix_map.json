@@ -1420,8 +1420,8 @@
         },
         {
           "group": true,
-          "key": "x-reaqta-event.ip_refs",
-          "object": "x-reaqta",
+          "key": "x-oca-event.ip_refs",
+          "object": "event",
           "references": [
             "src_ip"
           ]
@@ -1444,8 +1444,8 @@
         },
         {
           "group": true,
-          "key": "x-reaqta-event.ip_refs",
-          "object": "x-reaqta",
+          "key": "x-oca-event.ip_refs",
+          "object": "event",
           "references": [
             "src_ip"
           ]
