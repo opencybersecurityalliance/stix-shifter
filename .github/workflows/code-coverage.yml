@@ -36,6 +36,8 @@ jobs:
       - name: Upload coverage information to Codecov
         uses: codecov/codecov-action@v3
         with:
-          version: "v0.2.6"
+          version: "v0.5.2"
           fail_ci_if_error: true # optional (default = false)
           verbose: true # optional (default = false)
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
