@@ -108,7 +108,7 @@ class Connector(BaseJsonSyncConnector):
         #This is a mapping of the UI useful name with the internal ID they are using.
         #I determined this by using their HunQ search tool within the Reaqta environment.
         #This could change in the future and may need to be updated or removed.
-        TACTIC_NAME_MAPPING = {
+        tactic_name_mapping = {
             "0":"Unknown",
             "1":"Initial Access",
             "2":"Execution",
@@ -150,8 +150,8 @@ class Connector(BaseJsonSyncConnector):
                 dict_list = []
                 for tactic in tactic_list:
                     
-                    if (f"{tactic}" in TACTIC_NAME_MAPPING):
-                        dict_list.append({"tactic_number": tactic, "tactic_name": TACTIC_NAME_MAPPING.get(f"{tactic}"), "technique":technique})
+                    if (f"{tactic}" in tactic_name_mapping):
+                        dict_list.append({"tactic_number": tactic, "tactic_name": tactic_name_mapping.get(f"{tactic}"), "technique":technique})
                     else:
                         dict_list.append({"tactic_number": tactic, "tactic_name": "Unknown", "technique":technique})
                 result['payload']['data']['mod_tactics'] = dict_list

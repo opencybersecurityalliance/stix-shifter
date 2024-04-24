@@ -497,15 +497,14 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(finding["x_reaqta_matcher_id"] == "1072556371783720966")
         
     def test_updated_mitre_fields(self):
-        data = {'eventId': '1119732427405660161', 'endpointId': '1114241789272784896', 'payload': {'localId': '1119732154209667073', 'process': {'id': '1114241789272784896:4704:1713564948917', 'parentId': '1114241789272784896:4060:1713564802263', 'endpointId': '1114241789272784896', 'program': {'path': 'c:\\users\\test\\desktop\\maze_rw.exe', 'filename': 'maze_rw.exe', 'md5': '01010101010101010101010101010101', 'sha1': '0101010101010101010101010101010101010101', 'sha256': '010101010101010101010101010101010101010101010101010101010101010', 'size': 495616, 'arch': 'x32', 'fsName': 'maze_rw.exe'}, 'user': 'USER-Desktop\\Desktop', 'pid': 4704, 'startTime': '2024-04-19T22:15:48.917Z', 'ppid': 4060, 'pstartTime': '2024-04-19T22:13:22.263Z', 'userSID': 'S-1-5-21-0101010101-0101010101-0101010101-1001', 'privilegeLevel': 'HIGH', 'noGui': False, 'logonId': '0x14c9e0'}, 'incidents': [], 'triggeredIncidents': ['1119732154268387330'], 'data': {'technique': 'T1053', 'tactics': [2, 3, 4], 'tags': [], 'relevance': 50, 'customData': {'cmdLine': '"c:\\\\windows\\\\system32\\\\schtasks.exe" /create /sc minute /mo 30 /tn skype /tr "c:\\\\users\\\\ibm desktop\\\\appdata\\\\roaming\\\\dspwzisybb.js'}, 'version': 1, 'mod_tactics': [{'tactic_number': 2, 'tactic_name': 'Execution', 'technique': 'T1053'}, {'tactic_number': 3, 'tactic_name': 'Persistence', 'technique': 'T1053'}, {'tactic_number': 4, 'tactic_name': 'Privilege Escalation', 'technique': 'T1053'}]}, 'eventType': 28}, 'happenedAt': '2024-04-19T22:15:49.181Z', 'receivedAt': '2024-04-19T22:16:54.316Z'}
-        result_bundle = run_in_thread(ENTRY_POINT.translate_results, DATA_SOURCE, [data])
+        result_bundle = run_in_thread(ENTRY_POINT.translate_results, DATA_SOURCE, [DATA])
         result_bundle_objects = result_bundle['objects']
         observed_data = result_bundle_objects[1]
         objects = observed_data['objects']
         
-        mitre_2 = objects["7"]
-        mitre_3 = objects["8"]
-        mitre_4 = objects["9"]
+        mitre_2 = objects["38"]
+        mitre_3 = objects["39"]
+        mitre_4 = objects["40"]
         
         assert(mitre_2 is not None), 'process object type not found'
         assert(mitre_2["type"] == "x-ibm-ttp-tagging")
