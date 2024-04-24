@@ -1,0 +1,30 @@
+{
+    "connection": {
+        "host": {
+            "label": "Management IP address or hostname",
+            "description": "Specify the IP address or hostname of the data source"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        },
+        "repository": {
+            "label": "Repository",
+            "description": "A container storing log events collected from various data source."
+        },
+        "options": {
+            "api_page_size": {
+                "label": "API Page Size",
+                "description": "Number of records per API call. Default value is above or equal to 2000"
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "api_token": {
+                "label": "Repository API token",
+                "description": "The API token of a Repository to access the repository related API's"
+            }
+        }
+    }
+}
