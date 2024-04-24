@@ -1,0 +1,1021 @@
+{
+    "type": "bundle",
+    "id": "bundle--58009c81-55e4-433e-b704-3f6ad1ca6adc",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "name": "crowdstrike_logscale",
+            "identity_class": "system",
+            "created": "2023-12-24T13:22:50.336Z",
+            "modified": "2023-12-24T13:22:50.336Z"
+        },
+        {
+            "id": "observed-data--054fed68-c9c8-4dd8-910a-33e72e8aa8dc",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-04-03T16:57:35.123Z",
+            "modified": "2024-04-03T16:57:35.123Z",
+            "objects": {
+                "0": {
+                    "type": "file",
+                    "x_extension": "exe",
+                    "name": "ruby.exe",
+                    "x_path": "\\Device\\ruby.exe",
+                    "parent_directory_ref": "3",
+                    "hashes": {
+                        "MD5": "10101010101010101010101001011001",
+                        "SHA-256": "1010101010101010101010100101100101010101010101010101010101010100"
+                    }
+                },
+                "1": {
+                    "type": "x-crowdstrike-detection-behavior",
+                    "behavior_id": "41002",
+                    "confidence": 100,
+                    "control_graph_id": "ctg:7adb:123",
+                    "description": "A process triggered a medium severity custom rule.",
+                    "display_name": "CustomIOAWinMedium",
+                    "process_ref": "2",
+                    "ioc_description": "\\Device\\ruby.exe",
+                    "ioc_source": "library_load",
+                    "ioc_type": "hash_sha256",
+                    "ioc_value": "123",
+                    "objective": "Falcon Detection Method",
+                    "pattern_disposition": 2048,
+                    "pattern_disposition_details": {
+                        "blocking_unsupported_or_disabled": "false",
+                        "bootup_safeguard_enabled": "false",
+                        "critical_process_disabled": "false",
+                        "detect": "false",
+                        "fs_operation_blocked": "false",
+                        "handle_operation_downgraded": "false",
+                        "inddet_mask": "false",
+                        "indicator": "false",
+                        "kill_action_failed": "false",
+                        "kill_parent": "false",
+                        "kill_process": "false",
+                        "kill_subprocess": "false",
+                        "operation_blocked": "false",
+                        "policy_disabled": "false",
+                        "process_blocked": "true",
+                        "quarantine_file": "false",
+                        "quarantine_machine": "false",
+                        "registry_operation_blocked": "false",
+                        "rooting": "false",
+                        "sensor_only": "false",
+                        "suspend_parent": "false",
+                        "suspend_process": "false"
+                    },
+                    "rule_instance_id": 3,
+                    "rule_instance_version": "3",
+                    "scenario": "suspicious_activity",
+                    "severity": 50,
+                    "ttp_tagging_ref": "6",
+                    "template_instance_id": "3",
+                    "created_time": "2024-03-14T13:41:22Z",
+                    "user_ref": "7"
+                },
+                "2": {
+                    "type": "process",
+                    "command_line": "\"C:\\Ruby25-x64\\bin\\ruby\"  -x \"C:\\Ruby25-x64\\bin\\ridk.cmd\" install",
+                    "name": "ruby.exe",
+                    "binary_ref": "0",
+                    "parent_ref": "4",
+                    "x_process_graph_id": "pid:7adb:456",
+                    "creator_user_ref": "7"
+                },
+                "3": {
+                    "type": "directory",
+                    "path": "\\Device\\Ruby25-x64\\bin"
+                },
+                "4": {
+                    "type": "process",
+                    "command_line": "C:\\cmd.exe /c \"\"C:\\Ruby25-x64\\bin\\ridk.cmd\" install\"",
+                    "binary_ref": "5",
+                    "x_process_graph_id": "pid:7adb:xyz"
+                },
+                "5": {
+                    "type": "file",
+                    "hashes": {
+                        "MD5": "10101010101010101010101001011001",
+                        "SHA-256": "1010101010101010101010100101100101010101010101010101010101010100"
+                    }
+                },
+                "6": {
+                    "type": "x-ibm-ttp-tagging",
+                    "name": "Custom Intelligence",
+                    "extensions": {
+                        "mitre-attack-ext": {
+                            "tactic_id": "CSTA0005",
+                            "technique_name": "Indicator of Attack",
+                            "technique_id": "CST0004"
+                        }
+                    }
+                },
+                "7": {
+                    "type": "user-account",
+                    "user_id": "S-1-5-21",
+                    "display_name": "Administrator"
+                },
+                "8": {
+                    "type": "x-ibm-finding",
+                    "x_logscale_repository": "TestRepository",
+                    "x_logscale_event_id": "xpC1sUz8JCF1oyTpI7dSVld5_363_49_1712140849",
+                    "x_behavior_refs": [
+                        "1"
+                    ],
+                    "ttp_tagging_refs": [
+                        "6"
+                    ],
+                    "x_behaviors_processed": [
+                        "pid:7adb:456:41002"
+                    ],
+                    "time_observed": "2024-03-14T13:41:29.903Z",
+                    "x_last_updated": "2024-04-03T10:40:49.668767Z",
+                    "name": "ldt:7adb:123",
+                    "src_ip_ref": "11",
+                    "src_os_ref": "14",
+                    "x_is_email_sent": "false",
+                    "x_first_behavior_observed": "2024-03-14T13:41:22Z",
+                    "x_last_behavior_observed": "2024-03-14T13:41:22Z",
+                    "confidence": 100,
+                    "severity": 50,
+                    "x_severity_name": "Medium",
+                    "x_seconds_to_resolved": "0",
+                    "x_seconds_to_triaged": "0",
+                    "x_status": "new",
+                    "finding_type": "alert"
+                },
+                "9": {
+                    "type": "x-oca-asset",
+                    "x_cid": "cid123",
+                    "x_agent_ref": "10",
+                    "x_bios_manufacturer": "Xen",
+                    "x_bios_version": "4.2.amazon",
+                    "device_id": "did123",
+                    "ip_refs": [
+                        "11",
+                        "12"
+                    ],
+                    "x_first_seen": "2023-05-16T05:10:55Z",
+                    "x_device_groups": [
+                        "97350feebe4541e8a615c0d3f18acdf3",
+                        "bb1e1190b46348e69e10785030e8b23d"
+                    ],
+                    "hostname": "host",
+                    "x_instance_id": "i-123",
+                    "x_last_seen": "2024-03-14T13:28:09Z",
+                    "mac_refs": [
+                        "13"
+                    ],
+                    "x_last_modified": "2024-03-14T13:37:17Z",
+                    "os_ref": "14",
+                    "x_host_type_number": "3",
+                    "host_type": "Server",
+                    "x_service_provider": "AWS_EC2_V2",
+                    "x_service_account_id": "9876",
+                    "x_status": "normal",
+                    "x_system_manufacturer": "Xen",
+                    "x_system_product_name": "HVM domU"
+                },
+                "10": {
+                    "type": "x-crowdstrike-edr-agent",
+                    "load_flags": "0",
+                    "local_time": "2024-03-14T12:34:02.565Z",
+                    "version": "7.11.18110.0",
+                    "config_id_base": "65994763",
+                    "config_id_build": "18110",
+                    "config_id_platform": "3"
+                },
+                "11": {
+                    "type": "ipv4-addr",
+                    "value": "2.3.4.5"
+                },
+                "12": {
+                    "type": "ipv4-addr",
+                    "value": "2.3.4.5",
+                    "resolves_to_refs": [
+                        "13"
+                    ]
+                },
+                "13": {
+                    "type": "mac-addr",
+                    "value": "01:01:01:01:ab:cd"
+                },
+                "14": {
+                    "type": "software",
+                    "x_major_version": "10",
+                    "x_minor_version": "0",
+                    "version": "Windows Server 2022",
+                    "x_id": "0",
+                    "name": "Windows"
+                }
+            },
+            "last_observed": "2024-04-03T10:40:49.668Z",
+            "first_observed": "2024-03-14T13:41:29.903Z",
+            "number_observed": 1
+        },
+      {
+            "id": "observed-data--3768a4d3-74a5-4b45-8394-4d01722e2de1",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-04-03T17:01:37.394Z",
+            "modified": "2024-04-03T17:01:37.394Z",
+            "objects": {
+                "0": {
+                    "type": "file",
+                    "x_extension": "exe",
+                    "name": "WMIC.exe",
+                    "x_path": "\\Device\\wbem\\WMIC.exe",
+                    "parent_directory_ref": "3",
+                    "hashes": {
+                        "MD5": "10101010101010101010101001011001",
+                        "SHA-256": "1010101010101010101010100101100101010101010101010101010101010100"
+                    }
+                },
+                "1": {
+                    "type": "x-crowdstrike-detection-behavior",
+                    "behavior_id": "41002",
+                    "confidence": 100,
+                    "control_graph_id": "ctg:did123:4455",
+                    "description": "A process triggered a medium severity custom rule.",
+                    "display_name": "CustomIOAWinMedium",
+                    "process_ref": "2",
+                    "ioc_description": "\\Device\\wbem\\WMIC.exe",
+                    "ioc_source": "library_load",
+                    "ioc_type": "hash_sha256",
+                    "ioc_value": "bd8",
+                    "objective": "Falcon Detection Method",
+                    "pattern_disposition": 2048,
+                    "pattern_disposition_details": {
+                        "blocking_unsupported_or_disabled": "false",
+                        "bootup_safeguard_enabled": "false",
+                        "critical_process_disabled": "false",
+                        "detect": "false",
+                        "fs_operation_blocked": "false",
+                        "handle_operation_downgraded": "false",
+                        "inddet_mask": "false",
+                        "indicator": "false",
+                        "kill_action_failed": "false",
+                        "kill_parent": "false",
+                        "kill_process": "false",
+                        "kill_subprocess": "false",
+                        "operation_blocked": "false",
+                        "policy_disabled": "false",
+                        "process_blocked": "true",
+                        "quarantine_file": "false",
+                        "quarantine_machine": "false",
+                        "registry_operation_blocked": "false",
+                        "rooting": "false",
+                        "sensor_only": "false",
+                        "suspend_parent": "false",
+                        "suspend_process": "false"
+                    },
+                    "rule_instance_id": 3,
+                    "rule_instance_version": "3",
+                    "scenario": "suspicious_activity",
+                    "severity": 50,
+                    "ttp_tagging_ref": "6",
+                    "template_instance_id": "3",
+                    "created_time": "2024-01-18T06:09:26Z",
+                    "user_ref": "7"
+                },
+                "2": {
+                    "type": "process",
+                    "command_line": "C:\\wbem\\wmic.exe  /namespace:\\\\root\\inventorylogging path msftsil_managementtasks call setloggingstate  ",
+                    "name": "WMIC.exe",
+                    "binary_ref": "0",
+                    "parent_ref": "4",
+                    "x_process_graph_id": "pid:did123:1122",
+                    "creator_user_ref": "7"
+                },
+                "3": {
+                    "type": "directory",
+                    "path": "\\Device\\wbem"
+                },
+                "4": {
+                    "type": "process",
+                    "command_line": "\"C:\\cmd.exe\" /d /c C:\\silcollector.cmd configure",
+                    "binary_ref": "5",
+                    "x_process_graph_id": "pid:did123:214919408229"
+                },
+                "5": {
+                    "type": "file",
+                    "hashes": {
+                        "MD5": "10101010101010101010101001011001",
+                        "SHA-256": "1010101010101010101010100101100101010101010101010101010101010100"
+                    }
+                },
+                "6": {
+                    "type": "x-ibm-ttp-tagging",
+                    "name": "Custom Intelligence",
+                    "extensions": {
+                        "mitre-attack-ext": {
+                            "tactic_id": "CSTA0005",
+                            "technique_name": "Indicator of Attack",
+                            "technique_id": "CST0004"
+                        }
+                    }
+                },
+                "7": {
+                    "type": "user-account",
+                    "user_id": "S-1-5-18",
+                    "display_name": "user1"
+                },
+                "8": {
+                    "type": "x-ibm-finding",
+                    "x_logscale_repository": "TestRepository",
+                    "x_logscale_event_id": "xpC1sUz8JCF1oyTpI7dSVld5_363_116_1712140849",
+                    "x_behavior_refs": [
+                        "1"
+                    ],
+                    "ttp_tagging_refs": [
+                        "6"
+                    ],
+                    "x_behaviors_processed": [
+                        "pid:did123:1122:41002"
+                    ],
+                    "time_observed": "2024-01-18T06:09:33.081Z",
+                    "x_last_updated": "2024-04-03T10:40:49.669334Z",
+                    "name": "ldt:did123:4455",
+                    "src_ip_ref": "11",
+                    "src_os_ref": "14",
+                    "x_is_email_sent": "false",
+                    "x_first_behavior_observed": "2024-01-18T06:09:26Z",
+                    "x_last_behavior_observed": "2024-01-18T06:09:26Z",
+                    "confidence": 100,
+                    "severity": 50,
+                    "x_severity_name": "Medium",
+                    "x_seconds_to_resolved": "0",
+                    "x_seconds_to_triaged": "0",
+                    "x_status": "new",
+                    "finding_type": "alert"
+                },
+                "9": {
+                    "type": "x-oca-asset",
+                    "x_cid": "cid123",
+                    "x_agent_ref": "10",
+                    "x_bios_manufacturer": "Xen",
+                    "x_bios_version": "4.11.amazon",
+                    "device_id": "did123",
+                    "ip_refs": [
+                        "11",
+                        "12"
+                    ],
+                    "x_first_seen": "2023-05-16T05:10:55Z",
+                    "x_device_groups": [
+                        "97350feebe4541e8a615c0d3f18acdf3",
+                        "bb1e1190b46348e69e10785030e8b23d"
+                    ],
+                    "hostname": "host",
+                    "x_instance_id": "i-123",
+                    "x_last_seen": "2024-01-18T06:08:34Z",
+                    "mac_refs": [
+                        "13"
+                    ],
+                    "x_last_modified": "2024-01-18T06:08:40Z",
+                    "os_ref": "14",
+                    "x_host_type_number": "3",
+                    "host_type": "Server",
+                    "x_service_provider": "AWS_EC2_V2",
+                    "x_service_account_id": "9876",
+                    "x_status": "normal",
+                    "x_system_manufacturer": "Xen",
+                    "x_system_product_name": "HVM domU"
+                },
+                "10": {
+                    "type": "x-crowdstrike-edr-agent",
+                    "load_flags": "1",
+                    "local_time": "2024-01-18T06:08:24.864Z",
+                    "version": "7.05.17706.0",
+                    "config_id_base": "65994763",
+                    "config_id_build": "17706",
+                    "config_id_platform": "3"
+                },
+                "11": {
+                    "type": "ipv4-addr",
+                    "value": "44.202.166.182"
+                },
+                "12": {
+                    "type": "ipv4-addr",
+                    "value": "2.3.4.5",
+                    "resolves_to_refs": [
+                        "13"
+                    ]
+                },
+                "13": {
+                    "type": "mac-addr",
+                    "value": "01:01:01:01:ab:cd"
+                },
+                "14": {
+                    "type": "software",
+                    "x_major_version": "10",
+                    "x_minor_version": "0",
+                    "version": "Windows Server 2022",
+                    "x_id": "0",
+                    "name": "Windows"
+                }
+            },
+            "last_observed": "2024-04-03T10:40:49.669Z",
+            "first_observed": "2024-01-18T06:09:33.081Z",
+            "number_observed": 1
+        },
+         {
+            "id": "observed-data--a70eddf0-2388-4663-b7e0-83a3c2d5c95b",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-04-03T17:09:04.816Z",
+            "modified": "2024-04-03T17:09:04.816Z",
+            "objects": {
+                "0": {
+                    "type": "file",
+                    "x_extension": "exe",
+                    "name": "wusa.exe",
+                    "x_path": "\\Device\\wusa.exe",
+                    "parent_directory_ref": "3",
+                    "hashes": {
+                        "MD5": "22333333344444455555",
+                        "SHA-256": "887777322334454111111111111111111"
+                    }
+                },
+                "1": {
+                    "type": "x-crowdstrike-detection-behavior",
+                    "behavior_id": "41002",
+                    "confidence": 100,
+                    "control_graph_id": "ctg:did123:214759104287",
+                    "description": "A process triggered a medium severity custom rule.",
+                    "display_name": "CustomIOAWinMedium",
+                    "process_ref": "2",
+                    "ioc_description": "\\Device\\wusa.exe",
+                    "ioc_source": "library_load",
+                    "ioc_type": "hash_sha256",
+                    "ioc_value": "1abcd",
+                    "objective": "Falcon Detection Method",
+                    "pattern_disposition": 2048,
+                    "pattern_disposition_details": {
+                        "blocking_unsupported_or_disabled": "false",
+                        "bootup_safeguard_enabled": "false",
+                        "critical_process_disabled": "false",
+                        "detect": "false",
+                        "fs_operation_blocked": "false",
+                        "handle_operation_downgraded": "false",
+                        "inddet_mask": "false",
+                        "indicator": "false",
+                        "kill_action_failed": "false",
+                        "kill_parent": "false",
+                        "kill_process": "false",
+                        "kill_subprocess": "false",
+                        "operation_blocked": "false",
+                        "policy_disabled": "false",
+                        "process_blocked": "true",
+                        "quarantine_file": "false",
+                        "quarantine_machine": "false",
+                        "registry_operation_blocked": "false",
+                        "rooting": "false",
+                        "sensor_only": "false",
+                        "suspend_parent": "false",
+                        "suspend_process": "false"
+                    },
+                    "rule_instance_id": 3,
+                    "rule_instance_version": "3",
+                    "scenario": "suspicious_activity",
+                    "severity": 50,
+                    "ttp_tagging_ref": "6",
+                    "template_instance_id": "3",
+                    "created_time": "2024-01-24T14:17:11Z",
+                    "user_ref": "7"
+                },
+                "2": {
+                    "type": "process",
+                    "command_line": "\"C:\\wusa.exe\" \"C:\\windows10.0-f.msu\" ",
+                    "name": "wusa.exe",
+                    "binary_ref": "0",
+                    "parent_ref": "4",
+                    "x_process_graph_id": "pid:did123:222674754477",
+                    "creator_user_ref": "7"
+                },
+                "3": {
+                    "type": "directory",
+                    "path": "\\Device"
+                },
+                "4": {
+                    "type": "process",
+                    "command_line": "\"C:\\cmd.exe\" ",
+                    "binary_ref": "5",
+                    "x_process_graph_id": "pid:did123:222673021986"
+                },
+                "5": {
+                    "type": "file",
+                    "hashes": {
+                        "MD5": "10101010101010101010101010110",
+                        "SHA-256": "101011010101010010101010101010101010101010101010101001"
+                    }
+                },
+                "6": {
+                    "type": "x-ibm-ttp-tagging",
+                    "name": "Custom Intelligence",
+                    "extensions": {
+                        "mitre-attack-ext": {
+                            "tactic_id": "CSTA0005",
+                            "technique_name": "Indicator of Attack",
+                            "technique_id": "CST0004"
+                        }
+                    }
+                },
+                "7": {
+                    "type": "user-account",
+                    "user_id": "S-1-5-21",
+                    "display_name": "Administrator"
+                },
+                "8": {
+                    "type": "x-ibm-finding",
+                    "x_logscale_repository": "TestRepository",
+                    "x_logscale_event_id": "xpC1sUz8JCF1oyTpI7dSVld5_363_87_1712140849",
+                    "x_behavior_refs": [
+                        "1"
+                    ],
+                    "ttp_tagging_refs": [
+                        "6"
+                    ],
+                    "x_behaviors_processed": [
+                        "pid:did123:222674754477:41002"
+                    ],
+                    "time_observed": "2024-01-24T14:17:19.087Z",
+                    "x_last_updated": "2024-04-03T10:40:28.680870Z",
+                    "name": "ldt:did123:214759104287",
+                    "src_ip_ref": "11",
+                    "src_os_ref": "14",
+                    "x_is_email_sent": "false",
+                    "x_first_behavior_observed": "2024-01-24T14:17:11Z",
+                    "x_last_behavior_observed": "2024-01-24T14:17:11Z",
+                    "confidence": 100,
+                    "severity": 50,
+                    "x_severity_name": "Medium",
+                    "x_seconds_to_resolved": "0",
+                    "x_seconds_to_triaged": "0",
+                    "x_status": "new",
+                    "finding_type": "alert"
+                },
+                "9": {
+                    "type": "x-oca-asset",
+                    "x_cid": "cid123",
+                    "x_agent_ref": "10",
+                    "x_bios_manufacturer": "Xen",
+                    "x_bios_version": "4.11.amazon",
+                    "device_id": "did123",
+                    "ip_refs": [
+                        "11",
+                        "12"
+                    ],
+                    "x_first_seen": "2023-05-16T05:10:55Z",
+                    "x_device_groups": [
+                        "97350feebe4541e8a615c0d3f18acdf3",
+                        "bb1e1190b46348e69e10785030e8b23d"
+                    ],
+                    "hostname": "host",
+                    "x_instance_id": "i-123",
+                    "x_last_seen": "2024-01-24T13:47:13Z",
+                    "mac_refs": [
+                        "13"
+                    ],
+                    "x_last_modified": "2024-01-24T14:12:41Z",
+                    "os_ref": "14",
+                    "x_host_type_number": "3",
+                    "host_type": "Server",
+                    "x_service_provider": "AWS_EC2_V2",
+                    "x_service_account_id": "9876",
+                    "x_status": "normal",
+                    "x_system_manufacturer": "Xen",
+                    "x_system_product_name": "HVM domU"
+                },
+                "10": {
+                    "type": "x-crowdstrike-edr-agent",
+                    "load_flags": "1",
+                    "local_time": "2024-01-23T12:32:59.287Z",
+                    "version": "7.05.17706.0",
+                    "config_id_base": "65994763",
+                    "config_id_build": "17706",
+                    "config_id_platform": "3"
+                },
+                "11": {
+                    "type": "ipv4-addr",
+                    "value": "9.9.9.9"
+                },
+                "12": {
+                    "type": "ipv4-addr",
+                    "value": "2.3.4.5",
+                    "resolves_to_refs": [
+                        "13"
+                    ]
+                },
+                "13": {
+                    "type": "mac-addr",
+                    "value": "01:01:01:01:ab:cd"
+                },
+                "14": {
+                    "type": "software",
+                    "x_major_version": "10",
+                    "x_minor_version": "0",
+                    "version": "Windows Server 2022",
+                    "x_id": "0",
+                    "name": "Windows"
+                }
+            },
+            "last_observed": "2024-04-03T10:40:28.680Z",
+            "first_observed": "2024-01-24T14:17:19.087Z",
+            "number_observed": 1
+        },{
+            "id": "observed-data--892c29eb-7938-4a08-bd80-ab29e58ac3f5",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-04-04T02:51:17.680Z",
+            "modified": "2024-04-04T02:51:17.680Z",
+            "objects": {
+                "0": {
+                    "type": "file",
+                    "x_extension": "exe",
+                    "name": "cmd.exe",
+                    "x_path": "\\Device\\cmd.exe",
+                    "parent_directory_ref": "3",
+                    "hashes": {
+                        "MD5": "111111100000000000000000111",
+                        "SHA-256": "111111111111111111111100000000000000"
+                    }
+                },
+                "1": {
+                    "type": "x-crowdstrike-detection-behavior",
+                    "behavior_id": "41002",
+                    "confidence": 100,
+                    "control_graph_id": "ctg:did123:214754619929",
+                    "description": "A process triggered a medium severity custom rule.",
+                    "display_name": "CustomIOAWinMedium",
+                    "process_ref": "2",
+                    "ioc_description": "\\Device\\cmd.exe",
+                    "ioc_source": "library_load",
+                    "ioc_type": "hash_sha256",
+                    "ioc_value": "eb71ea69dd19f728ab9240565e8c7efb59821e19e3788e289301e1e74940c208",
+                    "objective": "Falcon Detection Method",
+                    "pattern_disposition": 2048,
+                    "pattern_disposition_details": {
+                        "blocking_unsupported_or_disabled": "false",
+                        "bootup_safeguard_enabled": "false",
+                        "critical_process_disabled": "false",
+                        "detect": "false",
+                        "fs_operation_blocked": "false",
+                        "handle_operation_downgraded": "false",
+                        "inddet_mask": "false",
+                        "indicator": "false",
+                        "kill_action_failed": "false",
+                        "kill_parent": "false",
+                        "kill_process": "false",
+                        "kill_subprocess": "false",
+                        "operation_blocked": "false",
+                        "policy_disabled": "false",
+                        "process_blocked": "true",
+                        "quarantine_file": "false",
+                        "quarantine_machine": "false",
+                        "registry_operation_blocked": "false",
+                        "rooting": "false",
+                        "sensor_only": "false",
+                        "suspend_parent": "false",
+                        "suspend_process": "false"
+                    },
+                    "rule_instance_id": 3,
+                    "rule_instance_version": "3",
+                    "scenario": "suspicious_activity",
+                    "severity": 50,
+                    "ttp_tagging_ref": "6",
+                    "template_instance_id": "3",
+                    "created_time": "2024-01-23T12:34:00Z",
+                    "user_ref": "7"
+                },
+                "2": {
+                    "type": "process",
+                    "command_line": "C:\\cmd.exe /c C:\\reg.exe query hklm\\software\\microsoft\\windows\\softwareinventorylogging /v collectiontime /reg:64",
+                    "name": "cmd.exe",
+                    "binary_ref": "0",
+                    "parent_ref": "4",
+                    "x_process_graph_id": "pid:did123:219231592680",
+                    "creator_user_ref": "7"
+                },
+                "3": {
+                    "type": "directory",
+                    "path": "\\Device"
+                },
+                "4": {
+                    "type": "process",
+                    "command_line": "\"C:\\cmd.exe\" /d /c C:\\silcollector.cmd configure",
+                    "binary_ref": "5",
+                    "x_process_graph_id": "pid:did123:219225422769"
+                },
+                "5": {
+                    "type": "file",
+                    "hashes": {
+                        "MD5": "111111111111111111111",
+                        "SHA-256": "a111111111111aaaaaaaaaaaaaaa1111111"
+                    }
+                },
+                "6": {
+                    "type": "x-ibm-ttp-tagging",
+                    "name": "Custom Intelligence",
+                    "extensions": {
+                        "mitre-attack-ext": {
+                            "tactic_id": "CSTA0005",
+                            "technique_name": "Indicator of Attack",
+                            "technique_id": "CST0004"
+                        }
+                    }
+                },
+                "7": {
+                    "type": "user-account",
+                    "user_id": "S-1-5-18",
+                    "display_name": "user"
+                },
+                "8": {
+                    "type": "x-ibm-finding",
+                    "x_logscale_repository": "TestRepository",
+                    "x_logscale_event_id": "xpC1sUz8JCF1oyTpI7dSVld5_363_119_1712140849",
+                    "x_behavior_refs": [
+                        "1"
+                    ],
+                    "ttp_tagging_refs": [
+                        "6"
+                    ],
+                    "x_behaviors_processed": [
+                        "pid:did123:219231592680:41002"
+                    ],
+                    "time_observed": "2024-01-23T12:34:07.127Z",
+                    "x_last_updated": "2024-04-03T10:40:49.669334Z",
+                    "name": "ldt:did123:214754619929",
+                    "src_ip_ref": "11",
+                    "src_os_ref": "14",
+                    "x_is_email_sent": "false",
+                    "x_first_behavior_observed": "2024-01-23T12:34:00Z",
+                    "x_last_behavior_observed": "2024-01-23T12:34:00Z",
+                    "confidence": 100,
+                    "severity": 50,
+                    "x_severity_name": "Medium",
+                    "x_seconds_to_resolved": "0",
+                    "x_seconds_to_triaged": "0",
+                    "x_status": "new",
+                    "finding_type": "alert"
+                },
+                "9": {
+                    "type": "x-oca-asset",
+                    "x_cid": "cid123",
+                    "x_agent_ref": "10",
+                    "x_bios_manufacturer": "Xen",
+                    "x_bios_version": "4.11.amazon",
+                    "device_id": "did123",
+                    "ip_refs": [
+                        "11",
+                        "12"
+                    ],
+                    "x_first_seen": "2023-05-16T05:10:55Z",
+                    "x_device_groups": [
+                        "97350feebe4541e8a615c0d3f18acdf3",
+                        "bb1e1190b46348e69e10785030e8b23d"
+                    ],
+                    "hostname": "host",
+                    "x_instance_id": "i-123",
+                    "x_last_seen": "2024-01-23T12:33:12Z",
+                    "mac_refs": [
+                        "13"
+                    ],
+                    "x_last_modified": "2024-01-23T12:33:16Z",
+                    "os_ref": "14",
+                    "x_host_type_number": "3",
+                    "host_type": "Server",
+                    "x_service_provider": "AWS_EC2_V2",
+                    "x_service_account_id": "9876",
+                    "x_status": "normal",
+                    "x_system_manufacturer": "Xen",
+                    "x_system_product_name": "HVM domU"
+                },
+                "10": {
+                    "type": "x-crowdstrike-edr-agent",
+                    "load_flags": "1",
+                    "local_time": "2024-01-23T12:32:59.287Z",
+                    "version": "7.05.17706.0",
+                    "config_id_base": "65994763",
+                    "config_id_build": "17706",
+                    "config_id_platform": "3"
+                },
+                "11": {
+                    "type": "ipv4-addr",
+                    "value": "9.9.9.9"
+                },
+                "12": {
+                    "type": "ipv4-addr",
+                    "value": "2.3.4.5",
+                    "resolves_to_refs": [
+                        "13"
+                    ]
+                },
+                "13": {
+                    "type": "mac-addr",
+                    "value": "01:01:01:01:ab:cd"
+                },
+                "14": {
+                    "type": "software",
+                    "x_major_version": "10",
+                    "x_minor_version": "0",
+                    "version": "Windows Server 2022",
+                    "x_id": "0",
+                    "name": "Windows"
+                }
+            },
+            "last_observed": "2024-04-03T10:40:49.669Z",
+            "first_observed": "2024-01-23T12:34:07.127Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--ef14dda2-c17c-4d9a-b031-019e27d0fa63",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-04-04T02:52:44.790Z",
+            "modified": "2024-04-04T02:52:44.790Z",
+            "objects": {
+                "0": {
+                    "type": "file",
+                    "x_extension": "exe",
+                    "name": "conhost.exe",
+                    "x_path": "\\Device\\conhost.exe",
+                    "parent_directory_ref": "3",
+                    "hashes": {
+                        "MD5": "222222222222222222222222222",
+                        "SHA-256": "33333333333333333333333333333333333"
+                    }
+                },
+                "1": {
+                    "type": "x-crowdstrike-detection-behavior",
+                    "behavior_id": "41002",
+                    "confidence": 100,
+                    "control_graph_id": "ctg:did123:240518818424",
+                    "description": "A process triggered a medium severity custom rule.",
+                    "display_name": "CustomIOAWinMedium",
+                    "process_ref": "2",
+                    "objective": "Falcon Detection Method",
+                    "pattern_disposition": 10240,
+                    "pattern_disposition_details": {
+                        "blocking_unsupported_or_disabled": "false",
+                        "bootup_safeguard_enabled": "false",
+                        "critical_process_disabled": "true",
+                        "detect": "false",
+                        "fs_operation_blocked": "false",
+                        "handle_operation_downgraded": "false",
+                        "inddet_mask": "false",
+                        "indicator": "false",
+                        "kill_action_failed": "false",
+                        "kill_parent": "false",
+                        "kill_process": "false",
+                        "kill_subprocess": "false",
+                        "operation_blocked": "false",
+                        "policy_disabled": "false",
+                        "process_blocked": "true",
+                        "quarantine_file": "false",
+                        "quarantine_machine": "false",
+                        "registry_operation_blocked": "false",
+                        "rooting": "false",
+                        "sensor_only": "false",
+                        "suspend_parent": "false",
+                        "suspend_process": "false"
+                    },
+                    "rule_instance_id": 3,
+                    "rule_instance_version": "3",
+                    "scenario": "suspicious_activity",
+                    "severity": 50,
+                    "ttp_tagging_ref": "4",
+                    "template_instance_id": "3",
+                    "created_time": "2024-02-19T04:59:15Z",
+                    "user_ref": "5"
+                },
+                "2": {
+                    "type": "process",
+                    "command_line": "C:\\Windows\\system32\\conhost.exe 0xffffffff -ForceV1",
+                    "name": "conhost.exe",
+                    "binary_ref": "0",
+                    "x_process_graph_id": "pid:did123:0011",
+                    "creator_user_ref": "5"
+                },
+                "3": {
+                    "type": "directory",
+                    "path": "\\Device"
+                },
+                "4": {
+                    "type": "x-ibm-ttp-tagging",
+                    "name": "Custom Intelligence",
+                    "extensions": {
+                        "mitre-attack-ext": {
+                            "tactic_id": "CSTA0005",
+                            "technique_name": "Indicator of Attack",
+                            "technique_id": "CST0004"
+                        }
+                    }
+                },
+                "5": {
+                    "type": "user-account",
+                    "user_id": "S-1-5-18",
+                    "display_name": "user2"
+                },
+                "6": {
+                    "type": "x-ibm-finding",
+                    "x_logscale_repository": "TestRepository",
+                    "x_logscale_event_id": "xpC1sUz8JCF1oyTpI7dSVld5_363_125_1712140849",
+                    "x_behavior_refs": [
+                        "1"
+                    ],
+                    "ttp_tagging_refs": [
+                        "4"
+                    ],
+                    "x_behaviors_processed": [
+                        "pid:did123:0011:41002"
+                    ],
+                    "time_observed": "2024-02-19T04:59:22.678Z",
+                    "x_last_updated": "2024-04-03T10:40:49.669334Z",
+                    "name": "ldt:did123:240518818424",
+                    "src_ip_ref": "9",
+                    "src_os_ref": "12",
+                    "x_is_email_sent": "false",
+                    "x_first_behavior_observed": "2024-02-19T04:59:15Z",
+                    "x_last_behavior_observed": "2024-02-19T04:59:15Z",
+                    "confidence": 100,
+                    "severity": 50,
+                    "x_severity_name": "Medium",
+                    "x_seconds_to_resolved": "0",
+                    "x_seconds_to_triaged": "0",
+                    "x_status": "new",
+                    "finding_type": "alert"
+                },
+                "7": {
+                    "type": "x-oca-asset",
+                    "x_cid": "cid123",
+                    "x_agent_ref": "8",
+                    "x_bios_manufacturer": "Xen",
+                    "x_bios_version": "4.11.amazon",
+                    "device_id": "did123",
+                    "ip_refs": [
+                        "9",
+                        "10"
+                    ],
+                    "x_first_seen": "2023-05-16T05:10:55Z",
+                    "x_device_groups": [
+                        "97350feebe4541e8a615c0d3f18acdf3",
+                        "bb1e1190b46348e69e10785030e8b23d"
+                    ],
+                    "hostname": "host",
+                    "x_instance_id": "i-123",
+                    "x_last_seen": "2024-02-19T04:59:18Z",
+                    "mac_refs": [
+                        "11"
+                    ],
+                    "x_last_modified": "2024-02-19T04:59:19Z",
+                    "os_ref": "12",
+                    "x_host_type_number": "3",
+                    "host_type": "Server",
+                    "x_service_provider": "AWS_EC2_V2",
+                    "x_service_account_id": "9876",
+                    "x_status": "normal",
+                    "x_system_manufacturer": "Xen",
+                    "x_system_product_name": "HVM domU"
+                },
+                "8": {
+                    "type": "x-crowdstrike-edr-agent",
+                    "load_flags": "1",
+                    "local_time": "2024-02-19T04:59:08.771Z",
+                    "version": "7.06.17807.0",
+                    "config_id_base": "65994763",
+                    "config_id_build": "17807",
+                    "config_id_platform": "3"
+                },
+                "9": {
+                    "type": "ipv4-addr",
+                    "value": "9.3.4.5"
+                },
+                "10": {
+                    "type": "ipv4-addr",
+                    "value": "2.3.4.5",
+                    "resolves_to_refs": [
+                        "11"
+                    ]
+                },
+                "11": {
+                    "type": "mac-addr",
+                    "value": "01:01:01:01:ab:cd"
+                },
+                "12": {
+                    "type": "software",
+                    "x_major_version": "10",
+                    "x_minor_version": "0",
+                    "version": "Windows Server 2022",
+                    "x_id": "0",
+                    "name": "Windows"
+                }
+            },
+            "last_observed": "2024-04-03T10:40:49.669Z",
+            "first_observed": "2024-02-19T04:59:22.678Z",
+            "number_observed": 1
+        }
+    ],
+    "spec_version": "2.0"
+}
