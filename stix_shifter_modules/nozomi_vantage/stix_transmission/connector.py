@@ -30,8 +30,11 @@ class Connector(BaseJsonSyncConnector):
         try:
             offset = int(offset)
             length = int(length)
+            # result_count is overall record count from all the previous batches processed.
             result_count = offset
+            # total_records is record count till the current batch, including the result_count.
             total_records, page_number, offset = self.handle_metadata(offset, length, metadata)
+            # expected_result_count is the expected result count for the current batch, after the calculation of offset.
             expected_result_count = offset + length
 
             # Generating jwt token
@@ -58,6 +61,7 @@ class Connector(BaseJsonSyncConnector):
 
                 return_obj['success'] = True
                 data += response_dict['result']
+                # local_result_count is number of records fetched per API call.
                 local_result_count = len(response_dict['result'])
                 result_count += local_result_count
 
@@ -167,6 +171,8 @@ class Connector(BaseJsonSyncConnector):
             if isinstance(metadata, dict) and metadata.get('page_number'):
                 page_number = int(metadata.get('page_number', 1))
                 # overwrite the offset for current batch.
+                # offset passed from the function parameter is not directly used for slicing.
+                # after calculating offset for the current batch, It will be used for slicing.
                 offset = abs(offset - ((page_number - 1) * self.api_client.api_page_size))
             else:
                 # raise exception when metadata doesnt contain jwtToken token
