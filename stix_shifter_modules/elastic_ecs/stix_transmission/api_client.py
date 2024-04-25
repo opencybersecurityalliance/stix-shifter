@@ -16,7 +16,7 @@ class APIClient():
         url_modifier_function = None
         auth = configuration.get('auth')
         self.indices = connection.get('indices', None)
-        self.pagination_enabled = connection.get('pagination', True)
+        self.pagination_enabled = connection.get('pagination')
 
         if self.indices and type(self.indices) == str:
             self.indices = self.indices.split(",")

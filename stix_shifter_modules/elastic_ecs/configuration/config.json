@@ -24,6 +24,7 @@
         },
         "pagination": {
             "type": "boolean",
+            "default": true,
             "optional": true
         },
         "selfSignedCert": {
