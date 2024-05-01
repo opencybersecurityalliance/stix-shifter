@@ -1,6 +1,0 @@
-stix-shifter
-stix-shifter-utils
-stix-shifter-modules-stix-bundle
-stix-shifter-modules-mysql
-notebook==6.5.5
-mysql-connector-python

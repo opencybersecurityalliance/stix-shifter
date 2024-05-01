@@ -1,6 +1,0 @@
-{
-  "stix-input":"[file:created = t'2014-01-13T07:03:17Z']",
-  "car-elastic": "data_model.object:file AND data_model.fields.creation_time:2014-01-13 07:03:17+00:00",
-  "car-splunk": "(match(tag, \"dm-file-.*\") AND creation_time = 2014-01-13 07:03:17+00:00)",
-  "cim-splunk": "search (file_create_time = 2014-01-13 07:03:17+00:00) earliest=\"-5minutes\" | head 10000 | fields src_ip, src_port, src_mac, src_ipv6, dest_ip, dest_port, dest_mac, dest_ipv6, file_hash, user, url, protocol"
-}
