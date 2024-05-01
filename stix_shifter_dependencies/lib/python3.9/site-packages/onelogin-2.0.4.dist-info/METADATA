@@ -1,0 +1,32 @@
+Metadata-Version: 2.1
+Name: onelogin
+Version: 2.0.4
+Summary: OneLogin Python SDK. Use this API client to interact with OneLogin's platform
+Home-page: https://github.com/onelogin/onelogin-python-sdk
+Author: OneLogin
+Author-email: support@onelogin.com
+License: MIT
+Keywords: onelogin api sdk
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+License-File: LICENSE
+Requires-Dist: requests (<3,>=2)
+Requires-Dist: defusedxml (>=0.6.0)
+Requires-Dist: python-dateutil (<3,>=2)
+Provides-Extra: test
+Requires-Dist: coverage (<6,>=3) ; extra == 'test'
+Requires-Dist: pylint (<3,>=1) ; extra == 'test'
+Requires-Dist: pycodestyle ; extra == 'test'
+Requires-Dist: pyflakes (<3,>=1) ; extra == 'test'
+Requires-Dist: mock ; (python_version < "3.3") and extra == 'test'
+
+UNKNOWN
+

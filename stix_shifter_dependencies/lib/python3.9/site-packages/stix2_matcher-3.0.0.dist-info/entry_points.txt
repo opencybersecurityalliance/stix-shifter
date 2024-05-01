@@ -1,0 +1,3 @@
+[console_scripts]
+stix2-matcher = stix2matcher.matcher:main
+

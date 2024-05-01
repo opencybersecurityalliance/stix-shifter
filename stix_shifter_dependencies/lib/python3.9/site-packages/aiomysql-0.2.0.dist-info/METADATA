@@ -1,0 +1,447 @@
+Metadata-Version: 2.1
+Name: aiomysql
+Version: 0.2.0
+Summary: MySQL driver for asyncio.
+Home-page: https://github.com/aio-libs/aiomysql
+Download-URL: https://pypi.python.org/pypi/aiomysql
+Author: Nikolay Novik
+Author-email: nickolainovik@gmail.com
+License: MIT
+Project-URL: CI: GitHub, https://github.com/aio-libs/aiomysql/actions
+Project-URL: Docs: RTD, https://aiomysql.readthedocs.io/
+Project-URL: GitHub: repo, https://github.com/aio-libs/aiomysql
+Project-URL: GitHub: issues, https://github.com/aio-libs/aiomysql/issues
+Project-URL: GitHub: discussions, https://github.com/aio-libs/aiomysql/discussions
+Keywords: mysql,mariadb,asyncio,aiomysql
+Platform: POSIX
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Operating System :: POSIX
+Classifier: Environment :: Web Environment
+Classifier: Development Status :: 3 - Alpha
+Classifier: Topic :: Database
+Classifier: Topic :: Database :: Front-Ends
+Classifier: Framework :: AsyncIO
+Requires-Python: >=3.7
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: PyMySQL (>=1.0)
+Provides-Extra: rsa
+Requires-Dist: PyMySQL[rsa] (>=1.0) ; extra == 'rsa'
+Provides-Extra: sa
+Requires-Dist: sqlalchemy (<1.4,>=1.3) ; extra == 'sa'
+
+aiomysql
+========
+.. image:: https://github.com/aio-libs/aiomysql/actions/workflows/ci-cd.yml/badge.svg?branch=master
+    :target: https://github.com/aio-libs/aiomysql/actions/workflows/ci-cd.yml
+.. image:: https://codecov.io/gh/aio-libs/aiomysql/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/aio-libs/aiomysql
+    :alt: Code coverage
+.. image:: https://badge.fury.io/py/aiomysql.svg
+    :target: https://badge.fury.io/py/aiomysql
+    :alt: Latest Version
+.. image:: https://readthedocs.org/projects/aiomysql/badge/?version=latest
+    :target: https://aiomysql.readthedocs.io/
+    :alt: Documentation Status
+.. image:: https://badges.gitter.im/Join%20Chat.svg
+    :target: https://gitter.im/aio-libs/Lobby
+    :alt: Chat on Gitter
+
+**aiomysql** is a "driver" for accessing a `MySQL` database
+from the asyncio_ (PEP-3156/tulip) framework. It depends on and reuses most
+parts of PyMySQL_ . *aiomysql* tries to be like awesome aiopg_ library and
+preserve same api, look and feel.
+
+Internally **aiomysql** is copy of PyMySQL, underlying io calls switched
+to async, basically ``yield from`` and ``asyncio.coroutine`` added in
+proper places)). `sqlalchemy` support ported from aiopg_.
+
+
+Documentation
+-------------
+https://aiomysql.readthedocs.io/
+
+Basic Example
+-------------
+
+**aiomysql** based on PyMySQL_ , and provides same api, you just need
+to use  ``await conn.f()`` or ``yield from conn.f()`` instead of calling
+``conn.f()`` for every method.
+
+Properties are unchanged, so ``conn.prop`` is correct as well as
+``conn.prop = val``.
+
+.. code:: python
+
+    import asyncio
+    import aiomysql
+
+
+    async def test_example(loop):
+        pool = await aiomysql.create_pool(host='127.0.0.1', port=3306,
+                                          user='root', password='',
+                                          db='mysql', loop=loop)
+        async with pool.acquire() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute("SELECT 42;")
+                print(cur.description)
+                (r,) = await cur.fetchone()
+                assert r == 42
+        pool.close()
+        await pool.wait_closed()
+
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(test_example(loop))
+
+
+Example of SQLAlchemy optional integration
+------------------------------------------
+Sqlalchemy support has been ported from aiopg_ so api should be very familiar
+for aiopg_ user.:
+
+.. code:: python
+
+    import asyncio
+    import sqlalchemy as sa
+
+    from aiomysql.sa import create_engine
+
+
+    metadata = sa.MetaData()
+
+    tbl = sa.Table('tbl', metadata,
+                   sa.Column('id', sa.Integer, primary_key=True),
+                   sa.Column('val', sa.String(255)))
+
+
+    async def go(loop):
+        engine = await create_engine(user='root', db='test_pymysql',
+                                     host='127.0.0.1', password='', loop=loop)
+        async with engine.acquire() as conn:
+            await conn.execute(tbl.insert().values(val='abc'))
+            await conn.execute(tbl.insert().values(val='xyz'))
+
+            async for row in conn.execute(tbl.select()):
+                print(row.id, row.val)
+
+        engine.close()
+        await engine.wait_closed()
+
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(go(loop))
+
+
+Requirements
+------------
+
+* Python_ 3.7+
+* PyMySQL_
+
+
+.. _Python: https://www.python.org
+.. _asyncio: http://docs.python.org/3.5/library/asyncio.html
+.. _aiopg: https://github.com/aio-libs/aiopg
+.. _PyMySQL: https://github.com/PyMySQL/PyMySQL
+.. _Tornado-MySQL: https://github.com/PyMySQL/Tornado-MySQL
+
+Changes
+-------
+
+0.2.0 (2023-06-11)
+^^^^^^^^^^^^^^^^^^
+
+* Bump minimal SQLAlchemy version to 1.3 #815
+
+* Remove deprecated Pool.get #706
+
+* | Partially ported `PyMySQL#304 <https://github.com/PyMySQL/PyMySQL/pull/304>`_ #792
+  | aiomysql now reraises the original exception during connect() if it's not `IOError`, `OSError` or `asyncio.TimeoutError`.
+  | This was previously always raised as `OperationalError`.
+
+* Fix debug log level with sha256_password authentication #863
+
+* Modernized code with `pyupgrade <https://github.com/asottile/pyupgrade>`_ to Python 3.7+ syntax #930
+
+* Removed tests for EoL MariaDB versions 10.3, 10.7 and 10.8, added tests for MariaDB 10.9, 10.10, 10.11 #932
+
+0.1.1 (2022-05-08)
+^^^^^^^^^^^^^^^^^^
+
+* Fix SSL connection handshake charset not respecting client configuration #776
+
+0.1.0 (2022-04-11)
+^^^^^^^^^^^^^^^^^^
+
+* Don't send sys.argv[0] as program_name to MySQL server by default #620
+
+* Allow running process as anonymous uid #587
+
+* Fix timed out MySQL 8.0 connections raising InternalError rather than OperationalError #660
+
+* Fix timed out MySQL 8.0 connections being returned from Pool #660
+
+* Ensure connections are properly closed before raising an OperationalError when the server connection is lost #660
+
+* Ensure connections are properly closed before raising an InternalError when packet sequence numbers are out of sync #660
+
+* Unix sockets are now internally considered secure, allowing sha256_password and caching_sha2_password auth methods to be used #695
+
+* Test suite now also tests unix socket connections #696
+
+* Fix SSCursor raising InternalError when last result was not fully retrieved #635
+
+* Remove deprecated no_delay argument #702
+
+* Support PyMySQL up to version 1.0.2 #643
+
+* Bump minimal PyMySQL version to 1.0.0 #713
+
+* Align % formatting in Cursor.executemany() with Cursor.execute(), literal % now need to be doubled in Cursor.executemany() #714
+
+* Fixed unlimited Pool size not working, this is now working as documented by passing maxsize=0 to create_pool #119
+
+* Added Pool.closed property as present in aiopg #463
+
+* Fixed SQLAlchemy connection context iterator #410
+
+* Fix error packet handling for SSCursor #428
+
+* Required python version is now properly documented in python_requires instead of failing on setup.py execution #731
+
+* Add rsa extras_require depending on PyMySQL[rsa] #557
+
+* Migrate to PEP 517 build system #746
+
+* Self-reported `__version__` now returns version generated by `setuptools-scm` during build, otherwise `'unknown'` #748
+
+* Fix SSCursor raising query timeout error on wrong query #428
+
+
+0.0.22 (2021-11-14)
+^^^^^^^^^^^^^^^^^^^
+
+* Support python 3.10 #505
+
+
+0.0.21 (2020-11-26)
+^^^^^^^^^^^^^^^^^^^
+
+* Allow to use custom Cursor subclasses #374
+
+* Fill Connection class with actual client version #388
+
+* Fix legacy __aiter__ methods #403
+
+* Fix & update docs #418 #437
+
+* Ignore pyenv's .python-version file #424
+
+* Replace asyncio.streams.IncompleteReadError with asyncio.IncompleteReadError #460 #454
+
+* Add support for SQLAlchemy default parameters #455 #466
+
+* Update dependencies #485
+
+* Support Python 3.7 & 3.8 #493
+
+
+0.0.20 (2018-12-19)
+^^^^^^^^^^^^^^^^^^^
+
+* Fixed connect_timeout #360
+
+* Fixed support for SQLA executemany #324
+
+* Fix the python 3.7 compatibility #357
+
+* Fixed reuse connections when StreamReader has an exception #339
+
+* Fixes warning when inserting binary strings #326
+
+
+0.0.19 (2018-07-12)
+^^^^^^^^^^^^^^^^^^^
+
+* See v0.0.18
+
+
+0.0.18 (2018-07-09)
+^^^^^^^^^^^^^^^^^^^
+
+* Updated to support latest PyMySQL changes.
+
+* aiomysql now sends client connection info.
+
+* MySQL8+ Support including sha256_password and cached_sha2_password authentication plugins.
+
+* Default max packet length sent to the server is no longer 1.
+
+* Fixes issue where cursor.nextset can hang on query sets that raise errors.
+
+
+0.0.17 (2018-07-06)
+^^^^^^^^^^^^^^^^^^^
+
+* Pinned version of PyMySQL
+
+
+0.0.16 (2018-06-03)
+^^^^^^^^^^^^^^^^^^^
+
+* Added ability to execute precompiled sqlalchemy queries #294 (Thanks @vlanse)
+
+
+0.0.15 (2018-05-20)
+^^^^^^^^^^^^^^^^^^^
+
+* Fixed handling of user-defined types for sqlalchemy  #290
+
+* Fix KeyError when server reports unknown collation #289
+
+
+0.0.14 (2018-04-22)
+^^^^^^^^^^^^^^^^^^^
+
+* Fixed SSL connection finalization  #282
+
+
+0.0.13 (2018-04-19)
+^^^^^^^^^^^^^^^^^^^
+
+* Added SSL support #280 (Thanks @terrycain)
+
+* Fixed __all__ in aiomysql/__init__ #270 (Thanks @matianjun1)
+
+* Added docker fixtures #275 (Thanks @terrycain)
+
+
+0.0.12 (2018-01-18)
+^^^^^^^^^^^^^^^^^^^
+
+* Fixed support for SQLAlchemy 1.2.0
+
+* Fixed argument for cursor.execute in sa engine #239 (Thanks @NotSoSuper)
+
+
+0.0.11 (2017-12-06)
+^^^^^^^^^^^^^^^^^^^
+
+* Fixed README formatting on pypi
+
+
+0.0.10 (2017-12-06)
+^^^^^^^^^^^^^^^^^^^
+
+* Updated regular expressions to be compatible with pymysql #167 (Thanks @AlexLisovoy)
+
+* Added connection recycling in the pool #216
+
+
+0.0.9 (2016-09-14)
+^^^^^^^^^^^^^^^^^^
+
+* Fixed AttributeError in  _request_authentication function #104 (Thanks @ttlttl)
+
+* Fixed legacy auth #105
+
+* uvloop added to test suite #106
+
+* Fixed bug with unicode in json field #107 (Thanks @methane)
+
+
+0.0.8 (2016-08-24)
+^^^^^^^^^^^^^^^^^^
+
+* Default min pool size reduced to 1 #80 (Thanks @Drizzt1991)
+
+* Update to PyMySQL 0.7.5 #89
+
+* Fixed connection cancellation in process of executing a query #79 (Thanks @Drizzt1991)
+
+
+0.0.7 (2016-01-27)
+^^^^^^^^^^^^^^^^^^
+
+* Fix for multiple results issue, ported from pymysql #52
+
+* Fixed useless warning with no_delay option #55
+
+* Added async/await support for Engine, SAConnection, Transaction #57
+
+* pool.release returns future so we can wait on it in __aexit__ #60
+
+* Update to PyMySQL 0.6.7
+
+
+0.0.6 (2015-12-11)
+^^^^^^^^^^^^^^^^^^
+
+* Fixed bug with SA rollback (Thanks @khlyestovillarion!)
+
+* Fixed issue with default no_delay option (Thanks @khlyestovillarion!)
+
+
+0.0.5 (2015-10-28)
+^^^^^^^^^^^^^^^^^^
+
+* no_delay option is deprecated and True by default
+
+* Add Cursor.mogrify() method
+
+* Support for "LOAD LOCAL INFILE" query.
+
+* Check connection inside pool, in case of timeout drop it, fixes #25
+
+* Add support of python 3.5 features to pool, connection and cursor
+
+
+0.0.4 (2015-05-23)
+^^^^^^^^^^^^^^^^^^
+
+* Allow to call connection.wait_closed twice.
+
+* Fixed sqlalchemy 1.0.0 support.
+
+* Fix #11: Rename Connection.wait_closed() to .ensure_closed()
+
+* Raise ResourceWarning on non-closed Connection
+
+* Rename Connection.connect to _connect
+
+
+0.0.3 (2015-03-10)
+^^^^^^^^^^^^^^^^^^
+
+* Added support for PyMySQL up to 0.6.6.
+
+* Ported improvements from PyMySQL.
+
+* Added basic documentation.
+
+* Fixed and added more examples.
+
+
+0.0.2 (2015-02-17)
+^^^^^^^^^^^^^^^^^^
+
+* Added MANIFEST.in.
+
+
+0.0.1 (2015-02-17)
+^^^^^^^^^^^^^^^^^^
+
+* Initial release.
+
+* Implemented plain connections: connect, Connection, Cursor.
+
+* Implemented database pools.
+
+* Ported sqlalchemy optional support.

@@ -1,0 +1,11 @@
+Component,Origin,License,Copyright
+setup.cfg,nulltype,Apache License 2.0,
+setup.cfg,python-dateutil,Apache License 2.0,
+setup.cfg,certifi,MPL-2.0,
+setup.cfg,six,MIT,
+setup.cfg,urllib3,MIT,
+setup.cfg,flexmock,BSD License,
+setup.cfg,pytest,MIT license,
+setup.cfg,pytest-black,MIT,
+setup.cfg,pytest-randomly,BSD,
+setup.cfg,pytest-cov,MIT,
