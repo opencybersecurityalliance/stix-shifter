@@ -97,7 +97,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert query_response['search_id'] == query
 
     @staticmethod
-    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination', autospec=True)
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search', autospec=True)
     @patch('ssl.SSLContext.load_verify_locations')
     def test_results_response(self, mock_results_response):
         mocked_return_value = """ {
@@ -162,7 +162,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert len(results_response['data']) > 0
         assert len(results_response['metadata']) >= 1
 
-    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination', autospec=True)
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search', autospec=True)
     def test_results_response_exception(self, mock_results_response):
         mocked_return_value = """ {    } """
         mock_results_response.return_value = get_mock_response(404, mocked_return_value, 'byte')
@@ -190,7 +190,7 @@ class TestElasticEcsConnection(unittest.TestCase, object):
         assert results_response['success'] is False
 
     @staticmethod
-    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search_pagination', autospec=True)
+    @patch('stix_shifter_modules.elastic_ecs.stix_transmission.api_client.APIClient.search', autospec=True)
     @patch('ssl.SSLContext.load_verify_locations')
     def test_query_flow(self, mock_results_response):
         results_mock = """ {
