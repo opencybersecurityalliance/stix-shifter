@@ -21,15 +21,6 @@
     "selfSignedCert": {
       "type": "password",
       "optional": true
-    },
-    "options": {
-      "type": "fields",
-      "api_page_size": {
-        "default": 1000,
-        "min": 100,
-        "max": 10000,
-        "type": "number"
-      }
     }
   },
   "configuration": {

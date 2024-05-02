@@ -14,7 +14,6 @@ class APIClient:
         self.client = RestApiClientAsync(connection.get('host'), connection.get('port'), headers=self.headers,
                                          cert_verify=connection.get('selfSignedCert'))
         self.result_limit = connection['options'].get('result_limit')
-        self.api_page_size = connection['options'].get('api_page_size')
         self.timeout = connection['options'].get('timeout')
 
     async def ping_data_source(self, token):

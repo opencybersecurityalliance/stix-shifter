@@ -504,7 +504,7 @@ class TestNozomiConnection(unittest.TestCase, object):
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_success_query_with_metadata_parameter(self, mock_result_response):
         """ test success result response with metadata parameter"""
-        metadata = {"page_number": 2}
+        metadata = {"page_number": 2, "page_index": 0}
         query = "query=alerts | where threat_name==\"\" | where record_created_at>=1698836400000 | where " \
                 "record_created_at<=1704344040000"
         mock_result_response.side_effect = [
@@ -542,7 +542,7 @@ class TestNozomiConnection(unittest.TestCase, object):
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_with_expired_jwt_token(self, mock_result_response):
         """ test expired jwt token"""
-        metadata = {"page_number": 2}
+        metadata = {"page_number": 2, "page_index": 0}
         query = "alerts | where port_dst>\"22\" | where record_created_at>=1701388800000 | where " \
                 "record_created_at<=1704106800000 "
         mock_result_response.side_effect = [get_mock_response(200, json.dumps(TestNozomiConnection.mock_token_response),

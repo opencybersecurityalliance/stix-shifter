@@ -10,6 +10,7 @@ class InvalidMetadataException(Exception):
 
 
 class Connector(BaseJsonSyncConnector):
+    NOZOMI_MAX_PAGE_SIZE = 1000
 
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
@@ -30,20 +31,21 @@ class Connector(BaseJsonSyncConnector):
         try:
             offset = int(offset)
             length = int(length)
-            # result_count is overall record count from all the previous batches processed.
-            result_count = offset
-            # total_records is record count till the current batch, including the result_count.
-            total_records, page_number, offset = self.handle_metadata(offset, length, metadata)
-            # expected_result_count is the expected result count for the current batch, after the calculation of offset.
-            expected_result_count = offset + length
+            page_number, page_index = self.get_page_details(offset, metadata)
+
+            start_index = offset
+            end_index = offset + length
+            # Adjusting the end index if it exceeds the result limit.
+            if self.api_client.result_limit < end_index:
+                end_index = self.api_client.result_limit
 
             # Generating jwt token
             jwt_token, return_obj = await self.__get_token()
             if return_obj:
                 return return_obj
 
-            while result_count < total_records:
-                query_url = f'{query}&page={page_number}&count={self.api_client.api_page_size}'
+            while start_index < end_index:
+                query_url = f'{query}&page={page_number}&count={Connector.NOZOMI_MAX_PAGE_SIZE}'
                 response_wrapper = await self.api_client.get_search_results(query_url, jwt_token)
                 response_dict, return_obj = self.handle_api_response(response_wrapper)
 
@@ -60,24 +62,30 @@ class Connector(BaseJsonSyncConnector):
                     continue
 
                 return_obj['success'] = True
-                data += response_dict['result']
-                # local_result_count is number of records fetched per API call.
-                local_result_count = len(response_dict['result'])
-                result_count += local_result_count
+                data += response_dict['result'][page_index:page_index+length]
+                start_index += len(response_dict['result'][page_index:page_index+length])
+                remaining_data = response_dict['result'][page_index+length:]
 
-                if len(response_dict['result']) < self.api_client.api_page_size:
+                if len(response_dict['result']) < Connector.NOZOMI_MAX_PAGE_SIZE and not remaining_data:
                     page_number = None
                     break
 
-                # Incrementing the next page when the fetched results are fully utilized.
-                if local_result_count <= expected_result_count:
+                # if the current page results are not fully utilized.
+                if remaining_data:
+                    page_index = page_index + length
+                    break
+                else:
+                    # Incrementing the page number if the current page results are fully utilized.
+                    page_index = 0
                     page_number += 1
+                    # Adjust the length for the next slicing.
+                    length -= len(data)
 
-            return_obj = self.handle_data(data, offset, expected_result_count, return_obj)
+            return_obj = self.handle_data(data, return_obj)
 
             if return_obj.get('data'):
-                if page_number and result_count < self.api_client.result_limit:
-                    return_obj['metadata'] = {"page_number": page_number}
+                if page_number and end_index < self.api_client.result_limit:
+                    return_obj['metadata'] = {"page_number": page_number, "page_index": page_index}
 
         except InvalidMetadataException as ex:
             return_obj = self.handle_api_exception(422, f'Invalid metadata: {str(ex)}')
@@ -150,35 +158,27 @@ class Connector(BaseJsonSyncConnector):
         ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj
 
-    def handle_metadata(self, offset, length, metadata):
+    @staticmethod
+    def get_page_details(offset, metadata):
         """
-        Processing metadata information
+        Handling page number and page index
         :param offset, int
-        :param length, int
         :param metadata, dict
-        :return: total_records, int
-                 page_number, int
-                 offset, int
+        :return: page_number, int
+                 page_index, int
         """
         page_number = 1
-
-        # calculating the overall record count
-        total_records = offset + length
-        if self.api_client.result_limit < total_records:
-            total_records = self.api_client.result_limit
+        page_index = offset
 
         if metadata:
             if isinstance(metadata, dict) and metadata.get('page_number'):
                 page_number = int(metadata.get('page_number', 1))
-                # overwrite the offset for current batch.
-                # offset passed from the function parameter is not directly used for slicing.
-                # after calculating offset for the current batch, It will be used for slicing.
-                offset = abs(offset - ((page_number - 1) * self.api_client.api_page_size))
+                page_index = int(metadata.get('page_index', 0))
             else:
                 # raise exception when metadata doesnt contain jwtToken token
                 raise InvalidMetadataException(metadata)
 
-        return total_records, page_number, offset
+        return page_number, page_index
 
     def handle_api_response(self, response_wrapper):
         """
@@ -209,18 +209,16 @@ class Connector(BaseJsonSyncConnector):
         return response_dict, return_obj
 
     @staticmethod
-    def handle_data(data, offset, expected_result_count, return_obj):
+    def handle_data(data, return_obj):
         """
          Process the data
         :param data, list
-        :param offset, int
-        :param expected_result_count, int
         :param return_obj, dict
         :return: return_obj, dict
         """
         if data:
             data = Connector.get_results_data(data)
-            return_obj['data'] = data[offset: expected_result_count] if data else []
+            return_obj['data'] = data if data else []
         else:
             if not return_obj.get('error') and return_obj.get('success') is not False:
                 return_obj['success'] = True
