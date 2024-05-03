@@ -15,6 +15,12 @@
     "selfSignedCert": {
         "label": "PEM Formatted SSL certificate(s)",
         "description": "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
+    },
+    "options": {
+      "api_page_size": {
+        "label": "API Page Size",
+        "description": "Number of records per API call. Data source recommended value should be kept below or equal to 1000 per API call. Valid input range is {{min}} to {{max}}."
+      }
     }
   },
   "configuration": {

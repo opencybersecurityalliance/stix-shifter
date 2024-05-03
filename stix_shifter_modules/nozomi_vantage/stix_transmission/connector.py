@@ -10,7 +10,6 @@ class InvalidMetadataException(Exception):
 
 
 class Connector(BaseJsonSyncConnector):
-    NOZOMI_MAX_PAGE_SIZE = 1000
 
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
@@ -45,7 +44,7 @@ class Connector(BaseJsonSyncConnector):
                 return return_obj
 
             while start_index < end_index:
-                query_url = f'{query}&page={page_number}&count={Connector.NOZOMI_MAX_PAGE_SIZE}'
+                query_url = f'{query}&page={page_number}&count={self.api_client.api_page_size}'
                 response_wrapper = await self.api_client.get_search_results(query_url, jwt_token)
                 response_dict, return_obj = self.handle_api_response(response_wrapper)
 
@@ -63,10 +62,11 @@ class Connector(BaseJsonSyncConnector):
 
                 return_obj['success'] = True
                 data += response_dict['result'][page_index:page_index+length]
-                start_index += len(response_dict['result'][page_index:page_index+length])
+                processed_data_count = len(response_dict['result'][page_index:page_index+length])
+                start_index += processed_data_count
                 remaining_data = response_dict['result'][page_index+length:]
 
-                if len(response_dict['result']) < Connector.NOZOMI_MAX_PAGE_SIZE and not remaining_data:
+                if len(response_dict['result']) < self.api_client.api_page_size and not remaining_data:
                     page_number = None
                     break
 
@@ -79,7 +79,7 @@ class Connector(BaseJsonSyncConnector):
                     page_index = 0
                     page_number += 1
                     # Adjust the length for the next slicing.
-                    length -= len(data)
+                    length -= processed_data_count
 
             return_obj = self.handle_data(data, return_obj)
 
