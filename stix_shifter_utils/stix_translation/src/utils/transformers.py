@@ -97,7 +97,7 @@ class ToInteger(ValueTransformer):
     @staticmethod
     def transform(obj):
         try:
-            if type(obj) is str and re.search('\.', obj):
+            if type(obj) is str and re.search(r'\.', obj):
                 obj = float(obj)
             return int(obj)
         except ValueError:
@@ -330,6 +330,14 @@ class ValueToList(ValueTransformer):
     @staticmethod
     def transform(obj):
         return [obj]
+
+
+class UnlistIfList(ValueTransformer):
+    """A value transformer that returns the first item if it is a list"""
+    @staticmethod
+    def transform(obj):
+        return obj[0] if isinstance(obj, list) else obj
+
 
 class GraphIDToPID(ValueTransformer):
     """A value transformer that converts a single value into a list container the value"""

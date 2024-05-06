@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import json
 import unittest
 import uuid
 from datetime import datetime
@@ -49,7 +48,7 @@ class TestResultTranslatorMixin:
         return ob_data["objects"]
 
     def translate_results(self, data):
-        result = self.results_translator.translate_results(json.dumps(self.data_source), json.dumps(data))
+        result = self.results_translator.translate_results(self.data_source, data)
         return result
 
     def _get_objects(self, data):
@@ -251,11 +250,19 @@ class TestEndpointResultTranslator(unittest.TestCase, TestResultTranslatorMixin)
         self.assertEqual(value["binary_ref"], file_key)
 
     def test_object_registry(self):
-        data = [{
-            "objectRegistryData": "4359",
-            "objectRegistryKeyHandle": "hkcu\\software\\microsoft\\internet explorer\\domstorage\\office.com",
-            "objectRegistryValue": "total",
-        }]
+        data = [
+            {
+                "objectRegistryData": "4359",
+                "objectRegistryKeyHandle": "hkcu\\software\\microsoft\\internet explorer\\domstorage\\office.com",
+                "objectRegistryValue": "total",
+                "objectRegistryValueType": [
+                    {
+                        "name": "total",
+                        "data": "4359"
+                    }
+                ]
+            }
+        ]
         observed_objects = self._get_observed_objects(data)
         key_key, key_value = self._find_object_by_type(observed_objects, "windows-registry-key")
         self.assertEqual(key_value["key"], r"HKEY_CURRENT_USER\software\microsoft\internet explorer\domstorage\office.com")
@@ -324,11 +331,8 @@ class TestEndpointResultTranslator(unittest.TestCase, TestResultTranslatorMixin)
         self.assertEqual(file_value["parent_directory_ref"], dir_key)
         self.assertEqual(file_value["hashes"]["SHA-1"], data[0]["srcFileHashSha1"])
 
-    def test_malformed_payload(self):
-        self.assertRaises(LoadJsonResultsException, self.translate_results, "test")
-
     def test_missing_id(self):
-        self.assertRaises(TranslationResultException, self.results_translator.translate_results, "{}", "{}")
+        self.assertRaises(TranslationResultException, self.results_translator.translate_results, {}, {})
 
 
 class TestMessageResultTranslator(unittest.TestCase, TestResultTranslatorMixin):
@@ -383,19 +387,25 @@ class TestMessageResultTranslator(unittest.TestCase, TestResultTranslatorMixin):
         self.assertEqual(value["date"], data[0]["mail_message_delivery_time"])
 
     def test_headers(self):
-        data = [{
-            "mail_message_id": "<abcdef@aaa.bbb.ccc>",
-            "mail_internet_headers": [
-                {
-                    "Value": "aaa@bbb.ccc.ddd",
-                    "HeaderName": "Return-Path"
-                },
-                {
-                    "Value": "spf=pass (sender IP is 207.46.50.224); compauth=pass reason=100",
-                    "HeaderName": "Authentication-Results"
-                }
-            ],
-        }]
+        data = [
+            {
+                "mail_message_id": "<abcdef@aaa.bbb.ccc>",
+                "mail_internet_headers": [
+                    {
+                        "Value": "aaa@bbb.ccc.ddd",
+                        "HeaderName": "Return-Path"
+                    },
+                    {
+                        "Value": "spf=pass (sender IP is 207.46.50.224); compauth=pass reason=100",
+                        "HeaderName": "Authentication-Results"
+                    },
+                    {
+                        "HeaderName": "Message-ID",
+                        "Value": "<abcdef@aaa.bbb.ccc>"
+                    }
+                ]
+            }
+        ]
         observed_objects = self._get_observed_objects(data)
         key, value = self._find_object_by_type(observed_objects, "email-message")
         self.assertDictEqual(value["additional_header_fields"], {
@@ -405,9 +415,17 @@ class TestMessageResultTranslator(unittest.TestCase, TestResultTranslatorMixin):
         })
 
     def test_message_id(self):
-        data = [{
-            "mail_message_id": "<abcdef@aaa.bbb.ccc>",
-        }]
+        data = [
+                {
+                    "mail_message_id": "<abcdef@aaa.bbb.ccc>",
+                    "mail_internet_headers": [
+                        {
+                            "HeaderName": "Message-ID",
+                            "Value": "<abcdef@aaa.bbb.ccc>"
+                        }
+                    ]
+                }
+            ]
         observed_objects = self._get_observed_objects(data)
         key, value = self._find_object_by_type(observed_objects, "email-message")
         self.assertDictEqual(value["additional_header_fields"], {
@@ -415,26 +433,32 @@ class TestMessageResultTranslator(unittest.TestCase, TestResultTranslatorMixin):
         })
 
     def test_email_message(self):
-        data = [{
-            "mail_message_sender": "aaa@bbb.ccc.ddd",
-            "mail_message_recipient": [
-                "111xdrwbtest@xdrintwb.bbb.ccc",
-                "222xdrwbtest@xdrintwb.bbb.ccc"
-            ],
-            "mail_message_subject": "Message Center Major Change Update Notification",
-            "mail_message_delivery_time": "2021-04-13T08:30:56.000Z",
-            "mail_message_id": "<abcdef@aaa.bbb.ccc>",
-            "mail_internet_headers": [
-                {
-                    "Value": "aaa@bbb.ccc.ddd",
-                    "HeaderName": "Return-Path"
-                },
-                {
-                    "Value": "spf=pass (sender IP is 207.46.50.224); compauth=pass reason=100",
-                    "HeaderName": "Authentication-Results"
-                }
-            ],
-        }]
+        data = [
+            {
+                "mail_message_sender": "aaa@bbb.ccc.ddd",
+                "mail_message_recipient": [
+                    "111xdrwbtest@xdrintwb.bbb.ccc",
+                    "222xdrwbtest@xdrintwb.bbb.ccc"
+                ],
+                "mail_message_subject": "Message Center Major Change Update Notification",
+                "mail_message_delivery_time": "2021-04-13T08:30:56.000Z",
+                "mail_message_id": "<abcdef@aaa.bbb.ccc>",
+                "mail_internet_headers": [
+                    {
+                        "Value": "aaa@bbb.ccc.ddd",
+                        "HeaderName": "Return-Path"
+                    },
+                    {
+                        "Value": "spf=pass (sender IP is 207.46.50.224); compauth=pass reason=100",
+                        "HeaderName": "Authentication-Results"
+                    },
+                    {
+                        "HeaderName": "Message-ID",
+                        "Value": "<abcdef@aaa.bbb.ccc>"
+                    }
+                ]
+            }
+        ]
         observed_objects = self._get_observed_objects(data)
         sender_addr_key, sender_addr_value = self._find_object(observed_objects, "email-addr", "aaa@bbb.ccc.ddd")
         self.assertEqual(sender_addr_value["value"], data[0]["mail_message_sender"])

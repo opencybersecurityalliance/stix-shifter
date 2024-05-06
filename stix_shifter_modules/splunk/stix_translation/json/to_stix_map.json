@@ -1,7 +1,6 @@
 {
   "event_count": {
     "key": "number_observed",
-    "cybox": false,
     "transformer": "ToInteger"
   },
   "_raw": [
@@ -23,15 +22,19 @@
   "dest_ip": [
     {
       "key": "ipv4-addr.value",
-      "object": "dst_ip"
+      "object": "dst_ip",
+      "unwrap": true,
+      "transformer": "FilterIPv4List"
     },
     {
       "key": "ipv6-addr.value",
-      "object": "dst_ip"
+      "object": "dst_ip",
+      "unwrap": true,
+      "transformer": "FilterIPv6List"
     },
     {
       "key": "network-traffic.dst_ref",
-      "object": "network-traffic",
+      "object": "network_traffic",
       "references": "dst_ip"
     },
     {
@@ -43,30 +46,27 @@
       "group": true
     },
     {
-      "key": "x-oca-event.network_ref",
-      "object": "event",
-      "references": "network-traffic"
-    },
-    {
-      "key": "process.opened_connection_refs",
-      "object": "process",
-      "references": [
-        "network-traffic"
-      ]
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "ibm_finding",
+      "references": "dst_ip"
     }
   ],
   "src_ip": [
     {
       "key": "ipv4-addr.value",
-      "object": "src_ip"
+      "object": "src_ip",
+      "unwrap": true,
+      "transformer": "FilterIPv4List"
     },
     {
       "key": "ipv6-addr.value",
-      "object": "src_ip"
+      "object": "src_ip",
+      "unwrap": true,
+      "transformer": "FilterIPv6List"
     },
     {
       "key": "network-traffic.src_ref",
-      "object": "network-traffic",
+      "object": "network_traffic",
       "references": "src_ip"
     },
     {
@@ -78,122 +78,253 @@
       "group": true
     },
     {
-      "key": "x-oca-event.network_ref",
-      "object": "event",
-      "references": "network-traffic"
-    },
-    {
-      "key": "process.opened_connection_refs",
-      "object": "process",
-      "references": [
-        "network-traffic"
-      ]
+      "key": "x-ibm-finding.src_ip_ref",
+      "object": "ibm_finding",
+      "references": "src_ip"
     }
   ],
-  "dest_port": [
+  "networkdata": {
+    "dest_port": [
+      {
+        "key": "network-traffic.dst_port",
+        "object": "network_traffic",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "network_traffic"
+      }
+    ],
+    "src_port": [
+      {
+        "key": "network-traffic.src_port",
+        "object": "network_traffic",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "network_traffic"
+      }
+    ],
+    "protocol": [
+      {
+        "key": "network-traffic.protocols",
+        "object": "network_traffic",
+        "group": true,
+        "transformer": "ToLowercaseArray"
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "network_traffic"
+      },
+      {
+        "key": "process.opened_connection_refs",
+        "object": "process",
+        "references": [
+          "network_traffic"
+        ]
+      }
+    ],
+    "transport": [
+      {
+        "key": "network-traffic.protocols",
+        "object": "network_traffic",
+        "group": true,
+        "transformer": "ToLowercaseArray"
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "network_traffic"
+      },
+      {
+        "key": "process.opened_connection_refs",
+        "object": "process",
+        "references": [
+          "network_traffic"
+        ]
+      }
+    ],
+    "direction": [
+      {
+        "key": "network-traffic.x_direction",
+        "object": "network_traffic"
+      }
+    ]
+  },
+  "bytes_in": [
     {
-      "key": "network-traffic.dst_port",
-      "object": "network-traffic",
+      "key": "network-traffic.dst_byte_count",
+      "object": "network_traffic",
       "transformer": "ToInteger"
-    },
-    {
-      "key": "x-oca-event.network_ref",
-      "object": "event",
-      "references": "network-traffic"
-    },
-    {
-      "key": "process.opened_connection_refs",
-      "object": "process",
-      "references": [
-        "network-traffic"
-      ]
     }
   ],
-  "src_port": [
+  "bytes_out": [
     {
-      "key": "network-traffic.src_port",
-      "object": "network-traffic",
+      "key": "network-traffic.src_byte_count",
+      "object": "network_traffic",
       "transformer": "ToInteger"
+    }
+  ],
+  "packets_in": [
+    {
+      "key": "network-traffic.dst_packets",
+      "object": "network_traffic"
+    }
+  ],
+  "packets_out": [
+    {
+      "key": "network-traffic.src_packets",
+      "object": "network_traffic"
+    }
+  ],
+  "name": [
+    {
+      "key": "network-traffic.extensions.dns-ext.name",
+      "object": "network_traffic"
+    }
+  ],
+  "message_type": [
+    {
+      "key": "network-traffic.extensions.dns-ext.message_type",
+      "object": "network_traffic"
+    }
+  ],
+  "query_count": [
+    {
+      "key": "network-traffic.extensions.dns-ext.query_count",
+      "object": "network_traffic"
+    }
+  ],
+  "query_type": [
+    {
+      "key": "network-traffic.extensions.dns-ext.query_type",
+      "object": "network_traffic"
+    }
+  ],
+  "record_type": [
+    {
+      "key": "network-traffic.extensions.dns-ext.record_type",
+      "object": "network_traffic"
+    }
+  ],
+  "reply_code": [
+    {
+      "key": "network-traffic.extensions.dns-ext.reply_code",
+      "object": "network_traffic"
+    }
+  ],
+  "reply_code_id": [
+    {
+      "key": "network-traffic.extensions.dns-ext.reply_code_id",
+      "object": "network_traffic"
+    }
+  ],
+  "query": [
+    {
+      "key": "domain-name.value",
+      "object": "dns_domain"
     },
     {
-      "key": "x-oca-event.network_ref",
+      "key": "network-traffic.extensions.dns-ext.question.name_ref",
+      "object": "network_traffic",
+      "references": "dns_domain"
+    },
+    {
+      "key": "x-oca-event.domain_ref",
       "object": "event",
-      "references": "network-traffic"
+      "references": "dns_domain"
     },
     {
-      "key": "process.opened_connection_refs",
-      "object": "process",
+      "key": "network-traffic.dst_ref",
+      "object": "network_traffic",
+      "references": "dns_domain"
+    }
+  ],
+  "answer": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "resolved_ip",
+      "unwrap": true,
+      "transformer": "FilterIPv4List"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "resolved_ip",
+      "unwrap": true,
+      "transformer": "FilterIPv6List"
+    },
+    {
+      "key": "network-traffic.extensions.dns-ext.resolved_ip_refs",
+      "object": "network_traffic",
       "references": [
-        "network-traffic"
+        "resolved_ip"
       ]
     }
   ],
-  "protocol": [
+  "transaction_id": [
     {
-      "key": "network-traffic.protocols",
-      "object": "network-traffic",
-      "transformer": "ToLowercaseArray"
-    },
-    {
-      "key": "x-oca-event.network_ref",
-      "object": "event",
-      "references": "network-traffic"
-    },
-    {
-      "key": "process.opened_connection_refs",
-      "object": "process",
-      "references": [
-        "network-traffic"
-      ]
+      "key": "network-traffic.extensions.dns-ext.transaction_id",
+      "object": "network_traffic"
     }
   ],
-  "_time": [
+  "http_method": [
     {
-      "key": "first_observed",
-      "transformer": "SplunkToTimestamp",
-      "cybox": false
-    },
+      "key": "network-traffic.extensions.http-request-ext.request_method",
+      "object": "network_traffic"
+    }
+  ],
+  "http_referrer": [
     {
-      "key": "last_observed",
-      "transformer": "SplunkToTimestamp",
-      "cybox": false
-    },
+      "key": "network-traffic.extensions.http-request-ext.request_header.Referer",
+      "object": "network_traffic"
+    }
+  ],
+  "http_user_agent": [
     {
-      "key": "x-oca-event.created",
-      "transformer": "SplunkToTimestamp",
-      "object": "event"
+      "key": "network-traffic.extensions.http-request-ext.request_header.User-Agent",
+      "object": "network_traffic"
+    }
+  ],
+  "uri_path": [
+    {
+      "key": "network-traffic.extensions.http-request-ext.request_value",
+      "object": "network_traffic"
+    }
+  ],
+  "uri_query": [
+    {
+      "key": "network-traffic.extensions.http-request-ext.x_uri_query",
+      "object": "network_traffic"
     }
   ],
   "user": [
     {
-      "key": "user-account.account_login",
-      "object": "authentication"
-    },
-    {
-      "key": "x_splunk_spl.user",
-      "cybox": false
-    },
-    {
       "key": "user-account.user_id",
-      "object": "authentication"
+      "object": "user",
+      "unwrap": true
     },
     {
       "key": "x-oca-event.user_ref",
       "object": "event",
-      "references": "authentication"
+      "references": "user"
     }
   ],
-  "process_user": [
+  "user_id": [
     {
-      "key": "process.creator_user_ref",
-      "object": "process",
-      "references": "authentication"
+      "key": "user-account.account_login",
+      "object": "user"
     }
   ],
-  "bytes": {
-    "key": "x_splunk_spl.bytes",
-    "cybox": false
-  },
+  "user_name": [
+    {
+      "key": "user-account.x_user_name",
+      "object": "user"
+    }
+  ],
   "ssl_hash": [
     {
       "key": "x509-certificate.hashes.SHA-256",
@@ -224,10 +355,71 @@
     "key": "x509-certificate.subject_public_key_algorithm",
     "object": "certificate"
   },
+  "ssl_start_time": {
+    "key": "x509-certificate.validity_not_before",
+    "object": "certificate",
+    "transformer": "EpochToTimestamp"
+  },
+  "ssl_end_time": {
+    "key": "x509-certificate.validity_not_after",
+    "object": "certificate",
+    "transformer": "EpochToTimestamp"
+  },
+  "ssl_is_valid": {
+    "key": "x509-certificate.x_ssl_is_valid",
+    "object": "certificate"
+  },
+  "ssl_issuer_common_name": {
+    "key": "x509-certificate.x_ssl_issuer_common_name",
+    "object": "certificate"
+  },
+  "ssl_subject_common_name": {
+    "key": "x509-certificate.x_ssl_subject_common_name",
+    "object": "certificate"
+  },
+  "ssl_name": {
+    "key": "x509-certificate.x_ssl_name",
+    "object": "certificate"
+  },
+  "ssl_publickey": {
+    "key": "x509-certificate.x_ssl_publickey",
+    "object": "certificate"
+  },
+  "ssl_issuer_email_domain": [
+    {
+      "key": "domain-name.value",
+      "object": "ssl_email_domain"
+    },
+    {
+      "key": "x509-certificate.x_ssl_issuer_domain_ref",
+      "object": "certificate",
+      "references": "ssl_email_domain"
+    }
+  ],
+  "ssl_subject_email_domain": [
+    {
+      "key": "domain-name.value",
+      "object": "ssl_subject_domain"
+    },
+    {
+      "key": "x509-certificate.x_ssl_subject_domain_ref",
+      "object": "certificate",
+      "references": "ssl_subject_domain"
+    }
+  ],
+  "ssl_issuer_organization": {
+    "key": "x509-certificate.x_ssl_issuer_organization",
+    "object": "certificate"
+  },
+  "ssl_subject_organization": {
+    "key": "x509-certificate.x_ssl_subject_organization",
+    "object": "certificate"
+  },
   "process_id": [
     {
       "key": "process.pid",
-      "object": "process"
+      "object": "process",
+      "transformer": "ConvertHexAndStringToInteger"
     },
     {
       "key": "x-oca-event.process_ref",
@@ -238,6 +430,28 @@
   "process_name": [
     {
       "key": "process.name",
+      "object": "process",
+      "transformer": "CheckProcessName"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    },
+    {
+      "key": "file.name",
+      "object": "process_file",
+      "transformer": "CheckProcessName"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "process_file"
+    }
+  ],
+  "process": [
+    {
+      "key": "process.command_line",
       "object": "process"
     },
     {
@@ -246,10 +460,6 @@
       "references": "process"
     }
   ],
-  "process": {
-    "key": "process.command_line",
-    "object": "process"
-  },
   "process_exec": [
     {
       "key": "file.name",
@@ -259,11 +469,6 @@
       "key": "process.binary_ref",
       "object": "process",
       "references": "process-exec"
-    },
-    {
-      "key": "x-oca-event.file_ref",
-      "object": "event",
-      "references": "process-exec"
     }
   ],
   "process_hash": {
@@ -271,21 +476,35 @@
     "object": "process-exec",
     "transformer": "SplunkHash"
   },
+  "process_guid": {
+    "key": "process.x_unique_id",
+    "object": "process"
+  },
+  "parent_process_guid": {
+    "key": "process.x_unique_id",
+    "object": "parent-process"
+  },
+  "process_current_directory": {
+    "key": "process.cwd",
+    "object": "process"
+  },
   "process_path": [
     {
       "key": "directory.path",
-      "object": "process-path"
+      "object": "process_directory",
+      "transformer": "CheckProcessPath"
     },
     {
       "key": "file.parent_directory_ref",
-      "object": "process-exec",
-      "references": "process-path"
+      "object": "process_file",
+      "references": "process_directory"
     }
   ],
   "parent_process_id": [
     {
       "key": "process.pid",
-      "object": "parent-process"
+      "object": "parent-process",
+      "transformer": "ConvertHexAndStringToInteger"
     },
     {
       "key": "x-oca-event.parent_process_ref",
@@ -312,12 +531,33 @@
       "key": "process.parent_ref",
       "object": "process",
       "references": "parent-process"
+    },
+    {
+      "key": "file.name",
+      "object": "parent_process_file"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent-process",
+      "references": "parent_process_file"
     }
   ],
-  "parent_process": {
-    "key": "process.command_line",
-    "object": "parent-process"
-  },
+  "parent_process": [
+    {
+      "key": "process.command_line",
+      "object": "parent-process"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "parent-process"
+    },
+    {
+      "key": "x-oca-event.parent_process_ref",
+      "object": "event",
+      "references": "parent-process"
+    }
+  ],
   "parent_process_exec": [
     {
       "key": "file.name",
@@ -332,52 +572,59 @@
   "parent_process_path": [
     {
       "key": "directory.path",
-      "object": "parent-process-path"
+      "object": "parent-directory"
     },
     {
       "key": "file.parent_directory_ref",
-      "object": "parent-process-exec",
-      "references": "parent-process-path"
+      "object": "parent_process_file",
+      "references": "parent-directory"
     }
   ],
   "file_path": [
     {
       "key": "directory.path",
-      "object": "directory"
+      "object": "file_directory"
     },
     {
       "key": "file.parent_directory_ref",
       "object": "file",
-      "references": "directory"
+      "references": "file_directory"
     }
   ],
   "file_create_time": [
     {
-      "key": "directory.created",
-      "object": "directory",
-      "transformer": "SplunkToTimestamp"
-    },
-    {
       "key": "file.created",
       "object": "file",
-      "transformer": "SplunkToTimestamp"
+      "transformer": "FormatTimestamp"
     }
   ],
   "file_modify_time": [
     {
-      "key": "directory.modified",
-      "object": "directory",
-      "transformer": "SplunkToTimestamp"
-    },
-    {
       "key": "file.modified",
       "object": "file",
-      "transformer": "SplunkToTimestamp"
+      "transformer": "FormatTimestamp"
     }
   ],
-  "file_hash": {
-    "key": "file.hashes.UNKNOWN",
-    "object": "file"
+  "file_access_time": [
+    {
+      "key": "file.accessed",
+      "object": "file",
+      "transformer": "FormatTimestamp"
+    }
+  ],
+  "file_hashes": {
+    "file_sha1": {
+      "key": "file.hashes.SHA-1",
+      "object": "file"
+    },
+    "file_sha256": {
+      "key": "file.hashes.SHA-256",
+      "object": "file"
+    },
+    "file_md5": {
+      "key": "file.hashes.MD5",
+      "object": "file"
+    }
   },
   "file_name": [
     {
@@ -392,22 +639,21 @@
   ],
   "file_size": {
     "key": "file.size",
+    "object": "file",
+    "transformer": "ToInteger"
+  },
+  "file_acl": {
+    "key": "file.x_acl",
     "object": "file"
   },
   "src_mac": [
     {
       "key": "mac-addr.value",
-      "object": "src_mac"
+      "object": "src_mac",
+      "transformer": "SplunkMacFormatChange"
     },
     {
       "key": "ipv4-addr.resolves_to_refs",
-      "object": "src_ip",
-      "references": [
-        "src_mac"
-      ]
-    },
-    {
-      "key": "ipv6-addr.resolves_to_refs",
       "object": "src_ip",
       "references": [
         "src_mac"
@@ -417,7 +663,8 @@
   "dest_mac": [
     {
       "key": "mac-addr.value",
-      "object": "dst_mac"
+      "object": "dst_mac",
+      "transformer": "SplunkMacFormatChange"
     },
     {
       "key": "ipv4-addr.resolves_to_refs",
@@ -425,19 +672,13 @@
       "references": [
         "dst_mac"
       ]
-    },
-    {
-      "key": "ipv6-addr.resolves_to_refs",
-      "object": "dst_ip",
-      "references": [
-        "dst_mac"
-      ]
     }
   ],
-  "object_path": [
+  "registry_key_name": [
     {
       "key": "windows-registry-key.key",
-      "object": "windows-registry-key"
+      "object": "windows-registry-key",
+      "transformer": "RegistryValueName"
     },
     {
       "key": "x-oca-event.registry_ref",
@@ -445,30 +686,92 @@
       "references": "windows-registry-key"
     }
   ],
+  "registry_value": {
+    "key": "windows-registry-key.values",
+    "object": "windows-registry-key",
+    "transformer": "FormatToStixRegistryValue"
+  },
+  "registry_hive": [
+    {
+      "key": "windows-registry-key.x_hive",
+      "object": "windows-registry-key"
+    }
+  ],
+  "registry_path": [
+    {
+      "key": "windows-registry-key.x_path",
+      "object": "windows-registry-key"
+    }
+  ],
+  "registry_value_text": [
+    {
+      "key": "windows-registry-key.x_value_text",
+      "object": "windows-registry-key"
+    }
+  ],
   "url": [
     {
       "key": "url.value",
-      "object": "web"
+      "object": "url"
     },
     {
-      "key": "domain-name.value",
-      "transformer": "ToDomainName"
+      "key": "x-oca-event.url_ref",
+      "object": "event",
+      "references": "url"
     }
   ],
   "src_user": [
     {
       "key": "email-addr.value",
-      "object": "email-addr"
-    },
-    {
-      "key": "email-message.sender_ref",
-      "object": "email-message",
-      "references": "email-addr"
+      "object": "email-addr",
+      "unwrap": true
     },
     {
       "key": "email-message.from_ref",
       "object": "email-message",
       "references": "email-addr"
+    }
+  ],
+  "recipient": [
+    {
+      "key": "email-addr.value",
+      "object": "email-recipient",
+      "unwrap": true
+    },
+    {
+      "key": "email-message.to_refs",
+      "object": "email-message",
+      "references": [
+        "email-recipient"
+      ]
+    }
+  ],
+  "ssl_issuer_email": [
+    {
+      "key": "email-addr.value",
+      "object": "issuer_email",
+      "unwrap": true
+    },
+    {
+      "key": "x509-certificate.x_ssl_issuer_email_ref",
+      "object": "certificate",
+      "references": [
+        "issuer_email"
+      ]
+    }
+  ],
+  "ssl_subject_email":[
+    {
+      "key": "email-addr.value",
+      "object": "subject_email",
+      "unwrap": true
+    },
+    {
+      "key": "x509-certificate.x_ssl_subject_email_ref",
+      "object": "certificate",
+      "references": [
+        "subject_email"
+      ]
     }
   ],
   "subject": {
@@ -477,8 +780,7 @@
   },
   "is_multipart": {
     "key": "email-message.is_multipart",
-    "object": "email-message",
-    "transformer": "StringToBool"
+    "object": "email-message"
   },
   "host": [
     {
@@ -491,72 +793,158 @@
       "references": "host"
     }
   ],
-  "Direction": [
+  "recipient_domain": [
     {
-      "key": "x-splunk.direction",
-      "object": "x-splunk"
+      "key": "domain-name.value",
+      "object": "recipient_domain"
+    },
+    {
+      "key": "email-addr.x_recipient_domain_ref",
+      "object": "email-recipient",
+      "references": "recipient_domain"
     }
   ],
-  "EventID": [
+  "src_user_domain": [
     {
-      "key": "x-splunk.event_id",
-      "object": "x-splunk"
+      "key": "domain-name.value",
+      "object": "src_domain"
+    },
+    {
+      "key": "email-addr.x_src_user_domain_ref",
+      "object": "email-addr",
+      "references": "src_domain"
     }
   ],
-  "TacticId": [
+  "internal_message_id": [
     {
-      "key": "x-splunk.mitre_tactic_id",
-      "object": "x-splunk"
+      "key": "email-message.x_internal_message_id",
+      "object": "email-message"
     }
   ],
-  "Tactic": [
+  "message_id": [
     {
-      "key": "x-splunk.mitre_tactic",
-      "object": "x-splunk"
+      "key": "email-message.x_message_id",
+      "object": "email-message"
     }
   ],
-  "TechniqueId": [
+  "message_info": [
     {
-      "key": "x-splunk.mitre_technique_id",
-      "object": "x-splunk"
+      "key": "email-message.x_message_info",
+      "object": "email-message"
     }
   ],
-  "Technique": [
+  "os": [
     {
-      "key": "x-splunk.mitre_technique",
-      "object": "x-splunk"
+      "key": "x-oca-asset.x_operating_system",
+      "object": "host"
     }
   ],
-  "EventName": [
+  "original_file_name": [
     {
-      "key": "x-splunk.event_name",
-      "object": "x-splunk"
+      "key": "process.x_original_file_name",
+      "object": "process"
     }
   ],
-  "ss_name": {
-    "key": "x-ibm-finding.name",
-    "object": "x-ibm-finding"
+  "mem_used": [
+    {
+      "key": "process.x_memory_used",
+      "object": "process"
+    }
+  ],
+  "finding_type": {
+    "key": "x-ibm-finding.finding_type",
+    "object": "ibm_finding"
   },
-  "DeviceType": [
+  "alert_severity": [
     {
-      "key": "x-ibm-finding.src_device",
-      "object": "x-ibm-finding"
+      "key": "x-ibm-finding.severity",
+      "object": "ibm_finding",
+      "transformer": "SeverityToScore"
+    }
+  ],
+  "alert_signature": [
+    {
+      "key": "x-ibm-finding.name",
+      "object": "ibm_finding"
+    }
+  ],
+  "alert_id": [
+    {
+      "key": "x-ibm-finding.alert_id",
+      "object": "ibm_finding"
+    }
+  ],
+  "alert_description": [
+    {
+      "key": "x-ibm-finding.description",
+      "object": "ibm_finding"
+    }
+  ],
+  "source": [
+    {
+    "key": "x-oca-event.module",
+    "object": "event"
+    },
+    {
+      "key": "x-splunk-data.log_source",
+      "object": "x_splunk"
+    }
+  ],
+  "_sourcetype": {
+    "key": "x-splunk-data.log_source_type",
+    "object": "x_splunk"
+  },
+  "eventtype": {
+    "key": "x-splunk-data.event_type",
+    "object": "x_splunk"
+  },
+  "status": [
+    {
+      "key": "x-oca-event.x_status",
+      "object": "event"
+    }
+  ],
+  "vendor_product": [
+    {
+      "key": "x-oca-event.provider",
+      "object": "event"
+    }
+  ],
+  "action": [
+    {
+      "key": "x-oca-event.outcome",
+      "object": "event"
+    }
+  ],
+  "duration": [
+    {
+      "key": "x-oca-event.duration",
+      "object": "event",
+      "transformer": "ToInteger"
     }
   ],
   "severity": [
     {
-      "key": "x-ibm-finding.severity",
-      "object": "x-ibm-finding"
+      "key": "x-oca-event.severity",
+      "object": "event",
+      "transformer": "SeverityToScore"
     }
   ],
-  "source": {
-    "key": "x-oca-event.module",
-    "object": "event"
-  },
-  "description": {
-    "key": "x-oca-event.action",
-    "object": "event"
-  },
+  "_time": [
+    {
+      "key": "first_observed",
+      "transformer": "SplunkToTimestamp"
+    },
+    {
+      "key": "last_observed",
+      "transformer": "SplunkToTimestamp"
+    },
+    {
+      "key": "x-oca-event.created",
+      "transformer": "SplunkToTimestamp",
+      "object": "event"
+    }
+  ],
   "signature": {
     "key": "x-oca-event.action",
     "object": "event"
@@ -565,62 +953,87 @@
     "key": "x-oca-event.code",
     "object": "event"
   },
-  "result": {
-    "key": "x-oca-event.outcome",
-    "object": "event"
-  },
-  "query": [
+  "app": [
     {
-      "key": "domain-name.value",
-      "object": "domain"
-    },
-    {
-      "key": "network-traffic.extensions.dns-ext.question.domain_ref",
-      "object": "network-traffic",
-      "references": "domain"
-    },
-    {
-      "key": "x-oca-event.domain_ref",
-      "object": "event",
-      "references": "domain"
-    },
-    {
-      "key": "x-oca-event.network_ref",
-      "object": "event",
-      "references": "network-traffic"
-    },
-    {
-      "key": "process.opened_connection_refs",
-      "object": "process",
-      "references": [
-        "network-traffic"
-      ]
+      "key": "x-oca-event.x_application",
+      "object": "event"
     }
   ],
-  "answer": [
+  "dest": [
     {
-      "key": "ipv4-addr.value",
-      "object": "resolved-ip"
+      "key": "x-oca-event.x_dest",
+      "object": "event"
+    }
+  ],
+  "src": [
+    {
+      "key": "x-oca-event.x_src",
+      "object": "event"
+    }
+  ],
+  "event_id": [
+    {
+      "key": "x-oca-event.x_event_id",
+      "object": "event"
+    }
+  ],
+  "authentication_method": [
+    {
+      "key": "x-splunk-authentication.method",
+      "object": "auth"
+    }
+  ],
+  "authentication_service": [
+    {
+      "key": "x-splunk-authentication.service",
+      "object": "auth"
+    }
+  ],
+  "user_agent": [
+    {
+      "key": "x-splunk-authentication.user_agent",
+      "object": "auth"
+    }
+  ],
+  "user_type": [
+    {
+      "key": "x-splunk-authentication.user_type",
+      "object": "auth"
+    }
+  ],
+  "msft": [
+    {
+      "key": "x-splunk-vulnerability.msft",
+      "object": "vulnerability"
+    }
+  ],
+  "cve": [
+    {
+      "key": "x-splunk-vulnerability.cve",
+      "object": "vulnerability"
+    }
+  ],
+  "cvss": [
+    {
+      "key": "x-splunk-vulnerability.cvss",
+      "object": "vulnerability"
+    }
+  ],
+  "mskb": [
+    {
+      "key": "x-splunk-vulnerability.mskb",
+      "object": "vulnerability"
+    }
+  ],
+  "mitre_technique_id": [
+    {
+      "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_id",
+      "object": "ttp_tag"
     },
     {
-      "key": "network-traffic.extensions.dns-ext.resolved_ip_refs",
-      "object": "network-traffic",
-      "references": [
-        "resolved-ip"
-      ],
-      "group": true
-    },
-    {
-      "key": "x-oca-event.network_ref",
-      "object": "event",
-      "references": "network-traffic"
-    },
-    {
-      "key": "process.opened_connection_refs",
-      "object": "process",
-      "references": [
-        "network-traffic"
-      ]
+      "key": "x-ibm-finding.ttp_tagging_refs",
+      "object": "ibm_finding",
+      "references": ["ttp_tag"]
     }
   ]
 }

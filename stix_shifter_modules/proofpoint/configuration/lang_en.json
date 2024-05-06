@@ -2,11 +2,10 @@
     "connection": {
         "host": {
             "label": "Management IP address or hostname",
-            "placeholder": "192.168.1.10",
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
@@ -16,13 +15,13 @@
     },
     "configuration": {
         "auth": {
-            "principal": {
-                "label": "Principal",
-                "description": "Principal with access to the SIEM API"
+            "principle": {
+                "label": "Principle",
+                "description": "Principle with access to the SIEM API"
             },
             "secret": {
                 "label": "Secret",
-                "description": "Secret with access to the SIEM API"
+                "description": "Secret required for data source authentication"
             }
         }
     }

@@ -38,19 +38,20 @@ class ErrorMapper:
     DEFAULT_ERROR = ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR
 
     @staticmethod
-    def set_error_code(json_data, return_obj):
+    def set_error_code(json_data, return_obj, connector=None):
         """ms_atp transmit specified error
          :param json_data: dict, error response of api_call
          :param return_obj: dict, returns error and error code"""
         error_type = ''
-        
         if isinstance(json_data, tuple):
             error_type = 'HTTPSConnectionError'
+        elif 'code' in json_data.get('error', {}):
+            error_type = json_data['error']['code']
+        elif json_data.get('error'):
+            error_type = json_data['error']
         else:
-            try:
-                error_type = json_data['error']['code']
-            except Exception:
-                error_type = json_data['error']
+            error_type = 'notSupported'
+                
 
         error_code = ErrorMapper.DEFAULT_ERROR
 
@@ -59,5 +60,4 @@ class ErrorMapper:
 
         if error_code == ErrorMapper.DEFAULT_ERROR:
             ErrorMapper.logger.debug("failed to map: " + str(json_data))
-
-        ErrorMapperBase.set_error_code(return_obj, error_code)
+        ErrorMapperBase.set_error_code(return_obj, error_code, connector=connector)

@@ -269,7 +269,6 @@
       },
       {
         "key": "x_action_file_last_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       }
     ],
@@ -281,7 +280,6 @@
       },
       {
         "key": "x_actor_process_last_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       }
     ],
@@ -293,7 +291,6 @@
       },
       {
         "key": "x_os_actor_process_last_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       }
     ],
@@ -326,7 +323,6 @@
       },
       {
         "key": "first_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       }
     ],
@@ -474,7 +470,6 @@
       },
       {
         "key": "x_process_first_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       }
     ],
@@ -486,7 +481,6 @@
       },
       {
         "key": "x_process_actor_first_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       }
     ],
@@ -498,7 +492,6 @@
       },
       {
         "key": "x_process_causality_actor_first_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       }
     ],
@@ -510,7 +503,6 @@
       },
       {
         "key": "x_process_os_actor_first_observed",
-        "cybox": false,
         "transformer": "EpochToTimestamp"
       }
     ],
@@ -850,10 +842,6 @@
       "key": "file.extensions.x-paloalto-file.control_verdict",
       "object": "file"
     },
-    "actor_process_instance_id": {
-      "key": "process.extensions.x-paloalto-process.instance_id",
-      "object": "process_actor"
-    },
     "actor_process_causality_id": {
       "key": "process.extensions.x-paloalto-process.causality_id",
       "object": "process_actor"
@@ -1075,6 +1063,17 @@
     "action_external_hostname": {
       "key": "network-traffic.extensions.x-paloalto-network.external_hostname",
       "object": "nt"
-    }
+    },
+     "actor_process_instance_id": [
+      {
+        "key": "process.x_unique_id",
+        "object": "process_actor"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "process_actor"
+      }
+    ]
   }
 }

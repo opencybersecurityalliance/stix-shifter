@@ -1,0 +1,16 @@
+{
+  "software": {
+    "fields": {
+      "name": ["serviceSource"]    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "severity": ["severity"],
+      "x_assignedTo": ["assignedTo"],
+      "x_classification": ["classification"],
+      "x_determination": ["determination"],
+      "x_lastUpdateDateTime": ["lastUpdateDateTime"],
+      "x_status": ["status"]
+    }
+  }
+}

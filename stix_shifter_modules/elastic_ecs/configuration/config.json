@@ -22,8 +22,9 @@
             "type": "text",
             "optional": true
         },
-        "sni": {
-            "type": "text",
+        "pagination": {
+            "type": "boolean",
+            "default": true,
             "optional": true
         },
         "selfSignedCert": {

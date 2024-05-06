@@ -1,197 +1,548 @@
 {
-    "x-oca-event": {
-      "cim_type": "alert",
-      "fields": {
-        "code": ["signature_id"],
-        "action": ["signature"],
-        "outcome": ["result"],
-        "module": ["source"],
-        "created": ["_time"],
-        "process_ref.command_line": ["process"],
-        "process_ref.image_ref.name": ["process_exec"],
-        "process_ref.parent_ref.command_line": ["parent_process"],
-        "process_ref.creator_user_ref.user_id": ["process_user"],
-        "process_ref.name": ["process_name"],
-        "process_ref.pid": ["process_id"],
-        "parent_process_ref.command_line": ["parent_process"],
-        "parent_process_ref.image_ref.name": ["parent_process_exec"],
-        "parent_process_ref.pid": ["parent_process_id"],
-        "parent_process_ref.name": ["parent_process_name"],
-        "domain_ref.value": ["url", "url_domain"],
-        "file_ref.name": ["file_name"],
-        "host_ref.hostname": ["host"],
-        "host_ref.ip_refs[*].value": ["src_ip"],
-        "registry_ref.key": ["ObjectName", "RegistryKey"],
-        "user_ref.user_id": ["user"],
-        "url_ref.value": ["url"]
-      }
-    },
-    "x-oca-asset": {
-      "cim_type": "host",
-      "fields": {
-        "hostname": "host"
-      }
-    },
-    "directory": {
-        "cim_type": "endpoint",
-        "fields": {
-            "path": ["file_path", "process_path", "parent_process_path"],
-            "ctime": "file_create_time",
-            "mtime": "file_modify_time"
-        }
-    },
-    "domain-name": {
-        "cim_type": "flow",
-        "fields": {
-            "value": ["host", "url"]
-        }
-    },
-    "x-readable-payload": {
-        "cim_type": "",
-        "fields": {
-            "value": "_raw"
-        }
-    },
-    "email-addr": {
-        "cim_type": "email",
-        "fields": {
-            "value": ["src_user", "recipient"]
-        }
-    },
-    "email-message": {
-        "cim_type": "email",
-        "fields": {
-            "body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.MD5": "file_hash",
-            "body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.'SHA-1'": "file_hash",
-            "body_multipart.[*].'mime-part-type'.body_raw_ref.hashes.'SHA-256'": "file_hash",
-            "body_multipart.[*].'mime-part-type'.body_raw_ref.name": "file_name",
-            "body_multipart.[*].'mime-part-type'.body_raw_ref.size": "file_size",
-            "to_refs.[*].value": "recipient",
-            "cc_refs.[*].value": "recipient",
-            "bcc_refs.[*].value": "recipient",
-            "subject": "subject",
-            "sender_ref.value": "src_user",
-            "from_ref.value": "src_user"
-        }
-    },
-    "file": {
-        "cim_type": "endpoint",
-        "fields": {
-            "hashes.MD5": "file_hash",
-            "hashes.'SHA-1'": "file_hash",
-            "hashes.'SHA-256'": "file_hash",
-            "name": "file_name",
-            "ctime": "file_create_time",
-            "mtime": "file_modify_time",
-            "parent_directory_ref.path": "file_path",
-            "size": "file_size"
-        }
-    },
-    "ipv4-addr": {
-        "cim_type": "flow",
-        "fields": {
-            "value": [
-                "src_ip",
-                "dest_ip"
-            ]
-        }
-    },
-    "ipv6-addr": {
-        "cim_type": "flow",
-        "fields": {
-            "value": [
-                "src_ipv6",
-                "dest_ipv6"
-            ]
-        }
-    },
-    "mac-addr": {
-        "cim_type": "flow",
-        "fields": {
-            "value": [
-                "src_mac",
-                "dest_mac"
-            ]
-        }
-    },
-    "network-traffic": {
-        "cim_type": "network",
-        "fields": {
-            "src_ref.value": ["src_ip"],
-            "src_port": "src_port",
-            "dst_ref.value": ["dest_ip"],
-            "dst_port": "dest_port",
-            "protocols[*]": "protocol",
-            "start": "earliest",
-            "end": "latest"
-        }
-    },
-    "process": {
-        "cim_type": "process",
-        "fields": {
-            "x_name": ["process_name", "parent_process_name"],
-            "command_line": ["process", "parent_process"],
-            "pid": ["process_id", "parent_process_id"],
-            "creator_user_ref.account_login": "user",
-            "creator_user_ref.user_login": "user",
-            "image_ref.parent_directory_ref.path": "process_path",
-            "image_ref.name": "process_exec"
-        }
-    },
-    "url": {
-        "cim_type": "web",
-        "fields": {
-            "value": "url"
-        }
-    },
-    "user-account": {
-        "cim_type": "authentication",
-        "fields": {
-            "user_id": "user",
-            "account_login": "user"
-        }
-    },
-    "windows-registry-key": {
-        "cim_type": "endpoint",
-        "fields": {
-            "key": "object",
-            "values[*]": "result",
-            "creator_user_ref.account_login": "user"
-        }
-    },
-    "x509-certificate": {
-        "cim_type": "certificate",
-        "fields": {
-            "hashes.'SHA-256'": "ssl_hash",
-            "hashes.'SHA-1'": "ssl_hash",
-            "version": "ssl_version",
-            "serial_number": "ssl_serial",
-            "signature_algorithm": "ssl_signature_algorithm",
-            "issuer": "ssl_issuer",
-            "subject": "ssl_subject",
-            "subject_public_key_algorithm": "ssl_publickey_algorithm"
-        }
-    },
-    "x-splunk": {
-        "cim_type": "endpoint",
-        "fields": {
-            "log_source": ["source"],
-            "log_source_type": ["_sourcetype"],
-            "direction": ["Direction"],
-            "event_id": ["EventID"],
-            "event_name": ["EventName"],
-            "mitre_tactic_id": ["TacticId"],
-            "mitre_tactic": ["Tactic"],
-            "mitre_technique_id": ["TechniqueId"],
-            "mitre_technique": ["Technique"]
-        }
-    },
-    "x-ibm-finding": {
-        "cim_type": "endpoint",
-        "fields": {
-          "name": ["ss_name"],
-          "src_device": ["DeviceType"],
-          "severity": ["severity"]
-        }
+  "x-oca-event": {
+    "cim_type": "endpoint",
+    "fields": {
+      "code": [
+        "signature_id"
+      ],
+      "action": [
+        "signature"
+      ],
+      "outcome": [
+        "action"
+      ],
+      "module": [
+        "source"
+      ],
+      "created": [
+        "_time"
+      ],
+      "duration": [
+        "duration"
+      ],
+      "provider": [
+        "vendor_product"
+      ],
+      "severity": [
+        "severity"
+      ],     
+      "file_ref.name": [
+        "file_name"
+      ],
+      "process_ref.binary_ref.name": [
+        "process_exec"
+      ],
+      "process_ref.name": [
+        "process_name"
+      ],
+      "process_ref.pid": [
+        "process_id"
+      ],
+      "parent_process_ref.pid": [
+        "parent_process_id"
+      ],
+      "parent_process_ref.name": [
+        "parent_process_name"
+      ],
+      "domain_ref.value": [        
+        "query"
+      ],
+      "host_ref.hostname": [
+        "host"
+      ],
+      "ip_refs[*].value": [
+        "src_ip",
+        "dest_ip"
+      ],
+      "registry_ref.key": [        
+        "registry_key_name"
+      ],
+      "user_ref.user_id": [
+        "user"
+      ],
+      "url_ref.value": [
+        "url"
+      ],
+      "network_ref.src_port": [
+        "src_port"
+      ],
+      "network_ref.dst_port": [
+        "dest_port"
+      ],
+      "x_dest": [
+        "dest"
+      ],
+      "x_src": [
+        "src"
+      ],
+      "x_application": [
+        "app"
+      ],
+      "x_status": [
+        "status"
+      ],
+      "x_event_id": [
+        "event_id"
+      ]
     }
+  },
+  "x-oca-asset": {
+    "cim_type": "host",
+    "fields": {
+      "hostname": [
+        "host"
+      ],
+      "x_operating_system": [
+        "os"
+      ]
+    }
+  },
+  "directory": {
+    "cim_type": "endpoint",
+    "fields": {
+      "path": [
+        "file_path",
+        "process_path",
+        "parent_process_path"
+      ],
+      "ctime": "file_create_time",
+      "mtime": "file_modify_time",
+      "atime": "file_access_time"
+    }
+  },
+  "domain-name": {
+    "cim_type": "flow",
+    "fields": {
+      "value": [
+        "query",
+        "recipient_domain",
+        "src_user_domain",
+        "ssl_issuer_email_domain",
+        "ssl_subject_email_domain"
+      ]
+    }
+  },
+  "x-readable-payload": {
+    "cim_type": "",
+    "fields": {
+      "value": [
+        "_raw"
+      ]
+    }
+  },
+  "email-addr": {
+    "cim_type": "email",
+    "fields": {
+      "value": [
+        "src_user",
+        "recipient",
+        "ssl_issuer_email",
+        "ssl_subject_email"
+      ],
+      "x_recipient_domain_ref.value": [
+        "recipient_domain"
+      ],
+      "x_src_user_domain_ref.value": [
+        "src_user_domain"
+      ]
+    }
+  },
+  "email-message": {
+    "cim_type": "email",
+    "fields": {     
+      "to_refs[*].value": [
+        "recipient"
+      ],
+      "subject": [
+        "subject"
+      ],
+      "from_ref.value": [
+        "src_user"
+      ],
+      "x_url_ref.value": [
+        "url"
+      ],
+      "x_internal_message_id": [
+        "internal_message_id"
+      ],
+      "x_message_id": [
+        "message_id"
+      ]
+    }
+  },
+  "file": {
+    "cim_type": "endpoint",
+    "fields": {
+      "hashes.MD5": [
+        "file_hash"
+      ],
+      "hashes.'SHA-1'": [
+        "file_hash"
+      ],
+      "hashes.'SHA-256'": [
+        "file_hash"
+      ],
+      "name": [
+        "file_name",
+        "process_name",
+        "parent_process_name",
+        "process_exec",
+        "parent_process_exec"
+      ],
+      "ctime": "file_create_time",
+      "mtime": "file_modify_time",
+      "atime": "file_access_time",
+      "parent_directory_ref.path": [
+        "file_path",
+        "process_path",
+        "parent_process_path"
+      ],
+      "size": [
+        "file_size"
+      ],
+      "x_acl": [
+        "file_acl"
+      ]
+    }
+  },
+  "ipv4-addr": {
+    "cim_type": "flow",
+    "fields": {
+      "value": [
+        "src_ip",
+        "dest_ip"
+      ],
+      "resolves_to_refs[*].value": [
+        "src_mac",
+        "dest_mac"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "cim_type": "flow",
+    "fields": {
+      "value": [
+        "src_ip",
+        "dest_ip"
+      ],
+      "resolves_to_refs[*].value": [
+        "src_mac",
+        "dest_mac"
+      ]
+    }
+  },
+  "mac-addr": {
+    "cim_type": "flow",
+    "fields": {
+      "value": [
+        "src_mac",
+        "dest_mac"
+      ]
+    }
+  },
+  "network-traffic": {
+    "cim_type": "network",
+    "fields": {
+      "src_ref.value": [
+        "src_ip"
+      ],
+      "src_port": [
+        "src_port"
+      ],
+      "dst_ref.value": [
+        "dest_ip"
+      ],
+      "dst_port": [
+        "dest_port"
+      ],
+      "protocols[*]": [
+        "protocol",
+        "transport"
+      ],
+      "dst_byte_count": [
+        "bytes_in"
+      ],
+      "src_byte_count": [
+        "bytes_out"
+      ],
+      "dst_packets": [
+        "packets_in"
+      ],
+      "src_packets": [
+        "packets_out"
+      ],
+      "x_direction": [
+        "direction"
+      ],
+      "extensions.'dns-ext'.name": [
+        "name"
+      ],
+      "extensions.'dns-ext'.question.name_ref.value": [
+        "query"
+      ],
+      "extensions.'dns-ext'.resolved_ip_refs[*].value": [
+        "answer"
+      ],
+      "extensions.'dns-ext'.message_type": [
+        "message_type"
+      ],
+      "extensions.'dns-ext'.query_count": [
+        "query_count"
+      ],
+      "extensions.'dns-ext'.query_type": [
+        "query_type"
+      ],
+      "extensions.'dns-ext'.record_type": [
+        "record_type"
+      ],
+      "extensions.'dns-ext'.reply_code": [
+        "reply_code"
+      ],
+      "extensions.'dns-ext'.reply_code_id": [
+        "reply_code_id"
+      ],
+      "extensions.'dns-ext'.transaction_id": [
+        "transaction_id"
+      ],
+      "extensions.'http-request-ext'.request_method": [
+        "http_method"
+      ],
+      "extensions.'http-request-ext'.request_value": [
+        "uri_path"
+      ],
+      "extensions.'http-request-ext'.request_header.Referer": [
+        "http_referrer"
+      ],
+      "extensions.'http-request-ext'.request_header.'User-Agent'": [
+        "http_user_agent"
+      ],
+      "extensions.'http-request-ext'.x_uri_query": [
+        "uri_query"
+      ]
+    }
+  },
+  "process": {
+    "cim_type": "process",
+    "fields": {
+      "x_name": [
+        "process_name",
+        "parent_process_name"
+      ],
+      "command_line": [
+        "process",
+        "parent_process"
+      ],
+      "pid": [
+        "process_id",
+        "parent_process_id"
+      ],
+      "cwd": [
+        "process_current_directory"
+      ],
+      "binary_ref.name": [
+        "process_name",
+        "parent_process_name"
+      ],
+      "x_unique_id": [
+        "process_guid",
+        "parent_process_guid"
+      ],
+      "x_original_file_name": [
+        "original_file_name"
+      ],
+      "x_memory_used": [
+        "mem_used"
+      ]
+    }
+  },
+  "url": {
+    "cim_type": "web",
+    "fields": {
+      "value": [
+        "url"
+      ]
+    }
+  },
+  "user-account": {
+    "cim_type": "authentication",
+    "fields": {
+      "user_id": [
+        "user"
+      ],
+      "account_login": [
+        "user_id"
+      ],
+      "x_user_name": [
+        "user_name"
+      ]
+    }
+  },
+  "windows-registry-key": {
+    "cim_type": "endpoint",
+    "fields": {
+      "key": [
+        "registry_key_name"
+      ],
+      "values[*].name": [
+        "registry_value_name"
+      ],
+      "values[*].data": [
+        "registry_value_data"
+      ],
+      "x_hive": [
+        "registry_hive"
+      ],
+      "x_path": [
+        "registry_path"
+      ],
+      "x_value_text": [
+        "registry_value_text"
+      ]
+    }
+  },
+  "x509-certificate": {
+    "cim_type": "certificate",
+    "fields": {
+      "hashes.'SHA-256'": [
+        "ssl_hash"
+      ],
+      "hashes.'SHA-1'": [
+        "ssl_hash"
+      ],
+      "version": [
+        "ssl_version"
+      ],
+      "serial_number": [
+        "ssl_serial"
+      ],
+      "signature_algorithm": [
+        "ssl_signature_algorithm"
+      ],
+      "issuer": [
+        "ssl_issuer"
+      ],
+      "subject": [
+        "ssl_subject"
+      ],
+      "subject_public_key_algorithm": [
+        "ssl_publickey_algorithm"
+      ],
+      "validity_not_before": [
+        "ssl_start_time"
+      ],
+      "validity_not_after": [
+        "ssl_end_time"
+      ],
+      "x_ssl_is_valid": [
+        "ssl_is_valid"
+      ],
+      "x_ssl_issuer_common_name": [
+        "ssl_issuer_common_name"
+      ],
+      "x_ssl_subject_common_name": [
+        "ssl_subject_common_name"
+      ],
+      "x_ssl_name": [
+        "ssl_name"
+      ],
+      "x_ssl_publickey": [
+        "ssl_publickey"
+      ],
+      "x_ssl_issuer_email_ref.value": [
+        "ssl_issuer_email"
+      ],
+      "x_ssl_subject_email_ref.value": [
+        "ssl_subject_email"
+      ],
+      "x_ssl_issuer_domain_ref.value": [
+        "ssl_issuer_email_domain"
+      ],
+      "x_ssl_subject_domain_ref.value": [
+        "ssl_subject_email_domain"
+      ],
+      "x_ssl_issuer_organization": [
+        "ssl_issuer_organization"
+      ],
+      "x_ssl_subject_organization": [
+        "ssl_subject_organization"
+      ]
+    }
+  },
+  "x-ibm-finding": {
+    "cim_type": "alert",
+    "fields": {
+      "severity": [
+        "severity"
+      ],
+      "finding_type": [
+        "type"
+      ],
+      "name": [
+        "signature"
+      ],
+      "alert_id": [
+        "id"
+      ],
+      "description": [
+        "description"
+      ],
+      "src_ip_ref.value": [
+          "src_ip"
+      ],
+      "dst_ip_ref.value": [
+          "dest_ip"
+      ],
+      "ttp_tagging_refs[*].extensions.'mitre-attack-ext'.technique_id": [
+          "mitre_technique_id"
+      ]
+    }
+  },
+  "x-splunk-data": {
+    "cim_type": "endpoint",
+    "fields": {
+      "log_source": [
+        "source"
+      ],
+      "log_source_type": [
+        "_sourcetype"
+      ],
+      "event_type": [
+        "eventtype"
+      ]
+    }
+  },
+  "x-splunk-authentication": {
+    "cim_type": "authentication",
+    "fields": {
+      "user_type": [
+        "user_type"
+      ],
+      "user_agent": [
+        "user_agent"
+      ],
+      "method": [
+        "authentication_method"
+      ],
+      "service": [
+        "authentication_service"
+      ]
+    }
+  },
+  "x-splunk-vulnerability": {
+    "cim_type": "vulnerability",
+    "fields": {
+      "msft": "msft",
+      "cve": "cve",
+      "cvss": "cvss",
+      "mskb": "mskb"
+    }
+  },
+  "x-ibm-ttp-tagging": {
+    "cim_type": "alert",
+    "fields": {
+      "extensions.'mitre-attack-ext'.technique_id": [
+        "mitre_technique_id"
+      ]
+    }
+  }
 }

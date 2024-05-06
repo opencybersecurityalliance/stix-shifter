@@ -7,7 +7,7 @@ class StatusConnector(BaseStatusConnector):
         self.host = host
         self.auth = auth
 
-    def create_status_connection(self, search_id):
+    async def create_status_connection(self, search_id):
         
         return_obj = {}
         return_obj['success'] = True

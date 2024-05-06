@@ -1,7 +1,7 @@
 {
     "connection": {
         "region": {
-            "label": "Enter Region",
+            "label": "Enter region",
             "description": "Enter the region for your SumoLogic instance.",
             "placeholder": "us1"
         },
@@ -17,7 +17,7 @@
                 "description": "Enter your Access ID"
             },
             "access_key": {
-                "label": "Access Key",
+                "label": "Access key",
                 "description": "Enter your Access key"
             }
         }

@@ -1,10 +1,12 @@
 {
     "connection": {
         "type": {
-            "displayName": "Micro Focus ArcSight"
+            "displayName": "Micro Focus ArcSight",
+            "group": "microfocus"
         },
         "host": {
-            "type": "text"
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$"
         },
         "port": {
             "type": "number",
@@ -16,12 +18,9 @@
             "type": "link",
             "default": "data-sources-arcsight.html"
         },
-        "sni": {
-            "type": "text",
-            "optional": true
-        },
         "selfSignedCert": {
-            "type": "password"
+            "type": "password",
+            "optional": true
         }
     },
     "configuration": {

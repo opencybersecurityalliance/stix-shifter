@@ -1,10 +1,12 @@
 {
     "connection": {
         "type": {
-            "displayName": "Async Sample"
+            "displayName": "Async Sample",
+            "group":"async_sample"
         },
         "host": {
-            "type": "text"
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$"
         },
         "port": {
             "type": "number",
@@ -15,10 +17,6 @@
         "help": {
             "type": "link",
             "default": "data-sources.html"
-        },
-        "sni": {
-            "type": "text",
-            "optional": true
         },
         "selfSignedCert": {
             "type": "password",

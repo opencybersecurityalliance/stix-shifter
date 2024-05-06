@@ -16,11 +16,6 @@ class QueryStringPatternTranslator:
     """
     Stix to kusto query translation
     """
-    # Join query to get MAC address value from DeviceNetworkInfo
-    join_query = ' | join kind= inner (DeviceNetworkInfo {qualifier_string}{floor_time}| mvexpand parse_json(' \
-                 'IPAddresses) | extend IP = IPAddresses.IPAddress | project Timestamp ,DeviceId , MacAddress, IP, ' \
-                 'FormattedTimeKey) on DeviceId, $left.FormattedTimeKey ' \
-                 '== $right.FormattedTimeKey | where LocalIP == IP | where {mac_query} | order by Timestamp desc'
 
     def __init__(self, pattern: Pattern, data_model_mapper, time_range):
         self.dmm = data_model_mapper
@@ -31,6 +26,12 @@ class QueryStringPatternTranslator:
         self.lookup_table_object = None
         self._is_mac = None
         self.parse_expression(pattern)
+
+    @staticmethod
+    def _escape_value(value):
+        if isinstance(value, str):
+            return value.replace("\\", "\\\\")
+        return value
 
     @staticmethod
     def _format_equality(value, comparator) -> str:
@@ -44,7 +45,7 @@ class QueryStringPatternTranslator:
                 comparator = '=~'
             elif comparator == '!=':
                 comparator = '!~'
-        return '"{}"'.format(value), comparator
+        return '"{}"'.format(QueryStringPatternTranslator._escape_value(value)), comparator
 
     @staticmethod
     def _format_set(value) -> str:
@@ -55,7 +56,7 @@ class QueryStringPatternTranslator:
         """
         final_value = []
         for val in value.values:
-            final_value.append('"{}"'.format(val))
+            final_value.append('"{}"'.format(QueryStringPatternTranslator._escape_value(val)))
         return '{}'.format(str(final_value).replace('[', '(').replace(']', ')').replace("'", ""))
 
     @staticmethod
@@ -66,6 +67,7 @@ class QueryStringPatternTranslator:
         :return: str
         """
         # Replacing value with % to .* and _ to . for supporting Like comparator
+        value = QueryStringPatternTranslator._escape_value(value)
         compile_regex = re.compile(r'.*(\%|\_).*')
         if compile_regex.match(value):
             if comparator == 'contains':
@@ -80,7 +82,7 @@ class QueryStringPatternTranslator:
         :param value: str
         :return: str
         """
-        return 'regex"({})"'.format(value)
+        return 'regex"({})"'.format(QueryStringPatternTranslator._escape_value(value))
 
     @staticmethod
     def _format_datetime(value, expression) -> str:
@@ -177,6 +179,10 @@ class QueryStringPatternTranslator:
                                          ComparisonComparators.Equal, ComparisonComparators.NotEqual]:
                 if is_int_field or is_date_field:
                     mapped_field = 'tostring({mapped_field})'.format(mapped_field=mapped_field)
+                elif expression.object_path == "domain-name:value":
+                    # since msatp has one field RemoteUrl that sometimes contains urls and sometime only domain names
+                    # in order to find a domain name we need to replace the normal equality comparator to contains
+                    comparator = 'contains'
             elif expression.comparator in [ComparisonComparators.GreaterThan, ComparisonComparators.GreaterThanOrEqual,
                                            ComparisonComparators.LessThan,
                                            ComparisonComparators.LessThanOrEqual]:

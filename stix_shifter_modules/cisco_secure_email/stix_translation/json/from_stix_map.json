@@ -1,0 +1,221 @@
+{
+  "email-addr": {
+    "fields": {
+      "value": [
+        "envelopeRecipientfilterValue",
+        "envelopeSenderfilterValue"
+      ]
+    }
+  },
+  "email-message": {
+    "fields": {
+      "from_ref": [
+        "envelopeSenderfilterValue"
+      ],
+      "sender_ref": [
+        "envelopeSenderfilterValue"
+      ],
+      "to_refs": [
+        "envelopeRecipientfilterValue"
+      ],
+      "subject": [
+        "subjectfilterValue"
+      ],
+      "x_message_id_header": [
+        "messageIdHeader"
+      ],
+      "x_cisco_mid": [
+        "ciscoMid"
+      ],
+      "x_sender_ip_ref": [
+        "senderIp"
+      ]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": [
+        "attachmentNameValue"
+      ],
+      "hashes.'SHA-256'": [
+        "fileSha256"
+      ]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "senderIp"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": [
+        "senderIp"
+      ]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": [
+        "domainNameValue"
+      ]
+    }
+  },
+  "x-oca-host": {
+    "fields": {
+      "hostname": [
+        "ciscoHost"
+      ]
+    }
+  },
+  "x-cisco-email-msgevent": {
+    "fields": {
+      "advanced_malware_protection_mailflow_direction": [
+        "advancedMalwareProtectionMailflowDirection"
+      ],
+      "advanced_malware_protection": [
+        "advancedMalwareProtection"
+      ],
+      "app_forwarding": [
+        "appForwarding"
+      ],
+      "content_filters_name": [
+        "contentFiltersName"
+      ],
+      "content_filters_direction": [
+        "contentFiltersDirection"
+      ],
+      "content_filters_action": [
+        "contentFiltersAction"
+      ],
+      "dane_failure": [
+        "daneFailure"
+      ],
+      "message_status": [
+        "deliveryStatus"
+      ],
+      "message_delivered": [
+        "message_delivered"
+      ],
+      "dlp_violations_names": [
+        "dlpViolationsNames"
+      ],
+      "dlpViolationsSeverities": [
+        "dlpViolationsSeverities"
+      ],
+      "dlp_action": [
+        "dlpAction"
+      ],
+      "dmarc_from": [
+        "dmarcFrom"
+      ],
+      "dmarc_action": [
+        "dmarcAction"
+      ],
+      "etf_sources": [
+        "etfSources"
+      ],
+      "etf_iocs": [
+        "etfIocs"
+      ],
+      "forged_email_detection": [
+        "forgedEmailDetection"
+      ],
+      "geo_location": [
+        "geoLocation"
+      ],
+      "graymail": [
+        "graymail"
+      ],
+      "hard_bounced": [
+        "hardBounced"
+      ],
+      "ip_reputation": [
+        "ipReputation"
+      ],
+      "macro_mailflow_direction": [
+        "macroMailflowDirection"
+      ],
+      "macro_file_types_detected": [
+        "macroFileTypesDetected"
+      ],
+      "message_filters": [
+        "messageFilters"
+      ],
+      "contained_malicious_urls": [
+        "containedMaliciousUrls"
+      ],
+      "contained_neutral_urls": [
+        "containedNeutralUrls"
+      ],
+      "outbreak_filters_url_rewritten_byof": [
+        "outbreakFiltersUrlRewrittenByOf"
+      ],
+      "outbreak_filtersVofThreatCategory": [
+        "outbreakFiltersVofThreatCategory"
+      ],
+      "in_outbreak_quarantine": [
+        "inOutbreakQuarantine"
+      ],
+      "quarantined_to": [
+        "quarantinedTo"
+      ],
+      "reply_to": [
+        "replyToValue"
+      ],
+      "s_mime": [
+        "smime"
+      ],
+      "sdr_categories": [
+        "sdrCategories"
+      ],
+      "sdr_threat_levels": [
+        "sdrThreatLevels"
+      ],
+      "soft_bounced": [
+        "softBounced"
+      ],
+      "spam_positive": [
+        "spamPositive"
+      ],
+      "quarantined_as_spam": [
+        "quarantinedAsSpam"
+      ],
+      "quarantine_status": [
+        "quarantineStatus"
+      ],
+      "threat_name": [
+        "threatName"
+      ],
+      "suspect_spam": [
+        "suspectSpam"
+      ],
+      "url_categories": [
+        "urlCategories"
+      ],
+      "url_reputation": [
+        "urlReputation"
+      ],
+      "safeprint_ext": [
+        "safeprintExt"
+      ],
+      "virus_positive": [
+        "virusPositive"
+      ],
+      "web_interaction_tracking_urls": [
+        "webInteractionTrackingUrls"
+      ],
+      "web_interaction_tracking_mailflow_direction": [
+        "webInteractionTrackingMailflowDirection"
+      ],
+      "mail_policy": [
+        "mailPolicyName"
+      ],
+      "mail_policy_direction": [
+        "mailPolicyDirection"
+      ]
+    }
+  }
+}

@@ -2,7 +2,7 @@
     "connection": {
         "type": {
             "displayName": "Microsoft Graph Security",
-            "group": "azure"
+            "group": "microsoft"
         },
         "host": {
             "type": "text",
@@ -15,17 +15,27 @@
             "min": 1,
             "max": 65535
         },
+        "login_host": {
+            "type": "text",
+            "default": "login.microsoftonline.com"
+        },
         "help": {
             "type": "link",
             "default": "data-sources-sentinel.html"
         },
-        "sni": {
-            "type": "text",
-            "optional": true
-        },
         "selfSignedCert": {
             "type": "password",
             "optional": true
+        },
+        "options": {
+            "alert": {
+                "type": "boolean",
+                "default": true
+            },
+            "alertV2": {
+                "type": "boolean",
+                "default": false
+            }
         }
     },
     "configuration": {

@@ -1,4 +1,4 @@
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils import logger
 import hmac
 import hashlib
@@ -18,21 +18,22 @@ class APIClient:
         headers = {}
         url_modifier_function = None
         self.auth = configuration.get('auth')
-        self.client = RestApiClient(connection.get('host'), port=None,
+        self.client = RestApiClientAsync(connection.get('host'), port=None,
                                     headers=headers, cert_verify=False,
                                     url_modifier_function=url_modifier_function
                                     )
+        self.timeout = connection['options'].get('timeout')
 
-    def ping_box(self):
+    async def ping_box(self):
         """
             Ping the Data Source
             :return: Response object
         """
         encoded_query = self._encode_query("")
         headers = self.get_header(self.PING_ENDPOINT, encoded_query)
-        return self.client.call_api(self.PING_ENDPOINT, 'GET', headers=headers, data=None)
+        return await self.client.call_api(self.PING_ENDPOINT, 'GET', headers=headers, data=None, timeout=self.timeout)
 
-    def get_search_results(self, query):
+    async def get_search_results(self, query):
         """
         Get results from Data Source
         :param query: Data Source Query
@@ -41,7 +42,7 @@ class APIClient:
         self.logger.debug("query: %s", query)
         encoded_query = self._encode_query(query)
         headers = self.get_header(self.QUERY_ENDPOINT, encoded_query)
-        return self.client.call_api(self.QUERY_ENDPOINT + encoded_query, 'GET', headers=headers, data=None)
+        return await self.client.call_api(self.QUERY_ENDPOINT + encoded_query, 'GET', headers=headers, data=None, timeout=self.timeout)
 
     def get_header(self, endpoint,  query):
         query_url = "/" + endpoint + query

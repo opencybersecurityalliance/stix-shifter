@@ -1214,7 +1214,7 @@
         "questions": {
           "key": "network-traffic.extensions.dns-ext.questions",
           "object": "nt",
-          "group": "true"
+          "group": true
         }
       },
       "dhcp": {
@@ -1522,18 +1522,17 @@
           "object": "security_email",
           "transformer" : "FilterValidEmail"
         },
-        "url": [
-          {
+        "url": {
             "key": "url.value",
             "object": "security_url",
             "transformer": "ValidateUrl"
-          },
-          {
-            "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result.url_ref",
+        },
+        "groupAboutUrlReferences": {
+            "key": "x-ibm-finding.extensions.x-gcp-chronicle-security-result.url_refs",
             "object": "security_result",
-            "references": "security_url"
-          }
-        ]
+            "references": ["security_url"],
+            "group_ref": true
+        }
       },
       "findingType": {
         "key": "x-ibm-finding.finding_type",
@@ -1596,12 +1595,10 @@
           "object": "event"
         },
         {
-          "key": "first_observed",
-          "cybox": false
+          "key": "first_observed"
         },
         {
-          "key": "last_observed",
-          "cybox": false
+          "key": "last_observed"
         }
       ],
       "description": {
@@ -1638,11 +1635,6 @@
             "key": "file.parent_directory_ref",
             "object": "about_file",
             "references": "about_directory"
-          },
-          {
-            "key": "email-message.extensions.x-gcp-chronicle-email-message.file_ref",
-            "object": "em",
-            "references": "about_file"
           }
         ],
         "size": {
@@ -1674,6 +1666,12 @@
           "key": "file.extensions.x-gcp-chronicle-file.file_type",
           "object": "about_file"
         }
+      },
+     "GroupAboutFileReferences": {
+        "key": "email-message.extensions.x-gcp-chronicle-email-message.file_refs",
+        "object": "em",
+        "references": ["about_file"],
+        "group_ref": true
       }
     },
     "additional": {

@@ -2,11 +2,10 @@
     "connection": {
         "host": {
             "label": "Management IP address or hostname",
-            "placeholder": "192.168.1.10",
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
@@ -18,13 +17,13 @@
             "description": "To search specific Elasticsearch indices, specify a single index or multiple indices in a comma separated list",
             "placeholder": "index1,index2"
         },
-        "selfSignedCert": {
-            "label": " Elasticsearch connection certificate",
-            "description": "Use self-signed Security Sockets Layer (SSL) or CA-signed certificate for secure communication between web reports or REST API server and the authorized user"
+        "pagination": {
+            "label": "Enable pagination support",
+            "description": "Whether or not to enable pagination support in Elasticsearch; pagination enables infinite result retrieval, but requires sorting, which could cause performance issues in Elasticsearch."
         },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
+        "selfSignedCert": {
+            "label": "PEM Formatted SSL certificate(s)",
+            "description": "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
         }
     },
     "configuration": {
@@ -38,15 +37,15 @@
                 "description": "Password of the user with access to the search API"
             },
             "access_token": {
-                "label": "Access Token (Token Based Access)",
+                "label": "Access token (Token based access)",
                 "description": "Access Token is required for token based authentication"
             },
             "api_key": {
-                "label": "API Key (Key Based Access)",
+                "label": "API key (Key based access)",
                 "description": "API Key is required for Key based authentication"
             },
             "id": {
-                "label": "ID (Key Based Access)",
+                "label": "ID (Key based access)",
                 "description": "ID is required for Key based authentication with API Key"
             }
         }

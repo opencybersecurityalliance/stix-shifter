@@ -5,7 +5,7 @@
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
@@ -13,12 +13,8 @@
             "description": "More details on the datasource setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "Connection Certificate",
-            "description": "Use self-signed SSL certificate and CA content (root and intermediate) of datasource"
-        },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
+            "label": "PEM Formatted SSL certificate(s)",
+            "description": "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
         }
     },
     "configuration": {

@@ -32,8 +32,6 @@ DATA = {
 SAMPLE_DATA = "{'data': '"+domain_name+"', 'dataType': 'domain'}"
 
 connection = {
-    "host": "www.data.com",
-    "port": 443,
     "namespace":namespace
 }
 config = {
@@ -194,7 +192,7 @@ class TestReversingLabsConnection(unittest.TestCase, object):
         assert 'success' in query_response
         assert query_response['success'] is True
     
-    @patch('stix_shifter_utils.utils.base_entry_point.BaseEntryPoint.delete_query_connection', autospec=True)
+    @patch('stix_shifter_modules.reversinglabs.stix_transmission.api_client.APIClient.delete_search', autospec=True)
     def test_delete_query_exception(self, mock_delete_response, mock_api_client):
         error_msg = 'an error occured while checking the if the query is deleted'
         mock_api_client.return_value = None

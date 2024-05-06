@@ -1,9 +1,13 @@
+import copy
 import importlib
 import traceback
 import os
 import functools
 import json
 import glob
+from inspect import isawaitable
+from typing import Union
+
 from stix_shifter_utils.utils.module_discovery import dialect_list
 from stix_shifter_utils.modules.base.stix_translation.base_query_translator import BaseQueryTranslator
 from stix_shifter_utils.modules.base.stix_translation.base_results_translator import BaseResultTranslator
@@ -12,10 +16,11 @@ from stix_shifter_utils.modules.base.stix_transmission.base_delete_connector imp
 from stix_shifter_utils.modules.base.stix_transmission.base_query_connector import BaseQueryConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_status_connector import BaseStatusConnector
 from stix_shifter_utils.modules.base.stix_transmission.base_ping_connector import BasePingConnector
-from stix_shifter_utils.modules.base.stix_transmission.base_results_connector import BaseResultsConnector
-from stix_shifter_utils.utils.param_validator import param_validator, modernize_objects
+from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseResultsConnector
+from stix_shifter_utils.utils.param_validator import param_validator, modernize_objects, get_merged_config
 from stix_shifter_utils.stix_translation.src.utils.exceptions import UnsupportedDialectException
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.stix_translation.src.json_to_stix.json_to_stix import JSONToStix
 
 OPTION_LANGUAGE = 'language'
 
@@ -37,17 +42,6 @@ class BaseEntryPoint:
         self.__status_connector = None
         self.__delete_connector = None
         self.__query_connector = None
-
-        module_name = self.__connector_module
-        module = importlib.import_module(
-                    "stix_shifter_modules." + module_name + ".stix_translation")
-        json_path = os.path.dirname(module.__file__)
-        json_path = os.path.abspath(json_path)
-        json_path = os.path.join(json_path, 'json')
-        if os.path.isdir(json_path):
-            to_stix = os.path.join(json_path, 'to_stix_map.json')
-            if not os.path.isfile(to_stix):
-                raise Exception(to_stix + ' is not found')
 
         if connection:
             validation_obj = {'connection': connection, 'configuration': configuration}
@@ -103,10 +97,14 @@ class BaseEntryPoint:
 
     def setup_translation_simple(self, dialect_default, query_translator=None, results_translator=None):
         module_name = self.__connector_module
-        dialects = dialect_list(module_name)
+        dialects = dialect_list(module_name, self.__options) # get list of dialects from configuration
         for dialect in dialects:
+            if self.__options:
+                is_default = True
+            else:
+                is_default = (dialect == dialect_default)
             self.add_dialect(dialect, query_translator=query_translator, results_translator=results_translator,
-                             default=(dialect == dialect_default))
+                             default=is_default)
 
     def create_default_query_translator(self, dialect):
         module_name = self.__connector_module
@@ -119,11 +117,18 @@ class BaseEntryPoint:
 
     def create_default_results_translator(self, dialect):
         module_name = self.__connector_module
-        module = importlib.import_module(
-                    "stix_shifter_modules." + module_name + ".stix_translation.results_translator")
-        basepath = os.path.dirname(module.__file__)
-        mapping_filepath = os.path.abspath(basepath)
-        results_translator = module.ResultsTranslator(self.__options, dialect, mapping_filepath)
+        dir_path = "stix_shifter_modules." + module_name + ".stix_translation"
+        file_path = dir_path + ".results_translator"
+        try:
+            module = importlib.import_module(file_path)
+            basepath = os.path.dirname(module.__file__)
+            mapping_filepath = os.path.abspath(basepath)
+            results_translator = module.ResultsTranslator(self.__options, dialect, mapping_filepath)
+        except:
+            module = importlib.import_module(dir_path)
+            basepath = os.path.dirname(module.__file__)
+            mapping_filepath = os.path.abspath(basepath)
+            results_translator = JSONToStix(self.__options, dialect, mapping_filepath)
         return results_translator
 
     @translation
@@ -152,28 +157,59 @@ class BaseEntryPoint:
             return self.__dialect_to_query_translator[self.__dialect_default[self.__options.get(OPTION_LANGUAGE, "stix")]]
         except KeyError as ex:
             raise UnsupportedDialectException(dialect)
+        
+    @translation
+    def __combine_default_results_translator_to_stix_maps(self, dialects:list=None):
+        """
+        Returns default or dialect specific ResultTranslator. 
+        If there are multiple dialects in the module and 'dialects' list argument is specified, the return combines
+        the corresponding ResultTranslators' map_data into a copy of the default ResultTranslator and returns it.
+        """
+        default_results_translator:BaseResultTranslator = self.__dialect_to_results_translator[self.__dialect_default[self.__options.get(OPTION_LANGUAGE, "stix")]]
+        results_translator = copy.deepcopy(default_results_translator)
+
+        for dialect, translator in self.__dialect_to_results_translator.items():
+            if dialects and dialect not in dialects:
+                continue
+            results_translator.map_data = {**results_translator.map_data, **translator.map_data}
+
+        return results_translator
+
 
     @translation
-    def get_results_translator(self, dialect=None):
-        if dialect:
+    def get_results_translator(self, dialect:Union[str,list]=None):
+        if dialect and isinstance(dialect, str):
             return self.__dialect_to_results_translator[dialect]
-        return self.__dialect_to_results_translator[self.__dialect_default[self.__options.get(OPTION_LANGUAGE, "stix")]]
+        return self.__combine_default_results_translator_to_stix_maps(dialect)
 
     @translation
-    def parse_query(self, data):
+    async def parse_query(self, data):
         translator = self.get_query_translator()
-        return translator.parse_query(data)
+        result = translator.parse_query(data)
+        if isawaitable(result):
+            result = await result
+        return result
 
     @translation
-    def transform_query(self, dialect, data):
+    async def transform_query(self, dialect, data):
         translator = self.get_query_translator(dialect)
-        return translator.transform_query(data)
+        result = translator.transform_query(data)
+        if isawaitable(result):
+            result = await result
+        return result
 
     @translation
-    def translate_results(self, data_source, data):
-        translator = self.get_results_translator()
+    async def translate_results(self, data_source, data):
+        dialects = None
+        if 'dialects' in self.__options:
+            dialects = self.__options['dialects']
+
+        translator = self.get_results_translator(dialects)
         try:
-            return translator.translate_results(data_source, data)
+            result = translator.translate_results(data_source, data)
+            if isawaitable(result):
+                result = await result
+            return result
         except Exception as ex:
             result = {}
             ErrorResponder.fill_error(result, message_struct={'exception': ex})
@@ -184,6 +220,10 @@ class BaseEntryPoint:
         if include_hidden:
             return self.__dialects_all
         return self.__dialects_active_default
+    
+    @translation
+    def get_configs_full(self):
+        return get_merged_config(self.__connector_module)
 
     @translation
     def get_dialects_full(self):
@@ -242,8 +282,11 @@ class BaseEntryPoint:
         self.__query_connector = connector
 
     @transmission
-    def create_query_connection(self, query):
-        return self.__query_connector.create_query_connection(query)
+    async def create_query_connection(self, query):
+        result = self.__query_connector.create_query_connection(query)
+        if isawaitable(result):
+            result = await result
+        return result
 
     def set_status_connector(self, connector):
         if not (isinstance(connector, (BaseConnector, BaseStatusConnector)) or issubclass(connector, BaseConnector)):
@@ -251,10 +294,15 @@ class BaseEntryPoint:
         self.__status_connector = connector
 
     @transmission
-    def create_status_connection(self, search_id, metadata=None):
+    async def create_status_connection(self, search_id, metadata=None):
+        result = None
         if metadata:
-            return self.__status_connector.create_status_connection(search_id, metadata)
-        return self.__status_connector.create_status_connection(search_id)
+            result = self.__status_connector.create_status_connection(search_id, metadata)
+        else:
+            result = self.__status_connector.create_status_connection(search_id)
+        if isawaitable(result):
+            result = await result
+        return result
 
     def set_results_connector(self, connector):
         if not isinstance(connector, (BaseConnector, BaseResultsConnector)):
@@ -262,16 +310,27 @@ class BaseEntryPoint:
         self.__results_connector = connector
 
     @transmission
-    def create_results_connection(self, search_id, offset, length, metadata=None):
+    async def create_results_connection(self, search_id, offset, length, metadata=None):
+        result = None
         if metadata:
-            return self.__results_connector.create_results_connection(search_id, offset, length, metadata)
-        return self.__results_connector.create_results_connection(search_id, offset, length)
+            result = self.__results_connector.create_results_connection(search_id, offset, length, metadata)
+        else:
+            result = self.__results_connector.create_results_connection(search_id, offset, length)
+        if isawaitable(result):
+            result = await result
+        return result
+
 
     @transmission
-    def create_results_stix_connection(self, search_id, offset, length, data_source, metadata=None):
+    async def create_results_stix_connection(self, search_id, offset, length, data_source, metadata=None):
+        result = None
         if metadata:
-            return self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source, metadata) 
-        return self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source)
+            result = self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source, metadata) 
+        else:
+            result = self.__results_connector.create_results_stix_connection(self, search_id, offset, length, data_source)
+        if isawaitable(result):
+            result = await result
+        return result        
 
     def set_delete_connector(self, connector):
         if not isinstance(connector, (BaseConnector, BaseDeleteConnector)):
@@ -279,8 +338,12 @@ class BaseEntryPoint:
         self.__delete_connector = connector
 
     @transmission
-    def delete_query_connection(self, search_id):
-        return self.__delete_connector.delete_query_connection(search_id)
+    async def delete_query_connection(self, search_id):
+        result = self.__delete_connector.delete_query_connection(search_id)
+        if isawaitable(result):
+            result = await result
+        return result   
+
 
     def set_ping_connector(self, connector):
         if not isinstance(connector, (BaseConnector, BasePingConnector)):
@@ -288,8 +351,11 @@ class BaseEntryPoint:
         self.__ping_connector = connector
 
     @transmission
-    def ping_connection(self):
-        return self.__ping_connector.ping_connection()
+    async def ping_connection(self):
+        result = self.__ping_connector.ping_connection()
+        if isawaitable(result):
+            result = await result
+        return result   
 
     def set_async(self, is_async):
         self.__async = is_async

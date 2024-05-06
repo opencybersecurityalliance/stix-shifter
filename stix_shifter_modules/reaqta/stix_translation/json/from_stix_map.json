@@ -8,13 +8,13 @@
     "fields": {
       "extensions.'x-reaqta-data'.arch": ["eventdata.arch"],
       "extensions.'x-reaqta-data'.file_type": ["eventdata.filetype"],
-      "extensions.'x-reaqta-data'.fsname": ["filename"],
+      "extensions.'x-reaqta-data'.fsname": ["fsName"],
       "extensions.'x-reaqta-program'.arch": ["service.arch"],
-      "extensions.'x-reaqta-program'.fsname": ["filename"],
+      "extensions.'x-reaqta-program'.fsname": ["fsName"],
       "hashes.MD5": ["md5"],
       "hashes.'SHA-1'": ["sha1"],
       "hashes.'SHA-256'": ["sha256"],
-      "name": ["consumer.script.filename", "filename"],
+      "name": ["consumer.script.filename", "fsName"],
       "parent_directory_ref.path": ["path"],
       "size": ["eventdata.size"]
     }
@@ -40,13 +40,13 @@
   },
   "process": {
     "fields": {
-      "binary_ref.name": ["filename"],
+      "binary_ref.name": ["fsName"],
       "creator_user_ref.user_id": [],
       "extensions.'windows-process-ext'.owner_sid": ["user.sid"],
       "extensions.'x-reaqta-process'.logon_id": ["service.login.id"],
       "extensions.'x-reaqta-process'.no_gui": ["service.hasGui"],
       "extensions.'x-reaqta-process'.privilege_level": ["service.privilege"],
-      "name": ["__etwCallerProcessName", "__etwLogonProcessName", "__etwProcessName", "login.processName"],
+      "name": ["__etwCallerProcessName", "__etwLogonProcessName", "__etwProcessName", "login.processName", "filename"],
       "parent_ref.binary_ref.name": ["service.ppid"],
       "pid": ["__etwCallerProcessId", "__etwProcessId", "accessor.pid", "accessor.ppid", "allocator.pid", "allocator.ppid", "engine.pid", "engine.ppid", "eventdata.targetProcessId", "host.pid", "pid", "ppid", "service.pid", "service.ppid", "wmi.clientPid", "wmiHost.pid"]
     }
@@ -73,7 +73,21 @@
       "extensions.'x-reaqta-avdetection'.av_threat_info_array": ["antimalware.threatInfo"],
       "finding_type": ["antimalware.threatType"],
       "name": ["antimalware.objectStatus"],
-      "src_ip_ref.value": ["ip"]
+      "src_ip_ref.value": ["ip"],
+      "ttp_tagging_refs": ["mitre.tactic", "mitre.technique"]
+    }
+  },
+  "x-ibm-ttp-tagging": {
+    "fields": {
+      "name": [
+        "mitre.technique"
+      ],
+      "extensions.'mitre-attack-ext'.tactic_name": [
+        "mitre.tactic"
+      ],
+      "extensions.'mitre-attack-ext'.technique_name": [
+        "mitre.technique"
+      ]
     }
   },
   "x-oca-asset": {
@@ -108,8 +122,7 @@
       "network_ref.dst_ref.value": ["ip"],
       "network_ref.src_ref.value": ["ip"],
       "parent_process_ref.pid": ["service.ppid"],
-      "process_ref.pid": ["wmi.clientPid"],
-      "user_ref.user_id": []
+      "process_ref.pid": ["wmi.clientPid"]
     }
   },
   "x-reaqta-amsi": {
@@ -231,10 +244,8 @@
       "service_name": ["service.name"],
       "service_type": ["service.type"],
       "start_type": ["service.startType"],
-      "tactics": ["mitre.tactic"],
       "tags": ["eventdata.tag"],
       "task_name": ["task.name"],
-      "technique": ["mitre.technique"],
       "version": ["eventdata.version"]
     }
   },

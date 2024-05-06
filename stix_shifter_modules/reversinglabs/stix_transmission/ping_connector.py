@@ -7,22 +7,20 @@ class PingConnector(BasePingConnector):
     def __init__(self, api_client):
         self.api_client = api_client
         self.logger = logger.set_logger(__name__)
+        self.connector = __name__.split('.')[1]
 
-    def ping_connection(self):
+    async def ping_connection(self):
         try:
-            response_dict, response_code = self.api_client.ping_reversinglabs()
-
-            # response = json.loads(response_dict.read().decode('utf-8'))
-            # response_code = response_dict.code
-            # response_dict = {'code': 1010, 'message': 'remote system error message'} # <-- simulate error in response to test error mapping
-            # response_code = response_dict["code"]
-
-            # Construct a response object
+            response_dict, response_code = await self.api_client.ping_reversinglabs()
             return_obj = dict()
+
             if response_code == 200:
                 return_obj['success'] = True
+                return_obj['code'] = response_code
+                return_obj['connector'] = self.connector
             else:
-                ErrorResponder.fill_error(return_obj, response_dict, ['message'])
+                ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
+                self.logger.error(return_obj)
             return return_obj
         except Exception as err:
             self.logger.error('error when pinging datasource {}:'.format(err))

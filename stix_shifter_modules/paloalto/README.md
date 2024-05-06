@@ -1,4 +1,8 @@
-# PaloAlto Cortex XDR Connector
+# PaloAlto Cortex XDR
+
+## Supported STIX Mappings
+
+See the [table of mappings](paloalto_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 **Table of Contents**
 
@@ -568,9 +572,9 @@ results
                     "name": "System",
                     "binary_ref": "5",
                     "pid": 4,
+                    "x_unique_id": "AdgdeB26mNQAAAAEAAAAAA==",
                     "extensions": {
                         "x-paloalto-process": {
-                            "instance_id": "AdgdeB26mNQAAAAEAAAAAA==",
                             "causality_id": "AdgdeB26mNQAAAAEAAAAAA==",
                             "auth_id": "999",
                             "signature_vendor": "Microsoft Corporation",
@@ -692,9 +696,9 @@ results
                     "name": "System",
                     "binary_ref": "5",
                     "pid": 4,
+                    "x_unique_id": "AdgdeB26mNQAAAAEAAAAAA==",
                     "extensions": {
                         "x-paloalto-process": {
-                            "instance_id": "AdgdeB26mNQAAAAEAAAAAA==",
                             "causality_id": "AdgdeB26mNQAAAAEAAAAAA==",
                             "auth_id": "999",
                             "signature_vendor": "Microsoft Corporation",

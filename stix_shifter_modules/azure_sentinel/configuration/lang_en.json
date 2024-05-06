@@ -5,20 +5,30 @@
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
+        },
+        "login_host": {
+            "label": "Microsoft Entra authentication endpoint",
+            "description": "Replace the default value with the correct Microsoft Entra authentication endpoint for national clouds. For example, specify login.microsoftonline.us for US Government"
         },
         "help": {
             "label": "Need additional help?",
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "Microsoft Azure Sentinel Certificate",
-            "description": "Use SSL certificate for Microsoft Azure Sentinel."
+            "label": "PEM Formatted SSL certificate(s)",
+            "description": "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
         },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication."
+        "options": {
+            "alert": {
+                "label": "Legacy Alert",
+                "description": "First Generation of alerts in the Microsoft Graph security API"
+            },
+            "alertV2": {
+                "label": "Alert",
+                "description": "Latest Generation of alerts in the Microsoft Graph security API"
+            }
         }
     },
     "configuration": {
@@ -28,11 +38,11 @@
                 "description": "Tenant ID of Azure Active directory Application with access to the Microsoft Graph API"
             },
             "clientId": {
-                "label": "Client Id",
+                "label": "Client ID",
                 "description": "Client ID of Azure Active directory Application with access to the Microsoft Graph API"
             },
             "clientSecret": {
-                "label": "Client Secret",
+                "label": "Client secret",
                 "description": "Client Secret of Azure Active directory Application with access to the Microsoft Graph API"
             }
         }

@@ -13,11 +13,11 @@ logger = utils_logger.set_logger(__name__)
 
 class ErrorCode(Enum):
     TRANSLATION_NOTIMPLEMENTED_MODE = 'not_implemented'
-    TRANSLATION_MODULE_DEFAULT_ERROR = 'invalid_parameter'
+    TRANSLATION_MODULE_DEFAULT_ERROR = 'translation_error'
     TRANSLATION_MAPPING_ERROR = 'mapping_error'
     TRANSLATION_STIX_VALIDATION = 'invalid_parameter'
     TRANSLATION_NOTSUPPORTED = 'invalid_parameter'
-    TRANSLATION_RESULT = 'mapping_error'
+    TRANSLATION_RESULT = 'results_translation_error'
     TRANSLATION_UNKNOWN_DIALOG = 'invalid_parameter'
     TRANSLATION_UNKNOWN_LANGUAGE = 'invalid_parameter'
 
@@ -26,6 +26,7 @@ class ErrorCode(Enum):
     TRANSMISSION_CONNECT = 'service_unavailable'
     TRANSMISSION_AUTH_SSL = 'authentication_fail'
     TRANSMISSION_AUTH_CREDENTIALS = 'authentication_fail'
+    TRANSMISSION_CERT_ERROR = 'certificate_fail'
     TRANSMISSION_MODULE_DEFAULT_ERROR = 'unknown'
     TRANSMISSION_QUERY_PARSING_ERROR = 'invalid_query'
     TRANSMISSION_QUERY_LOGICAL_ERROR = 'invalid_query'
@@ -33,6 +34,7 @@ class ErrorCode(Enum):
     TRANSMISSION_SEARCH_DOES_NOT_EXISTS = 'no_results'
     TRANSMISSION_INVALID_PARAMETER = 'invalid_parameter'
     TRANSMISSION_REMOTE_SYSTEM_IS_UNAVAILABLE = 'service_unavailable'
+    TRANSMISSION_TOO_MANY_REQUESTS = 'too_many_requests'
 
 
 class ErrorResponder():
@@ -86,7 +88,7 @@ class ErrorResponder():
         error_msg = ''
         if error is not None:
             str_error = str(error)
-            logger.error("error occurred: " + str_error)
+            logger.error(connector + " connector error occurred: " + str_error)
             logger.debug(utils_logger.exception_to_string(error))
             if isinstance(error, SSLError):
                 error_code = ErrorCode.TRANSMISSION_AUTH_SSL
@@ -104,14 +106,21 @@ class ErrorResponder():
 
         if message is not None and len(message) > 0:
             if error_code.value == ErrorCode.TRANSMISSION_UNKNOWN.value:
-                if 'uthenticat' in message or 'uthoriz' in message or 'access denied' in message:
+                if 'certificate' in message:
+                    error_code = ErrorCode.TRANSMISSION_CERT_ERROR
+                elif 'uthenticat' in message or 'uthoriz' in message or 'access denied' in message:
                     error_code = ErrorCode.TRANSMISSION_AUTH_CREDENTIALS
                 elif 'query_syntax_error' in message:
                     error_code = ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR
                 elif 'Forbidden' in message or 'forbidden' in message:
                     error_code = ErrorCode.TRANSMISSION_FORBIDDEN
+                elif 'too_many_requests' in message or 'Too Many Requests' in message:
+                    error_code = ErrorCode.TRANSMISSION_TOO_MANY_REQUESTS
+                elif any(m in message for m in ['client_connector_error', 'server timeout_error', 'ailed to establish']):
+                    error_code = ErrorCode.TRANSMISSION_CONNECT
             message = '{} connector error => {}'.format(connector, str(message))
-            return_object['error'] = str(message)
+            message = message.replace('[Errno 61] ','')
+            return_object['error'] = message
         ErrorMapperBase.set_error_code(return_object, error_code.value, connector=connector)
         if error_code == ErrorCode.TRANSMISSION_UNKNOWN:
             ErrorResponder.call_module_error_mapper(message_struct, return_object, connector)
@@ -131,7 +140,7 @@ class ErrorResponder():
         try:
             module = importlib.import_module(module_path)
             if json_data is not None:
-                module.ErrorMapper.set_error_code(json_data, return_object)
+                module.ErrorMapper.set_error_code(json_data, return_object, connector)
             else:
                 ErrorMapperBase.set_error_code(return_object, module.ErrorMapper.DEFAULT_ERROR, connector=connector)
         except ModuleNotFoundError:

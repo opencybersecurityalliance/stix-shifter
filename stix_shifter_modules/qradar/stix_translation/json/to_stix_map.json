@@ -143,7 +143,6 @@
   "eventcount": [
     {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     },
     {
@@ -160,24 +159,22 @@
   "starttime": [
     {
       "key": "first_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
+      "transformer": "QRadarEpochToTimestamp"
     },
     {
       "key": "x-ibm-finding.start",
-      "transformer": "EpochToTimestamp",
+      "transformer": "QRadarEpochToTimestamp",
       "object": "finding"
     }
   ],
   "endtime": [
     {
       "key": "last_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
+      "transformer": "QRadarEpochToTimestamp"
     },
     {
       "key": "x-ibm-finding.end",
-      "transformer": "EpochToTimestamp",
+      "transformer": "QRadarEpochToTimestamp",
       "object": "finding"
     }
   ],
@@ -460,12 +457,7 @@
     "object": "nt",
     "transformer": "ToLowercaseArray"
   },
-  "domainname": [
-    {
-      "key": "domain-name.value",
-      "object": "domain2",
-      "transformer": "ToDomainName"
-    },
+  "qradardomain": [
     {
       "key": "x-qradar.domain_name",
       "object": "x-qradar"
@@ -473,17 +465,9 @@
   ],
   "dnsdomainname": [
     {
-      "key": "url.value",
-      "object": "url"
-    },
-    {
       "key": "domain-name.value",
-      "object": "domain1",
+      "object": "domain",
       "transformer": "ToDomainName"
-    },
-    {
-      "key": "x-qradar.domain_name",
-      "object": "x-qradar"
     }
   ],
   "flowsource": [
@@ -760,7 +744,7 @@
   "EventID": {
     "key": "x-oca-event.code",
     "object": "event",
-    "transformer": "ToInteger"
+    "transformer": "ToString"
   },
   "ParentProcessId": [
     {

@@ -6,7 +6,7 @@ class DeleteConnector(BaseDeleteConnector):
         self.host = host
         self.auth = auth
 
-    def delete_query_connection(self, search_id):
+    async def delete_query_connection(self, search_id):
 
         return_obj = {"success" : True}
         return return_obj

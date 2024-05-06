@@ -1,15 +1,16 @@
 import json
 import sys
 from argparse import ArgumentParser
-from stix2validator import validate_instance, print_results
+from stix2validator import validate_instance, print_results, ValidationOptions
 
 def __main__():
     bundle_file = sys.argv[1]
+    stix_version = sys.argv[2]
 
     try:
         with open(bundle_file) as f:
             bundle = json.load(f)
-        results = validate_instance(bundle)
+        results = validate_instance(bundle, ValidationOptions(version=stix_version))
         if results.is_valid:
             print_results(results)
             print("\n *** STIX bundle is valid but may contain warnings. Warnings marked as yellow [!] can be ignored but recommended to fix ***\n")

@@ -6,7 +6,7 @@ import uuid
 class ResultsTranslator(BaseResultTranslator):
 
     def read_json(self, filepath, options):
-        return '{}'
+        return {}
 
     def translate_results(self, data_source, data):
         # Wrap data in a STIX bundle and insert the data_source identity object as the first object
@@ -16,13 +16,10 @@ class ResultsTranslator(BaseResultTranslator):
             "objects": []
         }
 
-        data_source = json.loads(data_source)
         bundle['objects'] += [data_source]
         # Data is already STIX and we don't want to touch it
-        bundle_data = json.loads(data)
-
-        for obs in bundle_data:
+        for obs in data:
             obs["created_by_ref"] = data_source['id']
 
-        bundle['objects'] += bundle_data
+        bundle['objects'] += data
         return bundle

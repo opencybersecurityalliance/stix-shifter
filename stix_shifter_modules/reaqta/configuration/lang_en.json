@@ -2,11 +2,10 @@
     "connection": {
         "host": {
             "label": "Management IP address or hostname",
-            "placeholder": "192.168.1.10",
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
-            "label": "Host Port",
+            "label": "Host port",
             "description": "Set the port number that is associated with the hostname or IP address"
         },
         "help": {
@@ -14,24 +13,19 @@
             "description": "More details on the data source setting can be found in the specified link"
         },
         "selfSignedCert": {
-            "label": "ReaQta Certificate",
-            "placeholder": "Paste your certificate"
-        },
-        "sni": {
-            "label": "Server name indicator",
-            "placeholder": "Add a server name indicator",
-            "description": "If your hostname or IP address does not match the common name you will need to supply a Server Name Indicator (SNI). This is used to allow a separate hostname to be provided to the TLS handshake of the resource connection."
+            "label": "PEM Formatted SSL certificate(s)",
+            "description": "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
         }
     },
     "configuration": {
         "auth": {
             "app_id": {
-                "label": "Reaqta App ID",
-                "description": "Reaqta App ID with access to the Hunt API"
+                "label": "App ID",
+                "description": "App ID with access to the Hunt API"
             },
             "secret_key": {
-                "label": "Secret Key",
-                "description": "Reaqta App Secret Key with access to the Hunt API"
+                "label": "Secret key",
+                "description": "App Secret Key with access to the Hunt API"
             }
         }
     }

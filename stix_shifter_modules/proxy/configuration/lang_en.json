@@ -7,11 +7,10 @@
         "options": {
             "proxy_host": {
                 "label": "Management IP address or hostname",
-                "placeholder": "192.168.1.10",
                 "description": "Specify the IP address or hostname of the proxy"
             },
             "proxy_port": {
-                "label": "Host Port",
+                "label": "Host port",
                 "description": "Set the port number that is associated with the proxy hostname or IP address"
             },
             "destination": {

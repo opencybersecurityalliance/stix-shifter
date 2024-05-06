@@ -1,16 +1,22 @@
 from stix_shifter.stix_translation import stix_translation
 import unittest
 import re
-
+import json
 translation = stix_translation.StixTranslation()
 
 
 def _remove_timestamp_from_query(queries):
-    pattern = r'eventDateTime \w{2} \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z'
+    pattern_alert = r'eventDateTime \w{2} \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z'
+    pattern_alertV2 = r'createdDateTime \w{2} \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z'
+    query_list = []
     if isinstance(queries, list):
-        return [re.sub(pattern, "", query) for query in queries]
-    elif isinstance(queries, str):
-        return re.sub(pattern, "", queries)
+        for query in queries:
+            if 'alert' in query:
+                query_list.append(re.sub(pattern_alert, "", query['alert']))
+            else:
+                query_list.append(re.sub(pattern_alertV2, "", query['alertV2']))
+
+    return query_list
 
 
 class TestQueryTranslator(unittest.TestCase):
@@ -32,8 +38,11 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        queries = ["(fileStates/any(query1:tolower(query1/name) eq 'services.exe')) and (eventDateTime ge "
-                   "2019-12-24T09:21:51.505Z and eventDateTime le 2019-12-24T09:26:51.505Z)"]
+        queries = [
+            {
+                "alert": "(fileStates/any(query1:tolower(query1/name) eq 'services.exe')) and (eventDateTime ge 2023-04-26T14:05:28.029Z and eventDateTime le 2023-04-26T14:10:28.029Z)"
+            }
+        ]
 
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -44,23 +53,27 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
-            "((processes/any(query1:tolower(query1/name) eq 'svchost.exe') or processes/any(query1:tolower(query1/parentProcessName) eq 'svchost.exe'))) and (eventDateTime ge "
-            "2019-12-24T09:22:44.667Z and eventDateTime le 2019-12-24T09:27:44.667Z)"]
+            {
+                "alert": "((processes/any(query1:tolower(query1/name) eq 'svchost.exe') or processes/any(query1:tolower(query1/parentProcessName) eq 'svchost.exe'))) and (eventDateTime ge 2023-04-26T14:32:57.319Z and eventDateTime le 2023-04-26T14:37:57.319Z)"
+            }
+        ]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
-    def test_network_comp_exp(self):
+    def test_ipaddr_comp_exp(self):
         stix_pattern = "[ipv4-addr:value = '172.16.2.22'] START t'2019-09-10T08:43:10.003Z' STOP " \
                        "t'2019-09-23T10:43:10.453Z'"
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
-            "((networkConnections/any(query1:contains(tolower(query1/sourceAddress), '172.16.2.22')) "
-            "or networkConnections/any(query1:contains(tolower(query1/destinationAddress), '172.16.2.22')) "
-            "or networkConnections/any(query1:tolower(query1/natSourceAddress) eq '172.16.2.22') "
-            "or networkConnections/any(query1:tolower(query1/natDestinationAddress) eq '172.16.2.22'))) "
-            "and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"
+            {
+                "alert": "((networkConnections/any(query1:contains(tolower(query1/sourceAddress), '172.16.2.22')) or "
+                "networkConnections/any(query1:contains(tolower(query1/destinationAddress), '172.16.2.22')) or "
+                "networkConnections/any(query1:tolower(query1/natSourceAddress) eq '172.16.2.22') or "
+                "networkConnections/any(query1:tolower(query1/natDestinationAddress) eq '172.16.2.22'))) and "
+                "(eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"
+            }
         ]
 
         queries = _remove_timestamp_from_query(queries)
@@ -72,9 +85,11 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        queries = ["(fileStates/any(query1:contains(tolower(query1/path), 'system32'))) and ("
-                   "eventDateTime ge 2019-10-01T08:43:10.003Z and eventDateTime le "
-                   "2019-10-30T10:43:10.003Z)"]
+        queries = [
+            {
+                "alert": "(fileStates/any(query1:contains(tolower(query1/path), 'system32'))) and (eventDateTime ge 2019-10-01T08:43:10.003Z and eventDateTime le 2019-10-30T10:43:10.003Z)"
+            }
+        ]
 
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -84,9 +99,11 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        queries = ["((fileStates/any(query1:contains(tolower(query1/path), 'windows')) or "
-                   "process/any(query1:tolower(query1/path) eq 'windows'))) and "
-                   "(eventDateTime ge 2019-12-24T09:46:34.835Z and eventDateTime le 2019-12-24T09:51:34.835Z)"]
+        queries = [
+            {
+                "alert": "((fileStates/any(query1:contains(tolower(query1/path), 'windows')) or process/any(query1:tolower(query1/path) eq 'windows'))) and (eventDateTime ge 2023-04-26T14:39:07.023Z and eventDateTime le 2023-04-26T14:44:07.023Z)"
+            }
+        ]
 
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -98,8 +115,10 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
-            "((processes/any(query1:tolower(query1/name) ne 'services.exe') or processes/any(query1:tolower(query1/parentProcessName) ne 'services.exe'))) "
-            "and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"]
+            {
+                "alert": "((processes/any(query1:tolower(query1/name) ne 'services.exe') or processes/any(query1:tolower(query1/parentProcessName) ne 'services.exe'))) and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"
+            }
+        ]
         queries = _remove_timestamp_from_query(queries)
 
         self._test_query_assertions(query, queries)
@@ -109,8 +128,11 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        queries = ["(fileStates/any(query1:contains(tolower(query1/name), 'svc'))) and (eventDateTime ge "
-                   "2019-12-24T09:48:37.359Z and eventDateTime le 2019-12-24T09:53:37.359Z)"]
+        queries = [
+            {
+                "alert": "(fileStates/any(query1:contains(tolower(query1/name), 'svc'))) and (eventDateTime ge 2023-04-26T14:40:18.624Z and eventDateTime le 2023-04-26T14:45:18.624Z)"
+            }
+        ]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -119,8 +141,11 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        queries = ["(fileStates/any(query1:contains(tolower(query1/name), 'serv'))) and (eventDateTime ge "
-                   "2019-12-24T09:49:14.586Z and eventDateTime le 2019-12-24T09:54:14.586Z)"]
+        queries = [
+            {
+                "alert": "(fileStates/any(query1:contains(tolower(query1/name), 'serv'))) and (eventDateTime ge 2023-04-26T14:40:47.144Z and eventDateTime le 2023-04-26T14:45:47.144Z)"
+            }
+        ]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -130,9 +155,11 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        queries = ["(contains(tolower(title), 'Suspicious') and tolower(azureTenantId) ne "
-                   "'Sb73e5ba' and tolower(azureTenantId) ne 'b73e5ba8') and "
-                   "(eventDateTime ge 2019-12-27T04:50:48.593Z and eventDateTime le 2019-12-27T04:55:48.593Z)"]
+        queries = [
+            {
+                "alert": "(contains(tolower(title), 'Suspicious') and tolower(azureTenantId) ne 'Sb73e5ba' and tolower(azureTenantId) ne 'b73e5ba8') and (eventDateTime ge 2023-04-26T14:41:33.013Z and eventDateTime le 2023-04-26T14:46:33.013Z)"
+            }
+        ]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -141,11 +168,14 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        queries = ["((processes/any(query1:tolower(query1/name) eq 'services.exe') or "
-                   "processes/any(query1:tolower(query1/name) eq 'svchost.exe') or "
-                   "processes/any(query1:tolower(query1/parentProcessName) eq 'services.exe') or "
-                   "processes/any(query1:tolower(query1/parentProcessName) eq 'svchost.exe'))) and "
-                   "(eventDateTime ge 2019-12-24T09:50:39.638Z and eventDateTime le 2019-12-24T09:55:39.638Z)"]
+        queries = [
+        {
+            "alert": "((processes/any(query1:tolower(query1/name) eq 'services.exe') or processes/any(query1:tolower(query1/name) eq "
+            "'svchost.exe') or processes/any(query1:tolower(query1/parentProcessName) eq 'services.exe') or "
+            "processes/any(query1:tolower(query1/parentProcessName) eq 'svchost.exe'))) and "
+            "(eventDateTime ge 2023-04-26T14:43:07.619Z and eventDateTime le 2023-04-26T14:48:07.619Z)"
+        }
+    ]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -155,12 +185,11 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        queries = ["(fileStates/any(query1:tolower(query1/name) eq 'notepad.exe') or "
-                   "(processes/any(query2:tolower(query2/name) eq 'services.exe') or "
-                   "processes/any(query2:tolower(query2/name) eq 'svchost.exe') or "
-                   "processes/any(query2:tolower(query2/parentProcessName) eq 'services.exe') or "
-                   "processes/any(query2:tolower(query2/parentProcessName) eq 'svchost.exe'))) and "
-                   "(eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"]
+        queries = [
+            {
+                "alert": "(fileStates/any(query1:tolower(query1/name) eq 'notepad.exe') or (processes/any(query2:tolower(query2/name) eq 'services.exe') or processes/any(query2:tolower(query2/name) eq 'svchost.exe') or processes/any(query2:tolower(query2/parentProcessName) eq 'services.exe') or processes/any(query2:tolower(query2/parentProcessName) eq 'svchost.exe'))) and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"
+            }
+        ]
 
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -171,12 +200,11 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        queries = ["((processes/any(query1:tolower(query1/name) ne 'powershell.exe') "
-                   "and processes/any(query1:tolower(query1/parentProcessName) "
-                   "ne 'powershell.exe')) "
-                   "or (networkConnections/any(query2:tolower(query2/sourcePort) eq '454') "
-                   "or networkConnections/any(query2:tolower(query2/natSourcePort) eq '454'))) "
-                   "and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"]
+        queries = [
+            {
+                "alert": "((processes/any(query1:tolower(query1/name) ne 'powershell.exe') and processes/any(query1:tolower(query1/parentProcessName) ne 'powershell.exe')) or (networkConnections/any(query2:tolower(query2/sourcePort) eq '454') or networkConnections/any(query2:tolower(query2/natSourcePort) eq '454') or networkConnections/any(query2:tolower(query2/natDestinationPort) eq '454'))) and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"
+            }
+        ]
 
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -187,19 +215,14 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
-            "((processes/any(query1:tolower(query1/name) eq 'services.exe') "
-            "or processes/any(query1:tolower(query1/parentProcessName) eq 'services.exe'))) "
-            "and (eventDateTime ge 2021-11-20T02:39:16.342Z and eventDateTime le 2021-11-20T02:44:16.342Z)",
-            "((networkConnections/any(query2:tolower(query2/destinationPort) ge '100') "
-            "or networkConnections/any(query2:tolower(query2/natDestinationPort) ge '100'))) "
-            "and (eventDateTime ge 2021-11-20T02:39:16.343Z and eventDateTime le 2021-11-20T02:44:16.343Z)"
+            {
+                "alert": "((processes/any(query1:tolower(query1/name) eq 'services.exe') or processes/any(query1:tolower(query1/parentProcessName) eq 'services.exe'))) and (eventDateTime ge 2023-04-27T14:06:27.757Z and eventDateTime le 2023-04-27T14:11:27.757Z)"
+            },
+            {
+                "alert": "((networkConnections/any(query2:tolower(query2/destinationPort) ge '100') or networkConnections/any(query2:tolower(query2/natDestinationPort) ge '100'))) and (eventDateTime ge 2023-04-27T14:06:27.757Z and eventDateTime le 2023-04-27T14:11:27.757Z)"
+            }
         ]
-        # queries = ["((processes/any(query1:tolower(query1/name) eq 'services.exe') or "
-        #            "processes/any(query1:tolower(query1/parentProcessName) eq 'services.exe'))) and "
-        #            "(eventDateTime ge 2021-03-23T19:07:25.737Z and eventDateTime le 2021-03-23T19:12:25.737Z)",
-        #            "(networkConnections/any(query2:tolower(query2/destinationPort) ge '100')) and "
-        #            "(eventDateTime ge 2021-03-23T19:07:25.737Z and eventDateTime le 2021-03-23T19:12:25.737Z)"]
-
+        
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
@@ -211,40 +234,38 @@ class TestQueryTranslator(unittest.TestCase):
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
         queries = [
-            "((processes/any(query1:query1/processId eq 110) or processes/any(query1:query1/processId eq 220) or "
-            "processes/any(query1:query1/parentProcessId eq 110) or processes/any(query1:query1/parentProcessId eq 220) or "
-            "registryKeyStates/any(query1:query1/processId eq 110) or registryKeyStates/any(query1:query1/processId eq 220))) and "
-            "(eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)",
-            "(userStates/any(query2:query2/logonDateTime eq 2019-09-23T10:43:10.453Z) and "
-            "networkConnections/any(query3:contains(tolower(query3/sourceAddress), '52.94.233.129'))) and "
-            "(eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"]
+            {
+                "alert": "((processes/any(query1:query1/processId eq 110) or processes/any(query1:query1/processId eq 220) or processes/any(query1:query1/parentProcessId eq 110) or processes/any(query1:query1/parentProcessId eq 220) or registryKeyStates/any(query1:query1/processId eq 110) or registryKeyStates/any(query1:query1/processId eq 220))) and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"
+            },
+            {
+                "alert": "(userStates/any(query2:query2/logonDateTime eq 2019-09-23T10:43:10.453Z) and networkConnections/any(query3:contains(tolower(query3/sourceAddress), '52.94.233.129'))) and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"
+            }
+        ]
 
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
 
     def test_comb_observation_obs_qualifier_two(self):
-        stix_pattern = "([file:hashes.'SHA-1' LIKE 'daf67'] OR [file:hashes.'SHA-1' = " \
-                       "'b6d237154f2e528f0b503b58b025862d66b02b73'] OR [" \
-                       "x-msazure-sentinel-alert:vendor = 'Microsoft'] AND [" \
-                       "x-msazure-sentinel-alert:provider LIKE 'Microsoft']) START " \
-                       "t'2019-09-10T08:43:10.003Z' STOP t'2019-09-23T10:43:10.453Z'"
+        stix_pattern = "[file:hashes.'SHA-1' LIKE 'daf67'] OR [file:hashes.'SHA-1' = 'b6d237154f2e528f0b503b58b025862d66b02b73'] " \
+                        "OR [ipv4-addr:value = '1.1.1.1'] AND [ipv4-addr:value = '2.1.1.1'] START t'2019-09-10T08:43:10.003Z' " \
+                        "STOP t'2019-09-23T10:43:10.453Z'"
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        queries = ["((fileStates/any(query1:query1/fileHash/hashType eq 'sha1') and fileStates/any(query1:contains("
-                   "tolower(query1/fileHash/hashValue), 'daf67')))) and (eventDateTime ge 2019-09-10T08:43:10.003Z "
-                   "and eventDateTime le 2019-09-23T10:43:10.453Z)", "((fileStates/any("
-                                                                     "query2:query2/fileHash/hashType eq 'sha1') and "
-                                                                     "fileStates/any(query2:tolower("
-                                                                     "query2/fileHash/hashValue) eq "
-                                                                     "'b6d237154f2e528f0b503b58b025862d66b02b73'))) "
-                                                                     "and (eventDateTime ge 2019-09-10T08:43:10.003Z "
-                                                                     "and eventDateTime le "
-                                                                     "2019-09-23T10:43:10.453Z)",
-                   "(vendorInformation/vendor eq 'Microsoft') and (eventDateTime ge 2019-09-10T08:43:10.003Z and "
-                   "eventDateTime le 2019-09-23T10:43:10.453Z)", "(contains(vendorInformation/provider, 'Microsoft')) "
-                                                                 "and (eventDateTime ge 2019-09-10T08:43:10.003Z and "
-                                                                 "eventDateTime le 2019-09-23T10:43:10.453Z)"]
+        queries =  [
+            {
+                "alert": "((fileStates/any(query1:query1/fileHash/hashType eq 'sha1') and fileStates/any(query1:contains(tolower(query1/fileHash/hashValue), 'daf67')))) and (eventDateTime ge 2023-04-27T13:45:31.261Z and eventDateTime le 2023-04-27T13:50:31.261Z)"
+            },
+            {
+                "alert": "((fileStates/any(query2:query2/fileHash/hashType eq 'sha1') and fileStates/any(query2:tolower(query2/fileHash/hashValue) eq 'b6d237154f2e528f0b503b58b025862d66b02b73'))) and (eventDateTime ge 2023-04-27T13:45:31.261Z and eventDateTime le 2023-04-27T13:50:31.261Z)"
+            },
+            {
+                "alert": "((networkConnections/any(query3:contains(tolower(query3/sourceAddress), '1.1.1.1')) or networkConnections/any(query3:contains(tolower(query3/destinationAddress), '1.1.1.1')) or networkConnections/any(query3:tolower(query3/natSourceAddress) eq '1.1.1.1') or networkConnections/any(query3:tolower(query3/natDestinationAddress) eq '1.1.1.1'))) and (eventDateTime ge 2023-04-27T13:45:31.261Z and eventDateTime le 2023-04-27T13:50:31.261Z)"
+            },
+            {
+                "alert": "((networkConnections/any(query4:contains(tolower(query4/sourceAddress), '2.1.1.1')) or networkConnections/any(query4:contains(tolower(query4/destinationAddress), '2.1.1.1')) or networkConnections/any(query4:tolower(query4/natSourceAddress) eq '2.1.1.1') or networkConnections/any(query4:tolower(query4/natDestinationAddress) eq '2.1.1.1'))) and (eventDateTime ge 2019-09-10T08:43:10.003Z and eventDateTime le 2019-09-23T10:43:10.453Z)"
+            }
+        ]
 
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -258,19 +279,42 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        print(query['queries'])
+        queries = [
+            {
+                "alert": "(tolower(title) eq 'photos') and (eventDateTime ge 2023-04-27T13:49:25.393Z and eventDateTime le 2023-04-27T13:54:25.393Z)"
+            },
+            {
+                "alert": "(tolower(category) eq 'test type') and (eventDateTime ge 2023-04-27T13:49:25.393Z and eventDateTime le 2023-04-27T13:54:25.393Z)"
+            },
+            {
+                "alert": "(tolower(description) eq 'test description') and (eventDateTime ge 2023-04-27T13:49:25.393Z and eventDateTime le 2023-04-27T13:54:25.393Z)"
+            },
+            {
+                "alert": "(tolower(severity) eq 'test severity') and (eventDateTime ge 2023-04-27T13:49:25.393Z and eventDateTime le 2023-04-27T13:54:25.393Z)"
+            },
+            {
+                "alert": "(networkConnections/any(query5:tolower(query5/sourceLocation) eq 'canada')) and (eventDateTime ge 2023-04-27T13:49:25.393Z and eventDateTime le 2023-04-27T13:54:25.393Z)"
+            },
+            {
+                "alert": "(networkConnections/any(query6:tolower(query6/destinationLocation) eq 'us')) and (eventDateTime ge 2023-04-27T13:49:25.393Z and eventDateTime le 2023-04-27T13:54:25.393Z)"
+            },
+            {
+                "alertV2": "(tolower(severity) eq 'test severity') and (createdDateTime ge 2023-04-27T18:54:53.833Z and createdDateTime le 2023-04-27T18:59:53.833Z)"
+            }
+        ]
+        queries = _remove_timestamp_from_query(queries)
+        self.assertSetEqual(set(query['queries']), set(queries))
+    
+    def test_lamda_operator_with_collection(self):
+        stix_pattern = "[x-ibm-finding:x_recommendedActions = 'Enforce' OR x-ibm-finding:x_detectionIds != '111']"
+        query = translation.translate('azure_sentinel', 'query', '{}', stix_pattern)
+        query['queries'] = _remove_timestamp_from_query(query['queries'])
 
-        queries = ["(tolower(title) eq 'photos') and (eventDateTime ge 2021-10-08T00:18:50.449Z and eventDateTime le "
-                    "2021-10-08T00:23:50.449Z)",
-                    "(tolower(category) eq 'test type') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
-                    "eventDateTime le 2021-10-08T00:23:50.449Z)",
-                    "(tolower(description) eq 'test description') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
-                    "eventDateTime le 2021-10-08T00:23:50.449Z)",
-                    "(tolower(severity) eq 'test severity') and (eventDateTime ge 2021-10-08T00:18:50.449Z and "
-                    "eventDateTime le 2021-10-08T00:23:50.449Z)",
-                    "(networkConnections/any(query5:tolower(query5/sourceLocation) eq 'canada')) and (eventDateTime "
-                    "ge 2021-10-08T00:18:50.449Z and eventDateTime le 2021-10-08T00:23:50.449Z)",
-                    "(networkConnections/any(query6:tolower(query6/destinationLocation) eq 'us')) and (eventDateTime "
-                    "ge 2021-10-08T00:18:50.449Z and eventDateTime le 2021-10-08T00:23:50.449Z)"]
+        queries = [{
+                "alert": "(NOT(detectionIds/any(query1:query1 eq '111')) or recommendedActions/any(query2:query2 eq 'Enforce')) and "
+                "(eventDateTime ge 2023-04-27T13:47:00.039Z and eventDateTime le 2023-04-27T13:52:00.039Z)"
+            }
+        ]
+        
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)

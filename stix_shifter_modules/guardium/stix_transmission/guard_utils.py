@@ -1,31 +1,27 @@
-import argparse
 import datetime
-import hashlib
 import json
-import re
-import sys
-import traceback
-from stix_shifter_utils.stix_transmission.utils.RestApiClient import RestApiClient
+from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix_shifter_utils.utils import logger
 
 
-class GuardApiClient(RestApiClient):
+class GuardApiClient(RestApiClientAsync):
 
     def __init__(self, params, host, port, headers,
-                 url_modifier_function, cert_verify, sni, auth):
-        self.client = RestApiClient(host, port, headers, url_modifier_function, cert_verify, sni, auth)
+                 url_modifier_function, cert_verify, auth):
+        self.client = RestApiClientAsync(host, port, headers, url_modifier_function, cert_verify, auth)
         self.logger = logger.set_logger(__name__)
         self.url = params["url"]
         self.secret = params["client_secret"]
         self.user = params["config_uname"]
         self.password = params["config_pass"]
         self.client_id = params["client_id"]
+        self.timeout = params["timeout"]
         self.token_target = 'oauth/token'
         self.report_target = 'restAPI/online_report'
         self.qs_target = 'restAPI/quick_search'
         self.fields_target = 'restAPI/fieldsTitles'
         self.fields = {}
-        self.get_token()
+        self.access_token = ""
 
         # -------------------------------------------------------------------------------
         # REPORT parameters
@@ -81,7 +77,7 @@ class GuardApiClient(RestApiClient):
         finally:
             file.close()
 
-    def get_token(self):
+    async def get_token(self):
         # -------------------------------------------------------------------------------
         # Authentication
         # -------------------------------------------------------------------------------
@@ -90,25 +86,28 @@ class GuardApiClient(RestApiClient):
         # print("secret="+self.secret)
         # print("user="+self.user)
         # print("password="+self.password)
-        response = self.request_token()
+        response = await self.request_token()
         # if self.validate_response(response, "token ", True):
-        self.access_token = json.loads(response.read())['access_token']
-        # print("token="+ self.access_token)
-        self.headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {0}'.format(self.access_token)}
+        response_code = response.code
+        response_json = json.loads(response.read())
+        if response_code != 200 or 'access_token' in response_json:
+            self.access_token = response_json['access_token']
+            # print("token="+ self.access_token)
+            self.headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {0}'.format(self.access_token)}
 
-    def request_token(self):
+    async def request_token(self):
         self.token_data = 'client_id={0}&grant_type=password&client_secret={1}&username={2}&password={3}'.format(
             self.client_id, self.secret, self.user, self.password)
-        return self.client.call_api(self.token_target, 'POST', urldata=self.token_data)
+        return await self.client.call_api(self.token_target, 'POST', urldata=self.token_data, timeout=self.timeout)
 
     def validate_response(self, p_response, prefix, abort=False):
         if p_response.code != 200:
             if abort:
-                raise Exception(prefix + "request faild " + str(p_response.code) + "-" + p_response.read())
+                raise Exception(prefix + "request faild " + str(p_response.code) + "-" + p_response.read().decode())
             return False
         return True
 
-    def handle_report(self, params, index_from, fetch_size):
+    async def handle_report(self, params, index_from, fetch_size):
         # -------------------------------------------------------------------------------
         # REPORT
         # -------------------------------------------------------------------------------
@@ -121,7 +120,7 @@ class GuardApiClient(RestApiClient):
 
         rest_data = json.dumps(params)
 
-        response = self.client.call_api(self.report_target, 'POST', headers=self.headers, data=rest_data)
+        response = await self.client.call_api(self.report_target, 'POST', headers=self.headers, data=rest_data, timeout=self.timeout)
 
         results = response.read()
         if not isinstance(results, list):
@@ -135,13 +134,13 @@ class GuardApiClient(RestApiClient):
                     params.pop("inputTZ")
                     rest_data = json.dumps(params)
                     self.logger.warn("InputTZ not suppoerted - running query without it")
-                    response = self.client.call_api(self.report_target, 'POST', headers=self.headers,
-                                                    data=rest_data)
+                    response = await self.client.call_api(self.report_target, 'POST', headers=self.headers,
+                                                    data=rest_data, timeout=self.timeout)
             except:
                 pass
         return response
 
-    def handle_qs(self, params, index_from, fetch_size):
+    async def handle_qs(self, params, index_from, fetch_size):
         # -------------------------------------------------------------------------------
         # QS
         # -------------------------------------------------------------------------------
@@ -153,7 +152,7 @@ class GuardApiClient(RestApiClient):
         params["firstPosition"] = int(index_from - 1)
         params["inputTZ"] = "UTC"
         value = ''
-        if params['filters'] is not '':
+        if params['filters'] != '':
             temp = params["filters"].split("value=")
             temp1 = temp[1].split("&")
             temp3 = temp1[0].replace("'", "").replace("[", "").replace("]", "")
@@ -170,7 +169,7 @@ class GuardApiClient(RestApiClient):
                 params['filters'] = data
                 rest_data = json.dumps(params)
          
-                response = self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers)
+                response = await self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers, timeout=self.timeout)
                 results = response.read()
                 result_text = response.response.text
                 resp_str.append(result_text)
@@ -181,10 +180,10 @@ class GuardApiClient(RestApiClient):
             response.content = json.dumps(content)
             return response
         else:
-            print('else')
+            # print('else')
             rest_data = json.dumps(params)
-            print(rest_data)
-            response = self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers)
+            # print(rest_data)
+            response = await self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers, timeout=self.timeout)
             results = response.read()
 
         if not isinstance(results, list):
@@ -197,15 +196,15 @@ class GuardApiClient(RestApiClient):
                     params.pop("inputTZ")
                     rest_data = json.dumps(params)
                     self.logger.warn("InputTZ not suppoerted - running query without it")
-                    response = self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers)
+                    response = await self.client.call_api(self.qs_target, 'POST', data=rest_data, headers=self.headers, timeout=self.timeout)
             except:
                 pass
         response.content = self.translate_response(json.loads(self.fields), json.loads(response.read()))
         return response
 
-    def get_field_titles(self):
+    async def get_field_titles(self):
         # get QS field titles from Guardium
-        response = self.client.call_api(self.fields_target, 'GET', headers=self.headers)
+        response = await self.client.call_api(self.fields_target, 'GET', headers=self.headers, timeout=self.timeout)
         # response = requests.get(self.url + self.fields_target, headers=self.headers, verify=False)
         try:
             msg = json.loads(response.read())["Message"]
