@@ -239,9 +239,26 @@
                 "noGui": false,
                 "logonId": "0x3e7"
             },
-            "technique": "T1043",
+            "technique": "T1053",
             "tactics": [
-                10
+                2,3,4
+            ],
+            "mod_tactics": [
+                {
+                    "tactic_number": 2, 
+                    "tactic_name": "Execution", 
+                    "technique": "T1053"
+                }, 
+                {
+                    "tactic_number": 3, 
+                    "tactic_name": "Persistence", 
+                    "technique": "T1053"
+                }, 
+                {
+                    "tactic_number": 4, 
+                    "tactic_name": "Privilege Escalation", 
+                    "technique": "T1053"
+                }
             ],
             "hijackingType": 2,
             "scriptBlockText": "# Localized\t12/07/2019 05:47 AM (GMT)\t303:6.40.20520\r\nadminTSHistorySize=Disk space\r\n###PSLOC\r\n'@\r\n",
