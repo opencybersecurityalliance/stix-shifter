@@ -1,7 +1,7 @@
 {
   "endpointId": {
-    "key": "x-oca-asset.host_id",
-    "object": "asset"
+    "key": "x-reaqta-event.host_id",
+    "object": "x-reaqta"
   },
   "eventId": {
     "key": "x-oca-event.code",
@@ -30,12 +30,12 @@
       "transformer": "ToString"
     },
     "incidents": {
-      "key": "x-ibm-finding.extensions.x-reaqta-alert-ext.incidents",
-      "object": "x-ibm-finding"
+      "key": "x-oca-event.extensions.x-reaqta-alert-ext.incidents",
+      "object": "event"
     },
     "triggeredIncidents": {
-      "key": "x-ibm-finding.extensions.x-reaqta-alert-ext.triggered_incidents",
-      "object": "x-ibm-finding"
+      "key": "x-oca-even.extensions.x-reaqta-alert-ext.triggered_incidents",
+      "object": "event"
     },
     "localId": {
       "key": "x-reaqta-event.local_id",
@@ -43,8 +43,8 @@
     },
     "process": {
       "endpointId": {
-        "key": "x-oca-asset.host_id",
-        "object": "asset"
+        "key": "x-reaqta-event.host_id",
+        "object": "x-reaqta"
       },
       "id": {
         "key": "process.x_unique_id",
@@ -204,8 +204,8 @@
     "data": {
       "accessorProcess": {
         "endpointId": {
-          "key": "x-oca-asset.host_id",
-          "object": "asset"
+          "key": "x-reaqta-event.host_id",
+          "object": "x-reaqta"
         },
         "id": {
           "key": "process.x_unique_id",
@@ -372,8 +372,8 @@
       },
       "allocatorProc": {
         "endpointId": {
-          "key": "x-oca-asset.host_id",
-          "object": "asset"
+          "key": "x-reaqta-event.host_id",
+          "object": "x-reaqta"
         },
         "id": {
           "key": "process.x_unique_id",
@@ -574,8 +574,8 @@
       },
       "childProcess": {
         "endpointId": {
-          "key": "x-oca-asset.host_id",
-          "object": "asset"
+          "key": "x-reaqta-event.host_id",
+          "object": "x-reaqta"
         },
         "id": {
           "key": "process.x_unique_id",
@@ -835,8 +835,8 @@
       },
       "engineProcess": {
         "endpointId": {
-          "key": "x-oca-asset.host_id",
-          "object": "asset"
+          "key": "x-reaqta-event.host_id",
+          "object": "x-reaqta"
         },
         "id": {
           "key": "process.x_unique_id",
@@ -1450,19 +1450,14 @@
           "references": "src_ip"
         },
         {
-          "key": "x-ibm-finding.src_ip_ref",
-          "object": "x-ibm-finding",
-          "references": "src_ip"
-        },
-        {
           "key": "x-oca-event.network_ref",
           "object": "event",
           "references": "nt"
         },
         {
           "group": true,
-          "key": "x-oca-asset.ip_refs",
-          "object": "asset",
+          "key": "x-oca-event.ip_refs",
+          "object": "event",
           "references": [
             "src_ip"
           ]
@@ -1479,19 +1474,14 @@
           "references": "src_ip"
         },
         {
-          "key": "x-ibm-finding.src_ip_ref",
-          "object": "x-ibm-finding",
-          "references": "src_ip"
-        },
-        {
           "key": "x-oca-event.network_ref",
           "object": "event",
           "references": "nt"
         },
         {
           "group": true,
-          "key": "x-oca-asset.ip_refs",
-          "object": "asset",
+          "key": "x-oca-event.ip_refs",
+          "object": "event",
           "references": [
             "src_ip"
           ]
@@ -1587,11 +1577,6 @@
           "references": "dst_ip"
         },
         {
-          "key": "x-ibm-finding.dst_ip_ref",
-          "object": "x-ibm-finding",
-          "references": "dst_ip"
-        },
-        {
           "key": "x-oca-event.network_ref",
           "object": "event",
           "references": "nt"
@@ -1605,11 +1590,6 @@
         {
           "key": "network-traffic.dst_ref",
           "object": "nt",
-          "references": "dst_ip"
-        },
-        {
-          "key": "x-ibm-finding.dst_ip_ref",
-          "object": "x-ibm-finding",
           "references": "dst_ip"
         },
         {
@@ -1641,8 +1621,8 @@
       },
       "serviceProcess": {
         "endpointId": {
-          "key": "x-oca-asset.host_id",
-          "object": "asset"
+          "key": "x-reaqta-event.host_id",
+          "object": "x-reaqta"
         },
         "id": {
           "key": "process.x_unique_id",
@@ -1819,25 +1799,41 @@
         "key": "x-reaqta-event.start_type",
         "object": "x-reaqta"
       },
-      "tactics": [
+      "mod_tactics": {
+        "tactic_number" : {
+            "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.x_reaqta_tactic_number",
+            "object": "x-ibm-ttp-tagging"
+          },
+        "tactic_name" : {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+          "object": "x-ibm-ttp-tagging"
+        },
+        "technique": [
         {
-          "key": "x-ibm-finding.ttp_tagging_refs",
-          "object": "x-ibm-finding",
-          "references": ["x-ibm-ttp-tagging"]
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+          "object": "x-ibm-ttp-tagging"
         },
         {
-          "key": "x-ibm-ttp-tagging.extensions.'mitre-attack-ext'.tactic_name",
+          "key": "x-ibm-ttp-tagging.extensions.name",
           "object": "x-ibm-ttp-tagging"
+        }],
+        "groupReference": {
+          "key": "x-oca-event.ttp_tagging_refs",
+          "object": "event",
+          "references": [
+            "x-ibm-ttp-tagging"
+          ],
+          "group_ref": true
         }
-      ],
+      },
       "tags": {
         "key": "x-reaqta-event.tags",
         "object": "x-reaqta"
       },
       "targetProcess": {
         "endpointId": {
-          "key": "x-oca-asset.host_id",
-          "object": "asset"
+          "key": "x-reaqta-event.host_id",
+          "object": "x-reaqta"
         },
         "id": {
           "key": "process.x_unique_id",
@@ -2010,21 +2006,6 @@
         "key": "x-reaqta-event.task_name",
         "object": "x-reaqta"
       },
-      "technique": [
-        {
-          "key": "x-ibm-finding.ttp_tagging_refs",
-          "object": "x-ibm-finding",
-          "references": ["x-ibm-ttp-tagging"]
-        },
-        {
-          "key": "x-ibm-ttp-tagging.extensions.'mitre-attack-ext'.technique_name",
-          "object": "x-ibm-ttp-tagging"
-        },
-        {
-          "key": "x-ibm-ttp-tagging.extensions.name",
-          "object": "x-ibm-ttp-tagging"
-        }
-      ],
       "url": {
         "key": "url.value",
         "object": "url"
@@ -2041,6 +2022,26 @@
         "key": "process.pid",
         "object": "wmi_process",
         "transformer": "ToInteger"
+      },
+      "matched": {
+        "policyId": [
+        {
+          "key":"x-ibm-finding.finding_type",
+          "object":"alert_id",
+          "value":"alert"
+        },
+        {
+          "key":"x-ibm-finding.name",
+          "object":"alert_id"
+        }],
+        "versionId": {
+          "key":"x-ibm-finding.x_reaqta_version_id",
+          "object":"alert_id"
+        },
+        "matcherId": {
+          "key":"x-ibm-finding.x_reaqta_matcher_id",
+          "object":"alert_id"
+        }
       }
     }
   }
