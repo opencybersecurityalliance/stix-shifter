@@ -31,6 +31,8 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 
 ### Fixes:
 
+*  Reaqta various mapping fixes [#1683](https://github.com/opencybersecurityalliance/stix-shifter/pull/1683)
+
 ### Dependency update:
 
 --------------------------------------
