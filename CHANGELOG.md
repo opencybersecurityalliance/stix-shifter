@@ -15,6 +15,27 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 *List the dependecy upgrade or downgrade.*
 
 --------------------------------------
+## 7.0.7 (2024-05-07)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+*  CrowdStrike Logscale UDI Connector [#1631](https://github.com/opencybersecurityalliance/stix-shifter/pull/1631)
+*  Nozomi UDI connector [#1656](https://github.com/opencybersecurityalliance/stix-shifter/pull/1656)
+*  add feature to disable pagination and simplify API [#1676](https://github.com/opencybersecurityalliance/stix-shifter/pull/1676)
+*  remove non-standard powershell fields for ECS [#1684](https://github.com/opencybersecurityalliance/stix-shifter/pull/1684)
+*  Update code-coverage with new version of Codecov CLI  and token[#1682](https://github.com/opencybersecurityalliance/stix-shifter/pull/1682)
+
+### Fixes:
+
+*  Reaqta various mapping fixes [#1683](https://github.com/opencybersecurityalliance/stix-shifter/pull/1683)
+
+### Dependency update:
+
+--------------------------------------
 ## 7.0.6 (2024-04-16)
 
 ### Breaking changes:
