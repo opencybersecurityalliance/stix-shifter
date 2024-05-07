@@ -35,7 +35,7 @@
     {
       "key": "network-traffic.dst_ref",
       "object": "nt",
-      "references": "src_ip"
+      "references": "dst_ip"
     },
     {
       "key": "x-oca-event.network_ref",
@@ -102,7 +102,7 @@
       "object": "src_mac"
     },
     {
-      "key": "ipv4-addr.resolves_to_ref",
+      "key": "ipv4-addr.resolves_to_refs",
       "object": "src_ip",
       "references": [
         "src_mac"
@@ -115,7 +115,7 @@
       "object": "dst_mac"
     },
     {
-      "key": "ipv4-addr.resolves_to_ref",
+      "key": "ipv4-addr.resolves_to_refs",
       "object": "dst_ip",
       "references": [
         "dst_mac"
