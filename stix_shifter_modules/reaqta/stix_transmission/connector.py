@@ -109,19 +109,19 @@ class Connector(BaseJsonSyncConnector):
         #I determined this by using their HunQ search tool within the Reaqta environment.
         #This could change in the future and may need to be updated or removed.
         tactic_name_mapping = {
-            "0":"Unknown",
-            "1":"Initial Access",
-            "2":"Execution",
-            "3":"Persistence",
-            "4":"Privilege Escalation",
-            "5":"Defense Evasion",
-            "6":"Credential Access",
-            "7":"Discovery",
-            "8":"Lateral Movement",
-            "9":"Collection",
-            "10":"Command and Control",
-            "11":"Exfiltration",
-            "12":"Impact"
+            0:"Unknown",
+            1:"Initial Access",
+            2:"Execution",
+            3:"Persistence",
+            4:"Privilege Escalation",
+            5:"Defense Evasion",
+            6:"Credential Access",
+            7:"Discovery",
+            8:"Lateral Movement",
+            9:"Collection",
+            10:"Command and Control",
+            11:"Exfiltration",
+            12:"Impact"
         }
         
         
@@ -150,8 +150,8 @@ class Connector(BaseJsonSyncConnector):
                 dict_list = []
                 for tactic in tactic_list:
                     
-                    if (f"{tactic}" in tactic_name_mapping):
-                        dict_list.append({"tactic_number": tactic, "tactic_name": tactic_name_mapping.get(f"{tactic}"), "technique":technique})
+                    if (tactic in tactic_name_mapping):
+                        dict_list.append({"tactic_number": tactic, "tactic_name": tactic_name_mapping.get(tactic), "technique":technique})
                     else:
                         dict_list.append({"tactic_number": tactic, "tactic_name": "Unknown", "technique":technique})
                 result['payload']['data']['mod_tactics'] = dict_list
