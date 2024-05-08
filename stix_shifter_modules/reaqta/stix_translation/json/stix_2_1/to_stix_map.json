@@ -34,7 +34,7 @@
       "object": "event"
     },
     "triggeredIncidents": {
-      "key": "x-oca-even.extensions.x-reaqta-alert-ext.triggered_incidents",
+      "key": "x-oca-event.extensions.x-reaqta-alert-ext.triggered_incidents",
       "object": "event"
     },
     "localId": {
@@ -1814,7 +1814,7 @@
           "object": "x-ibm-ttp-tagging"
         },
         {
-          "key": "x-ibm-ttp-tagging.extensions.name",
+          "key": "x-ibm-ttp-tagging.name",
           "object": "x-ibm-ttp-tagging"
         }],
         "groupReference": {

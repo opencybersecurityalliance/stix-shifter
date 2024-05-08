@@ -508,21 +508,21 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         
         assert(mitre_2 is not None), 'process object type not found'
         assert(mitre_2["type"] == "x-ibm-ttp-tagging")
-        assert(mitre_2["extensions"]["name"] == "T1053")
+        assert(mitre_2["name"] == "T1053")
         assert(mitre_2["extensions"]["mitre-attack-ext"]["x_reaqta_tactic_number"] == 2)
         assert(mitre_2["extensions"]["mitre-attack-ext"]["tactic_name"] == 'Execution')
         assert(mitre_2["extensions"]["mitre-attack-ext"]["technique_name"] == 'T1053')
         
         assert(mitre_3 is not None), 'process object type not found'
         assert(mitre_3["type"] == "x-ibm-ttp-tagging")
-        assert(mitre_3["extensions"]["name"] == "T1053")
+        assert(mitre_3["name"] == "T1053")
         assert(mitre_3["extensions"]["mitre-attack-ext"]["x_reaqta_tactic_number"] == 3)
         assert(mitre_3["extensions"]["mitre-attack-ext"]["tactic_name"] == 'Persistence')
         assert(mitre_3["extensions"]["mitre-attack-ext"]["technique_name"] == 'T1053')
         
         assert(mitre_4 is not None), 'process object type not found'
         assert(mitre_4["type"] == "x-ibm-ttp-tagging")
-        assert(mitre_4["extensions"]["name"] == "T1053")
+        assert(mitre_4["name"] == "T1053")
         assert(mitre_4["extensions"]["mitre-attack-ext"]["x_reaqta_tactic_number"] == 4)
         assert(mitre_4["extensions"]["mitre-attack-ext"]["tactic_name"] == 'Privilege Escalation')
         assert(mitre_4["extensions"]["mitre-attack-ext"]["technique_name"] == 'T1053')
