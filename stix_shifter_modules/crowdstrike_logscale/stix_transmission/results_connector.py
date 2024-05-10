@@ -67,6 +67,10 @@ class ResultsConnector(BaseJsonResultsConnector):
                 return_obj = await self.format_results(data, offset,total_records, first_iteration)
                 if (offset + len(return_obj['data'])) < self.api_client.result_limit:
                     return_obj['metadata'] = ResultsConnector.prepare_metadata(return_obj['data'], response_query_status_details)
+            else:
+                if not return_obj.get('success') and not return_obj.get('error'):
+                    return_obj['success'] = True
+                    return_obj['data'] = []
 
         except InvalidSearchIdException:
             return_obj = self.handle_api_exception(404,"Invalid Search Id")
