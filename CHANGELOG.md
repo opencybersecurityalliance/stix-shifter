@@ -15,6 +15,25 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 *List the dependecy upgrade or downgrade.*
 
 --------------------------------------
+## 7.0.9 (2024-05-23)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+*  Modified the ping endpoint [#1692](https://github.com/opencybersecurityalliance/stix-shifter/pull/1692)
+*  Hided the API page size parameter view in console [#1690](https://github.com/opencybersecurityalliance/stix-shifter/pull/1690)
+*  Added dialects from cloud siem Sumologic [#1686](https://github.com/opencybersecurityalliance/stix-shifter/pull/1686)
+
+
+### Fixes:
+*  Reaqta various mapping fixes [#1688](https://github.com/opencybersecurityalliance/stix-shifter/pull/1688)
+
+### Dependency update:
+
+--------------------------------------
 ## 7.0.7 (2024-05-07)
 
 ### Breaking changes:
@@ -770,3 +789,4 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 * Bump pyopenssl from 20.0.1 to 22.0.0
 * Bump stix2-validator from 1.1.2 to 3.0.2
 * Bump boto3 from 1.17.20 to 1.21.5## 4.0.0 (2022-02-23)
+
