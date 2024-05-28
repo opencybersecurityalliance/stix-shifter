@@ -1,5 +1,5 @@
-##### Updated on 10/25/23
-## IBM QRadar
+##### Updated on 05/23/24
+## IBM Security QRadar SIEM
 ### Results STIX Domain Objects
 * Identity
 * Observed Data
@@ -48,7 +48,7 @@
 | **user-account**:user_id | username |
 | **user-account**:account_login | username |
 | **artifact**:payload_bin | UTF8(payload) |
-| **domain-name**:value | "DNS Request Domain", UrlHost |
+| **domain-name**:value | "DNS Request Domain", "URL Host" |
 | **x-qradar**:qid | qid |
 | **x-qradar**:magnitude | magnitude |
 | **x-qradar**:log_source_id | logsourceid |
@@ -73,13 +73,13 @@
 | **x-ibm-finding**:dst_geolocation | destinationgeographiclocation |
 | **x-ibm-finding**:rule_names[*] | rulename(creeventlist) |
 | **process**:pid | "Process ID" |
-| **process**:name | "Process Name", Image, ParentImage, TargetImage |
-| **process**:binary_ref.name | Image, TargetImage |
-| **process**:binary_ref.parent_directory_ref.path | Image, TargetImage |
-| **process**:parent_ref.binary_ref.name | ParentImage |
-| **process**:command_line | "Process CommandLine", ParentCommandLine |
-| **process**:parent_ref.command_line | ParentCommandLine |
-| **process**:extensions.'windows-service-ext'.service_dll_refs[*].name | ServiceFileName |
+| **process**:name | "Process Name", "Process Path", "Parent Process Path", "Target Process Path" |
+| **process**:binary_ref.name | "Process Path", "Target Process Path" |
+| **process**:binary_ref.parent_directory_ref.path | "Process Path", "Target Process Path" |
+| **process**:parent_ref.binary_ref.name | "Parent Process Path" |
+| **process**:command_line | "Process CommandLine", "Parent Command" |
+| **process**:parent_ref.command_line | "Parent Command" |
+| **process**:extensions.'windows-service-ext'.service_dll_refs[*].name | "Service Filename" |
 | **process**:x_unique_id | "Process Guid" |
 | **x-oca-event**:action | QIDNAME(qid) |
 | **x-oca-event**:code | EventID |
@@ -89,22 +89,22 @@
 | **x-oca-event**:agent | LOGSOURCENAME(logsourceid) |
 | **x-oca-event**:provider | LOGSOURCETYPENAME(devicetype) |
 | **x-oca-event**:process_ref.command_line | "Process CommandLine" |
-| **x-oca-event**:process_ref.binary_ref.name | Image, TargetImage |
-| **x-oca-event**:process_ref.parent_ref.command_line | ParentCommandLine |
+| **x-oca-event**:process_ref.binary_ref.name | "Process Path", "Target Process Path" |
+| **x-oca-event**:process_ref.parent_ref.command_line | "Parent Command" |
 | **x-oca-event**:process_ref.creator_user_ref.user_id | username |
 | **x-oca-event**:process_ref.name | "Process Name" |
 | **x-oca-event**:process_ref.pid | "Process ID" |
-| **x-oca-event**:parent_process_ref.command_line | ParentCommandLine |
-| **x-oca-event**:parent_process_ref.binary_ref.name | ParentImage |
-| **x-oca-event**:domain_ref.value | "DNS Request Domain", UrlHost |
+| **x-oca-event**:parent_process_ref.command_line | "Parent Command" |
+| **x-oca-event**:parent_process_ref.binary_ref.name | "Parent Process Path" |
+| **x-oca-event**:domain_ref.value | "DNS Request Domain", "URL Host" |
 | **x-oca-event**:file_ref.name | Filename |
-| **x-oca-event**:host_ref.hostname | identityhostname, "Machine ID" |
+| **x-oca-event**:host_ref.hostname | identityhostname, "Machine Identifier" |
 | **x-oca-event**:host_ref.ip_refs[*].value | identityip, sourceaddress |
 | **x-oca-event**:registry_ref.key | ObjectName, "Registry Key" |
 | **x-oca-event**:user_ref.user_id | username |
 | **x-oca-event**:url_ref.value | URL |
 | **x-oca-event**:original_ref.payload_bin | UTF8(payload), Message |
-| **x-oca-asset**:hostname | identityhostname, "Machine ID" |
+| **x-oca-asset**:hostname | identityhostname, "Machine Identifier" |
 | **x-oca-asset**:ip_refs[*].value | identityip, sourceaddress |
 | **x-oca-asset**:mac_refs[*].value | sourcemac |
 | **windows-registry-key**:key | ObjectName, "Registry Key" |
@@ -181,12 +181,12 @@
 | artifact | mime_type | mime_type_message |
 | <br> | | |
 | directory | path | "File Path" |
-| directory | path | Image |
-| directory | path | ParentImage |
-| directory | path | TargetImage |
-| directory | path | ServiceFileName |
+| directory | path | "Process Path" |
+| directory | path | "Parent Process Path" |
+| directory | path | "Target Process Path" |
+| directory | path | "Service Filename" |
 | <br> | | |
-| domain-name | value | UrlHost |
+| domain-name | value | "URL Host" |
 | domain-name | value | "DNS Request Domain" |
 | <br> | | |
 | email-message | content_type | contenttype |
@@ -199,14 +199,14 @@
 | file | size | filesize |
 | file | parent_directory_ref | "File Path" |
 | file | mime_type | contenttype |
-| file | name | Image |
-| file | parent_directory_ref | Image |
-| file | name | ParentImage |
-| file | parent_directory_ref | ParentImage |
-| file | name | TargetImage |
-| file | parent_directory_ref | TargetImage |
-| file | name | ServiceFileName |
-| file | parent_directory_ref | ServiceFileName |
+| file | name | "Process Path" |
+| file | parent_directory_ref | "Process Path" |
+| file | name | "Parent Process Path" |
+| file | parent_directory_ref | "Parent Process Path" |
+| file | name | "Target Process Path" |
+| file | parent_directory_ref | "Target Process Path" |
+| file | name | "Service Filename" |
+| file | parent_directory_ref | "Service Filename" |
 | <br> | | |
 | ipv4-addr | value | identityip |
 | ipv4-addr | value | destinationaddress |
@@ -229,7 +229,7 @@
 | network-traffic | dst_ref | destinationv6 |
 | network-traffic | src_ref | sourceaddress |
 | network-traffic | src_ref | sourcev6 |
-| network-traffic | extensions.dns-ext.question.domain_ref | UrlHost |
+| network-traffic | extensions.dns-ext.question.domain_ref | "URL Host" |
 | network-traffic | src_payload_ref | flowsourcepayload |
 | network-traffic | dst_payload_ref | flowdestinationpayload |
 | network-traffic | dst_port | destinationport |
@@ -248,18 +248,18 @@
 | network-traffic | extensions.http-request-ext.request_header.Content-Type | contenttype |
 | <br> | | |
 | process | creator_user_ref | username |
-| process | binary_ref | Image |
-| process | binary_ref | ParentImage |
-| process | parent_ref | ParentImage |
+| process | binary_ref | "Process Path" |
+| process | binary_ref | "Parent Process Path" |
+| process | parent_ref | "Parent Process Path" |
 | process | command_line | "Process CommandLine" |
-| process | command_line | ParentCommandLine |
-| process | parent_ref | ParentCommandLine |
+| process | command_line | "Parent Command" |
+| process | parent_ref | "Parent Command" |
 | process | name | "Process Name" |
 | process | pid | "Process ID" |
 | process | pid | "Parent Process ID" |
 | process | parent_ref | "Parent Process ID" |
-| process | binary_ref | TargetImage |
-| process | extensions.windows-service-ext.service_dll_refs | ServiceFileName |
+| process | binary_ref | "Target Process Path" |
+| process | extensions.windows-service-ext.service_dll_refs | "Service Filename" |
 | process | x_unique_id | "Process Guid" |
 | <br> | | |
 | software | name | applicationname |
@@ -292,7 +292,7 @@
 | x-oca-asset | hostname | identityhostname |
 | x-oca-asset | ip_refs | sourceaddress |
 | x-oca-asset | mac_refs | sourcemac |
-| x-oca-asset | hostname | "Machine ID" |
+| x-oca-asset | hostname | "Machine Identifier" |
 | <br> | | |
 | x-oca-event | user_ref | username |
 | x-oca-event | outcome | CATEGORYNAME(category) |
@@ -308,15 +308,15 @@
 | x-oca-event | network_ref | sourceaddress |
 | x-oca-event | network_ref | sourcev6 |
 | x-oca-event | url_ref | URL |
-| x-oca-event | domain_ref | UrlHost |
-| x-oca-event | network_ref | UrlHost |
+| x-oca-event | domain_ref | "URL Host" |
+| x-oca-event | network_ref | "URL Host" |
 | x-oca-event | file_ref | Filename |
 | x-oca-event | file_ref | "File Path" |
 | x-oca-event | original_ref | UTF8(payload) |
-| x-oca-event | process_ref | Image |
-| x-oca-event | parent_process_ref | ParentImage |
+| x-oca-event | process_ref | "Process Path" |
+| x-oca-event | parent_process_ref | "Parent Process Path" |
 | x-oca-event | process_ref | "Process CommandLine" |
-| x-oca-event | parent_process_ref | ParentCommandLine |
+| x-oca-event | parent_process_ref | "Parent Command" |
 | x-oca-event | process_ref | "Process Name" |
 | x-oca-event | process_ref | "Process ID" |
 | x-oca-event | code | EventID |
@@ -325,7 +325,7 @@
 | x-oca-event | registry_ref | "Registry Value Name" |
 | x-oca-event | original_ref | Message |
 | x-oca-event | original | Message |
-| x-oca-event | host_ref | "Machine ID" |
+| x-oca-event | host_ref | "Machine Identifier" |
 | <br> | | |
 | x-qradar | category_id | category |
 | x-qradar | high_level_category_id | highlevelcategory |

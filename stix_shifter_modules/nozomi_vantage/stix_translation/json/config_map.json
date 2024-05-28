@@ -1,0 +1,31 @@
+{
+  "int_supported_fields": [
+    "risk"
+  ],
+  "epoch_supported_fields": [
+    "time",
+    "created_time",
+    "closed_time"
+  ],
+  "enum_supported_fields": [
+    "threat_name"
+  ],
+  "enum_supported_values": {
+    "threat_name": [
+      "threat",
+      "alert"
+    ]
+  },
+  "bytes_supported_fields": [
+    "properties/details_file_size/value"
+  ],
+  "subset_supported_fields": [
+    "ip_dst"
+  ],
+  "properties_supported_fields": [
+    "properties",
+    "properties/process/ancestry",
+    "properties/process/image_path",
+    "properties/cve_references"
+  ]
+}

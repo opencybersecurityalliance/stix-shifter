@@ -1,0 +1,554 @@
+{
+    "behaviors": {
+      "alleged_filetype": {
+        "key": "file.x_extension",
+        "object": "file"
+      },
+      "behavior_id": {
+        "key": "x-crowdstrike-detection-behavior.behavior_id",
+        "object": "behavior"
+      },
+      "cmdline": {
+        "key": "process.command_line",
+        "object": "process"
+      },
+      "confidence": {
+        "key": "x-crowdstrike-detection-behavior.confidence",
+        "object": "behavior",
+        "transformer": "ToInteger"
+      },
+      "control_graph_id": {
+        "key": "x-crowdstrike-detection-behavior.control_graph_id",
+        "object": "behavior"
+      },
+      "description": {
+        "key": "x-crowdstrike-detection-behavior.description",
+        "object": "behavior"
+      },
+      "display_name": {
+        "key": "x-crowdstrike-detection-behavior.display_name",
+        "object": "behavior"
+      },
+      "filename": [
+        {
+          "key": "file.name",
+          "object": "file"
+        },
+        {
+          "key": "x-crowdstrike-detection-behavior.process_ref",
+          "object": "behavior",
+          "references": "process"
+        },
+        {
+          "key": "process.image_ref",
+          "object": "process",
+          "references": "file"
+        }
+      ],
+      "filepath": [
+        {
+          "key": "file.x_path",
+          "object": "file"
+        },
+        {
+          "key": "directory.path",
+          "object": "directory",
+          "transformer": "ToDirectoryPath"
+        },
+        {
+          "key": "file.parent_directory_ref",
+          "object": "file",
+          "references": "directory"
+        }
+      ],
+      "template_instance_id": {
+        "key": "x-crowdstrike-detection-behavior.template_instance_id",
+        "object": "behavior"
+      },
+      "ioc_description": {
+        "key": "x-crowdstrike-detection-behavior.ioc_description",
+        "object": "behavior"
+      },
+      "ioc_source": {
+        "key": "x-crowdstrike-detection-behavior.ioc_source",
+        "object": "behavior"
+      },
+      "ioc_type": {
+        "key": "x-crowdstrike-detection-behavior.ioc_type",
+        "object": "behavior"
+      },
+      "ioc_value": {
+        "key": "x-crowdstrike-detection-behavior.ioc_value",
+        "object": "behavior"
+      },
+      "md5": [
+        {
+          "key": "file.hashes.MD5",
+          "object": "file"
+        },
+        {
+          "key": "process.image_ref",
+          "object": "process",
+          "references": "file"
+        }
+      ],
+      "objective": {
+        "key": "x-crowdstrike-detection-behavior.objective",
+        "object": "behavior"
+      },
+      "parent_details": {
+        "parent_cmdline": [
+          {
+            "key": "process.command_line",
+            "object": "parent_process"
+          },
+          {
+            "key": "process.parent_ref",
+            "object": "process",
+            "references": "parent_process"
+          }
+        ],
+        "parent_md5": [
+          {
+            "key": "file.hashes.MD5",
+            "object": "parent_file"
+          },
+          {
+            "key": "process.image_ref",
+            "object": "parent_process",
+            "references": "parent_file"
+          }
+        ],
+        "parent_process_graph_id": [
+          {
+            "key": "process.x_process_graph_id",
+            "object": "parent_process"
+          },
+          {
+            "key": "process.parent_ref",
+            "object": "process",
+            "references": "parent_process"
+          }
+        ],
+        "parent_sha256": [
+          {
+            "key": "file.hashes.SHA-256",
+            "object": "parent_file"
+          },
+          {
+            "key": "process.image_ref",
+            "object": "parent_process",
+            "references": "parent_file"
+          }
+        ]
+      },
+      "pattern_disposition": {
+        "key": "x-crowdstrike-detection-behavior.pattern_disposition",
+        "object": "behavior",
+        "transformer": "ToInteger"
+      },
+      "pattern_disposition_details": {
+        "key": "x-crowdstrike-detection-behavior.pattern_disposition_details",
+        "object": "behavior"
+      },
+      "rule_instance_id": {
+        "key": "x-crowdstrike-detection-behavior.rule_instance_id",
+        "object": "behavior",
+        "transformer": "ToInteger"
+      },
+      "rule_instance_version": {
+        "key": "x-crowdstrike-detection-behavior.rule_instance_version",
+        "object": "behavior"
+      },
+      "scenario": {
+        "key": "x-crowdstrike-detection-behavior.scenario",
+        "object": "behavior"
+      },
+      "severity": {
+        "key": "x-crowdstrike-detection-behavior.x_severity",
+        "object": "behavior",
+        "transformer": "ToInteger"
+      },
+      "sha256": {
+        "key": "file.hashes.SHA-256",
+        "object": "file"
+      },
+      "tactic": [
+        {
+          "key": "x-ibm-ttp-tagging.name",
+          "object": "ttp"
+        },
+        {
+          "key": "x-crowdstrike-detection-behavior.ttp_tagging_ref",
+          "object": "behavior",
+          "references": "ttp"
+        }
+      ],
+      "tactic_id": [
+        {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_id",
+          "object": "ttp"
+        },
+        {
+          "key": "x-crowdstrike-detection-behavior.ttp_tagging_ref",
+          "object": "behavior",
+          "references": "ttp"
+        }
+      ],
+      "technique": {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+        "object": "ttp"
+      },
+      "technique_id": {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_id",
+        "object": "ttp"
+      },
+      "timestamp": {
+        "key": "x-crowdstrike-detection-behavior.created_time",
+        "object": "behavior"
+      },
+      "triggering_process_graph_id": {
+        "key": "process.x_process_graph_id",
+        "object": "process"
+      },
+      "user_id": [
+        {
+          "key": "user-account.user_id",
+          "object": "user"
+        },
+        {
+          "key": "x-crowdstrike-detection-behavior.user_ref",
+          "object": "behavior",
+          "references": "user"
+        },
+        {
+          "key": "process.creator_user_ref",
+          "object": "process",
+          "references": "user"
+        }
+      ],
+      "user_name": {
+        "key": "user-account.display_name",
+        "object": "user"
+      },
+      "GroupBehaviorsReferences": {
+        "key": "x-ibm-finding.x_behavior_refs",
+        "object": "finding",
+        "references": [
+          "behavior"
+        ],
+        "group_ref": true
+      },
+      "GroupTtpReferences": {
+        "key": "x-ibm-finding.ttp_tagging_refs",
+        "object": "finding",
+        "references": [
+          "ttp"
+        ],
+        "group_ref": "true"
+      }
+    },
+    "finding_type": {
+      "key": "x-ibm-finding.finding_type",
+      "object": "finding"
+    },
+    "behaviors_processed": {
+      "key": "x-ibm-finding.x_behaviors_processed",
+      "object": "finding"
+    },
+    "cid": [
+      {
+        "key": "x-oca-asset.x_cid",
+        "object": "asset"
+      }
+    ],
+    "created_timestamp": [
+      {
+        "key": "x-ibm-finding.time_observed",
+        "object": "finding",
+        "transformer": "LogscaleToTimestamp"
+      },
+      {
+        "key": "first_observed",
+        "transformer": "LogscaleToTimestamp"
+      }
+    ],
+    "detection_id": {
+      "key": "x-ibm-finding.name",
+      "object": "finding"
+    },
+    "date_updated": {
+      "key": "x-ibm-finding.x_last_updated",
+      "object": "finding"
+    },
+    "device": {
+      "agent_load_flags": {
+        "key": "x-crowdstrike-edr-agent.load_flags",
+        "object": "edr"
+      },
+      "agent_local_time": [
+        {
+          "key": "x-crowdstrike-edr-agent.local_time",
+          "object": "edr"
+        },
+        {
+          "key": "x-oca-asset.x_agent_ref",
+          "object": "asset",
+          "references": "edr"
+        }
+      ],
+      "agent_version": [
+        {
+          "key": "x-crowdstrike-edr-agent.version",
+          "object": "edr"
+        },
+        {
+          "key": "x-oca-asset.x_agent_ref",
+          "object": "asset",
+          "references": "edr"
+        }
+      ],
+      "bios_manufacturer": {
+        "key": "x-oca-asset.x_bios_manufacturer",
+        "object": "asset"
+      },
+      "bios_version": {
+        "key": "x-oca-asset.x_bios_version",
+        "object": "asset"
+      },
+      "config_id_base": {
+        "key": "x-crowdstrike-edr-agent.config_id_base",
+        "object": "edr"
+      },
+      "config_id_build": {
+        "key": "x-crowdstrike-edr-agent.config_id_build",
+        "object": "edr"
+      },
+      "config_id_platform": {
+        "key": "x-crowdstrike-edr-agent.config_id_platform",
+        "object": "edr"
+      },
+      "device_id": {
+        "key": "x-oca-asset.device_id",
+        "object": "asset"
+      },
+      "external_ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "external"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "external"
+        },
+        {
+          "key": "x-oca-asset.ip_refs",
+          "object": "asset",
+          "references": [
+            "external"
+          ],
+          "group": true
+        },
+        {
+          "key": "x-ibm-finding.src_ip_ref",
+          "object": "finding",
+          "references": "external"
+        }
+      ],
+      "first_seen": {
+        "key": "x-oca-asset.x_first_seen",
+        "object": "asset"
+      },
+      "groups": {
+        "key": "x-oca-asset.x_device_groups",
+        "object": "asset"
+      },
+      "hostname": {
+        "key": "x-oca-asset.hostname",
+        "object": "asset"
+      },
+      "instance_id": {
+        "key": "x-oca-asset.x_instance_id",
+        "object": "asset"
+      },
+      "last_seen": {
+        "key": "x-oca-asset.x_last_seen",
+        "object": "asset"
+      },
+      "local_ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "internal"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "internal"
+        },
+        {
+          "key": "x-oca-asset.ip_refs",
+          "object": "asset",
+          "references": [
+            "internal"
+          ],
+          "group": true
+        }
+      ],
+      "mac_address": [
+        {
+          "key": "mac-addr.value",
+          "object": "mac",
+          "transformer": "FormatMacAddress"
+        },
+        {
+          "key": "x-oca-asset.mac_refs",
+          "object": "asset",
+          "references": [
+            "mac"
+          ]
+        },
+        {
+          "key": "ipv4-addr.resolves_to_refs",
+          "object": "internal",
+          "references": [
+            "mac"
+          ]
+        },
+        {
+          "key": "ipv6-addr.resolves_to_refs",
+          "object": "internal",
+          "references": [
+            "mac"
+          ]
+        }
+      ],
+      "major_version": {
+        "key": "software.x_major_version",
+        "object": "software"
+      },
+      "minor_version": {
+        "key": "software.x_minor_version",
+        "object": "software"
+      },
+      "modified_timestamp": {
+        "key": "x-oca-asset.x_last_modified",
+        "object": "asset"
+      },
+      "os_version": {
+        "key": "software.version",
+        "object": "software"
+      },
+      "platform_id": {
+        "key": "software.x_id",
+        "object": "software"
+      },
+      "platform_name": [
+        {
+          "key": "software.name",
+          "object": "software"
+        },
+        {
+          "key": "x-oca-asset.os_ref",
+          "object": "asset",
+          "references": "software"
+        },
+        {
+          "key": "x-ibm-finding.src_os_ref",
+          "object": "finding",
+          "references": "software"
+        }
+      ],
+      "product_type": {
+        "key": "x-oca-asset.x_host_type_number",
+        "object": "asset"
+      },
+      "product_type_desc": {
+        "key": "x-oca-asset.host_type",
+        "object": "asset"
+      },
+      "service_provider": {
+        "key": "x-oca-asset.x_service_provider",
+        "object": "asset"
+      },
+      "service_provider_account_id": {
+        "key": "x-oca-asset.x_service_account_id",
+        "object": "asset"
+      },
+      "status": {
+        "key": "x-oca-asset.x_status",
+        "object": "asset"
+      },
+      "system_manufacturer": {
+        "key": "x-oca-asset.x_system_manufacturer",
+        "object": "asset"
+      },
+      "system_product_name": {
+        "key": "x-oca-asset.x_system_product_name",
+        "object": "asset"
+      }
+    },
+    "email_sent": {
+      "key": "x-ibm-finding.x_is_email_sent",
+      "object": "finding"
+    },
+    "first_behavior": {
+      "key": "x-ibm-finding.x_first_behavior_observed",
+      "object": "finding"
+    },
+    "hostinfo": {
+      "domain": [
+        {
+          "key": "domain-name.value",
+          "object": "domain"
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "finding",
+          "references": [
+            "domain"
+          ]
+        }
+      ]
+    },
+    "@id": {
+      "key": "x-ibm-finding.x_logscale_event_id",
+      "object": "finding"
+    },
+    "#repo": {
+      "key": "x-ibm-finding.x_logscale_repository",
+      "object": "finding"
+    },
+    "@timestamp": {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp"
+    },
+    "last_behavior": {
+      "key": "x-ibm-finding.x_last_behavior_observed",
+      "object": "finding"
+    },
+    "max_confidence": {
+      "key": "x-ibm-finding.confidence",
+      "object": "finding",
+      "transformer": "ToInteger"
+    },
+    "max_severity": {
+      "key": "x-ibm-finding.x_severity",
+      "object": "finding",
+      "transformer": "ToInteger"
+    },
+    "max_severity_displayname": {
+      "key": "x-ibm-finding.x_severity_name",
+      "object": "finding"
+    },
+    "seconds_to_resolved": {
+      "key": "x-ibm-finding.x_seconds_to_resolved",
+      "object": "finding"
+    },
+    "status": {
+      "key": "x-ibm-finding.x_status",
+      "object": "finding"
+    },
+    "seconds_to_triaged": {
+      "key": "x-ibm-finding.x_seconds_to_triaged",
+      "object": "finding"
+    }
+}

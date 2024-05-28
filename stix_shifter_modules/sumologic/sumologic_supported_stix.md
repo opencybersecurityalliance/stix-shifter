@@ -1,4 +1,4 @@
-##### Updated on 10/25/23
+##### Updated on 05/23/24
 ## Sumo Logic
 ### Results STIX Domain Objects
 * Identity
@@ -12,6 +12,8 @@
 | AND (Comparison) | AND |
 | OR (Comparison) | OR |
 | = | = |
+| != | = |
+| LIKE | = |
 | IN | OR |
 | OR (Observation) | OR |
 | AND (Observation) | AND |

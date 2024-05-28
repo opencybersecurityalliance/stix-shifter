@@ -37,7 +37,7 @@ Stix-shifter currently offers connector support for the following cybersecurity 
 - [OneLogin](../stix_shifter_modules/onelogin/onelogin_supported_stix.md)
 - [PaloAlto Cortex XDR](../stix_shifter_modules/paloalto/paloalto_supported_stix.md)
 - [Proofpoint (SIEM API)](../stix_shifter_modules/proofpoint/proofpoint_supported_stix.md)
-- [IBM QRadar](../stix_shifter_modules/qradar/qradar_supported_stix.md)
+- [IBM Security QRadar SIEM](../stix_shifter_modules/qradar/qradar_supported_stix.md)
 - [IBM Security QRadar EDR](../stix_shifter_modules/reaqta/reaqta_supported_stix.md)
 - [Red Hat Advanced Cluster Security for Kubernetes](../stix_shifter_modules/rhacs/rhacs_supported_stix.md)
 - [IBM Security Verify Privilege Vault](../stix_shifter_modules/secretserver/secretserver_supported_stix.md)
@@ -46,3 +46,4 @@ Stix-shifter currently offers connector support for the following cybersecurity 
 - [Sumo Logic](../stix_shifter_modules/sumologic/sumologic_supported_stix.md)
 - [Trend Micro Vision One](../stix_shifter_modules/trendmicro_vision_one/trendmicro_vision_one_supported_stix.md)
 - [Vectra NDR](../stix_shifter_modules/vectra/vectra_supported_stix.md)
+- [Sysdig](../stix_shifter_modules/sysdig/sysdig_supported_stix.md)

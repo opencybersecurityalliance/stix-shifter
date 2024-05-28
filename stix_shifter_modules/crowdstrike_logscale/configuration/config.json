@@ -1,0 +1,37 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "CrowdStrike Falcon LogScale",
+            "group": "crowdstrike"
+        },
+        "host": {
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$"
+        },
+        "help": {
+            "type": "link",
+            "default": "data-sources.html"
+        },
+        "repository": {
+            "type": "text"
+        },
+        "options": {
+            "api_page_size": {
+                "default": 2000,
+                "min": 1000,
+                "max": 10000,
+                "type": "number",
+                "optional": true,
+                "hidden": true
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "api_token": {
+                "type": "password"
+            }
+        }
+    }
+}

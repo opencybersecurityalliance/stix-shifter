@@ -15,6 +15,118 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 *List the dependecy upgrade or downgrade.*
 
 --------------------------------------
+## 7.0.9 (2024-05-23)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+*  Modified the ping endpoint [#1692](https://github.com/opencybersecurityalliance/stix-shifter/pull/1692)
+*  Hided the API page size parameter view in console [#1690](https://github.com/opencybersecurityalliance/stix-shifter/pull/1690)
+*  Added dialects from cloud siem Sumologic [#1686](https://github.com/opencybersecurityalliance/stix-shifter/pull/1686)
+
+
+### Fixes:
+*  Reaqta various mapping fixes [#1688](https://github.com/opencybersecurityalliance/stix-shifter/pull/1688)
+
+### Dependency update:
+
+--------------------------------------
+## 7.0.7 (2024-05-07)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+*  CrowdStrike Logscale UDI Connector [#1631](https://github.com/opencybersecurityalliance/stix-shifter/pull/1631)
+*  Nozomi UDI connector [#1656](https://github.com/opencybersecurityalliance/stix-shifter/pull/1656)
+*  add feature to disable pagination and simplify API [#1676](https://github.com/opencybersecurityalliance/stix-shifter/pull/1676)
+*  remove non-standard powershell fields for ECS [#1684](https://github.com/opencybersecurityalliance/stix-shifter/pull/1684)
+*  Update code-coverage with new version of Codecov CLI  and token[#1682](https://github.com/opencybersecurityalliance/stix-shifter/pull/1682)
+
+### Fixes:
+
+*  Reaqta various mapping fixes [#1683](https://github.com/opencybersecurityalliance/stix-shifter/pull/1683)
+
+### Dependency update:
+
+--------------------------------------
+## 7.0.6 (2024-04-16)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+*  adding support for LIKE operator in SumoLogic Module [#1670](https://github.com/opencybersecurityalliance/stix-shifter/pull/1670)
+*  Infoblox connector source changes [#1660](https://github.com/opencybersecurityalliance/stix-shifter/pull/1660)
+*  sumologic: use milliseconds since epoch for timestamps [#1668](https://github.com/opencybersecurityalliance/stix-shifter/pull/1668)
+*  sumologic: add support for != [#1658](https://github.com/opencybersecurityalliance/stix-shifter/pull/1658)
+*  map validator: additional checks for single quotes and extensions properties [#1667](https://github.com/opencybersecurityalliance/stix-shifter/pull/1667)
+
+
+### Fixes:
+*  Amazon athena resolve column not found exception [#1673](https://github.com/opencybersecurityalliance/stix-shifter/pull/1673)
+*  Updated requirements and changed SSL purpose [#1664](https://github.com/opencybersecurityalliance/stix-shifter/pull/1664)
+
+### Dependency update:
+*  Bump json-fix from 0.5.2 to 1.0.0 in /stix_shifter [#1672](https://github.com/opencybersecurityalliance/stix-shifter/pull/1672)
+*  Bump colorlog from 6.8.0 to 6.8.2 in /stix_shifter [#1671](https://github.com/opencybersecurityalliance/stix-shifter/pull/1671)
+*  Bump regex from 2023.10.3 to 2023.12.25 in /stix_shifter [#1663](https://github.com/opencybersecurityalliance/stix-shifter/pull/1663)
+
+--------------------------------------
+## 7.0.4 (2024-03-14)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+*  Aligning config and lang en values to match a standard. [#1653](https://github.com/opencybersecurityalliance/stix-shifter/pull/1653)
+*  Update to events mapping after content pack CEP changes [#1651](https://github.com/opencybersecurityalliance/stix-shifter/pull/1651)
+*  Update README.md [#1652](https://github.com/opencybersecurityalliance/stix-shifter/pull/1652)
+*  Sysdig exception handling updated [#1648](https://github.com/opencybersecurityalliance/stix-shifter/pull/1648)
+*  Aligning the Amazon and Microsoft display names. [#1646](https://github.com/opencybersecurityalliance/stix-shifter/pull/1646)
+*  Added sysdig bundle  [#1647](https://github.com/opencybersecurityalliance/stix-shifter/pull/1647)
+
+
+### Fixes:
+*  Remove default value from cert_verify parameters [#1654](https://github.com/opencybersecurityalliance/stix-shifter/pull/1654)
+
+### Dependency update:
+*  Bump aioboto3 from 12.0.0 to 12.1.0 in /stix_shifter [#1628](https://github.com/opencybersecurityalliance/stix-shifter/pull/1628)
+*  update pyOpenSSL dependency to 24.1.0 [#1661](https://github.com/opencybersecurityalliance/stix-shifter/pull/1661)
+
+--------------------------------------
+
+## 7.0.2 (2024-01-25)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+*  Graph Security: Add login_host for national cloud authentication endpoint [#1641](https://github.com/opencybersecurityalliance/stix-shifter/pull/1641)
+*  AWS Athena: Make access ids optional and remove verify false from boto client [#1629](https://github.com/opencybersecurityalliance/stix-shifter/pull/1629)
+*  Add query batchsize(length) in common config.json [#1637](https://github.com/opencybersecurityalliance/stix-shifter/pull/1637)
+*  QRadar: change START / STOP regex to include <= year 2000 [#1640](https://github.com/opencybersecurityalliance/stix-shifter/pull/1640)
+*  Update machine ID field in QRadar module [#1634](https://github.com/opencybersecurityalliance/stix-shifter/pull/1634)
+*  New Sysdig connector [#1630](https://github.com/opencybersecurityalliance/stix-shifter/pull/1630)
+*  second half of email.* mapping for elastic_ecs [#1632](https://github.com/opencybersecurityalliance/stix-shifter/pull/1632)
+
+### Fixes:
+
+*  GCP: remove delete in result connector for chronicle [#1638](https://github.com/opencybersecurityalliance/stix-shifter/pull/1638)
+
+### Dependency update:
+
+--------------------------------------
 
 ## 7.0.1 (2023-12-11)
 
@@ -677,3 +789,4 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 * Bump pyopenssl from 20.0.1 to 22.0.0
 * Bump stix2-validator from 1.1.2 to 3.0.2
 * Bump boto3 from 1.17.20 to 1.21.5## 4.0.0 (2022-02-23)
+
