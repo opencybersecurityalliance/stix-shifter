@@ -1,4 +1,4 @@
-##### Updated on 10/25/23
+##### Updated on 05/23/24
 ## IBM Security QRadar EDR
 ### Results STIX Domain Objects
 * Identity
@@ -280,24 +280,20 @@
 | user-account | user_id | etwTargetOutboundUserName |
 | user-account | user_id | etwTargetUserName |
 | <br> | | |
-| x-ibm-finding | extensions.x-reaqta-alert.incidents | incidents |
-| x-ibm-finding | extensions.x-reaqta-alert.triggered_incidents | triggeredIncidents |
 | x-ibm-finding | name | avObjectStatus |
 | x-ibm-finding | extensions.x-reaqta-avdetection.av_scan_reason | avScanReason |
 | x-ibm-finding | extensions.x-reaqta-avdetection.av_threat_info_array | avThreatInfoArray |
 | x-ibm-finding | finding_type | avThreatType |
-| x-ibm-finding | src_ip_ref | localAddrV4 |
-| x-ibm-finding | src_ip_ref | localAddrV6 |
-| x-ibm-finding | dst_ip_ref | remoteAddrV4 |
-| x-ibm-finding | dst_ip_ref | remoteAddrV6 |
-| x-ibm-finding | ttp_tagging_refs | tactics |
-| x-ibm-finding | ttp_tagging_refs | technique |
+| x-ibm-finding | finding_type | policyId |
+| x-ibm-finding | name | policyId |
+| x-ibm-finding | x_reaqta_version_id | versionId |
+| x-ibm-finding | x_reaqta_matcher_id | matcherId |
 | <br> | | |
-| x-ibm-ttp-tagging | extensions.'mitre-attack-ext'.tactic_name | tactics |
-| x-ibm-ttp-tagging | extensions.'mitre-attack-ext'.technique_name | technique |
-| x-ibm-ttp-tagging | extensions.name | technique |
+| x-ibm-ttp-tagging | extensions.mitre-attack-ext.x_reaqta_tactic_number | tactic_number |
+| x-ibm-ttp-tagging | extensions.mitre-attack-ext.tactic_name | tactic_name |
+| x-ibm-ttp-tagging | extensions.mitre-attack-ext.technique_name | technique |
+| x-ibm-ttp-tagging | name | technique |
 | <br> | | |
-| x-oca-asset | host_id | endpointId |
 | x-oca-asset | hostname | clientMachine |
 | x-oca-asset | extensions.x-wmi-event.client_machine_fqn | clientMachineFqn |
 | x-oca-asset | extensions.x-reaqta-consumer.command_line_template_tokens | commandLineTemplateTokens |
@@ -311,14 +307,14 @@
 | x-oca-asset | host_id | etwWorkstation |
 | x-oca-asset | hostname | etwWorkstationName |
 | x-oca-asset | extensions.x-reaqta-consumer.event_namespace | eventNamespace |
-| x-oca-asset | ip_refs | localAddrV4 |
-| x-oca-asset | ip_refs | localAddrV6 |
 | x-oca-asset | hostname | machineName |
 | <br> | | |
 | x-oca-event | code | eventId |
 | x-oca-event | created | receivedAt |
 | x-oca-event | action | eventName |
 | x-oca-event | category | eventType |
+| x-oca-event | extensions.x-reaqta-alert.incidents | incidents |
+| x-oca-event | extensions.x-reaqta-alert.triggered_incidents | triggeredIncidents |
 | x-oca-event | process_ref | pid |
 | x-oca-event | parent_process_ref | ppid |
 | x-oca-event | file_ref | fsName |
@@ -342,10 +338,13 @@
 | x-oca-event | file_ref | file |
 | x-oca-event | process_ref | hostPid |
 | x-oca-event | network_ref | localAddrV4 |
+| x-oca-event | ip_refs | localAddrV4 |
 | x-oca-event | network_ref | localAddrV6 |
+| x-oca-event | ip_refs | localAddrV6 |
 | x-oca-event | network_ref | remoteAddrV4 |
 | x-oca-event | network_ref | remoteAddrV6 |
 | x-oca-event | extensions.x-reaqta-amsi.scan_result | scanResult |
+| x-oca-event | ttp_tagging_refs | groupReference |
 | x-oca-event | process_ref | targetProcessId |
 | <br> | | |
 | x-reaqta-etw | etw_allowed_to_delegateto | etwAllowedToDelegateTo |
@@ -400,6 +399,7 @@
 | x-reaqta-etw | etwUserWorkstations | etwUserWorkstations |
 | x-reaqta-etw | etwVirtualAccount | etwVirtualAccount |
 | <br> | | |
+| x-reaqta-event | host_id | endpointId |
 | x-reaqta-event | local_id | localId |
 | x-reaqta-event | action_name | actionName |
 | x-reaqta-event | custom_name | customName |
