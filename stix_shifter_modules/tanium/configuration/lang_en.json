@@ -1,12 +1,12 @@
 {
     "connection": {
         "host": {
-            "label": "Host IP address or hostname",
+            "label": "Management IP address or hostname",
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
             "label": "Host port",
-            "description": "Set the port number that is associated with the hostname or IP address."
+            "description": "Set the port number that is associated with the hostname or IP address"
         }
     },
     "configuration": {
