@@ -33,8 +33,7 @@
                         "pid": 9080,
                         "args": "\"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe\" --no-startup-window --continue-active-setup",
                         "file": {
-                            "hashes":
-                            {
+                            "hashes": {
                                 "md5": "d193ea4b8d102d020c02dc45af23ff0d",
                                 "sha1": "469e259b884043aedac879a96356fb741f82daa8",
                                 "sha256": "9ba39dd15eff718ff357db346d0fda3a12c9dbb216511cbb41050fb0d6b3d9c9"
@@ -96,20 +95,15 @@
                                 "relevant_actions": [
                                     {
                                         "verb": 6,
-                                        "target": 
-                                        {
-                                            "file": 
-                                            {
+                                        "target": {
+                                            "file": {
                                                 "path": "C:\\Users\\user\\AppData\\Local\\Temp\\gfw-install-CZejgRlL.exe",
-                                                "hash": 
-                                                {
+                                                "hash": {
                                                     "md5": "d41d8cd98f00b204e9800998ecf8427e",
                                                     "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
                                                     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
                                                 },
-                                                "size_bytes": 
-                                                {  
-                                                },
+                                                "size_bytes": {},
                                                 "modification_time": "2022-06-10T23:19:37.000Z",
                                                 "instance_hash_salt": "132993767777627641"
                                             },
@@ -121,20 +115,15 @@
                                     },
                                     {
                                         "verb": 6,
-                                        "target": 
-                                        {
-                                            "file": 
-                                            {
+                                        "target": {
+                                            "file": {
                                                 "path": "C:\\Users\\user\\AppData\\Local\\Temp\\gfw-install-CZejgRlL.exe",
-                                                "hash": 
-                                                {
+                                                "hash": {
                                                     "md5": "d41d8cd98f00b204e9800998ecf8427e",
                                                     "sha1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
                                                     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
                                                 },
-                                                "size_bytes": 
-                                                {
-                                                },
+                                                "size_bytes": {},
                                                 "modification_time": "2022-06-10T23:19:37.000Z",
                                                 "instance_hash_salt": "132993767777627641"
                                             },

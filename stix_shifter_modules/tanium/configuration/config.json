@@ -1,5 +1,9 @@
 {
     "connection": {
+        "type": {
+            "displayName": "Tanium Threat Response",
+            "group": "tanium"
+        },
         "host": {
             "type": "text",
             "optional": false
@@ -18,8 +22,7 @@
         }
     },
     "configuration": {
-        "auth":
-        {
+        "auth": {
             "accessToken": {
                 "type": "password",
                 "optional": false

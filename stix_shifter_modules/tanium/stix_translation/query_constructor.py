@@ -16,6 +16,7 @@ class QueryStringPatternTranslator:
         self.dmm = data_model_mapper
         self.comparator_lookup = self.dmm.map_comparator()
         self.pattern = pattern
+        self.observation_query_list = []
         self.translated = self.parse_expression(pattern)
 
     @classmethod
@@ -75,28 +76,41 @@ class QueryStringPatternTranslator:
             else:
                 return f"{query_string}"
         elif isinstance(expression, ObservationExpression):
-            return self._parse_expression(expression.comparison_expression, qualifier)
+            self.observation_query_list.append(self._parse_expression(expression.comparison_expression, qualifier))
+            self.fieldList = []
         elif hasattr(expression, 'qualifier') and hasattr(expression, 'observation_expression'):
             if isinstance(expression.observation_expression, CombinedObservationExpression):
                 operator = self._lookup_comparison_operator(self, expression.observation_expression.operator)
-                expression_01 = self._parse_expression(expression.observation_expression.expr1)
-                expression_02 = self._parse_expression(expression.observation_expression.expr2, expression.qualifier)                
-                return f"{expression_01}{operator}{expression_02}"
+                observation_1 = self._parse_expression(expression.observation_expression.expr1)
+                self.fieldList = []
+                observation_2 = self._parse_expression(expression.observation_expression.expr2, expression.qualifier)
+                self.fieldList = []           
+                self.observation_query_list.append(observation_1)
+                self.observation_query_list.append(observation_2)
             else:
-                return self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
+                observation_1 = self._parse_expression(expression.observation_expression.comparison_expression, expression.qualifier)
+                self.fieldList = []
+                self.observation_query_list.append(observation_1)
+                
         elif isinstance(expression, CombinedObservationExpression):
             operator = self._lookup_comparison_operator(self, expression.operator)
-            expression_01 = self._parse_expression(expression.expr1)
-            expression_02 = self._parse_expression(expression.expr2)
+            observation_1 = self._parse_expression(expression.expr1)
+            self.fieldList = []
+            observation_2 = self._parse_expression(expression.expr2)
+            self.fieldList = []
             
-            if expression_01 and expression_02:
-                return f"{expression_01}{operator}{expression_02}"
+            if observation_1:
+                self.observation_query_list.append(observation_1)
+            if observation_2:
+                self.observation_query_list.append(observation_2)
         elif isinstance(expression, Pattern):
             return f"{self._parse_expression(expression.expression)}"
         else:
             raise RuntimeError(f"Unknown Recursion Case for expression={expression}, type(expression)={type(expression)}")
+        
     def parse_expression(self, pattern: Pattern):
-        return self._parse_expression(pattern)
+        self._parse_expression(pattern)
+        return self.observation_query_list
         
     def validate_comparison_expression_operators(self, expression_01, expression_02, operator):
         field1 = regex.split("=|&", expression_01)
@@ -121,8 +135,8 @@ class QueryStringPatternTranslator:
 
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     try:
-        query = QueryStringPatternTranslator(pattern, data_model_mapping).translated
+        observation_query_list = QueryStringPatternTranslator(pattern, data_model_mapping).translated
     except Exception as err:
         raise err
-              
-    return [f"{query}"]
+    
+    return observation_query_list

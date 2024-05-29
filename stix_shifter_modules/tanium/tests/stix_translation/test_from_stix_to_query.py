@@ -100,16 +100,16 @@ class TestQueryTranslator(unittest.TestCase, object):
                             " START t'2022-07-01T00:00:00.000Z'" \
                             " STOP t'2024-07-27T00:05:00.000Z'"
         
-        expectedQueryList = [f"intelDocName={default_values_oca_event.get('x-oca-event:action')}" \
-                             f"&matchType={default_values_oca_event.get('x-oca-event:category')}" \
-                             f"&state={default_values_oca_event.get('x-oca-event:outcome')}" \
-                             f"&intelType={default_values_oca_event.get('x-oca-event:provider')}" \
-                             f"&computerName={default_values_oca_event.get('x-oca-event:host_ref.hostname')}" \
-                             f"&computerIpAddress={default_values_oca_event.get('x-oca-event:host_ref.ip_refs.value')}" \
-                             f"&platform={default_values_oca_event.get('x-oca-event:host_ref.os_ref.name')}" \
-                             f"&path={default_values_oca_event.get('x-oca-event:file_ref.parent_directory_ref.path')}" \
-                             f"&severity={default_values_oca_event.get('x-oca-event:severity')}" \
-                             f"&mitreId={default_values_oca_event.get('x-oca-event:x_ttp_tagging_refs.name')}" \
+        expectedQueryList = [f"intelDocName={default_values_oca_event.get('x-oca-event:action')}",
+                             f"matchType={default_values_oca_event.get('x-oca-event:category')}",
+                             f"state={default_values_oca_event.get('x-oca-event:outcome')}",
+                             f"intelType={default_values_oca_event.get('x-oca-event:provider')}",
+                             f"computerName={default_values_oca_event.get('x-oca-event:host_ref.hostname')}",
+                             f"computerIpAddress={default_values_oca_event.get('x-oca-event:host_ref.ip_refs.value')}",
+                             f"platform={default_values_oca_event.get('x-oca-event:host_ref.os_ref.name')}",
+                             f"path={default_values_oca_event.get('x-oca-event:file_ref.parent_directory_ref.path')}",
+                             f"severity={default_values_oca_event.get('x-oca-event:severity')}",
+                             f"mitreId={default_values_oca_event.get('x-oca-event:x_ttp_tagging_refs.name')}" \
                              f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
                              f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
         
@@ -133,20 +133,20 @@ class TestQueryTranslator(unittest.TestCase, object):
                         " START t'2022-07-01T00:00:00.000Z'" \
                         " STOP t'2024-07-27T00:05:00.000Z'"
         
-        expectedQueryList = [f"computerIpAddress={default_values_ibm_finding.get('x-ibm-finding:dst_ip_ref.value')}" \
-                             f"&intelDocName={default_values_ibm_finding.get('x-ibm-finding:action')}" \
-                             f"&severity={default_values_ibm_finding.get('x-ibm-finding:severity')}" \
-                             f"&platform={default_values_ibm_finding.get('x-ibm-finding:dst_os_ref.name')}" \
-                             f"&mitreId={default_values_ibm_finding.get('x-ibm-finding:x_ttp_tagging_refs.technique_id')}" \
-                             f"&guid={default_values_ibm_finding.get('x-ibm-finding:x_guid')}" \
-                             f"&priority={default_values_ibm_finding.get('x-ibm-finding:x_priority')}" \
-                             f"&intelDocId={default_values_ibm_finding.get('x-ibm-finding:x_intel_doc_id')}" \
-                             f"&scanConfigId={default_values_ibm_finding.get('x-ibm-finding:x_scan_config_id')}" \
-                             f"&path={default_values_ibm_finding.get('x-ibm-finding:x_path')}" \
-                             f"&intelSource={default_values_ibm_finding.get('x-ibm-finding:x_source')}" \
-                             f"&type={default_values_ibm_finding.get('x-ibm-finding:x_type')}" \
-                             f"&labelName={default_values_ibm_finding.get('x-ibm-finding:x_label_name')}" \
-                             f"&details={default_values_ibm_finding.get('x-ibm-finding:x_details')}" \
+        expectedQueryList = [f"computerIpAddress={default_values_ibm_finding.get('x-ibm-finding:dst_ip_ref.value')}",
+                             f"intelDocName={default_values_ibm_finding.get('x-ibm-finding:action')}",
+                             f"severity={default_values_ibm_finding.get('x-ibm-finding:severity')}",
+                             f"platform={default_values_ibm_finding.get('x-ibm-finding:dst_os_ref.name')}",
+                             f"mitreId={default_values_ibm_finding.get('x-ibm-finding:x_ttp_tagging_refs.technique_id')}",
+                             f"guid={default_values_ibm_finding.get('x-ibm-finding:x_guid')}",
+                             f"priority={default_values_ibm_finding.get('x-ibm-finding:x_priority')}",
+                             f"intelDocId={default_values_ibm_finding.get('x-ibm-finding:x_intel_doc_id')}",
+                             f"scanConfigId={default_values_ibm_finding.get('x-ibm-finding:x_scan_config_id')}",
+                             f"path={default_values_ibm_finding.get('x-ibm-finding:x_path')}",
+                             f"intelSource={default_values_ibm_finding.get('x-ibm-finding:x_source')}",
+                             f"type={default_values_ibm_finding.get('x-ibm-finding:x_type')}",
+                             f"labelName={default_values_ibm_finding.get('x-ibm-finding:x_label_name')}",
+                             f"details={default_values_ibm_finding.get('x-ibm-finding:x_details')}" \
                              f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
                              f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
         
@@ -193,9 +193,9 @@ class TestQueryTranslator(unittest.TestCase, object):
                         " START t'2022-07-01T00:00:00.000Z'" \
                         " STOP t'2024-07-27T00:05:00.000Z'"
         
-        expectedQueryList = [f"computerName={default_values_oca_asset.get('x-oca-asset:hostname')}" \
-                            f"&computerIpAddress={default_values_oca_asset.get('x-oca-asset:ip_refs.value')}" \
-                            f"&platform={default_values_oca_asset.get('x-oca-asset:os_ref.name')}" \
+        expectedQueryList = [f"computerName={default_values_oca_asset.get('x-oca-asset:hostname')}",
+                            f"computerIpAddress={default_values_oca_asset.get('x-oca-asset:ip_refs.value')}",
+                            f"platform={default_values_oca_asset.get('x-oca-asset:os_ref.name')}" \
                             f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
                             f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
         
@@ -239,22 +239,20 @@ class TestQueryTranslator(unittest.TestCase, object):
                         " START t'2022-07-01T00:00:00.000Z'" \
                         " STOP t'2024-07-27T00:05:00.000Z'"
         
-        expectedQueryList = [f"computerIpAddress=10.0.0.4" \
-                             f"&computerIpAddress=10.0.0.2" \
-                             f"&computerIpAddress=10.0.0.1" \
-                             f"&platform=windows" \
-                             f"&platform=osx" \
-                             f"&platform=linux" \
-                             f"&priority=high" \
-                             f"&priority=low" \
-                             f"&scanConfigId=2" \
-                             f"&scanConfigId=3" \
-                             f"&scanConfigId=4" \
-                             f"&scanConfigId=5" \
-                             f"&labelName=t" \
-                             f"&details=te" \
-                             f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
-                             f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
+        expectedQueryList = [f"computerIpAddress=10.0.0.4",
+                             f"computerIpAddress=10.0.0.2",
+                             f"computerIpAddress=10.0.0.1",
+                             f"platform=windows",
+                             f"platform=osx",
+                             f"platform=linux",
+                             f"priority=high",
+                             f"priority=low",
+                             f"scanConfigId=2",
+                             f"scanConfigId=3",
+                             f"scanConfigId=4",
+                             f"scanConfigId=5",
+                             f"labelName=t",
+                             f"details=te&alertedAtFrom=2022-07-01T00:00:00.000Z&alertedAtUntil=2024-07-27T00:05:00.000Z"]
        
         _test_stix_to_json(stix_pattern, expectedQueryList)
 
@@ -292,7 +290,6 @@ class TestQueryTranslator(unittest.TestCase, object):
                              f"&details=te" \
                              f"&alertedAtFrom=2022-07-01T00:00:00.000Z" \
                              f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
-        
         _test_stix_to_json(stix_pattern, expectedQueryList)
         
     def test_alternating_and_or_valid_comparison_with_in(self):
@@ -390,16 +387,72 @@ class TestQueryTranslator(unittest.TestCase, object):
                              f"&alertedAtUntil=2024-07-27T00:05:00.000Z"]
         
         _test_stix_to_json(stix_pattern, expectedQueryList)
-            
     
-    # def test_get_observed_data_objects(self):
-    #     assert True
-        # result_bundle = json_to_stix_translator.convert_to_stix(
-        #     data_source, map_data, [SAMPLE_DATA_DICT], get_module_transformers(MODULE), options)
-        # result_bundle_objects = result_bundle['objects']
+    
+    def test_observation_with_qualifier_and_three_comparisons(self):
+        stix_pattern = "[x-ibm-finding:dst_ip_ref.value = '10.0.0.1'" \
+                        " AND x-ibm-finding:dst_os_ref.name = 'windows'" \
+                        " AND x-ibm-finding:x_priority = 'low']" \
+                        " START t'2022-07-01T00:00:00.001Z'" \
+                        " STOP t'2024-07-27T00:05:00.001Z'" \
+                        " AND [x-ibm-finding:dst_ip_ref.value = '10.0.0.2'" \
+                        " AND x-ibm-finding:dst_os_ref.name = 'linux'" \
+                        " AND x-ibm-finding:x_priority = 'lower']" \
+                        " START t'2022-07-01T00:00:00.002Z'" \
+                        " STOP t'2024-07-27T00:05:00.002Z'" \
+                        " OR [x-ibm-finding:dst_ip_ref.value = '10.0.0.3'" \
+                        " AND x-ibm-finding:dst_os_ref.name = 'macos'" \
+                        " AND x-ibm-finding:x_priority = 'medium']" \
+                        " START t'2022-07-01T00:00:00.003Z'" \
+                        " STOP t'2024-07-27T00:05:00.003Z'" \
+                        " AND [x-ibm-finding:dst_ip_ref.value = '10.0.0.4'" \
+                        " AND x-ibm-finding:dst_os_ref.name = 'windows2'" \
+                        " AND x-ibm-finding:x_priority = 'high']" \
+                        " START t'2022-07-01T00:00:00.004Z'" \
+                        " STOP t'2024-07-27T00:05:00.004Z'"
 
-        # result_bundle_identity = result_bundle_objects[0]
-        # assert result_bundle_identity['type'] == data_source['type']
-        # observed_data = result_bundle_objects[1]
+        expectedQueryList = [f"computerIpAddress=10.0.0.1" \
+                             f"&platform=windows" \
+                             f"&priority=low" \
+                             f"&alertedAtFrom=2022-07-01T00:00:00.001Z" \
+                             f"&alertedAtUntil=2024-07-27T00:05:00.001Z",
+                             f"computerIpAddress=10.0.0.2" \
+                             f"&platform=linux" \
+                             f"&priority=lower" \
+                             f"&alertedAtFrom=2022-07-01T00:00:00.002Z" \
+                             f"&alertedAtUntil=2024-07-27T00:05:00.002Z",
+                             f"computerIpAddress=10.0.0.3" \
+                             f"&platform=macos" \
+                             f"&priority=medium" \
+                             f"&alertedAtFrom=2022-07-01T00:00:00.003Z" \
+                             f"&alertedAtUntil=2024-07-27T00:05:00.003Z",
+                             f"computerIpAddress=10.0.0.4" \
+                             f"&platform=windows2" \
+                             f"&priority=high" \
+                             f"&alertedAtFrom=2022-07-01T00:00:00.004Z" \
+                             f"&alertedAtUntil=2024-07-27T00:05:00.004Z"]
+        _test_stix_to_json(stix_pattern, expectedQueryList)
+        
+    def test_observation_with_qualifier_and_three_comparisons_odd(self):
+        stix_pattern = "[x-ibm-finding:dst_ip_ref.value = '10.0.0.1'" \
+                        " OR x-ibm-finding:dst_ip_ref.value = '10.0.1.1']" \
+                        " START t'2022-07-01T00:00:00.001Z'" \
+                        " STOP t'2024-07-27T00:05:00.001Z'" \
+                        " AND [x-ibm-finding:dst_ip_ref.value = '10.0.0.2'" \
+                        " OR x-ibm-finding:dst_ip_ref.value = '10.0.1.2']" \
+                        " OR [x-ibm-finding:dst_ip_ref.value = '10.0.0.3'" \
+                        " OR x-ibm-finding:dst_ip_ref.value = '10.0.1.3']" \
+                        " START t'2022-07-01T00:00:00.003Z'" \
+                        " STOP t'2024-07-27T00:05:00.003Z'" \
 
-        # assert 'objects' in observed_data
+        expectedQueryList = [f"computerIpAddress=10.0.0.1" \
+                             f"&computerIpAddress=10.0.1.1" \
+                             f"&alertedAtFrom=2022-07-01T00:00:00.001Z" \
+                             f"&alertedAtUntil=2024-07-27T00:05:00.001Z",
+                             f"computerIpAddress=10.0.0.2" \
+                             f"&computerIpAddress=10.0.1.2",
+                             f"computerIpAddress=10.0.0.3" \
+                             f"&computerIpAddress=10.0.1.3" \
+                             f"&alertedAtFrom=2022-07-01T00:00:00.003Z" \
+                             f"&alertedAtUntil=2024-07-27T00:05:00.003Z"]
+        _test_stix_to_json(stix_pattern, expectedQueryList)

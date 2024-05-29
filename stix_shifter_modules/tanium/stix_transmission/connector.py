@@ -35,39 +35,39 @@ class Connector(BaseJsonSyncConnector):
         return self.return_obj
         
 
-    async def create_results_connection(self, query, offset, limit):
+    async def create_results_connection(self, query, offset, length):
         self.return_obj['success'] = False
         self.return_obj["data"] = {}
         offset = int(offset)
-        limit = int(limit)
+        length = int(length)
         #Initalize values
         self.current_offset = offset
-        #This can be any value up to 500.
-        max_per_query_limit = 500
         
-        if(limit < max_per_query_limit):
-            per_query_limit = limit
+        #This can be any value up to 500.
+        max_per_query_length = 500
+        
+        if(length < max_per_query_length):
+            per_query_length = length
         
         try:
-            results = await self.get_results(per_query_limit, query, self.current_offset) 
+            results = await self.get_results(per_query_length, query, self.current_offset) 
             #Are we done?
-            while(len(self.final_results) < limit and len(results) > 0):
-                results = await self.get_results(per_query_limit, query, self.current_offset)
+            while(len(self.final_results) < length and len(results) > 0):
+                results = await self.get_results(per_query_length, query, self.current_offset)
                 
             self.return_obj["data"] = self.final_results
             self.return_obj['success'] = True
-            self.return_obj['metadata'] = self.return_obj['metadata'] = {"next_offset": self.current_offset}
-            
+                        
         except Exception as err:
             self.logger.error(f'error when connecting to the Tanium datasource {self.return_obj["error"]}:')
         return self.return_obj
         
-    async def get_results(self, per_query_limit, query, current_offset):
+    async def get_results(self, per_query_length, query, current_offset):
         #Create initial query
         if(query != ""):
-            current_query = f"{self._QUERY_ENDPOINT}{query}&limit={per_query_limit}&offset={current_offset}&expand=intelDoc" 
+            current_query = f"{self._QUERY_ENDPOINT}{query}&length={per_query_length}&offset={current_offset}&expand=intelDoc" 
         else:
-            current_query = f"limit={per_query_limit}&offset={current_offset}&expand=intelDoc"
+            current_query = f"length={per_query_length}&offset={current_offset}&expand=intelDoc"
             
         response_data = await self.query_tanium_api(current_query)
         response_data_as_json = json.loads(response_data.content.decode('utf-8'))
@@ -100,4 +100,7 @@ class Connector(BaseJsonSyncConnector):
                 ErrorResponder.fill_error(self.return_obj, response_dict, message=content_as_dict["Message"], connector=self.connector)
             elif("errors" in content_as_dict):
                 ErrorResponder.fill_error(self.return_obj, response_dict, message=content_as_dict["errors"][0]["description"], connector=self.connector)
+            #Just in case it fails to give anything back
+            else:
+                ErrorResponder.fill_error(self.return_obj, response_dict, message=f"Unexpected error with the following response code {response_code}",connector=self.connector)
             raise
