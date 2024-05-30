@@ -18,6 +18,10 @@ Result Endpoint: `https://api.sumologic.com/api/v1/search/jobs/<SEARCH_JOB_ID>/m
 
 [SumoLogic Search Job API](https://help.sumologic.com/APIs/Search-Job-API/About-the-Search-Job-API)
 
+## Dialects
+
+The connector supports two dialects: the default one and [the cloud_siem one](https://help.sumologic.com/docs/cse/get-started-with-cloud-siem/insight-generation-process/#entities-in-messages-are-mapped-to-entity-type-schema-attributes)
+
 ### Format for making STIX translation calls via the CLI
 
 `python main.py <translator_module> <query or result> <STIX identity object> <data>`
