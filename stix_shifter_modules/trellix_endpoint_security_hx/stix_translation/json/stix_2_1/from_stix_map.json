@@ -1,0 +1,73 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["Local IP Address", "Remote IP Address"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["Local IP Address", "Remote IP Address"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": ["Local Port"],
+      "dst_port": ["Remote Port"],
+      "src_ref.value": ["Local IP Address"],
+      "dst_ref.value": ["Remote IP Address"],
+      "extensions.'http-request-ext'.request_header.'Accept-Encoding'": ["HTTP Header"],
+      "extensions.'http-request-ext'.request_header.'User-Agent'": ["HTTP Header"],
+      "extensions.'http-request-ext'.request_header.Host": ["HTTP Header"],
+      "extensions.'http-request-ext'.request_value": ["URL"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["Username"]
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": ["Registry Key Full Path"],
+      "values[*].name": ["Registry Key Value Name"],
+      "values[*].data": ["Registry Key Value Text"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["DNS Hostname"]
+    }
+  },
+    "file": {
+    "fields": {
+      "name": ["File Name"],
+      "size": ["Size in bytes"],
+      "hashes.MD5": ["File MD5 Hash"],
+      "parent_directory_ref.path": ["File Full Path"],
+      "x_path": ["File Full Path"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["File Full Path"]
+    }
+  },
+  "process": {
+    "fields": {
+      "command_line": ["Process Arguments"],
+      "creator_user_ref.user_id": ["Username"],
+      "image_ref.name": ["File Name"],
+      "parent_ref.cwd": ["Parent Process Path"]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "file_ref.name": ["File Name"],
+      "domain_ref.value": ["DNS Hostname"],
+      "registry_ref.key": ["Registry Key Full Path"],
+      "network_ref.src_port": ["Local Port"],
+      "ip_refs[*].value": ["Local IP Address", "Remote IP Address"],
+      "user_ref.user_id": ["Username"]
+    }
+  }
+}
