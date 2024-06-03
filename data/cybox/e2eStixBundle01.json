@@ -42,7 +42,7 @@
             "value": "http://kbfvzoboss.bid/alien/fre.php"
           },
           "5": {
-            "type": "user-account:display_name",
+            "type": "user-account",
             "value": "isc-demo"
           }
         }
