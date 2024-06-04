@@ -247,7 +247,7 @@ transmit
 trellix_endpoint_security_hx
 "{\"host\":\"1.2.3.4\",\"port\":123,\"selfSignedCert\":\"cert\",\"options\":{\"host_sets\":\"host_set1,host_set2\"}}"
 "{\"auth\":{\"username\":\"xxx\",\"password\":  \"yyyy\"}}"
-results  "2493:host_set1"
+results  "2493:host_set1" 0 1
 ```
 
 #### STIX Transmit Results - Output
