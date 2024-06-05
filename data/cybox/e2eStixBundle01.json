@@ -52,7 +52,7 @@
             "7": {
             "type": "file:hashes.'SHA-256'",
             "value": "b0ab7076b0fe4b758d8e6622605d94204cc1b55baf718129cafe750d835ffb21"
-          }
+          },
             "8": {
             "type": "mac-addr",
             "value": "00:00:00:00:00:00"
