@@ -42,7 +42,8 @@
             "value": "http://kbfvzoboss.bid/alien/fre.php"
           },
           "5": {
-            "user_account": "uatcorkuser"
+             "type":"user_account",
+             "value":"uatcorkuser"
           },
             "6": {
             "type": "file:name",
