@@ -1,57 +1,58 @@
-/ Assisted by WCA@IBM
-// Latest GenAI contribution: ibm/granite-20b-code-instruct-v2
 {
-  "type": "bundle",
-  "id": "bundle--163f795d-48e6-4a6c-8624-96288669182f",
-  "spec_version": "2.0",
-  "objects": [
-    {
-      "type": "observed-data",
-      "id": "observed-data--163f795d-48e6-4a6c-8624-96288669182f",
-      "created_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
-      "created": "2023-03-24T18:17:15.000Z",
-      "modified": "2023-03-24T18:17:15.000Z",
-      "first_observed": "2023-03-24T18:17:15.000Z",
-      "last_observed": "2023-03-24T18:17:15.000Z",
-      "number_observed": 1,
-      "objects": {
-        "0": {
-          "type": "ipv4-addr",
-          "value": "1.2.3.4"
-        }
-		 "1": {
+    "type": "bundle",
+    "id": "bundle--163f795d-48e6-4a6c-8624-96288669182f",
+    "spec_version": "2.0",
+    "objects": [
+
+      {
+        "type": "observed-data",
+        "id": "observed-data--163f795d-48e6-4a6c-8624-96288669182f",
+        "created_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+        "created": "2023-03-24T18:17:15.000Z",
+        "modified": "2023-03-24T18:17:15.000Z",
+        "first_observed": "2023-03-24T18:17:15.000Z",
+        "last_observed": "2023-03-24T18:17:15.000Z",
+        "number_observed": 1,
+        "objects": {
+           "0": {
             "type": "ipv4-addr",
-            "value": "172.16.1.1"
+            "value": "1.2.3.4"
           },
-          "2": {
-            "type": "url",
-            "value": "onedrivefiles.digital"
-          },
-          "3": {
-            "type": "ipv6-addr",
-            "value": "0000:0000:0000:0000:0000:0000:0000:0001"
-          },
-          "4": {
-            "type": "url",
-            "value": "http://kbfvzoboss.bid/alien/fre.php"
-          },
-          "5": {
-             "type":"user_account",
-             "user_id":"uatcorkuser",
-             "account_login": "root"
-          },
-            "6": {
-            "type": "file:name",
-            "value": "uat_file.exe"
-          },
-            "7": {
-            "type": "file:hashes.'SHA-256'",
-            "value": "b0ab7076b0fe4b758d8e6622605d94204cc1b55baf718129cafe750d835ffb21"
-          },
-            "8": {
-            "type": "mac-addr",
-            "value": "00:00:00:00:00:00"
-          }
+           "1": {
+              "type": "ipv4-addr",
+              "value": "172.16.1.1"
+            },
+            "2": {
+              "type": "url",
+              "value": "onedrivefiles.digital"
+            },
+            "3": {
+              "type": "ipv6-addr",
+              "value": "0000:0000:0000:0000:0000:0000:0000:0001"
+            },
+            "4": {
+              "type": "url",
+              "value": "http://kbfvzoboss.bid/alien/fre.php"
+            },
+            "5": {
+               "type":"user_account",
+               "user_id":"uatcorkuser",
+               "account_login": "root"
+            },
+              "6": {
+              "type": "file:name",
+              "value": "uat_file.exe"
+            },
+              "7": {
+              "type": "file:hashes.'SHA-256'",
+              "value": "b0ab7076b0fe4b758d8e6622605d94204cc1b55baf718129cafe750d835ffb21"
+            },
+              "8": {
+              "type": "mac-addr",
+              "value": "00:00:00:00:00:00"
+            }
+        }
       }
-    }
-  ]
+    ]
+}
+  
