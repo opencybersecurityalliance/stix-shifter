@@ -1,31 +1,25 @@
+/ Assisted by WCA@IBM
+// Latest GenAI contribution: ibm/granite-20b-code-instruct-v2
 {
-    "type": "bundle",
-    "id": "bundle--258c4b63-6b04-4a0e-985d-f64a3a8c8ec7",
-    "spec_version": "2.0",
-    "objects": [
-      {
-        "type": "identity",
-        "id": "identity--33fa3e56-6511-40de-bc69-c5ffeb3838f9",
-        "created": "2024-06-03T09:44:40.150Z",
-        "modified": "2024-06-03T09:44:40.150Z",
-        "name": "E2E Testing",
-        "identity_class": "program"
-      },
-      {
-        "type": "observed-data",
-        "id": "observed-data--ed82dd61-cc41-485b-b608-d278469e6259",
-        "created_by_ref": "identity--33fa3e56-6511-40de-bc69-c5ffeb3838f9",
-        "created": "2024-06-03T09:44:40.150Z",
-        "modified": "2024-06-03T09:44:40.150Z",
-        "first_observed": "2020-07-29T09:44:40.150Z",
-        "last_observed": "2025-07-29T09:44:40.150Z",
-        "number_observed": 1,
-        "objects": {
-          "0": {
-            "type": "ipv4-addr",
-            "value": "127.0.0.1"
-          },
-          "1": {
+  "type": "bundle",
+  "id": "bundle--163f795d-48e6-4a6c-8624-96288669182f",
+  "spec_version": "2.0",
+  "objects": [
+    {
+      "type": "observed-data",
+      "id": "observed-data--163f795d-48e6-4a6c-8624-96288669182f",
+      "created_by_ref": "identity--c78cb6e5-0c4b-4611-8297-d1b8b55e40b5",
+      "created": "2023-03-24T18:17:15.000Z",
+      "modified": "2023-03-24T18:17:15.000Z",
+      "first_observed": "2023-03-24T18:17:15.000Z",
+      "last_observed": "2023-03-24T18:17:15.000Z",
+      "number_observed": 1,
+      "objects": {
+        "0": {
+          "type": "ipv4-addr",
+          "value": "1.2.3.4"
+        }
+		 "1": {
             "type": "ipv4-addr",
             "value": "172.16.1.1"
           },
@@ -44,7 +38,7 @@
           "5": {
              "type":"user_account",
              "user_id":"uatcorkuser",
-              "account_login": "root"
+             "account_login": "root"
           },
             "6": {
             "type": "file:name",
@@ -58,7 +52,6 @@
             "type": "mac-addr",
             "value": "00:00:00:00:00:00"
           }
-        }
       }
-    ]
-  }
+    }
+  ]
