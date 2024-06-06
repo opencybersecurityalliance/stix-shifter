@@ -43,7 +43,8 @@
           },
           "5": {
              "type":"user_account",
-             "value":"uatcorkuser"
+             "user_id":"uatcorkuser",
+              "account_login": "root"
           },
             "6": {
             "type": "file:name",
