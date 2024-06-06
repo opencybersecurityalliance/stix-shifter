@@ -102,7 +102,12 @@ class QueryStringPatternTranslator:
         :param value: (str) input value
         :return formatted value: (str) formatted value
         """
-        value = QueryStringPatternTranslator._escape_value(value)
+        # Escape value as necessary first
+        value = value.replace('\\', '\\\\').replace('/', '\\/')
+        # Lucene regex anchors are not supported, remove ^ and $
+        value = value[1:] if value.startswith('^') else value
+        value = value[:-1] if value.endswith('$') else value
+
         return f'{comparator.replace("value", value)}'
 
     @staticmethod
@@ -114,7 +119,7 @@ class QueryStringPatternTranslator:
         :return formatted value: (str) formatted value
         """
         value = QueryStringPatternTranslator._escape_value(value)
-        return f'{comparator.replace("value", value)}'
+        return f'{comparator.replace("value", str(value))}'
 
     @staticmethod
     def _format_equal(comparator, value, field_type) -> str:
@@ -135,7 +140,9 @@ class QueryStringPatternTranslator:
         :param value: (str) input value
         :return formatted value: (str) formatted value
         """
-        value = str(value).replace('/', '\\/').replace(':', '\\:')
+        if isinstance(value, str):
+            value = value.replace('/', '\\/').replace('\\', '\\\\').replace('\"', '\\"').replace('(', '\\(').replace(')', '\\)').replace(':', '\\:')
+            value = value.replace('-', '\\-')
         return value
 
     @staticmethod

@@ -41,7 +41,8 @@ class Connector(BaseJsonSyncConnector):
         try:
             offset = int(offset)
             length = int(length)
-            start_index, end_index = self.get_start_end_index(offset, length, metadata)
+            start_index = offset
+            end_index = offset + length
             # Adjusting the end index if it exceeds the result limit.
             if self.api_client.result_limit < end_index:
                 end_index = self.api_client.result_limit
@@ -59,15 +60,14 @@ class Connector(BaseJsonSyncConnector):
 
             # Update query start_date and next values from metadata to get more than 10k results.
             if metadata:
-                self.update_query_from_metadata(query, metadata)
-
+                self.update_query_from_metadata(query, offset, metadata)
+            is_query_start_date_updated = False
             while start_index < end_index:
                 self.set_query_limit_value(query)
                 response_wrapper = await self.api_client.get_search_results(query, token)
                 response_dict, return_obj = self.handle_api_response(response_wrapper)
                 if return_obj:
                     return return_obj
-                length = self.get_length(offset, length, start_index, query['limit'])
                 return_obj['success'] = True
                 processed_data = response_dict['events'][:length]
                 data += processed_data
@@ -79,7 +79,8 @@ class Connector(BaseJsonSyncConnector):
                 # If reached the limit of 10,000, resetting the start_date and next for query.
                 if (offset + len(data) + metadata_event_count) % SYMANTEC_MAX_QUERY_RESULTS == 0 and processed_data:
                     metadata = self.get_metadata(response_dict['events'][:length])
-                    self.update_query_from_metadata(query, metadata)
+                    self.update_query_from_metadata(query, 0, metadata)
+                    is_query_start_date_updated = True
 
                 # if the current page results are not fully utilized or doesn't have a next page.
                 if remaining_data or not response_dict.get('next'):
@@ -89,7 +90,7 @@ class Connector(BaseJsonSyncConnector):
             return_obj = self.handle_data(data, return_obj)
             if metadata:
                 # setting metadata with last event from the data to avoid duplicate events from next batch call
-                return_obj['metadata'] = self.get_metadata(data)
+                return_obj['metadata'] = self.get_metadata(data) if is_query_start_date_updated else metadata
 
         except Exception as ex:
             return_obj = self.handle_api_exception(None, str(ex))
@@ -183,16 +184,17 @@ class Connector(BaseJsonSyncConnector):
         return return_obj
 
     @staticmethod
-    def update_query_from_metadata(query, metadata):
+    def update_query_from_metadata(query, offset, metadata):
         """
         Update query 'start_date' and 'next' values from metadata.
         Skipping the event with the same time stamp by adding the 'start_date_event_count' from metadata.
         :param query, (dict) datasource query
+        param offset, int
         :param metadata, (dict) metadata with start data and count of the events with start data
         """
         if metadata:
             if isinstance(metadata, dict) and metadata.get('start_date_event_count') and metadata.get('start_date'):
-                query['next'] = int(metadata.get('start_date_event_count', 0))
+                query['next'] = offset % SYMANTEC_MAX_QUERY_RESULTS + int(metadata.get('start_date_event_count', 0))
                 query['start_date'] = metadata.get('start_date')
             else:
                 # raise exception when metadata doesnt contain page_index and start_date
@@ -258,28 +260,6 @@ class Connector(BaseJsonSyncConnector):
             query['limit'] = SYMANTEC_MAX_QUERY_RESULTS - (query.get('next'))
         else:
             query['limit'] = self.api_client.api_page_size
-
-    @staticmethod
-    def get_start_end_index(offset, length, metadata):
-        """
-        start and end indexes
-        """
-        start_index, end_index = offset, offset + length
-        if metadata:
-            start_index, end_index = 0, length
-        return start_index, end_index
-
-    def get_length(self, offset, length, start_index, limit):
-        """
-        Length of the results required,
-        resetting length value if required results is lesser than length provided
-        """
-        results_length = length
-        if offset + limit > self.api_client.result_limit:
-            results_length = self.api_client.result_limit - offset
-        elif start_index + limit > self.api_client.result_limit:
-            results_length = self.api_client.result_limit - start_index
-        return results_length
 
     @staticmethod
     def get_results_data(response):

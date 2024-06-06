@@ -68,7 +68,7 @@ class TestSymantecConnection(unittest.TestCase, object):
                         "mac": "0x:0x:00:00:0x:00"
                     }
                 ],
-                "device_os_name": "Windows Server 2019 Datacenter Edition",
+                "device_os_name": "",
                 "type_id": 8001,
                 "actor": {
                     "session_id": 0,
@@ -277,8 +277,8 @@ class TestSymantecConnection(unittest.TestCase, object):
             get_mock_response(200, json.dumps(TestSymantecConnection.mocked_response), 'byte')]
         transmission = stix_transmission.StixTransmission('symantec_endpoint_security', self.connection(),
                                                           self.configuration())
-        offset = 0
-        length = 10
+        offset = 9999
+        length = 1
         result_response = transmission.results(query, offset, length)
         assert result_response is not None
         assert result_response['success'] is True

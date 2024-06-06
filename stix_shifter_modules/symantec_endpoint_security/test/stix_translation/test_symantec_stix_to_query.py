@@ -171,13 +171,13 @@ class TestQueryTranslator(unittest.TestCase):
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
-                    'query': 'file.folder:"C\\:\\users\\administrator\\local\\data" OR'
-                             ' directory.folder:"C\\:\\users\\administrator\\local\\data" OR'
-                             ' actor.file.folder:"C\\:\\users\\administrator\\local\\data" OR'
-                             ' parent.file.folder:"C\\:\\users\\administrator\\local\\data" OR'
-                             ' process.file.folder:"C\\:\\users\\administrator\\local\\data" OR'
-                             ' module.folder:"C\\:\\users\\administrator\\local\\data" OR'
-                             ' startup_app.file.folder:"C\\:\\users\\administrator\\local\\data"',
+                    'query': 'file.folder:"C\\:\\\\users\\\\administrator\\\\local\\\\data" OR'
+                             ' directory.folder:"C\\:\\\\users\\\\administrator\\\\local\\\\data" OR'
+                             ' actor.file.folder:"C\\:\\\\users\\\\administrator\\\\local\\\\data" OR'
+                             ' parent.file.folder:"C\\:\\\\users\\\\administrator\\\\local\\\\data" OR'
+                             ' process.file.folder:"C\\:\\\\users\\\\administrator\\\\local\\\\data" OR'
+                             ' module.folder:"C\\:\\\\users\\\\administrator\\\\local\\\\data" OR'
+                             ' startup_app.file.folder:"C\\:\\\\users\\\\administrator\\\\local\\\\data"',
                     'start_date': '2024-05-01T00:00:00.000+00:00', 'end_date': '2024-05-01T11:00:00.000+00:00'}]
         queries = _remove_timestamp_from_query(queries)
         self._test_query_assertions(query, queries)
@@ -503,7 +503,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_combine_multiple_observation_with_same_date(self):
-        stix_pattern = "([(software:name IN ('Windows 10', 'iOS', 'Android')] OR " \
+        stix_pattern = "([software:name IN ('Windows 10', 'iOS', 'Android')] OR " \
                        "[(domain-name:value='internal.ec2.com')])START t'2024-01-01T01:56:00.000Z' " \
                        "STOP t'2024-05-01T01:57:00.003Z'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
@@ -559,8 +559,8 @@ class TestQueryTranslator(unittest.TestCase):
                                   "'Security,Application Activity,System Activity'"
 
     def test_invalid_timestamp(self):
-        stix_pattern = "[network-traffic:dst_port = 'symantec'] START t'Q000-01-01T01:56:00.000Z' " \
-                       "STOP t'2024-01-01T01:57:00.003Z'"
+        stix_pattern = "[network-traffic:dst_port = 'symantec'] " \
+                       "START t'Q000-01-01T01:56:00.000Z' STOP t'2024-01-01T01:57:00.003Z'"
         result = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         assert False is result['success']
         assert 'translation_error' == result['code']

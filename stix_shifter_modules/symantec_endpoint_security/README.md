@@ -696,3 +696,5 @@ symantec_endpoint_security
 | The name of the kernel resource. | x-kernel-resource:name | [x-kernel-resource:name = 'Default name'] |
 | The type of the kernel resource. | x-kernel-resource:type_id | [x-kernel-resource:type_id  = 'System call'] |
 | The name of the peripheral device. | x-peripheral-device:name | [x-peripheral-device:name  = 'keyboard'] |
+| The command line used to launch the startup application, service, process or job. | process:command_line | [process:command_line = 'C:\\Windows\\system32\\services.exe']|
+| The registry key object describes a Windows registry key. | windows-registry-key:key | [windows-registry-key:key = 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\W32Time\\SecureTimeLimits\\RunTime\\'] |
