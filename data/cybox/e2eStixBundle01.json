@@ -56,7 +56,23 @@
             "8": {
             "type": "mac-addr",
             "value": "00:00:00:00:00:00"
-          }
+          },
+          "9": {
+            "type": "user-account",
+            "user_id": "omern",
+            "account_login": "omern"
+           },
+           "10": {
+            "type": "file",
+            "name": "streamfwd",
+            "parent_directory_ref": "6"
+           },
+           "11": {
+            "type": "file",
+            "hashes": {
+            "MD5": "6F3C9485F8F97AC04C8E43EF4463A68C"
+                    }
+           }
         }
       }
     ]
