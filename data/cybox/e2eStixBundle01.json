@@ -30,32 +30,9 @@
             "value": "172.16.1.1"
           },
           "2": {
-            "type": "url",
-            "value": "onedrivefiles.digital"
-          },
-          "3": {
-            "type": "ipv6-addr",
-            "value": "0000:0000:0000:0000:0000:0000:0000:0001"
-          },
-          "4": {
-            "type": "url",
-            "value": "http://kbfvzoboss.bid/alien/fre.php"
-          },
-          "5": {
             "type": "user-account",
-            "value": "e2e user"
-          },
-            "6": {
-            "type": "file:name",
-            "value": "uat_file.exe"
-          },
-            "7": {
-            "type": "file:hashes.'SHA-256'",
-            "value": "b0ab7076b0fe4b758d8e6622605d94204cc1b55baf718129cafe750d835ffb21"
-          },
-            "8": {
-            "type": "mac-addr",
-            "value": "00:00:00:00:00:00"
+            "user_id": "omern",
+            "account_login": "omern"
           }
         }
       }
