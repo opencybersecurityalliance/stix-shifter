@@ -76,7 +76,7 @@ class Connector(BaseJsonSyncConnector):
             async def api_run(q):
                 return await self.api_client_run_search(q, length, offset)
 
-            return util.post_process(response_data, return_obj, api_run)
+            return await util.post_process(response_data, return_obj, api_run)
         except Exception as ex:
             if response_txt is not None:
                 ErrorResponder.fill_error(return_obj, message='unexpected exception', connector=self.connector)
