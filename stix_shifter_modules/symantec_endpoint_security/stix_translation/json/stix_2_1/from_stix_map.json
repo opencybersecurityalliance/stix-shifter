@@ -2,7 +2,7 @@
   "ipv4-addr": {
     "fields": {
       "value": ["device_ip", "connection.src_ip", "connection.dst_ip", "device_public_ip", "device_networks.ipv4", "device_networks.gateway_ip"],
-      "resolves_to_refs[*].value": ["device_mac", "device_networks.mac"]
+      "resolves_to_refs[*].value": ["device_mac", "device_networks.mac", "device_networks.gateway_mac"]
     }
   },
   "ipv6-addr": {
@@ -111,18 +111,12 @@
     "fields": {
       "name": ["device_os_name"],
       "version": ["device_os_ver"],
-      "x_os_type": ["device_os_type_id"],
-      "x_cmd_line": ["startup_app.cmd_line"],
-      "x_start_type_id": ["startup_app.start_id"],
-      "x_config_path": ["config_path"]
+      "x_os_type": ["device_os_type_id"]
     }
   },
   "url": {
     "fields": {
-      "value": ["url.text", "file.url.text"],
-      "x_url_host": ["url.host", "file.url.host", "connection.url.host"],
-      "x_url_path": ["url.path", "file.url.path", "connection.url.path"],
-      "x_url_port": ["url.port", "file.url.port", "connection.url.port"]
+      "value": ["url.text", "file.url.text", "connection.url.text"]
     }
   },
   "domain-name": {

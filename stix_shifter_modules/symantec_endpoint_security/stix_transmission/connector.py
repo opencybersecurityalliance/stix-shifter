@@ -59,8 +59,7 @@ class Connector(BaseJsonSyncConnector):
             query['next'] = offset
 
             # Update query start_date and next values from metadata to get more than 10k results.
-            if metadata:
-                self.update_query_from_metadata(query, offset, metadata)
+            self.update_query_from_metadata(query, offset, metadata)
             is_query_start_date_updated = False
             while start_index < end_index:
                 self.set_query_limit_value(query)
@@ -154,9 +153,12 @@ class Connector(BaseJsonSyncConnector):
         """
         response_dict = {}
         return_obj = {}
+
         response = response_wrapper.read().decode('utf-8')
-        if response.startswith('{') and response.endswith('}'):
+        try:
             response_dict = json.loads(response)
+        except ValueError as e:
+            response_dict['message'] = response
 
         if response_wrapper.code != 200:
             response_dict['message'] = response_dict.get('message', '')

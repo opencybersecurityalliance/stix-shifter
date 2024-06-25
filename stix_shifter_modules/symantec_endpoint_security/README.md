@@ -566,7 +566,8 @@ symantec_endpoint_security
 | List of dictionary fields | A list containing one or more dictionaries | "device_networks": [{"ipv4": "1.1.1.1", "ipv6": "xx22::2x2x:22xx:22xx:x2x2", "mac": "11:1X:XX:X1:11:X1" }, { "ipv4": "2.2.2.2", "ipv6": "xx11::1x1x:11xx:11xx:x1x1", "mac": "22:X2:22:X2:X2:22"}] |
 
 ### Observations
-- The access token expires 60 minutes after being created.
+- Attribute "x-oca-asset.host_type" mapped to data source attribute "device_type" is currently not 
+  available for value "Server" in Symantec Endpoint Security client version (14.3 RU8) and may be available in future versions.
 
 ### Limitations
 - The maximum number of API calls for events is limited to 500 per hour.

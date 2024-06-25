@@ -209,10 +209,19 @@
         ]
       }
     ],
-    "gateway_mac": {
-      "key": "mac-addr.value",
-      "object": "gateway_mac"
-    },
+    "gateway_mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "gateway_mac"
+      },
+      {
+        "key": "ipv4-addr.resolves_to_refs",
+        "object": "gateway_ip",
+        "references": [
+          "gateway_mac"
+        ]
+      }
+    ],
     "groupIpReference": {
       "key": "x-oca-asset.ip_refs",
       "object": "host",
