@@ -11,7 +11,7 @@ In addition to "finding" the data by using these patterns, STIX-Shifter also _tr
 
 ***Project Documentation***
 
-For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Documenation](https://stix-shifter.readthedocs.io/)
+For general information about STIX, this project, and the command line utilities, see the [STIX-shifter Documentation](https://stix-shifter.readthedocs.io/)
 
 ## Installation
 
