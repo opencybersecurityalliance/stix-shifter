@@ -655,7 +655,7 @@ transmit
 trellix_endpoint_security_hx
 "{\"host\":\"1.2.3.4\",\"port\":123,\"selfSignedCert\":\"cert\",\"options\":{\"host_sets\":\"host_set1,host_set2\"}}"
 "{\"auth\":{\"username\":\"xxx\",\"password\":  \"yyyy\"}}"
-results  {search id}
+results  {search id} offset length
 
 #### STIX Translate Results
 
@@ -683,15 +683,16 @@ results
   less than or equal to the data source. 
 - A maximum of 15 searches only can be created in data source. In order to create more searches, the existing 
   search ids created needs to be deleted.
-- As per datasource limitation, If a host set containing more than 1000 hosts, the 1000 hosts that responds first
-  will be returned in response. Configure multiple host sets in the datasource to fetch records from more than 1000 hosts.
+- As per the Trellix data source limitation, if a host set contains more than 1000 hosts, the 1000 hosts that respond
+  first will be returned in the response. To avoid this scenario, configure multiple host sets in the data source 
+  to fetch the records from more than 1000 hosts.
 - Supported operators for IP address fields and File hash fields are =, !=, IN, NOT IN.
 - Supported operators for Directory, file:parent_directory_ref.path, process:parent_ref.cwd are LIKE, MATCHES, NOT LIKE, NOT MATCHES.
 - Supported operators for network traffic : extensions.'http-request-ext'.request_header fields are LIKE, MATCHES, NOT LIKE, NOT MATCHES.
 - LIKE/MATCHES operator supports only substring search. Wild card character search is not supported.
 
 ### References
-- [Authentication | FireEye Developer Hub](https://fireeye.dev/docs/endpoint/authentication/)
+- [Authentication | Developer Hub](https://fireeye.dev/docs/endpoint/authentication/)
 - [Search limits](https://docs.trellix.com/bundle/hx_5.3.0_ug/page/UUID-bb2cc194-22e0-4501-95d8-6a73458db012.html)
 - [API Documentation](https://fireeye.dev/apis/lighthouse/)
 - [Enterprise Search](https://docs.trellix.com/bundle/hx_5.3.0_ug/page/UUID-e81232c3-a871-c015-f191-9fbd431bdb59.html)
