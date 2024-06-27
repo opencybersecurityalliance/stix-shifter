@@ -176,6 +176,17 @@
       "references": "file"
     }
   ],
+    "Parent File Name": [
+    {
+      "key": "file.name",
+      "object": "p_file"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent_process",
+      "references": "p_file"
+    }
+  ],
   "Host Set": {
      "key": "x-oca-asset.x_host_set",
     "object": "asset"

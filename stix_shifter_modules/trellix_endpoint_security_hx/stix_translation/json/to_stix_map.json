@@ -180,6 +180,17 @@
       "references": "file"
     }
   ],
+  "Parent File Name": [
+    {
+      "key": "file.name",
+      "object": "p_file"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent_process",
+      "references": "p_file"
+    }
+  ],
   "File MD5 Hash": {
     "key": "file.hashes.MD5",
     "object": "file"

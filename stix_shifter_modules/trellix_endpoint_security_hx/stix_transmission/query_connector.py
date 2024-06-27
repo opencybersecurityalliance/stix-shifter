@@ -123,6 +123,14 @@ class QueryConnector(BaseQueryConnector):
                 message = response_data.get('message')
         except json.JSONDecodeError:
             message = response_data
+
+        if 'exceeded limit on existing searches' in message.lower():
+            if response_data.get('details', []) and response_data['details'][0]['details']['existing_search_limit']:
+                message = (f"The total search limit - {response_data['details'][0]['details']['existing_search_limit']}"
+                           f" is reached. Delete an existing search to create a new one")
+            else:
+                message = f"The total search limit is reached. Delete an existing search to create a new one"
+
         response_dict = {'code': code, 'message': message} if code else {'message': message}
         ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
         return return_obj

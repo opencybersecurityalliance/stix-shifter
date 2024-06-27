@@ -88,6 +88,7 @@
 | process              | parent_ref                                 | Parent Process Path            |
 | process              | parent_ref                                 | Parent Process Name            |
 | process              | binary_ref                                 | File Name                      |
+| process              | binary_ref                                 | Parent File Name               |
 | process              | creator_user_ref                           | Username                       |
 | process              | x_event_type                               | Process Event Type             |
 | <br>                 |                                            |                                |
@@ -95,6 +96,7 @@
 | <br>                 |                                            |                                |
 | file                 | name                                       | File Name                      |
 | file                 | name                                       | Write Event File Name          |
+| file                 | name                                       | Parent File Name               |
 | file                 | hashes.MD5                                 | File MD5 Hash                  |
 | file                 | hashes.MD5                                 | Write Event File MD5 Hash      |
 | file                 | size                                       | Size in bytes                  |
