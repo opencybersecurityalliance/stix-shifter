@@ -14,7 +14,7 @@
     "transformer": "ToCategoryValue"
   },
   "feature_name": {
-    "key": "x-oca-event.agent",
+    "key": "x-oca-event.x_feature_name",
     "object": "event"
   },
   "time": [
@@ -694,39 +694,48 @@
       "key": "file.mime_type",
       "object": "file"
     },
-    "signature_issuer": {
-      "key": "file.x_signature_issuer",
-      "object": "file"
-    },
+    "signature_issuer": [
+      {
+        "key": "x509-certificate.issuer",
+        "object": "x509",
+        "transformer": "ToFormatMac"
+      },
+       {
+        "key": "file.x_certificate_ref",
+        "object": "file",
+         "references": "x509"
+      }
+    ],
     "signature_value": {
-      "key": "file.x_signature_value",
-      "object": "file"
+      "key": "x509-certificate.x_signature_value",
+      "object": "x509"
     },
     "signature_level_id": {
-      "key": "file.x_signature_level_id",
-      "object": "file"
+      "key": "x509-certificate.x_signature_level_id",
+      "object": "x509"
     },
     "signature_serial_number": {
-      "key": "file.x_signature_serial_number",
-      "object": "file"
+      "key": "x509-certificate.serial_number",
+      "object": "x509"
     },
     "signature_value_ids": {
-      "key": "file.x_signature_value_ids",
-      "object": "file",
+      "key": "x509-certificate.x_signature_value_ids",
+      "object": "x509",
       "transformer": "ToListValue"
     },
     "signature_created_date": {
-      "key": "file.x_signature_created_date",
-      "object": "file",
+      "key": "x509-certificate.validity_not_before",
+      "object": "x509",
       "transformer": "EpochSecondsToTimestamp"
     },
     "signature_company_name": {
-      "key": "file.x_signature_company_name",
-      "object": "file"
+      "key": "x509-certificate.x_signature_company_name",
+      "object": "x509"
     },
     "signature_fingerprints": {
-      "key": "file.x_signature_fingerprints",
-      "object": "file"
+      "key": "x509-certificate.hashes",
+      "object": "x509",
+      "transformer": "ToAlgorithmHashes"
     },
     "url": {
       "text": [
@@ -839,39 +848,47 @@
       "key": "file.mime_type",
       "object": "directory"
     },
-    "signature_issuer": {
-      "key": "file.x_signature_issuer",
-      "object": "directory"
-    },
+    "signature_issuer": [
+      {
+        "key": "x509-certificate.issuer",
+        "object": "x509"
+      },
+      {
+        "key": "file.x_certificate_ref",
+        "object": "directory",
+        "references": "x509"
+      }
+    ],
     "signature_value": {
-      "key": "file.x_signature_value",
-      "object": "directory"
+      "key": "x509-certificate.x_signature_value",
+      "object": "x509"
     },
     "signature_level_id": {
-      "key": "file.x_signature_level_id",
-      "object": "directory"
+      "key": "x509-certificate.x_signature_level_id",
+      "object": "x509"
     },
     "signature_serial_number": {
-      "key": "file.x_signature_serial_number",
-      "object": "directory"
+      "key": "x509-certificate.serial_number",
+      "object": "x509"
     },
     "signature_value_ids": {
-      "key": "file.x_signature_value_ids",
-      "object": "process_file",
+      "key": "x509-certificate.x_signature_value_ids",
+      "object": "x509",
       "transformer": "ToListValue"
     },
     "signature_created_date": {
-      "key": "file.x_signature_created_date",
-      "object": "directory",
+      "key": "x509-certificate.validity_not_before",
+      "object": "x509",
       "transformer": "EpochSecondsToTimestamp"
     },
     "signature_company_name": {
-      "key": "file.x_signature_company_name",
-      "object": "directory"
+      "key": "x509-certificate.x_signature_company_name",
+      "object": "x509"
     },
     "signature_fingerprints": {
-      "key": "file.x_signature_fingerprints",
-      "object": "directory"
+      "key": "x509-certificate.hashes",
+      "object": "x509",
+      "transformer": "ToAlgorithmHashes"
     },
     "url": {
       "text": [
@@ -921,11 +938,11 @@
       "object": "actor"
     },
     "tid": {
-      "key": "process.x_thread_id",
+      "key": "process.x_process_tid",
       "object": "actor"
     },
     "uid": {
-      "key": "process.x_proc_uid",
+      "key": "process.x_process_uid",
       "object": "actor"
     },
     "user": {
@@ -1041,39 +1058,47 @@
         "key": "file.mime_type",
         "object": "actor_file"
       },
-      "signature_issuer": {
-        "key": "file.x_signature_issuer",
-        "object": "actor_file"
-      },
+      "signature_issuer": [
+        {
+          "key": "x509-certificate.issuer",
+          "object": "x509"
+        },
+        {
+          "key": "file.x_certificate_ref",
+          "object": "actor_file",
+          "references": "x509"
+        }
+      ],
       "signature_value": {
-        "key": "file.x_signature_value",
-        "object": "actor_file"
+        "key": "x509-certificate.x_signature_value",
+        "object": "x509"
       },
       "signature_level_id": {
-        "key": "file.x_signature_level_id",
-        "object": "actor_file"
+        "key": "x509-certificate.x_signature_level_id",
+        "object": "x509"
       },
       "signature_serial_number": {
-        "key": "file.x_signature_serial_number",
-        "object": "actor_file"
+        "key": "x509-certificate.serial_number",
+        "object": "x509"
       },
       "signature_value_ids": {
-        "key": "file.x_signature_value_ids",
-        "object": "actor_file",
+        "key": "x509-certificate.x_signature_value_ids",
+        "object": "x509",
         "transformer": "ToListValue"
       },
       "signature_created_date": {
-        "key": "file.x_signature_created_date",
-        "object": "actor_file",
+        "key": "x509-certificate.validity_not_before",
+        "object": "x509",
         "transformer": "EpochSecondsToTimestamp"
       },
       "signature_company_name": {
-        "key": "file.x_signature_company_name",
-        "object": "actor_file"
+        "key": "x509-certificate.x_signature_company_name",
+        "object": "x509"
       },
       "signature_fingerprints": {
-        "key": "file.x_signature_fingerprints",
-        "object": "actor_file"
+        "key": "x509-certificate.hashes",
+        "object": "x509",
+        "transformer": "ToAlgorithmHashes"
       },
       "url": {
         "text": [
@@ -1153,39 +1178,48 @@
           "references": "module_dll_dir"
         }
       ],
-      "signature_issuer": {
-        "key": "file.x_signature_issuer",
-        "object": "module_dll"
-      },
+      "signature_issuer": [
+        {
+          "key": "x509-certificate.issuer",
+          "object": "x509",
+          "transformer": "ToFormatMac"
+        },
+        {
+          "key": "file.x_certificate_ref",
+          "object": "module_dll",
+          "references": "x509"
+        }
+      ],
       "signature_value": {
-        "key": "file.x_signature_value",
-        "object": "module_dll"
+        "key": "x509-certificate.x_signature_value",
+        "object": "x509"
       },
       "signature_level_id": {
-        "key": "file.x_signature_level_id",
-        "object": "module_dll"
+        "key": "x509-certificate.x_signature_level_id",
+        "object": "x509"
       },
       "signature_serial_number": {
-        "key": "file.x_signature_serial_number",
-        "object": "module_dll"
+        "key": "x509-certificate.serial_number",
+        "object": "x509"
       },
       "signature_value_ids": {
-        "key": "file.x_signature_value_ids",
-        "object": "module_dll",
+        "key": "x509-certificate.x_signature_value_ids",
+        "object": "x509",
         "transformer": "ToListValue"
       },
       "signature_created_date": {
-        "key": "file.x_signature_created_date",
-        "object": "module_dll",
+        "key": "x509-certificate.validity_not_before",
+        "object": "x509",
         "transformer": "EpochSecondsToTimestamp"
       },
       "signature_company_name": {
-        "key": "file.x_signature_company_name",
-        "object": "module_dll"
+        "key": "x509-certificate.x_signature_company_name",
+        "object": "x509"
       },
       "signature_fingerprints": {
-        "key": "file.x_signature_fingerprints",
-        "object": "module_dll"
+        "key": "x509-certificate.hashes",
+        "object": "x509",
+        "transformer": "ToAlgorithmHashes"
       },
       "url": {
         "text": [
@@ -1286,11 +1320,11 @@
       "object": "process"
     },
     "tid": {
-      "key": "process.x_thread_id",
+      "key": "process.x_process_tid",
       "object": "process"
     },
     "uid": {
-      "key": "process.x_proc_uid",
+      "key": "process.x_process_uid",
       "object": "process"
     },
     "user": {
@@ -1401,39 +1435,47 @@
         "key": "file.mime_type",
         "object": "process_file"
       },
-      "signature_issuer": {
-        "key": "file.x_signature_issuer",
-        "object": "process_file"
-      },
+      "signature_issuer": [
+        {
+          "key": "x509-certificate.issuer",
+          "object": "x509"
+        },
+        {
+          "key": "file.x_certificate_ref",
+          "object": "process_file",
+          "references": "x509"
+        }
+      ],
       "signature_value": {
-        "key": "file.x_signature_value",
-        "object": "process_file"
+        "key": "x509-certificate.x_signature_value",
+        "object": "x509"
       },
       "signature_level_id": {
-        "key": "file.x_signature_level_id",
-        "object": "process_file"
+        "key": "x509-certificate.x_signature_level_id",
+        "object": "x509"
       },
       "signature_serial_number": {
-        "key": "file.x_signature_serial_number",
-        "object": "process_file"
+        "key": "x509-certificate.serial_number",
+        "object": "x509"
       },
       "signature_value_ids": {
-        "key": "file.x_signature_value_ids",
-        "object": "process_file",
+        "key": "x509-certificate.x_signature_value_ids",
+        "object": "x509",
         "transformer": "ToListValue"
       },
       "signature_created_date": {
-        "key": "file.x_signature_created_date",
-        "object": "process_file",
+        "key": "x509-certificate.validity_not_before",
+        "object": "x509",
         "transformer": "EpochSecondsToTimestamp"
       },
       "signature_company_name": {
-        "key": "file.x_signature_company_name",
-        "object": "process_file"
+        "key": "x509-certificate.x_signature_company_name",
+        "object": "x509"
       },
       "signature_fingerprints": {
-        "key": "file.x_signature_fingerprints",
-        "object": "process_file"
+        "key": "x509-certificate.hashes",
+        "object": "x509",
+        "transformer": "ToAlgorithmHashes"
       },
       "url": {
         "text": [
@@ -1480,11 +1522,11 @@
       "object": "parent_proc"
     },
     "tid": {
-      "key": "process.x_thread_id",
+      "key": "process.x_process_tid",
       "object": "parent_proc"
     },
     "uid": {
-      "key": "process.x_proc_uid",
+      "key": "process.x_process_uid",
       "object": "parent_proc"
     },
     "user": {
@@ -1595,39 +1637,47 @@
         "key": "file.mime_type",
         "object": "parent_proc_file"
       },
-      "signature_issuer": {
-        "key": "file.x_signature_issuer",
-        "object": "parent_proc_file"
-      },
+      "signature_issuer": [
+        {
+          "key": "x509-certificate.issuer",
+          "object": "x509"
+        },
+        {
+          "key": "file.x_certificate_ref",
+          "object": "parent_proc_file",
+          "references": "x509"
+        }
+      ],
       "signature_value": {
-        "key": "file.x_signature_value",
-        "object": "parent_proc_file"
+        "key": "x509-certificate.x_signature_value",
+        "object": "x509"
       },
       "signature_level_id": {
-        "key": "file.x_signature_level_id",
-        "object": "parent_proc_file"
+        "key": "x509-certificate.x_signature_level_id",
+        "object": "x509"
       },
       "signature_serial_number": {
-        "key": "file.x_signature_serial_number",
-        "object": "parent_proc_file"
+        "key": "x509-certificate.serial_number",
+        "object": "x509"
       },
       "signature_value_ids": {
-        "key": "file.x_signature_value_ids",
-        "object": "parent_proc_file",
+        "key": "x509-certificate.x_signature_value_ids",
+        "object": "x509",
         "transformer": "ToListValue"
       },
       "signature_created_date": {
-        "key": "file.x_signature_created_date",
-        "object": "parent_proc_file",
+        "key": "x509-certificate.validity_not_before",
+        "object": "x509",
         "transformer": "EpochSecondsToTimestamp"
       },
       "signature_company_name": {
-        "key": "file.x_signature_company_name",
-        "object": "parent_proc_file"
+        "key": "x509-certificate.x_signature_company_name",
+        "object": "x509"
       },
       "signature_fingerprints": {
-        "key": "file.x_signature_fingerprints",
-        "object": "parent_proc_file"
+        "key": "x509-certificate.hashes",
+        "object": "x509",
+        "transformer": "ToAlgorithmHashes"
       },
       "url": {
         "text": [
@@ -2233,39 +2283,47 @@
         "references": "module_dir"
       }
     ],
-    "signature_issuer": {
-      "key": "file.x_signature_issuer",
-      "object": "module"
-    },
+    "signature_issuer": [
+      {
+        "key": "x509-certificate.issuer",
+        "object": "x509"
+      },
+      {
+        "key": "file.x_certificate_ref",
+        "object": "module",
+        "references": "x509"
+      }
+    ],
     "signature_value": {
-      "key": "file.x_signature_value",
-      "object": "module"
+      "key": "x509-certificate.x_signature_value",
+      "object": "x509"
     },
     "signature_level_id": {
-      "key": "file.x_signature_level_id",
-      "object": "module"
+      "key": "x509-certificate.x_signature_level_id",
+      "object": "x509"
     },
     "signature_serial_number": {
-      "key": "file.x_signature_serial_number",
-      "object": "module"
+      "key": "x509-certificate.serial_number",
+      "object": "x509"
     },
     "signature_value_ids": {
-      "key": "file.x_signature_value_ids",
-      "object": "module",
+      "key": "x509-certificate.x_signature_value_ids",
+      "object": "x509",
       "transformer": "ToListValue"
     },
     "signature_created_date": {
-      "key": "file.x_signature_created_date",
-      "object": "module",
+      "key": "x509-certificate.validity_not_before",
+      "object": "x509",
       "transformer": "EpochSecondsToTimestamp"
     },
     "signature_company_name": {
-      "key": "file.x_signature_company_name",
-      "object": "module"
+      "key": "x509-certificate.x_signature_company_name",
+      "object": "x509"
     },
     "signature_fingerprints": {
-      "key": "file.x_signature_fingerprints",
-      "object": "module"
+      "key": "x509-certificate.hashes",
+      "object": "x509",
+      "transformer": "ToAlgorithmHashes"
     },
     "url": {
         "text": [
@@ -2419,39 +2477,47 @@
         "key": "file.mime_type",
         "object": "app_file"
       },
-      "signature_issuer": {
-        "key": "file.x_signature_issuer",
-        "object": "app_file"
-      },
+      "signature_issuer": [
+        {
+          "key": "x509-certificate.issuer",
+          "object": "x509"
+        },
+        {
+          "key": "file.x_certificate_ref",
+          "object": "app_file",
+          "references": "x509"
+        }
+      ],
       "signature_value": {
-        "key": "file.x_signature_value",
-        "object": "app_file"
+        "key": "x509-certificate.x_signature_value",
+        "object": "x509"
       },
       "signature_level_id": {
-        "key": "file.x_signature_level_id",
-        "object": "app_file"
+        "key": "x509-certificate.x_signature_level_id",
+        "object": "x509"
       },
       "signature_serial_number": {
-        "key": "file.x_signature_serial_number",
-        "object": "app_file"
+        "key": "x509-certificate.serial_number",
+        "object": "x509"
       },
       "signature_value_ids": {
-        "key": "file.x_signature_value_ids",
-        "object": "app_file",
+        "key": "x509-certificate.x_signature_value_ids",
+        "object": "x509",
         "transformer": "ToListValue"
       },
       "signature_created_date": {
-        "key": "file.x_signature_created_date",
-        "object": "app_file",
+        "key": "x509-certificate.validity_not_before",
+        "object": "x509",
         "transformer": "EpochSecondsToTimestamp"
       },
       "signature_company_name": {
-        "key": "file.x_signature_company_name",
-        "object": "app_file"
+        "key": "x509-certificate.x_signature_company_name",
+        "object": "x509"
       },
       "signature_fingerprints": {
-        "key": "file.x_signature_fingerprints",
-        "object": "app_file"
+        "key": "x509-certificate.hashes",
+        "object": "x509",
+        "transformer": "ToAlgorithmHashes"
       },
       "url": {
         "text": [

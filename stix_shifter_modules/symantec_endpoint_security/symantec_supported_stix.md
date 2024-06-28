@@ -27,7 +27,7 @@
 | STIX Object and Property | Mapped Data Source Fields |
 |--|--|
 | **ipv4-addr**:value | device_ip, connection.src_ip, connection.dst_ip, device_public_ip, device_networks.ipv4, device_networks.gateway_ip |
-| **ipv4-addr**:resolves_to_refs[*].value | device_mac, device_networks.mac |
+| **ipv4-addr**:resolves_to_refs[*].value | device_mac, device_networks.mac, device_networks.gateway_mac |
 | **ipv6-addr**:value | device_ip, connection.src_ip, connection.dst_ip, device_networks.ipv6 |
 | **ipv6-addr**:resolves_to_refs[*].value | device_mac, device_networks.mac |
 | **mac-addr**:value | device_mac, device_networks.mac, device_networks.gateway_mac |
@@ -43,8 +43,8 @@
 | **process**:command_line | actor.cmd_line, process.cmd_line, parent.cmd_line, startup_app.cmd_line |
 | **process**:name | actor.app_name, process.app_name, parent.app_name |
 | **process**:created | actor.start_time, process.start_time, parent.start_time |
-| **process**:x_thread_id | actor.tid, process.tid |
-| **process**:x_proc_uid | actor.uid, process.uid, parent.uid |
+| **process**:x_process_tid | actor.tid, process.tid |
+| **process**:x_process_uid | actor.uid, process.uid, parent.uid |
 | **process**:creator_user_ref.user_id | actor.user.name, process.user.name |
 | **process**:creator_user_ref.account_login | actor.user.logon_name |
 | **process**:binary_ref.name | actor.file.name, process.file.name, parent.file.name, startup_app.file.name |
@@ -71,15 +71,15 @@
 | **file**:x_rep_score | file.rep_score |
 | **file**:x_file_version | file.version |
 | **file**:x_open_mode | open_mode |
-| **file**:x_signature_company_name | actor.file.signature_company_name, file.signature_company_name, module.signature_company_name, parent.file.signature_company_name, process.file.signature_company_name |
-| **file**:x_signature_created_date | actor.file.signature_created_date, actor.module.signature_created_date, file.signature_created_date, parent.signature_created_date, process.signature_created_date, directory.signature_created_date, startup_app.file.signature_created_date |
-| **file**:x_signature_fingerprints.algorithm | actor.file.signature_fingerprints.algorithm, actor.module.signature_fingerprints.algorithm, file.signature_fingerprints.algorithm, module.signature_fingerprints.algorithm, parent.file.signature_fingerprints.algorithm, parent.module.signature_fingerprints.algorithm, process.file.signature_fingerprints.algorithm, process.module.signature_fingerprints.algorithm, directory.signature_fingerprints.algorithm, startup_app.file.signature_fingerprints.algorithm |
-| **file**:x_signature_issuer | actor.file.signature_issuer |
-| **file**:x_signature_level_id | actor.file.signature_level_id, file.signature_level_id, parent.file.signature_level_id, process.file.signature_level_id, directory.signature_level_id, startup_app.file.signature_level_id |
-| **file**:x_signature_serial_number | actor.file.signature_serial_number |
-| **file**:x_signature_value | actor.file.signature_value |
-| **file**:x_signature_value_ids | actor.file.signature_value_ids, process.file.signature_value_ids, startup_app.file.signature_value_ids |
 | **file**:x_content_type | file.content_type.type_id |
+| **x509-certificate**:issuer | actor.file.signature_issuer |
+| **x509-certificate**:serial_number | actor.file.signature_serial_number |
+| **x509-certificate**:validity_not_before | actor.file.signature_created_date, actor.module.signature_created_date, file.signature_created_date, parent.signature_created_date, process.signature_created_date, directory.signature_created_date, startup_app.file.signature_created_date |
+| **x509-certificate**:signature_algorithm | actor.file.signature_fingerprints.algorithm, actor.module.signature_fingerprints.algorithm, file.signature_fingerprints.algorithm, module.signature_fingerprints.algorithm, parent.file.signature_fingerprints.algorithm, parent.module.signature_fingerprints.algorithm, process.file.signature_fingerprints.algorithm, process.module.signature_fingerprints.algorithm, directory.signature_fingerprints.algorithm, startup_app.file.signature_fingerprints.algorithm |
+| **x509-certificate**:x_signature_level_id | actor.file.signature_level_id, file.signature_level_id, parent.file.signature_level_id, process.file.signature_level_id, directory.signature_level_id, startup_app.file.signature_level_id |
+| **x509-certificate**:x_signature_company_name | actor.file.signature_company_name, file.signature_company_name, module.signature_company_name, parent.file.signature_company_name, process.file.signature_company_name |
+| **x509-certificate**:x_signature_value | actor.file.signature_value |
+| **x509-certificate**:x_signature_value_ids | actor.file.signature_value_ids, process.file.signature_value_ids, startup_app.file.signature_value_ids |
 | **directory**:path | file.folder, directory.folder, actor.file.folder, parent.file.folder, process.file.folder, module.folder, startup_app.file.folder |
 | **email-addr**:value | email.header_from, email.header_to |
 | **email-message**:from_ref | email.header_from |
@@ -94,13 +94,7 @@
 | **software**:name | device_os_name |
 | **software**:version | device_os_ver |
 | **software**:x_os_type | device_os_type_id |
-| **software**:x_cmd_line | startup_app.cmd_line |
-| **software**:x_start_type_id | startup_app.start_id |
-| **software**:x_config_path | config_path |
-| **url**:value | url.text, file.url.text |
-| **url**:x_url_host | url.host, file.url.host, connection.url.host |
-| **url**:x_url_path | url.path, file.url.path, connection.url.path |
-| **url**:x_url_port | url.port, file.url.port, connection.url.port |
+| **url**:value | url.text, file.url.text, connection.url.text |
 | **domain-name**:value | device_domain |
 | **x-oca-event**:code | uuid |
 | **x-oca-event**:severity | severity_id |
@@ -108,7 +102,7 @@
 | **x-oca-event**:action | type |
 | **x-oca-event**:description | message |
 | **x-oca-event**:provider | product_name |
-| **x-oca-event**:agent | feature_name |
+| **x-oca-event**:x_feature_name | feature_name |
 | **x-oca-event**:outcome | id |
 | **x-oca-event**:created | time |
 | **x-oca-event**:x_event_status | status_id |
@@ -192,6 +186,7 @@
 | ipv4-addr | value | device_networks.gateway_ip |
 | ipv4-addr | resolves_to_refs[*].value | device_mac |
 | ipv4-addr | resolves_to_refs[*].value | device_networks.mac |
+| ipv4-addr | resolves_to_refs[*].value | device_networks.gateway_mac |
 | <br> | | |
 | ipv6-addr | value | device_ip |
 | ipv6-addr | value | connection.src_ip |
@@ -226,11 +221,11 @@
 | process | created | actor.start_time |
 | process | created | process.start_time |
 | process | created | parent.start_time |
-| process | x_thread_id | actor.tid |
-| process | x_thread_id | process.tid |
-| process | x_proc_uid | actor.uid |
-| process | x_proc_uid | process.uid |
-| process | x_proc_uid | parent.uid |
+| process | x_process_tid | actor.tid |
+| process | x_process_tid | process.tid |
+| process | x_process_uid | actor.uid |
+| process | x_process_uid | process.uid |
+| process | x_process_uid | parent.uid |
 | process | creator_user_ref.user_id | actor.user.name |
 | process | creator_user_ref.user_id | process.user.name |
 | process | creator_user_ref.account_login | actor.user.logon_name |
@@ -321,41 +316,42 @@
 | file | x_rep_score | file.rep_score |
 | file | x_file_version | file.version |
 | file | x_open_mode | open_mode |
-| file | x_signature_company_name | actor.file.signature_company_name |
-| file | x_signature_company_name | file.signature_company_name |
-| file | x_signature_company_name | module.signature_company_name |
-| file | x_signature_company_name | parent.file.signature_company_name |
-| file | x_signature_company_name | process.file.signature_company_name |
-| file | x_signature_created_date | actor.file.signature_created_date |
-| file | x_signature_created_date | actor.module.signature_created_date |
-| file | x_signature_created_date | file.signature_created_date |
-| file | x_signature_created_date | parent.signature_created_date |
-| file | x_signature_created_date | process.signature_created_date |
-| file | x_signature_created_date | directory.signature_created_date |
-| file | x_signature_created_date | startup_app.file.signature_created_date |
-| file | x_signature_fingerprints.algorithm | actor.file.signature_fingerprints.algorithm |
-| file | x_signature_fingerprints.algorithm | actor.module.signature_fingerprints.algorithm |
-| file | x_signature_fingerprints.algorithm | file.signature_fingerprints.algorithm |
-| file | x_signature_fingerprints.algorithm | module.signature_fingerprints.algorithm |
-| file | x_signature_fingerprints.algorithm | parent.file.signature_fingerprints.algorithm |
-| file | x_signature_fingerprints.algorithm | parent.module.signature_fingerprints.algorithm |
-| file | x_signature_fingerprints.algorithm | process.file.signature_fingerprints.algorithm |
-| file | x_signature_fingerprints.algorithm | process.module.signature_fingerprints.algorithm |
-| file | x_signature_fingerprints.algorithm | directory.signature_fingerprints.algorithm |
-| file | x_signature_fingerprints.algorithm | startup_app.file.signature_fingerprints.algorithm |
-| file | x_signature_issuer | actor.file.signature_issuer |
-| file | x_signature_level_id | actor.file.signature_level_id |
-| file | x_signature_level_id | file.signature_level_id |
-| file | x_signature_level_id | parent.file.signature_level_id |
-| file | x_signature_level_id | process.file.signature_level_id |
-| file | x_signature_level_id | directory.signature_level_id |
-| file | x_signature_level_id | startup_app.file.signature_level_id |
-| file | x_signature_serial_number | actor.file.signature_serial_number |
-| file | x_signature_value | actor.file.signature_value |
-| file | x_signature_value_ids | actor.file.signature_value_ids |
-| file | x_signature_value_ids | process.file.signature_value_ids |
-| file | x_signature_value_ids | startup_app.file.signature_value_ids |
 | file | x_content_type | file.content_type.type_id |
+| <br> | | |
+| x509-certificate | issuer | actor.file.signature_issuer |
+| x509-certificate | serial_number | actor.file.signature_serial_number |
+| x509-certificate | validity_not_before | actor.file.signature_created_date |
+| x509-certificate | validity_not_before | actor.module.signature_created_date |
+| x509-certificate | validity_not_before | file.signature_created_date |
+| x509-certificate | validity_not_before | parent.signature_created_date |
+| x509-certificate | validity_not_before | process.signature_created_date |
+| x509-certificate | validity_not_before | directory.signature_created_date |
+| x509-certificate | validity_not_before | startup_app.file.signature_created_date |
+| x509-certificate | signature_algorithm | actor.file.signature_fingerprints.algorithm |
+| x509-certificate | signature_algorithm | actor.module.signature_fingerprints.algorithm |
+| x509-certificate | signature_algorithm | file.signature_fingerprints.algorithm |
+| x509-certificate | signature_algorithm | module.signature_fingerprints.algorithm |
+| x509-certificate | signature_algorithm | parent.file.signature_fingerprints.algorithm |
+| x509-certificate | signature_algorithm | parent.module.signature_fingerprints.algorithm |
+| x509-certificate | signature_algorithm | process.file.signature_fingerprints.algorithm |
+| x509-certificate | signature_algorithm | process.module.signature_fingerprints.algorithm |
+| x509-certificate | signature_algorithm | directory.signature_fingerprints.algorithm |
+| x509-certificate | signature_algorithm | startup_app.file.signature_fingerprints.algorithm |
+| x509-certificate | x_signature_level_id | actor.file.signature_level_id |
+| x509-certificate | x_signature_level_id | file.signature_level_id |
+| x509-certificate | x_signature_level_id | parent.file.signature_level_id |
+| x509-certificate | x_signature_level_id | process.file.signature_level_id |
+| x509-certificate | x_signature_level_id | directory.signature_level_id |
+| x509-certificate | x_signature_level_id | startup_app.file.signature_level_id |
+| x509-certificate | x_signature_company_name | actor.file.signature_company_name |
+| x509-certificate | x_signature_company_name | file.signature_company_name |
+| x509-certificate | x_signature_company_name | module.signature_company_name |
+| x509-certificate | x_signature_company_name | parent.file.signature_company_name |
+| x509-certificate | x_signature_company_name | process.file.signature_company_name |
+| x509-certificate | x_signature_value | actor.file.signature_value |
+| x509-certificate | x_signature_value_ids | actor.file.signature_value_ids |
+| x509-certificate | x_signature_value_ids | process.file.signature_value_ids |
+| x509-certificate | x_signature_value_ids | startup_app.file.signature_value_ids |
 | <br> | | |
 | directory | path | file.folder |
 | directory | path | directory.folder |
@@ -382,21 +378,10 @@
 | software | name | device_os_name |
 | software | version | device_os_ver |
 | software | x_os_type | device_os_type_id |
-| software | x_cmd_line | startup_app.cmd_line |
-| software | x_start_type_id | startup_app.start_id |
-| software | x_config_path | config_path |
 | <br> | | |
 | url | value | url.text |
 | url | value | file.url.text |
-| url | x_url_host | url.host |
-| url | x_url_host | file.url.host |
-| url | x_url_host | connection.url.host |
-| url | x_url_path | url.path |
-| url | x_url_path | file.url.path |
-| url | x_url_path | connection.url.path |
-| url | x_url_port | url.port |
-| url | x_url_port | file.url.port |
-| url | x_url_port | connection.url.port |
+| url | value | connection.url.text |
 | <br> | | |
 | domain-name | value | device_domain |
 | <br> | | |
@@ -406,7 +391,7 @@
 | x-oca-event | action | type |
 | x-oca-event | description | message |
 | x-oca-event | provider | product_name |
-| x-oca-event | agent | feature_name |
+| x-oca-event | x_feature_name | feature_name |
 | x-oca-event | outcome | id |
 | x-oca-event | created | time |
 | x-oca-event | x_event_status | status_id |

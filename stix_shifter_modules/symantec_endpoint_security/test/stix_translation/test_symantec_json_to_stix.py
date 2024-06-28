@@ -377,8 +377,7 @@ class TestSymantecResultsToStix(unittest.TestCase):
         file_obj = TestSymantecResultsToStix.get_first_of_type(objects.values(), 'file')
         assert file_obj is not None
         assert (file_obj.keys() == {'type', 'x_file_type', 'created', 'modified', 'hashes', 'size',
-                                    'x_signature_company_name', 'x_signature_value_ids', 'name',
-                                    'parent_directory_ref', 'x_signature_level_id'})
+                                    'name', 'parent_directory_ref'})
         assert file_obj['type'] == 'file'
         assert file_obj['name'] == 'svchost.exe'
         assert file_obj['size'] == 51736
@@ -388,7 +387,7 @@ class TestSymantecResultsToStix(unittest.TestCase):
         objects = TestSymantecResultsToStix.get_observed_data_objects(symantec_sample_response)
         process_obj = TestSymantecResultsToStix.get_first_of_type(objects.values(), 'process')
         assert process_obj is not None
-        assert (process_obj.keys() == {'type', 'pid', 'x_proc_uid', 'x_thread_id', 'created',
+        assert (process_obj.keys() == {'type', 'pid', 'x_process_uid', 'x_process_tid', 'created',
                                        'command_line', 'binary_ref', 'creator_user_ref', 'child_refs'})
         assert process_obj['type'] == 'process'
         assert process_obj['pid'] == 1880
@@ -462,7 +461,7 @@ class TestSymantecResultsToStix(unittest.TestCase):
         objects = TestSymantecResultsToStix.get_observed_data_objects(symantec_sample_response)
         x_symantec_info_obj = TestSymantecResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
         assert x_symantec_info_obj is not None
-        assert (x_symantec_info_obj.keys() == {'type', 'action', 'outcome', 'agent', 'provider',
+        assert (x_symantec_info_obj.keys() == {'type', 'action', 'outcome', 'x_feature_name', 'provider',
                                                'x_event_type_version', 'timezone', 'x_provider_version', 'host_ref',
                                                'category', 'x_event_type', 'process_ref', 'file_ref', 'severity',
                                                'user_ref', 'x_policy_ref', 'created', 'code'})
@@ -478,7 +477,7 @@ class TestSymantecResultsToStix(unittest.TestCase):
         objects = TestSymantecResultsToStix.get_observed_data_objects(symantec_policy_sample_response)
         x_symantec_info_obj = TestSymantecResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
         assert x_symantec_info_obj is not None
-        assert (x_symantec_info_obj.keys() == {'type', 'category', 'agent', 'outcome', 'description', 'x_policy_ref',
+        assert (x_symantec_info_obj.keys() == {'type', 'category', 'x_feature_name', 'outcome', 'description', 'x_policy_ref',
                                                'severity', 'x_event_status', 'action', 'x_event_type',
                                                'x_event_type_version', 'host_ref', 'provider', 'x_provider_version',
                                                'timezone', 'user_ref', 'created', 'code'})
@@ -501,6 +500,20 @@ class TestSymantecResultsToStix(unittest.TestCase):
         assert x_symantec_info_obj['severity'] == 100
         assert x_symantec_info_obj['name'] == 'Trojan.Gen.MBT'
         assert x_symantec_info_obj['x_threat_type_id'] == 'Malware'
+
+    def test_x509_certificate_obj_json_to_stix(self):
+        """test x-symantec-info stix object properties"""
+        objects = TestSymantecResultsToStix.get_observed_data_objects(symantec_threat_sample_response)
+        x_symantec_info_obj = TestSymantecResultsToStix.get_first_of_type(objects.values(), 'x509-certificate')
+        assert x_symantec_info_obj is not None
+        assert (x_symantec_info_obj.keys() == {'type', 'x_signature_company_name',
+                    'validity_not_before', 'hashes', 'issuer',
+                    'serial_number', 'x_signature_value', 'x_signature_value_ids'})
+        assert x_symantec_info_obj['type'] == 'x509-certificate'
+        assert x_symantec_info_obj['x_signature_company_name'] == 'DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1'
+        assert x_symantec_info_obj['issuer'] == 'knowbe4 inc.'
+        assert x_symantec_info_obj['serial_number'] == '0E44DA59C6985D40A6040C9D9AAAAAAA'
+        assert x_symantec_info_obj['validity_not_before'] == '2023-02-27T09:32:56.000Z'
 
     def test_file_type_id_json_to_stix(self):
         """test file stix object properties"""

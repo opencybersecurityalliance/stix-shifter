@@ -1,5 +1,6 @@
 from stix_shifter.stix_translation import stix_translation
 import unittest
+from datetime import datetime, timedelta
 
 translation = stix_translation.StixTranslation()
 
@@ -18,6 +19,9 @@ class TestQueryTranslator(unittest.TestCase):
     """
     class to perform unit test case symantec translate query
     """
+    end_time = datetime.strftime(datetime.utcnow(), '%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+    start_time = datetime.strftime(datetime.utcnow() - timedelta(days =1), '%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+	
     if __name__ == "__main__":
         unittest.main()
 
@@ -32,8 +36,7 @@ class TestQueryTranslator(unittest.TestCase):
             self.assertEqual(each_query, queries[index])
 
     def test_equal_operator(self):
-        stix_pattern = "[ipv4-addr:value = '111.11.1.111'] START t'2023-11-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[ipv4-addr:value = '111.11.1.111'] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
@@ -45,8 +48,8 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_not_equal_operator(self):
-        stix_pattern = "[ipv6-addr:value != '1234:a5a6:78910:1111:2222:3333'] START t'2023-11-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[ipv6-addr:value != '1234:a5a6:78910:1111:2222:3333'] START t'{self.start_time}' " \
+                       f"STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
@@ -59,8 +62,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_gt_operator(self):
-        stix_pattern = "[network-traffic:dst_port > 22] START t'2023-11-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[network-traffic:dst_port > 22] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP', 'query': 'connection.dst_port:{22 TO *}',
@@ -69,8 +71,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_gt_eq_operator(self):
-        stix_pattern = "[network-traffic:dst_port >= 22] START t'2023-11-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[network-traffic:dst_port >= 22] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP', 'query': 'connection.dst_port:[22 TO *}',
@@ -79,8 +80,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_lt_operator(self):
-        stix_pattern = "[network-traffic:src_port < 22] START t'2023-11-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[network-traffic:src_port < 22] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP', 'query': 'connection.src_port:{* TO 22}',
@@ -89,8 +89,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_lt_eq_operator(self):
-        stix_pattern = "[network-traffic:src_port <= 22] START t'2024-05-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[network-traffic:src_port <= 22] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP', 'query': 'connection.src_port:{* TO 22]',
@@ -99,8 +98,8 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_IN_operator(self):
-        stix_pattern = "[network-traffic:protocols[*] IN ('tcp', 'udp')] START t'2023-11-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[network-traffic:protocols[*] IN ('tcp', 'udp')] START t'{self.start_time}' " \
+                       f"STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP', 'query': 'connection.protocol_id:("6" OR "17")',
@@ -109,8 +108,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_like_operator(self):
-        stix_pattern = "[user-account:user_id LIKE 'SYSTEM'] START t'2024-05-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[user-account:user_id LIKE 'SYSTEM'] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP', 'query': 'user.name:SYSTEM* OR actor.user.name:SYSTEM*'
@@ -120,8 +118,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_matches_operator(self):
-        stix_pattern = "[process:name MATCHES 'host[a-z].exe'] START t'2024-05-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[process:name MATCHES 'host[a-z].exe'] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
@@ -132,8 +129,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_bool_operator(self):
-        stix_pattern = "[x-oca-geo:x_is_on_premises = 'true'] START t'2024-05-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[x-oca-geo:x_is_on_premises = 'true'] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP', 'query': 'device_location.on_premises:"true"',
@@ -142,8 +138,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_date_supported_properries(self):
-        stix_pattern = "[file:created = '2024-03-19T04:43:06.377Z'] START t'2024-05-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[file:created = '2024-03-19T04:43:06.377Z'] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
@@ -156,8 +151,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_not_supported_properties_for_like(self):
-        stix_pattern = "[mac-addr:value LIKE '11:aa:aa:11:11:11'] START t'2023-11-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[mac-addr:value LIKE '11:aa:aa:11:11:11'] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         assert False is query['success']
         assert 'not_implemented' == query['code']
@@ -166,8 +160,8 @@ class TestQueryTranslator(unittest.TestCase):
                                  'device_networks.gateway_mac'
 
     def test_directory_path(self):
-        stix_pattern = "[directory:path = 'C:\\\\users\\\\administrator\\\\local\\\\data']" \
-                       "START t'2024-05-01T00:00:00.000Z' STOP t'2024-05-01T11:00:00.000Z'"
+        stix_pattern = f"[directory:path = 'C:\\\\users\\\\administrator\\\\local\\\\data']" \
+                       f"START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
@@ -183,8 +177,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_enum_operator(self):
-        stix_pattern = "[x-oca-event:severity = 15] START t'2023-11-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[x-oca-event:severity = 15] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP', 'query': 'severity_id:"1"',
@@ -193,8 +186,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_int_operator(self):
-        stix_pattern = "[process:pid > 1235] START t'2023-11-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[process:pid > 1235] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
@@ -204,8 +196,8 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_event_date_attribute(self):
-        stix_pattern = "[x-oca-event:created = '2024-05-21T13:27:21.526Z'] " \
-                       "START t'2024-05-01T11:00:00.000Z' STOP t'2024-05-23T00:00:00.000Z'"
+        stix_pattern = f"[x-oca-event:created = '2024-05-21T13:27:21.526Z'] START t'{self.start_time}'" \
+                       f" STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{
@@ -219,8 +211,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_file_date_attribute(self):
-        stix_pattern = "[file:created = '2024-03-19T04:43:06.377Z'] " \
-                       "START t'2024-05-01T11:00:00.000Z' STOP t'2024-05-23T00:00:00.000Z'"
+        stix_pattern = f"[file:created = '2024-03-19T04:43:06.377Z'] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{
@@ -237,8 +228,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_protocol_attribute(self):
-        stix_pattern = "[network-traffic:protocols[*]='udp'] " \
-                       "START t'2024-03-15T16:43:26.000Z' STOP t'2024-05-25T06:23:26.003Z'"
+        stix_pattern = f"[network-traffic:protocols[*]='udp'] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{
@@ -253,7 +243,7 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_combined_comparison_AND_operator(self):
         stix_pattern = "[network-traffic:dst_port = 445 AND (process:pid = 1010 AND user-account:user_id LIKE " \
-                       "'Administrator')]START t'2024-05-01T00:00:00.000Z' STOP t'2024-05-01T11:00:00.000Z'"
+                       f"'Administrator')] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
@@ -266,8 +256,8 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_combined_comparison_OR_operator(self):
-        stix_pattern = "[process:pid = 1010 OR user-account:user_id LIKE 'Administrator']START " \
-                       "t'2024-05-01T00:00:00.000Z' STOP t'2024-05-01T11:00:00.000Z'"
+        stix_pattern = f"[process:pid = 1010 OR user-account:user_id LIKE 'Administrator'] START t'{self.start_time}'" \
+                       f" STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
@@ -281,7 +271,7 @@ class TestQueryTranslator(unittest.TestCase):
     def test_combined_comparison_OR_AND_operators(self):
         stix_pattern = "[(x-oca-event:severity = 15 OR x-oca-event:category = 'Security') AND " \
                        "(x-oca-asset:host_type = 'server' AND x-symantec-policy:name = 'default')]" \
-                       " START t'2024-05-01T00:00:00.000Z' STOP t'2024-05-01T11:00:00.000Z'"
+                       f" START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
@@ -296,7 +286,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "(x-symantec-policy:name = 'malware_detection' AND" \
                        " x-ibm-ttp-tagging:name = 'Drive by Compromise') OR" \
                        " (x-user-session:is_remote = 'true' AND network-traffic:src_port = 22)]" \
-                       "START t'2024-05-01T00:00:00.000Z' STOP t'2024-05-01T11:00:00.000Z'"
+                       f"START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
@@ -327,8 +317,8 @@ class TestQueryTranslator(unittest.TestCase):
                        "'BBDF0C85B1A39656E616E428FCEFEDC930761ACC5CF2846BBF8E60610016142A'," \
                        "'DBDF0C85B1A39656E616E428FCEFEDC930761ACC5CF2846BBF8E60610016142A'," \
                        "'ABDF0C85B1A39656E616E428FCEFEDC930761ACC5CF2846BBF8E60610016142A'," \
-                       "'DDDF0C85B1A39656E616E428FCEFEDC930761ACC5CF2846BBF8E60610016142A')] START " \
-                       "t'2024-05-01T11:00:00.000Z' STOP t'2024-05-06T11:54:00.000Z'"
+                       f"'DDDF0C85B1A39656E616E428FCEFEDC930761ACC5CF2846BBF8E60610016142A')] START t'{self.start_time}' " \
+                       f"STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
@@ -462,8 +452,8 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_multiple_observation_AND_operator(self):
-        stix_pattern = "([ipv4-addr:value = '1.1.1.1'] AND [file:name = 'cmd.exe'])START " \
-                       "t'2024-05-01T01:56:00.000Z' STOP t'2024-05-01T01:57:00.003Z'"
+        stix_pattern = f"([ipv4-addr:value = '1.1.1.1'] AND [file:name = 'cmd.exe']) START t'{self.start_time}' " \
+                       f"STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
@@ -479,7 +469,7 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_multiple_observation_OR_operator(self):
         stix_pattern = "([x-oca-event:severity = 15] OR [x-oca-asset:host_type = 'server'])" \
-                       "START t'2024-05-01T00:00:00.000Z' STOP t'2024-05-01T11:00:00.000Z'"
+                       f"START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP', 'query': '(device_type:"server") OR (severity_id:"1")',
@@ -490,7 +480,7 @@ class TestQueryTranslator(unittest.TestCase):
     def test_multiple_observation_with_combined_comparison(self):
         stix_pattern = "([x-oca-asset:host_type = 'server' AND x-symantec-policy:name = 'default'] OR " \
                        "[mac-addr:value = '11:aa:aa:11:11:11'])" \
-                       "START t'2024-05-01T01:56:00.000Z' STOP t'2024-05-01T01:57:00.003Z'"
+                       f"START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
@@ -504,8 +494,7 @@ class TestQueryTranslator(unittest.TestCase):
 
     def test_combine_multiple_observation_with_same_date(self):
         stix_pattern = "([software:name IN ('Windows 10', 'iOS', 'Android')] OR " \
-                       "[(domain-name:value='internal.ec2.com')])START t'2024-01-01T01:56:00.000Z' " \
-                       "STOP t'2024-05-01T01:57:00.003Z'"
+                       f"[(domain-name:value='internal.ec2.com')])START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP',
@@ -520,7 +509,7 @@ class TestQueryTranslator(unittest.TestCase):
             split into 2 queries
         """
         stix_pattern = "[x-oca-event:severity = 15] OR [x-oca-asset:host_type = 'server']" \
-                       "START t'2024-05-01T00:00:00.000Z' STOP t'2024-05-01T11:00:00.000Z'"
+                       f"START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         query['queries'] = _remove_timestamp_from_query(query['queries'])
         queries = [{'feature_name': 'ALL', 'product': 'SAEP', 'query': 'severity_id:"1"',
@@ -531,8 +520,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_invalid_MATCHES_operator(self):
-        stix_pattern = "[user-account:is_privileged MATCHES 'true'] START t'2024-05-14T16:43:26.000Z' STOP " \
-                       "t'2024-05-15T16:43:26.003Z'"
+        stix_pattern = f"[user-account:is_privileged MATCHES 'true'] START t'{self.start_time}' STOP t'{self.end_time}'"
         query = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         assert False is query['success']
         assert 'not_implemented' == query['code']
@@ -540,8 +528,7 @@ class TestQueryTranslator(unittest.TestCase):
                                  "operator is not supported for this fields actor.user.is_admin,session.user.is_admin"
 
     def test_invalid_int_input(self):
-        stix_pattern = "[process:pid = '123456789123'] START t'2024-02-15T16:43:26.000Z' STOP " \
-                       "t'2024-05-14T16:43:26.003Z'"
+        stix_pattern = f"[process:pid = '123456789123'] START t'{self.start_time}' STOP t'{self.end_time}'"
         result = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         assert False is result['success']
         assert 'not_implemented' == result['code']
@@ -549,8 +536,7 @@ class TestQueryTranslator(unittest.TestCase):
                                   ' 123456789123 is not supported for integer type field'
 
     def test_invalid_enum_value(self):
-        stix_pattern = "[x-oca-event:category = 'TEST'] START t'2024-05-15T16:43:26.000Z' STOP " \
-                       "t'2024-05-16T16:43:26.003Z'"
+        stix_pattern = f"[x-oca-event:category = 'TEST'] START t'{self.start_time}' STOP t'{self.end_time}'"
         result = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         assert False is result['success']
         assert 'not_implemented' == result['code']
@@ -559,8 +545,7 @@ class TestQueryTranslator(unittest.TestCase):
                                   "'Security,Application Activity,System Activity'"
 
     def test_invalid_timestamp(self):
-        stix_pattern = "[network-traffic:dst_port = 'symantec'] " \
-                       "START t'Q000-01-01T01:56:00.000Z' STOP t'2024-01-01T01:57:00.003Z'"
+        stix_pattern = f"[network-traffic:dst_port = 'symantec'] START t'2024' STOP t'{self.end_time}'"
         result = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         assert False is result['success']
         assert 'translation_error' == result['code']
@@ -568,7 +553,7 @@ class TestQueryTranslator(unittest.TestCase):
                                   "error: Invalid STIX timestamp None"
 
     def test_invalid_mapping_value(self):
-        stix_pattern = "[file:type LIKE 'cmd.exe']START t'2024-05-01T01:56:00.000Z' STOP t'2024-05-06T01:57:00.003Z'"
+        stix_pattern = f"[file:type LIKE 'cmd.exe']START t'{self.start_time}' STOP t'{self.end_time}'"
         result = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         assert False is result['success']
         assert 'mapping_error' == result['code']
@@ -576,8 +561,7 @@ class TestQueryTranslator(unittest.TestCase):
                                   "the following STIX objects and properties: [\'file:type\'] to data source fields"
 
     def test_severity_range(self):
-        stix_pattern = "[x-oca-event:severity = 200]START t'2024-05-01T01:56:00.000Z' STOP " \
-                       "t'2024-05-06T01:57:00.003Z'"
+        stix_pattern = f"[x-oca-event:severity = 200]START t'{self.start_time}' STOP t'{self.end_time}'"
         result = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         assert False is result['success']
         assert 'not_implemented' == result['code']
@@ -586,8 +570,7 @@ class TestQueryTranslator(unittest.TestCase):
                                " range from 0 to 100"
 
     def test_not_supported_operators(self):
-        stix_pattern = "[network-traffic:dst_port ISSUBSET '445'] START t'2023-11-01T11:00:00.000Z' STOP " \
-                       "t'2023-12-06T11:54:00.000Z'"
+        stix_pattern = f"[network-traffic:dst_port ISSUBSET '445'] START t'{self.start_time}' STOP t'{self.end_time}'"
         result = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         assert False is result['success']
         assert 'mapping_error' == result['code']
@@ -595,8 +578,7 @@ class TestQueryTranslator(unittest.TestCase):
                                   " the following STIX Operators: [IsSubSet] to data source fields"
 
     def test_invalid_like_values(self):
-        stix_pattern = "[user-account:user_id LIKE 'LOCAL SERVICE'] START t'2024-05-01T11:00:00.000Z' " \
-                       "STOP t'2024-05-06T11:54:00.000Z'"
+        stix_pattern = f"[user-account:user_id LIKE 'LOCAL SERVICE'] START t'{self.start_time}' STOP t'{self.end_time}'"
         result = translation.translate('symantec_endpoint_security', 'query', '{}', stix_pattern)
         assert False is result['success']
         assert 'not_implemented' == result['code']

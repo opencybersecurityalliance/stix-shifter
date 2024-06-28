@@ -85,19 +85,13 @@ class TestSymantecConnection(unittest.TestCase, object):
                         "md5": "0x000x0xx0x0000000x0xx00xxx0x00x00",
                         "sha2": "222e222c222b2b2222e2dd22d2df222222222cc2222222222ed22222b22d22b",
                         "size": 686968,
-                        "signature_company_name": "Microsoft Windows Publisher",
-                        "signature_value_ids": [
-                            3,
-                            5
-                        ],
                         "security_descriptor": "O:BAG:SYD:(A;;0x1fffff;;;SY)(A;;0x121411;;;BA)S:AI",
                         "normalized_path": "CSIDL_SYSTEM\\services.exe",
                         "path": "c:\\windows\\system32\\services.exe",
                         "uid": "281474977475580",
                         "name": "services.exe",
                         "folder": "c:\\windows\\system32",
-                        "original_name": "services.exe",
-                        "signature_level_id": 60
+                        "original_name": "services.exe"
                     },
                     "user": {
                         "name": "SYSTEM",

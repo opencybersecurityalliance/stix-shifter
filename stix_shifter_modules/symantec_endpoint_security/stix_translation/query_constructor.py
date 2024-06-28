@@ -13,9 +13,15 @@ logger = logger.set_logger(__name__)
 START_STOP_PATTERN = r"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z)"
 STOP_TIME = datetime.utcnow()
 CONFIG_MAP_PATH = "json/config_map.json"
+SYMANTEC_EVENT_RETENTION_PERIOD = 30
 
 
 class FileNotFoundException(Exception):
+    pass
+
+
+class StartStopQualifierValueException(Exception):
+    """ Start Stop qualifier exception """
     pass
 
 
@@ -187,6 +193,24 @@ class QueryStringPatternTranslator:
         except (KeyError, IndexError, TypeError) as e:
             raise e
 
+    @staticmethod
+    def _check_time_range_values(time_range):
+        """
+        checks for valid start time.
+        :param time_range: list
+        """
+        start_date = datetime.strptime(time_range[0].replace('+00:00', 'Z'), '%Y-%m-%dT%H:%M:%S.%fZ')
+        end_date = datetime.strptime(time_range[1].replace('+00:00', 'Z'), '%Y-%m-%dT%H:%M:%S.%fZ')
+
+        if start_date > end_date:
+            raise StartStopQualifierValueException(f"Start time should be lesser than Stop time")
+        if end_date > datetime.utcnow():
+            raise StartStopQualifierValueException(f"End time should be lesser than the current time")
+
+        if start_date < (datetime.utcnow() - timedelta(days=SYMANTEC_EVENT_RETENTION_PERIOD)):
+            raise StartStopQualifierValueException(f"Start date {start_date} is older than the event retention period of "
+                                                   f"{SYMANTEC_EVENT_RETENTION_PERIOD} days")
+
     def _get_mapped_field_type(self, mapped_field_array) -> str:
         """
         Returns the type of mapped field array
@@ -331,6 +355,7 @@ class QueryStringPatternTranslator:
         return: query: (list) list of queries attached with timestamp
         """
         time_range = QueryStringPatternTranslator._parse_time_range(qualifier, self.options['time_range'])
+        QueryStringPatternTranslator._check_time_range_values(time_range)
         for row in query:
             row['start_date'] = time_range[0]
             row['end_date'] = time_range[1]

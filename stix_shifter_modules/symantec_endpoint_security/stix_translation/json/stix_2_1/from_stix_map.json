@@ -33,8 +33,8 @@
       "pid": ["actor.pid", "process.pid", "parent.pid"],
       "command_line": ["actor.cmd_line","process.cmd_line", "parent.cmd_line", "startup_app.cmd_line"],
       "created_time": ["actor.start_time", "process.start_time", "parent.start_time"],
-      "x_thread_id": ["actor.tid", "process.tid"],
-      "x_proc_uid": ["actor.uid", "process.uid", "parent.uid"],
+      "x_process_tid": ["actor.tid", "process.tid"],
+      "x_process_uid": ["actor.uid", "process.uid", "parent.uid"],
       "creator_user_ref.user_id": ["actor.user.name", "process.user.name"],
       "creator_user_ref.account_login": ["actor.user.logon_name"],
       "image_ref.name": ["actor.file.name", "process.file.name", "parent.file.name", "startup_app.file.name"],
@@ -69,15 +69,19 @@
       "x_rep_score": ["file.rep_score"],
       "x_file_version": ["file.version"],
       "x_open_mode": ["open_mode"],
-      "x_signature_company_name": ["actor.file.signature_company_name", "file.signature_company_name", "module.signature_company_name", "parent.file.signature_company_name", "process.file.signature_company_name"],
-      "x_signature_created_date": ["actor.file.signature_created_date", "actor.module.signature_created_date", "file.signature_created_date", "parent.signature_created_date", "process.signature_created_date", "directory.signature_created_date", "startup_app.file.signature_created_date"],
-      "x_signature_fingerprints.algorithm": ["actor.file.signature_fingerprints.algorithm", "actor.module.signature_fingerprints.algorithm", "file.signature_fingerprints.algorithm", "module.signature_fingerprints.algorithm", "parent.file.signature_fingerprints.algorithm", "parent.module.signature_fingerprints.algorithm", "process.file.signature_fingerprints.algorithm", "process.module.signature_fingerprints.algorithm", "directory.signature_fingerprints.algorithm", "startup_app.file.signature_fingerprints.algorithm"],
-      "x_signature_issuer": ["actor.file.signature_issuer"],
-      "x_signature_level_id": ["actor.file.signature_level_id", "file.signature_level_id", "parent.file.signature_level_id", "process.file.signature_level_id", "directory.signature_level_id", "startup_app.file.signature_level_id"],
-      "x_signature_serial_number": ["actor.file.signature_serial_number"],
-      "x_signature_value": ["actor.file.signature_value"],
-      "x_signature_value_ids": ["actor.file.signature_value_ids", "process.file.signature_value_ids", "startup_app.file.signature_value_ids"],
       "x_content_type": ["file.content_type.type_id"]
+    }
+  },
+  "x509-certificate": {
+    "fields": {
+      "issuer": ["actor.file.signature_issuer"],
+      "serial_number": ["actor.file.signature_serial_number"],
+      "validity_not_before": ["actor.file.signature_created_date", "actor.module.signature_created_date", "file.signature_created_date", "parent.signature_created_date", "process.signature_created_date", "directory.signature_created_date", "startup_app.file.signature_created_date"],
+      "signature_algorithm": ["actor.file.signature_fingerprints.algorithm", "actor.module.signature_fingerprints.algorithm", "file.signature_fingerprints.algorithm", "module.signature_fingerprints.algorithm", "parent.file.signature_fingerprints.algorithm", "parent.module.signature_fingerprints.algorithm", "process.file.signature_fingerprints.algorithm", "process.module.signature_fingerprints.algorithm", "directory.signature_fingerprints.algorithm", "startup_app.file.signature_fingerprints.algorithm"],
+      "x_signature_level_id": ["actor.file.signature_level_id", "file.signature_level_id", "parent.file.signature_level_id", "process.file.signature_level_id", "directory.signature_level_id", "startup_app.file.signature_level_id"],
+      "x_signature_company_name": ["actor.file.signature_company_name", "file.signature_company_name", "module.signature_company_name", "parent.file.signature_company_name", "process.file.signature_company_name"],
+      "x_signature_value": ["actor.file.signature_value"],
+      "x_signature_value_ids": ["actor.file.signature_value_ids", "process.file.signature_value_ids", "startup_app.file.signature_value_ids"]
     }
   },
   "directory": {
@@ -132,7 +136,7 @@
       "x_action": ["type"],
       "description": ["message"],
       "provider": ["product_name"],
-      "agent": ["feature_name"],
+      "x_feature_name": ["feature_name"],
       "outcome": ["id"],
       "created": ["time"],
       "x_event_status": ["status_id"],

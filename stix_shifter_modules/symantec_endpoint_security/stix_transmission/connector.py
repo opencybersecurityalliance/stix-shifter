@@ -88,8 +88,10 @@ class Connector(BaseJsonSyncConnector):
                 length -= processed_data_count
             return_obj = self.handle_data(data, return_obj)
             if metadata:
-                # setting metadata with last event from the data to avoid duplicate events from next batch call
-                return_obj['metadata'] = self.get_metadata(data) if is_query_start_date_updated else metadata
+                # metadata will not be set if result limit reached or no more events from the query.
+                if (offset + len(return_obj['data'])) < self.api_client.result_limit and start_index == end_index:
+                    # setting metadata with last event from the data to avoid duplicate events from next batch call
+                    return_obj['metadata'] = self.get_metadata(data) if is_query_start_date_updated else metadata
 
         except Exception as ex:
             return_obj = self.handle_api_exception(None, str(ex))
@@ -130,11 +132,17 @@ class Connector(BaseJsonSyncConnector):
 
         # setting code 401 for 400 code if it is authentication failure.
         if "Invalid Client token" in str(response_txt) or 'Credential mismatch' in str(response_txt):
+            message = "Invalid oauth_credentials."
             code = 401
 
         # setting code 403 for 400 code if it is an invalid query.
         if 'Invalid query' in str(response_txt):
             code = 403
+
+        # setting code 429 with the custom message.
+        if 'Max retries exceeded. too_many_requests with max retry' in str(response_txt):
+            message = "Too many request were made in the last hour. This API is limited to 500 requests per hour."
+            code = 429
 
         if not message:
             message = str(response_txt)
@@ -264,6 +272,50 @@ class Connector(BaseJsonSyncConnector):
             query['limit'] = self.api_client.api_page_size
 
     @staticmethod
+    def set_attributes(record):
+        """
+        Preprocesses signature-related attributes in the provided response list. If standard attributes corresponding
+        to an x509-certificate object are not present, custom attributes are set to None, as an x509-certificate object
+        requires at least one standard attribute (signature_issuer, signature_serial_number, signature_created_date,
+        signature_fingerprints).
+
+        :param response: A list containing signature attributes.
+        :return response: The modified list after preprocessing.
+        """
+        if record.get('signature_issuer') is None and \
+                record.get('signature_serial_number') is None and \
+                record.get('signature_created_date') is None and \
+                record.get('signature_fingerprints') is None:
+            if record.get('signature_value'):
+                record['signature_value'] = None
+            if record.get('signature_level_id'):
+                record['signature_level_id'] = None
+            if record.get('signature_value_ids'):
+                record['signature_value_ids'] = None
+            if record.get('signature_company_name'):
+                record['signature_company_name'] = None
+
+        return record
+
+    @staticmethod
+    def process_data(record, keys):
+        """
+         Process items corresponding to keys which are present in the record.
+
+        :param response: list
+        :param keys: key element of record
+        :return response: list
+        """
+        if keys[1]:
+            if record.get(keys[0]) and record.get(keys[0]).get(keys[1]):
+                record[keys[0]][keys[1]] = Connector.set_attributes(record[keys[0]][keys[1]])
+        else:
+            if record.get(keys[0]):
+                record[keys[0]] = Connector.set_attributes(record[keys[0]])
+
+        return record
+
+    @staticmethod
     def get_results_data(response):
         """
          Preprocessing the response.
@@ -277,4 +329,15 @@ class Connector(BaseJsonSyncConnector):
                 record['device_os_type_id'] = None
                 record['device_os_ver'] = None
                 record['device_os_lang'] = None
+
+            # If the dict containing signature related attributes is present,
+            # then data needs some preprocessing. Check the following items in record for
+            # signature related attributes.
+            item_list = [('file', None), ('directory', None), ('actor', 'file'),
+                        ('actor', 'module'), ('process', 'file'), ('parent', 'file'),
+                        ('module', None), ('startup_app', 'file')]
+
+            for item in item_list:
+                record = Connector.process_data(record, item)
+
         return response

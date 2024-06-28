@@ -356,3 +356,19 @@ class ToListValue(ValueTransformer):
         if not isinstance(obj, list):
             obj = [obj]
         return obj
+
+class ToAlgorithmHashes(ValueTransformer):
+    """A value transformer that converts hashes to stix hashes format.
+    Example:
+        input : [{"algorithm": "sha1", "value": "21EE32614E2EE32EEE9E2056EEE28EEE5E7EEEEA"}]
+        output: {"sha1": "21EE32614E2EE32EEE9E2056EEE28EEE5E7EEEEA"}
+    """
+
+    @staticmethod
+    def transform(obj):
+        try:
+            if isinstance(obj, list):
+                obj = {item["algorithm"]: item["value"] for item in obj}
+            return obj
+        except ValueError:
+            LOGGER.error(f"Cannot convert the hashes {obj} to hashes format")

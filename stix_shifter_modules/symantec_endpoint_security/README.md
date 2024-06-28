@@ -143,19 +143,13 @@ transmit symantec_endpoint_security "{\"host\":\"api.sep.securitycloud.symantec.
                     "md5": "4dd18f001ac31d5f48f50f99e4aa1761",
                     "sha2": "2b105fb111b1bcd111b1111111b3a11c60b111eef1111d3bb0099e1111aaf6b",
                     "size": 51736,
-                    "signature_company_name": "Microsoft Windows Publisher",
-                    "signature_value_ids": [
-                        3,
-                        5
-                    ],
                     "security_descriptor": "O:S-1-5-5-0-11111G:SYD:(A;;0x1fffff;;;S-1-5-5-0-71241)(A;;0x1400;;;BA)S:AI",
                     "normalized_path": "CSIDL_SYSTEM\\svchost.exe",
                     "path": "c:\\windows\\system32\\svchost.exe",
                     "uid": "281474976968790",
                     "name": "svchost.exe",
                     "folder": "c:\\windows\\system32",
-                    "original_name": "svchost.exe",
-                    "signature_level_id": 60
+                    "original_name": "svchost.exe"
                 },
                 "user": {
                     "name": "SYSTEM",
@@ -273,7 +267,7 @@ transmit symantec_endpoint_security "{\"host\":\"api.sep.securitycloud.symantec.
                     "type": "x-oca-event",
                     "action": "event_query_results",
                     "outcome": "Command Script Run",
-                    "agent": "DETECTION_RESPONSE",
+                    "x_feature_name": "DETECTION_RESPONSE",
                     "provider": "Symantec Endpoint Security",
                     "x_event_type_version": "1.0.0",
                     "timezone": 0,
@@ -316,7 +310,7 @@ transmit symantec_endpoint_security "{\"host\":\"api.sep.securitycloud.symantec.
                 "6": {
                     "type": "process",
                     "pid": 1880,
-                    "x_thread_id": 1132,
+                    "x_process_tid": 1132,
                     "created": "2024-05-03T04:44:04.920Z",
                     "command_line": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Schedule",
                     "binary_ref": "7",
@@ -332,14 +326,8 @@ transmit symantec_endpoint_security "{\"host\":\"api.sep.securitycloud.symantec.
                         "SHA-256": "2b105fb111b1bcd111b1111111b3a11c60b111eef1111d3bb0099e1111aaf6b"
                     },
                     "size": 51736,
-                    "x_signature_company_name": "Microsoft Windows Publisher",
-                    "x_signature_value_ids": [
-                        3,
-                        5
-                    ],
                     "name": "svchost.exe",
-                    "parent_directory_ref": "8",
-                    "x_signature_level_id": 60
+                    "parent_directory_ref": "8"
                 },
                 "8": {
                     "type": "directory",
@@ -459,7 +447,7 @@ symantec_endpoint_security
                     "category": "Security",
                     "host_ref": "2",
                     "duration": 0,
-                    "agent": "MALWARE_PROTECTION",
+                    "x_feature_name": "MALWARE_PROTECTION",
                     "outcome": "Blocked",
                     "description": "Scan started on selected drives and folders and all extensions.",
                     "x_policy_ref": "5",
@@ -682,7 +670,7 @@ symantec_endpoint_security
 |  Description  |  STIX Pattern  |  Sample Values  |
 | --- | --- | --- |
 | Network Connection Direction  | network-traffic:x_direction | [network-traffic:x_direction = 'Inbound'] |
-| The Identifier of the thread associated with the event, as returned by the operating system.  | process:x_thread_id | [process:x_thread_id = 1234] |
+| The Identifier of the thread associated with the event, as returned by the operating system.  | process:x_process_tid | [process:x_process_tid = 1234] |
 | The user security identifier (SID).  | user-account:x_sid | [user-account:x_sid = 'S-1-1-11'] |
 | The file type.  | file:x_type | [file:x_type = 'Directory'] |
 | The company name on the certificate that signed the file..  | file:x_signature_company_name | [file:x_signature_company_name LIKE 'Amazon'] |
