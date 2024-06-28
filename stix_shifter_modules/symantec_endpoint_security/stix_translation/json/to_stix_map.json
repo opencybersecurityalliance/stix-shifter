@@ -1,0 +1,2651 @@
+{
+  "uuid": {
+    "key": "x-oca-event.code",
+    "object": "event"
+  },
+  "severity_id": {
+    "key": "x-oca-event.severity",
+    "object": "event",
+    "transformer": "ToSeverityValue"
+  },
+  "category_id": {
+    "key": "x-oca-event.category",
+    "object": "event",
+    "transformer": "ToCategoryValue"
+  },
+  "feature_name": {
+    "key": "x-oca-event.x_feature_name",
+    "object": "event"
+  },
+  "time": [
+    {
+      "key": "x-oca-event.created",
+      "object": "event",
+      "transformer": "TimestampToAddMilliseconds"
+    },
+    {
+      "key": "last_observed",
+      "transformer": "TimestampToAddMilliseconds"
+    },
+    {
+      "key": "first_observed",
+      "transformer": "TimestampToAddMilliseconds"
+    }
+  ],
+  "timezone": {
+    "key": "x-oca-event.timezone",
+    "object": "event"
+  },
+  "duration": {
+    "key": "x-oca-event.duration",
+    "object": "event"
+  },
+  "message": {
+    "key": "x-oca-event.description",
+    "object": "event"
+  },
+  "product_name": {
+    "key": "x-oca-event.provider",
+    "object": "event"
+  },
+  "id": {
+    "key": "x-oca-event.outcome",
+    "object": "event",
+    "transformer": "ToOutcomeString"
+  },
+  "version": {
+    "key": "x-oca-event.x_event_type_version",
+    "object": "event"
+  },
+  "type": {
+    "key": "x-oca-event.action",
+    "object": "event"
+  },
+  "type_id": {
+    "key": "x-oca-event.x_event_type",
+    "object": "event"
+  },
+  "event_id": {
+    "key": "x-oca-event.x_event_id",
+    "object": "event"
+  },
+  "data": {
+    "key": "x-oca-event.x_event_data",
+    "object": "event"
+  },
+  "product_ver": {
+    "key": "x-oca-event.x_provider_version",
+    "object": "event"
+  },
+  "status_id": {
+    "key": "x-oca-event.x_event_status",
+    "object": "event",
+    "transformer": "ToStatusString"
+  },
+  "device_public_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "public_ip"
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "host",
+      "references": ["public_ip"],
+      "group": true
+    }
+  ],
+  "device_name": [
+    {
+      "key": "x-oca-asset.hostname",
+      "object": "host"
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
+    }
+  ],
+  "device_type": {
+    "key": "x-oca-asset.host_type",
+    "object": "host"
+  },
+  "device_group": {
+    "key": "x-oca-asset.x_host_group",
+    "object": "host"
+  },
+  "device_domain": [
+    {
+      "key": "domain-name.value",
+      "object": "host_domain",
+      "transformer": "ToDomainName"
+    },
+    {
+      "key": "x-oca-asset.domain_ref",
+      "object": "host",
+      "references": "host_domain"
+    }
+  ],
+  "device_location": {
+    "country": [
+      {
+        "key": "x-oca-geo.country_name",
+        "object": "host_geo"
+      },
+      {
+        "key": "x-oca-asset.geo_ref",
+        "object": "host",
+        "references": "host_geo"
+      }
+    ],
+    "city": {
+      "key": "x-oca-geo.city_name",
+      "object": "host_geo"
+    },
+    "continent": {
+      "key": "x-oca-geo.continent_name",
+      "object": "host_geo"
+    },
+    "region": [
+      {
+        "key": "x-oca-geo.region_name",
+        "object": "host_geo"
+      },
+      {
+        "key": "x-oca-geo.region_iso_code",
+        "object": "host_geo"
+      }
+    ],
+    "desc": {
+      "key": "x-oca-geo.name",
+      "object": "host_geo"
+    },
+    "coordinates": {
+      "key": "x-oca-geo.location",
+      "object": "host_geo"
+    },
+    "on_premises": [
+      {
+        "key": "x-oca-geo.x_is_on_premises",
+        "object": "host_geo"
+      },
+      {
+        "key": "x-oca-asset.geo_ref",
+        "object": "host",
+        "references": "host_geo"
+      }
+    ]
+  },
+  "device_networks": {
+    "ipv4": {
+      "key": "ipv4-addr.value",
+      "object": "device_ip"
+    },
+    "ipv6": {
+      "key": "ipv6-addr.value",
+      "object": "device_ip6"
+    },
+    "gateway_ip": {
+      "key": "ipv4-addr.value",
+      "object": "gateway_ip"
+    },
+    "mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "device_mac",
+        "transformer": "ToFormatMac"
+      },
+      {
+        "key": "ipv4-addr.resolves_to_refs",
+        "object": "device_ip",
+        "references": [
+          "device_mac"
+        ]
+      },
+      {
+        "key": "ipv6-addr.resolves_to_refs",
+        "object": "device_ip6",
+        "references": [
+          "device_mac"
+        ]
+      }
+    ],
+    "gateway_mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "gateway_mac"
+      },
+      {
+        "key": "ipv4-addr.resolves_to_refs",
+        "object": "gateway_ip",
+        "references": [
+          "gateway_mac"
+        ]
+      }
+    ],
+    "groupIpReference": {
+      "key": "x-oca-asset.ip_refs",
+      "object": "host",
+      "references": [
+        "device_ip",
+        "device_ip6",
+        "gateway_ip"
+      ],
+      "group_ref": true
+    },
+    "groupMacReference": {
+      "key": "x-oca-asset.mac_refs",
+      "object": "host",
+      "references": [
+        "device_mac",
+        "gateway_mac"
+      ],
+      "group_ref": true
+    }
+  },
+  "device_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "device_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "device_ip"
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "host",
+      "references": ["device_ip"],
+      "group": true
+    }
+  ],
+  "device_mac": [
+    {
+      "key": "mac-addr.value",
+      "object": "device_mac",
+      "transformer": "ToFormatMac"
+    },
+    {
+      "key": "ipv4-addr.resolves_to_refs",
+      "object": "device_ip",
+      "references": ["device_mac"]
+    },
+    {
+      "key": "x-oca-asset.mac_refs",
+      "object": "host",
+      "references": ["device_mac"]
+    }
+  ],
+  "device_os_type_id": {
+    "key": "software.x_os_type",
+    "object": "software",
+    "transformer": "ToDeviceOsTypeString"
+  },
+  "device_os_name": [
+    {
+      "key": "software.name",
+      "object": "software"
+    },
+    {
+      "key": "x-oca-asset.os_ref",
+      "object": "host",
+      "references": "software"
+    }
+  ],
+  "device_os_ver": {
+    "key": "software.version",
+    "object": "software"
+  },
+  "device_os_lang": {
+    "key": "software.languages",
+    "object": "software"
+  },
+  "open_mode": {
+    "key": "file.x_open_mode",
+    "object": "file"
+  },
+  "connection": {
+    "src_ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "src_ip"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "connection",
+        "references": "src_ip"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "src_ip"
+        ],
+        "group": true
+      }
+    ],
+    "dst_ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ip"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "connection",
+        "references": "dst_ip"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "dst_ip"
+        ],
+        "group": true
+      }
+    ],
+    "dst_port": {
+      "key": "network-traffic.dst_port",
+      "object": "connection",
+      "transformer": "ToInteger"
+    },
+    "src_port": {
+      "key": "network-traffic.scr_port",
+      "object": "connection",
+      "transformer": "ToInteger"
+    },
+    "src_mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac_src",
+        "transformer": "ToFormatMac"
+      },
+      {
+        "key": "ipv4-addr.resolves_to_refs",
+        "object": "src_ip",
+        "references": ["mac_src"]
+      }
+    ],
+    "dst_mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac_dst",
+        "transformer": "ToFormatMac"
+      },
+      {
+        "key": "ipv4-addr.resolves_to_refs",
+        "object": "dst_ip",
+        "references": ["mac_dst"]
+      }
+    ],
+    "protocol_id": [
+      {
+        "key": "network-traffic.protocols",
+        "object": "connection",
+        "transformer": "ToProtocolKeyWord"
+      },
+      {
+        "key": "x-oca-event.network_ref",
+        "object": "event",
+        "references": "connection"
+      }
+    ],
+    "bytes_upload": {
+      "key": "network-traffic.src_byte_count",
+      "object": "connection"
+    },
+    "bytes_download": {
+      "key": "network-traffic.dst_byte_count",
+      "object": "connection"
+    },
+    "direction_id": {
+      "key": "network-traffic.x_connection_direction",
+      "object": "connection",
+      "transformer": "ToDirectionString"
+    },
+    "dst_name": {
+      "key": "network-traffic.x_dst_name",
+      "object": "connection"
+    },
+    "src_name": {
+      "key": "network-traffic.x_src_name",
+      "object": "connection"
+    },
+    "url": {
+      "text": [
+        {
+          "key": "url.value",
+          "object": "con_url"
+        },
+        {
+          "key": "network-traffic.x_url_ref",
+          "object": "connection",
+          "references": "con_url"
+        }
+      ],
+      "host": {
+        "key":"url.x_url_host",
+        "object": "con_url"
+      },
+      "path": {
+        "key":"url.x_url_path",
+        "object": "con_url"
+      },
+      "port": {
+        "key":"url.x_url_port",
+        "object": "con_url"
+      }
+    }
+  },
+  "proxy_connection": {
+    "src_ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "src_proxy"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "src_proxy"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "proxy_connection",
+        "references": "src_ip"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "src_proxy"
+        ],
+        "group": true
+      }
+    ],
+    "dst_ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst_proxy"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_proxy"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "proxy_connection",
+        "references": "dst_proxy"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "dst_proxy"
+        ],
+        "group": true
+      }
+    ],
+    "dst_port": {
+      "key": "network-traffic.dst_port",
+      "object": "proxy_connection"
+    },
+    "src_port": {
+      "key": "network-traffic.scr_port",
+      "object": "proxy_connection"
+    },
+    "src_mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "proxy_mac_src",
+        "transformer": "ToFormatMac"
+      },
+      {
+        "key": "ipv4-addr.resolves_to_refs",
+        "object": "src_proxy",
+        "references": ["proxy_mac_src"]
+      }
+    ],
+    "dst_mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "proxy_mac_dst",
+        "transformer": "ToFormatMac"
+      },
+      {
+        "key": "ipv4-addr.resolves_to_refs",
+        "object": "dst_proxy",
+        "references": ["proxy_mac_dst"]
+      }
+    ],
+    "protocol_id": [
+      {
+        "key": "network-traffic.protocols",
+        "object": "proxy_connection"
+      },
+      {
+        "key": "x-oca-event.x_proxy_network_ref",
+        "object": "event",
+        "references": "proxy_connection"
+      }
+    ],
+    "bytes_upload": {
+      "key": "network-traffic.src_byte_count",
+      "object": "proxy_connection"
+    },
+    "bytes_download": {
+      "key": "network-traffic.dst_byte_count",
+      "object": "proxy_connection"
+    },
+    "direction_id": {
+      "key": "network-traffic.x_connection_direction",
+      "object": "proxy_connection",
+      "transformer": "ToDirectionString"
+    }
+  },
+  "user": {
+    "name": [
+      {
+        "key": "user-account.user_id",
+        "object": "user"
+      },
+      {
+        "key": "x-oca-event.user_ref",
+        "object": "event",
+        "references": "user"
+      }
+    ],
+    "logon_name": {
+      "key": "user-account.account_login",
+      "object": "user"
+    },
+    "is_admin": {
+      "key": "user-account.is_privileged",
+      "object": "user"
+    },
+    "domain": {
+      "key": "user-account.x_user_domain",
+      "object": "user"
+    },
+    "sid": {
+        "key": "user-account.x_user_sid",
+        "object": "user"
+      },
+    "uid": {
+      "key": "user-account.x_user_uid",
+      "object": "user"
+    }
+  },
+  "url": {
+    "text": [
+      {
+        "key": "url.value",
+        "object": "url"
+      },
+      {
+        "key": "x-oca-event.url_ref",
+        "object": "event",
+        "references": "url"
+      }
+    ]
+  },
+  "file": {
+    "name": [
+      {
+        "key": "file.name",
+        "object": "file"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "actor",
+        "references": "file"
+      },
+      {
+        "key": "x-oca-event.file_ref",
+        "object": "event",
+        "references": "file"
+      }
+    ],
+    "size": {
+      "key": "file.size",
+      "object": "file"
+    },
+    "md5": {
+      "key": "file.hashes.MD5",
+      "object": "file"
+    },
+    "sha1": {
+      "key": "file.hashes.SHA-1",
+      "object": "file"
+    },
+    "sha2": {
+      "key": "file.hashes.SHA-256",
+      "object": "file"
+    },
+    "type_id": {
+      "key": "file.x_file_type",
+      "object": "file",
+      "transformer": "ToFileTypeString"
+    },
+    "rep_score": {
+      "key": "file.x_rep_score",
+      "object": "file"
+    },
+    "version": {
+      "key": "file.x_file_version",
+      "object": "file"
+    },
+    "path": [
+      {
+        "key": "directory.path",
+        "object": "actor_file_dir"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "actor_file_dir"
+      }
+    ],
+    "folder": [
+      {
+        "key": "directory.path",
+        "object": "actor_file_dir"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "file",
+        "references": "actor_file_dir"
+      }
+    ],
+    "content_type": {
+      "family_id": {
+        "key": "file.x_family_type",
+        "object": "file",
+        "transformer": "ToFamilyIdString"
+      },
+      "type_id": {
+        "key": "file.x_content_type",
+        "object": "file",
+        "transformer": "ToFileContentTypeString"
+      }
+    },
+    "created": {
+      "key": "file.created",
+      "object": "file"
+    },
+    "modified": {
+      "key": "file.modified",
+      "object": "file"
+    },
+    "accessed": {
+      "key": "file.accessed",
+      "object": "file"
+    },
+    "mime_type": {
+      "key": "file.mime_type",
+      "object": "file"
+    },
+    "signature_issuer": [
+      {
+        "key": "x509-certificate.issuer",
+        "object": "x509",
+        "transformer": "ToFormatMac"
+      },
+       {
+        "key": "file.x_certificate_ref",
+        "object": "file",
+         "references": "x509"
+      }
+    ],
+    "signature_value": {
+      "key": "x509-certificate.x_signature_value",
+      "object": "x509"
+    },
+    "signature_level_id": {
+      "key": "x509-certificate.x_signature_level_id",
+      "object": "x509"
+    },
+    "signature_serial_number": {
+      "key": "x509-certificate.serial_number",
+      "object": "x509"
+    },
+    "signature_value_ids": {
+      "key": "x509-certificate.x_signature_value_ids",
+      "object": "x509",
+      "transformer": "ToListValue"
+    },
+    "signature_created_date": {
+      "key": "x509-certificate.validity_not_before",
+      "object": "x509",
+      "transformer": "EpochSecondsToTimestamp"
+    },
+    "signature_company_name": {
+      "key": "x509-certificate.x_signature_company_name",
+      "object": "x509"
+    },
+    "signature_fingerprints": {
+      "key": "x509-certificate.hashes",
+      "object": "x509",
+      "transformer": "ToAlgorithmHashes"
+    },
+    "url": {
+      "text": [
+        {
+          "key": "url.value",
+          "object": "file_url"
+        },
+        {
+          "key": "file.x_url_ref",
+          "object": "file",
+          "references": "file_url"
+        }
+      ],
+      "host": {
+        "key":"url.x_url_host",
+        "object": "file_url"
+      },
+      "path": {
+        "key":"url.x_url_path",
+        "object": "file_url"
+      },
+      "port": {
+        "key":"url.x_url_port",
+        "object": "file_url"
+      }
+    }
+  },
+  "directory": {
+    "name": [
+      {
+        "key": "file.name",
+        "object": "directory"
+      },
+      {
+        "key": "process.binary_ref",
+        "object": "actor",
+        "references": "directory"
+      },
+      {
+        "key": "x-oca-event.file_ref",
+        "object": "event",
+        "references": "directory"
+      }
+    ],
+    "size": {
+      "key": "file.size",
+      "object": "directory"
+    },
+    "md5": {
+      "key": "file.hashes.MD5",
+      "object": "directory"
+    },
+    "sha1": {
+      "key": "file.hashes.SHA-1",
+      "object": "directory"
+    },
+    "sha2": {
+      "key": "file.hashes.SHA-256",
+      "object": "directory"
+    },
+    "type_id": {
+      "key": "file.x_file_type",
+      "object": "directory",
+      "transformer": "ToFileTypeString"
+    },
+    "rep_score": {
+      "key": "file.x_rep_score",
+      "object": "directory"
+    },
+    "version": {
+      "key": "file.x_file_version",
+      "object": "directory"
+    },
+    "folder": [
+      {
+        "key": "directory.path",
+        "object": "dir_file_dir"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "directory",
+        "references": "dir_file_dir"
+      }
+    ],
+    "content_type": {
+      "family_id": {
+        "key": "file.x_family_type",
+        "object": "directory",
+        "transformer": "ToFamilyIdString"
+      },
+      "type_id": {
+        "key": "file.x_content_type",
+        "object": "directory",
+        "transformer": "ToFileContentTypeString"
+      }
+    },
+    "created": {
+      "key": "file.created",
+      "object": "directory"
+    },
+    "modified": {
+      "key": "file.modified",
+      "object": "directory"
+    },
+    "accessed": {
+      "key": "file.accessed",
+      "object": "directory"
+    },
+    "mime_type": {
+      "key": "file.mime_type",
+      "object": "directory"
+    },
+    "signature_issuer": [
+      {
+        "key": "x509-certificate.issuer",
+        "object": "x509"
+      },
+      {
+        "key": "file.x_certificate_ref",
+        "object": "directory",
+        "references": "x509"
+      }
+    ],
+    "signature_value": {
+      "key": "x509-certificate.x_signature_value",
+      "object": "x509"
+    },
+    "signature_level_id": {
+      "key": "x509-certificate.x_signature_level_id",
+      "object": "x509"
+    },
+    "signature_serial_number": {
+      "key": "x509-certificate.serial_number",
+      "object": "x509"
+    },
+    "signature_value_ids": {
+      "key": "x509-certificate.x_signature_value_ids",
+      "object": "x509",
+      "transformer": "ToListValue"
+    },
+    "signature_created_date": {
+      "key": "x509-certificate.validity_not_before",
+      "object": "x509",
+      "transformer": "EpochSecondsToTimestamp"
+    },
+    "signature_company_name": {
+      "key": "x509-certificate.x_signature_company_name",
+      "object": "x509"
+    },
+    "signature_fingerprints": {
+      "key": "x509-certificate.hashes",
+      "object": "x509",
+      "transformer": "ToAlgorithmHashes"
+    },
+    "url": {
+      "text": [
+        {
+          "key": "url.value",
+          "object": "dir_url"
+        },
+        {
+          "key": "file.x_url_ref",
+          "object": "directory",
+          "references": "dir_url"
+        }
+      ],
+      "host": {
+        "key":"url.x_url_host",
+        "object": "dir_url"
+      },
+      "path": {
+        "key":"url.x_url_path",
+        "object": "dir_url"
+      },
+      "port": {
+        "key":"url.x_url_port",
+        "object": "dir_url"
+      }
+    }
+  },
+  "actor": {
+    "pid": [
+      {
+        "key": "process.pid",
+        "object": "actor",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "x-oca-event.process_ref",
+        "object": "event",
+        "references": "actor"
+      }
+    ],
+    "cmd_line": {
+      "key": "process.command_line",
+      "object": "actor"
+    },
+    "app_name": {
+      "key": "process.name",
+      "object": "actor"
+    },
+    "start_time": {
+      "key": "process.created",
+      "object": "actor"
+    },
+    "tid": {
+      "key": "process.x_process_tid",
+      "object": "actor"
+    },
+    "uid": {
+      "key": "process.x_process_uid",
+      "object": "actor"
+    },
+    "user": {
+      "name": [
+        {
+          "key": "user-account.user_id",
+          "object": "actor_user"
+        },
+        {
+          "key": "process.creator_user_ref",
+          "object": "actor",
+          "references": "actor_user"
+        }
+      ],
+      "logon_name": {
+        "key": "user-account.account_login",
+        "object": "actor_user"
+      },
+      "is_admin": {
+        "key": "user-account.is_privileged",
+        "object": "actor_user"
+      },
+      "domain": {
+        "key": "user-account.x_user_domain",
+        "object": "actor_user"
+      },
+      "sid": {
+        "key": "user-account.x_user_sid",
+        "object": "actor_user"
+      }
+    },
+    "file": {
+      "name": [
+        {
+          "key": "file.name",
+          "object": "actor_file"
+        },
+        {
+          "key": "process.binary_ref",
+          "object": "actor",
+          "references": "actor_file"
+        },
+        {
+          "key": "x-oca-event.file_ref",
+          "object": "event",
+          "references": "actor_file"
+        }
+      ],
+      "size": {
+        "key": "file.size",
+        "object": "actor_file"
+      },
+      "md5": {
+        "key": "file.hashes.MD5",
+        "object": "actor_file"
+      },
+      "sha1": {
+        "key": "file.hashes.SHA-1",
+        "object": "actor_file"
+      },
+      "sha2": {
+        "key": "file.hashes.SHA-256",
+        "object": "actor_file"
+      },
+      "type_id": {
+        "key": "file.x_file_type",
+        "object": "actor_file",
+        "transformer": "ToFileTypeString"
+      },
+      "rep_score": {
+        "key": "file.x_rep_score",
+        "object": "actor_file"
+      },
+      "version": {
+        "key": "file.x_file_version",
+        "object": "actor_file"
+      },
+      "folder": [
+        {
+          "key": "directory.path",
+          "object": "actor_file_dir"
+        },
+        {
+          "key": "file.parent_directory_ref",
+          "object": "actor_file",
+          "references": "actor_file_dir"
+        }
+      ],
+      "content_type": {
+        "family_id": {
+          "key": "file.x_family_type",
+          "object": "actor_file"
+        },
+        "type_id": {
+          "key": "file.x_content_type",
+          "object": "actor_file",
+          "transformer": "ToFileContentTypeString"
+        }
+      },
+      "created": {
+        "key": "file.created",
+        "object": "actor_file"
+      },
+      "modified": {
+        "key": "file.modified",
+        "object": "actor_file"
+      },
+      "accessed": {
+        "key": "file.accessed",
+        "object": "actor_file"
+      },
+      "mime_type": {
+        "key": "file.mime_type",
+        "object": "actor_file"
+      },
+      "signature_issuer": [
+        {
+          "key": "x509-certificate.issuer",
+          "object": "x509"
+        },
+        {
+          "key": "file.x_certificate_ref",
+          "object": "actor_file",
+          "references": "x509"
+        }
+      ],
+      "signature_value": {
+        "key": "x509-certificate.x_signature_value",
+        "object": "x509"
+      },
+      "signature_level_id": {
+        "key": "x509-certificate.x_signature_level_id",
+        "object": "x509"
+      },
+      "signature_serial_number": {
+        "key": "x509-certificate.serial_number",
+        "object": "x509"
+      },
+      "signature_value_ids": {
+        "key": "x509-certificate.x_signature_value_ids",
+        "object": "x509",
+        "transformer": "ToListValue"
+      },
+      "signature_created_date": {
+        "key": "x509-certificate.validity_not_before",
+        "object": "x509",
+        "transformer": "EpochSecondsToTimestamp"
+      },
+      "signature_company_name": {
+        "key": "x509-certificate.x_signature_company_name",
+        "object": "x509"
+      },
+      "signature_fingerprints": {
+        "key": "x509-certificate.hashes",
+        "object": "x509",
+        "transformer": "ToAlgorithmHashes"
+      },
+      "url": {
+        "text": [
+          {
+            "key": "url.value",
+            "object": "actor_url"
+          },
+          {
+            "key": "file.x_url_ref",
+            "object": "actor_file",
+            "references": "actor_url"
+          }
+        ],
+        "host": {
+          "key": "url.x_url_host",
+          "object": "actor_url"
+        },
+        "path": {
+          "key": "url.x_url_path",
+          "object": "actor_url"
+        },
+        "port": {
+          "key": "url.x_url_port",
+          "object": "actor_url"
+        }
+      }
+    },
+    "module": {
+      "name": [
+        {
+          "key": "file.name",
+          "object": "module_dll"
+        },
+        {
+          "key": "file.dll_ref",
+          "object": "actor_file",
+          "references": "module_dll"
+        }
+      ],
+      "size": {
+        "key": "file.size",
+        "object": "module_dll"
+      },
+      "md5": {
+        "key": "file.hashes.MD5",
+        "object": "module_dll"
+      },
+      "sha1": {
+        "key": "file.hashes.SHA-1",
+        "object": "module_dll"
+      },
+      "sha2": {
+        "key": "file.hashes.SHA-256",
+        "object": "module_dll"
+      },
+      "type_id": {
+        "key": "file.x_file_type",
+        "object": "module_dll",
+        "transformer": "ToFileTypeString"
+      },
+      "rep_score": {
+        "key": "file.x_rep_score",
+        "object": "module_dll"
+      },
+      "version": {
+        "key": "file.x_file_version",
+        "object": "module_dll"
+      },
+      "folder": [
+        {
+          "key": "directory.path",
+          "object": "module_dll_dir"
+        },
+        {
+          "key": "file.parent_directory_ref",
+          "object": "module_dll",
+          "references": "module_dll_dir"
+        }
+      ],
+      "signature_issuer": [
+        {
+          "key": "x509-certificate.issuer",
+          "object": "x509",
+          "transformer": "ToFormatMac"
+        },
+        {
+          "key": "file.x_certificate_ref",
+          "object": "module_dll",
+          "references": "x509"
+        }
+      ],
+      "signature_value": {
+        "key": "x509-certificate.x_signature_value",
+        "object": "x509"
+      },
+      "signature_level_id": {
+        "key": "x509-certificate.x_signature_level_id",
+        "object": "x509"
+      },
+      "signature_serial_number": {
+        "key": "x509-certificate.serial_number",
+        "object": "x509"
+      },
+      "signature_value_ids": {
+        "key": "x509-certificate.x_signature_value_ids",
+        "object": "x509",
+        "transformer": "ToListValue"
+      },
+      "signature_created_date": {
+        "key": "x509-certificate.validity_not_before",
+        "object": "x509",
+        "transformer": "EpochSecondsToTimestamp"
+      },
+      "signature_company_name": {
+        "key": "x509-certificate.x_signature_company_name",
+        "object": "x509"
+      },
+      "signature_fingerprints": {
+        "key": "x509-certificate.hashes",
+        "object": "x509",
+        "transformer": "ToAlgorithmHashes"
+      },
+      "url": {
+        "text": [
+          {
+            "key": "url.value",
+            "object": "module_url"
+          },
+          {
+            "key": "file.x_url_ref",
+            "object": "module_dll",
+            "references": "module_url"
+          }
+        ],
+        "host": {
+          "key": "url.x_url_host",
+          "object": "module_url"
+        },
+        "path": {
+          "key": "url.x_url_path",
+          "object": "module_url"
+        },
+        "port": {
+          "key": "url.x_url_port",
+          "object": "module_url"
+        }
+      }
+    },
+    "session": {
+      "id": [
+        {
+          "key": "x-user-session.id",
+          "object": "session"
+        },
+        {
+          "key": "x-oca-event.x_user_session_ref",
+          "object": "event",
+          "references": "session"
+        }
+      ],
+      "is_admin": {
+        "key": "x-user-session.is_admin",
+        "object": "session"
+      },
+      "remote": {
+        "key": "x-user-session.is_remote",
+        "object": "session"
+      },
+      "user": {
+        "name": [
+          {
+            "key": "user-account.user_id",
+            "object": "session_user"
+          },
+          {
+            "key": "x-user-session.user_ref",
+            "object": "session",
+            "references": "session_user"
+          }
+        ],
+        "logon_name": {
+          "key": "user-account.account_login",
+          "object": "session_user"
+        },
+        "is_admin": {
+          "key": "user-account.is_privileged",
+          "object": "session_user"
+        },
+        "domain": {
+          "key": "user-account.x_user_domain",
+          "object": "session_user"
+        },
+        "sid": {
+          "key": "user-account.x_user_sid",
+          "object": "session_user"
+        }
+      }
+    }
+  },
+  "process": {
+    "pid": [
+      {
+        "key": "process.pid",
+        "object": "process",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.child_refs",
+        "object": "actor",
+        "references": ["process"]
+      }
+    ],
+    "cmd_line": {
+      "key": "process.command_line",
+      "object": "process"
+    },
+    "app_name": {
+      "key": "process.name",
+      "object": "process"
+    },
+    "start_time": {
+      "key": "process.created",
+      "object": "process"
+    },
+    "tid": {
+      "key": "process.x_process_tid",
+      "object": "process"
+    },
+    "uid": {
+      "key": "process.x_process_uid",
+      "object": "process"
+    },
+    "user": {
+      "name": [
+        {
+          "key": "user-account.user_id",
+          "object": "process_user"
+        },
+        {
+          "key": "process.creator_user_ref",
+          "object": "process",
+          "references": "process_user"
+        }
+      ],
+      "logon_name": {
+        "key": "user-account.account_login",
+        "object": "process_user"
+      },
+      "is_admin": {
+        "key": "user-account.is_privileged",
+        "object": "process_user"
+      },
+      "domain": {
+        "key": "user-account.x_user_domain",
+        "object": "process_user"
+      },
+      "sid": {
+        "key": "user-account.x_user_sid",
+        "object": "process_user"
+      }
+    },
+    "file": {
+      "name": [
+        {
+          "key": "file.name",
+          "object": "process_file"
+        },
+        {
+          "key": "process.binary_ref",
+          "object": "process",
+          "references": "process_file"
+        }
+      ],
+      "size": {
+        "key": "file.size",
+        "object": "process_file"
+      },
+      "md5": {
+        "key": "file.hashes.MD5",
+        "object": "process_file"
+      },
+      "sha1": {
+        "key": "file.hashes.SHA-1",
+        "object": "process_file"
+      },
+      "sha2": {
+        "key": "file.hashes.SHA-256",
+        "object": "process_file"
+      },
+      "type_id": {
+        "key": "file.x_file_type",
+        "object": "process_file",
+        "transformer": "ToFileTypeString"
+      },
+      "rep_score": {
+        "key": "file.x_rep_score",
+        "object": "process_file"
+      },
+      "version": {
+        "key": "file.x_file_version",
+        "object": "process_file"
+      },
+      "folder": [
+        {
+          "key": "directory.path",
+          "object": "process_file_dir"
+        },
+        {
+          "key": "file.parent_directory_ref",
+          "object": "process_file",
+          "references": "process_file_dir"
+        }
+      ],
+      "content_type": {
+        "family_id": {
+          "key": "file.x_family_type",
+          "object": "process_file"
+        },
+        "type_id": {
+          "key": "file.x_content_type",
+          "object": "process_file",
+          "transformer": "ToFileContentTypeString"
+        }
+      },
+      "created": {
+        "key": "file.created",
+        "object": "process_file"
+      },
+      "modified": {
+        "key": "file.modified",
+        "object": "process_file"
+      },
+      "accessed": {
+        "key": "file.accessed",
+        "object": "process_file"
+      },
+      "mime_type": {
+        "key": "file.mime_type",
+        "object": "process_file"
+      },
+      "signature_issuer": [
+        {
+          "key": "x509-certificate.issuer",
+          "object": "x509"
+        },
+        {
+          "key": "file.x_certificate_ref",
+          "object": "process_file",
+          "references": "x509"
+        }
+      ],
+      "signature_value": {
+        "key": "x509-certificate.x_signature_value",
+        "object": "x509"
+      },
+      "signature_level_id": {
+        "key": "x509-certificate.x_signature_level_id",
+        "object": "x509"
+      },
+      "signature_serial_number": {
+        "key": "x509-certificate.serial_number",
+        "object": "x509"
+      },
+      "signature_value_ids": {
+        "key": "x509-certificate.x_signature_value_ids",
+        "object": "x509",
+        "transformer": "ToListValue"
+      },
+      "signature_created_date": {
+        "key": "x509-certificate.validity_not_before",
+        "object": "x509",
+        "transformer": "EpochSecondsToTimestamp"
+      },
+      "signature_company_name": {
+        "key": "x509-certificate.x_signature_company_name",
+        "object": "x509"
+      },
+      "signature_fingerprints": {
+        "key": "x509-certificate.hashes",
+        "object": "x509",
+        "transformer": "ToAlgorithmHashes"
+      },
+      "url": {
+        "text": [
+          {
+            "key": "url.value",
+            "object": "process_url"
+          },
+          {
+            "key": "file.x_url_ref",
+            "object": "process_file",
+            "references": "process_url"
+          }
+        ],
+        "host": {
+          "key": "url.x_url_host",
+          "object": "process_url"
+        },
+        "path": {
+          "key": "url.x_url_path",
+          "object": "process_url"
+        },
+        "port": {
+          "key": "url.x_url_port",
+          "object": "process_url"
+        }
+      }
+    }
+  },
+  "parent": {
+    "pid": [
+      {
+        "key": "process.pid",
+        "object": "parent_proc",
+        "transformer": "ToInteger"
+      },
+      {
+        "key": "process.parent_ref",
+        "object": "actor",
+        "references": "parent_proc"
+      }
+    ],
+    "cmd_line": {
+      "key": "process.command_line",
+      "object": "parent_proc"
+    },
+    "app_name": {
+      "key": "process.name",
+      "object": "parent_proc"
+    },
+    "tid": {
+      "key": "process.x_process_tid",
+      "object": "parent_proc"
+    },
+    "uid": {
+      "key": "process.x_process_uid",
+      "object": "parent_proc"
+    },
+    "user": {
+      "name": [
+        {
+          "key": "user-account.user_id",
+          "object": "p_user"
+        },
+        {
+          "key": "process.creator_user_ref",
+          "object": "parent_proc",
+          "references": "p_user"
+        }
+      ],
+      "account_login": {
+        "key": "user-account.account_login",
+        "object": "p_user"
+      },
+      "is_admin": {
+        "key": "user-account.is_privileged",
+        "object": "p_user"
+      },
+      "domain": {
+        "key": "user-account.x_user_domain",
+        "object": "p_user"
+      },
+      "sid": {
+        "key": "user-account.x_user_sid",
+        "object": "p_user"
+      }
+    },
+    "file": {
+      "name": [
+        {
+          "key": "file.name",
+          "object": "parent_proc_file"
+        },
+        {
+          "key": "process.binary_ref",
+          "object": "parent_proc",
+          "references": "parent_proc_file"
+        }
+      ],
+      "size": {
+        "key": "file.size",
+        "object": "parent_proc_file"
+      },
+      "md5": {
+        "key": "file.hashes.MD5",
+        "object": "parent_proc_file"
+      },
+      "sha1": {
+        "key": "file.hashes.SHA-1",
+        "object": "parent_proc_file"
+      },
+      "sha2": {
+        "key": "file.hashes.SHA-256",
+        "object": "parent_proc_file"
+      },
+      "type_id": {
+        "key": "file.x_file_type",
+        "object": "parent_proc_file",
+        "transformer": "ToFileTypeString"
+      },
+      "rep_score": {
+        "key": "file.x_rep_score",
+        "object": "parent_proc_file"
+      },
+      "version": {
+        "key": "file.x_file_version",
+        "object": "parent_proc_file"
+      },
+      "folder": [
+        {
+          "key": "directory.path",
+          "object": "parent_proc_file_dir"
+        },
+        {
+          "key": "file.parent_directory_ref",
+          "object": "parent_proc_file",
+          "references": "parent_proc_file_dir"
+        }
+      ],
+      "content_type": {
+        "family_id": {
+          "key": "file.x_family_type",
+          "object": "parent_proc_file"
+        },
+        "type_id": {
+          "key": "file.x_content_type",
+          "object": "parent_proc_file",
+          "transformer": "ToFileContentTypeString"
+        }
+      },
+      "created": {
+        "key": "file.created",
+        "object": "parent_proc_file"
+      },
+      "modified": {
+        "key": "file.modified",
+        "object": "parent_proc_file"
+      },
+      "accessed": {
+        "key": "file.accessed",
+        "object": "parent_proc_file"
+      },
+      "mime_type": {
+        "key": "file.mime_type",
+        "object": "parent_proc_file"
+      },
+      "signature_issuer": [
+        {
+          "key": "x509-certificate.issuer",
+          "object": "x509"
+        },
+        {
+          "key": "file.x_certificate_ref",
+          "object": "parent_proc_file",
+          "references": "x509"
+        }
+      ],
+      "signature_value": {
+        "key": "x509-certificate.x_signature_value",
+        "object": "x509"
+      },
+      "signature_level_id": {
+        "key": "x509-certificate.x_signature_level_id",
+        "object": "x509"
+      },
+      "signature_serial_number": {
+        "key": "x509-certificate.serial_number",
+        "object": "x509"
+      },
+      "signature_value_ids": {
+        "key": "x509-certificate.x_signature_value_ids",
+        "object": "x509",
+        "transformer": "ToListValue"
+      },
+      "signature_created_date": {
+        "key": "x509-certificate.validity_not_before",
+        "object": "x509",
+        "transformer": "EpochSecondsToTimestamp"
+      },
+      "signature_company_name": {
+        "key": "x509-certificate.x_signature_company_name",
+        "object": "x509"
+      },
+      "signature_fingerprints": {
+        "key": "x509-certificate.hashes",
+        "object": "x509",
+        "transformer": "ToAlgorithmHashes"
+      },
+      "url": {
+        "text": [
+          {
+            "key": "url.value",
+            "object": "parent_proc_url"
+          },
+          {
+            "key": "file.x_url_ref",
+            "object": "parent_proc_file",
+            "references": "parent_proc_url"
+          }
+        ],
+        "host": {
+          "key": "url.x_url_host",
+          "object": "parent_proc_url"
+        },
+        "path": {
+          "key": "url.x_url_path",
+          "object": "parent_proc_url"
+        },
+        "port": {
+          "key": "url.x_url_port",
+          "object": "parent_proc_url"
+        }
+      }
+    }
+  },
+  "email": {
+    "sender_ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "sender_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "sender_ip"
+      },
+      {
+        "key": "email-message.sender_ip_ref",
+        "object": "email_message",
+        "references": ["sender_ip"]
+      }
+    ],
+    "header_from": [
+      {
+        "key": "email-addr.value",
+        "object": "email_from"
+      },
+      {
+        "key": "email-message.from_ref",
+        "object": "email_message",
+        "references": ["email_from"]
+      },
+      {
+        "key": "email-message.is_multipart",
+        "object": "email_message",
+        "value" : true
+      }
+    ],
+    "header_to": [
+      {
+        "key": "email-addr.value",
+        "object": "email_to"
+      },
+      {
+        "key": "email-message.to_refs",
+        "object": "email_message",
+        "references": ["email_to"]
+      }
+    ],
+    "header_reply_to": [
+      {
+        "key": "email-addr.value",
+        "object": "email_reply_to"
+      },
+      {
+        "key": "email-message.additional_header_fields",
+        "object": "email_message",
+        "transformer" :"ReplyToDict",
+        "references": ["email_reply_to"]
+      }
+    ],
+    "smtp_from": [
+      {
+        "key": "email-addr.value",
+        "object": "email_smtp_from"
+      },
+      {
+        "key": "email-message.from_ref",
+        "object": "email_message",
+        "references": ["email_from"]
+      }
+    ],
+    "smtp_to": [
+      {
+        "key": "email-addr.value",
+        "object": "email_smtp_to"
+      },
+      {
+        "key": "email-message.to_refs",
+        "object": "email_message",
+        "references": ["email_to"]
+      }
+    ],
+    "header_subject": {
+      "key": "email-message.subject",
+      "object": "email_message"
+    },
+    "direction_id": {
+      "key": "email-message.x_email_direction",
+      "object": "email_message",
+      "transformer": "ToDirectionString"
+    },
+    "size": {
+      "key": "email-message.x_size",
+      "object": "email_message"
+    }
+  },
+  "email_uid": {
+    "key": "email-message.x_email_uid",
+    "object": "email_message"
+  },
+  "reg_key": {
+    "path": [
+      {
+        "key": "windows-registry-key.key",
+        "object": "win_registry"
+      },
+      {
+        "key": "x-oca-event.registry_ref",
+        "object": "event",
+        "references": "win_registry"
+      }
+    ],
+    "last_write": {
+      "key": "windows-registry-key.modified",
+      "object": "win_registry"
+    },
+    "is_system": {
+      "key": "windows-registry-key.x_is_system",
+      "object": "win_registry"
+    }
+  },
+  "reg_value": {
+    "path": [
+      {
+        "key": "windows-registry-key.key",
+        "object": "win_registry"
+      },
+      {
+        "key": "x-oca-event.registry_ref",
+        "object": "event",
+        "references": "win_registry"
+      }
+    ],
+    "data": {
+      "key": "windows-registry-key.values.data",
+      "object": "win_registry",
+      "group": "registry-value-type"
+    },
+    "name": {
+      "key": "windows-registry-key.values.name",
+      "object": "win_registry",
+      "group": "registry-value-type"
+    },
+    "type_id": {
+      "key": "windows-registry-key.values.data_type",
+      "object": "win_registry",
+      "group": "registry-value-type"
+    },
+    "last_write": {
+      "key": "windows-registry-key.modified",
+      "object": "win_registry"
+    },
+    "is_system": {
+      "key": "windows-registry-key.x_is_system",
+      "object": "win_registry"
+    }
+  },
+  "reason_id": {
+    "key": "x-ibm-finding.finding_type",
+    "object": "threat",
+    "transformer": "ToFindingTypeString"
+  },
+  "count": {
+    "key": "number_observed"
+  },
+  "threat": {
+    "name": {
+      "key": "x-ibm-finding.name",
+      "object": "threat"
+    },
+    "risk_id": {
+      "key": "x-ibm-finding.severity",
+      "object": "threat",
+      "transformer": "ToFindingSeverityString"
+    },
+    "type_id": {
+      "key": "x-ibm-finding.x_threat_type_id",
+      "object": "threat",
+      "transformer": "ToThreatTypeString"
+    },
+    "provider": {
+      "key": "x-ibm-finding.x_info_provider",
+      "object": "threat"
+    },
+    "id": {
+      "key": "x-ibm-finding.alert_id",
+      "object": "threat"
+    }
+  },
+  "attacks": {
+    "tactic_uids": {
+      "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_id",
+      "object": "attack",
+      "transformer": "UnlistIfList"
+    },
+    "technique_uid": {
+      "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_id",
+      "object": "attack"
+    },
+    "technique_name": [
+      {
+        "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+        "object": "attack"
+      },
+      {
+        "key": "x-ibm-ttp-tagging.name",
+        "object": "attack"
+      }
+    ],
+    "groupReference": {
+      "key": "x-ibm-finding.ttp_tagging_refs",
+      "object": "threat",
+      "references": ["attack"],
+      "group_ref": true
+    }
+  },
+  "policy": {
+    "name": [
+      {
+        "key": "x-symantec-policy.name",
+        "object": "policy"
+      },
+      {
+        "key": "x-ibm-finding.x_policy_ref",
+        "object": "threat",
+        "references": "policy"
+      },
+      {
+        "key": "x-oca-event.x_policy_ref",
+        "object": "event",
+        "references": "policy"
+      }
+    ],
+    "desc": {
+      "key": "x-symantec-policy.description",
+      "object": "policy"
+    },
+    "effective_date": {
+      "key": "x-symantec-policy.effective_date",
+      "object": "policy"
+    },
+    "group_name": {
+      "key": "x-symantec-policy.group_name",
+      "object": "policy"
+    },
+     "rule_group_name": {
+      "key": "x-symantec-policy.rule_group_name",
+      "object": "policy"
+    },
+     "rule_name": {
+      "key": "x-symantec-policy.rule_name",
+      "object": "policy"
+    },
+    "rule_category_id": {
+      "key": "x-symantec-policy.rule_category",
+      "object": "policy"
+    },
+     "type_id": {
+      "key": "x-symantec-policy.type_id",
+      "object": "policy"
+    },
+    "rule_desc": {
+      "key": "x-symantec-policy.rule_description",
+      "object": "policy"
+    },
+    "rule_group_desc": {
+      "key": "x-symantec-policy.rule_group_desc",
+      "object": "policy"
+    },
+    "version": {
+      "key": "x-symantec-policy.version",
+      "object": "policy"
+    },
+    "state_ids": {
+      "key": "x-symantec-policy.states",
+      "object": "policy"
+    }
+  },
+  "change_type_id" : {
+    "key": "x-symantec-policy.change_type_id",
+    "object": "policy"
+  },
+  "session": {
+    "id": [
+      {
+        "key": "x-user-session.id",
+        "object": "session"
+      },
+      {
+        "key": "x-oca-event.x_user_session_ref",
+        "object": "event",
+        "references": "session"
+      }
+    ],
+    "is_admin": {
+      "key": "x-user-session.is_admin",
+      "object": "session"
+    },
+    "remote": {
+      "key": "x-user-session.is_remote",
+      "object": "session"
+    },
+    "user": {
+      "name": [
+        {
+          "key": "user-account.user_id",
+          "object": "session_user"
+        },
+        {
+          "key": "x-user-session.user_ref",
+          "object": "session",
+          "references": "session_user"
+        }
+      ],
+      "logon_name": {
+        "key": "user-account.account_login",
+        "object": "session_user"
+      },
+      "is_admin": {
+        "key": "user-account.is_privileged",
+        "object": "session_user"
+      },
+      "domain": {
+        "key": "user-account.x_user_domain",
+        "object": "session_user"
+      },
+      "sid": {
+        "key": "user-account.x_user_sid",
+        "object": "session_user"
+      }
+    }
+  },
+  "kernel":{
+    "name": [
+      {
+        "key": "x-kernel-resource.name",
+        "object": "kernel"
+      },
+      {
+        "key": "x-oca-event.x_kernel_resource_ref",
+        "object": "event",
+        "references": "kernel"
+      }
+    ],
+    "type_id": {
+      "key": "x-kernel-resource.type_id",
+      "object": "kernel",
+      "transformer": "ToKernelType"
+    },
+    "system_call": {
+      "key": "x-kernel-resource.system_call",
+      "object": "kernel"
+    }
+  },
+  "certificate": {
+    "issuer_name": [
+      {
+        "key": "x509-certificate.issuer",
+        "object": "client-cert"
+      },
+      {
+        "key": "x-oca-event.x_certificate_ref",
+        "object": "event",
+        "references": "client-cert"
+      }
+    ],
+    "serial": {
+      "key": "x509-certificate.serial_number",
+      "object": "client-cert"
+    },
+    "start_time": {
+      "key": "x509-certificate.validity_not_before",
+      "object": "client-cert"
+    },
+    "end_time": {
+      "key": "x509-certificate.validity_not_after",
+      "object": "client-cert"
+    },
+    "version": {
+      "key": "x509-certificate.version",
+      "object": "client-cert"
+    },
+    "subject_name": {
+      "key": "x509-certificate.subject",
+      "object": "client-cert"
+    },
+    "is_valid": {
+      "key": "x509-certificate.x_is_valid",
+      "object": "client-cert"
+    }
+  },
+  "tls": {
+    "cipher": {
+      "key": "x-symantec-tls.cipher",
+      "object": "tls_obj"
+    },
+    "cipher_size": {
+      "key": "x-symantec-tls.cipher_size",
+      "object": "tls_obj"
+    },
+    "cipher_strength": {
+      "key": "x-symantec-tls.cipher_strength",
+      "object": "tls_obj"
+    },
+    "is_advertised": {
+      "key": "x-symantec-tls.is_advertised",
+      "object": "tls_obj"
+    },
+    "is_used": {
+      "key": "x-symantec-tls.is_used",
+      "object": "tls_obj"
+    },
+    "issuer_keyring": {
+      "key": "x-symantec-tls.issuer_keyring",
+      "object": "tls_obj"
+    },
+    "key_length": {
+      "key": "x-symantec-tls.key_length",
+      "object": "tls_obj"
+    },
+    "tls_policy_id": {
+      "key": "x-symantec-tls.tls_policy_id",
+      "object": "tls_obj"
+    },
+    "version": {
+      "key": "x-symantec-tls.protocol_version",
+      "object": "tls_obj"
+    },
+    "client_certificate": {
+      "issuer_name": [
+        {
+          "key": "x509-certificate.issuer",
+          "object": "client-cert"
+        },
+        {
+          "key": "x-symantec-tls.client_certificate_ref",
+          "object": "tls_obj",
+          "references": "client-cert"
+        }
+      ],
+      "serial": {
+        "key": "x509-certificate.serial_number",
+        "object": "client-cert"
+      },
+      "start_time": {
+        "key": "x509-certificate.validity_not_before",
+        "object": "client-cert"
+      },
+      "end_time": {
+        "key": "x509-certificate.validity_not_after",
+        "object": "client-cert"
+      },
+      "version": {
+        "key": "x509-certificate.version",
+        "object": "client-cert"
+      },
+      "subject_name": {
+        "key": "x509-certificate.subject",
+        "object": "client-cert"
+      },
+      "is_valid": {
+        "key": "x509-certificate.x_is_valid",
+        "object": "client-cert"
+      }
+    },
+    "server_certificate": {
+      "issuer_name": [
+        {
+          "key": "x509-certificate.issuer",
+          "object": "server-cert"
+        },
+        {
+          "key": "x-symantec-tls.server_certificate_ref",
+          "object": "tls_obj",
+          "references": "server-cert"
+        }
+      ],
+      "serial": {
+        "key": "x509-certificate.serial_number",
+        "object": "server-cert"
+      },
+      "start_time": {
+        "key": "x509-certificate.validity_not_before",
+        "object": "server-cert"
+      },
+      "end_time": {
+        "key": "x509-certificate.validity_not_after",
+        "object": "server-cert"
+      },
+      "version": {
+        "key": "x509-certificate.version",
+        "object": "server-cert"
+      },
+      "subject_name": {
+        "key": "x509-certificate.subject",
+        "object": "server-cert"
+      },
+      "is_valid": {
+        "key": "x509-certificate.x_is_valid",
+        "object": "server-cert"
+      }
+    }
+  },
+  "container": {
+    "host_name": {
+      "key": "",
+      "object": "container"
+    },
+    "image_name": {
+      "key": "x-oca-asset.extensions.x-oca-container-ext.image_name",
+      "object": "container"
+    },
+    "image_uid": {
+      "key": "x-oca-asset.extensions.x-oca-container-ext.image_id",
+      "object": "container"
+    },
+    "name": {
+      "key": "x-oca-asset.extensions.x-oca-container-ext.name",
+      "object": "container"
+    },
+    "os_name": {
+      "key": "x-oca-asset.extensions.x-oca-container-ext.os_name",
+      "object": "container"
+    },
+    "uid": {
+      "key": "x-oca-asset.extensions.x-oca-container-ext.container_id",
+      "object": "container"
+    }
+
+  },
+  "module": {
+    "name": [
+      {
+        "key": "file.name",
+        "object": "module"
+      },
+      {
+        "key": "x-oca-event.file_ref",
+        "object": "event",
+        "references": "module"
+      }
+    ],
+    "size": {
+      "key": "file.size",
+      "object": "module"
+    },
+    "md5": {
+      "key": "file.hashes.MD5",
+      "object": "module"
+    },
+    "sha1": {
+      "key": "file.hashes.SHA-1",
+      "object": "module"
+    },
+    "sha2": {
+      "key": "file.hashes.SHA-256",
+      "object": "module"
+    },
+    "type_id": {
+      "key": "file.x_file_type",
+      "object": "module",
+      "transformer": "ToFileTypeString"
+    },
+    "rep_score": {
+      "key": "file.x_rep_score",
+      "object": "module"
+    },
+    "version": {
+      "key": "file.x_file_version",
+      "object": "module"
+    },
+    "path": [
+      {
+        "key": "directory.path",
+        "object": "module_dir"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "module",
+        "references": "module_dir"
+      }
+    ],
+    "signature_issuer": [
+      {
+        "key": "x509-certificate.issuer",
+        "object": "x509"
+      },
+      {
+        "key": "file.x_certificate_ref",
+        "object": "module",
+        "references": "x509"
+      }
+    ],
+    "signature_value": {
+      "key": "x509-certificate.x_signature_value",
+      "object": "x509"
+    },
+    "signature_level_id": {
+      "key": "x509-certificate.x_signature_level_id",
+      "object": "x509"
+    },
+    "signature_serial_number": {
+      "key": "x509-certificate.serial_number",
+      "object": "x509"
+    },
+    "signature_value_ids": {
+      "key": "x509-certificate.x_signature_value_ids",
+      "object": "x509",
+      "transformer": "ToListValue"
+    },
+    "signature_created_date": {
+      "key": "x509-certificate.validity_not_before",
+      "object": "x509",
+      "transformer": "EpochSecondsToTimestamp"
+    },
+    "signature_company_name": {
+      "key": "x509-certificate.x_signature_company_name",
+      "object": "x509"
+    },
+    "signature_fingerprints": {
+      "key": "x509-certificate.hashes",
+      "object": "x509",
+      "transformer": "ToAlgorithmHashes"
+    },
+    "url": {
+        "text": [
+          {
+            "key": "url.value",
+            "object": "module_url"
+          },
+          {
+            "key": "file.x_url_ref",
+            "object": "module",
+            "references": "module_url"
+          }
+        ],
+        "host": {
+          "key": "url.x_url_host",
+          "object": "module_url"
+        },
+        "path": {
+          "key": "url.x_url_path",
+          "object": "module_url"
+        },
+        "port": {
+          "key": "url.x_url_port",
+          "object": "module_url"
+        }
+      }
+  },
+  "startup_app" : {
+    "name" : [
+      {
+        "key": "software.name",
+        "object": "app"
+      },
+      {
+        "key": "x-oca-event.x_startup_application",
+        "object": "event"
+      }
+    ],
+    "cmd_line" : {
+      "key": "software.x_cmd_line",
+      "object": "app"
+    },
+    "desc" : {
+      "key": "software.x_app_description",
+      "object": "app"
+    },
+    "run_state_id" : {
+      "key": "software.x_service_state_id",
+      "object": "app"
+    },
+    "start_id" : {
+      "key": "software.x_start_type_id",
+      "object": "app"
+    },
+    "type_ids" : {
+      "key": "software.x_type_ids",
+      "object": "app"
+    },
+    "vendor" : {
+      "key": "software.vendor",
+      "object": "app"
+    },
+    "file": {
+      "name": [
+        {
+          "key": "file.name",
+          "object": "app_file"
+        },
+        {
+          "key": "software.x_file_ref",
+          "object": "app",
+          "references": "app_file"
+        }
+      ],
+      "size": {
+        "key": "file.size",
+        "object": "app_file"
+      },
+      "md5": {
+        "key": "file.hashes.MD5",
+        "object": "app_file"
+      },
+      "sha1": {
+        "key": "file.hashes.SHA-1",
+        "object": "app_file"
+      },
+      "sha2": {
+        "key": "file.hashes.SHA-256",
+        "object": "app_file"
+      },
+      "type_id": {
+        "key": "file.x_file_type",
+        "object": "app_file",
+        "transformer": "ToFileTypeString"
+      },
+      "rep_score": {
+        "key": "file.x_rep_score",
+        "object": "app_file"
+      },
+      "version": {
+        "key": "file.x_file_version",
+        "object": "app_file"
+      },
+      "path": [
+        {
+          "key": "directory.path",
+          "object": "app_file_dir"
+        },
+        {
+          "key": "file.parent_directory_ref",
+          "object": "app_file",
+          "references": "app_file_dir"
+        }
+      ],
+      "folder": [
+        {
+          "key": "directory.path",
+          "object": "app_file_dir"
+        },
+        {
+          "key": "file.parent_directory_ref",
+          "object": "app_file",
+          "references": "app_file_dir"
+        }
+      ],
+      "content_type": {
+        "family_id": {
+          "key": "file.x_family_type",
+          "object": "app_file",
+          "transformer": "ToFamilyIdString"
+        },
+        "type_id": {
+          "key": "file.x_content_type",
+          "object": "app_file",
+          "transformer": "ToFileContentTypeString"
+        }
+      },
+      "created": {
+        "key": "file.created",
+        "object": "app_file"
+      },
+      "modified": {
+        "key": "file.modified",
+        "object": "app_file"
+      },
+      "accessed": {
+        "key": "file.accessed",
+        "object": "app_file"
+      },
+      "mime_type": {
+        "key": "file.mime_type",
+        "object": "app_file"
+      },
+      "signature_issuer": [
+        {
+          "key": "x509-certificate.issuer",
+          "object": "x509"
+        },
+        {
+          "key": "file.x_certificate_ref",
+          "object": "app_file",
+          "references": "x509"
+        }
+      ],
+      "signature_value": {
+        "key": "x509-certificate.x_signature_value",
+        "object": "x509"
+      },
+      "signature_level_id": {
+        "key": "x509-certificate.x_signature_level_id",
+        "object": "x509"
+      },
+      "signature_serial_number": {
+        "key": "x509-certificate.serial_number",
+        "object": "x509"
+      },
+      "signature_value_ids": {
+        "key": "x509-certificate.x_signature_value_ids",
+        "object": "x509",
+        "transformer": "ToListValue"
+      },
+      "signature_created_date": {
+        "key": "x509-certificate.validity_not_before",
+        "object": "x509",
+        "transformer": "EpochSecondsToTimestamp"
+      },
+      "signature_company_name": {
+        "key": "x509-certificate.x_signature_company_name",
+        "object": "x509"
+      },
+      "signature_fingerprints": {
+        "key": "x509-certificate.hashes",
+        "object": "x509",
+        "transformer": "ToAlgorithmHashes"
+      },
+      "url": {
+        "text": [
+          {
+            "key": "url.value",
+            "object": "app_url"
+          },
+          {
+            "key": "file.x_url_ref",
+            "object": "app_file",
+            "references": "app_url"
+          }
+        ],
+        "host": {
+          "key": "url.x_url_host",
+          "object": "app_url"
+        },
+        "path": {
+          "key": "url.x_url_path",
+          "object": "app_url"
+        },
+        "port": {
+          "key": "url.x_url_port",
+          "object": "app_url"
+        }
+      }
+    }
+  },
+  "config_path" : {
+    "key": "software.x_config_path",
+    "object": "app"
+  },
+  "command_name": {
+    "key": "x-oca-event.x_command_name",
+    "object": "event"
+  },
+  "command_uid" : {
+    "key": "x-oca-event.x_command_uid",
+    "object": "event"
+  },
+  "interpreter" : {
+    "key": "x-oca-event.x_script_interpreter",
+    "object": "event"
+  },
+  "peripheral_device" : {
+    "class": {
+      "key": "x-peripheral-device.class",
+      "object": "peripheral"
+    },
+    "name": [
+      {
+        "key": "x-peripheral-device.name",
+        "object": "peripheral"
+      },
+      {
+        "key": "x-oca-event.x_peripheral_device_ref",
+        "object": "event",
+        "references": "peripheral"
+      }
+    ],
+    "serial": {
+      "key": "x-peripheral-device.serial",
+      "object": "peripheral"
+    },
+    "vendor": {
+      "key": "x-peripheral-device.vendor",
+      "object": "peripheral"
+    },
+    "model": {
+      "key": "x-peripheral-device.model",
+      "object": "peripheral"
+    },
+    "instance_uid": {
+      "key": "x-peripheral-device.instance_uid",
+      "object": "peripheral"
+    }
+  },
+  "dst_endpoint_app": {
+    "name" : [
+      {
+        "key": "software.name",
+        "object": "dst_app_service"
+      },
+      {
+        "key": "x-oca-event.x_dst_app_service_ref",
+        "object": "event",
+        "references": "dst_app_service"
+      }
+    ],
+    "operation" : {
+      "key": "software.x_app_operation",
+      "object": "dst_app_service"
+    },
+    "groups" : {
+      "key": "software.x_app_groups",
+      "object": "dst_app_service"
+    }
+  },
+  "device_cloud_vm": {
+    "instance_uid": [
+      {
+        "key": "x-cloud-device.instance_uid",
+        "object": "cloud_vm"
+      },
+      {
+        "key": "x-oca-event.x_cloud_device_ref",
+        "object": "event",
+        "references": "cloud_vm"
+      }
+    ],
+    "subnet_uid": {
+      "key": "x-cloud-device.subnet_uid",
+      "object": "cloud_vm"
+    },
+    "vpc_uid": {
+      "key": "x-cloud-device.vpc_uid",
+      "object": "cloud_vm"
+    },
+    "dc_region": {
+      "key": "x-cloud-device.dc_region",
+      "object": "cloud_vm"
+    }
+  }
+}

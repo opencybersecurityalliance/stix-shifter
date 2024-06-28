@@ -1,0 +1,34 @@
+{
+  "connection": {
+    "host": {
+      "label": "Management IP address or hostname",
+      "description": "Specify the IP address or hostname of the data source"
+    },
+    "port": {
+      "label": "Host port",
+      "description": "Set the port number that is associated with the hostname or IP address"
+    },
+    "help": {
+      "label": "Need additional help?",
+      "description": "More details on the data source setting can be found in the specified link"
+    },
+    "selfSignedCert": {
+        "label": "PEM Formatted SSL certificate(s)",
+        "description": "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
+    },
+    "options": {
+      "api_page_size": {
+        "label": "API Page Size",
+        "description": "Number of records per API call. Valid input range is {{min}} to {{max}}."
+      }
+    }
+  },
+  "configuration": {
+    "auth": {
+      "oauth_credentials": {
+        "label": "OAuth Credentials",
+        "description": "The OAuth Credentials value is used in the Authentication API to generate a bearer token that is used in all API calls."
+      }
+    }
+  }
+}
