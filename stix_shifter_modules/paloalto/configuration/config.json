@@ -24,7 +24,9 @@
         "auth": {
             "type" : "fields",
             "tenant": {
-                "type": "password"
+                "type": "password",
+                "optional" : true,
+                "default": ""
             },
             "api_key": {
                 "type": "password"
