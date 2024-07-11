@@ -15,6 +15,21 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 *List the dependecy upgrade or downgrade.*
 
 --------------------------------------
+## 7.0.11 (2024-07-11)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+*  Allowing_Tenant_To_Be_Optional [#1708](https://github.com/opencybersecurityalliance/stix-shifter/pull/1708)
+
+### Fixes:
+
+### Dependency update:
+
+--------------------------------------
 
 ## 7.0.10 (2024-07-04)
 
@@ -814,4 +829,5 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 * Bump adal from 1.2.2 to 1.2.7
 * Bump pyopenssl from 20.0.1 to 22.0.0
 * Bump stix2-validator from 1.1.2 to 3.0.2
-* Bump boto3 from 1.17.20 to 1.21.5## 4.0.0 (2022-02-23)
+* Bump boto3 from 1.17.20 to 1.21.5## 4.0.0 (2022-02-23)## 7.0.11 (2024-07-11)
+
