@@ -125,7 +125,8 @@ class APIClient:
                 query = json.loads(query)
 
             for dataset in query.keys():
-                query[dataset]["tenants"] = self.auth['tenant'].split(",")
+                if(self.auth['tenant']):
+                    query[dataset]["tenants"] = self.auth['tenant'].split(",")
                 data = {
                     "request_data":
                         query[dataset]

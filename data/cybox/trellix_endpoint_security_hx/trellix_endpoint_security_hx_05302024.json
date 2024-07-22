@@ -1,0 +1,337 @@
+{
+    "type": "bundle",
+    "id": "bundle--536c62be-2b7c-4140-9a57-80e2dcb9a1cd",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "name": "trellix_endpoint_security_hx",
+            "identity_class": "system",
+            "created": "2024-05-30T00:22:50.336Z",
+            "modified": "2024-05-30T06:22:50.336Z"
+        },
+        {
+            "id": "observed-data--2a1c6cbd-9c9a-41fb-93ed-3fa008d30d8c",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-05-30T16:27:58.300Z",
+            "modified": "2024-05-30T16:27:58.300Z",
+            "objects": {
+                "0": {
+                    "type": "process",
+                    "name": "pycharm64.exe",
+                    "pid": 4336,
+                    "creator_user_ref": "2",
+                    "binary_ref": "7"
+                },
+                "1": {
+                    "type": "x-oca-event",
+                    "process_ref": "0",
+                    "user_ref": "2",
+                    "created": "2024-05-28T16:31:22.206Z",
+                    "modified": "2024-05-28T16:31:22.206Z",
+                    "host_ref": "3",
+                    "action": "File Write Event",
+                    "file_ref": "4"
+                },
+                "2": {
+                    "type": "user-account",
+                    "user_id": "user1"
+                },
+                "3": {
+                    "type": "x-oca-asset",
+                    "device_id": "device1",
+                    "hostname": "EC21",
+                    "x_host_set": "my_comp_host_set"
+                },
+                "4": {
+                    "type": "file",
+                    "name": "IdIndex.storage.values",
+                    "x_path": "C:\\Users\\IdIndex.storage.values",
+                    "parent_directory_ref": "5",
+                    "content_ref": "6",
+                    "x_bytes_written": 198376
+                },
+                "5": {
+                    "type": "directory",
+                    "path": "C:\\Users"
+                },
+                "6": {
+                    "type": "artifact",
+                    "payload_bin": "[file content base 64 encoded]"
+                },
+                "7": {
+                    "type": "file",
+                    "size": 0,
+                    "name": "pycharm64.exe"
+                }
+            },
+            "first_observed": "2024-05-28T16:31:22.206Z",
+            "last_observed": "2024-05-28T16:31:22.206Z",
+            "number_observed": 1
+        },
+      {
+            "id": "observed-data--ad8f4f30-b237-4a36-83ab-741ba88312a3",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-05-30T16:27:58.305Z",
+            "modified": "2024-05-30T16:27:58.305Z",
+            "objects": {
+                "0": {
+                    "type": "file",
+                    "name": "WmiPrvSE.exe",
+                    "x_path": "C:\\Windows\\WmiPrvSE.exe",
+                    "parent_directory_ref": "3",
+                    "hashes": {
+                        "MD5": "01010101001011011001010101010101"
+                    }
+                },
+                "1": {
+                    "type": "process",
+                    "binary_ref": "0",
+                    "name": "WmiPrvSE.exe",
+                    "parent_ref": "4",
+                    "x_event_type": "start",
+                    "pid": 9184,
+                    "creator_user_ref": "5",
+                    "command_line": "C:\\Windows\\wmiprvse.exe -secured -Embedding"
+                },
+                "2": {
+                    "type": "x-oca-event",
+                    "process_ref": "1",
+                    "parent_process_ref": "4",
+                    "user_ref": "5",
+                    "created": "2024-05-17T15:06:53.984Z",
+                    "modified": "2024-05-17T15:06:53.984Z",
+                    "x_last_run": "2024-05-17T15:06:53.984Z",
+                    "x_accessed_time": "2024-05-17T15:06:53.984Z",
+                    "start": "2024-05-17T15:06:53.984Z",
+                    "host_ref": "6",
+                    "action": "Process Event"
+                },
+                "3": {
+                    "type": "directory",
+                    "path": "C:\\Windows"
+                },
+                "4": {
+                    "type": "process",
+                    "name": "svchost.exe",
+                    "cwd": "C:\\Windows"
+                },
+                "5": {
+                    "type": "user-account",
+                    "user_id": "NT AUTHORITY\\NETWORK SERVICE"
+                },
+                "6": {
+                    "type": "x-oca-asset",
+                    "device_id": "device1",
+                    "hostname": "EC21",
+                    "x_host_set": "my_comp_host_set"
+                }
+            },
+            "first_observed": "2024-05-17T15:06:53.984Z",
+            "last_observed": "2024-05-17T15:06:53.984Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--7dadc551-8952-47cd-a66d-58bd03cba0e6",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-05-30T16:35:57.200Z",
+            "modified": "2024-05-30T16:35:57.200Z",
+            "objects": {
+                "0": {
+                    "type": "process",
+                    "name": "chrome.exe",
+                    "pid": 7600,
+                    "creator_user_ref": "2",
+                    "binary_ref": "7"
+                },
+                "1": {
+                    "type": "x-oca-event",
+                    "process_ref": "0",
+                    "user_ref": "2",
+                    "ip_refs": [
+                        "3",
+                        "6"
+                    ],
+                    "network_ref": "4",
+                    "created": "2024-05-28T09:04:04.751Z",
+                    "modified": "2024-05-28T09:04:04.751Z",
+                    "x_accessed_time": "2024-05-28T09:04:04.751Z",
+                    "host_ref": "5",
+                    "action": "IPv4 Network Event"
+                },
+                "2": {
+                    "type": "user-account",
+                    "user_id": "user2"
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "1.2.3.4"
+                },
+                "4": {
+                    "type": "network-traffic",
+                    "src_ref": "3",
+                    "dst_ref": "6",
+                    "src_port": 57896,
+                    "dst_port": 443,
+                    "protocols": [
+                        "ipv4"
+                    ]
+                },
+                "5": {
+                    "type": "x-oca-asset",
+                    "ip_refs": [
+                        "3"
+                    ],
+                    "device_id": "dev1",
+                    "hostname": "EC23",
+                    "x_host_set": "my_comp_host_set"
+                },
+                "6": {
+                    "type": "ipv4-addr",
+                    "value": "9.8.0.0"
+                },
+                "7": {
+                    "type": "file",
+                    "name": "chrome.exe"
+                }
+            },
+            "first_observed": "2024-05-28T09:04:04.751Z",
+            "last_observed": "2024-05-28T09:04:04.751Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--4640de62-4b95-4166-adef-8102e860f404",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-05-30T16:41:03.931Z",
+            "modified": "2024-05-30T16:41:03.931Z",
+            "objects": {
+                "0": {
+                    "type": "process",
+                    "name": "cortex-xdr-payload.exe",
+                    "pid": 5536,
+                    "creator_user_ref": "2",
+                    "binary_ref": "7"
+                },
+                "1": {
+                    "type": "x-oca-event",
+                    "process_ref": "0",
+                    "user_ref": "2",
+                    "ip_refs": [
+                        "3"
+                    ],
+                    "network_ref": "4",
+                    "domain_ref": "5",
+                    "created": "2024-05-02T04:48:00.463Z",
+                    "modified": "2024-05-02T04:48:00.463Z",
+                    "x_accessed_time": "2024-05-02T04:48:00.463Z",
+                    "host_ref": "6",
+                    "action": "URL Event"
+                },
+                "2": {
+                    "type": "user-account",
+                    "user_id": "NT AUTHORITY\\SYSTEM"
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "2.2.3.3"
+                },
+                "4": {
+                    "type": "network-traffic",
+                    "dst_ref": "3",
+                    "src_port": 49736,
+                    "dst_port": 80,
+                    "extensions": {
+                        "http-request-ext": {
+                            "request_value": "/latest/meta-data//ami-id",
+                            "request_header": {
+                                "Host": "2.2.3.3",
+                                "User-Agent": "python-requests/2.26.0",
+                                "Accept-Encoding": "gzip, deflate"
+                            },
+                            "request_method": "GET"
+                        }
+                    },
+                    "protocols": [
+                        "http"
+                    ]
+                },
+                "5": {
+                    "type": "domain-name",
+                    "value": "2.2.3.3"
+                },
+                "6": {
+                    "type": "x-oca-asset",
+                    "device_id": "dev56",
+                    "hostname": "EC212",
+                    "x_host_set": "my_comp_host_set"
+                },
+                "7": {
+                    "type": "file",
+                    "name": "cortex-xdr-payload.exe"
+                }
+            },
+            "first_observed": "2024-05-02T04:48:00.463Z",
+            "last_observed": "2024-05-02T04:48:00.463Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--150c8d52-e20a-4930-8ec0-e5703ef704e6",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-05-30T16:53:02.956Z",
+            "modified": "2024-05-30T16:53:02.956Z",
+            "objects": {
+                "0": {
+                    "type": "process",
+                    "name": "lsass.exe",
+                    "pid": 828,
+                    "creator_user_ref": "2",
+                    "binary_ref": "5"
+                },
+                "1": {
+                    "type": "x-oca-event",
+                    "process_ref": "0",
+                    "user_ref": "2",
+                    "registry_ref": "3",
+                    "created": "2024-05-24T13:34:08.114Z",
+                    "modified": "2024-05-24T13:34:08.114Z",
+                    "host_ref": "4",
+                    "action": "Registry Event"
+                },
+                "2": {
+                    "type": "user-account",
+                    "user_id": "NT AUTHORITY\\SYSTEM"
+                },
+                "3": {
+                    "type": "windows-registry-key",
+                    "key": "HKEY_LOCAL_MACHINE\\SYSTEM\\SecureTimeHigh",
+                    "values": [
+                        {
+                            "name": "SecureTimeHigh",
+                            "data_type": "REG_QWORD",
+                            "data": "....o,d("
+                        }
+                    ]
+                },
+                "4": {
+                    "type": "x-oca-asset",
+                    "device_id": "device-1",
+                    "hostname": "EC2-15",
+                    "x_host_set": "test_host_set1"
+                },
+                "5": {
+                    "type": "file",
+                    "name": "lsass.exe"
+                }
+            },
+            "first_observed": "2024-05-29T04:15:12.428Z",
+            "last_observed": "2024-05-29T04:15:12.428Z",
+            "number_observed": 1
+        }
+    ],
+    "spec_version": "2.0"
+}

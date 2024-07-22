@@ -15,6 +15,47 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 *List the dependecy upgrade or downgrade.*
 
 --------------------------------------
+## 7.0.11 (2024-07-11)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+*  Allowing_Tenant_To_Be_Optional [#1708](https://github.com/opencybersecurityalliance/stix-shifter/pull/1708)
+
+### Fixes:
+
+### Dependency update:
+
+--------------------------------------
+
+## 7.0.10 (2024-07-04)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+*  Trellix Endpoint Security HX Connector [#1695](https://github.com/opencybersecurityalliance/stix-shifter/pull/1695)
+*  Symantec Endpoint Security UDI connector [#1694](https://github.com/opencybersecurityalliance/stix-shifter/pull/1694)
+*  Update e2eStixBundle01.json [#1702](https://github.com/opencybersecurityalliance/stix-shifter/pull/1702)
+*  Update e2eStixBundle01.json [#1698](https://github.com/opencybersecurityalliance/stix-shifter/pull/1698)
+*  Update e2eStixBundle01.json [#1697](https://github.com/opencybersecurityalliance/stix-shifter/pull/1697)
+*  Create e2eStixBundle01.json [#1696](https://github.com/opencybersecurityalliance/stix-shifter/pull/1696)
+*  SumoLogics readme and supported_stix docs update [#1691](https://github.com/opencybersecurityalliance/stix-shifter/pull/1691)
+
+
+### Fixes:
+
+*  Fixing the unit test failing. [#1706](https://github.com/opencybersecurityalliance/stix-shifter/pull/1706)
+
+
+### Dependency update:
+
+--------------------------------------
 ## 7.0.9 (2024-05-23)
 
 ### Breaking changes:
@@ -788,5 +829,5 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 * Bump adal from 1.2.2 to 1.2.7
 * Bump pyopenssl from 20.0.1 to 22.0.0
 * Bump stix2-validator from 1.1.2 to 3.0.2
-* Bump boto3 from 1.17.20 to 1.21.5## 4.0.0 (2022-02-23)
+* Bump boto3 from 1.17.20 to 1.21.5## 4.0.0 (2022-02-23)## 7.0.11 (2024-07-11)
 
