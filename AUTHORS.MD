@@ -15,9 +15,9 @@ Ben Craig - Developer - Fredericton (NB)
 
 ## Connector Factory (former) - Fredericton (NB)
 
-Danny Elliot - Developer(Maintainer) - Fredericton (NB)__
-Md Azam  - Developer(Maintainer) - Fredericton (NB)__
-Arthur Muradyan - Developer - Frederiction (NB)__
-Omkar Gurav - Developer - Frederiction (NB)__
+Danny Elliot - Developer(Maintainer) - Fredericton (NB)  
+Md Azam  - Developer(Maintainer) - Fredericton (NB)  
+Arthur Muradyan - Developer - Frederiction (NB)  
+Omkar Gurav - Developer - Frederiction (NB)  
 
 ## Special thanks to
