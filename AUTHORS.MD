@@ -7,9 +7,9 @@ A project made in collaboration with the OCA project and IBM Canada.
 
 ## Connector Factory Developers- Fredericton (NB)
 
-Derek Rushton - Developer - Fredericton (NB)__
-Eric Larsen - Developer - Fredericton (NB)__
-Ben Craig - Developer - Fredericton (NB)__
+Derek Rushton - Developer - Fredericton (NB)  
+Eric Larsen - Developer - Fredericton (NB)  
+Ben Craig - Developer - Fredericton (NB)  
 
 ## All other contributors and their affiliations:
 
