@@ -10,7 +10,8 @@ metadata:
     - oca
     - interoperability
   annotations:
-    github.com/project-slug: opencybersecurityalliance/stix-shifter
+    github.com/project-slug: "opencybersecurityalliance/stix-shifter"
+    jira/component: "Connector Factory"
     backstage.io/techdocs-ref: dir:.
 spec:
   type: library
