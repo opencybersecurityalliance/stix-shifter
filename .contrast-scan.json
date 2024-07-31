@@ -1,6 +1,7 @@
 {
   "excludes": [
     "**/test/**",
-    "**/tests/**"
+    "**/tests/**",
+    "**/deployment/**"
   ]
 }
