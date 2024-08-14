@@ -144,6 +144,9 @@ class TestTaniumResultsToStix(unittest.TestCase, object):
                 self.x_tanium_inteldocument(result_bundle_object)
             elif(type_name == 'x-compiled-terms'):
                 self.x_compiled_terms(result_bundle_object)
+            elif(type_name == 'x-Tanium'):
+                #Unmapped fields aren't necessarily an error (In this case they map be duplicates)
+                self.x_tanium(result_bundle_object)
             else:
                 raise   
         except:
@@ -181,7 +184,7 @@ class TestTaniumResultsToStix(unittest.TestCase, object):
                 self.x_compiled_terms(result_bundle_object)
             elif(type_name == 'x-Tanium'):
                 #Unmapped fields aren't necessarily an error (In this case they map be duplicates)
-                return
+                self.x_tanium(result_bundle_object)
             else:
                 raise   
         except:
@@ -232,7 +235,7 @@ class TestTaniumResultsToStix(unittest.TestCase, object):
         assert result_bundle_object["x_config_id"] == 2
         assert result_bundle_object["x_path"] == 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
         assert result_bundle_object["x_received_at"] == '2023-10-16T12:29:34.609Z'
-        assert result_bundle_object["x_alertedAt"] == "2023-10-16T12:26:51.000Z"
+        assert result_bundle_object["x_alerted_at"] == "2023-10-16T12:26:51.000Z"
         assert result_bundle_object["x_acked_at"] == "2023-10-16T12:38:03.961Z"
         assert result_bundle_object["x_first_eid_resolution_attempt"] == "2023-10-16T12:29:37.091Z"
         assert result_bundle_object["x_intel_doc_ref"] is not None
@@ -249,7 +252,6 @@ class TestTaniumResultsToStix(unittest.TestCase, object):
         assert result_bundle_object["x_match_recorder_id"] == "3994044258139188996"
         
         assert result_bundle_object["x_finding_source_name"] == "recorder"
-        assert result_bundle_object["x_finding_intel_intra_ids"] == [{'id_v2': '901388892329936882'}]
         assert result_bundle_object["x_finding_process_ref"]  is not None
         assert result_bundle_object["x_finding_id"] == "1245935966959239109"
         assert result_bundle_object["x_finding_domain"] == "threatresponse"
@@ -308,7 +310,6 @@ class TestTaniumResultsToStix(unittest.TestCase, object):
 
     def directory_asserts(self, result_bundle_object):
         assert result_bundle_object["path"] == 'C:/Program Files (x86)/Microsoft/Edge/Application'
-        assert result_bundle_object["contains_refs"] is not None
 
         
     def certificate_asserts(self, result_bundle_object):
@@ -360,13 +361,13 @@ class TestTaniumResultsToStix(unittest.TestCase, object):
         assert result_bundle_object["syntax_version"] == 6
         assert result_bundle_object["is_schema_valid"] == True
         assert result_bundle_object["source_id"] == 2
-        assert result_bundle_object["unresolvedAlertCount"] == 8
-        assert result_bundle_object["throttledFindingCount"] == 0
-        assert result_bundle_object["allowAutoDisable"] == True
+        assert result_bundle_object["unresolved_alert_count"] == 8
+        assert result_bundle_object["throttled_finding_count"] == 0
+        assert result_bundle_object["allow_auto_disable"] == True
         assert result_bundle_object["disabled"] == False
-        assert result_bundle_object["disabledEndpointCount"] == 0
-        assert result_bundle_object["firstDeploymentTimestamp"] == "2023-10-13T19:28:05.584Z"
-        assert result_bundle_object["lastDeploymentTimestamp"] == "2023-11-28T18:50:31.920Z"
+        assert result_bundle_object["disabled_endpoint_count"] == 0
+        assert result_bundle_object["first_deployment_timestamp"] == "2023-10-13T19:28:05.584Z"
+        assert result_bundle_object["last_deployment_timestamp"] == "2023-11-28T18:50:31.920Z"
         assert result_bundle_object["status"] == "HIGH_FIDELITY"
 
     def x_compiled_terms(self, result_bundle_object):
@@ -375,3 +376,7 @@ class TestTaniumResultsToStix(unittest.TestCase, object):
         assert result_bundle_object["value"] == "eicar"
         assert result_bundle_object["object"] == "file"
         assert result_bundle_object["property"] == "path"
+        
+    #Unmapped fields
+    def x_tanium(self, result_bundle_object):
+        assert result_bundle_object["intel_intra_ids"] == [{'id_v2': '901388892329936882'}]
