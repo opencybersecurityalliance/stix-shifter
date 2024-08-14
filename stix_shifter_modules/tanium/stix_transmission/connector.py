@@ -44,20 +44,17 @@ class Connector(BaseJsonSyncConnector):
         self.current_offset = offset
         
         #This can be any value up to 500.
-        max_per_query_length = 500
-        
-        if(length < max_per_query_length):
-            per_query_length = length
+        per_query_length = min(500, length)
         
         try:
-            results = await self.get_results(per_query_length, query, self.current_offset) 
+            results = await self.get_results(per_query_length, query, self.current_offset)
+
             #Are we done?
             while(len(self.final_results) < length and len(results) > 0):
                 results = await self.get_results(per_query_length, query, self.current_offset)
-                
+
             self.return_obj["data"] = self.final_results
             self.return_obj['success'] = True
-                        
         except Exception as err:
             self.logger.error(f'error when connecting to the Tanium datasource {self.return_obj["error"]}:')
         return self.return_obj

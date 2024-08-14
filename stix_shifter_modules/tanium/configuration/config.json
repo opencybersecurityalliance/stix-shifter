@@ -14,14 +14,20 @@
             "min": 1,
             "max": 65535
         },
+        "help": {
+            "type": "link",
+            "default": "data-sources.html"
+        },
         "options": {
             "unmapped_fallback": {
-                "default": true
+                "type": "boolean",
+                "default": false
             }
         }
     },
     "configuration": {
         "auth": {
+            "type": "fields",
             "accessToken": {
                 "type": "password"
             }
