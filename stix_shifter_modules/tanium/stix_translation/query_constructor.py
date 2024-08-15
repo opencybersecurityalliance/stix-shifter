@@ -1,4 +1,5 @@
 import regex
+from stix_shifter_modules.tanium.stix_translation.transformers import ConvertTextSeverityToNumberValue
 from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ObservationExpression, ComparisonExpression, \
     Pattern,\
     CombinedComparisonExpression, CombinedObservationExpression
@@ -27,14 +28,27 @@ class QueryStringPatternTranslator:
         stop = qualifier_split[3]
         qualified_query = f"{expression}&alertedAtFrom={start}&alertedAtUntil={stop}"
         return qualified_query
+    
+    @staticmethod
+    def _format_severity(self, value):
+        if(value < 40):
+            return "info"
+        elif(value >= 40 and value < 80):
+            return "low"
+        elif(value >= 80):
+            return "high"
 
     @staticmethod
     def _parse_mapped_fields(self, value, comparator, mapped_fields_array):
-        {}
+        if(mapped_fields_array[0] == "severity"):
+            value = QueryStringPatternTranslator._format_severity(self, value)
         parsed_fields = f"{mapped_fields_array[0]}{comparator}{value}"
+
         if(comparator == "IN"):
             parsed_fields = ""
             for current_value in value.values:
+                if(mapped_fields_array[0] == "severity"):
+                    value = QueryStringPatternTranslator._format_severity(self, value)
                 parsed_fields += f"{mapped_fields_array[0]}={current_value}&"
             parsed_fields = parsed_fields[:-1]
         return parsed_fields
