@@ -857,4 +857,4 @@ opencybersecurityalliance/stix-shifter/pull/1448)
 * Bump adal from 1.2.2 to 1.2.7
 * Bump pyopenssl from 20.0.1 to 22.0.0
 * Bump stix2-validator from 1.1.2 to 3.0.2
-* Bump boto3 from 1.17.20 to 1.21.5## 4.0.0 (2022-02-23)## 7.0.11 (2024-07-11)
+* Bump boto3 from 1.17.20 to 1.21.5## 4.0.0 (2022-02-23)
