@@ -1,5 +1,4 @@
 import requests
-from requests_toolbelt.adapters import host_header_ssl
 from requests.packages.urllib3.util.retry import Retry
 from stix_shifter_utils.stix_transmission.utils.timeout_http_adapter import TimeoutHTTPAdapter
 import sys

@@ -219,13 +219,6 @@
               "references": "processFileDirectory"
             },
             {
-              "key": "directory.contains_refs",
-              "object": "processFileDirectory",
-              "references": [
-                "processFile"
-              ]
-            },
-            {
               "key": "process.binary_ref",
               "object": "process",
               "references": "processFile"
@@ -241,11 +234,6 @@
             "key": "process.parent_ref",
             "object": "process",
             "references": "parent-process"
-          },
-          {
-            "key": "process.child_ref",
-            "object": "parent-process",
-            "references": "process"
           }
         ],
         "start_time": {
@@ -290,10 +278,6 @@
       "whats": {
         "source_name": {
           "key": "x-ibm-finding.x_finding_source_name",
-          "object": "alert"
-        },
-        "intel_intra_ids": {
-          "key": "x-ibm-finding.x_finding_intel_intra_ids",
           "object": "alert"
         },
         "artifact_activity": {
@@ -367,13 +351,6 @@
                       "transformer": "ProcessCWDPathTransformer"
                     },
                     {
-                      "key": "directory.contains_refs",
-                      "object": "processFileDirectory",
-                      "references": [
-                        "processFile"
-                      ]
-                    },
-                    {
                       "key": "file.parent_directory_ref",
                       "object": "processFile",
                       "references": "processFileDirectory"
@@ -429,11 +406,6 @@
                       "key": "x-oca-event.parent_process_ref",
                       "object": "event",
                       "references": "process"
-                    },
-                    {
-                      "key": "process.child_ref",
-                      "object": "parent-process",
-                      "references": "process"
                     }
                   ],
                   "arguments": {
@@ -485,13 +457,6 @@
                           "key": "directory.path",
                           "object": "parent-processFileDirectory",
                           "transformer": "ProcessCWDPathTransformer"
-                        },
-                        {
-                          "key": "directory.contains_refs",
-                          "object": "parent-processFileDirectory",
-                          "references": [
-                            "parent-processFile"
-                          ]
                         },
                         {
                           "key": "file.parent_directory_ref",
@@ -596,13 +561,6 @@
                     "transformer": "ProcessCWDPathTransformer"
                   },
                   {
-                    "key": "directory.contains_refs",
-                    "object": "file-directory-action",
-                    "references": [
-                      "file-action"
-                    ]
-                  },
-                  {
                     "key": "file.parent_directory_ref",
                     "object": "file-action",
                     "references": "file-directory-action"
@@ -662,13 +620,6 @@
                       "key": "directory.path",
                       "object": "file-directory-action",
                       "transformer": "ProcessCWDPathTransformer"
-                    },
-                    {
-                      "key": "directory.contains_refs",
-                      "object": "file-directory-action",
-                      "references": [
-                        "file-action"
-                      ]
                     },
                     {
                       "key": "file.parent_directory_ref",
@@ -788,7 +739,7 @@
   },
   "alertedAt": [
     {
-      "key": "x-ibm-finding.x_alertedAt",
+      "key": "x-ibm-finding.x_alerted_at",
       "object": "alert"
     }
   ],
@@ -945,19 +896,19 @@
       "object": "alert"
     },
     "unresolvedAlertCount": {
-      "key": "x-tanium-inteldocument.unresolvedAlertCount",
+      "key": "x-tanium-inteldocument.unresolved_alert_count",
       "object": "intel-document"
     },
     "customHash": {
-      "key": "x-tanium-inteldocument.customHash",
+      "key": "x-tanium-inteldocument.custom_hash",
       "object": "intel-document"
     },
     "throttledFindingCount": {
-      "key": "x-tanium-inteldocument.throttledFindingCount",
+      "key": "x-tanium-inteldocument.throttled_finding_count",
       "object": "intel-document"
     },
     "allowAutoDisable": {
-      "key": "x-tanium-inteldocument.allowAutoDisable",
+      "key": "x-tanium-inteldocument.allow_auto_disable",
       "object": "intel-document"
     },
     "disabled": {
@@ -965,15 +916,15 @@
       "object": "intel-document"
     },
     "disabledEndpointCount": {
-      "key": "x-tanium-inteldocument.disabledEndpointCount",
+      "key": "x-tanium-inteldocument.disabled_endpoint_count",
       "object": "intel-document"
     },
     "firstDeploymentTimestamp": {
-      "key": "x-tanium-inteldocument.firstDeploymentTimestamp",
+      "key": "x-tanium-inteldocument.first_deployment_timestamp",
       "object": "intel-document"
     },
     "lastDeploymentTimestamp": {
-      "key": "x-tanium-inteldocument.lastDeploymentTimestamp",
+      "key": "x-tanium-inteldocument.last_deployment_timestamp",
       "object": "intel-document"
     },
     "status": {

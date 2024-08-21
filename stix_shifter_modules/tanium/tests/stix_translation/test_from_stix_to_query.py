@@ -95,7 +95,7 @@ class TestQueryTranslator(unittest.TestCase, object):
                             " AND [x-oca-event:host_ref.ip_refs.value = '10.0.0.4']" \
                             " AND [x-oca-event:host_ref.os_ref.name = 'windows']" \
                             " AND [x-oca-event:file_ref.parent_directory_ref.path = 'Application']" \
-                            " AND [x-oca-event:severity = 'info']" \
+                            " AND [x-oca-event:severity = 0]" \
                             " AND [x-oca-event:x_ttp_tagging_refs.technique_id = 'T1204']" \
                             " START t'2022-07-01T00:00:00.000Z'" \
                             " STOP t'2024-07-27T00:05:00.000Z'"
@@ -118,7 +118,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_ibm_finding(self):
         stix_pattern = "([x-ibm-finding:dst_ip_ref.value = '10.0.0.4']" \
                         " AND [x-ibm-finding:name = 'Outlook Spawned Process Creating DLL Files']" \
-                        " AND [x-ibm-finding:severity = 'info']" \
+                        " AND [x-ibm-finding:severity = 0]" \
                         " AND [x-ibm-finding:dst_os_ref.name = 'windows']" \
                         " AND [x-ibm-finding:x_ttp_tagging_refs.technique_id = 'T1204']" \
                         " AND [x-ibm-finding:x_guid = '00000000-0000-0000-114a-7429237cffc5']" \
