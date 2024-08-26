@@ -61,7 +61,7 @@ class RestApiClientAsync:
         #To enable proxy, set the environment variable "STIX_SHIFTER_ENABLE_TRUST_ENV" to true. This option will allow the connection
         #to use the system environments proxy settings. This can be done by setting the "https_proxy" environment variable to 
         #"http(s)://[username]:[password]@[hostname]/[ipaddress]:[port]". Alternative proxy schema's may or may not work.
-        self.trust_env_enabled = os.environ.get("STIX_SHIFTER_ENABLE_TRUST_ENV", False).lower()
+        self.trust_env_enabled = os.environ.get("STIX_SHIFTER_ENABLE_TRUST_ENV", "False").lower()
         if self.trust_env_enabled == "true":
             self.trust_env_enabled = True
         else:
