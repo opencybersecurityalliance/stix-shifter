@@ -12,7 +12,7 @@ class InvalidMetadataException(Exception):
 
 class Connector(BaseJsonSyncConnector):
     OKTA_MAX_PAGE_SIZE = 1000
-    DOMAIN_PATTERN = re.compile(r'^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(\.)?)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$')
+    DOMAIN_PATTERN = re.compile(r'^(?:(?:[a-z0-9]\.)|(?:[a-z0-9][a-z0-9-]{0,61}[a-z0-9]\.))+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$')
 
     def __init__(self, connection, configuration):
         self.api_client = APIClient(connection, configuration)
