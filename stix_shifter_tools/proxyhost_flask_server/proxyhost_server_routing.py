@@ -1,12 +1,63 @@
+import json
+from flask import Flask, request
+
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter_utils.utils import logger
 from flask import request
 import json
+    
+# Start a local web service for STIX shifter, to use in combination with the proxy data source
+# module. This combination allows one to run and debug their stix-shifter code locally, while interacting with
+# it inside a service provider such as IBM Security Connect
 
+def start_proxyhost_flask_server(data_source):
+    app = Flask("stix-shifter")
 
+    @app.route('/transform_query', methods=['POST'])
+    def transform_query():
+        host = ProxyHost()
+        return host.transform_query()
+
+    @app.route('/translate_results', methods=['POST'])
+    def translate_results():
+        data_source_identity_object = data_source
+        host = ProxyHost()
+        return host.translate_results(data_source_identity_object)
+
+    @app.route('/create_query_connection', methods=['POST'])
+    def create_query_connection():
+        host = ProxyHost()
+        return host.create_query_connection()
+
+    @app.route('/create_status_connection', methods=['POST'])
+    def create_status_connection():
+        host = ProxyHost()
+        return host.create_status_connection()
+
+    @app.route('/create_results_connection', methods=['POST'])
+    def create_results_connection():
+        host = ProxyHost()
+        return host.create_results_connection()
+
+    @app.route('/delete_query_connection', methods=['POST'])
+    def delete_query_connection():
+        host = ProxyHost()
+        return host.delete_query_connection()
+
+    @app.route('/ping', methods=['POST'])
+    def ping_connection():
+        host = ProxyHost()
+        return host.ping_connection()
+
+    @app.route('/is_async', methods=['POST'])
+    def is_async():
+        host = ProxyHost()
+        return host.is_async()
+    
+    return app
+    
 class ProxyHost():
-
     def __init__(self):
         self.logger = logger.set_logger(__name__)
         self.request_args = request.get_json(force=True)
