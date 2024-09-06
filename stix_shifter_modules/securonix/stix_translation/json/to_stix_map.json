@@ -1,0 +1,8 @@
+{
+
+  "destinationaddress": 
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    }
+}

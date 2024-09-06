@@ -1,0 +1,76 @@
+{
+  "process": {
+    "fields": {
+      "name": ["DestinationProcessName"],
+      "pid": ["DeviceProcessId"],
+      "command_line": ["CommandLine"],
+      "parent_ref.name": ["SourceProcessName"],
+      "binary_ref.name": ["DestinationProcessName"],
+      "x_unique_id": ["eventid"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_ref.value": ["SourceAddress"],
+      "src_port": ["SourcePort"],
+      "dst_ref.value": ["DestinationAddress"],
+      "dst_port": ["DestinationPort"],
+      "protocols": ["TransportProtocol"],
+      "src_byte_count": ["BytesReceived"],
+      "dst_byte_count": ["BytesSent"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": ["FileName"],
+      "size": ["FileSize"],
+      "hashes.SHA-256": [],
+      "hashes.SHA-1": [],
+      "hashes.MD5": ["Md5_Sha1_Hash"],
+      "parent_directory_ref.path": ["GrandParentProcessFullPath"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["FilePath"]
+    }
+  },
+  "ipv4-addr": {
+    "fields": {
+      "value": ["IpAddress"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": []
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": []
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["DestinationNtDomain"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["RequestUrl"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": ["AccountName"],
+      "account_login": [],
+      "account_type": ["AccountType"],
+      "is_privileged": []
+    }
+  },
+  "email-addr": {
+    "fields": {
+      "value": ["EmailSender"]
+        }
+  }
+}
