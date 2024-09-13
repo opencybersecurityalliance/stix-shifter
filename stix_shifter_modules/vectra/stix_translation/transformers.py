@@ -53,8 +53,7 @@ class VerifyDomainValue(ValueTransformer):
         try:
             if obj and isinstance(obj, list):
                 ip_pattern = re.compile(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})')
-                domain_pattern = re.compile(r'^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(\.)?)+[a-z0-9][a-z0-9-]{0,'
-                                            r'61}[a-z0-9]$')
+                domain_pattern = re.compile(r'^(?:(?:[a-z0-9]\.)|(?:[a-z0-9][a-z0-9-]{0,61}[a-z0-9]\.))+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$')
                 for index, row in enumerate(obj):
                     if domain_pattern.search(row):
                         continue

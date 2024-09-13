@@ -3,12 +3,10 @@ import sys
 import json
 import time
 import importlib
-from flask import Flask
 import logging
 import copy
 from stix_shifter.stix_translation import stix_translation
 from stix_shifter.stix_transmission import stix_transmission
-from stix_shifter_utils.utils.proxy_host import ProxyHost
 from stix_shifter_utils.utils.module_discovery import process_dialects, modules_list
 from stix_shifter_utils.utils import logger as utils_logger
 from stix_shifter_utils.utils.logger import exception_to_string
@@ -16,7 +14,6 @@ from stix_shifter_utils.utils.logger import exception_to_string
 TRANSLATE = 'translate'
 TRANSMIT = 'transmit'
 EXECUTE = 'execute'
-HOST = 'host'
 MAPPING = 'mapping'
 MODULES = 'modules'
 CONFIGS = 'configs'
@@ -170,28 +167,6 @@ def main():
     execute_parser.add_argument('-r', '--results', type=int, default=10,
                                 help='Maximum number of returned results (default 10)')
 
-    host_parser = parent_subparsers.add_parser(HOST, help='Host a local query service, for testing and development')
-    host_parser.add_argument(
-        'data_source',
-        type=str,
-        help='STIX Identity object for the data source'
-    )
-    host_parser.add_argument(
-        'host_address',
-        type=str,
-        help='Proxy Host:Port'
-    )
-    host_parser.add_argument(
-        'ssl_cert',
-        type=str,
-        help='SSL certificate filename'
-    )
-    host_parser.add_argument(
-        'ssl_key',
-        type=str,
-        help='SSL key filename'
-    )
-
     args = parent_parser.parse_args()
 
     help_and_exit = args.command is None
@@ -243,56 +218,6 @@ def main():
     if help_and_exit:
         parent_parser.print_help(sys.stderr)
         sys.exit(1)
-    elif args.command == HOST:
-        # Host means to start a local web service for STIX shifter, to use in combination with the proxy data source
-        # module. This combination allows one to run and debug their stix-shifter code locally, while interacting with
-        # it inside a service provider such as IBM Security Connect
-        app = Flask("stix-shifter")
-
-        @app.route('/transform_query', methods=['POST'])
-        def transform_query():
-            host = ProxyHost()
-            return host.transform_query()
-
-        @app.route('/translate_results', methods=['POST'])
-        def translate_results():
-            data_source_identity_object = args.data_source
-            host = ProxyHost()
-            return host.translate_results(data_source_identity_object)
-
-        @app.route('/create_query_connection', methods=['POST'])
-        def create_query_connection():
-            host = ProxyHost()
-            return host.create_query_connection()
-
-        @app.route('/create_status_connection', methods=['POST'])
-        def create_status_connection():
-            host = ProxyHost()
-            return host.create_status_connection()
-
-        @app.route('/create_results_connection', methods=['POST'])
-        def create_results_connection():
-            host = ProxyHost()
-            return host.create_results_connection()
-
-        @app.route('/delete_query_connection', methods=['POST'])
-        def delete_query_connection():
-            host = ProxyHost()
-            return host.delete_query_connection()
-
-        @app.route('/ping', methods=['POST'])
-        def ping_connection():
-            host = ProxyHost()
-            return host.ping_connection()
-
-        @app.route('/is_async', methods=['POST'])
-        def is_async():
-            host = ProxyHost()
-            return host.is_async()
-
-        host_address = args.host_address.split(":")
-        app.run(debug=True, port=int(host_address[1]), host=host_address[0], ssl_context=(args.ssl_cert, args.ssl_key))
-
     elif args.command == EXECUTE:
         # Execute means take the STIX SCO pattern as input, execute query, and return STIX as output
         

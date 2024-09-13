@@ -14,6 +14,27 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 ### Dependency update:
 *List the dependecy upgrade or downgrade.*
 
+## 7.1.0 (2024-08-30)
+
+### Breaking changes:
+
+*  Moving Flask Out of Core Stix-Shifter [#1730](https://github.com/opencybersecurityalliance/stix-shifter/pull/1730)
+
+### Deprecations:
+
+### Changes:
+
+*  Warning added for unmapped from_stix fields. [#1729](https://github.com/opencybersecurityalliance/stix-shifter/pull/1729)
+*  Update code-coverage.yml [#1711](https://github.com/opencybersecurityalliance/stix-shifter/pull/1711)
+
+
+### Fixes:
+
+*  Domain regex in some connectors had potential for performance issues [#1728](https://github.com/opencybersecurityalliance/stix-shifter/pull/1728)
+*  Rest API was not properly pulling in environment variables for proxy [#1727](https://github.com/opencybersecurityalliance/stix-shifter/pull/1727)
+
+### Dependency update:
+
 --------------------------------------
 
 ## 7.0.12 (2024-08-20)
