@@ -362,7 +362,7 @@ class TestQueryTranslator(unittest.TestCase):
         self._test_query_assertions(query, queries)
 
     def test_future_timestamp_qualifier(self):
-        stix_pattern = "[network-traffic:src_port < 53]START t'2024-09-19T11:00:00.000Z' " \
+        stix_pattern = "[network-traffic:src_port < 53]START t'2027-09-19T11:00:00.000Z' " \
                        "STOP t'2024-02-07T11:00:00.003Z'"
         result = translation.translate('trellix_endpoint_security_hx', 'query', '{}', stix_pattern,
                                        {"host_sets": "host_set1"})
