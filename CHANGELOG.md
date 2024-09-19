@@ -14,6 +14,23 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 ### Dependency update:
 *List the dependecy upgrade or downgrade.*
 
+## 7.1.1 (2024-09-19)
+
+### Breaking changes:
+
+### Deprecations:
+
+### Changes:
+
+*  Added a new crowdstrike connector that uses the V2 endpoint  [#1724](https://github.com/opencybersecurityalliance/stix-shifter/pull/1724)
+*  Updated the changelog [#1731](https://github.com/opencybersecurityalliance/stix-shifter/pull/1731)
+
+### Fixes:
+*  Small fix for integer values in crowdstrike. [#1736](https://github.com/opencybersecurityalliance/stix-shifter/pull/1736)
+
+### Dependency update:
+*  Updating the azure-identity dependencies. [#1734](https://github.com/opencybersecurityalliance/stix-shifter/pull/1734)
+
 ## 7.1.0 (2024-08-30)
 
 ### Breaking changes:
