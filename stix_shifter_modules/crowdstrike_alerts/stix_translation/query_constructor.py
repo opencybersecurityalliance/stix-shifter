@@ -50,7 +50,9 @@ class CSQueryStringPatternTranslator:
         comparison_strings = []
 
         if isinstance(value, str):
-                value = [value]
+            value = [value]
+        if isinstance(value,int):
+            value = [value]
         for val in value:
             for mapped_field in mapped_fields_array:
                 comparison_strings.append(f"{mapped_field}{comparator} '{val}'")
