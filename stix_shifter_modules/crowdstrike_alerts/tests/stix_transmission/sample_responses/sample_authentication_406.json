@@ -1,0 +1,13 @@
+{
+    "meta": {
+        "query_time": 1.2e-7,
+        "powered_by": "crowdstrike-api-gateway",
+        "trace_id": "b2e3308d-162e-45b1-a98e-44e268878dad"
+    },
+    "errors": [
+        {
+            "code": 406,
+            "message": "406: Not Acceptable\n\nAvailable representations: "
+        }
+    ]
+}

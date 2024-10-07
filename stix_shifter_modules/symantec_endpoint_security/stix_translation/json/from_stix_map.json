@@ -1,0 +1,254 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": ["device_ip", "connection.src_ip", "connection.dst_ip", "device_public_ip", "device_networks.ipv4", "device_networks.gateway_ip"],
+      "resolves_to_refs[*].value": ["device_mac", "device_networks.mac", "device_networks.gateway_mac"]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": ["device_ip", "connection.src_ip", "connection.dst_ip", "device_networks.ipv6"],
+      "resolves_to_refs[*].value": ["device_mac", "device_networks.mac"]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": ["device_mac", "device_networks.mac", "device_networks.gateway_mac"]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_ref.value": ["connection.src_ip"],
+      "dst_ref.value": ["connection.dst_ip"],
+      "dst_port": ["connection.dst_port"],
+      "src_port": ["connection.src_port"],
+      "protocols[*]": ["connection.protocol_id"],
+      "src_byte_count": ["connection.bytes_upload"],
+      "dst_byte_count": ["connection.bytes_download"],
+      "x_connection_direction": ["connection.direction_id"]
+    }
+  },
+  "process": {
+    "fields": {
+      "pid": ["actor.pid", "process.pid", "parent.pid"],
+      "command_line": ["actor.cmd_line","process.cmd_line", "parent.cmd_line", "startup_app.cmd_line"],
+      "name": ["actor.app_name", "process.app_name", "parent.app_name"],
+      "created": ["actor.start_time", "process.start_time", "parent.start_time"],
+      "x_process_tid": ["actor.tid", "process.tid"],
+      "x_process_uid": ["actor.uid", "process.uid", "parent.uid"],
+      "creator_user_ref.user_id": ["actor.user.name", "process.user.name"],
+      "creator_user_ref.account_login": ["actor.user.logon_name"],
+      "binary_ref.name": ["actor.file.name", "process.file.name", "parent.file.name", "startup_app.file.name"],
+      "binary_ref.parent_directory_ref.path": ["actor.file.path", "process.file.path", "parent.file.path", "startup_app.file.path"],
+      "binary_ref.hashes.MD5": ["actor.file.md5", "process.file.md5", "parent.file.md5","startup_app.file.md5"],
+      "binary_ref.hashes.'SHA-256'": ["actor.file.sha2", "process.file.sha2", "parent.file.sha2", "startup_app.file.sha2"],
+      "binary_ref.hashes.'SHA-1'": ["actor.file.c", "process.file.sha1", "parent.file.sha1", "startup_app.file.sha1"],
+      "binary_ref.size" : ["actor.file.size", "process.file.size", "startup_app.file.size"]
+    }
+  },
+  "user-account":{
+    "fields": {
+      "user_id": ["user.name","actor.user.name", "session.user.name"],
+      "account_login": ["actor.user.logon_name", "session.user.logon_name"],
+      "is_privileged": ["actor.user.is_admin", "session.user.is_admin"],
+      "x_user_domain": ["actor.user.domain", "session.user.domain"],
+      "x_user_sid": ["user.sid","actor.user.sid", "session.user.sid"],
+      "x_user_uid": ["user.uid"]
+    }
+  },
+  "file": {
+    "fields": {
+      "name" :["file.name", "directory.name", "actor.file.name", "parent.file.name", "process.file.name", "module.name", "startup_app.file.name"],
+      "size" : ["file.size", "actor.file.size", "module.size", "process.file.size", "startup_app.file.size"],
+      "parent_directory_ref.path": ["file.folder", "directory.folder", "actor.file.folder", "parent.file.folder", "process.file.folder", "module.folder", "startup_app.file.folder"],
+      "hashes.MD5": ["file.md5", "actor.file.md5", "module.md5", "parent.file.md5", "process.file.md5", "startup_app.file.md5"],
+      "hashes.'SHA-256'": ["file.sha2", "actor.file.sha2", "module.sha2", "parent.file.sha2", "process.file.sha2", "startup_app.file.sha2"],
+      "hashes.'SHA-1'": ["file.sha1", "actor.file.sha1", "parent.file.sha1", "process.file.sha1", "startup_app.file.sha1"],
+      "created": ["actor.file.created", "parent.file.created", "process.file.created", "startup_app.file.created"],
+      "modified": ["actor.file.modified", "process.file.modified", "startup_app.file.modified"],
+      "x_file_type": ["file.type_id", "actor.file.type_id", "process.file.type_id"],
+      "x_rep_score": ["file.rep_score"],
+      "x_file_version": ["file.version"],
+      "x_open_mode": ["open_mode"],
+      "x_content_type": ["file.content_type.type_id"]
+    }
+  },
+  "x509-certificate": {
+    "fields": {
+      "issuer": ["actor.file.signature_issuer"],
+      "serial_number": ["actor.file.signature_serial_number"],
+      "validity_not_before": ["actor.file.signature_created_date", "actor.module.signature_created_date", "file.signature_created_date", "parent.signature_created_date", "process.signature_created_date", "directory.signature_created_date", "startup_app.file.signature_created_date"],
+      "signature_algorithm": ["actor.file.signature_fingerprints.algorithm", "actor.module.signature_fingerprints.algorithm", "file.signature_fingerprints.algorithm", "module.signature_fingerprints.algorithm", "parent.file.signature_fingerprints.algorithm", "parent.module.signature_fingerprints.algorithm", "process.file.signature_fingerprints.algorithm", "process.module.signature_fingerprints.algorithm", "directory.signature_fingerprints.algorithm", "startup_app.file.signature_fingerprints.algorithm"],
+      "x_signature_level_id": ["actor.file.signature_level_id", "file.signature_level_id", "parent.file.signature_level_id", "process.file.signature_level_id", "directory.signature_level_id", "startup_app.file.signature_level_id"],
+      "x_signature_company_name": ["actor.file.signature_company_name", "file.signature_company_name", "module.signature_company_name", "parent.file.signature_company_name", "process.file.signature_company_name"],
+      "x_signature_value": ["actor.file.signature_value"],
+      "x_signature_value_ids": ["actor.file.signature_value_ids", "process.file.signature_value_ids", "startup_app.file.signature_value_ids"]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": ["file.folder", "directory.folder", "actor.file.folder", "parent.file.folder", "process.file.folder", "module.folder", "startup_app.file.folder"]
+    }
+  },
+  "email-addr": {
+    "fields": {
+      "value": ["email.header_from", "email.header_to"]
+    }
+  },
+  "email-message": {
+    "fields": {
+      "from_ref": ["email.header_from"],
+      "to_refs[*]": ["email.header_to"],
+      "subject": ["email.header_subject"],
+      "x_email_direction": ["email.direction_id"],
+      "x_email_uid": ["email_uid"]
+    }
+  },
+  "windows-registry-key": {
+    "fields": {
+      "key": ["reg_key.path"],
+      "values[*].data": ["reg_value.data"],
+      "values[*].name": ["reg_value.name"],
+      "values[*].data_type": ["reg_value.type_id"]
+    }
+  },
+  "software": {
+    "fields": {
+      "name": ["device_os_name"],
+      "version": ["device_os_ver"],
+      "x_os_type": ["device_os_type_id"]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": ["url.text", "file.url.text", "connection.url.text"]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": ["device_domain"]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "code": ["uuid"],
+      "severity": ["severity_id"],
+      "category": ["category_id"],
+      "action": ["type"],
+      "description": ["message"],
+      "provider": ["product_name"],
+      "x_feature_name": ["feature_name"],
+      "outcome": ["id"],
+      "created": ["time"],
+      "x_event_status": ["status_id"],
+      "host_ref.hostname": ["device_name"],
+      "host_ref.host_type": ["device_type"],
+      "file_ref.name": ["file.name"],
+      "process_ref.pid": ["actor.pid"],
+      "process_ref.name": ["actor.app_name"],
+      "process_ref.command_line": ["actor.cmd_line"],
+      "parent_process_ref.pid": ["parent.pid"],
+      "parent_process_ref.name": ["parent.app_name"],
+      "parent_process_ref.command_line": ["parent.cmd_line"],
+      "process_ref.binary_ref.name": ["actor.file.name"],
+      "process_ref.creator_user_ref.user_id": ["actor.user.name"],
+      "registry_ref.key": ["reg_key.path", "reg_value.path"],
+      "url_ref.value": ["url.text"],
+      "domain_ref.value": ["device_domain"],
+      "network_ref.protocols[*]": ["connection.protocol_id"],
+      "user_ref.user_id": ["user.name"],
+      "x_event_type": ["type_id"],
+      "x_event_id": ["event_id"],
+      "x_provider_version": ["product_ver"],
+      "x_command_uid": ["command_uid"],
+      "x_event_data": ["data"]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": ["device_name"],
+      "host_type": ["device_type"],
+      "x_host_group": ["device_group"],
+      "mac_refs[*].value": ["device_mac"],
+      "ip_ref[*].value": ["device_ip"],
+      "os_ref.name": ["device_os_name"],
+      "os_ref.version": ["device_os_ver"],
+      "domain_ref.value": ["device_domain"]
+    }
+  },
+  "x-oca-geo": {
+    "fields": {
+      "name": ["device_location.desc"],
+      "x_is_on_premises": ["device_location.on_premises"]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "name": ["threat.name"],
+      "severity": ["threat.risk_id"],
+      "alert_id": ["threat.id"],
+      "finding_type": ["reason_id"],
+      "x_threat_type_id": ["threat.type_id"],
+      "x_info_provider": ["threat.provider"],
+      "ttp_tagging_refs[*].name": ["attacks.technique_name"],
+      "ttp_tagging_refs[*].extensions.'mitre-attack-ext'.technique_id": ["attacks.technique_uid"],
+      "ttp_tagging_refs[*].extensions.'mitre-attack-ext'.technique_name": ["attacks.technique_name"],
+      "ttp_tagging_refs[*].extensions.'mitre-attack-ext'.tactic_id": ["attacks.tactic_uids"]
+    }
+  },
+  "x-ibm-ttp-tagging": {
+    "fields":{
+      "name": ["attacks.technique_name"],
+      "extensions.'mitre-attack-ext'.tactic_id" : ["attacks.tactic_uids"],
+      "extensions.'mitre-attack-ext'.technique_id" : ["attacks.technique_uid"],
+      "extensions.'mitre-attack-ext'.technique_name" : ["attacks.technique_name"]
+    }
+  },
+  "x-symantec-policy": {
+    "fields": {
+      "name": ["policy.name"],
+      "effective_date": ["policy.effective_date"],
+      "rule_group_name": ["policy.rule_group_name"],
+      "rule_name": ["policy.rule_name"],
+      "rule_category": ["policy.rule_category_id"],
+      "type_id": ["policy.type_id"],
+      "rule_description": ["policy.rule_desc"],
+      "version": ["policy.version"],
+      "states": ["policy.state_ids"]
+    }
+  },
+  "x-user-session": {
+    "fields": {
+      "id": ["session.id", "actor.session.id"],
+      "is_admin": ["session.is_admin"],
+      "is_remote": ["session.remote", "actor.session.remote"],
+      "user_ref.user_id": ["session.user.name", "actor.session.user.name"],
+      "user_ref.account_login": ["session.user.logon_name", "actor.session.user.logon_name"],
+      "user_ref.is_privileged": ["session.user.is_admin", "actor.session.user.is_admin"],
+      "user_ref.x_domain": ["session.user.domain","actor.session.user.domain"],
+      "user_ref.x_sid": ["session.user.sid"]
+    }
+  },
+  "x-kernel-resource": {
+    "fields": {
+      "name": ["kernel.name"],
+      "type_id": ["kernel.type_id"]
+    }
+  },
+  "x-peripheral-device": {
+    "fields": {
+      "class": [
+        "peripheral_device.class"
+      ],
+      "instance_uid": [
+        "peripheral_device.instance_uid"
+      ],
+      "name": [
+        "peripheral_device.name"
+      ],
+      "serial": [
+        "peripheral_device.serial"
+      ]
+    }
+  }
+}

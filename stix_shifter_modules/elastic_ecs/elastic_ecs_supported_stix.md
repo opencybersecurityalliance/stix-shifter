@@ -1,4 +1,4 @@
-##### Updated on 01/25/24
+##### Updated on 05/23/24
 ## Elasticsearch ECS
 ### Results STIX Domain Objects
 * Identity
@@ -91,7 +91,7 @@
 | **user-account**:x_group.domain | user.group.domain |
 | **user-account**:x_group.id | user.group.id |
 | **user-account**:x_group.name | user.group.name |
-| **process**:command_line | process.command_line, powershell.command.value |
+| **process**:command_line | process.command_line |
 | **process**:created | process.start |
 | **process**:cwd | process.working_directory |
 | **process**:pid | process.pid, process.ppid, process.parent.pid, process.parent.ppid |
@@ -105,7 +105,7 @@
 | **process**:parent_ref.x_thread_id | process.parent.thread.id |
 | **process**:parent_ref.x_uptime | process.parent.uptime |
 | **process**:parent_ref.cwd | process.parent.working_directory |
-| **process**:parent_ref.binary_ref.path | process.parent.executable |
+| **process**:parent_ref.binary_ref.name | process.parent.executable |
 | **process**:parent_ref.binary_ref.parent_directory_ref.path | process.parent.executable |
 | **process**:binary_ref.name | process.executable, process.parent.executable |
 | **process**:binary_ref.parent_directory_ref.path | process.executable, process.parent.executable |
@@ -155,10 +155,10 @@
 | **x-oca-event**:start | event.start |
 | **x-oca-event**:timezone | event.timezone |
 | **x-oca-event**:url | event.url |
-| **x-oca-event**:original | message, powershell.file.script_block_text |
+| **x-oca-event**:original | message |
 | **x-oca-event**:process_ref.pid | process.pid |
 | **x-oca-event**:process_ref.name | process.name |
-| **x-oca-event**:process_ref.command_line | process.command_line, powershell.command.value |
+| **x-oca-event**:process_ref.command_line | process.command_line |
 | **x-oca-event**:process_ref.binary_ref.name | file.name, process.executable |
 | **x-oca-event**:process_ref.parent_ref.pid | process.ppid, process.parent.ppid |
 | **x-oca-event**:process_ref.parent_ref.command_line | process.parent.command_line |
@@ -375,7 +375,7 @@
 | **user-account**:x_group.domain | user.group.domain |
 | **user-account**:x_group.id | user.group.id |
 | **user-account**:x_group.name | user.group.name |
-| **process**:command_line | process.command_line.keyword, powershell.command.value |
+| **process**:command_line | process.command_line.keyword |
 | **process**:created | process.start |
 | **process**:cwd | process.working_directory.keyword |
 | **process**:pid | process.pid, process.ppid, process.parent.pid, process.parent.ppid |
@@ -435,10 +435,10 @@
 | **x-oca-event**:start | event.start |
 | **x-oca-event**:timezone | event.timezone |
 | **x-oca-event**:url | event.url |
-| **x-oca-event**:original | message, powershell.file.script_block_text.keyword |
+| **x-oca-event**:original | message |
 | **x-oca-event**:process_ref.pid | process.pid |
 | **x-oca-event**:process_ref.name | process.name.keyword |
-| **x-oca-event**:process_ref.command_line | process.command_line.keyword, powershell.command.value |
+| **x-oca-event**:process_ref.command_line | process.command_line.keyword |
 | **x-oca-event**:process_ref.binary_ref.name | file.name, process.executable.keyword |
 | **x-oca-event**:process_ref.parent_ref.pid | process.ppid, process.parent.ppid |
 | **x-oca-event**:process_ref.parent_ref.command_line | process.parent.command_line.keyword |

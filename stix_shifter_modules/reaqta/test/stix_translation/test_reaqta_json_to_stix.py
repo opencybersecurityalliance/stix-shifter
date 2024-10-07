@@ -25,6 +25,7 @@ DATA_RECEIVED_AR_TIMESTAMP = find('receivedAt', DATA)
 DATA_HAPPENED_AT_TIMESTAMP = find('happenedAt', DATA)
 DATA_EVENT_ID = find('eventId', DATA)
 DATA_EVENT_TYPE = find('payload.eventType', DATA)
+DATA_HOST_ID = find('payload.hostId', DATA)
 DATA_LOCAL_ID = find('payload.localId', DATA)
 DATA_PROCESS_GUID = find('payload.process.id', DATA)
 DATA_PROCESS_PARENT_ID = find('payload.process.parentId', DATA)
@@ -307,40 +308,13 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(ip_obj['type'] == 'ipv4-addr')
         assert(ip_obj['value'] == DATA_REMOTE_IP)
 
-    
-    def test_x_ibm_finding(self):
-        objects = TestReaqtaResultsToStix.get_observed_data_objects()
-        event = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
-
-        assert(event is not None), "x-ibm-finding not found"
-        assert(event.keys() == {'type', 'extensions', 'ttp_tagging_refs', 'src_ip_ref', 'dst_ip_ref'})
-        assert(event['type'] == "x-ibm-finding")
-
-        ip_ref = event['src_ip_ref']
-        assert(ip_ref in objects), f"src_ip_ref with key {event['src_ip_ref']} not found"
-        ip_obj = objects[ip_ref]
-        assert(ip_obj.keys() == {'type', 'value'})
-        assert(ip_obj['type'] == 'ipv4-addr')
-        assert(ip_obj['value'] == DATA_LOCAL_IP)
-
-        ip_ref = event['dst_ip_ref']
-        assert(ip_ref in objects), f"dst_ip_ref with key {event['dst_ip_ref']} not found"
-        ip_obj = objects[ip_ref]
-        assert(ip_obj.keys() == {'type', 'value'})
-        assert(ip_obj['type'] == 'ipv4-addr')
-        assert(ip_obj['value'] == DATA_REMOTE_IP)
-
-        extensions = find('extensions.x-reaqta-alert', event)
-        assert(extensions is not None), "file extensions not found"
-        assert(extensions.keys() == {'incidents'})
-        assert(extensions['incidents'] == [254356654453, 4352345234525])
 
     def test_x_reaqta_event(self):
         objects = TestReaqtaResultsToStix.get_observed_data_objects()
         event = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x-reaqta-event')
 
         assert(event is not None), "x-reaqta-event not found"
-        assert(event.keys() == {'type', 'local_id', 'root_object', 'name', 'data', 'version', 'namespace_name', 'operation', 'is_local', 'queryName', 'custom_type', 'custom_name', 'relevance', 'region_size', 'pe_type', 'return_code', 'task_name', 'action_name', 'service_name', 'start_type', 'service_type'})
+        assert(event.keys() == {'type', 'host_id', 'local_id', 'root_object', 'name', 'data', 'version', 'namespace_name', 'operation', 'is_local', 'queryName', 'custom_type', 'custom_name', 'relevance', 'region_size', 'pe_type', 'return_code', 'task_name', 'action_name', 'service_name', 'start_type', 'service_type'})
         assert(event['type'] == "x-reaqta-event")
         assert(event['local_id'] == DATA_LOCAL_ID)
         assert(event['relevance'] == DATA_RELEVANCE)
@@ -401,7 +375,6 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(sum(obj['type'] == 'url' for obj in result_bundle_objects) == 1)
         assert(sum(obj['type'] == 'user-account' for obj in result_bundle_objects) == 5)
         assert(sum(obj['type'] == 'x-ibm-finding' for obj in result_bundle_objects) == 1)
-        assert(sum(obj['type'] == 'x-oca-asset' for obj in result_bundle_objects) == 3)
         assert(sum(obj['type'] == 'x-oca-event' for obj in result_bundle_objects) == 4)
         assert(sum(obj['type'] == 'x-reaqta-etw' for obj in result_bundle_objects) == 1)
         assert(sum(obj['type'] == 'x-reaqta-event' for obj in result_bundle_objects) == 1)
@@ -411,7 +384,7 @@ class TestReaqtaResultsToStix(unittest.TestCase):
 
         event = TestReaqtaResultsToStix.get_first_cybox_of_type_stix_2_1(result_bundle_objects, 'x-reaqta-event')
         assert(event is not None), "x-reaqta-event not found"
-        assert(event.keys() == {'type', 'local_id', 'id', 'spec_version', 'root_object', 'name', 'data', 'version', 'namespace_name', 'operation', 'is_local', 'queryName', 'custom_type', 'custom_name', 'relevance', 'region_size', 'pe_type', 'return_code', 'task_name', 'action_name', 'service_name', 'start_type', 'service_type'})
+        assert(event.keys() == {'type', 'local_id', 'host_id', 'id', 'spec_version', 'root_object', 'name', 'data', 'version', 'namespace_name', 'operation', 'is_local', 'queryName', 'custom_type', 'custom_name', 'relevance', 'region_size', 'pe_type', 'return_code', 'task_name', 'action_name', 'service_name', 'start_type', 'service_type'})
         assert(event['type'] == "x-reaqta-event")
         assert(event['local_id'] == DATA_LOCAL_ID)
         assert(event['relevance'] == DATA_RELEVANCE)
@@ -474,8 +447,8 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         assert(extensions['address_family'] == 'IPv4')
         assert(extensions['outbound'] == False)
 
-        x_oca_asset = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x-oca-asset')
-        ip_refs =  x_oca_asset['ip_refs']
+        x_oca_event = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x-oca-event')
+        ip_refs =  x_oca_event['ip_refs']
         obj_num = ip_refs[0]
         ip_obj = objects[obj_num]
         assert(ip_obj['value'] == DATA_LOCAL_IP) # DATA_REMOTE_IP is switched to local ip for inbound connection
@@ -507,3 +480,49 @@ class TestReaqtaResultsToStix(unittest.TestCase):
         hex_pid = hex(pid)
         original_pid = data['payload']['data']['etwProcessId']
         assert hex_pid == original_pid
+        
+    def test_updated_finding_fields(self):
+        data = {'eventId': '1119732427405660161', 'endpointId': '1114241789272784896', 'payload': {'localId': '1119732154209667073', 'process': {'id': '1114241789272784896:4704:1713564948917', 'parentId': '1114241789272784896:4060:1713564802263', 'endpointId': '1114241789272784896', 'program': {'path': 'c:\\users\\test\\desktop\\maze_rw.exe', 'filename': 'maze_rw.exe', 'md5': '01010101010101010101010101010101', 'sha1': '0101010101010101010101010101010101010101', 'sha256': '010101010101010101010101010101010101010101010101010101010101010', 'size': 495616, 'arch': 'x32', 'fsName': 'maze_rw.exe'}, 'user': 'USER-Desktop\\Desktop', 'pid': 4704, 'startTime': '2024-04-19T22:15:48.917Z', 'ppid': 4060, 'pstartTime': '2024-04-19T22:13:22.263Z', 'userSID': 'S-1-5-21-0101010101-0101010101-0101010101-1001', 'privilegeLevel': 'HIGH', 'noGui': False, 'logonId': '0x14c9e0'}, 'incidents': [], 'triggeredIncidents': ['1119732154268387330'], 'data': {'matched': [{'policyId': '1072556371783712772', 'versionId': '1072556371783716869', 'matcherId': '1072556371783720966'}]}, 'eventType': 28}, 'happenedAt': '2024-04-19T22:15:49.181Z', 'receivedAt': '2024-04-19T22:16:54.316Z'}
+        result_bundle = run_in_thread(ENTRY_POINT.translate_results, DATA_SOURCE, [data])
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        objects = observed_data['objects']
+        
+        finding = TestReaqtaResultsToStix.get_first_of_type(objects.values(), 'x-ibm-finding')
+        assert(finding is not None), 'process object type not found'
+        assert(finding["type"] == "x-ibm-finding")
+        assert(finding["finding_type"] == "alert")
+        assert(finding["name"] == "1072556371783712772")
+        assert(finding["x_reaqta_version_id"] == "1072556371783716869")
+        assert(finding["x_reaqta_matcher_id"] == "1072556371783720966")
+        
+    def test_updated_mitre_fields(self):
+        result_bundle = run_in_thread(ENTRY_POINT.translate_results, DATA_SOURCE, [DATA])
+        result_bundle_objects = result_bundle['objects']
+        observed_data = result_bundle_objects[1]
+        objects = observed_data['objects']
+        
+        mitre_2 = objects["38"]
+        mitre_3 = objects["39"]
+        mitre_4 = objects["40"]
+        
+        assert(mitre_2 is not None), 'process object type not found'
+        assert(mitre_2["type"] == "x-ibm-ttp-tagging")
+        assert(mitre_2["name"] == "T1053")
+        assert(mitre_2["extensions"]["mitre-attack-ext"]["x_reaqta_tactic_number"] == 2)
+        assert(mitre_2["extensions"]["mitre-attack-ext"]["tactic_name"] == 'Execution')
+        assert(mitre_2["extensions"]["mitre-attack-ext"]["technique_name"] == 'T1053')
+        
+        assert(mitre_3 is not None), 'process object type not found'
+        assert(mitre_3["type"] == "x-ibm-ttp-tagging")
+        assert(mitre_3["name"] == "T1053")
+        assert(mitre_3["extensions"]["mitre-attack-ext"]["x_reaqta_tactic_number"] == 3)
+        assert(mitre_3["extensions"]["mitre-attack-ext"]["tactic_name"] == 'Persistence')
+        assert(mitre_3["extensions"]["mitre-attack-ext"]["technique_name"] == 'T1053')
+        
+        assert(mitre_4 is not None), 'process object type not found'
+        assert(mitre_4["type"] == "x-ibm-ttp-tagging")
+        assert(mitre_4["name"] == "T1053")
+        assert(mitre_4["extensions"]["mitre-attack-ext"]["x_reaqta_tactic_number"] == 4)
+        assert(mitre_4["extensions"]["mitre-attack-ext"]["tactic_name"] == 'Privilege Escalation')
+        assert(mitre_4["extensions"]["mitre-attack-ext"]["technique_name"] == 'T1053')

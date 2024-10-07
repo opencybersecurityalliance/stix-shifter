@@ -104,6 +104,27 @@ class Connector(BaseJsonSyncConnector):
     
     @classmethod
     def modify_result(cls, data):
+        #For whatever reason, the api does not return the name of the Tactic, just an ID that maps loosely to a few tactics.
+        #This is a mapping of the UI useful name with the internal ID they are using.
+        #I determined this by using their HunQ search tool within the Reaqta environment.
+        #This could change in the future and may need to be updated or removed.
+        tactic_name_mapping = {
+            0:"Unknown",
+            1:"Initial Access",
+            2:"Execution",
+            3:"Persistence",
+            4:"Privilege Escalation",
+            5:"Defense Evasion",
+            6:"Credential Access",
+            7:"Discovery",
+            8:"Lateral Movement",
+            9:"Collection",
+            10:"Command and Control",
+            11:"Exfiltration",
+            12:"Impact"
+        }
+        
+        
         transmit_basepath = os.path.abspath(__file__)
         translate_basepath = transmit_basepath.split(os.sep)
         event_names_path = os.sep.join([*translate_basepath, "stix_translation", "json", "event_names_map.json"])
@@ -121,6 +142,21 @@ class Connector(BaseJsonSyncConnector):
                     payload['eventName'] = event_name
                 
                 result['payload'] = cls.update_net_traffic_flow(payload, network_protocol)
+            
+            if result.get('payload') and result['payload'].get('data') and result['payload']['data'].get('tactics'):
+                tactic_list = result['payload']['data']['tactics']
+                technique = result['payload']['data']['technique']
+                result['payload']['data']['mod_tactics'] = {}
+                dict_list = []
+                for tactic in tactic_list:
+                    
+                    if (tactic in tactic_name_mapping):
+                        dict_list.append({"tactic_number": tactic, "tactic_name": tactic_name_mapping.get(tactic), "technique":technique})
+                    else:
+                        dict_list.append({"tactic_number": tactic, "tactic_name": "Unknown", "technique":technique})
+                result['payload']['data']['mod_tactics'] = dict_list
+                
+                
     @classmethod
     def update_net_traffic_flow(cls, payload, network_protocol):
         result_data = payload.get('data')

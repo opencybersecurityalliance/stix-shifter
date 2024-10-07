@@ -1,5 +1,8 @@
 # CrowdStrike Falcon
 
+The CrowdStrike connector is set for deprecation and will no longer be supported. To continue receiving data, use the CrowdStrike Alerts connector instead.
+The CrowdStrike Alerts connector will collect the same data as this one, except it uses the newer alerts endpoint instead of the detections endpoint. 
+
 ## Supported STIX Mappings
 
 See the [table of mappings](crowdstrike_supported_stix.md) for the STIX objects and operators supported by this connector.

@@ -1,0 +1,410 @@
+{
+    "type": "bundle",
+    "id": "bundle--4be73729-74d1-4079-8679-0096a4fae7da",
+    "objects": [
+        {
+            "type": "identity",
+            "id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "name": "Symantec Endpoint Security",
+            "identity_class": "events",
+            "created": "2023-04-11T16:11:11.878Z",
+            "modified": "2023-04-11T16:11:11.878Z"
+        },
+        {
+            "id": "observed-data--2a3a92d8-76bb-4770-a550-e5b48b460522",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-05-17T05:39:31.397Z",
+            "modified": "2024-05-17T05:39:31.397Z",
+            "objects": {
+                "0": {
+                    "type": "x-oca-event",
+                    "category": "Application Activity",
+                    "x_feature_name": "AGENT_FRAMEWORK",
+                    "outcome": "Allowed",
+                    "description": "An update for Virus and Spyware Definitions SDS Win64 (Reduced) from LiveUpdate was successfully installed.  The new sequence number is 240502019.\r\n\r\nContent was downloaded from HTTPS://liveupdate.symantecliveupdate.com/1714698245jtun_emtsepn64c3sdsencful.7z.",
+                    "severity": 16,
+                    "x_event_status": "Success",
+                    "action": "UPDATE",
+                    "x_event_type": 3,
+                    "x_event_type_version": "1.0",
+                    "host_ref": "2",
+                    "provider": "Symantec Endpoint Security",
+                    "x_provider_version": "14.3.10148.8000",
+                    "timezone": 0,
+                    "user_ref": "11",
+                    "created": "2024-05-03T04:28:27.634Z",
+                    "code": "3:9681a520-0905-11ef-c338-000001ce90c9"
+                },
+                "1": {
+                    "type": "ipv4-addr",
+                    "value": "10.10.10.10",
+                    "resolves_to_refs": [
+                        "5"
+                    ]
+                },
+                "2": {
+                    "type": "x-oca-asset",
+                    "ip_refs": [
+                        "1",
+                        "10"
+                    ],
+                    "geo_ref": "3",
+                    "x_host_group": "Default/TestDevGroup",
+                    "hostname": "HOST_NAME",
+                    "mac_refs": [
+                        "5",
+                        "8"
+                    ],
+                    "os_ref": "9"
+                },
+                "3": {
+                    "type": "x-oca-geo",
+                    "name": "Default",
+                    "x_is_on_premises": false
+                },
+                "4": {
+                    "type": "ipv6-addr",
+                    "value": "fe00::0d0d:00cf:00ba:a0d0",
+                    "resolves_to_refs": [
+                        "5"
+                    ]
+                },
+                "5": {
+                    "type": "mac-addr",
+                    "value": "00:0a:de:e0:00:e0"
+                },
+                "6": {
+                    "type": "ipv4-addr",
+                    "value": "20.20.20.20",
+                    "resolves_to_refs": [
+                        "8"
+                    ]
+                },
+                "7": {
+                    "type": "ipv6-addr",
+                    "value": "fe00::00c0:e0ad:00f0:00fd",
+                    "resolves_to_refs": [
+                        "8"
+                    ]
+                },
+                "8": {
+                    "type": "mac-addr",
+                    "value": "00:c0:00:b0:c0:00"
+                },
+                "9": {
+                    "type": "software",
+                    "name": "Windows Server 2019 Datacenter Edition",
+                    "x_os_type": "Windows"
+                },
+                "10": {
+                    "type": "ipv4-addr",
+                    "value": "44.44.44.44"
+                },
+                "11": {
+                    "type": "user-account",
+                    "user_id": "Administrator"
+                }
+            },
+            "last_observed": "2024-05-03T04:28:27.634Z",
+            "first_observed": "2024-05-03T04:28:27.634Z",
+            "number_observed": 1
+        },
+        {
+            "id": "observed-data--70072127-5726-473d-9380-a9b1ff2f33a6",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-06-27T09:44:24.987Z",
+            "modified": "2024-06-27T09:44:24.987Z",
+            "objects": {
+                "0": {
+                    "type": "x-oca-event",
+                    "category": "Security",
+                    "x_feature_name": "MALWARE_PROTECTION",
+                    "file_ref": "4",
+                    "outcome": "Quarantined",
+                    "x_policy_ref": "8",
+                    "severity": 16,
+                    "action": "HOST_FILE_DETECTION",
+                    "x_event_type": 8031,
+                    "x_event_type_version": "1.0",
+                    "host_ref": "2",
+                    "provider": "Symantec Endpoint Security",
+                    "x_provider_version": "14.3.10148.8000",
+                    "timezone": 0,
+                    "user_ref": "18",
+                    "created": "2024-05-03T12:54:34.000Z",
+                    "code": "8031:4a456100-094c-11ef-c4f3-0000029ebed4"
+                },
+                "1": {
+                    "type": "ipv4-addr",
+                    "value": "10.10.10.10",
+                    "resolves_to_refs": [
+                        "12"
+                    ]
+                },
+                "2": {
+                    "type": "x-oca-asset",
+                    "ip_refs": [
+                        "1",
+                        "17"
+                    ],
+                    "geo_ref": "3",
+                    "domain_ref": "10",
+                    "x_host_group": "Default/TestEDRGroup",
+                    "hostname": "AMAZ-XXXXXX",
+                    "mac_refs": [
+                        "12",
+                        "15"
+                    ],
+                    "os_ref": "16"
+                },
+                "3": {
+                    "type": "x-oca-geo",
+                    "name": "Default",
+                    "x_is_on_premises": false
+                },
+                "4": {
+                    "type": "file",
+                    "x_family_type": "Executable",
+                    "parent_directory_ref": "5",
+                    "name": "SimulatorSetup.exe",
+                    "x_rep_score": -105,
+                    "hashes": {
+                        "SHA-256": "de00a0e00000005375dc1ac000006066000d9ffc7d73628ef4fe1b1b000ab00c"
+                    },
+                    "x_certificate_ref": "7",
+                    "size": 181872248,
+                    "x_file_type": "File",
+                    "x_file_version": "2.4.1.2"
+                },
+                "5": {
+                    "type": "directory",
+                    "path": "C:\\Users\\Administrator\\Downloads\\Ransom App"
+                },
+                "7": {
+                    "type": "x509-certificate",
+                    "x_signature_company_name": "DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1",
+                    "validity_not_before": "2023-02-27T09:32:56.000Z",
+                    "hashes": {
+                        "sha1": "21AA32614C2BE32AAA9E2056CAA28CAB5A7AAAAA"
+                    },
+                    "issuer": "knowbe4 inc.",
+                    "serial_number": "0E44DA59C6985D40A6000C9D9AAAAAAA",
+                    "x_signature_value": 1099520606215,
+                    "x_signature_value_ids": [
+                        1,
+                        2,
+                        3,
+                        17,
+                        20
+                    ]
+                },
+                "8": {
+                    "type": "x-symantec-policy",
+                    "name": "Default Antimalware Policy",
+                    "rule_category": 1,
+                    "version": "1"
+                },
+                "9": {
+                    "type": "x-ibm-finding",
+                    "x_policy_ref": "8",
+                    "finding_type": "threat",
+                    "alert_id": 42878,
+                    "name": "Trojan.Gen.MBT",
+                    "severity": 100,
+                    "x_threat_type_id": "Malware"
+                },
+                "10": {
+                    "type": "domain-name",
+                    "value": "workgroup"
+                },
+                "11": {
+                    "type": "ipv6-addr",
+                    "value": "fe80::3333:3333:3333:99d5",
+                    "resolves_to_refs": [
+                        "12"
+                    ]
+                },
+                "12": {
+                    "type": "mac-addr",
+                    "value": "0a:bb:bb:bb:bb:75"
+                },
+                "13": {
+                    "type": "ipv4-addr",
+                    "value": "4.4.4.4",
+                    "resolves_to_refs": [
+                        "15"
+                    ]
+                },
+                "14": {
+                    "type": "ipv6-addr",
+                    "value": "fe80::4444:4444:4444:31cf",
+                    "resolves_to_refs": [
+                        "15"
+                    ]
+                },
+                "15": {
+                    "type": "mac-addr",
+                    "value": "86:cc:cc:cc:cc:89"
+                },
+                "16": {
+                    "type": "software",
+                    "name": "Windows Server 2019 Datacenter Edition",
+                    "x_os_type": "Windows"
+                },
+                "17": {
+                    "type": "ipv4-addr",
+                    "value": "10.1.1.1"
+                },
+                "18": {
+                    "type": "user-account",
+                    "user_id": "SYSTEM"
+                }
+            },
+            "number_observed": 1,
+            "last_observed": "2024-05-03T12:54:34.000Z",
+            "first_observed": "2024-05-03T12:54:34.000Z"
+        },
+        {
+            "id": "observed-data--6699deed-268e-456f-a8c4-aa24660dc77b",
+            "type": "observed-data",
+            "created_by_ref": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff",
+            "created": "2024-05-17T05:39:31.443Z",
+            "modified": "2024-05-17T05:39:31.443Z",
+            "objects": {
+                "0": {
+                    "type": "software",
+                    "x_os_type": "Windows",
+                    "name": "Windows Server 2019 Datacenter Edition",
+                    "version": "10.0.17763"
+                },
+                "1": {
+                    "type": "x-oca-event",
+                    "action": "event_query_results",
+                    "outcome": "Logged",
+                    "x_feature_name": "DETECTION_RESPONSE",
+                    "provider": "Symantec Endpoint Security",
+                    "x_event_type_version": "1.0.0",
+                    "timezone": 0,
+                    "x_provider_version": "14.3.10148.8000",
+                    "host_ref": "2",
+                    "category": "System Activity",
+                    "x_event_type": 8018,
+                    "process_ref": "6",
+                    "file_ref": "7",
+                    "severity": 16,
+                    "user_ref": "10",
+                    "x_policy_ref": "11",
+                    "x_event_data": "{ $_.DeviceID -eq 'XENBUS\\VEN_XS0001&DEV_VBD&REV_00000001\\_' -or $_.DeviceClass -eq 'Net' -and ( $_.Manufacturer -like 'Intel*' -or $_.Manufacturer -eq 'Citrix Systems, Inc.' -or $_.Manufacturer -eq 'Amazon Inc.' -or $_.Manufacturer -eq 'Amazon Web Services, Inc.' )}",
+                    "created": "2024-05-09T03:46:52.529Z",
+                    "code": "8018:c5c95610-0db6-11ef-cede-00002e029b7b"
+                },
+                "2": {
+                    "type": "x-oca-asset",
+                    "x_host_group": "Default/TestEDRGroup",
+                    "ip_refs": [
+                        "3",
+                        "15"
+                    ],
+                    "hostname": "HOST_NAME",
+                    "mac_refs": [
+                        "5"
+                    ],
+                    "os_ref": "0"
+                },
+                "3": {
+                    "type": "ipv4-addr",
+                    "value": "10.10.10.10",
+                    "resolves_to_refs": [
+                        "5"
+                    ]
+                },
+                "4": {
+                    "type": "ipv6-addr",
+                    "value": "fe00:0000:0000:0000:000f:df0a:0000:00d0",
+                    "resolves_to_refs": [
+                        "5"
+                    ]
+                },
+                "5": {
+                    "type": "mac-addr",
+                    "value": "0a:0f:00:00:0c:00"
+                },
+                "6": {
+                    "type": "process",
+                    "name": "PowerShell_C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe_10.0.17763.1",
+                    "pid": 3148,
+                    "x_process_uid": "A477490A-0DB6-F1EF-848E-EAEACDB378C2",
+                    "x_process_tid": 3592,
+                    "created": "2024-05-09T03:46:48.154Z",
+                    "command_line": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe \"Get-CimInstance Win32_PnPSignedDriver | Where-Object { $_.DeviceID -eq 'XENBUS\\VEN_XS0001&DEV_VBD&REV_00000001\\_' -or $_.DeviceClass -eq 'Net' -and ( $_.Manufacturer -like 'Intel*' -or $_.Manufacturer -eq 'Citrix Systems, Inc.' -or $_.Manufacturer -eq 'Amazon Inc.' -or $_.Manufacturer -eq 'Amazon Web Services, Inc.' )}\" \"| Select-Object\" \"Description, DriverVersion\" \"| ConvertTo-Json -Depth 3\"",
+                    "binary_ref": "7",
+                    "creator_user_ref": "9"
+                },
+                "7": {
+                    "type": "file",
+                    "x_file_type": "File",
+                    "created": "2018-09-15T07:14:14.454Z",
+                    "modified": "2018-09-15T07:14:14.454Z",
+                    "hashes": {
+                        "MD5": "0000f60b1000074eb17c0f4dddefe000",
+                        "SHA-256": "de00a0e00000005375dc1ac000006066000d9ffc7d73628ef4fe1b1b000ab00c"
+                    },
+                    "size": 448000,
+                    "name": "powershell.exe",
+                    "parent_directory_ref": "8"
+                },
+                "8": {
+                    "type": "directory",
+                    "path": "c:\\windows\\system32\\windowspowershell\\v1.0"
+                },
+                "9": {
+                    "type": "user-account",
+                    "user_id": "SYSTEM",
+                    "x_user_sid": "S-1-1-11",
+                    "x_user_domain": "NT AUTHORITY"
+                },
+                "10": {
+                    "type": "user-account",
+                    "user_id": "SYSTEM"
+                },
+                "11": {
+                    "type": "x-symantec-policy",
+                    "name": "Default Detection and Response Policy",
+                    "version": "1"
+                },
+                "13": {
+                    "type": "x-ibm-ttp-tagging",
+                    "extensions": {
+                        "mitre-attack-ext": {
+                            "technique_id": "T1059",
+                            "technique_name": "Command and Scripting Interpreter",
+                            "tactic_id": "TA0002"
+                        }
+                    },
+                    "name": "Command and Scripting Interpreter"
+                },
+                "14": {
+                    "type": "x-ibm-ttp-tagging",
+                    "extensions": {
+                        "mitre-attack-ext": {
+                            "technique_id": "T1059",
+                            "technique_name": "Command and Scripting Interpreter",
+                            "tactic_id": "TA0002"
+                        }
+                    },
+                    "name": "Command and Scripting Interpreter"
+                },
+                "15": {
+                    "type": "ipv4-addr",
+                    "value": "44.44.44.44"
+                }
+            },
+            "last_observed": "2024-05-09T03:46:52.529Z",
+            "first_observed": "2024-05-09T03:46:52.529Z",
+            "number_observed": 1
+        }
+    ],
+    "spec_version": "2.0"
+}

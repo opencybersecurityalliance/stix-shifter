@@ -1,0 +1,13 @@
+{
+    "meta": {
+        "query_time": 1.01e-7,
+        "powered_by": "crowdstrike-api-gateway",
+        "trace_id": "1160beea-805a-4325-8227-a9e55f47594a"
+    },
+    "errors": [
+        {
+            "code": 415,
+            "message": "415: Unsupported Media Type"
+        }
+    ]
+}

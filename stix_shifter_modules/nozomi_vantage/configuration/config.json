@@ -1,0 +1,47 @@
+{
+  "connection": {
+    "type": {
+      "displayName": "Nozomi Vantage",
+      "group": "nozomi"
+    },
+    "host": {
+      "type": "text",
+      "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$"
+    },
+    "port": {
+      "type": "number",
+      "default": 443,
+      "min": 1,
+      "max": 65535
+    },
+    "help": {
+      "type": "link",
+      "default": "data-sources.html"
+    },
+    "selfSignedCert": {
+      "type": "password",
+      "optional": true
+    },
+    "options": {
+      "type": "fields",
+      "api_page_size": {
+        "default": 1000,
+        "min": 100,
+        "max": 10000,
+        "hidden": true,
+        "type": "number"
+      }
+    }
+  },
+  "configuration": {
+    "auth": {
+      "type": "fields",
+      "key_name": {
+        "type": "text"
+      },
+      "key_token": {
+        "type": "password"
+      }
+    }
+  }
+}

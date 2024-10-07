@@ -1,0 +1,41 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "CrowdStrike Falcon Alerts",
+            "group": "crowdstrike"
+        },
+        "host": {
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$"
+        },
+        "port": {
+            "type": "number",
+            "default": 443,
+            "min": 1,
+            "max": 65535
+        },
+        "help": {
+            "default": "data-sources-crowdstrike-falcon.html",
+            "type": "link"
+        },
+        "options": {
+            "validate_pattern": {
+                "default": false
+            },
+            "result_limit": {
+                "default": 1000
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "client_id": {
+                "type": "password"
+            },
+            "client_secret": {
+                "type": "password"
+            }
+        }
+    }
+}

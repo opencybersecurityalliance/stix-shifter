@@ -17,7 +17,7 @@
         "auth": {
              "tenant": {
                 "label": "Tenant",
-                "description": "Tenant Id of Palo Alto Cortex XDR Application"
+                "description": "Tenant Id of Palo Alto Cortex XDR Application. When using a multi-tenant environment, this value is used to determine the tenant that will be used."
             },
             "api_key": {
                 "label": "API key",

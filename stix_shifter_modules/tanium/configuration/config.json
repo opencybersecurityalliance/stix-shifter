@@ -1,0 +1,36 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "Tanium Threat Response",
+            "group": "tanium"
+        },
+        "host": {
+            "type": "text",
+            "regex": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:/\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9_:/\\-]*[A-Za-z0-9])$"
+        },
+        "port": {
+            "type": "number",
+            "default": 443,
+            "min": 1,
+            "max": 65535
+        },
+        "help": {
+            "type": "link",
+            "default": "data-sources.html"
+        },
+        "options": {
+            "unmapped_fallback": {
+                "type": "boolean",
+                "default": false
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type": "fields",
+            "accessToken": {
+                "type": "password"
+            }
+        }
+    }
+}

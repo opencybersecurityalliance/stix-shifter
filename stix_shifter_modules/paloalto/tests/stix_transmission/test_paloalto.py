@@ -543,3 +543,70 @@ class TestPaloaltoConnection(unittest.TestCase, object):
         assert result_response['data'] == [{'xdr_data': {'actor_primary_user_sid': 'S123',
                                                          'actor_primary_username': 'username',
                                                          'actor_process_logon_id': 'id12'}}]
+
+
+    @patch('stix_shifter_modules.paloalto.stix_transmission.api_client.APIClient.create_search')
+    def test_query_response_no_tenant_id(self, mock_search_response):
+        """test create search query"""
+        mocked_return_value = '{"reply": {"search_id": "07f63c733f5946_15006_inv"}}'
+        mock_search = RequestMockResponse(200, mocked_return_value)
+        search_response = get_mock_response(200, mocked_return_value, 'byte',response=mock_search)
+        mock_search_response.return_value = search_response
+
+        query = json.dumps({"xdr_data": {"query": "dataset = xdr_data | filter ((action_process_image_name not in ("
+                                                  "\"conhost.exe\",\"AtBroker.exe\") or actor_process_image_name not "
+                                                  "in (\"conhost.exe\",\"AtBroker.exe\") or "
+                                                  "causality_actor_process_image_name not in (\"conhost.exe\","
+                                                  "\"AtBroker.exe\") or os_actor_process_image_name not in ("
+                                                  "\"conhost.exe\",\"AtBroker.exe\"))  and (to_epoch(_time,"
+                                                  "\"millis\") >= 1644451200000 and to_epoch(_time,\"millis\") <= "
+                                                  "1644883200000)) or ((action_process_file_create_time = "
+                                                  "1643704990003 or actor_process_file_create_time = 1643704990003 or "
+                                                  "causality_actor_process_file_create_time = 1643704990003 or "
+                                                  "os_actor_process_file_create_time = 1643704990003)  and (to_epoch("
+                                                  "_time,\"millis\") >= 1644451200000 and to_epoch(_time,\"millis\") "
+                                                  "<= 1644883200000)) or ((action_process_image_name ~= \"wildfire$\" "
+                                                  "or actor_process_image_name ~= \"wildfire$\" or "
+                                                  "causality_actor_process_image_name ~= \"wildfire$\" or "
+                                                  "os_actor_process_image_name ~= \"wildfire$\")  and (to_epoch("
+                                                  "_time,\"millis\") >= 1644451200000 and to_epoch(_time,\"millis\") "
+                                                  "<= 1644883200000)) | alter dataset_name = \"xdr_data\" | fields "
+                                                  "dataset_name,action_local_ip,action_remote_ip,"
+                                                  "agent_ip_addresses_v6,dst_agent_ip_addresses_v6,action_local_port,"
+                                                  "action_remote_port,action_network_protocol,action_file_name,"
+                                                  "action_file_size,action_file_md5,action_module_md5,"
+                                                  "action_process_image_md5,action_file_authenticode_sha1,"
+                                                  "action_file_authenticode_sha2,action_file_sha256,"
+                                                  "action_module_sha256,action_process_image_sha256,"
+                                                  "action_file_access_time,actor_process_file_access_time,"
+                                                  "os_actor_process_file_access_time,action_file_mod_time,"
+                                                  "actor_process_file_mod_time,os_actor_process_file_mod_time,"
+                                                  "action_file_create_time,action_file_path,"
+                                                  "action_process_image_path,action_registry_file_path,"
+                                                  "actor_process_image_path,causality_actor_process_image_path,"
+                                                  "os_actor_process_image_path,action_process_image_command_line,"
+                                                  "actor_process_command_line,causality_actor_process_command_line,"
+                                                  "os_actor_process_command_line,action_process_file_create_time,"
+                                                  "actor_process_file_create_time,"
+                                                  "causality_actor_process_file_create_time,"
+                                                  "os_actor_process_file_create_time,action_process_image_name,"
+                                                  "actor_process_image_name,causality_actor_process_image_name,"
+                                                  "os_actor_process_image_name,action_module_process_os_pid ,"
+                                                  "action_process_os_pid,actor_process_os_pid,"
+                                                  "causality_actor_process_os_pid,os_actor_process_os_pid,"
+                                                  "action_process_requested_parent_pid,action_thread_parent_pid,"
+                                                  "action_thread_child_pid,action_process_username,auth_domain,"
+                                                  "dst_host_metadata_domain,host_metadata_domain,"
+                                                  "dst_action_url_category ,action_registry_key_name,"
+                                                  "action_registry_value_name,mac,associated_mac,dst_associated_mac ,"
+                                                  "dst_mac,dst_user_id,user_id,action_username,"
+                                                  "actor_primary_username,actor_process_logon_id | limit 10000 ",
+                                         "timeframe": {"from": 1644451200000, "to": 1644883200000}}})
+
+        configuration_local = self.configuration()
+        configuration_local["auth"]["tenant"] = ""
+        transmission = stix_transmission.StixTransmission('paloalto', self.connection(), configuration_local)
+        query_response = transmission.query(query)
+        assert query_response is not None
+        assert 'success' in query_response
+        assert query_response['success'] is True

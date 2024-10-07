@@ -28,6 +28,7 @@ SCO_CONNECTORS = {
     "cbcloud": "Carbon Black Cloud", 
     "cisco_secure_email": "Cisco Secure Email",
     "crowdstrike": 'CrowdStrike Falcon',
+    "crowdstrike_alerts": 'CrowdStrike Falcon Alerts API',
     "cybereason": "Cybereason",
     "darktrace": "Darktrace",
     "datadog": "Datadog",

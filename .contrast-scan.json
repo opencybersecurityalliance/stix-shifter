@@ -1,0 +1,10 @@
+{
+  "excludes": [
+    "**/test/**",
+    "**/tests/**",
+    "**/deployment/**",
+    "**/scripts/changelog_generator/**",
+    "**/scripts/mysql_populate_script/**",
+    "**/scripts/supported_property_exporter.py"
+  ]
+}

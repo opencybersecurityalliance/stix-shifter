@@ -94,18 +94,27 @@ If the data source is synchronous, you must include `set_async(False)` in the co
 
 #### Testing a new connector using the proxy host
 
-Work on a new stix-shifter connector occurs after the project has been forked and cloned into a local development environment. Stix-shifter contains a **proxy** connector that facilitates a remote instance of the project calling out to a local instance. While in development, a new connector's working branch can be tested in any project using the stix-shifter library without first merging into the master branch on Github. A host is run on the local instance from the CLI. When a `proxy` data source is passed to the remote instance of stix-shifter, the real connection attributes (data source type, host, and port contained in the options) are passed onto the local instance of stix-shifter running the proxy host. The host will then use the new connector and return results back to the remote stix-shifter instance.
+The Proxyhost server routing provides a python file with all of the required mappings to start a flask server that can be used to allow communication through the proxy module. The flask server is run on the local instance from the CLI. When a `proxy` data source is passed to the remote instance of stix-shifter, the real connection attributes (data source type, host, and port contained in the options) are passed onto the local instance of stix-shifter running the proxy host. The host will then use the new connector and return results back to the remote stix-shifter instance.
 
-Open a terminal and navigate to your local stix-shifter directory. Run the host with the following command:
+##### Requirements
+1. stix-shifter-utils must be installed.
+2. flask must be installed.
+3. You need to be able to access the proxyhost_server_routing.py from your CLI.
+
+##### Running the tool
+
+To start a flask server with the proxy host routing map you can run the following command.
 
 ```
-python main.py host "<STIX Identity Object>" "<Host IP address>:<Host Port>"
+flask --app 'proxyhost_server_routing:start_proxyhost_flask_server({"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "Bundle","identity_class": "events"})' run'
 ```
 
-As an example:
+Running this command starts up the server on localhost and on port 5000.
+
+To start the server up the same way as it was done previously (through the stix-shifter CLI)
 
 ```
-python main.py host '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "Bundle","identity_class": "events"}' "192.168.122.83:5000"
+flask --app 'proxyhost_server_routing:start_proxyhost_flask_server({"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "Bundle","identity_class": "events"})' run -h 127.0.0.1 -p 5001 --cert "/Users/StixShifter/stix-shifter/cert.pem" --key "/Users/StixShifter/stix-shifter/key.pem"
 ```
 
 ##### Calling the proxy host

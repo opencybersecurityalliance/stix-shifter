@@ -1,0 +1,340 @@
+{
+  "Event Type": {
+    "key": "x-oca-event.x_action",
+    "object": "event"
+  },
+  "Timestamp - Last Run": {
+    "key": "x-oca-event.x_last_run",
+    "object": "event"
+  },
+  "Timestamp - Started": {
+    "key": "x-oca-event.start",
+    "object": "event"
+  },
+  "Timestamp - Accessed": {
+    "key": "x-oca-event.x_accessed_time",
+    "object": "event"
+  },
+  "Timestamp - Modified": {
+    "key": "x-oca-event.modified",
+    "object": "event"
+  },
+  "Timestamp - Event": [
+    {
+      "key": "first_observed"
+    },
+    {
+      "key": "last_observed"
+    },
+    {
+      "key": "x-oca-event.created",
+      "object": "event"
+    }
+  ],
+  "Hostname": [
+    {
+      "key": "x-oca-asset.hostname",
+      "object": "asset"
+    },
+    {
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "asset"
+    }
+  ],
+  "Host ID": {
+    "key": "x-oca-asset.device_id",
+    "object": "asset"
+  },
+  "Username": [
+    {
+      "key": "user-account.user_id",
+      "object": "user"
+    },
+    {
+      "key": "process.creator_user_ref",
+      "object": "process",
+      "references": "user"
+    },
+    {
+      "key": "x-oca-event.user_ref",
+      "object": "event",
+      "references": "user"
+    }
+  ],
+  "Local IP Address": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "asset",
+      "references": [
+        "src_ip"
+      ]
+    },
+    {
+      "key": "x-oca-event.ip_refs",
+      "object": "event",
+      "references": [
+        "src_ip"
+      ],
+      "group": true
+    }
+  ],
+  "Remote IP Address": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "x-oca-event.ip_refs",
+      "object": "event",
+      "references": [
+        "dst_ip"
+      ],
+      "group": true
+    }
+  ],
+  "Remote Port": [
+    {
+      "key": "network-traffic.dst_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "x-oca-event.network_ref",
+      "object": "event",
+      "references": "nt"
+    }
+  ],
+  "Local Port": [
+    {
+      "key": "network-traffic.src_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    },
+    {
+      "key": "x-oca-event.network_ref",
+      "object": "event",
+      "references": "nt"
+    }
+  ],
+  "Port Protocol": [
+    {
+      "key": "network-traffic.protocols",
+      "object": "nt",
+      "transformer": "ToLowercaseArray"
+    },
+    {
+      "key": "x-oca-event.network_ref",
+      "object": "event",
+      "references": "nt"
+    }
+  ],
+  "HTTP Header": {
+    "key": "network-traffic.extensions.http-request-ext.request_header",
+    "object": "nt"
+  },
+  "URL":
+    {
+      "key": "network-traffic.extensions.http-request-ext.request_value",
+      "object": "nt"
+    },
+  "HTTP Method":
+  {
+      "key": "network-traffic.extensions.http-request-ext.request_method",
+      "object": "nt"
+  },
+  "File Name": [
+    {
+      "key": "file.name",
+      "object": "file"
+    },
+    {
+      "key": "process.image_ref",
+      "object": "process",
+      "references": "file"
+    }
+  ],
+    "Parent File Name": [
+    {
+      "key": "file.name",
+      "object": "p_file"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent_process",
+      "references": "p_file"
+    }
+  ],
+  "Host Set": {
+     "key": "x-oca-asset.x_host_set",
+    "object": "asset"
+  },
+  "File MD5 Hash": {
+    "key": "file.hashes.MD5",
+    "object": "file"
+  },
+  "Size in bytes": {
+    "key": "file.size",
+    "object": "file",
+    "transformer": "ToInteger"
+  },
+  "File Bytes Written": {
+    "key": "file.x_bytes_written",
+    "object": "file",
+    "transformer": "ToInteger"
+  },
+  "File Full Path": [
+    {
+      "key": "file.x_path",
+      "object": "file"
+    },
+    {
+      "key": "directory.path",
+      "object": "dir",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file",
+      "references": "dir"
+    }
+  ],
+  "Parent Process Path": [
+    {
+      "key": "process.cwd",
+      "object": "parent_process",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    },
+    {
+      "key": "x-oca-event.parent_process_ref",
+      "object": "event",
+      "references": "parent_process"
+    }
+  ],
+  "Registry Key Full Path": [
+    {
+      "key": "windows-registry-key.key",
+      "object": "registry"
+    },
+    {
+      "key": "x-oca-event.registry_ref",
+      "object": "event",
+      "references": "registry"
+    }
+  ],
+  "Registry Key Values": {
+    "key": "windows-registry-key.values",
+    "object": "registry"
+  },
+  "DNS Hostname": [
+    {
+      "key": "domain-name.value",
+      "object": "domain"
+    },
+    {
+      "key": "x-oca-event.domain_ref",
+      "object": "event",
+      "references": "domain"
+    }
+  ],
+  "Process ID": [
+    {
+    "key": "process.pid",
+    "object": "process",
+    "transformer": "ToInteger"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "Process Event Type": {
+    "key": "process.x_event_type",
+    "object": "process"
+  },
+  "Process Arguments": {
+    "key": "process.command_line",
+    "object": "process"
+  },
+  "Write Event File Name": [
+    {
+      "key": "file.name",
+      "object": "file_write"
+    },
+    {
+      "key": "x-oca-event.file_ref",
+      "object": "event",
+      "references": "file_write"
+    }
+  ],
+  "Write Event File Full Path": [
+    {
+      "key": "file.x_path",
+      "object": "file_write"
+    },
+    {
+      "key": "directory.path",
+      "object": "dir1",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file_write",
+      "references": "dir1"
+    }
+  ],
+  "Write Event File Text Written": [
+    {
+      "key": "artifact.payload_bin",
+      "object": "artifact",
+      "transformer": "ToBase64"
+    },
+    {
+      "key": "file.content_ref",
+      "object": "file_write",
+      "references": "artifact"
+    }
+  ],
+  "Write Event File Bytes Written": {
+    "key": "file.x_bytes_written",
+    "object": "file_write",
+    "transformer": "ToInteger"
+  },
+  "Write Event File MD5 Hash": {
+    "key": "file.hashes.MD5",
+    "object": "file_write"
+  },
+  "Write Event Size in bytes": {
+    "key": "file.size",
+    "object": "file_write",
+    "transformer": "ToInteger"
+  }
+}

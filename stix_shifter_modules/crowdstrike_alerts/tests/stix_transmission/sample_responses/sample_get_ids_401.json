@@ -1,0 +1,13 @@
+{
+    "meta": {
+        "query_time": 1.76e-7,
+        "powered_by": "crowdstrike-api-gateway",
+        "trace_id": "27ea2cbc-2f57-4e56-b419-5e356f71a5c3"
+    },
+    "errors": [
+        {
+            "code": 401,
+            "message": "access denied, invalid bearer token"
+        }
+    ]
+}

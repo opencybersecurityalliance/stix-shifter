@@ -96,7 +96,7 @@
   },
   "process" : {
     "fields": {
-      "command_line": ["process.command_line.keyword", "powershell.command.value"],
+      "command_line": ["process.command_line.keyword"],
       "created": ["process.start"],
       "cwd": ["process.working_directory.keyword"],
       "pid": ["process.pid", "process.ppid", "process.parent.pid", "process.parent.ppid"],
@@ -184,10 +184,10 @@
       "start": ["event.start"],
       "timezone": ["event.timezone"],
       "url": ["event.url"],
-      "original": ["message", "powershell.file.script_block_text.keyword"],
+      "original": ["message"],
       "process_ref.pid": ["process.pid"],
       "process_ref.name": ["process.name.keyword"],
-      "process_ref.command_line": ["process.command_line.keyword", "powershell.command.value"],
+      "process_ref.command_line": ["process.command_line.keyword"],
       "process_ref.binary_ref.name": ["file.name", "process.executable.keyword"],
       "process_ref.parent_ref.pid": ["process.ppid", "process.parent.ppid"],
       "process_ref.parent_ref.command_line": ["process.parent.command_line.keyword"],

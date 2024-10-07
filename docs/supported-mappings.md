@@ -25,6 +25,7 @@ Stix-shifter currently offers connector support for the following cybersecurity 
 - [Carbon Black Cloud](../stix_shifter_modules/cbcloud/cbcloud_supported_stix.md)
 - [Cisco Secure Email](../stix_shifter_modules/cisco_secure_email/cisco_secure_email_supported_stix.md)
 - [CrowdStrike Falcon](../stix_shifter_modules/crowdstrike/crowdstrike_supported_stix.md)
+- [CrowdStrike Falcon Alerts API](../stix_shifter_modules/crowdstrike_alerts/crowdstrike_alerts_supported_stix.md)
 - [Cybereason](../stix_shifter_modules/cybereason/cybereason_supported_stix.md)
 - [Darktrace](../stix_shifter_modules/darktrace/darktrace_supported_stix.md)
 - [Datadog](../stix_shifter_modules/datadog/datadog_supported_stix.md)

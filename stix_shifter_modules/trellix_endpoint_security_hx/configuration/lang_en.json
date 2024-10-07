@@ -1,0 +1,42 @@
+{
+    "connection": {
+        "host": {
+            "label": "Management IP address or hostname",
+            "description": "Specify the IP address or hostname of the data source"
+        },
+        "port": {
+            "label": "Host port",
+            "description": "Set the port number that is associated with the hostname or IP address"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        },
+        "selfSignedCert": {
+            "label": "PEM Formatted SSL certificate(s)",
+            "description": "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
+        },
+        "options": {
+            "host_sets": {
+                "label": "Host Sets",
+                "description": "Provide one or more host set name(group of hosts) separated by comma. Example: Host_set1,Host_set2"
+            },
+            "progress_threshold": {
+                "label": "Progress Threshold Percentage",
+                "description": "The Progress Percentage that needs to be verified for search status"
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "username": {
+                "label": "Username",
+                "description": "Username with access to the search API"
+            },
+            "password": {
+                "label": "Password",
+                "description": "Password of the user with access to the search API"
+            }
+        }
+    }
+}

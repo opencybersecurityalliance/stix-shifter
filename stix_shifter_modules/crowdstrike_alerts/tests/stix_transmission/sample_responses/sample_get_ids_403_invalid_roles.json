@@ -1,0 +1,13 @@
+{
+    "meta": {
+        "query_time": 1.31e-7,
+        "powered_by": "crowdstrike-api-gateway",
+        "trace_id": "0041eea1-239f-4cbc-9f26-4257addf82e2"
+    },
+    "errors": [
+        {
+            "code": 403,
+            "message": "access denied, authorization failed"
+        }
+    ]
+}

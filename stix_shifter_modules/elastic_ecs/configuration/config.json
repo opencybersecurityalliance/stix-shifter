@@ -22,6 +22,11 @@
             "type": "text",
             "optional": true
         },
+        "pagination": {
+            "type": "boolean",
+            "default": true,
+            "optional": true
+        },
         "selfSignedCert": {
             "type": "password",
             "optional": true

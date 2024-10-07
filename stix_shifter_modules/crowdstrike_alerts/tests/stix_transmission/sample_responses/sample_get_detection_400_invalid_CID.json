@@ -1,0 +1,17 @@
+{
+    "meta": {
+        "query_time": 0.000975122,
+        "writes": {
+            "resources_affected": 0
+        },
+        "powered_by": "detectsapi",
+        "trace_id": "7ca54d91-6fe6-47ec-a198-3c4d45fad78e"
+    },
+    "errors": [
+        {
+            "code": 400,
+            "message": "invalid CID provided"
+        }
+    ],
+    "resources": []
+}

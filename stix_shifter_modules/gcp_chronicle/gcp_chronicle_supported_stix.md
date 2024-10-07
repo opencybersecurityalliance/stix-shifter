@@ -1,4 +1,4 @@
-##### Updated on 10/25/23
+##### Updated on 05/23/24
 ## GCP Chronicle
 ### Results STIX Domain Objects
 * Identity

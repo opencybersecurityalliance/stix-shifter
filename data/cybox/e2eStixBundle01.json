@@ -1,0 +1,79 @@
+{
+    "type": "bundle",
+    "id": "bundle--258c4b63-6b04-4a0e-985d-f64a3a8c8ec7",
+    "spec_version": "2.0",
+    "objects": [
+      {
+        "type": "identity",
+        "id": "identity--33fa3e56-6511-40de-bc69-c5ffeb3838f9",
+        "created": "2024-06-03T09:44:40.150Z",
+        "modified": "2024-06-03T09:44:40.150Z",
+        "name": "E2E Testing",
+        "identity_class": "program"
+      },
+      {
+        "type": "observed-data",
+        "id": "observed-data--ed82dd61-cc41-485b-b608-d278469e6259",
+        "created_by_ref": "identity--33fa3e56-6511-40de-bc69-c5ffeb3838f9",
+        "created": "2024-06-03T09:44:40.150Z",
+        "modified": "2024-06-03T09:44:40.150Z",
+        "first_observed": "2020-07-29T09:44:40.150Z",
+        "last_observed": "2025-07-29T09:44:40.150Z",
+        "number_observed": 1,
+        "objects": {
+          "0": {
+            "type": "ipv4-addr",
+            "value": "127.0.0.1"
+          },
+          "1": {
+            "type": "ipv4-addr",
+            "value": "172.16.1.1"
+          },
+          "2": {
+            "type": "url",
+            "value": "onedrivefiles.digital"
+          },
+          "3": {
+            "type": "ipv6-addr",
+            "value": "0000:0000:0000:0000:0000:0000:0000:0001"
+          },
+          "4": {
+            "type": "url",
+            "value": "http://kbfvzoboss.bid/alien/fre.php"
+          },
+          "5": {
+            "type": "user-account",
+            "value": "e2e user"
+          },
+            "6": {
+            "type": "file:name",
+            "value": "uat_file.exe"
+          },
+            "7": {
+            "type": "file:hashes.'SHA-256'",
+            "value": "b0ab7076b0fe4b758d8e6622605d94204cc1b55baf718129cafe750d835ffb21"
+          },
+            "8": {
+            "type": "mac-addr",
+            "value": "00:00:00:00:00:00"
+          },
+          "9": {
+            "type": "user-account",
+            "user_id": "omern",
+            "account_login": "omern"
+           },
+           "10": {
+            "type": "file",
+            "name": "streamfwd",
+            "parent_directory_ref": "6"
+           },
+           "11": {
+            "type": "file",
+            "hashes": {
+            "MD5": "6F3C9485F8F97AC04C8E43EF4463A68C"
+                    }
+           }
+        }
+      }
+    ]
+  }
