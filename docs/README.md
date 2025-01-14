@@ -26,7 +26,7 @@ The recommended method for installing stix-shifter is via pip. Two prerequisite 
 
 ### Dependencies
 
-STIX-shifter requries Python 3.8 or greater. See the [requirements file](../stix_shifter/requirements.txt) for library dependencies. 
+STIX-shifter requries Python 3.9 or greater. See the [requirements file](../stix_shifter/requirements.txt) for library dependencies. 
 
 ## Usage
 
