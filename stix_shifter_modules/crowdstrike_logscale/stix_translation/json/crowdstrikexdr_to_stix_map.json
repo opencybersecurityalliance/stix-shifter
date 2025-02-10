@@ -1,0 +1,55 @@
+{
+    "Agent IP": {
+      "key": "ipv4-addr.value",
+      "object": "ipv4-addr"
+    },
+    "LocalIP": {
+      "key": "ipv4-addr.value",
+      "object": "ipv4-addr"
+    },
+    "LocalAddressIP4": {
+      "key": "ipv4-addr.value",
+      "object": "ipv4-addr"
+    },
+    "aip": {
+      "key": "ipv4-addr.value",
+      "object": "ipv4-addr"
+    },
+    "DomainName": {
+      "key": "domain-name.value",
+      "object": "domain-name"
+    },
+    "ComputerName": [{
+      "key": "x-oca-asset.hostname",
+      "object": "x-oca-asset"
+      },
+      {
+        "key": "user-account.user_id",
+        "object": "user-account"
+      },
+      {
+        "key": "user-account.account_login",
+        "object": "user-account"
+      }
+    ],
+    "ContextTimeStamp": {
+      "key": "x-ibm-finding.time_observed",
+      "object": "x-ibm-finding"
+    },
+    "ContextProcessId": {
+      "key": "process.pid",
+      "object": "process"
+    },
+    "CNAMERecords": {
+      "key": "url.value",
+      "object": "url"
+    },
+    "@ingesttimestamp": {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp"
+    },
+    "timestamp": {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp"
+    }
+  }

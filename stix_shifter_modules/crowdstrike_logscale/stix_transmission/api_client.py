@@ -1,7 +1,7 @@
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 import json
 
-JOB_ENDPOINT = 'api/v1/repositories'
+JOB_ENDPOINT = 'humio/api/v1/repositories'
 
 class APIClient:
 

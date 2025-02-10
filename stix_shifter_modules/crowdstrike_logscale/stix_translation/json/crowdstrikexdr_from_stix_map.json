@@ -1,0 +1,57 @@
+{
+    "ipv4-addr": {
+      "fields": {
+        "value": [
+          "Agent IP",
+          "aip",
+          "LocalIP",
+          "LocalAddressIP4"
+        ]
+      }
+    },
+    "process": {
+      "fields": {
+        "pid": [
+          "ContextProcessId"
+        ]
+      }
+    },
+    "domain-name": {
+      "fields": {
+        "value": [
+          "DomainName"
+        ]
+      }
+    },
+    "x-oca-asset": {
+      "fields": {
+        "hostname": [
+          "ComputerName"
+        ]
+      }
+    },
+    "url": {
+      "fields": {
+        "value": [
+          "CNAMERecords"
+        ]
+      }
+    },
+    "user-account": {
+      "fields": {
+        "user_id": [
+          "ComputerName"
+        ],
+        "account_login": [
+          "ComputerName"
+        ]
+      }
+    },
+    "x-ibm-finding": {
+      "fields": {
+        "time_observed": [
+          "ContextTimeStamp"
+        ]
+      }
+    }
+  }
