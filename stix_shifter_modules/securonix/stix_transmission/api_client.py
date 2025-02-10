@@ -1,10 +1,7 @@
 import json
 import requests
-from urllib.parse import urlencode
-from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from datetime import datetime, timedelta
 from stix_shifter_utils.utils import logger
-import time
 import re
 
 
@@ -14,8 +11,6 @@ class APIResponseException(Exception):
         self.error_message = error_message
         self.content_header_type = content_header_type
         self.response = response
-
-    pass
 
 
 class APIClient:
@@ -35,36 +30,10 @@ class APIClient:
             'user-agent': 'oca_stixshifter_1.0'
         }
         self._token_time = datetime.now() - timedelta(days=7)
+        self._token = None
 
-    async def ping_box(self, client, base_url, auth_headers, headers, timeout):
-        base_url = base_url.rstrip('/')
-        token = await self.get_token(client, base_url, auth_headers, timeout)
-        headers['token'] = token
-        params = {"query": "index=violation"}
-
-        try:
-            response = requests.get(
-                f"{base_url}{self.SEARCH_ENDPOINT}",
-                headers=headers,
-                params=params,
-                timeout=timeout,
-                verify=False
-            )
-            response_data = response.json()
-            self.logger.info(f"Ping Response: {response_data}")
-
-            response_obj = type('response_obj', (), {
-                'code': response.status_code,
-                'content': json.dumps(response_data),
-                'headers': response.headers
-            })()
-            return response_obj
-
-        except Exception as e:
-            self.logger.error(f"Error during ping box: {e}")
-            raise e
-
-    async def get_securonix_data(self, query, client, base_url, auth_headers, headers, timeout, queryId=None):
+    async def get_securonix_data(self, query, client, base_url, auth_headers, headers, timeout, queryId=None,
+                                 nextCursorMarker=None):
         token = await self.get_token(client, base_url, auth_headers, timeout)
         headers['token'] = token
         headers['Accept'] = '*/*'
@@ -80,7 +49,7 @@ class APIClient:
         # Clean the query by removing eventtime conditions
         clean_query = re.sub(r'AND\s+eventtime>="\d{2}/\d{2}/\d{4}\s+\d{2}:\d{2}:\d{2}"', '', query)
         clean_query = re.sub(r'AND\s+eventtime<="\d{2}/\d{2}/\d{4}\s+\d{2}:\d{2}:\d{2}"', '', clean_query)
-        
+
         # If no eventtime parameters found, use default 24-hour window
         if not eventtime_from or not eventtime_to:
             now = datetime.now()
@@ -94,8 +63,13 @@ class APIClient:
             "eventtime_to": eventtime_to
         }
 
+        if queryId:
+            params["queryId"] = queryId
+        if nextCursorMarker:
+            params["nextCursorMarker"] = nextCursorMarker
+
         base_url = base_url.rstrip('/')
-        full_url = f"{base_url}/Snypr/ws/spotter/index/search"
+        full_url = f"{base_url}{self.SEARCH_ENDPOINT}"
 
         try:
             response = requests.get(
@@ -106,7 +80,6 @@ class APIClient:
                 verify=False
             )
 
-            # Check if response is not empty
             if response.text:
                 response_data = response.json()
             else:
@@ -124,7 +97,7 @@ class APIClient:
 
     async def get_token(self, client, base_url, auth_headers, timeout) -> str:
         base_url = base_url.rstrip('/')
-        if (datetime.now() - self._token_time) >= timedelta(minutes=30):
+        if self._token is None or (datetime.now() - self._token_time) >= timedelta(minutes=30):
             try:
                 response = requests.get(
                     f"{base_url}{self.TOKEN_ENDPOINT}",

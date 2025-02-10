@@ -8,6 +8,19 @@
       "key": "network-traffic.src_ref",
       "object": "nt",
       "references": "src_ip"
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "asset",
+      "references": [
+        "src_ip"
+      ],
+      "group": true
+    },
+    {
+      "key": "x-oca-event.network_ref",
+      "object": "event",
+      "references": "src_ip"
     }
   ],
   "destinationaddress": [
@@ -19,6 +32,19 @@
       "key": "network-traffic.dst_ref",
       "object": "nt",
       "references": "dst_ip"
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "asset",
+      "references": [
+        "dst_ip"
+      ],
+      "group": true
+    },
+    {
+      "key": "x-oca-event.network_ref",
+      "object": "event",
+      "references": "dst_ip"
     }
   ],
   "ipaddress": [
@@ -29,117 +55,105 @@
     {
       "key": "x-oca-asset.ip_refs",
       "object": "asset",
+      "references": [
+        "ip"
+      ],
+      "group": true
+    },
+        {
+      "key": "x-oca-event.network_ref",
+      "object": "event",
       "references": "ip"
     }
   ],
-  "translatedipaddress": [
-    {
-      "key": "ipv4-addr.value", 
-      "object": "translated_ip"
-    }
-  ],
-  "destinationtranslatedaddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "dst_translated_ip"
-    }
-  ],
-  "deviceaddress": [
-    {
-      "key": "ipv4-addr.value",
-      "object": "device_ip"
-    }
-  ],
-  "devicecustomipv6address1": [
-    {
-      "key": "ipv6-addr.value",
-      "object": "ipv6_1"
-    }
-  ],
-  "devicecustomipv6address2": [
-    {
-      "key": "ipv6-addr.value",
-      "object": "ipv6_2" 
-    }
-  ],
-  "devicecustomipv6address3": [
-    {
-      "key": "ipv6-addr.value",
-      "object": "ipv6_3"
-    }
-  ],
-  "devicecustomipv6address4": [
-    {
-      "key": "ipv6-addr.value",
-      "object": "ipv6_4"
-    }
-  ],
-  "requesturl": [
-    {
-      "key": "url.value",
-      "object": "url"
-    }
-  ],
-  "sourceport": [
-    {
-      "key": "network-traffic.src_port",
-      "object": "nt"
-    }
-  ],
-  "destinationport": [
-    {
-      "key": "network-traffic.dst_port",
-      "object": "nt"
-    }
-  ],
-  "transportprotocol": [
-    {
-      "key": "network-traffic.protocols",
-      "object": "nt"
-    }
-  ],
-  "applicationprotocol": [
-    {
-      "key": "network-traffic.protocols",
-      "object": "nt"
-    }
-  ],
+  "translatedipaddress": {
+    "key": "ipv4-addr.value",
+    "object": "translated_ip"
+  },
+  "destinationtranslatedaddress": {
+    "key": "ipv4-addr.value",
+    "object": "dst_translated_ip"
+  },
+  "deviceaddress": {
+    "key": "ipv4-addr.value",
+    "object": "device_ip"
+  },
+  "devicecustomipv6address1": {
+    "key": "ipv6-addr.value",
+    "object": "ipv6_1"
+  },
+  "devicecustomipv6address2": {
+    "key": "ipv6-addr.value",
+    "object": "ipv6_2"
+  },
+  "devicecustomipv6address3": {
+    "key": "ipv6-addr.value",
+    "object": "ipv6_3"
+  },
+  "devicecustomipv6address4": {
+    "key": "ipv6-addr.value",
+    "object": "ipv6_4"
+  },
+  "requesturl": {
+    "key": "url.value",
+    "object": "url"
+  },
+  "sourceport": {
+    "key": "network-traffic.src_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "destinationport": {
+    "key": "network-traffic.dst_port",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "transportprotocol": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "transformer": "ToLowercaseArray"
+  },
+  "applicationprotocol": {
+    "key": "network-traffic.protocols",
+    "object": "nt",
+    "transformer": "ToLowercaseArray"
+  },
   "starttime": [
     {
-      "key": "network-traffic.start",
-      "object": "nt"
+      "key": "network-traffic.start_time",
+      "object": "nt",
+      "transformer": "EpochToTimestamp"
     },
     {
       "key": "x-oca-event.created",
-      "object": "event"
+      "object": "event",
+      "transformer": "EpochToTimestamp"
     }
   ],
-  "endtime": [
-    {
-      "key": "network-traffic.end",
-      "object": "nt"
-    }
-  ],
-  "bytesin": [
-    {
-      "key": "network-traffic.src_byte_count",
-      "object": "nt"
-    }
-  ],
-  "bytesout": [
-    {
-      "key": "network-traffic.dst_byte_count",
-      "object": "nt"
-    }
-  ],
+  "endtime": {
+    "key": "network-traffic.end_time",
+    "object": "nt",
+    "transformer": "EpochToTimestamp"
+  },
+  "bytesin": {
+    "key": "network-traffic.src_byte_count",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
+  "bytesout": {
+    "key": "network-traffic.dst_byte_count",
+    "object": "nt",
+    "transformer": "ToInteger"
+  },
   "processname": [
     {
       "key": "process.name",
       "object": "process"
     },
     {
-      "key": "process.binary_ref",
-      "object": "process"
+      "key": "process.binary_ref.name",
+      "object": "process",
+      "references": "file"
     },
     {
       "key": "x-oca-event.process_name",
@@ -156,76 +170,61 @@
       "object": "event"
     }
   ],
-  "destinationprocessname": [
-    {
-      "key": "process.name",
-      "object": "dst_process"
-    }
-  ],
-  "deviceprocessname": [
-    {
-      "key": "process.name",
-      "object": "device_process"
-    }
-  ],
-  "parentprocessname": [
-    {
-      "key": "process.parent_ref.name",
-      "object": "process"
-    }
-  ],
+  "destinationprocessname": {
+    "key": "process.name",
+    "object": "dst_process"
+  },
+  "deviceprocessname": {
+    "key": "process.name",
+    "object": "device_process"
+  },
+  "parentprocessname": {
+    "key": "process.parent_ref.name",
+    "object": "process"
+  },
   "sourceprocessid": [
     {
       "key": "process.pid",
-      "object": "src_process"
+      "object": "src_process",
+      "transformer": "ToInteger"
     },
     {
       "key": "x-oca-event.process_id",
-      "object": "event"
+      "object": "event",
+      "transformer": "ToInteger"
     }
   ],
-  "destinationprocessid": [
-    {
-      "key": "process.pid",
-      "object": "dst_process"
-    }
-  ],
-  "deviceprocessid": [
-    {
-      "key": "process.pid",
-      "object": "device_process"
-    }
-  ],
-  "parentprocessid": [
-    {
-      "key": "process.parent_ref.pid",
-      "object": "process"
-    }
-  ],
-  "resourcecustomfield1": [
-    {
-      "key": "process.command_line",
-      "object": "process"
-    }
-  ],
-  "resourcecustomfield2": [
-    {
-      "key": "process.command_line",
-      "object": "process"
-    }
-  ],
-  "customstring2": [
-    {
-      "key": "user-account.account_login",
-      "object": "user"
-    }
-  ],
-  "customstring59": [
-    {
-      "key": "user-account.account_login",
-      "object": "user"
-    }
-  ],
+  "destinationprocessid": {
+    "key": "process.pid",
+    "object": "dst_process",
+    "transformer": "ToInteger"
+  },
+  "deviceprocessid": {
+    "key": "process.pid",
+    "object": "device_process",
+    "transformer": "ToInteger"
+  },
+  "parentprocessid": {
+    "key": "process.parent_ref.pid",
+    "object": "process",
+    "transformer": "ToInteger"
+  },
+  "resourcecustomfield1": {
+    "key": "process.command_line",
+    "object": "process"
+  },
+  "resourcecustomfield2": {
+    "key": "process.command_line",
+    "object": "process"
+  },
+  "customstring2": {
+    "key": "user-account.account_login",
+    "object": "user"
+  },
+  "customstring59": {
+    "key": "user-account.account_login",
+    "object": "user"
+  },
   "accountname": [
     {
       "key": "user-account.user_id",
@@ -242,30 +241,35 @@
       "references": "user"
     }
   ],
-  "processstarttime": [
-    {
-      "key": "process.created",
-      "object": "process"
-    }
-  ],
-  "currentdirectory": [
-    {
-      "key": "process.cwd",
-      "object": "process"
-    }
-  ],
+  "processstarttime": {
+    "key": "process.created",
+    "object": "process",
+    "transformer": "EpochToTimestamp"
+  },
+  "currentdirectory": {
+    "key": "process.cwd",
+    "object": "process"
+  },
   "filename": [
     {
       "key": "file.name",
       "object": "file"
-    }
-  ],
-  "oldfilename": [
+    },
     {
-      "key": "file.name",
-      "object": "oldfile"
+      "key": "process.binary_ref.name",
+      "object": "process",
+      "references": "file"
+    },
+    {
+      "key": "x-oca-event.file_ref",
+      "object": "event",
+      "references": "file"
     }
   ],
+  "oldfilename": {
+    "key": "file.name",
+    "object": "oldfile"
+  },
   "filepath": [
     {
       "key": "file.path",
@@ -279,14 +283,17 @@
       "key": "file.parent_directory_ref",
       "object": "file",
       "references": "directory"
-    }
-  ],
-  "oldfilepath": [
+    },
     {
-      "key": "file.path",
-      "object": "oldfile"
+      "key": "x-oca-event.file_ref",
+      "object": "event",
+      "references": "file"
     }
   ],
+  "oldfilepath": {
+    "key": "file.path",
+    "object": "oldfile"
+  },
   "filehash": [
     {
       "key": "file.hashes.MD5",
@@ -319,78 +326,71 @@
       "object": "oldfile"
     }
   ],
-  "filesize": [
-    {
-      "key": "file.size",
-      "object": "file"
-    }
-  ],
-  "oldfilesize": [
-    {
-      "key": "file.size",
-      "object": "oldfile"
-    }
-  ],
+  "filesize": {
+    "key": "file.size",
+    "object": "file",
+    "transformer": "ToInteger"
+  },
+  "oldfilesize": {
+    "key": "file.size",
+    "object": "oldfile",
+    "transformer": "ToInteger"
+  },
   "filecreatetime": [
     {
       "key": "file.created",
-      "object": "file"
+      "object": "file",
+      "transformer": "EpochToTimestamp"
     },
     {
       "key": "directory.created",
-      "object": "directory"
+      "object": "directory",
+      "transformer": "EpochToTimestamp"
     }
   ],
-  "oldfilecreatetime": [
-    {
-      "key": "file.created",
-      "object": "oldfile"
-    }
-  ],
+  "oldfilecreatetime": {
+    "key": "file.created",
+    "object": "oldfile",
+    "transformer": "EpochToTimestamp"
+  },
   "filemodificationtime": [
     {
       "key": "file.modified",
-      "object": "file"
+      "object": "file",
+      "transformer": "EpochToTimestamp"
     },
     {
       "key": "directory.modified",
-      "object": "directory"
+      "object": "directory",
+      "transformer": "EpochToTimestamp"
     },
     {
       "key": "windows-registry-key.modified",
-      "object": "registry"
+      "object": "registry",
+      "transformer": "EpochToTimestamp"
     }
   ],
-  "fileaccesstime": [
-    {
-      "key": "file.accessed",
-      "object": "file"
-    }
-  ],
-  "accounttype": [
-    {
-      "key": "user-account.account_type",
-      "object": "user"
-    }
-  ],
-  "sourceusername": [
-    {
-      "key": "user-account.display_name",
-      "object": "src_user"
-    }
-  ],
-  "destinationusername": [
-    {
-      "key": "user-account.display_name",
-      "object": "dst_user"
-    }
-  ],
-  "sourcentdomain": [
-    {
-      "key": "user-account.domain",
-      "object": "src_user"
-    }
-  ],
+  "fileaccesstime": {
+    "key": "file.accessed",
+    "object": "file",
+    "transformer": "EpochToTimestamp"
+  },
+  "accounttype": {
+    "key": "user-account.account_type",
+    "object": "user"
+  },
+  "sourceusername": {
+    "key": "user-account.display_name",
+    "object": "src_user"
+  },
+  "destinationusername": {
+    "key": "user-account.display_name",
+    "object": "dst_user"
+  },
+  "sourcentdomain": {
+    "key": "user-account.domain",
+    "object": "src_user"
+  },
   "destinationntdomain": [
     {
       "key": "user-account.domain",
@@ -401,24 +401,19 @@
       "object": "domain"
     }
   ],
-  "sourceuserprivileges": [
-    {
-      "key": "user-account.privileges",
-      "object": "src_user"
-    }
-  ],
-  "destinationuserprivileges": [
-    {
-      "key": "user-account.privileges",
-      "object": "dst_user"
-    }
-  ],
-  "accountcreationtime": [
-    {
-      "key": "user-account.created",
-      "object": "user"
-    }
-  ],
+  "sourceuserprivileges": {
+    "key": "user-account.privileges",
+    "object": "src_user"
+  },
+  "destinationuserprivileges": {
+    "key": "user-account.privileges",
+    "object": "dst_user"
+  },
+  "accountcreationtime": {
+    "key": "user-account.created",
+    "object": "user",
+    "transformer": "EpochToTimestamp"
+  },
   "registrykey": [
     {
       "key": "windows-registry-key.key",
@@ -429,12 +424,10 @@
       "object": "registry"
     }
   ],
-  "registryvalue": [
-    {
-      "key": "windows-registry-key.values.data",
-      "object": "registry"
-    }
-  ],
+  "registryvalue": {
+    "key": "windows-registry-key.values.data",
+    "object": "registry"
+  },
   "emailsender": [
     {
       "key": "email-addr.value",
@@ -474,30 +467,18 @@
       "references": "recipient"
     }
   ],
-  "emailsubject": [
-    {
-      "key": "email-message.subject",
-      "object": "email"
-    }
-  ],
-  "message": [
-    {
-      "key": "email-message.body",
-      "object": "email"
-    }
-  ],
-  "filetype": [
-    {
-      "key": "artifact.mime_type",
-      "object": "artifact"
-    }
-  ],
-  "oldfiletype": [
-    {
-      "key": "artifact.mime_type",
-      "object": "oldartifact"
-    }
-  ],
+  "emailsubject": {
+    "key": "email-message.subject",
+    "object": "email"
+  },
+  "filetype": {
+    "key": "artifact.mime_type",
+    "object": "artifact"
+  },
+  "oldfiletype": {
+    "key": "artifact.mime_type",
+    "object": "oldartifact"
+  },
   "destinationdnsdomain": [
     {
       "key": "domain-name.value",
@@ -512,42 +493,31 @@
       "object": "asset"
     }
   ],
-  "sourcednsdomain": [
-    {
-      "key": "domain-name.value",
-      "object": "src_domain"
-    }
-  ],
-  "devicednsdomain": [
-    {
-      "key": "domain-name.value",
-      "object": "device_domain"
-    }
-  ],
-  "deviceaction": [
-    {
-      "key": "x-oca-event.action",
-      "object": "event"
-    }
-  ],
-  "eventoutcome": [
-    {
-      "key": "x-oca-event.action",
-      "object": "event"
-    }
-  ],
-  "categoryobject": [
-    {
-      "key": "x-oca-event.category",
-      "object": "event"
-    }
-  ],
-  "categorybehavior": [
-    {
-      "key": "x-oca-event.category",
-      "object": "event"
-    }
-  ],
+  "sourcednsdomain": {
+    "key": "domain-name.value",
+    "object": "src_domain"
+  },
+  "devicednsdomain": {
+    "key": "domain-name.value",
+    "object": "device_domain"
+  },
+  "deviceaction": {
+    "key": "x-oca-event.action",
+    "object": "event"
+  },
+  "eventoutcome": {
+    "key": "x-oca-event.action",
+    "object": "event"
+  },
+  "categoryobject": {
+    "key": "x-oca-event.category",
+    "object": "event"
+  },
+  "categorybehavior": {
+    "key": "x-oca-event.category",
+    "object": "event",
+    "transformer": "ValueToList"
+  },
   "devicehostname": [
     {
       "key": "x-oca-event.hostname",
@@ -560,10 +530,6 @@
     {
       "key": "x-oca-asset.name",
       "object": "asset"
-    },
-    {
-      "key": "x-oca-event.host-ref",
-      "object": "event"
     }
   ],
   "sourcehostname": [
@@ -578,19 +544,11 @@
     {
       "key": "x-oca-asset.name",
       "object": "asset"
-    },
-    {
-      "key": "x-oca-event.host-ref",
-      "object": "event"
     }
   ],
   "destinationhostname": [
     {
       "key": "x-oca-event.hostname",
-      "object": "event"
-    },
-    {
-      "key": "x-oca-event.host-ref",
       "object": "event"
     },
     {
@@ -602,30 +560,22 @@
       "object": "asset"
     }
   ],
-  "sourceservicename": [
-    {
-      "key": "x-oca-event.provider",
-      "object": "event"
-    }
-  ],
-  "destinationservicename": [
-    {
-      "key": "x-oca-event.provider",
-      "object": "event"
-    }
-  ],
-  "deviceseverity": [
-    {
-      "key": "x-oca-event.severity",
-      "object": "event"
-    }
-  ],
-  "eventtype": [
-    {
-      "key": "x-oca-event.type",
-      "object": "event"
-    }
-  ],
+  "sourceservicename": {
+    "key": "x-oca-event.provider",
+    "object": "event"
+  },
+  "destinationservicename": {
+    "key": "x-oca-event.provider",
+    "object": "event"
+  },
+  "deviceseverity": {
+    "key": "x-oca-event.severity",
+    "object": "event"
+  },
+  "eventtype": {
+    "key": "x-oca-event.type",
+    "object": "event"
+  },
   "sourcemacaddress": [
     {
       "key": "x-oca-asset.mac_refs",
@@ -652,6 +602,22 @@
     {
       "key": "last_observed",
       "transformer": "EpochToTimestamp"
+    }
+  ],
+  "rawevent": [
+    {
+      "key": "artifact.payload_bin",
+      "object": "event_payload",
+      "transformer": "ToBase64"
+    },
+    {
+      "key": "x-oca-event.original_ref",
+      "object": "event",
+      "references": "event_payload"
+    },
+    {
+      "key": "x-oca-event.original",
+      "object": "event"
     }
   ]
 }

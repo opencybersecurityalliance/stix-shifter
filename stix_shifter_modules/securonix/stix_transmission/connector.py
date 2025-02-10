@@ -12,8 +12,7 @@ class Connector(BaseJsonSyncConnector):
         self.connector = __name__.split('.')[1]
         self.api_client = APIClient()
         self.logger = logger.set_logger(__name__)
-        self.result_limit = connection['options'].get('result_limit', 1000)
-
+        self.result_limit = connection['options'].get('result_limit', 1000)  # Default to 1000
         self.client = RestApiClientAsync(connection.get('host'), None, {})
 
         auth = configuration.get('auth')
@@ -48,38 +47,47 @@ class Connector(BaseJsonSyncConnector):
 
     async def create_results_connection(self, query, offset, length):
         return_obj = {}
+        queryId = None
+        nextCursorMarker = None
+        all_events = []
+        has_more_data = True
 
         try:
-            response = await self.api_client.get_securonix_data(
-                query,
-                self.client,
-                self.base_url,
-                self.auth_headers,
-                self.headers,
-                self.timeout
-            )
+            while has_more_data:
+                response = await self.api_client.get_securonix_data(
+                    query,
+                    self.client,
+                    self.base_url,
+                    self.auth_headers,
+                    self.headers,
+                    self.timeout,
+                    queryId=queryId,
+                    nextCursorMarker=nextCursorMarker
+                )
 
-            if response.code == 200:
-                response_data = json.loads(response.content)
-                events = response_data.get('events', [])
+                if response.code == 200:
+                    response_data = json.loads(response.content)
+                    events = response_data.get('events', [])
+                    all_events.extend(events)  # Accumulate events
 
-                return_obj['success'] = True
-                return_obj['data'] = events
+                    # Check if there's more data based on response
+                    queryId = response_data.get('queryId')
+                    nextCursorMarker = response_data.get('nextCursorMarker')
 
-                if len(events) < self.result_limit:
-                    return_obj['metadata'] = None
+                    if not events or not (queryId and nextCursorMarker):
+                        has_more_data = False
+                        return_obj['metadata'] = None
+                    else:
+                        has_more_data = True  # Prepare for the next iteration
                 else:
-                    return_obj['metadata'] = {
-                        'queryId': response_data.get('queryId'),
-                        'result_count': len(events)
-                    }
-            else:
-                return self._handle_errors(response)
+                    return self._handle_errors(response)
+
+            return_obj['success'] = True
+            return_obj['data'] = all_events[offset:offset + length]  # consider offset and length
+            return return_obj
 
         except Exception as e:
             return self._handle_errors(e)
-
-        return return_obj
 
     def _handle_errors(self, error):
         response_dict = {}
