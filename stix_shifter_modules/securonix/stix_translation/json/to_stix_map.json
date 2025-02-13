@@ -20,7 +20,7 @@
     {
       "key": "x-oca-event.network_ref",
       "object": "event",
-      "references": "src_ip"
+      "references": "nt"
     }
   ],
   "destinationaddress": [
@@ -44,7 +44,7 @@
     {
       "key": "x-oca-event.network_ref",
       "object": "event",
-      "references": "dst_ip"
+      "references": "nt"
     }
   ],
   "ipaddress": [
@@ -63,7 +63,7 @@
         {
       "key": "x-oca-event.network_ref",
       "object": "event",
-      "references": "ip"
+      "references": "nt"
     }
   ],
   "translatedipaddress": {
@@ -208,14 +208,6 @@
     "key": "process.parent_ref.pid",
     "object": "process",
     "transformer": "ToInteger"
-  },
-  "resourcecustomfield1": {
-    "key": "process.command_line",
-    "object": "process"
-  },
-  "resourcecustomfield2": {
-    "key": "process.command_line",
-    "object": "process"
   },
   "customstring2": {
     "key": "user-account.account_login",
@@ -520,44 +512,35 @@
   },
   "devicehostname": [
     {
-      "key": "x-oca-event.hostname",
-      "object": "event"
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
     },
     {
       "key": "x-oca-asset.hostname",
       "object": "host"
-    },
-    {
-      "key": "x-oca-asset.name",
-      "object": "asset"
     }
   ],
   "sourcehostname": [
     {
-      "key": "x-oca-event.hostname",
-      "object": "event"
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
     },
     {
       "key": "x-oca-asset.hostname",
       "object": "host"
-    },
-    {
-      "key": "x-oca-asset.name",
-      "object": "asset"
     }
   ],
   "destinationhostname": [
     {
-      "key": "x-oca-event.hostname",
-      "object": "event"
+      "key": "x-oca-event.host_ref",
+      "object": "event",
+      "references": "host"
     },
     {
       "key": "x-oca-asset.hostname",
       "object": "host"
-    },
-    {
-      "key": "x-oca-asset.name",
-      "object": "asset"
     }
   ],
   "sourceservicename": {

@@ -54,7 +54,6 @@
         "deviceprocessid",
         "parentprocessid"
       ],
-      "command_line": ["resourcecustomfield1", "resourcecustomfield2"],
       "parent_ref.pid": ["parentprocessid"],
       "parent_ref.name": ["parentprocessname"],
       "creator_user_ref": ["accountname"],
@@ -115,7 +114,6 @@
       "sender_ref": ["emailsender"],
       "to_refs": ["emailrecipient"],
       "cc_refs": ["emailrecipient"],
-      "body": ["message"],
       "additional_header_fields.Reply-To": ["emailsender"]
     }
   },

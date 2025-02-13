@@ -39,6 +39,8 @@ class SecuronixQueryStringPatternTranslator:
                 value = value.replace('%', '*').replace('_', '?')
             elif comparator == "MATCHES":
                 pass
+            elif comparator == "CONTAINS":
+                value = value.strip('%*')
             return f'"{value}"'
         elif isinstance(value, (int, float)):
             return str(value)

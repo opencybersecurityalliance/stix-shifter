@@ -80,7 +80,7 @@ class Connector(BaseJsonSyncConnector):
                     else:
                         has_more_data = True  # Prepare for the next iteration
                 else:
-                    return self._handle_errors(response)
+                    raise Exception(f"status code: {response.code}, response: {response.content}")
 
             return_obj['success'] = True
             return_obj['data'] = all_events[offset:offset + length]  # consider offset and length
