@@ -44,12 +44,12 @@
       "key": "url.value",
       "object": "url"
     },
-    "@ingesttimestamp": {
-      "key": "first_observed",
-      "transformer": "EpochToTimestamp"
-    },
-    "timestamp": {
+    "timestamp": [{
       "key": "last_observed",
       "transformer": "EpochToTimestamp"
-    }
+    },
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp"
+    }]
   }
