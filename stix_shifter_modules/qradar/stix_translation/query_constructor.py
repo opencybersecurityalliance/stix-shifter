@@ -452,7 +452,14 @@ def _format_translated_queries(query_array):
 def translate_pattern(pattern: Pattern, data_model_mapping, options):
     result_limit = options["result_limit"]
     time_range = options["time_range"]
-    domain_id = options.get("domain_id") if options.get("domain_id") else None
+    domain_id_val = options.get("domain_id")
+    if domain_id_val is not None:
+        try:
+            domain_id = int(domain_id_val)
+        except Exception:
+            domain_id = None
+    else:
+        domain_id = None
     execution_time_ms = os.getenv("LOG_SEARCH_EXECUTION_TIME_LIMIT", "60000")
 
     translated_where_statements = AqlQueryStringPatternTranslator(
@@ -471,7 +478,7 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
         # Add domain constraint if provided
         try:
             domain_id = int(domain_id)
-        except ValueError:
+        except Exception:
             domain_id = domain_id
         if domain_id is not None:
             where_conditions.append(f"domainid = {domain_id}")
