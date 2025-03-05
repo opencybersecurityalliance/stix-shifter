@@ -26,3 +26,9 @@ class QueryTranslator(BaseQueryTranslator):
         query_string = query_constructor.translate_pattern(
             antlr_parsing_object, self, self.options)
         return query_string
+
+    def fetch_mapping(self, basepath, dialect, options, custom_mapping=None):
+        if custom_mapping:
+            return custom_mapping['from_stix_mapping']
+        else:
+            return super().fetch_mapping(basepath, dialect, options, custom_mapping)

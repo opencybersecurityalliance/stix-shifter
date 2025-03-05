@@ -11,3 +11,7 @@ class EntryPoint(BaseEntryPoint):
             self.setup_transmission_basic(connection, configuration)
 
         self.add_dialect('default', default=True)
+
+    def handle_custom_mapping(self, custom_mapping):
+        if custom_mapping and custom_mapping['to_stix_mapping']:
+            self.add_dialect('default', custom_mapping=custom_mapping)
