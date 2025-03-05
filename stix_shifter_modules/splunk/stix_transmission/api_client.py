@@ -38,6 +38,11 @@ class APIClient():
 
     async def set_splunk_auth_token(self, auth, headers):
         """ method to set splunk auth token """
+        if auth.get('token'):
+            headers['Authorization'] = "Splunk " + auth['token']
+            return
+        
+        # Fall back to username/password authentication
         data = {'username': auth['username'], 'password': auth['password'], 'output_mode': 'json'}
         endpoint = self.endpoint_start + 'auth/login'
         try:
