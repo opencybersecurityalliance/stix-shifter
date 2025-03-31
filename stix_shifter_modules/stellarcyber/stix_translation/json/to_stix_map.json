@@ -1,0 +1,190 @@
+{
+  "srcip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    }
+  ],
+  "dstip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
+  "srcport": [
+    {
+      "key": "network-traffic.src_port",
+      "object": "nt"
+    }
+  ],
+  "dstport": [
+    {
+      "key": "network-traffic.dst_port",
+      "object": "nt"
+    }
+  ],
+  "proto_name": [
+    {
+      "key": "network-traffic.protocols",
+      "object": "nt"
+    }
+  ],
+  "timestamp": [
+        {
+            "key": "created",
+            "transformer": "timestamp_to_iso_8601"
+        },
+        {
+            "key": "modified",
+            "transformer": "timestamp_to_iso_8601"
+        },
+        {
+            "key": "first_observed",
+            "transformer": "timestamp_to_iso_8601"
+        },
+        {
+            "key": "last_observed",
+            "transformer": "timestamp_to_iso_8601"
+        }
+    ],
+    "id": [
+      {
+        "key": "x-oca-asset.device_id",
+        "object": "host"
+      }
+    ],
+    "os_version": [
+      {
+        "key": "x-oca-asset.os_version",
+        "object": "host"
+      }
+    ],
+    "os": [
+      {
+        "key": "x-oca-asset.os_name",
+        "object": "host"
+      }
+    ],
+    "device_name": [
+      {
+        "key": "x-oca-asset.hostname",
+        "object": "host"
+      }
+    ],
+    "hostname": [
+      {
+        "key": "x-oca-asset.hostname",
+        "object": "host",
+        "unwrap": true
+      }
+    ],
+    "ip_protocol": [
+      {
+        "key": "network-traffic.protocols",
+        "object": "nt"
+      }
+    ],
+    "dstip_host": [
+      {
+        "key": "domain-name.value",
+        "object": "domain_name"
+      }
+    ],
+    "ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "host_ip4",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host",
+        "references": [
+          "host_ip4"
+        ],
+        "group": true
+      }
+    ],
+    "user_id": {
+      "key": "user-account.user_id",
+      "object": "user"
+    },
+    "displayName": {
+      "key": "user-account.display_name",
+      "object": "user"
+    },
+    "userPrincipalName": {
+      "key": "user-account.x_userPrincipalName",
+      "object": "user"
+    },
+    "givenName": {
+      "key": "user-account.account_login",
+      "object": "user"
+    },
+    "mail": [
+      {
+        "key": "email-addr.value",
+        "object": "email"
+      },
+      {
+        "key": "user-account.email_refs",
+        "object": "user",
+        "references": "email"
+      }
+    ],
+    "mailNickname": {
+      "key": "email-addr.display_name",
+      "object": "email"
+    },
+    "last_seen": {
+      "key": "user-account.account_last_login",
+      "object": "user",
+      "transformer": "timestamp_to_iso_8601"
+    },
+    "jobTitle": {
+      "key": "user-account.account_type",
+      "object": "user"
+    },
+    "usageLocation": {
+      "key": "user-account.x_logonLocation",
+      "object": "user"
+    },
+    "streetAddress": {
+      "key": "user-account.x_streetAddress",
+      "object": "user"
+    },
+    "officeLocation": {
+      "key": "user-account.x_officeLocation",
+      "object": "user"
+    },
+    "department": {
+      "key": "user-account.x_department",
+      "object": "user"
+    },
+    "mac": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac",
+        "unwrap": true
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "host",
+        "references": [
+          "mac"
+        ],
+        "group": true
+      }
+    ]
+}

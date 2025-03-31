@@ -1,0 +1,134 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "aella-adr.srcip",
+        "aella-adr.dstip",
+        "aella-assets.ip",
+        "aella-maltrace.src_ip",
+        "aella-maltrace.dst_ip"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": [
+
+      ]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": [
+      ]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": [
+
+      ]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": [
+
+      ]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "src_port": [
+        "aella-adr.srcport",
+        "aella-maltrace.src_port"
+      ],
+      "dst_port": [
+        "aella-adr.dstport",
+        "aella-maltrace.dstport"
+      ],
+      "src_ref.value": [
+        "aella-adr.srcip",
+        "aella-maltrace.srcip"
+      ],
+      "dst_ref.value": [
+        "aella-adr.dstip",
+        "aella-maltrace.dst_ip"
+      ],
+      "protocols": [
+        "aella-adr.proto_name",
+        "aella-maltrace.ip_protocol"
+      ]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": [
+        "aella-users.profile.id"
+      ],
+      "account_login": [
+        "aella-users.profile.mailNickname",
+        "aella-users.profile.surname",
+        "aella-users.profile.userPrincipalName",
+        "aella-users.profile.mail"
+      ],
+      "display_name": [
+        "aella-users.profile.displayName"
+      ],
+      "account_last_login": [
+        "aella-users.last_seen"
+      ],
+      "account_type": [
+        "aella-users.profile.jobTitle"
+      ],
+      "x_logonLocation": [
+        "aella-users.profile.usageLocation"
+      ],
+      "x_riskScore": [
+        "aella-users.risk_score"
+      ]
+    }
+  },
+  "email-addr": {
+    "fields": {
+      "value": [
+        "aella-users.profile.mail"
+      ]
+    }
+  },
+  "artifact": {
+    "fields": {
+      "payload_bin": [
+
+      ]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": [
+        "aella-maltrace.dstip_host"
+      ]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": [
+        "aella-maltrace.device_name",
+        "aella-assets.hostname",
+        "aella-assets.name"
+      ],
+      "device_id": [
+        "aella-assets.id"
+      ],
+      "os_version": [
+        "aella-assets.os_version"
+      ],
+      "os_name": [
+        "aella-assets.os"
+      ],
+      "ip_refs[*].value": [
+        "aella-assets.ip"
+      ]
+    }
+  }
+}

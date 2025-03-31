@@ -1,0 +1,69 @@
+{
+    "connection": {
+        "host": {
+            "label": "Management IP address or hostname",
+            "description": "Specify the IP address or hostname of the data source"
+        },
+        "port": {
+            "label": "Host port",
+            "description": "Set the port number that is associated with the hostname or IP address"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        },
+        "type": {
+            "description": "Data source type"
+        },
+        "options": {
+            "result_limit": {
+                "label": "Result size limit",
+                "description": "The maximum number of entries or objects that are returned by search query.  Valid input range is {{min}} to {{max}}."
+            },
+            "batch_size": {
+                "label": "Result length for datasource request",
+                "description": "The maximum results retrive in single API request to the datasource. This is not results limit. This value is mainly used for pagination."
+            },
+            "time_range": {
+                "label": "Query time range",
+                "description": "Time range for the search, in minutes, represented as last x minutes.  Valid input range is {{min}} to {{max}}."
+            },
+            "timeout": {
+                "label": "Query response timeout limit",
+                "description": "The limit on how long to wait for the data source response, in seconds. Valid input range is {{min}} to {{max}}."
+            },
+            "dialects": {
+                "label": "Dialect",
+                "description": "The dialect to use if the data source needs to search multiple schema or database tables."
+            },
+            "validate_pattern": {
+                "label": "STIX pattern validator",
+                "description": "Validate STIX patterns that needs to be translated into native data source query"
+            },
+            "stix_validator": {
+                "label": "STIX object validator",
+                "description": "Validate translated STIX Objects"
+            },
+            "mapping": {
+                "label": "Custom mapping",
+                "description": "Custom stix mapping if default mapping needs to be replaced"
+            },
+            "concurrent": {
+                "label": "Concurrent search limit",
+                "description": "The number of simultaneous connections that can be made to the data source.  Valid input range is {{min}} to {{max}}."
+            }
+        }
+    },
+    "configuration": {
+        "auth": {
+            "user_id": {
+                "label": "User ID",
+                "description": "User ID of the Stellar Cyber account with Admin privileges"
+            },
+            "api_key": {
+                "label": "API Key",
+                "description": "API Key of the Stellar Cyber account"
+            }
+        }
+    }
+}
