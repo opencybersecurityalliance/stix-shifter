@@ -65,6 +65,7 @@ stix_shifter_modules_sumologic-${VERSION}-py2.py3-none-any.whl
 stix_shifter_modules_symantec_endpoint_security-${VERSION}-py2.py3-none-any.whl
 stix_shifter_modules_synchronous_template-${VERSION}-py2.py3-none-any.whl
 stix_shifter_modules_sysdig-${VERSION}-py2.py3-none-any.whl
+stix_shifter_modules_stellarcyber-${VERSION}-py2.py3-none-any.whl
 stix_shifter_modules_tanium-${VERSION}-py2.py3-none-any.whl
 stix_shifter_modules_trellix_endpoint_security_hx-${VERSION}-py2.py3-none-any.whl
 stix_shifter_modules_trendmicro_vision_one-${VERSION}-py2.py3-none-any.whl
