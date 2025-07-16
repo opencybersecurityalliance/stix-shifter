@@ -11,7 +11,7 @@ flask==3.0.0
 flatten_json==0.1.14
 json-fix==1.0.0
 jsonmerge==1.9.2
-numpy==1.24.4
+numpy>=1.26,<1.27
 pyOpenSSL==25.0.0
 python-dateutil==2.8.2
 stix2-matcher==3.0.0
