@@ -7,7 +7,7 @@ This is a hands-on lab to start implementing a connector module in STIX-shifter 
 
 * GitHub account
 * Basic knowledge of git such as forking, committing, branching, pulling, and merging.
-* Working knowledge of the Python programming language. This lab will use Python 3.9
+* Working knowledge of the Python programming language. This lab will use Python 3.10
 * An IDE to write Python code, such as VS Code.
 * Knowledge of the data source API that includes API request, response, datatype and schema.
 * Knowledge of STIX 2.0. To learn about STIX Cyber Observable Objects, see the [STIX 2.0](https://docs.oasis-open.org/cti/stix/v2.0/stix-v2.0-part4-cyber-observable-objects.html) specification.
@@ -18,9 +18,9 @@ This is a hands-on lab to start implementing a connector module in STIX-shifter 
 ### 3. Make sure you are in the `stix-shifter/` parent directory
 ### 4. Create a python virtual environment with required depedencies in the terminal
 
-**Create Python3.9 virtual environment:**
+**Create Python3.10 virtual environment:**
 ```bash
-virtualenv -p python3.9 virtualenv && source virtualenv/bin/activate
+virtualenv -p python3.10 virtualenv && source virtualenv/bin/activate
 ```
 
 **Upgrade pip(optional):**

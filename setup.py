@@ -2,11 +2,11 @@ import os
 import subprocess
 import sys
 
-if sys.version_info.major == 3 and sys.version_info.minor > 7:
-    # good
+# Check Python version is or greater than 3.10
+if sys.version_info.major == 3 and sys.version_info.minor >= 10:
     print(sys.version)
 else:
-    print("Error: stix-shifter requires python 3.9 or greater")
+    print("Error: stix-shifter requires python 3.10 or greater")
     exit(1)
 
 
@@ -165,8 +165,8 @@ for project_name in projects.keys():
         # https://pypi.python.org/pypi?%3Aaction=list_classifiers
         'classifiers': [  # Optional
             'License :: OSI Approved :: Apache Software License',
-            'Programming Language :: Python :: 3.9',
             'Programming Language :: Python :: 3.10',
+            'Programming Language :: Python :: 3.11',
         ],
         'keywords': 'datasource stix translate transform transmit',  # Optional
         'packages': packages,  # Required
