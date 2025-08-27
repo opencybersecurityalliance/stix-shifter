@@ -14,6 +14,35 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 ### Dependency update:
 *List the dependecy upgrade or downgrade.*
 
+## 7.1.4 – 7.1.6 (2025-06-18 – 2025-08-15)
+_Retagged/rebuilt for updated base images. No functional changes since 7.1.3._
+
+--------------------------------------
+
+## 7.1.3 (2025-04-02)
+
+### Breaking changes:
+*  Minimum version must be 3.9 to resolve this security vulnerability. [#1744](https://github.com/opencybersecurityalliance/stix-shifter/pull/1744)
+
+### Deprecations:
+
+### Changes:
+
+### Fixes:
+*  Updating the code coverage version to resolve the failure. [#1743](https://github.com/opencybersecurityalliance/stix-shifter/pull/1743)
+
+### Dependency update:
+*  Bump azure-identity from 1.16.1 to 1.19.0 in /stix_shifter [#1740](https://github.com/opencybersecurityalliance/stix-shifter/pull/1740)
+*  Bump mysql-connector-python from 8.0.25 to 9.1.0 in /stix_shifter_modules/mysql [#1742](https://github.com/opencybersecurityalliance/stix-shifter/pull/1742)
+*  Resolve cryptography vulnerability [#1756](https://github.com/opencybersecurityalliance/stix-shifter/pull/1756)
+
+--------------------------------------
+
+## 7.1.2 (2025-03-12)
+_Retagged/rebuilt for updated base images. No functional changes since 7.1.1._
+
+--------------------------------------
+
 ## 7.1.1 (2024-09-19)
 
 ### Breaking changes:
