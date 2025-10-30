@@ -14,6 +14,25 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 ### Dependency update:
 *List the dependecy upgrade or downgrade.*
 
+## 8.0.1 (2025-10-30)
+
+### Breaking changes:
+* None
+
+### Deprecations:
+* None
+
+### Changes:
+* Updated the supported minimum version of **python-dateutil** to `2.9.0` to improve compatibility with modern Python packages and Python versions 3.10-3.12.
+
+### Fixes:
+* Resolved dependency conflict with projects requiring **python-dateutil >=2.9.0**.
+
+### Dependency update:
+* Bump **python-dateutil** from `2.8.2` → `>=2.9.0,<3.0.0`
+
+--------------------------------------
+
 ## 8.0.0 (2025-10-30)
 
 ### Breaking changes:
