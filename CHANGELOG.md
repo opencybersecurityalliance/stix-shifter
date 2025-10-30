@@ -14,6 +14,32 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 ### Dependency update:
 *List the dependecy upgrade or downgrade.*
 
+## 8.0.0 (2025-10-30)
+
+### Breaking changes:
+*  **Minimum Python version raised to 3.10**; Python 3.9 support removed due to EOL.
+*  Support now officially targets Python **3.10 – 3.12**.
+
+### Deprecations:
+*  Python **3.9 and below** are no longer supported.
+
+### Changes:
+*  CI updated to remove Python 3.9 and add coverage for Python 3.11 and 3.12.
+*  Updated core and module requirements to support modern Python versions.
+
+### Fixes:
+*  Resolved compatibility issues with **NumPy on Python 3.12**.
+
+### Dependency update:
+*  Bump **NumPy** from `1.24.4` → `>=1.26,<1.27`.
+*  Bump **Pandas** (Azure Log Analytics module) from `1.5.2` → `>=2.0.0`.
+*  Bump **urllib3** from `1.26.19` → `>=2.5.0,<3.0.0` to address:
+   * CVE-2025-50181  
+   * CVE-2025-50182
+*  Bump **aioboto3** from `12.1.0` → `>=15.0.0` to ensure compatibility with `urllib3 >=2.5.0`.
+
+--------------------------------------
+
 ## 7.1.4 – 7.1.6 (2025-06-18 – 2025-08-15)
 _Retagged/rebuilt for updated base images. No functional changes since 7.1.3._
 
