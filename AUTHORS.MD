@@ -1,23 +1,23 @@
-Project Authors
-===============
+# Project Authors
 
-A project made in collaboration with the OCA project and IBM Canada. 
+This project is a collaborative effort between the [OCA Project](https://opencybersecurityalliance.org/) and IBM Canada. It has been developed and maintained by a dedicated team of contributors over time.
 
-## Current Maintainers
+## Current Maintainer & Developer
 
-## Connector Factory Developers- Fredericton (NB)
+**Morgan Nolan** – Developer (Maintainer) – Cork, Ireland (IBM)
 
-Derek Rushton - Developer - Fredericton (NB)  
-Eric Larsen - Developer - Fredericton (NB)  
-Ben Craig - Developer - Fredericton (NB)  
+## Former Maintainers & Developers – IBM, Fredericton (NB), Canada
 
-## All other contributors and their affiliations:
+We gratefully acknowledge the contributions of former IBM Connector Factory maintainers and developers who helped shape this project:
 
-## Connector Factory (former) - Fredericton (NB)
+- **Derek Rushton** – Developer (Former Maintainer)  
+- **Eric Larsen** – Developer (Former Maintainer)  
+- **Ben Craig** – Developer (Former Maintainer)  
+- **Danny Elliot** – Developer (Maintainer)  
+- **Md Azam** – Developer (Maintainer)  
+- **Arthur Muradyan** – Developer  
+- **Omkar Gurav** – Developer  
 
-Danny Elliot - Developer(Maintainer) - Fredericton (NB)  
-Md Azam  - Developer(Maintainer) - Fredericton (NB)  
-Arthur Muradyan - Developer - Frederiction (NB)  
-Omkar Gurav - Developer - Frederiction (NB)  
+## Special Thanks
 
-## Special thanks to
+We also extend our appreciation to everyone who contributed ideas, bug reports, and feedback to improve the project.
