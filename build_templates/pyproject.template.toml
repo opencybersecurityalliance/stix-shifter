@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "$package_name"
+version = "$version"
+description = "$description"
+readme = "$readme_file"
+requires-python = "$requires_python"
+authors = [ $authors_block ]
+license = { text = "$license_text" }
+
+dependencies = [
+$dependencies_block
+]
+
+# optional scripts are injected below
+$project_scripts_block
+
+# other entry-point groups (if any)
+$other_entry_points
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = [$packages_include]
+
+[tool.setuptools]
+# Keep include-package-data true if you generate a MANIFEST.in and want those files
+include-package-data = true
