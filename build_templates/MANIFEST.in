@@ -2,6 +2,8 @@
 include *.md
 
 # Include the license file
-include LICENSE.txt
+include LICENSE.md
+include NOTICE.md
+include AUTHORS.md
 
 # Include JSON files (generated values)
