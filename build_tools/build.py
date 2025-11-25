@@ -399,7 +399,7 @@ def run_build(
     install_requires: List[str],
     entry_points: dict | None = None,
     version: str,
-    debug_keep_temp: bool = True,
+    debug_keep_temp: bool = False,
     build_no_isolation: bool = True,
 ) -> List[Path]:
     """
