@@ -7,9 +7,27 @@ name = "$package_name"
 version = "$version"
 description = "$description"
 readme = "$readme_file"
-requires-python = "$requires_python"
+
+# Minimum supported Python version for this package.
+# This is packaging metadata; pip and build tools will enforce this.
+# Recommended to set it to the oldest supported LTS Python version.
+requires-python = ">=3.10"
+
 authors = [ $authors_block ]
-license = { text = "$license_text" }
+license = "$license_text"
+license-files = [
+    "LICENSE.md",
+    "AUTHORS.md",
+    "NOTICE"
+]
+
+keywords = ["datasource", "stix", "translate", "transform", "transmit"]
+
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12"
+]
 
 dependencies = [
 $dependencies_block
@@ -20,6 +38,10 @@ $project_scripts_block
 
 # other entry-point groups (if any)
 $other_entry_points
+
+[project.urls]
+Homepage = "https://github.com/opencybersecurityalliance/stix-shifter"
+Source = "https://github.com/opencybersecurityalliance/stix-shifter"
 
 [tool.setuptools.packages.find]
 where = ["."]
