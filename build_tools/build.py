@@ -22,6 +22,7 @@ from .generate_pyproject import generate_pyproject_from_values
 SKIP_ME = 'SKIP.ME'
 TMP_MAPPING_DIR = 'tmp_mapping'
 MODULES_DIR = 'stix_shifter_modules'
+# DO NOT remove spaces around the equal sign at the line below
 DEFAULT_VERSION = '1.0.0'
 DEFAULT_MODE = 'N'
 
@@ -398,7 +399,7 @@ def run_build(
     install_requires: List[str],
     entry_points: dict | None = None,
     version: str,
-    debug_keep_temp: bool = False,
+    debug_keep_temp: bool = True,
     build_no_isolation: bool = True,
 ) -> List[Path]:
     """
@@ -579,7 +580,8 @@ def process_projects(projects, version_value, additional_args, mode_value, tmp_m
             packages=packages,
             install_requires=install_requires,
             entry_points=entry_points,
-            version=version_value)
+            version=version_value,
+        )
 
         # Cleanup and restore moved directories
         cleanup_after_setup(cleanup_file_list, temp_dir_list, project_name)
