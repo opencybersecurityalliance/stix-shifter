@@ -14,7 +14,7 @@ from pathlib import Path
 from jsonmerge import merge
 from setuptools import find_packages
 
-from .logging_setup import get_logger
+from .logging_setup import get_logger, is_debug
 from .generate_pyproject import generate_pyproject_from_values
 
 
@@ -470,6 +470,11 @@ def run_build(
 
         if additional_args:
             cmd.extend(additional_args)
+        
+        # Capture output only when LOG_LEVEL==DEBUG
+        capture_output = True
+        if is_debug():
+            capture_output = False
 
         # Use subprocess.run to capture output (avoid blocking reads)
         logger.info("Running build command: %s", " ".join(cmd))
@@ -477,13 +482,13 @@ def run_build(
             result = subprocess.run(
                 cmd,
                 check=True,
-                capture_output=True,
+                capture_output=capture_output,
                 text=True,
                 cwd=str(project_build_dir),
                 timeout=600,
             )
         except subprocess.CalledProcessError as e:
-            logger.error("Build failed (exit %s). Output:\n%s", e.returncode, e.output)
+            logger.error("Build failed (exit %s).", e.returncode)
             if debug_keep_temp:
                 logger.info("Preserving temp build dir for inspection: %s", project_build_dir)
                 preserved = temp_parent / f"preserved_{project_name}_{project_build_dir.name}"
