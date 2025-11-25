@@ -1,4 +1,6 @@
 [build-system]
+# These requirements may need to be updated if not using --no-isolation when building
+# However, we are using --no-isolation by default, so this is not a concern as of now
 requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
