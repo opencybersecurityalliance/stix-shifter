@@ -29,7 +29,7 @@ python3 -m pip install --upgrade pip
 ```
 **Install Dependencies:**
 ```bash
-INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install
+INSTALL_REQUIREMENTS_ONLY=1 python3 -m build_tools.run_build install
 ```
 
 ### 5. Make a copy of the `stix_shifter_modules/demo_template` module

@@ -50,7 +50,7 @@ In order to build `stix-shifter` packages from source follow the below prerequis
    1. Go to the stix-shifter parent directory
    2. Optionally, you can create a Python 3 virtual environemnt:
        `virtualenv -p python3 virtualenv && source virtualenv/bin/activate`
-   3. Run setup: `python3 setup.py install`
+   3. Run setup: `python -m build_tools.run_build install`
 
 
 ### Running from the source
@@ -67,9 +67,9 @@ In order to run `python3 main.py` from the source follow the below prerequisite 
    1. Go to the stix-shifter parent directory
    2. Optionally, you can create a Python 3 virtual environemnt:
        `virtualenv -p python3 virtualenv && source virtualenv/bin/activate`
-   3. Run setup to install dependancies: `INSTALL_REQUIREMENTS_ONLY=1 python3 setup.py install`. 
+   3. Run setup to install dependancies: `INSTALL_REQUIREMENTS_ONLY=1 python3 -m build_tools.run_build install`. 
 
-**Note:** setup.py only installs dependencies when INSTALL_REQUIREMENTS_ONLY=1 directive is used. This option is similar to `python3 generate_requirements.py && pip install -r requirements.txt`
+**Note:** `build_tools.run_build` only installs dependencies when INSTALL_REQUIREMENTS_ONLY=1 directive is used. This option is similar to `python3 -m build_tools.pre_build && pip install -r requirements.txt`
 
 ### As a library
 

@@ -129,10 +129,10 @@ python main.py transmit proxy '{"options": {"proxy_host": "127.0.0.1", "proxy_po
 
 #### Packaging individual connectors
 
-Stix-shifter can be broken into several python whl packages by using the `setup.py` script found in the root of the project. This packaging script can be called from the CLI:
+STIX-Shifter can be broken into several python whl packages by using the `run_build` module found in the ./build_tools/package. This packaging module can be called from the CLI:
 
 ```
-MODE='<module name>' VERSION='<connector version>' python3 setup.py bdist_wheel
+MODE='<module name>' VERSION='<connector version>' python -m build_tools.run_build
 ```
 
 `MODE` is a required argument that is used to determine how the project is packaged. Mode options include:
