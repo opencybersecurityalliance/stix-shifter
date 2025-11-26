@@ -5,7 +5,6 @@ import subprocess
 from pathlib import Path
 from .logging_setup import get_logger, init_logging
 from .pre_build import main as pre_build_main
-from .build import main as build_main
 
 
 # Initialise logging once at program start (respects LOG_LEVEL env)
@@ -34,10 +33,16 @@ def main():
     if os.getenv('INSTALL_REQUIREMENTS_ONLY', None) == '1':
         logger.info("INSTALL_REQUIREMENTS_ONLY set; exiting after pre-build.")
         sys.exit(0)
+    
+    # Import build_main only after pre_build has run and dependencies are installed
+    try:
+        from .build import main as build_main
+    except ModuleNotFoundError as e:
+        logger.critical("Build module not found: %s", e, exc_info=True)
+        sys.exit(1)
 
     # Run the actual build
     logger.info("Running STIX-Shifter's main build")
-
     try:
         build_main(additional_args)
     except Exception as e:
