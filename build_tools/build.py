@@ -400,7 +400,7 @@ def run_build(
     entry_points: dict | None = None,
     version: str,
     debug_keep_temp: bool = False,
-    build_no_isolation: bool = True,
+    build_no_isolation: bool = False,
 ) -> List[Path]:
     """
     Returns:
@@ -418,8 +418,6 @@ def run_build(
         debug_keep_temp: if True, preserves the temporary build directory for inspection.
         build_no_isolation: toggles --no-isolation flag, defaults to True.
     """
-    print("~" * 50)
-
     # Resolve paths, create directories, gather template
     temp_parent = PROJECT_ROOT / TEMP_DIR
     temp_parent.mkdir(parents=True, exist_ok=True)
@@ -551,6 +549,7 @@ def process_projects(projects, version_value, additional_args, mode_value, tmp_m
     (collect packages, requirements, entry points; prepare manifest/config; run build; cleanup).
     """
     for project_name in projects.keys():
+        print("~" * 50)
         logger.info("Building: %s", project_name)
 
         src_folders = projects[project_name]
@@ -587,6 +586,7 @@ def process_projects(projects, version_value, additional_args, mode_value, tmp_m
         cleanup_after_setup(cleanup_file_list, temp_dir_list, project_name)
 
         logger.info("Completed: %s", project_name)
+        print("~" * 50)
 
 
 # ------------------------------------------------------------------------------
