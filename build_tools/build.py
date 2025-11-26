@@ -469,11 +469,6 @@ def run_build(
 
         if additional_args:
             cmd.extend(additional_args)
-        
-        # Capture output only when LOG_LEVEL==DEBUG
-        capture_output = True
-        if is_debug():
-            capture_output = False
 
         # Use subprocess.run to capture output (avoid blocking reads)
         logger.info("Running build command: %s", " ".join(cmd))
@@ -481,7 +476,7 @@ def run_build(
             result = subprocess.run(
                 cmd,
                 check=True,
-                capture_output=capture_output,
+                capture_output=True,
                 text=True,
                 cwd=str(project_build_dir),
                 timeout=600,
@@ -497,6 +492,7 @@ def run_build(
 
         # log build output at debug level
         logger.debug("Build output:\n%s", result.stdout)
+        logger.debug("Build errors:\n%s", result.stderr)
 
         # Find wheels in out_dir and return list
         for p in out_dir.glob("*.whl"):
