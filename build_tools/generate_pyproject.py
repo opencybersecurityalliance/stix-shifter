@@ -1,22 +1,21 @@
 """
 generate_pyproject.py
 
-Small utility to render a pyproject.toml from a template and a set of explicit values.
+Small utility to generate a pyproject.toml from a template and a set of explicit values.
 
 Usage:
-    from build_tools.generate_pyproject import render_pyproject_from_values
+    from build_tools.generate_pyproject import generate_pyproject_from_values
 
-    render_pyproject_from_values(
+    generate_pyproject_from_values(
         template_path="build_templates/pyproject.template.toml",
         target_dir="/_temp/stix_shifter_modules_33sckmld39",
         package_name="stix_shifter_modules",
         version="8.0.2",
         description="My package description",
-        author="ibm",
-        author_email="",
+        authors="IBM",
         license_text="Apache-2.0",
-        dependencies=["requests>=2.28", "pyyaml"],
-        packages_list=["stix_shifter_utils", "stix_shifter_utils.submodule"],
+        dependencies_block=["requests>=2.28", "pyyaml"],
+        packages_include=["stix_shifter_utils", "stix_shifter_utils.submodule"],
         entry_points={
             "console_scripts": ["stix-shifter-utils=stix_shifter_utils.scripts:main"],
             "myplugin.hooks": ["hook1=some.module:func"]
