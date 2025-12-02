@@ -158,7 +158,7 @@ def _build_readme_block(target_dir: str) -> str:
     if not target_readme_path.exists():
         shutil.copy(DEFAULT_README_PATH, target_readme_path)
 
-    # TODO: implement content-type
+    # NOTE: setup tools may want us to implement content-type context at some point in the future
     # return {"file": "README.md", "content-type": "text/markdown"}
     return "README.md"
 
