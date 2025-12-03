@@ -37,7 +37,7 @@ DIST_DIR_LIBS=${DIST_DIR}/libs
 FILENAME=`find ${DIST_DIR} -name ${FILE_PREFIX}*-*.whl | head -n 1`
 
 if [ -z "$FILENAME" ]; then
-  echo "File is not found, expected file name sample: ${DIST_DIR}/${FILE_PREFIX}cloudsql-1.0.0-py2.py3-none-any.whl"
+  echo "File is not found, expected file name sample: ${DIST_DIR}/${FILE_PREFIX}cloudsql-1.0.0-py3-none-any.whl"
   exit 1
 fi
 FILENAME=${FILENAME:${#DIST_DIR}+1}
@@ -83,8 +83,7 @@ then
 else
   IMAGE_LOCAL_URL=${IMAGE_URL}/${FILE_PREFIX}${PROJECT_NAME}:${TAG}
 fi
+
 echo "Building image..."
 docker build --no-cache -t ${IMAGE_LOCAL_URL} --build-arg APP=${FILENAME%.whl} --build-arg VERSION=${PROJECT_VERSION} . --platform linux/amd64
-
-
 echo "Done!"

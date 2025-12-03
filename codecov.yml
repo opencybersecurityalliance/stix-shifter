@@ -10,6 +10,6 @@ ignore:
   - "conftest.py"
   - "generate_requirements.py"
   - "main.py"
-  - "setup.py"
+  - "build_tools/"
 comment:
   require_changes: true
