@@ -43,7 +43,7 @@ logger = get_logger("build")
 # ------------------------------------------------------------------------------
 
 
-def ensure_tmp_mapping_dir() -> Path:
+def _ensure_tmp_mapping_dir() -> Path:
     """
     Create a temporary mapping directory, clearing any pre-existing one.
     Returns the path.
@@ -59,7 +59,7 @@ def ensure_tmp_mapping_dir() -> Path:
 # ------------------------------------------------------------------------------
 
 
-def generate_connector_mappings(tmp_mapping_dir=TMP_MAPPING_DIR, modules_dir=MODULES_DIR):
+def _generate_connector_mappings(tmp_mapping_dir=TMP_MAPPING_DIR, modules_dir=MODULES_DIR):
     """
     Iterate over connectors in stix_shifter_modules and write each connector's mapping
     file into TMP_MAPPING_DIR/<module>.json unless the module contains SKIP.ME.
@@ -84,7 +84,7 @@ def generate_connector_mappings(tmp_mapping_dir=TMP_MAPPING_DIR, modules_dir=MOD
 # ------------------------------------------------------------------------------
 
 
-def fill_connectors(projects, modules_path):
+def _fill_connectors(projects, modules_path):
     """
     Discover connector directories under modules_path and add entries to the projects dict.
     Used to populate projects var when mode == 'N'.
@@ -103,7 +103,7 @@ def fill_connectors(projects, modules_path):
 # ------------------------------------------------------------------------------
 
 
-def determine_mode_and_version() -> Tuple[str, str]:
+def _determine_mode_and_version() -> Tuple[str, str]:
     """
     Determine packaging MODE and VERSION from environment variables.
     Defaults: mode = 'N', version = '1.0.0' (but defaults may be overridden via constants).
@@ -199,7 +199,7 @@ def _copy_src_folders_to_dir(src_folders: list[str], project_build_dir: Path):
 # ------------------------------------------------------------------------------
 
 
-def collect_packages_for_src_folders(src_folders) -> list[str]:
+def _collect_packages_for_src_folders(src_folders) -> list[str]:
     """
     Build the include patterns and call find_packages.
     Returns the list of packages found.
@@ -217,7 +217,7 @@ def collect_packages_for_src_folders(src_folders) -> list[str]:
     return packages
 
 
-def collect_requirements_for_src_folders(src_folders) -> list[str]:
+def _collect_requirements_for_src_folders(src_folders) -> list[str]:
     """
     Walk src_folders to find all requirements.txt files (except when SKIP.ME exists),
     parse them, filter comments and git+ entries, and return a list of unique install_requires.
@@ -242,7 +242,7 @@ def collect_requirements_for_src_folders(src_folders) -> list[str]:
     return install_requires
 
 
-def collect_entry_points_for_src_folders(project_name, src_folders) -> dict[str, list]:
+def _collect_entry_points_for_src_folders(project_name, src_folders) -> dict[str, list]:
     """
     Search for console script entry points under src_folders/scripts/<src_folder>.py
     and return entry_points dict for setup() (or empty dict if none).
@@ -263,7 +263,7 @@ def collect_entry_points_for_src_folders(project_name, src_folders) -> dict[str,
 
 
 # NOTE: could be replaced by hard-coding directly into pyproject.template.toml
-def get_hardcoded_metadata() -> dict[str, str]:
+def _get_hardcoded_metadata() -> dict[str, str]:
     """
     Hard-coded metadata to add to pyproject.toml
     """
@@ -277,7 +277,7 @@ def get_hardcoded_metadata() -> dict[str, str]:
     return params
 
 
-def prepare_manifest_and_configs(project_name, src_folders, mode_value, tmp_mapping_dir) -> tuple[list, list, list]:
+def _prepare_manifest_and_configs(project_name, src_folders, mode_value, tmp_mapping_dir) -> tuple[list, list, list]:
     """
     Main function that:
     - Writes MANIFEST.in from template
@@ -389,7 +389,7 @@ def prepare_manifest_and_configs(project_name, src_folders, mode_value, tmp_mapp
 # ------------------------------------------------------------------------------
 
 
-def run_build(
+def _run_build(
     *,
     params: dict,
     additional_args: List[str] | None = None,
@@ -518,7 +518,7 @@ def run_build(
     return wheel_paths
 
 
-def cleanup_after_setup(cleanup_file_list, temp_dir_list, project_name):
+def _cleanup_after_setup(cleanup_file_list, temp_dir_list, project_name):
     """
     Remove any temporary files and restore the original configuration directories moved to
     TemporaryDirectory objects earlier.
@@ -539,7 +539,7 @@ def cleanup_after_setup(cleanup_file_list, temp_dir_list, project_name):
             temp_dir.cleanup()
 
 
-def process_projects(projects, version_value, additional_args, mode_value, tmp_mapping_dir):
+def _process_projects(projects, version_value, additional_args, mode_value, tmp_mapping_dir):
     """
     Iterate over each project in the projects mapping and run the full packaging flow
     (collect packages, requirements, entry points; prepare manifest/config; run build; cleanup).
@@ -551,23 +551,23 @@ def process_projects(projects, version_value, additional_args, mode_value, tmp_m
         src_folders = projects[project_name]
 
         # Prepare packages
-        packages = collect_packages_for_src_folders(src_folders)
+        packages = _collect_packages_for_src_folders(src_folders)
 
         # Prepare install_requires list
-        install_requires = collect_requirements_for_src_folders(src_folders)
+        install_requires = _collect_requirements_for_src_folders(src_folders)
 
         # Prepare entry points
-        entry_points = collect_entry_points_for_src_folders(project_name, src_folders)
+        entry_points = _collect_entry_points_for_src_folders(project_name, src_folders)
 
         # Build params for setup
-        params = get_hardcoded_metadata()
+        params = _get_hardcoded_metadata()
 
         # Prepare MANIFEST and configuration files; collect cleanup/temp data
-        cleanup_file_list, temp_dir_list, _ = prepare_manifest_and_configs(
+        cleanup_file_list, temp_dir_list, _ = _prepare_manifest_and_configs(
             project_name, src_folders, mode_value, tmp_mapping_dir
         )
 
-        run_build(
+        _run_build(
             params=params,
             additional_args=additional_args,
             src_folders=src_folders,
@@ -579,7 +579,7 @@ def process_projects(projects, version_value, additional_args, mode_value, tmp_m
         )
 
         # Cleanup and restore moved directories
-        cleanup_after_setup(cleanup_file_list, temp_dir_list, project_name)
+        _cleanup_after_setup(cleanup_file_list, temp_dir_list, project_name)
 
         logger.info("Completed: %s", project_name)
         print("~" * 50)
@@ -595,10 +595,10 @@ def main(additional_args=None):
     Main driver that orchestrates the entire script in a readable sequence.
     """
     try:
-        ensure_tmp_mapping_dir()
-        generate_connector_mappings(TMP_MAPPING_DIR, MODULES_DIR)
+        _ensure_tmp_mapping_dir()
+        _generate_connector_mappings(TMP_MAPPING_DIR, MODULES_DIR)
 
-        mode_value, version_value = determine_mode_and_version()
+        mode_value, version_value = _determine_mode_and_version()
 
         # Decide project structure
         if mode_value == '1':
@@ -614,7 +614,7 @@ def main(additional_args=None):
                 "stix_shifter_utils": ["stix_shifter_utils"],
                 "stix_shifter": ["stix_shifter"]
             }
-            fill_connectors(projects, "stix_shifter_modules")
+            _fill_connectors(projects, "stix_shifter_modules")
         else:
             module_path = 'stix_shifter_modules/' + mode_value
             if os.path.isdir(module_path):
@@ -627,7 +627,7 @@ def main(additional_args=None):
                 )
 
         print("=" * 50)
-        process_projects(projects, version_value, additional_args, mode_value, TMP_MAPPING_DIR)
+        _process_projects(projects, version_value, additional_args, mode_value, TMP_MAPPING_DIR)
         print("=" * 50)
 
     finally:
