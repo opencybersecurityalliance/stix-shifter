@@ -14,6 +14,29 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 ### Dependency update:
 *List the dependecy upgrade or downgrade.*
 
+## 8.0.2 (2025-12-03)
+
+### Breaking changes:
+* None
+
+### Deprecations:
+* None
+
+### Changes:
+* Updated project metadata to explicitly require **Python ≥ 3.10**.
+* Refactored build system to remove deprecated `setup.py` invocation and adopt a **PEP 517/518-compliant** build workflow:
+  * Introduced new `build_tools` module (`run_build.py`, `build.py`, `pre_build.py`, `generate_pyproject.py`, `logging_setup.py`).
+  * Builds are now performed via `python -m build_tools.run_build` (and optional `install` mode), replacing all previous `setup.py` commands.
+  * Wheels now follow the modern naming format: `NAME_VERSION-py3-none.whl`.
+
+### Fixes:
+* Restored build reliability by resolving failures caused by deprecated setuptools behavior.
+
+### Dependency update:
+* None
+
+--------------------------------------
+
 ## 8.0.1 (2025-10-30)
 
 ### Breaking changes:
