@@ -14,7 +14,7 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 ### Dependency update:
 *List the dependecy upgrade or downgrade.*
 
-## 8.0.2 (2025-12-03)
+## 8.0.2 (2025-12-05)
 
 ### Breaking changes:
 * None
