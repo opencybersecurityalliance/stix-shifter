@@ -15,7 +15,7 @@ from stix_shifter_utils.utils import logger
 # This is a simple HTTP client that can be used to access the REST API
 
 RETRY_MAX_DEFAULT = 1
-CONNECT_TIMEOUT_DEFAULT = 2
+CONNECT_TIMEOUT_DEFAULT = 10
 
 
 class InterruptableThread(threading.Thread):
