@@ -104,7 +104,7 @@ class Connector(BaseJsonSyncConnector):
             return_obj['success'] = True
         elif response.code == 301:
             self.bundle_url = response.headers.get('Location')
-            return self.ping_connection()
+            return await self.ping_connection()
         else:
             ErrorResponder.fill_error(return_obj, response_txt, ['message'], connector=self.connector)
         return return_obj
