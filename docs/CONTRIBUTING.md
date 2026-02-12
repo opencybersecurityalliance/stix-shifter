@@ -40,8 +40,6 @@ To test a specific connector module:
 pytest stix_shifter_modules/<module-name>/tests/ -vv
 ```
 
-For more development commands and guidance, see [CLAUDE.md](../CLAUDE.md).
-
 ## <a id="feedback">Feedback</a>
 
 Questions or comments about the OCA's activities may be composed as GitHub issues or comments or may be directed to the project's general email list at oca@lists.oasis-open-projects.org. General questions about OASIS Open Projects may be directed to OASIS staff at op-admin@lists.oasis-open-projects.org
