@@ -117,7 +117,7 @@ class QueryConnector(BaseQueryConnector):
         if(modified_query == True or self.total_try_count > 10):
             logger.debug(f"The number of attempts to remove missing columns was {self.total_try_count}")
             if(self.total_try_count >= 10):
-                logger.warn("There were 10 failed exceptions related to columns. This could be because there were more invalid columns than 10, \
+                logger.warning("There were 10 failed exceptions related to columns. This could be because there were more invalid columns than 10, \
                              or alternatively that the replacement failed to remove the offending column.")
             return_obj['success'] = True
             return return_obj

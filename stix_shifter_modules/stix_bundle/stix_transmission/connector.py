@@ -4,9 +4,56 @@ import json
 import re
 from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector import BaseJsonSyncConnector
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
-from stix2matcher.matcher import Pattern
-from stix2matcher.matcher import MatchListener
+from stix2matcher.matcher import Pattern, MatchListener
+from stix2matcher import matcher as stix2matcher_module
 from stix_shifter_utils.utils.error_response import ErrorResponder
+
+
+# ANTLR 4.13.2 Compatibility Patch for stix2-matcher
+# stix2-matcher==3.0.0 has a bug where _literal_terminal_to_python_val() converts
+# TimestampLiterals to datetime objects, but then the code tries to convert them
+# again with _str_to_datetime(), causing "'datetime.datetime' object is not iterable".
+# This patch fixes it by getting the raw text from the token instead.
+# See: https://github.com/oasis-open/cti-pattern-matcher/issues
+# Remove this patch when stix2-matcher is updated to fix this issue.
+def _apply_stix2matcher_compatibility_patch():
+    """Apply runtime compatibility patch for stix2-matcher with ANTLR 4.13.2."""
+    # Check if not already patched
+    if hasattr(stix2matcher_module, '_antlr_patched'):
+        return
+
+    def patched_exitStartStopQualifier(self, ctx):
+        """Patched version that gets raw timestamp text instead of pre-converted datetime."""
+        # For both STIX 2.0 and 2.1, get the raw text from the timestamp tokens
+        # and convert them to datetime objects. The issue is that
+        # _literal_terminal_to_python_val already converts TimestampLiterals,
+        # so we need to get the raw text using .getText() instead.
+        start_token = ctx.TimestampLiteral(0)
+        stop_token = ctx.TimestampLiteral(1)
+
+        # Get raw text and strip the t' prefix and ' suffix: t'2020-...' -> 2020-...
+        start_text = start_token.getText()
+        stop_text = stop_token.getText()
+        start_str = start_text[2:-1] if start_text.startswith("t'") else start_text
+        stop_str = stop_text[2:-1] if stop_text.startswith("t'") else stop_text
+
+        # Convert timestamp strings to datetime objects
+        try:
+            start_dt = stix2matcher_module._str_to_datetime(start_str)
+            stop_dt = stix2matcher_module._str_to_datetime(stop_str)
+        except ValueError as e:
+            # re-raise as MatcherException (Python 3 syntax)
+            raise stix2matcher_module.MatcherException(*e.args) from e
+
+        self._MatchListener__push((start_dt, stop_dt), u"exitStartStopQualifier")
+
+    # Apply the patch
+    stix2matcher_module.MatchListener.exitStartStopQualifier = patched_exitStartStopQualifier
+    stix2matcher_module._antlr_patched = True
+
+
+# Apply the patch when the module is loaded
+_apply_stix2matcher_compatibility_patch()
 
 
 class UnexpectedResponseException(Exception):
@@ -65,12 +112,11 @@ class Connector(BaseJsonSyncConnector):
     async def create_results_connection(self, search_id, offset, length):
         observations = []
         return_obj = dict()
-        is_stix_21 = self.connection['options'].get("stix_2.1")
+        is_stix_21 = self.connection.get('options', {}).get("stix_2.1")
         stix_version = '2.1' if is_stix_21 else '2.0'
 
-        if not is_stix_21 and self.test_START_STOP_format(search_id):
-            # Remove leading 't' before timestamps from search_id. search_id is the stix pattern
-            search_id = re.sub("(?<=START\s)t|(?<=STOP\s)t", "", search_id)
+        # NOTE: The 't' prefix in timestamp literals (t'2020-09-30T16:24:59.988Z') is required by
+        # stix2-matcher for both STIX 2.0 and 2.1. Do not remove it.
 
         response = await self.client.call_api(self.bundle_url, 'get', timeout=self.timeout)
 
@@ -140,6 +186,6 @@ class Connector(BaseJsonSyncConnector):
 
     def test_START_STOP_format(self, query_string) -> bool:
         # Matches START t'1234-56-78T00:00:00.123Z' STOP t'1234-56-78T00:00:00.123Z'
-        pattern = "START\s(t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')\sSTOP"
+        pattern = r"START\s(t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')\sSTOP"
         match = re.search(pattern, query_string)
         return bool(match)
