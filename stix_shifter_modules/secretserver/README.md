@@ -1,8 +1,14 @@
 # IBM Security Verify Privilege Vault
 
+## Supported STIX Mappings
+
+See the [table of mappings](secretserver_supported_stix.md) for the STIX objects and operators supported by this connector.
+
+### API Endpoints
+
 REST Web Service APIs: https://www.ibm.com/support/pages/node/1136272
 
-Prerequisite :
+### Prerequisite
 
 Create custom report on IBM Privilege Vault Secret Server/ Delinea Secret Server by using following steps:
 - Login to  IBM Privilege Vault Secret Server/ Delinea Secret Server.

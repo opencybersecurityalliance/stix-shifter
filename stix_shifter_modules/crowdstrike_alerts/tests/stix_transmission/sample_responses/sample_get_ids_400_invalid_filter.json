@@ -1,0 +1,17 @@
+{
+    "meta": {
+        "query_time": 0.000479598,
+        "writes": {
+            "resources_affected": 0
+        },
+        "powered_by": "detectsapi",
+        "trace_id": "5250e410-93bb-4585-8dab-34909a7963c3"
+    },
+    "errors": [
+        {
+            "code": 400,
+            "message": "invalid query filter in request"
+        }
+    ],
+    "resources": []
+}

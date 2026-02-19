@@ -1,0 +1,332 @@
+{
+  "timestamp": [
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp"
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "device_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "host_ip"
+    }
+  ],
+  "device_natIp": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "nat_ip"
+    }
+  ],
+  "dns_replyIp": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dns_ip"
+    }
+  ],
+  "dstDevice_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    },
+    {
+      "key": "x-oca-event.network_ref",
+      "object": "event",
+      "references": "nt"
+    }
+  ],
+  "srcDevice_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    },
+    {
+      "key": "x-oca-event.network_ref",
+      "object": "event",
+      "references": "nt"
+    }
+  ],
+  "dstPort": [
+    {
+      "key": "network-traffic.dst_port",
+      "object": "nt"
+    }
+  ],
+  "srcPort": [
+    {
+      "key": "network-traffic.src_port",
+      "object": "nt"
+    }
+  ],
+  "ipProtocol": [
+    {
+      "key": "network-traffic.protocols",
+      "object": "nt",
+      "transformer": "FormatTCPProtocol"	
+    }
+  ],
+  "dstDevice_natIp": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_nat"
+    }
+  ],
+  "srcDevice_natIp": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_nat"
+    }
+  ],
+  "device_mac": [
+    {
+      "key": "mac-addr.value",
+      "object": "host_mac"
+    }
+  ],
+  "srcDevice_mac": [
+    {
+      "key": "mac-addr.value",
+      "object": "src_mac"
+    },
+    {
+      "key": "ipv4-addr.resolves_to_refs",
+      "object": "src_ip",
+      "references": [
+        "src_mac"
+      ]
+    }
+  ],
+  "dstDevice_mac": [
+    {
+      "key": "mac-addr.value",
+      "object": "dst_mac"
+    },
+    {
+      "key": "ipv4-addr.resolves_to_refs",
+      "object": "dst_ip",
+      "references": [
+        "dst_mac"
+      ]
+    }
+  ],
+  "baseImage": [
+    {
+      "key": "file.name",
+      "object": "file_image",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "directory_image",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "process",
+      "references": "file_image"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file_image",
+      "references": "directory_image"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "commandLine": [
+    {
+      "key": "process.command_line",
+      "object": "process"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event",
+      "references": "process"
+    }
+  ],
+  "parentBaseImage": [
+    {
+      "key": "file.name",
+      "object": "file_parent_image",
+      "transformer": "ToFileName"
+    },
+    {
+      "key": "directory.path",
+      "object": "directory_parent_image",
+      "transformer": "ToDirectoryPath"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file_parent_image",
+      "references": "directory_parent_image"
+    },
+    {
+      "key": "process.binary_ref",
+      "object": "parent_process",
+      "references": "file_parent_image"
+    },
+    {
+      "key": "process.parent_ref",
+      "object": "process",
+      "references": "parent_process"
+    },
+    {
+      "key": "x-oca-event.parent_process_ref",
+      "object": "event",
+      "references": "parent_process"
+    }
+  ],
+  "user_username": [
+    {
+      "key": "process.creator_user_ref",
+      "object": "process",
+      "references": [
+        "user"
+      ]
+    },
+    {
+      "key": "user-account.user_id",
+      "object": "user"
+    },
+    {
+      "key": "user-account.display_name",
+      "object": "user"
+    },
+    {
+      "key": "x-oca-event.user_ref",
+      "object": "event",
+      "references": "user"
+    }
+  ],
+  "user_username_raw": [
+    {
+      "key": "process.creator_user_ref",
+      "object": "process",
+      "references": [
+        "user"
+      ]
+    },
+    {
+      "key": "user-account.user_id",
+      "object": "user"
+    },
+    {
+      "key": "user-account.display_name",
+      "object": "user"
+    },
+    {
+      "key": "x-oca-event.user_ref",
+      "object": "event",
+      "references": "user"
+    }
+  ],
+  "fromUser_username": [
+    {
+      "key": "user-account.user_id",
+      "object": "user"
+    },
+    {
+      "key": "user-account.display_name",
+      "object": "user"
+    }
+  ],
+  "fromUser_username_raw": [
+    {
+      "key": "user-account.user_id",
+      "object": "user"
+    },
+    {
+      "key": "user-account.display_name",
+      "object": "user"
+    }
+  ],
+  "file_basename": [
+    {
+      "key": "file.name",
+      "object": "file"
+    }
+  ],
+  "file_hash_sha256": [
+    {
+      "key": "file.hashes.SHA-256",
+      "object": "file"
+    }
+  ],
+  "file_hash_md5": [
+    {
+      "key": "file.hashes.MD5",
+      "object": "file"
+    }
+  ],
+  "file_hash_sha1": [
+    {
+      "key": "file.hashes.SHA-1",
+      "object": "file"
+    }
+  ],
+  "file_path": [
+    {
+      "key": "file.name",
+      "object": "file"
+    },
+    {
+      "key": "directory.path",
+      "object": "directory",
+      "references": [
+        "file"
+      ]
+    }
+  ],
+  "http_referer_fqdn": [
+    {
+      "key": "domain-name.value",
+      "object": "referer"
+    }
+  ],
+  "http_url_fqdn": [
+    {
+      "key": "domain-name.value",
+      "object": "http_domain"
+    }
+  ],
+  "http_url": [
+    {
+      "key": "url.value",
+      "object": "url"
+    }
+  ],
+  "targetUser_email": [
+    {
+      "key": "email-addr.value",
+      "object": "target_email"
+    }
+  ],
+  "user_email": [
+    {
+      "key": "email-addr.value",
+      "object": "user_email"
+    }
+  ],
+  "metadata_deviceEventId": [
+    {
+      "key": "x-oca-event.code",
+      "object": "event"
+    }
+  ]   
+}

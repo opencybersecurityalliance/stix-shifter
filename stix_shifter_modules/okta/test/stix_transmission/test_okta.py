@@ -538,7 +538,7 @@ class TestOktaConnection(unittest.TestCase, object):
         ping_response = transmission.ping()
         assert ping_response is not None
         assert ping_response['success'] is False
-        assert ping_response['code'] == "invalid_parameter"
+        assert ping_response['code'] == "authentication_fail"
         assert "Invalid session" in ping_response['error']
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
@@ -554,7 +554,7 @@ class TestOktaConnection(unittest.TestCase, object):
         result_response = transmission.results(query, offset, length)
         assert result_response is not None
         assert result_response['success'] is False
-        assert result_response['code'] == "invalid_parameter"
+        assert result_response['code'] == "authentication_fail"
         assert 'Invalid session' in result_response['error']
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')

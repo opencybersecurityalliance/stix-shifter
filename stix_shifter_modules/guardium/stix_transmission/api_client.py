@@ -23,13 +23,13 @@ class APIClient():
         # TODO switch on cert_verify
         # cert_verify = connection.get('selfSignedCert', True)
         cert_verify = connection.get(False)
-        sni = connection.get('sni', None)
         auth = connection.get('auth', None)
         url = "https://" + host + ":" + str(port)
         params = dict()
         params["client_id"] = connection["client_id"]
         params["url"] = url
         params["client_secret"] = connection["client_secret"]
+        params["timeout"] = connection['options'].get('timeout')
         params["config_uname"] = configuration["auth"]["username"]
         params["config_pass"] = configuration["auth"]["password"]
         self.client_aux = GuardApiClient(params,
@@ -38,7 +38,6 @@ class APIClient():
                                          headers,
                                          url_modifier_function,
                                          cert_verify,
-                                         sni,
                                          auth
                                          )
 

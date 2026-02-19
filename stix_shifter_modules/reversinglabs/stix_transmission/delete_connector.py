@@ -9,7 +9,7 @@ class DeleteConnector(BaseDeleteConnector):
 
     async def delete_query_connection(self, search_id):
         try:
-            response_dict = await self.api_client.delete_search(search_id)
+            response_dict =await  self.api_client.delete_search(search_id)
             response_code = response_dict["code"]
 
             # Construct a response object

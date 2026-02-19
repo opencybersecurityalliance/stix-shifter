@@ -155,20 +155,6 @@ class ResultsConnector(BaseJsonResultsConnector):
             self.logger.error('error when getting search results: %s', exp)
             ErrorResponder.fill_error(return_obj, response_dict, ['message'], connector=self.connector)
 
-        finally:
-            try:
-                if not return_obj.get('data') or result_count >= self.api_client.result_limit or \
-                        response_dict.get('message') or not response_text.get('nextPageToken'):
-                    if 'code' in response_dict:
-                        if response_dict['code'] not in (1010, 1015):
-                            self.logger.debug("Deleting the search id in results_connector")
-                            await self.api_client.delete_search(search_id)
-                    else:
-                        self.logger.debug("Deleting the search id in results_connector")
-                        await self.api_client.delete_search(search_id)
-
-            except Exception:
-                self.logger.info("User doesn't have permission to delete the search id")
         return return_obj
 
     def invalid_response(self, return_obj, response_dict, status, response_text):

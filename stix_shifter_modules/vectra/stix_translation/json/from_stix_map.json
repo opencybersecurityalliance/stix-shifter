@@ -1,0 +1,299 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "detection.src_ip",
+        "detection.grouped_details.dst_ips",
+        "detection.grouped_details.dst_hosts.dst_ip",
+        "detection.grouped_details.normal_admin_hosts.ip",
+        "detection.grouped_details.dst_hosts.ip",
+        "detection.grouped_details.origin_ip",
+        "detection.grouped_details.sessions.dst_ip",
+        "detection.grouped_details.events.dst_ip",
+        "detection.grouped_details.events.dst_ips",
+        "detection.grouped_details.events.sessions.dst_ip",
+        "detection.grouped_details.connection_events.target_host.ip"
+      ]
+    }
+  },
+  "ipv6-addr": {
+    "fields": {
+      "value": [
+        "detection.src_ip",
+        "detection.grouped_details.dst_ips",
+        "detection.grouped_details.dst_hosts.dst_ip",
+        "detection.grouped_details.normal_admin_hosts.ip",
+        "detection.grouped_details.dst_hosts.ip",
+        "detection.grouped_details.origin_ip",
+        "detection.grouped_details.sessions.dst_ip",
+        "detection.grouped_details.events.dst_ip",
+        "detection.grouped_details.events.dst_ips",
+        "detection.grouped_details.events.sessions.dst_ip",
+        "detection.grouped_details.connection_events.target_host.ip"
+      ]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": [
+        "detection.grouped_details.target_domains",
+        "detection.grouped_details.origin_domain",
+        "detection.grouped_details.events.target_domains",
+        "detection.grouped_details.connection_events.target_host.dst_dns"
+      ]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "dst_port": [
+        "detection.grouped_details.dst_ports",
+        "detection.grouped_details.dst_hosts.dst_port",
+        "detection.grouped_details.origin_port",
+        "detection.grouped_details.sessions.dst_port",
+        "detection.grouped_details.events.dst_ports",
+        "detection.grouped_details.events.sessions.dst_port",
+        "detection.grouped_details.events.target_summary.dst_port",
+        "detection.grouped_details.connection_events.dst_port"
+      ],
+      "src_port": ["detection.grouped_details.src_port"],
+      "src_ref.value": ["detection.src_ip"],
+      "dst_ref.value": [
+        "detection.grouped_details.dst_ips",
+        "detection.grouped_details.dst_hosts.dst_ip",
+        "detection.grouped_details.sessions.dst_ip",
+        "detection.grouped_details.origin_ip",
+        "detection.grouped_details.events.sessions.dst_ip",
+        "detection.grouped_details.connection_events.target_host.ip"
+      ],
+      "protocols[*]": [
+        "detection.grouped_details.protocol",
+        "detection.grouped_details.app_protocol",
+        "detection.grouped_details.dst_protocol",
+        "detection.grouped_details.origin_protocol",
+        "detection.grouped_details.sessions.protocol",
+        "detection.grouped_details.sessions.app_protocol",
+        "detection.grouped_details.events.protocol",
+        "detection.grouped_details.events.sessions.app_protocol",
+        "detection.grouped_details.events.sessions.protocol",
+        "detection.grouped_details.events.target_summary.app_protocol",
+        "detection.grouped_details.events.target_summary.protocol",
+        "detection.grouped_details.connection_events.protocol"
+      ],
+      "src_byte_count": [
+        "detection.grouped_details.bytes_sent",
+        "detection.grouped_details.sessions.bytes_sent",
+        "detection.grouped_details.events.bytes_sent",
+        "detection.grouped_details.connection_events.total_bytes_sent"
+      ],
+      "dst_byte_count": [
+        "detection.grouped_details.bytes_received",
+        "detection.grouped_details.sessions.bytes_received",
+        "detection.grouped_details.events.bytes_received",
+        "detection.grouped_details.events.sessions.bytes_received",
+        "detection.grouped_details.connection_events.total_bytes_rcvd"
+      ],
+      "start": [
+        "detection.first_timestamp",
+        "detection.grouped_details.first_timestamp",
+        "detection.grouped_details.sessions.first_timestamp",
+        "detection.grouped_details.events.first_timestamp",
+        "detection.grouped_details.events.sessions.first_timestamp",
+        "detection.grouped_details.events.target_summary.first_timestamp",
+        "detection.grouped_details.connection_events.first_timestamp"
+      ],
+      "end": [
+        "detection.last_timestamp",
+        "detection.grouped_details.last_timestamp",
+        "detection.grouped_details.dst_hosts.last_timestamp",
+        "detection.grouped_details.sessions.last_timestamp",
+        "detection.grouped_details.events.last_seen",
+        "detection.grouped_details.events.last_timestamp",
+        "detection.grouped_details.events.target_summary.last_timestamp",
+        "detection.grouped_details.connection_events.last_timestamp"
+      ],
+      "x_count": ["detection.grouped_details.events.count"],
+      "x_dst_country": ["detection.grouped_details.events.dst_country"],
+      "x_num_accounts": ["detection.grouped_details.num_accounts"],
+      "x_reason": ["detection.grouped_details.reason"],
+      "x_num_attempts": ["detection.grouped_details.num_attempts"],
+      "x_tunnel_type": ["detection.grouped_details.sessions.tunnel_type"],
+      "x_num_sessions": ["detection.grouped_details.num_sessions"],
+      "x_user_agent": ["detection.grouped_details.user_agent"],
+      "x_dst_geo_latitude": [
+        "detection.grouped_details.dst_geo_lat",
+        "detection.grouped_details.origin_geo_lat"
+      ],
+      "x_dst_geo_longitude": [
+        "detection.grouped_details.dst_geo_lon",
+        "detection.grouped_details.origin_geo_lon"
+      ],
+      "x_dst_geo": [
+        "detection.grouped_details.dst_geo",
+        "detection.grouped_details.origin_geo"
+      ],
+      "x_num_response_objects": ["detection.grouped_details.num_response_objects"],
+      "x_client_name": ["detection.grouped_details.client_name"],
+      "x_client_token": ["detection.grouped_details.client_token"],
+      "x_is_normally_accessed_by_rdp": ["detection.grouped_details.events.is_normally_accessed_by_rdp"],
+      "x_rpc_uuid": ["detection.grouped_details.uuid"],
+      "x_nt_referrer": ["detection.grouped_details.events.referrer"],
+      "x_num_events": ["detection.grouped_details.num_events"],
+      "x_time_duration": [
+        "detection.grouped_details.duration",
+        "detection.grouped_details.events.duration",
+        "detection.grouped_details.events.sessions.duration",
+        "detection.grouped_details.connection_events.duration_int"
+      ],
+      "x_status_code": ["detection.grouped_details.status_code"],
+      "x_named_pipe": ["detection.grouped_details.named_pipe"],
+      "x_uri": ["detection.grouped_details.uri"],
+      "x_src_session_uid": ["detection.grouped_details.metadata.orig_sluid"],
+      "x_executed_functions": ["detection.grouped_details.executed_functions"],
+      "x_event_type": ["detection.grouped_details.events.event_type"],
+      "x_error_code": ["detection.grouped_details.events.error_code"],
+      "x_target_domain_refs[*].value": ["detection.grouped_details.events.target_domains"],
+      "x_is_external": ["detection.grouped_details.connection_events.is_external"],
+      "x_request_uri": ["detection.grouped_details.uri"],
+      "x_period_identified": ["detection.grouped_details.period_identified"],
+      "x_smb_share": ["detection.grouped_details.share"],
+      "x_account_uid": ["detection.grouped_details.account_uid"],
+      "extensions.'http-request-ext'.request_method": ["detection.grouped_details.events.http_method"],
+      "extensions.'http-request-ext'.x_response_code": ["detection.grouped_details.events.response_code"],
+      "extensions.'http-request-ext'.request_header.'User-Agent'": ["detection.grouped_details.user_agent"]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": [
+        "detection.grouped_details.dst_accounts.uid",
+        "detection.grouped_details.src_account.name",
+        "detection.grouped_details.normal_users",
+        "detection.summary.accounts"
+      ],
+      "account_login": ["detection.grouped_details.src_account.name"],
+      "x_privilege_category": ["detection.grouped_details.src_account.privilege_category"],
+      "x_privilege_level": ["detection.grouped_details.src_account.privilege_level"]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "name": ["detection.detection_type"],
+      "alert_id": ["detection.id"],
+      "description": ["detection.description", "detection.summary.description"],
+      "x_num_sessions": ["detection.grouped_details.num_sessions"],
+      "severity": ["detection.threat"],
+      "confidence": ["detection.certainty"],
+      "start": ["detection.first_timestamp"],
+      "end": ["detection.last_timestamp"],
+      "time_observed": ["detection.created_timestamp"],
+      "event_count": ["detection.summary.num_sessions", "detection.summary.num_attempts"],
+      "x_state": ["detection.state"],
+      "x_num_successes": ["detection.summary.num_successes"],
+      "x_assigned_to": [
+        "detection.assigned_to"
+      ],
+      "x_assigned_date": [
+        "detection.assigned_date"
+      ],
+      "x_sensor_name": ["detection.sensor_name"],
+      "x_is_triaged": ["detection.is_triaged"],
+      "src_ip_ref": ["detection.src_ip"],
+      "x_dst_ports": ["detection.summary.dst_ports"],
+      "x_account_refs.user_id": ["detection.summary.accounts"],
+      "x_shares": ["detection.summary.shares"],
+      "x_probable_owner": ["detection.summary.probable_owner"],
+      "x_matches": ["detection.summary.matches"]
+    }
+  },
+  "x-ibm-ttp-tagging": {
+    "fields": {
+      "name": ["detection.detection_type"],
+      "confidence": ["detection.certainty"],
+      "kill_chain_phases.phase_name":  ["detection.detection_category"]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": ["detection.src_host.name"],
+      "device_id": ["detection.src_host.id"],
+      "x_is_key_asset": ["detection.src_host.is_key_asset"],
+      "ip_refs[*].value": ["detection.src_ip"],
+      "x_threat": ["detection.src_host.threat"],
+      "x_certainty": ["detection.src_host.certainty"],
+      "x_privilege_category": ["detection.grouped_details.src_host.privilege_category"],
+      "x_privilege_level": ["detection.grouped_details.src_host.privilege_level"]
+    }
+  },
+  "x-grouped-details": {
+    "fields": {
+      "first_seen": ["detection.grouped_details.first_seen"],
+      "last_seen": ["detection.grouped_details.last_seen"],
+      "detection_source": ["detection.grouped_details.detection_source"],
+      "detection_slug": ["detection.grouped_details.detection_slug"],
+      "account_ref.user_id": ["detection.grouped_details.src_account.name"],
+      "ja3_hashes": ["detection.grouped_details.ja3_hashes"],
+      "ja3s_hashes": ["detection.grouped_details.ja3s_hashes"],
+      "x_num_sessions": ["detection.grouped_details.num_sessions"],
+      "start": ["detection.grouped_details.first_timestamp"],
+      "end": ["detection.grouped_details.last_timestamp"],
+      "count": ["detection.grouped_details.count"],
+      "client_name": ["detection.grouped_details.client_name"],
+      "client_token": ["detection.grouped_details.client_token"],
+      "dst_byte_count": ["detection.grouped_details.bytes_received"],
+      "src_byte_count": ["detection.grouped_details.bytes_sent"],
+      "subnet": ["detection.grouped_details.subnet"],
+      "rpc_function_uuid": ["detection.grouped_details.uuid"],
+      "num_services_requested": ["detection.grouped_details.num_services_requested"],
+      "num_services_high_privilege": ["detection.grouped_details.num_services_high_privilege"],
+      "service_privilege": ["detection.grouped_details.service_privilege"]
+    }
+  },
+  "x-service-accessed-info": {
+    "fields": {
+      "name": ["detection.grouped_details.service_accessed.name"],
+      "privilege_category": ["detection.grouped_details.service_accessed.privilege_category"],
+      "privilege_level": ["detection.grouped_details.service_accessed.privilege_level"]
+    }
+  },
+  "x-ldap-event": {
+    "fields": {
+      "base_object": ["detection.grouped_details.events.base_object"],
+      "request": ["detection.grouped_details.events.request"],
+      "response_code": ["detection.grouped_details.events.response_code"],
+      "num_response_objects": ["detection.grouped_details.events.num_response_objects"],
+      "last_timestamp": ["detection.grouped_details.events.last_timestamp"]
+    }
+  },
+  "x-sql-request-info": {
+    "fields": {
+      "http_segment": ["detection.grouped_details.targets.events.http_segment"],
+      "user_agent": ["detection.grouped_details.targets.events.user_agent"],
+      "sql_fragment": ["detection.grouped_details.targets.events.sql_fragment"],
+      "response_code": ["detection.grouped_details.targets.events.response_code"],
+      "bytes_received": ["detection.grouped_details.targets.events.bytes_received"],
+      "last_seen": ["detection.grouped_details.targets.events.last_seen"]
+    }
+  },
+  "x-anomalous-rpc": {
+    "fields": {
+      "function_call": ["detection.grouped_details.anomalous_profiles.function_call"],
+      "rpc_function_uuid": ["detection.grouped_details.anomalous_profiles.function_uuid"],
+      "count": ["detection.grouped_details.anomalous_profiles.count"],
+      "start": ["detection.grouped_details.anomalous_profiles.first_timestamp"],
+      "end": ["detection.grouped_details.anomalous_profiles.last_timestamp"]
+    }
+  },
+  "x-services-requested": {
+    "fields": {
+      "service": ["detection.grouped_details.services_requested.service"]
+      }
+  },
+  "x-new-host-info": {
+    "fields": {
+      "artifact": ["detection.grouped_details.artifact"],
+      "via": ["detection.grouped_details.via"],
+      "role": ["detection.grouped_details.role"],
+      "end": ["detection.grouped_details.last_timestamp"]
+    }
+  }
+}

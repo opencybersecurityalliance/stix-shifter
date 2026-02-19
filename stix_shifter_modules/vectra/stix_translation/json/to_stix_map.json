@@ -1,0 +1,1259 @@
+{
+  "src_ip": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "source_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "source_ip"
+    },
+    {
+      "key": "x-ibm-finding.src_ip_ref",
+      "object": "detection",
+      "references": "source_ip"
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "host",
+      "references": [
+        "source_ip"
+      ],
+      "group": true
+    }
+  ],
+  "detection_type": [
+    {
+      "key": "x-ibm-finding.name",
+      "object": "detection"
+    },
+    {
+      "key": "x-ibm-ttp-tagging.name",
+      "object": "ttp_finding"
+    },
+    {
+      "key": "x-ibm-finding.finding_type",
+      "object": "detection",
+      "value": "alert"
+    }
+  ],
+  "id": [
+    {
+      "key": "x-ibm-finding.alert_id",
+      "object": "detection"
+    }
+  ],
+  "description": {
+    "key": "x-ibm-finding.description",
+    "object": "detection"
+  },
+  "summary": {
+    "description": {
+      "key": "x-ibm-finding.description",
+      "object": "detection"
+    },
+    "num_sessions": {
+      "key": "x-ibm-finding.event_count",
+      "object": "detection"
+    },
+    "num_attempts": {
+      "key": "x-ibm-finding.event_count",
+      "object": "detection"
+    },
+    "num_successes": {
+      "key": "x-ibm-finding.x_num_successes",
+      "object": "detection",
+      "transformer": "ToString"
+    },
+    "dst_ports": {
+      "key": "x-ibm-finding.x_dst_ports",
+      "object": "detection"
+    },
+    "accounts": [
+      {
+        "key": "user-account.user_id",
+        "object": "account",
+        "unwrap": true
+      },
+      {
+        "key": "x-ibm-finding.x_account_refs",
+        "object": "detection",
+        "references": [
+          "account"
+        ],
+        "group": true
+      }
+    ],
+    "shares": {
+      "key": "x-ibm-finding.x_shares",
+      "object": "detection"
+    },
+    "probable_owner": {
+      "key": "x-ibm-finding.x_probable_owner",
+      "object": "detection"
+    },
+    "matches": {
+      "key": "x-ibm-finding.x_matches",
+      "object": "detection"
+    }
+  },
+  "threat": [
+    {
+      "key": "x-ibm-finding.severity",
+      "object": "detection"
+    }
+  ],
+  "certainty": [
+    {
+      "key": "x-ibm-finding.confidence",
+      "object": "detection"
+    },
+    {
+      "key": "x-ibm-ttp-tagging.confidence",
+      "object": "ttp_finding",
+      "transformer": "ConvertToReal"
+    }
+  ],
+  "first_timestamp": [
+    {
+      "key": "x-ibm-finding.start",
+      "object": "detection"
+    },
+    {
+      "key": "first_observed"
+    }
+  ],
+  "last_timestamp": [
+    {
+      "key": "x-ibm-finding.end",
+      "object": "detection"
+    },
+    {
+      "key": "last_observed"
+    }
+  ],
+  "created_timestamp": {
+    "key": "x-ibm-finding.time_observed",
+    "object": "detection"
+  },
+  "state": {
+    "key": "x-ibm-finding.x_state",
+    "object": "detection"
+  },
+  "assigned_to": {
+    "key": "x-ibm-finding.x_assigned_to",
+    "object": "detection"
+  },
+  "assigned_date": {
+    "key": "x-ibm-finding.x_assigned_date",
+    "object": "detection"
+  },
+  "src_host": {
+    "name": {
+      "key": "x-oca-asset.hostname",
+      "object": "host"
+    },
+    "id": {
+      "key": "x-oca-asset.device_id",
+      "object": "host"
+    },
+    "is_key_asset": {
+      "key": "x-oca-asset.x_is_key_asset",
+      "object": "host"
+    },
+    "threat": {
+      "key": "x-oca-asset.x_threat",
+      "object": "host"
+    },
+    "certainty": {
+      "key": "x-oca-asset.x_certainty",
+      "object": "host"
+    }
+  },
+  "detection_category": [
+    {
+      "key": "x-ibm-ttp-tagging.kill_chain_phases",
+      "object": "ttp_finding",
+      "transformer": "ChainNameValue"
+    },
+    {
+      "key": "x-ibm-finding.ttp_tagging_refs",
+      "object": "detection",
+      "references": [
+        "ttp_finding"
+      ]
+    }
+  ],
+  "sensor_name": {
+    "key": "x-ibm-finding.x_sensor_name",
+    "object": "detection"
+  },
+  "is_triaged": {
+    "key": "x-ibm-finding.x_is_triaged",
+    "object": "detection"
+  },
+  "grouped_details": {
+    "protocol": {
+      "key": "network-traffic.protocols",
+      "object": "nt_session",
+      "group": true,
+      "transformer": "ToLowercaseArray"
+    },
+    "app_protocol": {
+      "key": "network-traffic.protocols",
+      "object": "nt_session",
+      "group": true,
+      "transformer": "ToLowercaseArray"
+    },
+    "dst_protocol": {
+      "key": "network-traffic.protocols",
+      "object": "nt_session",
+      "group": true,
+      "transformer": "ToLowercaseArray"
+    },
+    "dst_ports": {
+      "key": "network-traffic.dst_port",
+      "object": "nt_session",
+      "transformer": "ListToValue"
+    },
+    "dst_ips": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "dst_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "dst_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "nt_session",
+        "references": "dst_ip"
+      }
+    ],
+    "dst_hosts": {
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_ip"
+        }
+      ],
+      "groupdstReference": {
+        "key": "network-traffic.dst_ref",
+        "object": "nt_session",
+        "references": "dst_ip",
+        "group_ref": true
+      }
+    },
+    "normal_admin_hosts": {
+      "ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "normal_host",
+          "unwrap": true,
+          "transformer": "FilterIPv4List"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "normal_host",
+          "unwrap": true,
+          "transformer": "FilterIPv4List"
+        }
+      ],
+      "groupNormalHostReference": {
+        "key": "network-traffic.x_normal_admin_host_refs",
+        "object": "nt_session",
+        "references": "normal_host",
+        "group_ref": true
+      }
+    },
+    "src_port": {
+      "key": "network-traffic.src_port",
+      "object": "nt_session"
+    },
+    "bytes_received": {
+      "key": "network-traffic.dst_byte_count",
+      "object": "nt_session",
+      "transformer": "ToInteger"
+    },
+    "bytes_sent": {
+      "key": "network-traffic.src_byte_count",
+      "object": "nt_session",
+      "transformer": "ToInteger"
+    },
+    "first_timestamp": {
+      "key": "network-traffic.start",
+      "object": "nt_session"
+    },
+    "last_timestamp": [
+      {
+        "key": "network-traffic.end",
+        "object": "nt_session"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "nt_session",
+        "references": "source_ip"
+      }
+    ],
+    "duration": {
+      "key": "network-traffic.x_time_duration",
+      "object": "nt_session"
+    },
+    "dst_geo": {
+      "key": "network-traffic.x_dst_geo",
+      "object": "nt_session"
+    },
+    "dst_geo_lat": {
+      "key": "network-traffic.x_dst_geo_latitude",
+      "object": "nt_session"
+    },
+    "dst_geo_lon": {
+      "key": "network-traffic.x_dst_geo_longitude",
+      "object": "nt_session"
+    },
+    "target_domains": [
+      {
+        "key": "domain-name.value",
+        "object": "target_domain",
+        "unwrap": true,
+        "transformer": "VerifyDomainValue"
+      }
+    ],
+    "reason": {
+      "key": "network-traffic.x_reason_message",
+      "object": "nt_session"
+    },
+    "num_attempts": {
+      "key": "network-traffic.x_num_attempts",
+      "object": "nt_session"
+    },
+    "num_successes": {
+      "key": "network-traffic.x_num_successes",
+      "object": "nt_session"
+    },
+    "user_agent": {
+      "key": "network-traffic.x_user_agent",
+      "object": "nt_session"
+    },
+    "status_code" : {
+      "key": "network-traffic.x_status_code",
+      "object": "nt_session"
+    },
+    "uri" : {
+      "key": "network-traffic.x_request_uri",
+      "object": "nt_session"
+    },
+    "metadata" : {
+      "orig_sluid": {
+        "key": "network-traffic.x_src_session_uid",
+        "object": "nt_session"
+      }
+    },
+    "origin_domain": {
+      "key": "domain-name.value",
+      "object": "origin_domain"
+    },
+    "origin_ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "origin_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "origin_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "origin_nt",
+        "references": "origin_ip"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "origin_nt",
+        "references": "source_ip"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "origin_domain",
+        "references": [
+          "origin_ip"
+        ]
+      }
+    ],
+    "origin_port": {
+      "key": "network-traffic.dst_port",
+      "object": "origin_nt",
+      "transformer": "ListToValue"
+    },
+    "origin_protocol": {
+      "key": "network-traffic.protocols",
+      "object": "origin_nt",
+      "group": true,
+      "transformer": "ToLowercaseArray"
+    },
+    "origin_geo_lat": {
+      "key": "network-traffic.x_dst_geo_latitude",
+      "object": "origin_nt"
+    },
+    "origin_geo_lon": {
+      "key": "network-traffic.x_dst_geo_longitude",
+      "object": "origin_nt"
+    },
+    "origin_geo": {
+      "key": "network-traffic.x_dst_geo",
+      "object": "origin_nt"
+    },
+    "num_accounts": {
+      "key": "network-traffic.x_num_accounts",
+      "object": "nt_session"
+    },
+    "num_response_objects": {
+      "key": "network-traffic.x_num_response_objects",
+      "object": "nt_session"
+    },
+    "client_name": {
+      "key": "network-traffic.x_client_name",
+      "object": "nt_session"
+    },
+    "client_token": {
+      "key": "network-traffic.x_client_token",
+      "object": "nt_session"
+    },
+    "uuid": {
+      "key": "network-traffic.x_rpc_uuid",
+      "object": "nt_session"
+    },
+    "named_pipe": {
+      "key": "network-traffic.x_named_pipe",
+      "object": "nt_session"
+    },
+    "executed_functions": {
+      "key": "network-traffic.x_executed_functions",
+      "object": "nt_session"
+    },
+    "normal_users": [
+      {
+        "key": "user-account.user_id",
+        "object": "user",
+        "unwrap": true
+      },
+      {
+        "key": "network-traffic.x_normal_user_refs",
+        "object": "nt_session",
+        "references": ["user"]
+      }
+    ],
+    "num_events": {
+      "key": "network-traffic.x_num_events",
+      "object": "nt_session"
+    },
+    "num_sessions": {
+      "key": "network-traffic.x_num_sessions",
+      "object": "nt_session"
+    },
+    "first_seen": {
+      "key": "x-grouped-details.first_seen",
+      "object": "group_detail"
+    },
+    "last_seen": {
+      "key": "x-grouped-details.last_seen",
+      "object": "group_detail"
+    },
+    "detection_source": {
+      "key": "x-grouped-details.detection_source",
+      "object": "group_detail"
+    },
+    "detection_slug": {
+      "key": "x-grouped-details.detection_slug",
+      "object": "group_detail"
+    },
+    "period_identified": {
+      "key": "network-traffic.x_period_identified",
+      "object": "nt_session"
+    },
+    "share": {
+      "key": "network-traffic.x_smb_share",
+      "object": "nt_session"
+    },
+    "account_uid" : {
+      "key": "network-traffic.x_account_uid",
+      "object": "nt_session"
+    },
+    "src_account" : {
+      "name": [
+        {
+          "key": "user-account.user_id",
+          "object": "user_account"
+        },
+        {
+          "key": "user-account.account_login",
+          "object": "user_account"
+        },
+        {
+          "key": "x-grouped-details.account_ref",
+          "object": "group_detail",
+          "references": "user_account"
+        },
+        {
+          "key": "x-ibm-finding.src_os_user_ref",
+          "object": "detection",
+          "references": "user_account"
+        }
+      ],
+      "privilege_category": {
+        "key": "user-account.x_privilege_category",
+        "object": "user_account"
+      },
+      "privilege_level": {
+        "key": "user-account.x_privilege_level",
+        "object": "user_account"
+      }
+    },
+    "service_accessed": {
+      "name": [
+        {
+          "key": "x-service-accessed-info.name",
+          "object": "service_info"
+        },
+        {
+          "key": "x-grouped-details.service_accessed_info_ref",
+          "object": "group_detail",
+          "references": "service_info"
+        }
+      ],
+      "privilege_category": {
+        "key": "x-service-accessed-info.privilege_category",
+        "object": "service_info"
+      },
+      "privilege_level": {
+        "key": "x-service-accessed-info.privilege_level",
+        "object": "service_info"
+      }
+    },
+    "src_host":{
+      "privilege_category" : {
+        "key": "x-oca-asset.x_privilege_category",
+        "object": "host"
+      },
+      "privilege_level" : {
+        "key": "x-oca-asset.x_privilege_level",
+        "object": "host"
+      }
+    },
+    "anomalous_profiles": {
+      "function_call": {
+        "key": "x-anomalous-rpc.function_call",
+        "object": "a_profile"
+      },
+      "function_uuid": {
+        "key": "x-anomalous-rpc.rpc_function_uuid",
+        "object": "a_profile"
+      },
+      "count": {
+        "key": "x-anomalous-rpc.count",
+        "object": "a_profile"
+      },
+      "first_timestamp": {
+        "key": "x-anomalous-rpc.start",
+        "object": "a_profile"
+      },
+      "last_timestamp": {
+        "key": "x-anomalous-rpc.end",
+        "object": "a_profile"
+      }
+    },
+    "events": {
+      "base_object": {
+          "key": "x-ldap-event.base_object",
+          "object": "ldap_event"
+        },
+      "request": {
+        "key": "x-ldap-event.request",
+        "object": "ldap_event"
+      },
+      "response_code": {
+        "key": "x-ldap-event.response_code",
+        "object": "ldap_event"
+      },
+      "num_response_objects": {
+        "key": "x-ldap-event.num_response_objects",
+        "object": "ldap_event"
+      },
+      "last_timestamp": {
+        "key": "x-ldap-event.last_timestamp",
+        "object": "ldap_event"
+      }
+    },
+    "targets": {
+      "events": {
+        "http_segment": {
+          "key": "x-sql-request-info.http_segment",
+          "object": "sql_request"
+        },
+        "user_agent": {
+          "key": "x-sql-request-info.user_agent",
+          "object": "sql_request"
+        },
+        "sql_fragment": {
+          "key": "x-sql-request-info.sql_fragment",
+          "object": "sql_request"
+        },
+        "response_code": {
+          "key": "x-sql-request-info.response_code",
+          "object": "sql_request"
+        },
+        "bytes_received": {
+          "key": "x-sql-request-info.bytes_received",
+          "object": "sql_request"
+        },
+        "last_seen": {
+          "key": "x-sql-request-info.last_seen",
+          "object": "sql_request"
+        }
+      }
+    },
+    "groupProfileReference": {
+      "key": "network-traffic.x_anomalous_rpc_refs",
+      "object": "nt_session",
+      "references": [
+        "a_profile"
+      ],
+      "group_ref": true
+    },
+    "groupEventReference": {
+      "key": "network-traffic.x_ldap_event_refs",
+      "object": "nt_session",
+      "references": [
+        "ldap_event"
+      ],
+      "group_ref": true
+    },
+    "groupSQLReferences": {
+      "key": "network-traffic.x_sql_request_info_refs",
+      "object": "nt_session",
+      "references": [
+        "sql_request"
+      ],
+      "group_ref": true
+    },
+    "groupIocReference": {
+      "key": "x-ibm-finding.ioc_refs",
+      "object": "detection",
+      "references": [
+        "source_ip",
+        "dst_ip",
+        "origin_ip",
+        "target_domain",
+        "normal_host"
+      ],
+      "group_ref": true
+    }
+  },
+  "grouped_details_ex": {
+    "num_sessions": {
+      "key": "x-grouped-details.num_sessions",
+      "object": "group_detail"
+    },
+    "ja3_hashes": {
+      "key": "x-grouped-details.ja3_hashes",
+      "object": "group_detail"
+    },
+    "ja3s_hashes": {
+      "key": "x-grouped-details.ja3s_hashes",
+      "object": "group_detail"
+    },
+    "first_timestamp": {
+      "key": "x-grouped-details.start",
+      "object": "group_detail"
+    },
+    "last_timestamp": {
+      "key": "x-grouped-details.end",
+      "object": "group_detail"
+    },
+    "count": {
+      "key": "x-grouped-details.count",
+      "object": "group_detail"
+    },
+    "client_name": {
+      "key": "x-grouped-details.client_name",
+      "object": "group_detail"
+    },
+    "client_token": {
+      "key": "x-grouped-details.client_token",
+      "object": "group_detail"
+    },
+    "bytes_received": {
+      "key": "x-grouped-details.dst_byte_count",
+      "object": "group_detail",
+      "transformer": "ToInteger"
+    },
+    "bytes_sent": {
+      "key": "x-grouped-details.src_byte_count",
+      "object": "group_detail",
+      "transformer": "ToInteger"
+    },
+    "subnet": {
+      "key": "x-grouped-details.subnet",
+      "object": "group_detail"
+    },
+    "uuid": {
+      "key": "x-grouped-details.rpc_function_uuid",
+      "object": "group_detail"
+    },
+    "num_services_requested": {
+      "key": "x-grouped-details.num_services_requested",
+      "object": "group_detail"
+    },
+    "num_services_high_privilege": {
+      "key": "x-grouped-details.num_services_high_privilege",
+      "object": "group_detail"
+    },
+    "service_privilege": {
+      "key": "x-grouped-details.service_privilege",
+      "object": "group_detail"
+    },
+    "services_requested": {
+      "service": {
+        "key": "x-services-requested.service",
+        "object": "service"
+      },
+      "privilege": {
+        "key": "x-services-requested.privilege",
+        "object": "service"
+      },
+      "groupServiceReference": {
+        "key": "x-grouped-details.service_refs",
+        "object": "group_detail",
+        "references": [
+          "service"
+        ],
+        "group_ref": true
+      }
+    },
+    "dst_accounts": {
+      "uid": {
+        "key": "user-account.user_id",
+        "object": "dst_account"
+      },
+      "groupServiceReference": {
+        "key": "x-grouped-details.dst_account_refs",
+        "object": "group_detail",
+        "references": [
+          "dst_account"
+        ],
+        "group_ref": true
+      }
+    },
+    "dst_hosts": {
+      "protocol": {
+        "key": "network-traffic.protocols",
+        "object": "nt_host",
+        "group": true,
+        "transformer": "ToLowercaseArray"
+      },
+      "dst_port": {
+        "key": "network-traffic.dst_port",
+        "object": "nt_host",
+        "transformer": "ListToValue"
+      },
+      "dst_ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "nt_host",
+          "references": "dst_ip"
+        }
+      ],
+      "last_timestamp": [
+        {
+          "key": "network-traffic.end",
+          "object": "nt_host"
+        },
+        {
+          "key": "network-traffic.src_ref",
+          "object": "nt_host",
+          "references": "source_ip"
+        }
+      ],
+      "group_nt_Reference": {
+          "key": "x-grouped-details.host_network_refs",
+          "object": "group_detail",
+          "references": [
+              "nt_host"
+          ],
+          "group_ref": true
+        }
+    },
+    "events": {
+      "bytes_received": {
+        "key": "network-traffic.dst_byte_count",
+        "object": "event"
+      },
+      "bytes_sent": {
+        "key": "network-traffic.src_byte_count",
+        "object": "event"
+      },
+      "count": {
+        "key": "network-traffic.x_count",
+        "object": "event"
+      },
+      "dst_country": {
+        "key": "network-traffic.x_dst_country",
+        "object": "event"
+      },
+      "dst_ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "event",
+          "references": "dst_ip"
+        }
+      ],
+      "dst_ips": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip",
+          "unwrap": true
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_ip"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "event",
+          "references": "dst_ip"
+        }
+      ],
+      "dst_ports": {
+        "key": "network-traffic.dst_port",
+        "object": "event",
+        "transformer": "ListToValue"
+      },
+      "duration": {
+        "key": "network-traffic.x_time_duration",
+        "object": "event"
+      },
+      "error_code": {
+        "key": "network-traffic.x_error_code",
+        "object": "event"
+      },
+      "event_type": {
+        "key": "network-traffic.x_event_type",
+        "object": "event"
+      },
+      "first_timestamp": [
+        {
+          "key": "network-traffic.start",
+          "object": "event"
+        },
+        {
+          "key": "network-traffic.src_ref",
+          "object": "event",
+          "references": "source_ip"
+        }
+      ],
+      "http_method": {
+        "key": "network-traffic.extensions.http-request-ext.request_method",
+        "object": "event"
+      },
+      "is_normally_accessed_by_rdp": {
+        "key": "network-traffic.x_is_normally_accessed_by_rdp",
+        "object": "event"
+      },
+      "last_seen": {
+        "key": "network-traffic.end",
+        "object": "event"
+      },
+      "last_timestamp": {
+        "key": "network-traffic.end",
+        "object": "event"
+      },
+      "num_attempts": {
+        "key": "network-traffic.x_num_attempts",
+        "object": "event"
+      },
+      "protocol": {
+        "key": "network-traffic.protocols",
+        "object": "event",
+        "group": true,
+        "transformer": "ToLowercaseArray"
+      },
+      "referrer": {
+        "key": "network-traffic.x_nt_referrer",
+        "object": "event"
+      },
+      "request": {
+        "key": "network-traffic.extensions.http-request-ext.request_value",
+        "object": "event"
+      },
+      "response_code": {
+        "key": "network-traffic.extensions.http-request-ext.x_response_code",
+        "object": "event"
+      },
+      "target_domains": [
+        {
+          "key": "domain-name.value",
+          "object": "target_domain",
+          "unwrap": true
+        },
+        {
+          "key": "network-traffic.x_target_domain_refs",
+          "object": "event",
+          "references": ["target_domain"]
+        }
+      ],
+      "sessions": {
+        "app_protocol": {
+          "key": "network-traffic.protocols",
+          "object": "event_session",
+          "group": true,
+          "transformer": "ToLowercaseArray"
+        },
+        "bytes_received": {
+          "key": "network-traffic.dst_byte_count",
+          "object": "event_session"
+        },
+        "dst_ip": [
+          {
+            "key": "ipv4-addr.value",
+            "object": "dst_ip",
+            "unwrap": true
+          },
+          {
+            "key": "ipv6-addr.value",
+            "object": "dst_ip"
+          },
+          {
+            "key": "network-traffic.dst_ref",
+            "object": "event_session",
+            "references": "dst_ip"
+          }
+        ],
+        "dst_port": {
+          "key": "network-traffic.dst_port",
+          "object": "event_session"
+        },
+        "duration": {
+          "key": "network-traffic.x_time_duration",
+          "object": "event_session"
+        },
+        "first_timestamp": [
+          {
+            "key": "network-traffic.start",
+            "object": "event_session"
+          },
+          {
+            "key": "network-traffic.src_ref",
+            "object": "event_session",
+            "references": "source_ip"
+          }
+        ],
+        "protocol": {
+          "key": "network-traffic.protocols",
+          "object": "event_session",
+          "group": true,
+          "transformer": "ToLowercaseArray"
+        },
+        "groupSessionReference": {
+          "key": "network-traffic.x_session_refs",
+          "object": "event",
+          "references": [
+            "event_session"
+          ],
+          "group_ref": true
+        }
+      },
+      "target_summary": {
+        "app_protocol": {
+          "key": "network-traffic.protocols",
+          "object": "event",
+          "group": true,
+          "transformer": "ToLowercaseArray"
+        },
+        "bytes_sent": {
+          "key": "network-traffic.src_byte_count",
+          "object": "event"
+        },
+        "dst_port": {
+          "key": "network-traffic.dst_port",
+          "object": "event"
+        },
+        "first_timestamp": {
+          "key": "network-traffic.start",
+          "object": "event"
+        },
+        "last_timestamp": {
+          "key": "network-traffic.end",
+          "object": "event"
+        },
+        "protocol": {
+          "key": "network-traffic.protocols",
+          "object": "event",
+          "group": true,
+          "transformer": "ToLowercaseArray"
+        }
+      },
+      "url": {
+        "key": "url.value",
+        "object": "url"
+      },
+      "user_agent": {
+        "key": "network-traffic.extensions.http-request-ext.request_header.User-Agent",
+        "object": "event_session"
+      },
+      "groupEventReference": {
+          "key": "x-grouped-details.event_refs",
+          "object": "group_detail",
+          "references": [
+            "event"
+          ],
+          "group_ref": true
+        }
+    },
+    "sessions": {
+      "tunnel_type": {
+        "key": "network-traffic.x_tunnel_type",
+        "object": "session"
+      },
+      "protocol": {
+        "key": "network-traffic.protocols",
+        "object": "session",
+        "group": true,
+        "transformer": "ToLowercaseArray"
+      },
+      "app_protocol": {
+        "key": "network-traffic.protocols",
+        "object": "session",
+        "group": true,
+        "transformer": "ToLowercaseArray"
+      },
+      "dst_port": {
+        "key": "network-traffic.dst_port",
+        "object": "session",
+        "transformer": "ListToValue"
+      },
+      "dst_ip": [
+        {
+          "key": "ipv4-addr.value",
+          "object": "dst_ip",
+          "unwrap": true,
+          "transformer": "FilterIPv4List"
+        },
+        {
+          "key": "ipv6-addr.value",
+          "object": "dst_ip",
+          "unwrap": true,
+          "transformer": "FilterIPv6List"
+        },
+        {
+          "key": "network-traffic.dst_ref",
+          "object": "session",
+          "references": "dst_ip"
+        }
+      ],
+      "bytes_received": {
+        "key": "network-traffic.dst_byte_count",
+        "object": "session",
+        "transformer": "ToInteger"
+      },
+      "bytes_sent": {
+        "key": "network-traffic.src_byte_count",
+        "object": "session",
+        "transformer": "ToInteger"
+      },
+      "first_timestamp": [
+        {
+          "key": "network-traffic.start",
+          "object": "session"
+        },
+        {
+          "key": "network-traffic.src_ref",
+          "object": "session",
+          "references": "source_ip"
+        }
+      ],
+      "last_timestamp": {
+        "key": "network-traffic.end",
+        "object": "session"
+      },
+      "dst_geo": {
+        "key": "network-traffic.x_dst_geo",
+        "object": "session"
+      },
+      "dst_geo_lat": {
+        "key": "network-traffic.x_dst_geo_latitude",
+        "object": "session"
+      },
+      "dst_geo_lon": {
+        "key": "network-traffic.x_dst_geo_longitude",
+        "object": "session"
+      },
+      "groupSessionReference": {
+        "key": "x-grouped-details.session_refs",
+        "object": "group_detail",
+        "references": [
+          "session"
+        ],
+        "group_ref": true
+      }
+    },
+    "connection_events": {
+      "dst_port": {
+        "key": "network-traffic.dst_port",
+        "object": "con_event",
+        "transformer": "ListToValue"
+      },
+      "duration_int": {
+        "key": "network-traffic.x_time_duration",
+        "object": "con_event"
+      },
+      "first_timestamp": [
+        {
+          "key": "network-traffic.start",
+          "object": "con_event"
+        },
+        {
+          "key": "network-traffic.src_ref",
+          "object": "con_event",
+          "references": "source_ip"
+        }
+      ],
+      "last_timestamp": {
+        "key": "network-traffic.end",
+        "object": "con_event"
+      },
+      "is_external": {
+        "key": "network-traffic.x_is_external",
+        "object": "con_event"
+      },
+      "protocol": {
+        "key": "network-traffic.protocols",
+        "object": "con_event",
+        "group": true,
+        "transformer": "ToLowercaseArray"
+      },
+      "target_host": {
+        "dst_dns": [
+          {
+            "key": "domain-name.value",
+            "object": "dns_name"
+          },
+          {
+            "key": "domain-name.resolves_to_refs",
+            "object": "dns_name",
+            "references": ["dst_ip"]
+          }
+        ],
+        "ip": [
+          {
+            "key": "ipv4-addr.value",
+            "object": "dst_ip",
+            "unwrap": true,
+            "transformer": "FilterIPv4List"
+          },
+          {
+            "key": "ipv6-addr.value",
+            "object": "dst_ip",
+            "unwrap": true,
+            "transformer": "FilterIPv6List"
+          },
+          {
+            "key": "network-traffic.dst_ref",
+            "object": "con_event",
+            "references": "dst_ip"
+          }
+        ]
+      },
+      "total_bytes_rcvd": {
+        "key": "network-traffic.dst_byte_count",
+        "object": "con_event",
+        "transformer": "ToInteger"
+      },
+      "total_bytes_sent": {
+        "key": "network-traffic.src_byte_count",
+        "object": "con_event",
+        "transformer": "ToInteger"
+      },
+      "groupConEventsReference": {
+        "key": "x-grouped-details.connection_event_refs",
+        "object": "group_detail",
+        "references": [
+          "con_event"
+        ],
+        "group_ref": true
+      }
+    },
+    "groupIOCReference": {
+        "key": "x-ibm-finding.ioc_refs",
+        "object": "detection",
+        "references": [
+          "source_ip",
+          "target_domain",
+          "dst_ip"
+        ],
+        "group_ref": true
+      }
+  },
+  "grouped_details_info": {
+    "artifact": {
+      "key": "x-new-host-info.artifact",
+      "object": "new_host"
+    },
+    "via": {
+      "key": "x-new-host-info.via",
+      "object": "new_host"
+    },
+    "role": {
+      "key": "x-new-host-info.role",
+      "object": "new_host"
+    },
+    "last_timestamp": {
+      "key": "x-new-host-info.end",
+      "object": "new_host"
+    },
+    "groupNewHostReferences": {
+      "key": "x-ibm-finding.x_new_host_info_refs",
+      "object": "detection",
+      "references": [
+        "new_host"
+      ],
+      "group_ref": true
+    },
+    "groupIocReference": {
+      "key": "x-ibm-finding.ioc_refs",
+      "object": "detection",
+      "references": [
+        "source_ip"
+      ],
+      "group_ref": true
+    }
+  }
+}

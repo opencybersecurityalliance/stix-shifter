@@ -352,10 +352,11 @@ class TestGcpChronicleResultsToStix(unittest.TestCase):
         assert (os_obj['name'] == 'windows')
         assert (os_obj['version'] == 'windows 10')
 
-        url_ref = finding['extensions']['x-gcp-chronicle-security-result']['url_ref']
-        assert (url_ref in objects), f"url_ref with key " \
-                                     f"{finding['extensions']['x-gcp-chronicle-security-result']['url_ref']} not found"
-        url_obj = objects[url_ref]
+        url_refs = finding['extensions']['x-gcp-chronicle-security-result']['url_refs']
+        assert (url_refs[0] in objects), f"url_refs with key " \
+                                         f"{finding['extensions']['x-gcp-chronicle-security-result']['url_refs']}" \
+                                         f" not found"
+        url_obj = objects[url_refs[0]]
         assert (url_obj.keys() == {'type', 'value'})
         assert (url_obj['type'] == 'url')
         assert (url_obj['value'] == 'https://testurl.com')
@@ -631,12 +632,12 @@ class TestGcpChronicleResultsToStix(unittest.TestCase):
             assert (objects[to_obj]['type'] == 'email-addr')
             assert (objects[to_obj]['value'] == 'user2@iscgalaxy.com')
 
-        file_ref = email_obj['extensions']['x-gcp-chronicle-email-message']['file_ref']
-        assert (file_ref in objects), f"file_ref with key " \
-                                      f"{email_obj['extensions']['x-gcp-chronicle-email-message']['file_ref']} " \
-                                      f"not found"
-        assert (objects[file_ref].keys() == {'type', 'hashes', 'name', 'extensions'})
-        assert (objects[file_ref]['type'] == 'file')
+        file_refs = email_obj['extensions']['x-gcp-chronicle-email-message']['file_refs']
+        assert (file_refs[0] in objects), f"file_ref with key " \
+                                          f"{email_obj['extensions']['x-gcp-chronicle-email-message']['file_refs']} " \
+                                          f"not found"
+        assert (objects[file_refs[0]].keys() == {'type', 'hashes', 'name', 'extensions'})
+        assert (objects[file_refs[0]]['type'] == 'file')
 
     def test_registry_property(self):
         data = {

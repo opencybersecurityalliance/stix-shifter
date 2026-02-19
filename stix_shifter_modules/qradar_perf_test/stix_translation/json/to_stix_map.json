@@ -149,7 +149,6 @@
   "eventcount": [
     {
       "key": "number_observed",
-      "cybox": false,
       "transformer": "ToInteger"
     },
     {
@@ -166,8 +165,7 @@
   "starttime": [
     {
       "key": "first_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
+      "transformer": "EpochToTimestamp"
     },
     {
       "key": "x-ibm-finding.start",
@@ -178,8 +176,7 @@
   "endtime": [
     {
       "key": "last_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
+      "transformer": "EpochToTimestamp"
     },
     {
       "key": "x-ibm-finding.end",
@@ -768,7 +765,7 @@
   "EventID": {
     "key": "x-oca-event.code",
     "object": "event",
-    "transformer": "ToInteger"
+    "transformer": "ToString"
   },
   "ParentProcessId": [
     {

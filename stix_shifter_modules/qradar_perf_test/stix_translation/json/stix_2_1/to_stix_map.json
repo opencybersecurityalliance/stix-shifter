@@ -738,7 +738,7 @@
   "EventID": {
     "key": "x-oca-event.code",
     "object": "event",
-    "transformer": "ToInteger"
+    "transformer": "ToString"
   },
   "ParentProcessId": [
     {

@@ -480,7 +480,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "t'2021-10-27T00:00:00.000000Z' "
         result = translation.translate('gcp_chronicle', 'query', '{}', stix_pattern)
         assert result['success'] is False
-        assert "invalid_parameter" == result['code']
+        assert "translation_error" == result['code']
         assert 'Start time should be lesser than Stop time' in result['error']
 
     def test_invalid_email_address(self):

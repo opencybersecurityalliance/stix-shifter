@@ -2,8 +2,12 @@
 
 This is a connector for searching IBM Security Verify events. Connector uses stix-patterns and IBM event verify REST API to make a convert and execute the qurey.
 
+## Supported STIX Mappings
+
+See the [table of mappings](ibm_security_verify_supported_stix.md) for the STIX objects and operators supported by this connector.
+
 * To know more about IBM Security Verify API refer to the [API Reference](https://docs.verify.ibm.com/verify/reference/getallevents)
-* Connector uses the stix schema defined as per [stix-extension/stix2.0/x-oca-event](https://github.ibm.com/IBM-Security-STIX/stix-extensions/blob/verify/STIX%202.0/x-oca-event.md)
+* Connector uses the stix schema defined as per [stix-extension/stix2.0/x-oca-event](https://github.com/opencybersecurityalliance/stix-extensions/blob/main/2.0/x-oca-event.md)
 * Connector supports ` Equal, AND, IN ` stix operations
 * Possible event types are ` sso,authentication,management,risk,adaptive_risk `
 

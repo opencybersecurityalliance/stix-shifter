@@ -1,0 +1,13 @@
+{
+    "meta": {
+        "query_time": 1.94e-7,
+        "powered_by": "crowdstrike-api-gateway",
+        "trace_id": "9e24dfb7-4ccb-44ed-838b-d3699a5d2fab"
+    },
+    "errors": [
+        {
+            "code": 500,
+            "message": "Internal Server Error: Please provide trace-id='9e24dfb7-4ccb-44ed-838b-d3699a5d2fab' to support"
+        }
+    ]
+}

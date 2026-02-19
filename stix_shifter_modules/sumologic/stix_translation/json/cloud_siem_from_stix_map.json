@@ -1,0 +1,162 @@
+{
+  "ipv4-addr": {
+    "fields": {
+      "value": [
+        "device_ip",
+        "device_natIp",
+        "dns_replyIp",
+        "dstDevice_ip",
+        "srcDevice_ip",
+        "dstDevice_natIp",
+        "srcDevice_natIp"
+      ],
+      "resolves_to_ref.value": [
+        "srcDevice_mac",
+        "dstDevice_mac"
+      ]
+    }
+  },
+  "network-traffic": {
+    "fields": {
+      "dst_port": [
+        "dstPort"
+      ],
+      "src_port": [
+        "srcPort"
+      ],
+      "protocols": [
+        "ipProtocol"
+      ],
+      "dst_ref.value": [
+        "dstDevice_ip"
+      ],
+      "src_ref.value": [
+        "srcDevice_ip"
+      ]
+    }
+  },
+  "x-oca-event": {
+    "fields": {
+      "network_ref.src_ref.value": [
+        "srcDevice_ip"
+      ],
+      "network_ref.dst_ref.value": [
+        "dstDevice_ip"
+      ],
+      "process_ref.binary_ref.name": [
+        "baseImage"
+      ],
+      "process_ref.command_line": [
+        "commandLine"
+      ],
+      "parent_process_ref.binary_ref.name": [
+        "parentBaseImage"
+      ],
+      "user_ref.user_id": [
+        "user_username",
+        "user_username_raw"
+      ],
+      "code": [
+        "metadata_deviceEventId"
+      ]
+    }
+  },
+  "mac-addr": {
+    "fields": {
+      "value": [
+        "device_mac",
+        "srcDevice_mac",
+        "dstDevice_mac"
+      ]
+    }
+  },
+  "file": {
+    "fields": {
+      "name": [
+        "baseImage",
+        "parentBaseImage",
+        "file_basename",
+        "file_path"
+      ],
+      "parent_directory_ref.binary_ref.name": [
+        "baseImage",
+        "parentBaseImage"
+      ],
+      "hashes.SHA-256": [
+        "file_hash_sha256"
+      ],
+      "hashes.MD5": [
+        "file_hash_md5"
+      ],
+      "hashes.SHA-1": [
+        "file_hash_sha1"
+      ]
+    }
+  },
+  "directory": {
+    "fields": {
+      "path": [
+        "baseImage",
+        "parentBaseImage",
+        "file_path"
+      ]
+    }
+  },
+  "process": {
+    "fields": {
+      "binary_ref.name": [
+        "baseImage",
+        "parentBaseImage"
+      ],
+      "command_line": [
+        "commandLine"
+      ],
+      "parent_ref.binary_ref.name": [
+        "parentBaseImage"
+      ],
+      "creator_user_ref.user_id": [
+        "user_username",
+        "user_username_raw"
+      ]
+    }
+  },
+  "user-account": {
+    "fields": {
+      "user_id": [
+        "user_username",
+        "user_username_raw",
+        "fromUser_username",
+        "fromUser_username_raw"
+      ],
+      "display_name": [
+        "user_username",
+        "user_username_raw",
+        "fromUser_username",
+        "fromUser_username_raw"
+      ]
+    }
+  },
+  "domain-name": {
+    "fields": {
+      "value": [
+        "http_referer_fqdn",
+        "http_url_fqdn"
+      ]
+    }
+  },
+  "url": {
+    "fields": {
+      "value": [
+        "http_url"
+      ]
+    }
+  },
+  "email-addr": {
+    "fields": {
+      "value": [
+        "targetUser_email",
+        "user_email"
+      ]
+    }
+  }
+}

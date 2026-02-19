@@ -12,20 +12,16 @@
       "label": "Need additional help?",
       "description": "More details on the data source setting can be found in the specified link"
     },
-    "sni": {
-      "label": "Server Name Indicator",
-      "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
-    },
     "selfSignedCert": {
-      "label": "RHACS connection certificate",
-      "description": "Use self-signed SSL certificate or CA content(root and intermediate) of data source"
-    }
+      "label": "PEM Formatted SSL certificate(s)",
+      "description": "Provide a self-signed or CA-signed certificate to securely communicate with the data source."
+  }
   },
   "configuration": {
     "auth": {
       "token": {
-        "label": "API token",
-        "description": "Token with readonly access to the alert API"
+          "label": "API token",
+          "description": "Token with readonly access required for data source authentication"
       }
     }
   }

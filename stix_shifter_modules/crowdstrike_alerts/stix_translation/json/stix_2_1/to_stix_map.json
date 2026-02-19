@@ -1,0 +1,1231 @@
+{
+  "agent_id": {
+    "key": "x-crowdstrike.agent_id",
+    "object": "crowdstrike_object"
+  },
+  "aggregate_id": {
+    "key": "x-crowdstrike.aggregate_id",
+    "object": "crowdstrike_object"
+  },
+  "alleged_filetype": {
+    "key": "x-crowdstrike.alleged_filetype",
+    "object": "crowdstrike_object"
+  },
+  "child_process_ids": {
+    "key": "x-crowdstrike.child_process_ids",
+    "object": "crowdstrike_object"
+  },
+  "cid": {
+    "key": "x-crowdstrike.cid",
+    "object": "crowdstrike_object"
+  },
+  "cloud_indicator": {
+    "key": "x-crowdstrike.cloud_indicator",
+    "object": "crowdstrike_object"
+  },
+  "cmdline": [
+    {
+      "key": "process.command_line",
+      "object": "process_object"
+    },
+    {
+      "key": "x-oca-event.process_ref",
+      "object": "event_object",
+      "references": "process_object"
+    }
+  ],
+  "composite_id": {
+    "key": "x-crowdstrike.composite_id",
+    "object": "crowdstrike_object"
+  },
+  "confidence": {
+    "key": "x-crowdstrike.confidence",
+    "object": "crowdstrike_object"
+  },
+  "context_timestamp": {
+    "key": "x-crowdstrike.context_timestamp",
+    "object": "crowdstrike_object"
+  },
+  "control_graph_id": {
+    "key": "x-crowdstrike.control_graph_id",
+    "object": "crowdstrike_object"
+  },
+  "crawled_timestamp": {
+    "key": "x-crowdstrike.crawled_timestamp",
+    "object": "crowdstrike_object"
+  },
+  "created_timestamp": {
+    "key": "x-oca-event.created",
+    "object": "event_object"
+  },
+  "data_domains": {
+    "key": "x-crowdstrike.data_domains",
+    "object": "crowdstrike_object"
+  },
+  "description": {
+    "key": "x-oca-event.description",
+    "object": "event_object"
+  },
+  "device": {
+    "agent_load_flags": {
+      "key": "x-oca-asset.x_agent_load_flags",
+      "object": "host_object"
+    },
+    "agent_local_time": {
+      "key": "x-oca-asset.x_agent_local_time",
+      "object": "host_object"
+    },
+    "agent_version": {
+      "key": "x-oca-asset.x_agent_version",
+      "object": "host_object"
+    },
+    "bios_manufacturer": {
+      "key": "x-oca-asset.x_bios_manufacturer",
+      "object": "host_object"
+    },
+    "bios_version": {
+      "key": "x-oca-asset.x_bios_version",
+      "object": "host_object"
+    },
+    "cid": {
+      "key": "x-oca-asset.x_device_cid",
+      "object": "host_object"
+    },
+    "config_id_base": {
+      "key": "x-oca-asset.x_config_id_base",
+      "object": "host_object"
+    },
+    "config_id_build": {
+      "key": "x-oca-asset.x_config_id_build",
+      "object": "host_object"
+    },
+    "config_id_platform": {
+      "key": "x-oca-asset.x_config_id_platform",
+      "object": "host_object"
+    },
+    "device_id": {
+      "key": "x-oca-asset.device_id",
+      "object": "host_object"
+    },
+    "external_ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "external_ip_address"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host_object",
+        "references": [
+          "external_ip_address"
+        ],
+        "group": true
+      },
+      {
+        "key": "x-oca-event.ip_refs",
+        "object": "event_object",
+        "references": [
+          "external_ip_address"
+        ],
+        "group": true
+      }
+    ],
+    "first_seen": {
+      "key": "x-oca-asset.x_first_seen",
+      "object": "host_object"
+    },
+    "hostname": {
+      "key": "x-oca-asset.hostname",
+      "object": "host_object"
+    },
+    "instance_id": {
+      "key": "x-oca-asset.x_instance_id",
+      "object": "host_object"
+    },
+    "last_seen": {
+      "key": "x-oca-asset.x_last_seen",
+      "object": "host_object"
+    },
+    "local_ip": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "local_ip_address"
+      },
+      {
+        "key": "x-oca-asset.ip_refs",
+        "object": "host_object",
+        "references": [
+          "local_ip_address"
+        ],
+        "group": true
+      },
+      {
+        "key": "x-oca-event.ip_refs",
+        "object": "event_object",
+        "references": [
+          "local_ip_address"
+        ],
+        "group": true
+      }
+    ],
+    "mac_address": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac_object",
+        "transformer": "CrowdStrikeFormatMac"
+      },
+      {
+        "key": "x-oca-asset.mac_refs",
+        "object": "host_object",
+        "references": [
+          "mac_object"
+        ],
+        "group": true
+      }
+    ],
+    "major_version": {
+      "key": "x-oca-asset.x_major_version",
+      "object": "host_object"
+    },
+    "minor_version": {
+      "key": "x-oca-asset.x_minor_version",
+      "object": "host_object"
+    },
+    "modified_timestamp": {
+      "key": "x-oca-asset.x_modified_timestamp",
+      "object": "host_object"
+    },
+    "os_version": [
+      {
+        "key": "software.version",
+        "object": "software_object"
+      },
+      {
+        "key": "x-oca-asset.os_ref",
+        "object": "host_object",
+        "references": "software_object"
+      }
+    ],
+    "ou": {
+      "key": "x-oca-asset.x_device_ou",
+      "object": "host_object"
+    },
+    "platform_id": {
+      "key": "x-oca-asset.x_platform_id",
+      "object": "host_object"
+    },
+    "platform_name": [
+      {
+        "key": "software.name",
+        "object": "software_object"
+      }
+    ],
+    "pod_labels": {
+      "key": "x-oca-asset.x_pod_labels",
+      "object": "host_object"
+    },
+    "product_type": {
+      "key": "x-oca-asset.x_product_type",
+      "object": "host_object"
+    },
+    "product_type_desc": {
+      "key": "x-oca-asset.x_product_type_desc",
+      "object": "host_object"
+    },
+    "service_provider": {
+      "key": "x-oca-asset.x_service_provider",
+      "object": "host_object"
+    },
+    "service_provider_account_id": {
+      "key": "x-oca-asset.x_service_provider_account_id",
+      "object": "host_object"
+    },
+    "status": {
+      "key": "x-oca-asset.x_device_status",
+      "object": "host_object"
+    },
+    "system_manufacturer": {
+      "key": "x-oca-asset.x_system_manufacturer",
+      "object": "host_object"
+    },
+    "system_product_name": {
+      "key": "x-oca-asset.x_system_product_name",
+      "object": "host_object"
+    },
+    "hostinfo": {
+      "domain": {
+        "key": "url.value",
+        "object": "device_url_object"
+      }
+    }
+  },
+  "display_name": {
+    "key": "x-crowdstrike.display_name",
+    "object": "crowdstrike_object"
+  },
+  "email_sent": {
+    "key": "x-crowdstrike.email_sent",
+    "object": "crowdstrike_object"
+  },
+  "falcon_host_link": [
+    {
+      "key": "url.value",
+      "object": "url_object"
+    },
+    {
+      "key": "x-oca-event.url_ref",
+      "object": "event_object",
+      "references": "url_object"
+    }
+  ],
+  "filename": [
+    {
+      "key": "file.filename",
+      "object": "file_object"
+    },
+    {
+      "key": "process.name",
+      "object": "process_object"
+    },
+    {
+      "key": "process.image_ref",
+      "object": "process_object",
+      "references": "file_object"
+    },
+    {
+      "key": "x-oca-event.file_ref",
+      "object": "event_object",
+      "references": "file_object"
+    }
+  ],
+  "filepath": [
+    {
+      "key": "directory.path",
+      "object": "directory_object"
+    },
+    {
+      "key": "file.parent_directory_ref",
+      "object": "file_object",
+      "references": "directory_object"
+    }
+  ],
+  "global_prevalence": {
+    "key": "x-crowdstrike.global_prevalence",
+    "object": "crowdstrike_object"
+  },
+  "grandparent_details": {
+    "cmdline": [
+      {
+        "key": "process.command_line",
+        "object": "grandparent_process_object"
+      },
+      {
+        "key": "process.parent_process_ref",
+        "object": "parent_process_object",
+        "references": "grandparent_process_object"
+      }
+    ],
+    "filename": [
+      {
+        "key": "file.filename",
+        "object": "grandparent_file_object"
+      },
+      {
+        "key": "process.name",
+        "object": "grandparent_process_object"
+      },
+      {
+        "key": "process.image_ref",
+        "object": "grandparent_process_object",
+        "references": "grandparent_file_object"
+      }
+    ],
+    "filepath": [
+      {
+        "key": "directory.path",
+        "object": "grandparent_directory_object"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "grandparent_file_object",
+        "references": "grandparent_directory_object"
+      }
+    ],
+    "local_process_id": {
+      "key": "process.pid",
+      "object": "grandparent_process_object"
+    },
+    "md5": {
+      "key": "file.hashes.'MD5'",
+      "object": "grandparent_file_object"
+    },
+    "process_graph_id": {
+      "key": "x-crowdstrike.grandparent_process_graph_id",
+      "object": "crowdstrike_object"
+    },
+    "process_id": {
+      "key": "x-crowdstrike.grandparent_process_id",
+      "object": "crowdstrike_object"
+    },
+    "sha256": {
+      "key": "file.hashes.'SHA-256'",
+      "object": "grandparent_file_object"
+    },
+    "timestamp": [
+      {
+        "key": "file.atime",
+        "object": "grandparent_file_object"
+      },
+      {
+        "key": "process.created",
+        "object": "grandparent_process_object"
+      },
+      {
+        "key": "directory.atime",
+        "object": "grandparent_directory_object"
+      }
+    ],
+    "user_graph_id": {
+      "key": "x-crowdstrike.grandparent_user_graph_id",
+      "object": "crowdstrike_object"
+    },
+    "user_id": [
+      {
+        "key": "user-account.user_id",
+        "object": "grandparent_user_object"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "grandparent_process_object",
+        "references": "grandparent_user_object"
+      }
+    ],
+    "user_name": {
+      "key": "user-account.account_login",
+      "object": "grandparent_user_object"
+    }
+  },
+  "id": {
+    "key": "x-crowdstrike.id",
+    "object": "crowdstrike_object"
+  },
+  "indicator_id": {
+    "key": "x-crowdstrike.indicator_id",
+    "object": "crowdstrike_object"
+  },
+  "ioc_context": {
+    "key": "x-crowdstrike.ioc_context",
+    "object": "crowdstrike_object"
+  },
+  "ioc_values": {
+    "key": "x-crowdstrike.ioc_values",
+    "object": "crowdstrike_object"
+  },
+  "local_prevalence": {
+    "key": "x-crowdstrike.local_prevalence",
+    "object": "crowdstrike_object"
+  },
+  "local_process_id": {
+    "key": "process.pid",
+    "object": "process_object"
+  },
+  "logon_domain": {
+    "key": "x-crowdstrike.logon_domain",
+    "object": "crowdstrike_object"
+  },
+  "md5": {
+    "key": "file.hashes.'MD5'",
+    "object": "file_object"
+  },
+  "name": {
+    "key": "x-oca-event.action",
+    "object": "event_object"
+  },
+  "objective": {
+    "key": "x-crowdstrike.objective",
+    "object": "crowdstrike_object"
+  },
+  "parent_details": {
+    "cmdline": [
+      {
+        "key": "process.command_line",
+        "object": "parent_process_object"
+      },
+      {
+        "key": "process.parent_process_ref",
+        "object": "process_object",
+        "references": "parent_process_object"
+      }
+    ],
+    "filename": [
+      {
+        "key": "file.filename",
+        "object": "parent_file_object"
+      },
+      {
+        "key": "process.name",
+        "object": "parent_process_object"
+      },
+      {
+        "key": "process.image_ref",
+        "object": "parent_process_object",
+        "references": "parent_file_object"
+      }
+    ],
+    "filepath": [
+      {
+        "key": "directory.path",
+        "object": "parent_directory_object"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "parent_file_object",
+        "references": "parent_directory_object"
+      }
+    ],
+    "local_process_id": {
+      "key": "process.pid",
+      "object": "parent_process_object"
+    },
+    "md5": {
+      "key": "file.hashes.'MD5'",
+      "object": "parent_file_object"
+    },
+    "process_graph_id": {
+      "key": "x-crowdstrike.parent_process_graph_id",
+      "object": "crowdstrike_object"
+    },
+    "process_id": {
+      "key": "x-crowdstrike.process_id",
+      "object": "crowdstrike_object"
+    },
+    "sha256": {
+      "key": "file.hashes.'SHA-256'",
+      "object": "parent_file_object"
+    },
+    "timestamp": [
+      {
+        "key": "file.atime",
+        "object": "parent_file_object"
+      },
+      {
+        "key": "process.created",
+        "object": "parent_process_object"
+      },
+      {
+        "key": "directory.atime",
+        "object": "parent_directory_object"
+      }
+    ],
+    "user_graph_id": {
+      "key": "x-crowdstrike.parent_user_graph_id",
+      "object": "crowdstrike_object"
+    },
+    "user_id": [
+      {
+        "key": "user-account.user_id",
+        "object": "parent_user_object"
+      },
+      {
+        "key": "process.creator_user_ref",
+        "object": "parent_process_object",
+        "references": "parent_user_object"
+      }
+    ],
+    "user_name": {
+      "key": "user-account.account_login",
+      "object": "parent_user_object"
+    }
+  },
+  "parent_process_id": {
+    "key": "x-crowdstrike.parent_process_id",
+    "object": "crowdstrike_object"
+  },
+  "pattern_disposition": {
+    "key": "x-crowdstrike.pattern_disposition",
+    "object": "crowdstrike_object"
+  },
+  "pattern_disposition_description": {
+    "key": "x-crowdstrike.pattern_disposition_description",
+    "object": "crowdstrike_object"
+  },
+  "pattern_disposition_details": {
+    "blocking_unsupported_or_disabled": {
+      "key": "x-crowdstrike.blocking_unsupported_or_disabled",
+      "object": "crowdstrike_object"
+    },
+    "bootup_safeguard_enabled": {
+      "key": "x-crowdstrike.bootup_safeguard_enabled",
+      "object": "crowdstrike_object"
+    },
+    "critical_process_disabled": {
+      "key": "x-crowdstrike.critical_process_disabled",
+      "object": "crowdstrike_object"
+    },
+    "detect": {
+      "key": "x-crowdstrike.detect",
+      "object": "crowdstrike_object"
+    },
+    "fs_operation_blocked": {
+      "key": "x-crowdstrike.fs_operation_blocked",
+      "object": "crowdstrike_object"
+    },
+    "handle_operation_downgraded": {
+      "key": "x-crowdstrike.handle_operation_downgraded",
+      "object": "crowdstrike_object"
+    },
+    "inddet_mask": {
+      "key": "x-crowdstrike.inddet_mask",
+      "object": "crowdstrike_object"
+    },
+    "indicator": {
+      "key": "x-crowdstrike.indicator",
+      "object": "crowdstrike_object"
+    },
+    "kill_action_failed": {
+      "key": "x-crowdstrike.kill_action_failed",
+      "object": "crowdstrike_object"
+    },
+    "kill_parent": {
+      "key": "x-crowdstrike.kill_parent",
+      "object": "crowdstrike_object"
+    },
+    "kill_process": {
+      "key": "x-crowdstrike.kill_process",
+      "object": "crowdstrike_object"
+    },
+    "kill_subprocess": {
+      "key": "x-crowdstrike.kill_subprocess",
+      "object": "crowdstrike_object"
+    },
+    "operation_blocked": {
+      "key": "x-crowdstrike.operation_blocked",
+      "object": "crowdstrike_object"
+    },
+    "policy_disabled": {
+      "key": "x-crowdstrike.policy_disabled",
+      "object": "crowdstrike_object"
+    },
+    "process_blocked": {
+      "key": "x-crowdstrike.process_blocked",
+      "object": "crowdstrike_object"
+    },
+    "quarantine_file": {
+      "key": "x-crowdstrike.quarantine_file",
+      "object": "crowdstrike_object"
+    },
+    "quarantine_machine": {
+      "key": "x-crowdstrike.quarantine_machine",
+      "object": "crowdstrike_object"
+    },
+    "registry_operation_blocked": {
+      "key": "x-crowdstrike.registry_operation_blocked",
+      "object": "crowdstrike_object"
+    },
+    "rooting": {
+      "key": "x-crowdstrike.rooting",
+      "object": "crowdstrike_object"
+    },
+    "sensor_only": {
+      "key": "x-crowdstrike.sensor_only",
+      "object": "crowdstrike_object"
+    },
+    "suspend_parent": {
+      "key": "x-crowdstrike.suspend_parent",
+      "object": "crowdstrike_object"
+    },
+    "suspend_process": {
+      "key": "x-crowdstrike.suspend_process",
+      "object": "crowdstrike_object"
+    }
+  },
+  "pattern_id": {
+    "key": "x-crowdstrike.pattern_id",
+    "object": "crowdstrike_object"
+  },
+  "platform": {
+    "key": "software.name",
+    "object": "software_object"
+  },
+  "poly_id": {
+    "key": "x-crowdstrike.poly_id",
+    "object": "crowdstrike_object"
+  },
+  "process_id": {
+    "key": "x-crowdstrike.process_id",
+    "object": "crowdstrike_object"
+  },
+  "process_start_time": {
+    "key": "x-oca-event.start",
+    "object": "event_object"
+  },
+  "product": {},
+  "scenario": {
+    "key": "x-oca-event.category",
+    "object": "event_object"
+  },
+  "seconds_to_resolved": {
+    "key": "x-crowdstrike.seconds_to_resolved",
+    "object": "crowdstrike_object"
+  },
+  "seconds_to_triaged": {
+    "key": "x-crowdstrike.seconds_to_triaged",
+    "object": "crowdstrike_object"
+  },
+  "severity": {
+    "key": "x-oca-event.severity",
+    "object": "event_object"
+  },
+  "severity_name": {
+    "key": "x-oca-event.x_severity_name",
+    "object": "event_object"
+  },
+  "sha1": {
+    "key": "x-crowdstrike.sha1",
+    "object": "crowdstrike_object"
+  },
+  "sha256": {
+    "key": "file.hashes'.SHA-256'",
+    "object": "file_object"
+  },
+  "show_in_ui": {
+    "key": "x-crowdstrike.show_in_ui",
+    "object": "crowdstrike_object"
+  },
+  "source_products": {
+    "key": "x-crowdstrike.source_products",
+    "object": "crowdstrike_object"
+  },
+  "source_vendors": {
+    "key": "x-crowdstrike.source_vendors",
+    "object": "crowdstrike_object"
+  },
+  "status": {
+    "key": "x-crowdstrike.event_status",
+    "object": "crowdstrike_object"
+  },
+  "tactic": {
+    "key": "x-crowdstrike.tactic",
+    "object": "crowdstrike_object"
+  },
+  "tactic_id": {
+    "key": "x-crowdstrike.tactic_id",
+    "object": "crowdstrike_object"
+  },
+  "technique": {
+    "key": "x-crowdstrike.technique",
+    "object": "crowdstrike_object"
+  },
+  "technique_id": {
+    "key": "x-crowdstrike.technique_id",
+    "object": "crowdstrike_object"
+  },
+  "template_instance_id": {
+    "key": "x-crowdstrike.template_instance_id",
+    "object": "crowdstrike_object"
+  },
+  "timestamp": [
+    {
+      "key": "file.atime",
+      "object": "file_object"
+    },
+    {
+      "key": "process.created",
+      "object": "process_object"
+    },
+    {
+      "key": "directory.atime",
+      "object": "directory_object"
+    }
+  ],
+  "tree_id": {
+    "key": "x-crowdstrike.tree_id",
+    "object": "crowdstrike_object"
+  },
+  "tree_root": {
+    "key": "x-crowdstrike.tree_root",
+    "object": "crowdstrike_object"
+  },
+  "triggering_process_graph_id": {
+    "key": "x-crowdstrike.triggering_process_graph_id",
+    "object": "crowdstrike_object"
+  },
+  "type": {
+    "key": "x-crowdstrike.type",
+    "object": "crowdstrike_object"
+  },
+  "updated_timestamp": {
+    "key": "x-crowdstrike.updated_timestamp",
+    "object": "crowdstrike_object"
+  },
+  "user_id": [
+    {
+      "key": "user-account.user_id",
+      "object": "user_object"
+    },
+    {
+      "key": "process.creator_user_ref",
+      "object": "process_object",
+      "references": "user_object"
+    },
+    {
+      "key": "x-oca-event.user_ref",
+      "object": "event_object",
+      "references": "user_object"
+    }
+  ],
+  "user_name": {
+    "key": "user-account.account_login",
+    "object": "user_object"
+  },
+  "start_time_epoch": {
+    "key": "x-crowdstrike.incident_start_time_epoch",
+    "object": "crowdstrike_object"
+  },
+  "end_time_epoch": {
+    "key": "x-crowdstrike.incident_end_time_epoch",
+    "object": "crowdstrike_object"
+  },
+  "xdr_detection_id": {
+    "key": "x-crowdstrike.xdr_detection_id",
+    "object": "crowdstrike_object"
+  },
+  "xdr_pattern_id": {
+    "key": "x-crowdstrike.xdr_pattern_id",
+    "object": "crowdstrike_object"
+  },
+  "xdr_rule_id": {
+    "key": "x-crowdstrike.xdr_rule_id",
+    "object": "crowdstrike_object"
+  },
+  "xdr_type": {
+    "key": "x-crowdstrike.xdr_type",
+    "object": "crowdstrike_object"
+  },
+  "no_signal": {
+    "key": "x-crowdstrike.no_signal",
+    "object": "crowdstrike_object"
+  },
+  "entity_values": {
+    "key": "x-crowdstrike.entity_values",
+    "object": "crowdstrike_object"
+  },
+  "source_event_model": {
+    "key": "x-crowdstrike.source_event_model",
+    "object": "crowdstrike_object"
+  },
+  "has_script_or_module_ioc": {
+    "key": "x-crowdstrike.has_script_or_module_ioc",
+    "object": "crowdstrike_object"
+  },
+  "ioc_description": {
+    "key": "x-crowdstrike.ioc_description",
+    "object": "crowdstrike_object"
+  },
+  "ioc_source": {
+    "key": "x-crowdstrike.ioc_source",
+    "object": "crowdstrike_object"
+  },
+  "ioc_type": {
+    "key": "x-crowdstrike.ioc_type",
+    "object": "crowdstrike_object"
+  },
+  "ioc_value": {
+    "key": "x-crowdstrike.ioc_value",
+    "object": "crowdstrike_object"
+  },
+  "process_end_time": {
+    "key": "x-crowdstrike.process_end_time",
+    "object": "crowdstrike_object"
+  },
+  "agent_scan_id": {
+    "key": "x-crowdstrike.agent_scan_id",
+    "object": "crowdstrike_object"
+  },
+  "event_id": {
+    "key": "x-crowdstrike.event_id",
+    "object": "crowdstrike_object"
+  },
+  "quarantined": {
+    "key": "x-crowdstrike.quarantined",
+    "object": "crowdstrike_object"
+  },
+  "scan_id": {
+    "key": "x-crowdstrike.scan_id",
+    "object": "crowdstrike_object"
+  },
+  "os_name": [
+    {
+      "key": "software.name",
+      "object": "software_object"
+    },
+    {
+      "key": "x-oca-asset.os_ref",
+      "object": "host_object",
+      "references": "software_object"
+    }
+  ],
+  "incident": {
+    "classification": {
+      "key": "x-crowdstrike.incident",
+      "object": "crowdstrike_object"
+    },
+    "created_time": {
+      "key": "x-crowdstrike.incident_created_time",
+      "object": "crowdstrike_object"
+    },
+    "highest_score": {
+      "key": "x-crowdstrike.incident_highest_score",
+      "object": "crowdstrike_object"
+    },
+    "host_ids": {
+      "key": "x-crowdstrike.incident_host_ids",
+      "object": "crowdstrike_object"
+    },
+    "score": {
+      "key": "x-crowdstrike.incident_score",
+      "object": "crowdstrike_object"
+    },
+    "state": {
+      "key": "x-crowdstrike.incident_state",
+      "object": "crowdstrike_object"
+    },
+    "type": {
+      "key": "x-crowdstrike.incident_type",
+      "object": "crowdstrike_object"
+    },
+    "version": {
+      "key": "x-crowdstrike.incident_version",
+      "object": "crowdstrike_object"
+    },
+    "start_time": {
+      "key": "x-crowdstrike.incident_start_time",
+      "object": "crowdstrike_object"
+    },
+    "end_time": {
+      "key": "x-crowdstrike.incident_end_time",
+      "object": "crowdstrike_object"
+    },
+    "created": {
+      "key": "x-crowdstrike.incident_created",
+      "object": "crowdstrike_object"
+    },
+    "end": {
+      "key": "x-crowdstrike.incident_end",
+      "object": "crowdstrike_object"
+    },
+    "id": {
+      "key": "x-crowdstrike.incident_id",
+      "object": "crowdstrike_object"
+    },
+    "start": {
+      "key": "x-crowdstrike.incident_start",
+      "object": "crowdstrike_object"
+    }
+  },
+  "author": {
+    "key": "x-crowdstrike.author",
+    "object": "crowdstrike_object"
+  },
+  "start_time": {
+    "key": "x-crowdstrike.incident_start_time",
+    "object": "crowdstrike_object"
+  },
+  "end_time": {
+    "key": "x-crowdstrike.incident_end_time",
+    "object": "crowdstrike_object"
+  },
+  "references": {
+    "source_vertex_id": {
+      "key": "x-crowdstrike.source_vertex_id",
+      "object": "crowdstrike_object"
+    },
+    "source_vertex_type": {
+      "key": "x-crowdstrike.source_vertex_type",
+      "object": "crowdstrike_object"
+    },
+    "xdr_source_event_id": {
+      "key": "x-crowdstrike.xdr_source_event_id",
+      "object": "crowdstrike_object"
+    },
+    "indicator_alert_ids": {
+      "key": "x-crowdstrike.list_of_alert_ids",
+      "object": "crowdstrike_object"
+    },
+    "indicator_detection_ids": {
+      "key": "x-crowdstrike.list_of_detection_ids",
+      "object": "crowdstrike_object"
+    },
+    "indicator_vertex_ids": {
+      "key": "x-crowdstrike.list_of_vertex_ids",
+      "object": "crowdstrike_object"
+    },
+    "xdr_indicator_ids": {
+      "key": "x-crowdstrike.list_of_indicator_ids",
+      "object": "crowdstrike_object"
+    }
+  },
+  "entities": {
+    "agent_ids": {
+      "key": "x-crowdstrike.list_of_agent_ids",
+      "object": "crowdstrike_object"
+    },
+    "domain": {
+      "key": "x-crowdstrike.list_of_domains",
+      "object": "crowdstrike_object"
+    },
+    "file_name": {
+      "key": "x-crowdstrike.list_of_file_names",
+      "object": "crowdstrike_object"
+    },
+    "image_file_name": {
+      "key": "x-crowdstrike.list_of_image_file_names",
+      "object": "crowdstrike_object"
+    },
+    "ipv4": {
+      "key": "x-crowdstrike.list_of_ipv4",
+      "object": "crowdstrike_object"
+    },
+    "process": {
+      "key": "x-crowdstrike.list_of_processes",
+      "object": "crowdstrike_object"
+    },
+    "sha256": {
+      "key": "x-crowdstrike.list_of_sha256",
+      "object": "crowdstrike_object"
+    }
+  },
+  "tactic_ids": {
+    "key": "x-crowdstrike.list_of_tactic_ids",
+    "object": "crowdstrike_object"
+  },
+  "tactics": {
+    "key": "x-crowdstrike.list_of_tactics",
+    "object": "crowdstrike_object"
+  },
+  "technique_ids": {
+    "key": "x-crowdstrike.list_of_technique_ids",
+    "object": "crowdstrike_object"
+  },
+  "techniques": {
+    "key": "x-crowdstrike.list_of_techniques",
+    "object": "crowdstrike_object"
+  },
+  "documents_accessed": {
+    "filename": {
+      "key": "file.filename",
+      "object": "document_file_object"
+    },
+    "filepath": [
+      {
+        "key": "directory.path",
+        "object": "document_directory_object"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "document_file_object",
+        "references": "document_directory_object"
+      }
+    ],
+    "timestamp": [
+      {
+        "key": "file.atime",
+        "object": "document_file_object"
+      },
+      {
+        "key": "directory.atime",
+        "object": "document_directory_object"
+      }
+    ],
+    "groupReference": {
+      "key": "x-crowdstrike.documents_accessed",
+      "object": "crowdstrike_object",
+      "references": [
+        "document_file_object"
+      ],
+      "group_ref": true
+    }
+  },
+  "files_accessed": {
+    "filename": {
+      "key": "file.filename",
+      "object": "document_file_object"
+    },
+    "filepath": [
+      {
+        "key": "directory.path",
+        "object": "document_directory_object"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "document_file_object",
+        "references": "document_directory_object"
+      }
+    ],
+    "timestamp": [
+      {
+        "key": "file.atime",
+        "object": "document_file_object"
+      },
+      {
+        "key": "directory.atime",
+        "object": "document_directory_object"
+      }
+    ],
+    "groupReference": {
+      "key": "x-crowdstrike.files_accessed",
+      "object": "crowdstrike_object",
+      "references": [
+        "document_file_object"
+      ],
+      "group_ref": true
+    }
+  },
+  "executables_written": {
+    "filename": {
+      "key": "file.filename",
+      "object": "document_file_object"
+    },
+    "filepath": [
+      {
+        "key": "directory.path",
+        "object": "document_directory_object"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "document_file_object",
+        "references": "document_directory_object"
+      }
+    ],
+    "timestamp": [
+      {
+        "key": "file.atime",
+        "object": "document_file_object"
+      },
+      {
+        "key": "directory.atime",
+        "object": "document_directory_object"
+      }
+    ],
+    "groupReference": {
+      "key": "x-crowdstrike.executables_written",
+      "object": "crowdstrike_object",
+      "references": [
+        "document_file_object"
+      ],
+      "group_ref": true
+    }
+  },
+  "files_written": {
+    "filename": {
+      "key": "file.filename",
+      "object": "document_file_object"
+    },
+    "filepath": [
+      {
+        "key": "directory.path",
+        "object": "document_directory_object"
+      },
+      {
+        "key": "file.parent_directory_ref",
+        "object": "document_file_object",
+        "references": "document_directory_object"
+      }
+    ],
+    "timestamp": [
+      {
+        "key": "file.atime",
+        "object": "document_file_object"
+      },
+      {
+        "key": "directory.atime",
+        "object": "document_directory_object"
+      }
+    ],
+    "groupReference": {
+      "key": "x-crowdstrike.files_written",
+      "object": "crowdstrike_object",
+      "references": [
+        "document_file_object"
+      ],
+      "group_ref": true
+    }
+  },
+  "file_writes": {
+    "name": {
+      "key": "file.filename",
+      "object": "write_file_object"
+    },
+    "sha256": {
+      "key": "file.hashes.'SHA-256'",
+      "object": "write_file_object"
+    },
+    "groupReference": {
+      "key": "x-crowdstrike.file_writes",
+      "object": "crowdstrike_object",
+      "references": [
+        "write_file_object"
+      ],
+      "group_ref": true
+    }
+  },
+  "network_accesses": {
+    "access_timestamp": {
+      "key": "network-traffic.start",
+      "object": "network_object"
+    },
+    "access_type": {
+      "key": "network-traffic.x_access_type",
+      "object": "network_object"
+    },
+    "connection_direction": {
+      "key": "network-traffic.x_connection_direction",
+      "object": "network_object"
+    },
+    "isIPV6": {
+      "key": "network-traffic.x_network_isIPV6",
+      "object": "network_object"
+    },
+    "local_address": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "network_local_ip"
+      },
+      {
+        "key": "network-traffic.src_ref",
+        "object": "network_object",
+        "references": "network_local_ip"
+      }
+    ],
+    "local_port": {
+      "key": "network-traffic.src_port",
+      "object": "network_object"
+    },
+    "protocol": {
+      "key": "network-traffic.protocols",
+      "object": "network_object"
+    },
+    "remote_address": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "network_external_ip"
+      },
+      {
+        "key": "network-traffic.dst_ref",
+        "object": "network_object",
+        "references": "network_external_ip"
+      }
+    ],
+    "remote_port": {
+      "key": "network-traffic.dst_port",
+      "object": "network_object"
+    },
+    "groupReference": {
+      "key": "x-crowdstrike.network_objects",
+      "object": "crowdstrike_object",
+      "references": [
+        "network_object"
+      ],
+      "group_ref": true
+    }
+  }
+}

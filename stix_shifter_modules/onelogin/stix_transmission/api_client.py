@@ -1,11 +1,11 @@
 from onelogin.api.client import OneLoginClient
 
-
 class APIClient:
 
     def __init__(self, connection, configuration):
         auth = configuration.get('auth')
-        self.client = OneLoginClient(auth.get('clientId'), auth.get('clientSecret'), connection['region'])
+        self.timeout = connection['options'].get('timeout')
+        self.client = OneLoginClient(auth.get('clientId'), auth.get('clientSecret'), connection['region'], default_timeout=(10, self.timeout))
 
     def generate_token(self):
         """To generate the Token"""

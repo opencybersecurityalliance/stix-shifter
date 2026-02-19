@@ -114,8 +114,10 @@ class BaseQueryTranslator(object, metaclass=ABCMeta):
         unmapped_operator = stripped_parsing.get('unmapped_operator')
         if unmapped_stix:
             unmapped_stix_collection.extend(unmapped_stix)
+            self.logger.warn(f"The following STIX fields are not supported : {set(unmapped_stix_collection)} with dialect {self.dialect}. The request will ignore those fields. This can result in results that do not match the request.")
         if unmapped_operator:
             unmapped_operator_collection.extend(unmapped_operator)
+            self.logger.warn(f"The following STIX operators are not supported : {set(unmapped_operator_collection)} with dialect {self.dialect}. The request will ignore those fields. This can result in results that do not match the request.")
         if antlr_parsing:
             translated_queries = self.transform_antlr(data, antlr_parsing)
             if isinstance(translated_queries, str):

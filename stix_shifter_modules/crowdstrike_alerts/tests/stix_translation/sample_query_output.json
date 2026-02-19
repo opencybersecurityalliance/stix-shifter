@@ -1,0 +1,1387 @@
+[
+    {
+        "queries": [
+            "((filename:! '1.1.1.1',grandparent_details.filename:! '1.1.1.1',parent_details.filename:! '1.1.1.1',documents_accessed.filename:! '1.1.1.1',files_accessed.filename:! '1.1.1.1',executables_written.filename:! '1.1.1.1',files_written.filename:! '1.1.1.1',file_writes.name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((md5:! '1.1.1.1',grandparent_details.md5:! '1.1.1.1',parent_details.md5:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((sha256:! '1.1.1.1',grandparent_details.sha256:! '1.1.1.1',parent_details.sha256:! '1.1.1.1',file_writes.sha256:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((timestamp:! '1.1.1.1',grandparent_details.timestamp:! '1.1.1.1',parent_details.timestamp:! '1.1.1.1',documents_accessed.timestamp:! '1.1.1.1',files_accessed.timestamp:! '1.1.1.1',executables_written.timestamp:! '1.1.1.1',files_written.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filepath:! '1.1.1.1',grandparent_details.filepath:! '1.1.1.1',parent_details.filepath:! '1.1.1.1',documents_accessed.filepath:! '1.1.1.1',files_accessed.filepath:! '1.1.1.1',executables_written.filepath:! '1.1.1.1',files_written.filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((accessed:! '1.1.1.1',grandparent_details.accessed:! '1.1.1.1',parent_details.accessed:! '1.1.1.1',documents_accessed.timestamp:! '1.1.1.1',files_accessed.timestamp:! '1.1.1.1',executables_written.timestamp:! '1.1.1.1',files_written.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((accessed:! '1.1.1.1',grandparent_details.accessed:! '1.1.1.1',parent_details.accessed:! '1.1.1.1',documents_accessed.timestamp:! '1.1.1.1',files_accessed.timestamp:! '1.1.1.1',executables_written.timestamp:! '1.1.1.1',files_written.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filepath:! '1.1.1.1',grandparent_details.filepath:! '1.1.1.1',parent_details.filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((accessed:! '1.1.1.1',grandparent_details.accessed:! '1.1.1.1',parent_details.accessed:! '1.1.1.1',documents_accessed.timestamp:! '1.1.1.1',files_accessed.timestamp:! '1.1.1.1',executables_written.timestamp:! '1.1.1.1',files_written.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((cmdline:! '1.1.1.1',grandparent_details.cmdline:! '1.1.1.1',parent_details.cmdline:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((local_process_id:! '1.1.1.1',grandparent_details.local_process_id:! '1.1.1.1',parent_details.local_process_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filename:! '1.1.1.1',grandparent_details.filename:! '1.1.1.1',parent_details.filename:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filepath:! '1.1.1.1',grandparent_details.filepath:! '1.1.1.1',parent_details.filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((timestamp:! '1.1.1.1',grandparent_details.timestamp:! '1.1.1.1',parent_details.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((user_id:! '1.1.1.1',parent_details.user_id:! '1.1.1.1',grandparent_details.user_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((user_name:! '1.1.1.1',parent_details.user_name:! '1.1.1.1',grandparent_details.user_name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filename:! '1.1.1.1',grandparent_details.filename:! '1.1.1.1',parent_details.filename:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((timestamp:! '1.1.1.1',grandparent_details.timestamp:! '1.1.1.1',parent_details.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((md5:! '1.1.1.1',grandparent_details.md5:! '1.1.1.1',parent_details.md5:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((sha256:! '1.1.1.1',grandparent_details.sha256:! '1.1.1.1',parent_details.sha256:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filepath:! '1.1.1.1',grandparent_details.filepath:! '1.1.1.1',parent_details.filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((accessed:! '1.1.1.1',grandparent_details.accessed:! '1.1.1.1',parent_details.accessed:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.cmdline:! '1.1.1.1',parent_details.cmdline:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.local_process_id:! '1.1.1.1',parent_details.local_process_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.filename:! '1.1.1.1',parent_details.filename:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.filepath:! '1.1.1.1',parent_details.filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.timestamp:! '1.1.1.1',parent_details.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((parent_details.user_id:! '1.1.1.1',grandparent_details.user_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((parent_details.user_name:! '1.1.1.1',grandparent_details.user_name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.filename:! '1.1.1.1',parent_details.filename:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.timestamp:! '1.1.1.1',parent_details.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.md5:! '1.1.1.1',parent_details.md5:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.sha256:! '1.1.1.1',parent_details.sha256:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.filepath:! '1.1.1.1',parent_details.filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.accessed:! '1.1.1.1',parent_details.accessed:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((cmdline:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((local_process_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filename:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((user_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((user_name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filename:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((md5:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((sha256:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((accessed:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.cmdline:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.local_process_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.filename:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((parent_details.user_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((parent_details.user_name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.filename:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.md5:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.sha256:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.accessed:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((user_id:! '1.1.1.1',parent_details.user_id:! '1.1.1.1',grandparent_details.user_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((user_name:! '1.1.1.1',parent_details.user_name:! '1.1.1.1',grandparent_details.user_name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((falcon_host_link:! '1.1.1.1',device.hostinfo.domain:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((description:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((scenario:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((severity:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((severity_name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((created_timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((process_start_time:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((falcon_host_link:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filename:! '1.1.1.1',grandparent_details.filename:! '1.1.1.1',parent_details.filename:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((md5:! '1.1.1.1',grandparent_details.md5:! '1.1.1.1',parent_details.md5:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((sha256:! '1.1.1.1',grandparent_details.sha256:! '1.1.1.1',parent_details.sha256:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((timestamp:! '1.1.1.1',grandparent_details.timestamp:! '1.1.1.1',parent_details.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filepath:! '1.1.1.1',grandparent_details.filepath:! '1.1.1.1',parent_details.filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((accessed:! '1.1.1.1',grandparent_details.accessed:! '1.1.1.1',parent_details.accessed:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((logon_domain:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.external_ip:! '1.1.1.1',device.local_ip:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.external_ip:! '1.1.1.1',device.local_ip:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((user_id:! '1.1.1.1',parent_details.user_id:! '1.1.1.1',grandparent_details.user_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((user_name:! '1.1.1.1',parent_details.user_name:! '1.1.1.1',grandparent_details.user_name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((cmdline:! '1.1.1.1',grandparent_details.cmdline:! '1.1.1.1',parent_details.cmdline:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((local_process_id:! '1.1.1.1',grandparent_details.local_process_id:! '1.1.1.1',parent_details.local_process_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filename:! '1.1.1.1',grandparent_details.filename:! '1.1.1.1',parent_details.filename:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filepath:! '1.1.1.1',grandparent_details.filepath:! '1.1.1.1',parent_details.filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((timestamp:! '1.1.1.1',grandparent_details.timestamp:! '1.1.1.1',parent_details.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((user_id:! '1.1.1.1',parent_details.user_id:! '1.1.1.1',grandparent_details.user_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((user_name:! '1.1.1.1',parent_details.user_name:! '1.1.1.1',grandparent_details.user_name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filename:! '1.1.1.1',grandparent_details.filename:! '1.1.1.1',parent_details.filename:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((timestamp:! '1.1.1.1',grandparent_details.timestamp:! '1.1.1.1',parent_details.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((md5:! '1.1.1.1',grandparent_details.md5:! '1.1.1.1',parent_details.md5:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((sha256:! '1.1.1.1',grandparent_details.sha256:! '1.1.1.1',parent_details.sha256:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((filepath:! '1.1.1.1',grandparent_details.filepath:! '1.1.1.1',parent_details.filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((accessed:! '1.1.1.1',grandparent_details.accessed:! '1.1.1.1',parent_details.accessed:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.cmdline:! '1.1.1.1',parent_details.cmdline:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.local_process_id:! '1.1.1.1',parent_details.local_process_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.filename:! '1.1.1.1',parent_details.filename:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.filepath:! '1.1.1.1',parent_details.filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.timestamp:! '1.1.1.1',parent_details.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((parent_details.user_id:! '1.1.1.1',grandparent_details.user_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((parent_details.user_name:! '1.1.1.1',grandparent_details.user_name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.filename:! '1.1.1.1',parent_details.filename:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.timestamp:! '1.1.1.1',parent_details.timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.md5:! '1.1.1.1',parent_details.md5:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.sha256:! '1.1.1.1',parent_details.sha256:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.filepath:! '1.1.1.1',parent_details.filepath:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.accessed:! '1.1.1.1',parent_details.accessed:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.external_ip:! '1.1.1.1',device.local_ip:! '1.1.1.1',network_accesses.local_address:! '1.1.1.1',network_accesses.remote_address:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.external_ip:! '1.1.1.1',device.local_ip:! '1.1.1.1',network_accesses.local_address:! '1.1.1.1',network_accesses.remote_address:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((network_accesses.access_timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((network_accesses.access_type:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((network_accesses.connection_direction:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((network_accesses.isIPV6:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((network_accesses.src_port:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((network_accesses.protocol:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((network_accesses.remote_port:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.mac_address:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.os_version:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.platform_name:! '1.1.1.1',platform:! '1.1.1.1',os_name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.device_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.hostname:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.external_ip:! '1.1.1.1',device.local_ip:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.mac_address:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.os_version:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.platform_name:! '1.1.1.1',platform:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.agent_load_flags:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.agent_local_time:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.agent_version:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.bios_manufacturer:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.bios_version:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.cid:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.config_id_base:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.config_id_build:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.config_id_platform:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.first_seen:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.instance_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.last_seen:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.major_version:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.minor_version:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.modified_timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.ou:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.platform_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.pod_labels:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.product_type:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.product_type_desc:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.service_provider:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.service_provider_account_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.status:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.system_manufacturer:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((device.system_product_name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((agent_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((aggregate_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((alleged_filetype:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((author:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((child_process_ids:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((cid:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((cloud_indicator:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((composite_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((confidence:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((context_timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((control_graph_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((crawled_timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((data_domains:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((display_name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((email_sent:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((entity_values:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((status:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((global_prevalence:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.user_graph_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((start_time:! '1.1.1.1',incident.start_time:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((start_time_epoch:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((end_time:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((end_time_epoch:! '1.1.1.1',incident.end_time:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((indicator_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((ioc_context:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((ioc_description:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((ioc_source:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((ioc_type:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((ioc_value:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((ioc_values:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((local_prevalence:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((logon_domain:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((no_signal:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((objective:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((parent_process_id:! '1.1.1.1',parent_details.process_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((parent_details.user_graph_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_description:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((poly_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((parent_details.process_graph_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.process_graph_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((process_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((grandparent_details.process_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((scenario:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((sha1:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((seconds_to_resolved:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((seconds_to_triaged:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((show_in_ui:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((source_event_model:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((source_products:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((source_vendors:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((references.source_vertex_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((references.source_vertex_type:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((template_instance_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((tactic:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((tactic_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((technique:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((technique_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((tree_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((tree_root:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((triggering_process_graph_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((type:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((updated_timestamp:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((xdr_detection_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((xdr_pattern_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((xdr_rule_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((references.xdr_source_event_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((xdr_type:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((incident.classification:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((incident.created_time:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((incident.highest_score:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((incident.host_ids:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((incident.score:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((incident.state:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((incident.type:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((incident.version:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((incident.created:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((incident.end:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((incident.id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((incident.start:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((has_script_or_module_ioc:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((process_end_time:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((agent_scan_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((event_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((quarantined:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((scan_id:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((entities.agent_ids:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((refereneces.indicator_alert_ids:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((refereneces.indicator_detection_ids:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((refereneces.indicator_vertex_ids:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((refereneces.xdr_indicator_ids:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((tactic_ids:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((tactics:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((technique_ids:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((techniques:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((entities.domain:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((entities.file_name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((entities.image_file_name:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((entities.ipv4:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((entities.process:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((entities.sha256:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.blocking_unsupported_or_disabled:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.bootup_safeguard_enabled:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.critical_process_disabled:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.detect:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.handle_operation_downgraded:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.inddet_mask:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.indicator:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.fs_operation_blocked:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.kill_action_failed:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.kill_parent:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.kill_process:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.kill_subprocess:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.operation_blocked:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.policy_disabled:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.process_blocked:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.quarantine_file:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.quarantine_machine:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.registry_operation_blocked:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.rooting:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.sensor_only:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.suspend_parent:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    },
+    {
+        "queries": [
+            "((pattern_disposition_details.suspend_process:! '1.1.1.1') %2B (timestamp:>= '2024-05-01T11:00:00' %2B timestamp:<= '2024-05-31T11:54:00'))"
+        ]
+    }
+]

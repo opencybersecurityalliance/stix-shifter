@@ -1,0 +1,17 @@
+{
+    "meta": {
+        "query_time": 0.000427,
+        "writes": {
+            "resources_affected": 0
+        },
+        "powered_by": "detectsapi",
+        "trace_id": "c76d4cf6-4cae-4f28-a299-7e42b1ba52cd"
+    },
+    "errors": [
+        {
+            "code": 400,
+            "message": "limit must be greater than 1 and less than 10000"
+        }
+    ],
+    "resources": []
+}

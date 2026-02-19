@@ -1,0 +1,17 @@
+{
+    "meta": {
+        "query_time": 0.036283634,
+        "writes": {
+            "resources_affected": 0
+        },
+        "powered_by": "detectsapi",
+        "trace_id": "2177f26a-f0a6-4aed-ac29-53b368aa3e1e"
+    },
+    "errors": [
+        {
+            "code": 400,
+            "message": "failed to read and parse request"
+        }
+    ],
+    "resources": []
+}

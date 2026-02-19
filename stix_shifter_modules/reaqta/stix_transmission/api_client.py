@@ -1,5 +1,4 @@
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
-import requests
 from datetime import datetime, timedelta
 import json
 
@@ -17,8 +16,7 @@ class APIClient():
                                     connection.get('port'),
                                     self.headers,
                                     url_modifier_function=url_modifier_function,
-                                    cert_verify=connection.get('selfSignedCert', True),
-                                    sni=connection.get('sni', None)
+                                    cert_verify=connection.get('selfSignedCert')
                                     )
         self.timeout = connection['options'].get('timeout')
         self.app_id = auth['app_id']
@@ -43,7 +41,7 @@ class APIClient():
 
         body_data = {'query': search_id}
         
-        return await self.client.call_api(self.EVENT_ENDPOINT, 'POST', urldata=params, headers=self.headers, data=body_data)
+        return await self.client.call_api(self.EVENT_ENDPOINT, 'POST', urldata=params, headers=self.headers, data=body_data, timeout=self.timeout)
     
     async def page_search(self, search_id, next_page_url, length):
         params = dict()
@@ -58,7 +56,7 @@ class APIClient():
         page = next_page_url.split('?', maxsplit=1)[1]
         next_page_endpoint = self.EVENT_ENDPOINT + '?' + page
         
-        return await self.client.call_api(next_page_endpoint, 'POST', headers=self.headers, data=body_data)
+        return await self.client.call_api(next_page_endpoint, 'POST', headers=self.headers, data=body_data, timeout=self.timeout)
 
     async def get_token(self):
         auth_data = dict()
@@ -67,7 +65,7 @@ class APIClient():
         auth_data['secret'] = self.secret_key
 
         try:
-            response = await self.client.call_api(self.AUTH_ENDPOINT, 'POST', headers=self.headers, data=auth_data)
+            response = await self.client.call_api(self.AUTH_ENDPOINT, 'POST', headers=self.headers, data=auth_data, timeout=self.timeout)
             
             response_dict['code'] = response.code
             response_text = json.loads(response.read())

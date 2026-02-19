@@ -73,7 +73,21 @@
       "extensions.'x-reaqta-avdetection'.av_threat_info_array": ["antimalware.threatInfo"],
       "finding_type": ["antimalware.threatType", "eventType"],
       "name": ["antimalware.objectStatus"],
-      "src_ip_ref.value": ["ip"]
+      "src_ip_ref.value": ["ip"],
+      "ttp_tagging_refs": ["mitre.tactic", "mitre.technique"]
+    }
+  },
+  "x-ibm-ttp-tagging": {
+    "fields": {
+      "name": [
+        "mitre.technique"
+      ],
+      "extensions.'mitre-attack-ext'.tactic_name": [
+        "mitre.tactic"
+      ],
+      "extensions.'mitre-attack-ext'.technique_name": [
+        "mitre.technique"
+      ]
     }
   },
   "x-oca-asset": {
@@ -231,10 +245,8 @@
       "service_name": ["service.name"],
       "service_type": ["service.type"],
       "start_type": ["service.startType"],
-      "tactics": ["mitre.tactic"],
       "tags": ["eventdata.tag"],
       "task_name": ["task.name"],
-      "technique": ["mitre.technique"],
       "version": ["eventdata.version"]
     }
   },

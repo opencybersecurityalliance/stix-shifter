@@ -1,0 +1,228 @@
+{
+  "like_supported_fields": [
+    "envelopeRecipientfilterValue",
+    "envelopeSenderfilterValue",
+    "subjectfilterValue",
+    "domainNameValue",
+    "replyToValue",
+    "attachmentNameValue"
+  ],
+  "in_supported_fields": [
+    "contentFiltersDirection",
+    "quarantinedTo",
+    "urlCategories",
+    "advancedMalwareProtectionMailflowDirection",
+    "advancedMalwareProtection",
+    "macroMailflowDirection",
+    "macroFileTypesDetected",
+    "webInteractionTrackingMailflowDirection",
+    "mailPolicyDirection"
+  ],
+  "bool_supported_fields": [
+    "message_delivered",
+    "daneFailure",
+    "graymail",
+    "hardBounced",
+    "containedMaliciousUrls",
+    "containedNeutralUrls",
+    "inOutbreakQuarantine",
+    "softBounced",
+    "spamPositive",
+    "quarantinedAsSpam",
+    "suspectSpam",
+    "safeprintExt",
+    "virusPositive"
+  ],
+  "int_supported_fields": [
+    "ciscoMid",
+    "ipReputation",
+    "sdrCategories",
+    "sdrThreatLevels"
+  ],
+  "enum_supported_fields": [
+    "deliveryStatus",
+    "appForwarding",
+    "dlpViolationsSeverities",
+    "ciscoHost",
+    "appForwarding",
+    "dlpAction",
+    "dmarcAction",
+    "etfIocs",
+    "smime",
+    "quarantineStatus",
+    "contentFiltersDirection",
+    "contentFiltersAction",
+    "advancedMalwareProtectionMailflowDirection",
+    "advancedMalwareProtection",
+    "macroMailflowDirection",
+    "webInteractionTrackingMailflowDirection",
+    "mailPolicyDirection"
+  ],
+  "enum_supported_values": {
+    "deliveryStatus": [
+      "DELIVERED",
+      "DROPPED",
+      "ABORTED",
+      "BOUNCED"
+    ],
+    "appForwarding": [
+      "app_success",
+      "app_failed"
+    ],
+    "dlpViolationsSeverities": [
+      "critical",
+      "high",
+      "medium",
+      "low"
+    ],
+    "ciscoHost": [
+      "All_Hosts"
+    ],
+    "dlpAction": [
+      "delivered",
+      "encrypted",
+      "dropped"
+    ],
+    "dmarcAction": [
+      "none",
+      "quarantine",
+      "reject",
+      "passed",
+      "failed"
+    ],
+    "etfIocs": [
+      "file_hash",
+      "url",
+      "domain"
+    ],
+    "smime": [
+      "smime_successful",
+      "smime_failed"
+    ],
+    "quarantineStatus": [
+      "POLICY",
+      "AMP",
+      "AV",
+      "UNCLASSIFIED",
+      "DLP",
+      "OUTBREAK"
+    ],
+    "contentFiltersDirection": [
+      "inbound",
+      "outbound"
+    ],
+    "contentFiltersAction": [
+      "stopped"
+    ],
+    "advancedMalwareProtectionMailflowDirection": [
+      "incoming",
+      "outgoing"
+    ],
+    "advancedMalwareProtection": [
+      "amp_clean",
+      "amp_malicious",
+      "amp_unknown",
+      "amp_unscannable",
+      "amp_lowrisk"
+    ],
+    "macroMailflowDirection": [
+      "inbound",
+      "outbound"
+    ],
+    "webInteractionTrackingMailflowDirection": [
+      "inbound",
+      "outbound"
+    ],
+    "mailPolicyDirection": [
+      "inbound",
+      "outbound"
+    ]
+  },
+  "or_supported_values": [
+    "advancedMalwareProtectionMailflowDirection",
+    "advancedMalwareProtection",
+    "appForwarding",
+    "contentFiltersName",
+    "contentFiltersDirection",
+    "contentFiltersAction",
+    "daneFailure",
+    "deliveryStatus",
+    "message_delivered",
+    "dlpViolationsNames",
+    "dlp_violations_severities",
+    "dlpAction",
+    "dmarcFrom",
+    "dmarcAction",
+    "etfSources",
+    "etfIocs",
+    "forgedEmailDetection",
+    "geoLocation",
+    "graymail",
+    "hardBounced",
+    "ipReputation",
+    "macroMailflowDirection",
+    "macroFileTypesDetected",
+    "messageFilters",
+    "containedMaliciousUrls",
+    "containedNeutralUrls",
+    "outbreakFiltersUrlRewrittenByOf",
+    "outbreakFiltersVofThreatCategory",
+    "inOutbreakQuarantine",
+    "quarantinedTo",
+    "smime",
+    "sdrCategories",
+    "sdrReputation",
+    "softBounced",
+    "spamPositive",
+    "quarantinedAsSpam",
+    "quarantineStatus",
+    "threatName",
+    "suspectSpam",
+    "urlCategories",
+    "urlReputation",
+    "safeprintExt",
+    "virusPositive",
+    "webInteractionTrackingUrls",
+    "webInteractionTrackingMailflowDirection",
+    "mailPolicyName",
+    "mailPolicyDirection"
+  ],
+  "grouped_fields": {
+    "contentFiltersName": [
+      "contentFiltersDirection",
+      "contentFiltersAction"
+    ],
+    "contentFiltersDirection": [
+      "contentFiltersName",
+      "contentFiltersAction"
+    ],
+    "contentFiltersAction": [
+      "contentFiltersDirection",
+      "contentFiltersName"
+    ],
+    "advancedMalwareProtectionMailflowDirection": [
+      "advancedMalwareProtection"
+    ],
+    "advancedMalwareProtection": [
+      "advancedMalwareProtectionMailflowDirection"
+    ],
+    "macroMailflowDirection": [
+      "macroFileTypesDetected"
+    ],
+    "macroFileTypesDetected": [
+      "macroMailflowDirection"
+    ],
+    "webInteractionTrackingUrls": [
+      "webInteractionTrackingMailflowDirection"
+    ],
+    "webInteractionTrackingMailflowDirection": [
+      "webInteractionTrackingUrls"
+    ],
+    "mailPolicyDirection": [
+      "mailPolicyName"
+    ],
+    "mailPolicyName": [
+      "mailPolicyDirection"
+    ]
+  }
+}

@@ -6,7 +6,6 @@ from stix_shifter_utils.modules.base.stix_transmission.base_json_sync_connector 
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 from stix2matcher.matcher import Pattern
 from stix2matcher.matcher import MatchListener
-from stix2validator import validate_instance, ValidationOptions
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
 
@@ -89,12 +88,6 @@ class Connector(BaseJsonSyncConnector):
                 response_txt = response.read().decode('utf-8')
                 bundle = json.loads(response_txt)
 
-                if "stix_validator" in self.connection['options'] and self.connection['options'].get("stix_validator") is True:
-                    results = validate_instance(bundle, ValidationOptions(version=stix_version))
-
-                    if results.is_valid is not True:
-                        ErrorResponder.fill_error(return_obj,  message='Invalid Objects in STIX Bundle.', connector=self.connector)
-                        return return_obj
 
                 if is_stix_21:
                     observations = [bundle]

@@ -1,0 +1,15 @@
+{
+    "ComparisonExpressionOperators.And": "AND",
+    "ComparisonExpressionOperators.Or": "OR",
+    "ComparisonComparators.Equal": ":",
+    "ComparisonComparators.NotEqual": ":",
+    "ComparisonComparators.GreaterThan": ":{value TO *}",
+    "ComparisonComparators.LessThan": ":{* TO value}",
+    "ComparisonComparators.GreaterThanOrEqual": ":[value TO *}",
+    "ComparisonComparators.LessThanOrEqual": ":{* TO value]",
+    "ComparisonComparators.Like": ":value*",
+    "ComparisonComparators.Matches": ":/value/",
+    "ComparisonComparators.In": ":(value)",
+    "ObservationOperators.Or": "OR",
+    "ObservationOperators.And": "OR"
+}

@@ -1,0 +1,119 @@
+{
+  "srcaddr": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    },
+    {
+      "key": "x-ibm-finding.src_ip_ref",
+      "object": "ibm_finding",
+      "references": "src_ip"
+    },
+    {
+      "key": "ipv4-addr.x_aws_interface_id",
+      "object": "src_ip",
+      "ds_key": "interface_id"
+    },
+    {
+      "key": "ipv6-addr.x_aws_interface_id",
+      "object": "src_ip",
+      "ds_key": "interface_id"
+    }
+  ],
+  "dstaddr": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "ibm_finding",
+      "references": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    }
+  ],
+  "srcport": [
+    {
+      "key": "network-traffic.src_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    }
+  ],
+  "dstport": [
+    {
+      "key": "network-traffic.dst_port",
+      "object": "nt",
+      "transformer": "ToInteger"
+    }
+  ],
+  "protocol": [
+    {
+      "key": "network-traffic.protocols",
+      "object": "nt",
+      "transformer": "ToLowercaseArray"
+    }
+  ],
+  "starttime": [
+    {
+      "key": "network-traffic.start",
+      "object": "nt",
+      "transformer": "EpochSecondsToTimestamp"
+    },
+    {
+      "key": "x-ibm-finding.start",
+      "object": "ibm_finding",
+      "transformer": "EpochSecondsToTimestamp"
+    },
+    {
+      "key": "first_observed",
+      "transformer": "EpochSecondsToTimestamp"
+    }
+  ],
+  "endtime": [
+    {
+      "key": "network-traffic.end",
+      "object": "nt",
+      "transformer": "EpochSecondsToTimestamp"
+    },
+    {
+      "key": "x-ibm-finding.end",
+      "object": "ibm_finding",
+      "transformer": "EpochSecondsToTimestamp"
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "account": [
+    {
+      "key": "x-aws-details.account_id",
+      "object": "accountid"
+    }
+  ],
+  "action": {
+    "key": "x-ibm-finding.finding_type",
+    "object": "ibm_finding"
+  },
+  "name": {
+    "key": "x-ibm-finding.name",
+    "object": "ibm_finding"
+  }
+}

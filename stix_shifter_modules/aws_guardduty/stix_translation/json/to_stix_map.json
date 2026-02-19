@@ -1,0 +1,2417 @@
+{
+  "FindingType": {
+    "key": "x-ibm-finding.finding_type",
+    "object": "finding"
+  },
+  "AccountId": [
+    {
+      "key": "x-aws-resource.account_id",
+      "object": "resource"
+    },
+    {
+      "key": "x-ibm-finding.x_resource_ref",
+      "object": "finding",
+      "references": "resource"
+    }
+  ],
+  "Arn": {
+    "key": "x-ibm-finding.x_arn",
+    "object": "finding"
+  },
+  "Confidence": {
+    "key": "x-ibm-finding.confidence",
+    "object": "finding"
+  },
+  "CreatedAt": {
+    "key": "first_observed"
+  },
+  "Description": {
+    "key": "x-ibm-finding.description",
+    "object": "finding"
+  },
+  "Id": {
+    "key": "x-ibm-finding.alert_id",
+    "object": "finding"
+  },
+  "Partition": {
+    "key": "x-aws-resource.partition",
+    "object": "resource"
+  },
+  "Region": {
+    "key": "x-aws-resource.region",
+    "object": "resource"
+  },
+  "SchemaVersion": {
+    "key": "x-ibm-finding.x_schema_version",
+    "object": "finding"
+  },
+  "Severity": {
+    "key": "x-ibm-finding.severity",
+    "object": "finding"
+  },
+  "Title": {
+    "key": "x-ibm-finding.x_title",
+    "object": "finding"
+  },
+  "Type": {
+    "key": "x-ibm-finding.name",
+    "object": "finding"
+  },
+  "UpdatedAt": [
+    {
+      "key": "x-ibm-finding.time_observed",
+      "object": "finding"
+    },
+    {
+      "key": "last_observed"
+    }
+  ],
+  "Resource": {
+    "ResourceType": [
+      {
+        "key": "x-aws-resource.resource_type",
+        "object": "resource"
+      },
+      {
+        "key": "x-ibm-finding.x_resource_ref",
+        "object": "finding",
+        "references": "resource"
+      }
+    ],
+    "AccessKeyDetails": {
+      "AccessKeyId": {
+        "key": "user-account.x_access_key_id",
+        "object": "access_user"
+      },
+      "PrincipalId": [
+        {
+          "key": "user-account.user_id",
+          "object": "access_user"
+        },
+        {
+          "key": "x-aws-resource.access_key_ref",
+          "object": "resource",
+          "references": "access_user"
+        }
+      ],
+      "UserName": {
+        "key": "user-account.display_name",
+        "object": "access_user"
+      },
+      "UserType": {
+        "key": "user-account.x_user_type",
+        "object": "access_user"
+      }
+    },
+    "EbsVolumeDetails": {
+      "ScannedVolumeDetails": {
+        "DeviceName": {
+          "key": "x-aws-ebs-volume-scanned.device_name",
+          "object": "ebsvolume_scanned"
+        },
+        "EncryptionType": {
+          "key": "x-aws-ebs-volume-scanned.encryption_type",
+          "object": "ebsvolume_scanned"
+        },
+        "KmsKeyArn": {
+          "key": "x-aws-ebs-volume-scanned.kms_key_arn",
+          "object": "ebsvolume_scanned"
+        },
+        "SnapshotArn": {
+          "key": "x-aws-ebs-volume-scanned.snapshot_key_arn",
+          "object": "ebsvolume_scanned"
+        },
+        "VolumeArn": {
+          "key": "x-aws-ebs-volume-scanned.volume_arn",
+          "object": "ebsvolume_scanned"
+        },
+        "VolumeSizeInGB": {
+          "key": "x-aws-ebs-volume-scanned.volume_size",
+          "object": "ebsvolume_scanned"
+        },
+        "VolumeType": {
+          "key": "x-aws-ebs-volume-scanned.volume_type",
+          "object": "ebsvolume_scanned"
+        },
+        "GroupEbsVolumeScannedReferences": {
+          "key": "x-aws-resource.ebs_volume.scanned_refs",
+          "object": "resource",
+          "references": [
+            "ebsvolume_scanned"
+          ],
+          "group_ref": true
+        }
+      },
+      "SkippedVolumeDetails": {
+        "DeviceName": {
+          "key": "x-aws-ebs-volume-skipped.device_name",
+          "object": "ebsvolume_skipped"
+        },
+        "EncryptionType": {
+          "key": "x-aws-ebs-volume-skipped.encryption_type",
+          "object": "ebsvolume_skipped"
+        },
+        "KmsKeyArn": {
+          "key": "x-aws-ebs-volume-skipped.kms_key_arn",
+          "object": "ebsvolume_skipped"
+        },
+        "SnapshotArn": {
+          "key": "x-aws-ebs-volume-skipped.snapshot_key_arn",
+          "object": "ebsvolume_skipped"
+        },
+        "VolumeArn": {
+          "key": "x-aws-ebs-volume-skipped.volume_arn",
+          "object": "ebsvolume_skipped"
+        },
+        "VolumeSizeInGB": {
+          "key": "x-aws-ebs-volume-skipped.volume_size",
+          "object": "ebsvolume_skipped"
+        },
+        "VolumeType": {
+          "key": "x-aws-ebs-volume-skipped.volume_type",
+          "object": "ebsvolume_skipped"
+        },
+        "GroupEbsVolumeSkippedReferences": {
+          "key": "x-aws-resource.ebs_volume.skipped_refs",
+          "object": "resource",
+          "references": [
+            "ebsvolume_skipped"
+          ],
+          "group_ref": true
+        }
+      }
+    },
+    "ContainerDetails": {
+      "ContainerRuntime": {
+        "key": "x-aws-container.container_runtime",
+        "object": "container"
+      },
+      "Id": [
+        {
+          "key": "x-aws-container.container_id",
+          "object": "container"
+        },
+        {
+          "key": "x-aws-resource.standalone_container_ref",
+          "object": "resource",
+          "references": "container"
+        }
+      ],
+      "Image": {
+        "key": "x-aws-container.image",
+        "object": "container"
+      },
+      "ImagePrefix": {
+        "key": "x-aws-container.image_prefix",
+        "object": "container"
+      },
+      "Name": {
+        "key": "x-aws-container.name",
+        "object": "container"
+      },
+      "SecurityContext": {
+        "Privileged": {
+          "key": "x-aws-container.is_container_privileged",
+          "object": "container"
+        }
+      },
+      "VolumeMounts": {
+        "MountPath": {
+          "key": "x-aws-container-volume-mount.path",
+          "object": "container_volume_mount"
+        },
+        "Name": {
+          "key": "x-aws-container-volume-mount.name",
+          "object": "container_volume_mount"
+        },
+        "GroupContainerVolumeMountReferences": {
+          "key": "x-aws-container.volume_mount_refs",
+          "object": "container",
+          "references": [
+            "container_volume_mount"
+          ],
+          "group_ref": true
+        }
+      }
+    },
+    "EcsClusterDetails": {
+      "ActiveServicesCount": {
+        "key": "x-aws-ecs-cluster.active_services_count",
+        "object": "ecs_cluster"
+      },
+      "Arn": {
+        "key": "x-aws-ecs-cluster.cluster_arn",
+        "object": "ecs_cluster"
+      },
+      "Name": [
+        {
+          "key": "x-aws-ecs-cluster.name",
+          "object": "ecs_cluster"
+        },
+        {
+          "key": "x-aws-resource.ecs_cluster_ref",
+          "object": "resource",
+          "references": "ecs_cluster"
+        }
+      ],
+      "RegisteredContainerInstancesCount": {
+        "key": "x-aws-ecs-cluster.container_instances_registered_count",
+        "object": "ecs_cluster"
+      },
+      "RunningTasksCount": {
+        "key": "x-aws-ecs-cluster.running_tasks_count",
+        "object": "ecs_cluster"
+      },
+      "Status": {
+        "key": "x-aws-ecs-cluster.status",
+        "object": "ecs_cluster"
+      },
+      "Tags": {
+        "key": "x-aws-ecs-cluster.tags",
+        "object": "ecs_cluster"
+      },
+      "TaskDetails": {
+        "Arn": {
+          "key": "x-aws-ecs-cluster.task.arn",
+          "object": "ecs_cluster"
+        },
+        "Containers": {
+          "containerRuntime": {
+            "key": "x-aws-container.container_runtime",
+            "object": "ecs_cluster_container"
+          },
+          "Id": {
+            "key": "x-aws-container.container_id",
+            "object": "ecs_cluster_container"
+          },
+          "Image": {
+            "key": "x-aws-container.image",
+            "object": "ecs_cluster_container"
+          },
+          "ImagePrefix": {
+            "key": "x-aws-container.image_prefix",
+            "object": "ecs_cluster_container"
+          },
+          "Name": {
+            "key": "x-aws-container.name",
+            "object": "ecs_cluster_container"
+          },
+          "SecurityContext": {
+            "Privileged": {
+              "key": "x-aws-container.is_container_privileged",
+              "object": "ecs_cluster_container"
+            }
+          },
+          "VolumeMounts": {
+            "MountPath": {
+              "key": "x-aws-container-volume-mount.path",
+              "object": "ecs_cluster_container_volume_mount"
+            },
+            "Name": {
+              "key": "x-aws-container-volume-mount.name",
+              "object": "ecs_cluster_container_volume_mount"
+            },
+            "GroupContainerVolumeMountReferences": {
+              "key": "x-aws-container.volume_mount_refs",
+              "object": "ecs_cluster_container",
+              "references": [
+                "ecs_cluster_container_volume_mount"
+              ],
+              "group_ref": true
+            }
+          },
+          "GroupClusterContainerReferences": {
+            "key": "x-aws-ecs-cluster.task.container_refs",
+            "object": "ecs_cluster",
+            "references": [
+              "ecs_cluster_container"
+            ],
+            "group_ref": true
+          }
+        },
+        "DefinitionArn": {
+          "key": "x-aws-ecs-cluster.task.definition_arn",
+          "object": "ecs_cluster"
+        },
+        "Group": {
+          "key": "x-aws-ecs-cluster.task.group_name",
+          "object": "ecs_cluster"
+        },
+        "StartedAt": {
+          "key": "x-aws-ecs-cluster.task.started_at",
+          "object": "ecs_cluster",
+          "transformer": "FormatDateTimeObjectToTimestamp"
+        },
+        "StartedBy": {
+          "key": "x-aws-ecs-cluster.task.started_by",
+          "object": "ecs_cluster"
+        },
+        "Tags": {
+          "key": "x-aws-ecs-cluster.task.tags",
+          "object": "ecs_cluster"
+        },
+        "CreatedAt": {
+          "key": "x-aws-ecs-cluster.task.created_at",
+          "object": "ecs_cluster",
+          "transformer": "FormatDateTimeObjectToTimestamp"
+        },
+        "Version": {
+          "key": "x-aws-ecs-cluster.task.version",
+          "object": "ecs_cluster"
+        },
+        "Volumes": {
+          "key": "x-aws-ecs-cluster.task.volumes",
+          "object": "ecs_cluster"
+        }
+      }
+    },
+    "EksClusterDetails": {
+      "Arn": {
+        "key": "x-aws-eks-cluster.arn",
+        "object": "eks_cluster"
+      },
+      "CreatedAt": {
+        "key": "x-aws-eks-cluster.created_at",
+        "object": "eks_cluster",
+        "transformer": "FormatDateTimeObjectToTimestamp"
+      },
+      "Name": [
+        {
+          "key": "x-aws-eks-cluster.name",
+          "object": "eks_cluster"
+        },
+        {
+          "key": "x-aws-resource.eks_cluster_ref",
+          "object": "resource",
+          "references": "eks_cluster"
+        }
+      ],
+      "Status": {
+        "key": "x-aws-eks-cluster.status",
+        "object": "eks_cluster"
+      },
+      "Tags": {
+        "key": "x-aws-eks-cluster.tags",
+        "object": "eks_cluster"
+      },
+      "VpcId": {
+        "key": "x-aws-eks-cluster.vpc_id",
+        "object": "eks_cluster"
+      }
+    },
+    "InstanceDetails": {
+      "AvailabilityZone": {
+        "key": "x-aws-instance.availability_zone",
+        "object": "instance"
+      },
+      "IamInstanceProfile": {
+        "Arn": {
+          "key": "x-aws-instance.instance_arn",
+          "object": "instance"
+        },
+        "Id": {
+          "key": "x-aws-instance.profile_id",
+          "object": "instance"
+        }
+      },
+      "ImageDescription": {
+        "key": "x-aws-instance.image_description",
+        "object": "instance"
+      },
+      "ImageId": [
+        {
+          "key": "x-aws-instance.image_id",
+          "object": "instance"
+        },
+        {
+          "key": "x-aws-resource.instance_ref",
+          "object": "resource",
+          "references": "instance"
+        }
+      ],
+      "InstanceId": [
+        {
+          "key": "x-aws-instance.instance_id",
+          "object": "instance"
+        }
+      ],
+      "InstanceState": {
+        "key": "x-aws-instance.state",
+        "object": "instance"
+      },
+      "InstanceType": {
+        "key": "x-aws-instance.instance_type",
+        "object": "instance"
+      },
+      "LaunchTime": {
+        "key": "x-aws-instance.launch_time",
+        "object": "instance"
+      },
+      "NetworkInterfaces": {
+        "Ipv6Addresses": [
+          {
+            "key": "ipv6-addr.value",
+            "object": "src_ip_v6",
+            "unwrap": true,
+            "transformer": "FilterIPv6List"
+          },
+          {
+            "key": "x-aws-network-interface.ip_refs",
+            "object": "ni",
+            "references": [
+              "src_ip_v6"
+            ]
+          }
+        ],
+        "NetworkInterfaceId": {
+          "key": "x-aws-network-interface.interface_id",
+          "object": "ni"
+        },
+        "PrivateIpAddresses": {
+          "PrivateDnsName": {
+            "key": "domain-name.value",
+            "object": "instance_private_domain"
+          },
+          "PrivateIpAddress": [
+            {
+              "key": "ipv4-addr.value",
+              "object": "src_ip_private"
+            },
+            {
+              "key": "domain-name.resolves_to_refs",
+              "object": "instance_private_domain",
+              "references": [
+                "src_ip_private"
+              ]
+            }
+          ],
+          "GroupPrivateDomainReferences": {
+            "key": "x-aws-network-interface.private_domain_refs",
+            "object": "ni",
+            "references": [
+              "instance_private_domain"
+            ],
+            "group_ref": true
+          }
+        },
+        "PublicDnsName": [
+          {
+            "key": "domain-name.value",
+            "object": "instance_public_domain"
+          },
+          {
+            "key": "x-aws-network-interface.public_domain_ref",
+            "object": "ni",
+            "references": "instance_public_domain"
+          }
+        ],
+        "PublicIp": [
+          {
+            "key": "ipv4-addr.value",
+            "object": "src_ip_public"
+          },
+          {
+            "key": "domain-name.resolves_to_refs",
+            "object": "instance_public_domain",
+            "references": [
+              "src_ip_public"
+            ]
+          }
+        ],
+        "SecurityGroups": {
+          "key": "x-aws-network-interface.security_groups",
+          "object": "ni"
+        },
+        "SubnetId": {
+          "key": "x-aws-network-interface.subnet_id",
+          "object": "ni"
+        },
+        "VpcId": {
+          "key": "x-aws-network-interface.vpc_id",
+          "object": "ni"
+        },
+        "GroupNetworkInterfaceReferences": {
+          "key": "x-aws-instance.x_network_interface_refs",
+          "object": "instance",
+          "references": [
+            "ni"
+          ],
+          "group_ref": true
+        }
+      },
+      "OutpostArn": {
+        "key": "x-aws-instance.outpost_arn",
+        "object": "instance"
+      },
+      "Platform": [
+        {
+          "key": "software.name",
+          "object": "instance_software"
+        },
+        {
+          "key": "x-aws-instance.os_ref",
+          "object": "instance",
+          "references": "instance_software"
+        }
+      ],
+      "ProductCodes": {
+        "key": "x-aws-instance.product_codes",
+        "object": "instance"
+      },
+      "Tags": {
+        "key": "x-aws-instance.tags",
+        "object": "instance"
+      }
+    },
+    "KubernetesDetails": {
+      "KubernetesUserDetails": {
+        "Groups": {
+          "key": "user-account.x_groups",
+          "object": "kubernetes_user"
+        },
+        "SessionName": {
+          "key": "user-account.x_session_name",
+          "object": "kubernetes_user"
+        },
+        "Uid": [
+          {
+            "key": "user-account.user_id",
+            "object": "kubernetes_user"
+          },
+          {
+            "key": "x-aws-eks-cluster.kubernetes_user_ref",
+            "object": "eks_cluster",
+            "references": "kubernetes_user"
+          },
+          {
+            "key": "x-ibm-finding.src_application_user_ref",
+            "object": "finding",
+            "references": "kubernetes_user"
+          }
+        ],
+        "Username": [
+          {
+            "key": "user-account.display_name",
+            "object": "kubernetes_user"
+          },
+          {
+            "key": "x-aws-eks-cluster.kubernetes_user_ref",
+            "object": "eks_cluster",
+            "references": "kubernetes_user"
+          },
+          {
+            "key": "x-ibm-finding.src_application_user_ref",
+            "object": "finding",
+            "references": "kubernetes_user"
+          }
+        ]
+      },
+      "KubernetesWorkloadDetails": {
+        "Containers": {
+          "ContainerRuntime": {
+            "key": "x-aws-container.container_runtime",
+            "object": "kubernetes_container"
+          },
+          "Id": {
+            "key": "x-aws-container.container_id",
+            "object": "kubernetes_container"
+          },
+          "Image": {
+            "key": "x-aws-container.image",
+            "object": "kubernetes_container"
+          },
+          "ImagePrefix": {
+            "key": "x-aws-container.image_prefix",
+            "object": "kubernetes_container"
+          },
+          "Name": {
+            "key": "x-aws-container.name",
+            "object": "kubernetes_container"
+          },
+          "SecurityContext": {
+            "Privileged": {
+              "key": "x-aws-container.is_container_privileged",
+              "object": "kubernetes_container"
+            }
+          },
+          "VolumeMounts": {
+            "MountPath": {
+              "key": "x-aws-container-volume-mount.path",
+              "object": "kubernetes_container_volume_mount"
+            },
+            "Name": {
+              "key": "x-aws-container-volume-mount.name",
+              "object": "kubernetes_container_volume_mount"
+            },
+            "GroupContainerVolumeMountReferences": {
+              "key": "x-aws-container.volume_mount_refs",
+              "object": "kubernetes_container",
+              "references": [
+                "kubernetes_container_volume_mount"
+              ],
+              "group_ref": true
+            }
+          },
+          "GroupKubernetesContainerReferences": {
+            "key": "x-aws-kubernetes-workload.container_refs",
+            "object": "kubernetes",
+            "references": [
+              "kubernetes_container"
+            ],
+            "group_ref": true
+          }
+        },
+        "HostNetwork": {
+          "key": "x-aws-kubernetes-workload.is_enabled_host_network_for_pods",
+          "object": "kubernetes"
+        },
+        "Name": [
+          {
+            "key": "x-aws-kubernetes-workload.workload_name",
+            "object": "kubernetes"
+          },
+          {
+            "key": "x-aws-eks-cluster.kubernetes_workload_ref",
+            "object": "eks_cluster",
+            "references": "kubernetes"
+          }
+        ],
+        "Namespace": {
+          "key": "x-aws-kubernetes-workload.workload_namespace",
+          "object": "kubernetes"
+        },
+        "Type": {
+          "key": "x-aws-kubernetes-workload.workload_type",
+          "object": "kubernetes"
+        },
+        "Uid": {
+          "key": "x-aws-kubernetes-workload.workload_id",
+          "object": "kubernetes"
+        },
+        "Volumes": {
+          "key": "x-aws-kubernetes-workload.volumes",
+          "object": "kubernetes"
+        }
+      }
+    },
+    "RdsDbInstanceDetails": {
+      "DbClusterIdentifier": [
+        {
+          "key": "x-aws-rds-db-instance.cluster_id",
+          "object": "rds_db"
+        },
+        {
+          "key": "x-aws-resource.rds_database_ref",
+          "object": "resource",
+          "references": "rds_db"
+        }
+      ],
+      "DbInstanceArn": {
+        "key": "x-aws-rds-db-instance.instance_arn",
+        "object": "rds_db"
+      },
+      "DbInstanceIdentifier": [
+        {
+          "key": "x-aws-rds-db-instance.instance_id",
+          "object": "rds_db"
+        },
+        {
+          "key": "x-aws-resource.rds_database_ref",
+          "object": "resource",
+          "references": "rds_db"
+        }
+      ],
+      "Engine": {
+        "key": "x-aws-rds-db-instance.engine",
+        "object": "rds_db"
+      },
+      "EngineVersion": {
+        "key": "x-aws-rds-db-instance.engine_version",
+        "object": "rds_db"
+      },
+      "Tags": {
+        "key": "x-aws-rds-db-instance.tags",
+        "object": "rds_db"
+      }
+    },
+    "RdsDbUserDetails": {
+      "Application": [
+        {
+          "key": "x-aws-rds-db-user.application_name",
+          "object": "rds_db_user"
+        },
+        {
+          "key": "x-aws-rds-db-instance.anomalous_login_user_ref",
+          "object": "rds_db",
+          "references": "rds_db_user"
+        }
+      ],
+      "AuthMethod": [
+        {
+          "key": "x-aws-rds-db-user.authentication_method",
+          "object": "rds_db_user"
+        },
+        {
+          "key": "x-aws-rds-db-instance.anomalous_login_user_ref",
+          "object": "rds_db",
+          "references": "rds_db_user"
+        }
+      ],
+      "Database": [
+        {
+          "key": "x-aws-rds-db-user.database_name",
+          "object": "rds_db_user"
+        },
+        {
+          "key": "x-aws-rds-db-instance.anomalous_login_user_ref",
+          "object": "rds_db",
+          "references": "rds_db_user"
+        }
+      ],
+      "Ssl": [
+        {
+          "key": "x-aws-rds-db-user.ssl",
+          "object": "rds_db_user"
+        },
+        {
+          "key": "x-aws-rds-db-instance.anomalous_login_user_ref",
+          "object": "rds_db",
+          "references": "rds_db_user"
+        }
+      ],
+      "User": [
+        {
+          "key": "x-aws-rds-db-user.user_name",
+          "object": "rds_db_user"
+        },
+        {
+          "key": "x-aws-rds-db-instance.anomalous_login_user_ref",
+          "object": "rds_db",
+          "references": "rds_db_user"
+        }
+      ]
+    },
+    "S3BucketDetails": {
+      "Arn": {
+        "key": "x-aws-s3-bucket.arn",
+        "object": "s3"
+      },
+      "CreatedAt": {
+        "key": "x-aws-s3-bucket.created_at",
+        "object": "s3",
+        "transformer": "FormatDateTimeObjectToTimestamp"
+      },
+      "DefaultServerSideEncryption": {
+        "EncryptionType": {
+          "key": "x-aws-s3-bucket.server_side_encryption_type",
+          "object": "s3"
+        },
+        "KmsMasterKeyArn": {
+          "key": "x-aws-s3-bucket.kms_encryption_key_arn",
+          "object": "s3"
+        }
+      },
+      "Name": {
+        "key": "x-aws-s3-bucket.name",
+        "object": "s3"
+      },
+      "Owner": {
+        "Id": {
+          "key": "x-aws-s3-bucket.canonical_id_of_bucket_owner",
+          "object": "s3"
+        }
+      },
+      "PublicAccess": {
+        "EffectivePermission": {
+          "key": "x-aws-s3-bucket.bucket_permission",
+          "object": "s3"
+        },
+        "PermissionConfiguration": {
+          "AccountLevelPermissions": {
+            "BlockPublicAccess": {
+              "BlockPublicAcls": {
+                "key": "x-aws-s3-bucket.permissions.account_level.block_public_acls",
+                "object": "s3"
+              },
+              "BlockPublicPolicy": {
+                "key": "x-aws-s3-bucket.permissions.account_level.block_public_policy",
+                "object": "s3"
+              },
+              "IgnorePublicAcls": {
+                "key": "x-aws-s3-bucket.permissions.account_level.ignore_public_acls",
+                "object": "s3"
+              },
+              "RestrictPublicBuckets": {
+                "key": "x-aws-s3-bucket.permissions.account_level.restrict_public_buckets",
+                "object": "s3"
+              }
+            }
+          },
+          "BucketLevelPermissions": {
+            "AccessControlList": {
+              "AllowsPublicReadAccess": {
+                "key": "x-aws-s3-bucket.permissions.bucket_level.access_control_policies.allows_public_read_access",
+                "object": "s3"
+              },
+              "AllowsPublicWriteAccess": {
+                "key": "x-aws-s3-bucket.permissions.bucket_level.access_control_policies.allows_public_write_access",
+                "object": "s3"
+              }
+            },
+            "BlockPublicAccess": {
+              "BlockPublicAcls": {
+                "key": "x-aws-s3-bucket.permissions.bucket_level.block_public_access_settings.block_public_acls",
+                "object": "s3"
+              },
+              "BlockPublicPolicy": {
+                "key": "x-aws-s3-bucket.permissions.bucket_level.block_public_access_settings.block_public_policy",
+                "object": "s3"
+              },
+              "IgnorePublicAcls": {
+                "key": "x-aws-s3-bucket.permissions.bucket_level.block_public_access_settings.ignore_public_acls",
+                "object": "s3"
+              },
+              "RestrictPublicBuckets": {
+                "key": "x-aws-s3-bucket.permissions.bucket_level.block_public_access_settings.restrict_public_buckets",
+                "object": "s3"
+              }
+            },
+            "BucketPolicy": {
+              "AllowsPublicReadAccess": {
+                "key": "x-aws-s3-bucket.permissions.bucket_level.bucket_policies.allows_public_read_access",
+                "object": "s3"
+              },
+              "AllowsPublicWriteAccess": {
+                "key": "x-aws-s3-bucket.permissions.bucket_level.bucket_policies.allows_public_write_access",
+                "object": "s3"
+              }
+            }
+          }
+        }
+      },
+      "Tags": {
+        "key": "x-aws-s3-bucket.tags",
+        "object": "s3"
+      },
+      "Type": {
+        "key": "x-aws-s3-bucket.bucket_type",
+        "object": "s3"
+      },
+      "GroupS3BucketReferences": {
+        "key": "x-aws-resource.s3_bucket_refs",
+        "object": "resource",
+        "references": [
+          "s3"
+        ],
+        "group_ref": true
+      }
+    },
+    "LambdaDetails": {
+      "Description": {
+        "key": "x-aws-lambda.description",
+        "object": "lambda"
+      },
+      "FunctionArn": {
+        "key": "x-aws-lambda.function_arn",
+        "object": "lambda"
+      },
+      "FunctionName": [
+        {
+          "key": "x-aws-lambda.function_name",
+          "object": "lambda"
+        },
+        {
+          "key": "x-aws-resource.lambda_details_ref",
+          "object": "resource",
+          "references": "lambda"
+        }
+      ],
+      "FunctionVersion": {
+        "key": "x-aws-lambda.function_version",
+        "object": "lambda"
+      },
+      "LastModifiedAt": {
+        "key": "x-aws-lambda.last_modified_at",
+        "object": "lambda",
+        "transformer": "FormatDateTimeObjectToTimestamp"
+      },
+      "RevisionId": {
+        "key": "x-aws-lambda.revision_id",
+        "object": "lambda"
+      },
+      "Role": {
+        "key": "x-aws-lambda.execution_role",
+        "object": "lambda"
+      },
+      "Tags": {
+        "key": "x-aws-lambda.tags",
+        "object": "lambda"
+      },
+      "VpcConfig": {
+        "securityGroups": {
+          "key": "x-aws-lambda.security_groups",
+          "object": "lambda"
+        },
+        "SubnetIds": {
+          "key": "x-aws-lambda.subnet_ids",
+          "object": "lambda"
+        },
+        "VpcId": {
+          "key": "x-aws-lambda.amazon_vpc_id",
+          "object": "lambda"
+        }
+      }
+    }
+  },
+  "Service": {
+    "Action": {
+      "ActionType": [
+        {
+          "key": "x-aws-finding-service.action.action_type",
+          "object": "service_action"
+        },
+        {
+          "key": "x-ibm-finding.x_service_ref",
+          "object": "finding",
+          "references": "service_action"
+        }
+      ],
+      "DnsRequestAction": {
+        "Blocked": {
+          "key": "network-traffic.x_is_target_port_blocked",
+          "object": "nt"
+        },
+        "Domain": [
+          {
+            "key": "domain-name.value",
+            "object": "dns_req_domain"
+          },
+          {
+            "key": "network-traffic.src_ref",
+            "object": "nt",
+            "references": "dns_req_domain"
+          }
+        ],
+        "Protocol": [
+          {
+            "key": "network-traffic.protocols",
+            "object": "nt",
+            "transformer": "ToLowercaseArray"
+          },
+          {
+            "key": "x-aws-finding-service.action.network_ref",
+            "object": "service_action",
+            "references": "nt"
+          }
+        ]
+      },
+      "PortProbeAction": {
+        "Blocked": {
+          "key": "x-aws-finding-service.action.is_port_probe_blocked",
+          "object": "service_action"
+        },
+        "PortProbeDetails": {
+          "LocalIpDetails": {
+            "IpAddressV4": [
+              {
+                "key": "ipv4-addr.value",
+                "object": "port_probe_src_ip"
+              },
+              {
+                "key": "network-traffic.src_ref",
+                "object": "nt",
+                "references": "port_probe_src_ip"
+              }
+            ]
+          },
+          "LocalPortDetails": {
+            "Port": {
+              "key": "network-traffic.src_port",
+              "object": "nt"
+            },
+            "PortName": {
+              "key": "network-traffic.protocols",
+              "object": "nt",
+              "transformer": "ToLowercaseArray"
+            }
+          },
+          "RemoteIpDetails": {
+            "IpAddressV4": [
+              {
+                "key": "ipv4-addr.value",
+                "object": "dst_ip"
+              },
+              {
+                "key": "network-traffic.dst_ref",
+                "object": "nt",
+                "references": "dst_ip"
+              }
+            ],
+            "Organization": {
+              "AsnOrg": {
+                "key": "autonomous-system.name",
+                "object": "as"
+              },
+              "Asn": [
+                {
+                  "key": "autonomous-system.number",
+                  "object": "as",
+                  "transformer": "ToInteger"
+                },
+                {
+                  "key": "ipv4-addr.belongs_to_refs",
+                  "object": "dst_ip",
+                  "references": [
+                    "as"
+                  ]
+                }
+              ],
+              "Isp": {
+                "key": "autonomous-system.x_isp",
+                "object": "as"
+              },
+              "Org": {
+                "key": "autonomous-system.x_organisation",
+                "object": "as"
+              }
+            },
+            "Country": {
+              "CountryCode": {
+                "key": "x-oca-geo.country_iso_code",
+                "object": "remote_geo"
+              },
+              "CountryName": [
+                {
+                  "key": "x-oca-geo.country_name",
+                  "object": "remote_geo"
+                },
+                {
+                  "key": "ipv4-addr.x_geo_ref",
+                  "object": "dst_ip",
+                  "references": "remote_geo"
+                }
+              ]
+            },
+            "City": {
+              "CityName": {
+                "key": "x-oca-geo.city_name",
+                "object": "remote_geo"
+              }
+            },
+            "GeoLocation": {
+              "key": "x-oca-geo.location",
+              "object": "remote_geo"
+            }
+          },
+          "GroupPortProbeDetailsReferences": {
+            "key": "x-aws-finding-service.action.network_refs",
+            "object": "service_action",
+            "references": [
+              "nt"
+            ],
+            "group_ref": true
+          }
+        }
+      },
+      "AwsApiCallAction": {
+        "AffectedResources": {
+          "key": "x-aws-finding-service.action.affected_resources",
+          "object": "service_action"
+        },
+        "Api": [
+          {
+            "key": "x-aws-finding-service.action.api_called",
+            "object": "service_action"
+          },
+          {
+            "key": "x-ibm-finding.x_service_ref",
+            "object": "finding",
+            "references": "service_action"
+          }
+        ],
+        "CallerType": {
+          "key": "x-aws-finding-service.action.caller_type",
+          "object": "service_action"
+        },
+        "DomainDetails": {
+          "Domain": [
+            {
+              "key": "domain-name.value",
+              "object": "aws_call_domain"
+            },
+            {
+              "key": "x-aws-finding-service.action.domain_ref",
+              "object": "service_action",
+              "references": "aws_call_domain"
+            }
+          ]
+        },
+        "ErrorCode": {
+          "key": "x-aws-finding-service.action.error_code",
+          "object": "service_action"
+        },
+        "ServiceName": {
+          "key": "x-aws-finding-service.action.service_name",
+          "object": "service_action"
+        },
+        "UserAgent": [
+          {
+            "key": "software.name",
+            "object": "api_call_software"
+          },
+          {
+            "key": "x-aws-finding-service.action.software_ref",
+            "object": "service_action",
+            "references": "api_call_software"
+          }
+        ],
+        "RemoteAccountDetails": {
+          "AccountId": {
+            "key": "x-aws-finding-service.action.caller_account_id",
+            "object": "service_action"
+          },
+          "Affiliated": {
+            "key": "x-aws-finding-service.action.is_caller_account_affiliated_to_aws",
+            "object": "service_action"
+          }
+        },
+        "RemoteIpDetails": {
+          "IpAddressV4": [
+            {
+              "key": "ipv4-addr.value",
+              "object": "dst_ip"
+            },
+            {
+              "key": "x-aws-finding-service.action.remote_ref",
+              "object": "service_action",
+              "references": "dst_ip"
+            }
+          ],
+          "Organization": {
+            "AsnOrg": {
+              "key": "autonomous-system.name",
+              "object": "as"
+            },
+            "Asn": [
+              {
+                "key": "autonomous-system.number",
+                "object": "as",
+                "transformer": "ToInteger"
+              },
+              {
+                "key": "ipv4-addr.belongs_to_refs",
+                "object": "dst_ip",
+                "references": [
+                  "as"
+                ]
+              }
+            ],
+            "Isp": {
+              "key": "autonomous-system.x_isp",
+              "object": "as"
+            },
+            "Org": {
+              "key": "autonomous-system.x_organisation",
+              "object": "as"
+            }
+          },
+          "Country": {
+            "CountryCode": {
+              "key": "x-oca-geo.country_iso_code",
+              "object": "remote_geo"
+            },
+            "CountryName": [
+              {
+                "key": "x-oca-geo.country_name",
+                "object": "remote_geo"
+              },
+              {
+                "key": "ipv4-addr.x_geo_ref",
+                "object": "dst_ip",
+                "references": "remote_geo"
+              }
+            ]
+          },
+          "City": {
+            "CityName": {
+              "key": "x-oca-geo.city_name",
+              "object": "remote_geo"
+            }
+          },
+          "GeoLocation": {
+            "key": "x-oca-geo.location",
+            "object": "remote_geo"
+          }
+        }
+      },
+      "NetworkConnectionAction": {
+        "ConnectionDirection": {
+          "key": "network-traffic.x_direction",
+          "object": "nt"
+        },
+        "RemoteIpDetails": {
+          "IpAddressV4": [
+            {
+              "key": "ipv4-addr.value",
+              "object": "dst_ip"
+            },
+            {
+              "key": "network-traffic.dst_ref",
+              "object": "nt",
+              "references": "dst_ip"
+            }
+          ],
+          "Organization": {
+            "AsnOrg": {
+              "key": "autonomous-system.name",
+              "object": "as"
+            },
+            "Asn": [
+              {
+                "key": "autonomous-system.number",
+                "object": "as",
+                "transformer": "ToInteger"
+              },
+              {
+                "key": "ipv4-addr.belongs_to_refs",
+                "object": "dst_ip",
+                "references": [
+                  "as"
+                ]
+              }
+            ],
+            "Isp": {
+              "key": "autonomous-system.x_isp",
+              "object": "as"
+            },
+            "Org": {
+              "key": "autonomous-system.x_organisation",
+              "object": "as"
+            }
+          },
+          "Country": {
+            "CountryCode": {
+              "key": "x-oca-geo.country_iso_code",
+              "object": "remote_geo"
+            },
+            "CountryName": [
+              {
+                "key": "x-oca-geo.country_name",
+                "object": "remote_geo"
+              },
+              {
+                "key": "ipv4-addr.x_geo_ref",
+                "object": "dst_ip",
+                "references": "remote_geo"
+              }
+            ]
+          },
+          "City": {
+            "CityName": {
+              "key": "x-oca-geo.city_name",
+              "object": "remote_geo"
+            }
+          },
+          "GeoLocation": {
+            "key": "x-oca-geo.location",
+            "object": "remote_geo"
+          }
+        },
+        "RemotePortDetails": {
+          "Port": {
+            "key": "network-traffic.dst_port",
+            "object": "nt"
+          },
+          "PortName": {
+            "key": "network-traffic.x_dst_port_name",
+            "object": "nt"
+          }
+        },
+        "LocalPortDetails": {
+          "Port": {
+            "key": "network-traffic.src_port",
+            "object": "nt"
+          },
+          "PortName": {
+            "key": "network-traffic.x_src_port_name",
+            "object": "nt"
+          }
+        },
+        "Protocol": [
+          {
+            "key": "network-traffic.protocols",
+            "object": "nt",
+            "transformer": "ToLowercaseArray"
+          },
+          {
+            "key": "x-aws-finding-service.action.network_ref",
+            "object": "service_action",
+            "references": "nt"
+          }
+        ],
+        "Blocked": {
+          "key": "network-traffic.x_is_target_port_blocked",
+          "object": "nt"
+        },
+        "LocalIpDetails": {
+          "IpAddressV4": [
+            {
+              "key": "ipv4-addr.value",
+              "object": "src_ip"
+            },
+            {
+              "key": "network-traffic.src_ref",
+              "object": "nt",
+              "references": "src_ip"
+            }
+          ]
+        }
+      },
+      "KubernetesApiCallAction": {
+        "Protocol": [
+          {
+            "key": "network-traffic.protocols",
+            "object": "nt",
+            "transformer": "ToLowercaseArray"
+          },
+          {
+            "key": "x-aws-finding-service.action.network_ref",
+            "object": "service_action",
+            "references": "nt"
+          }
+        ],
+        "Parameters": {
+          "key": "network-traffic.extensions.http-request-ext.x_parameters",
+          "object": "nt"
+        },
+        "RemoteIpDetails": {
+          "IpAddressV4": [
+            {
+              "key": "ipv4-addr.value",
+              "object": "dst_ip"
+            },
+            {
+              "key": "network-traffic.dst_ref",
+              "object": "nt",
+              "references": "dst_ip"
+            }
+          ],
+          "Organization": {
+            "AsnOrg": {
+              "key": "autonomous-system.name",
+              "object": "as"
+            },
+            "Asn": [
+              {
+                "key": "autonomous-system.number",
+                "object": "as",
+                "transformer": "ToInteger"
+              },
+              {
+                "key": "ipv4-addr.belongs_to_refs",
+                "object": "dst_ip",
+                "references": [
+                  "as"
+                ]
+              }
+            ],
+            "Isp": {
+              "key": "autonomous-system.x_isp",
+              "object": "as"
+            },
+            "Org": {
+              "key": "autonomous-system.x_organisation",
+              "object": "as"
+            }
+          },
+          "Country": {
+            "CountryCode": {
+              "key": "x-oca-geo.country_iso_code",
+              "object": "remote_geo"
+            },
+            "CountryName": [
+              {
+                "key": "x-oca-geo.country_name",
+                "object": "remote_geo"
+              },
+              {
+                "key": "ipv4-addr.x_geo_ref",
+                "object": "dst_ip",
+                "references": "remote_geo"
+              }
+            ]
+          },
+          "City": {
+            "CityName": [
+              {
+                "key": "x-oca-geo.city_name",
+                "object": "remote_geo"
+              },
+              {
+                "key": "ipv4-addr.x_geo_ref",
+                "object": "dst_ip",
+                "references": "remote_geo"
+              }
+            ]
+          },
+          "GeoLocation": {
+            "key": "x-oca-geo.location",
+            "object": "remote_geo"
+          }
+        },
+        "RequestUri": {
+          "key": "network-traffic.extensions.http-request-ext.request_value",
+          "object": "nt"
+        },
+        "SourceIPs": [
+          {
+            "key": "ipv4-addr.value",
+            "object": "kubernetes_api_call_source_ip",
+            "unwrap": true,
+            "transformer": "FilterIPv4List"
+          },
+          {
+            "key": "network-traffic.src_ref",
+            "object": "nt",
+            "references": "kubernetes_api_call_source_ip"
+          }
+        ],
+        "StatusCode": {
+          "key": "network-traffic.extensions.http-request-ext.x_status_code",
+          "object": "nt"
+        },
+        "UserAgent": {
+          "key": "network-traffic.extensions.http-request-ext.request_header.User-Agent",
+          "object": "nt"
+        },
+        "Verb": {
+          "key": "network-traffic.extensions.http-request-ext.request_method",
+          "object": "nt"
+        }
+      },
+      "RdsLoginAttemptAction": {
+        "LoginAttributes": {
+          "Application": [
+            {
+              "key": "x-aws-rds-login-attributes.login_application_name",
+              "object": "login_attr"
+            },
+            {
+              "key": "x-ibm-finding.x_service_ref",
+              "object": "finding",
+              "references": "service_action"
+            }
+          ],
+          "FailedLoginAttempts": {
+            "key": "x-aws-rds-login-attributes.failed_login_attempts",
+            "object": "login_attr"
+          },
+          "SuccessfulLoginAttempts": {
+            "key": "x-aws-rds-login-attributes.successful_login_attempts",
+            "object": "login_attr"
+          },
+          "User": {
+            "key": "x-aws-rds-login-attributes.login_attempted_user_name",
+            "object": "login_attr"
+          },
+          "GroupRdsLoginAttributes": {
+            "key": "x-aws-finding-service.action.rds_login_refs",
+            "object": "service_action",
+            "references": [
+              "login_attr"
+            ],
+            "group_ref": true
+          }
+        },
+        "RemoteIpDetails": {
+          "IpAddressV4": [
+            {
+              "key": "ipv4-addr.value",
+              "object": "dst_ip"
+            },
+            {
+              "key": "x-aws-finding-service.action.remote_ref",
+              "object": "service_action",
+              "references": "dst_ip"
+            },
+            {
+              "key": "x-ibm-finding.x_service_ref",
+              "object": "finding",
+              "references": "service_action"
+            }
+          ],
+          "Organization": {
+            "AsnOrg": {
+              "key": "autonomous-system.name",
+              "object": "as"
+            },
+            "Asn": [
+              {
+                "key": "autonomous-system.number",
+                "object": "as",
+                "transformer": "ToInteger"
+              },
+              {
+                "key": "ipv4-addr.belongs_to_refs",
+                "object": "dst_ip",
+                "references": [
+                  "as"
+                ]
+              }
+            ],
+            "Isp": {
+              "key": "autonomous-system.x_isp",
+              "object": "as"
+            },
+            "Org": {
+              "key": "autonomous-system.x_organisation",
+              "object": "as"
+            }
+          },
+          "Country": {
+            "CountryCode": {
+              "key": "x-oca-geo.country_iso_code",
+              "object": "remote_geo"
+            },
+            "CountryName": [
+              {
+                "key": "x-oca-geo.country_name",
+                "object": "remote_geo"
+              },
+              {
+                "key": "ipv4-addr.x_geo_ref",
+                "object": "dst_ip",
+                "references": "remote_geo"
+              }
+            ]
+          },
+          "City": {
+            "CityName": [
+              {
+                "key": "x-oca-geo.city_name",
+                "object": "remote_geo"
+              },
+              {
+                "key": "ipv4-addr.x_geo_ref",
+                "object": "dst_ip",
+                "references": "remote_geo"
+              }
+            ]
+          },
+          "GeoLocation": {
+            "key": "x-oca-geo.location",
+            "object": "remote_geo"
+          }
+        }
+      }
+    },
+    "AdditionalInfo": {
+      "key": "x-aws-finding-service.additional_info",
+      "object": "service_action"
+    },
+    "Archived": {
+      "key": "x-ibm-finding.x_archived",
+      "object": "finding"
+    },
+    "Count": [
+      {
+        "key": "x-ibm-finding.event_count",
+        "object": "finding"
+      },
+      {
+         "key": "number_observed",
+         "transformer": "ToInteger"
+      }
+    ],
+    "DetectorId": {
+      "key": "x-ibm-finding.x_detector_id",
+      "object": "finding"
+    },
+    "EventFirstSeen": [
+      {
+        "key": "x-aws-finding-service.event_first_seen",
+        "object": "service_action"
+      },
+      {
+        "key": "x-ibm-finding.x_service_ref",
+        "object": "finding",
+        "references": "service_action"
+      }
+    ],
+    "EventLastSeen": {
+      "key": "x-aws-finding-service.event_last_seen",
+      "object": "service_action"
+    },
+    "Evidence": {
+      "ThreatIntelligenceDetails": {
+        "ThreatListName": {
+          "key": "x-aws-evidence.threat_intelligence_list_name",
+          "object": "evidence"
+        },
+        "ThreatNames": {
+          "key": "x-aws-evidence.threat_names",
+          "object": "evidence"
+        },
+        "GroupEvidenceReferences": {
+          "key": "x-aws-finding-service.evidence_refs",
+          "object": "service_action",
+          "references": [
+            "evidence"
+          ],
+          "group_ref": true
+        }
+      }
+    },
+    "FeatureName": {
+      "key": "x-ibm-finding.x_feature_name",
+      "object": "finding"
+    },
+    "ResourceRole": {
+      "key": "x-aws-resource.resource_role",
+      "object": "resource"
+    },
+    "EbsVolumeScanDetails": {
+      "ScanCompletedAt": {
+        "key": "x-aws-ebs-volume-malware-scan.scan_completed_at",
+        "object": "ebsvolume",
+        "transformer": "FormatDateTimeObjectToTimestamp"
+      },
+      "ScanDetections": {
+        "HighestSeverityThreatDetails": {
+          "Count": {
+            "key": "x-aws-ebs-volume-malware-scan.highest_severity_threat.total_infected_files",
+            "object": "ebsvolume"
+          },
+          "Severity": {
+            "key": "x-aws-ebs-volume-malware-scan.highest_severity_threat.severity",
+            "object": "ebsvolume"
+          },
+          "ThreatName": {
+            "key": "x-aws-ebs-volume-malware-scan.highest_severity_threat.name",
+            "object": "ebsvolume"
+          }
+        },
+        "ScannedItemCount": {
+          "Files": {
+            "key": "x-aws-ebs-volume-malware-scan.scanned_items.total_scanned_files",
+            "object": "ebsvolume"
+          },
+          "TotalGb": {
+            "key": "x-aws-ebs-volume-malware-scan.scanned_items.total_files_scanned_in_gb",
+            "object": "ebsvolume"
+          },
+          "Volumes": {
+            "key": "x-aws-ebs-volume-malware-scan.scanned_items.total_volumes_scanned",
+            "object": "ebsvolume"
+          }
+        },
+        "ThreatDetectedByName": {
+          "ItemCount": {
+            "key": "x-aws-ebs-volume-malware-scan.threat_detected_by_name.infected_files_count",
+            "object": "ebsvolume"
+          },
+          "Shortened": {
+            "key": "x-aws-ebs-volume-malware-scan.threat_detected_by_name.is_finding_shortened",
+            "object": "ebsvolume"
+          },
+          "ThreatNames": {
+            "FilePaths": {
+              "FileName": {
+                "key": "file.name",
+                "object": "ebsvolume_file"
+              },
+              "FilePath": {
+                "key": "file.x_path",
+                "object": "ebsvolume_file"
+              },
+              "FileSha256": {
+                "key": "file.hashes.SHA-256",
+                "object": "ebsvolume_file"
+              },
+              "FileSha1": {
+                "key": "file.hashes.SHA-1",
+                "object": "ebsvolume_file"
+              },
+              "FileMd5": {
+                "key": "file.hashes.MD5",
+                "object": "ebsvolume_file"
+              },
+              "UnknownHash": {
+                "key": "file.x_unknown_hash",
+                "object": "ebsvolume_file"
+              },
+              "VolumeArn": {
+                "key": "file.x_volume_arn",
+                "object": "ebsvolume_file"
+              },
+              "GroupThreatFileReferences": {
+                "key": "x-aws-threat.infected_file_refs",
+                "object": "ebsvolume_threat",
+                "references": [
+                  "ebsvolume_file"
+                ],
+                "group_ref": true
+              }
+            },
+            "ItemCount": {
+              "key": "x-aws-threat.total_files_infected",
+              "object": "ebsvolume_threat"
+            },
+            "Name": {
+              "key": "x-aws-threat.threat_name",
+              "object": "ebsvolume_threat"
+            },
+            "Severity": {
+              "key": "x-aws-threat.severity",
+              "object": "ebsvolume_threat"
+            },
+            "GroupThreatNamesReferences": {
+              "key": "x-aws-ebs-volume-malware-scan.threat_detected_by_name.threat_refs",
+              "object": "ebsvolume",
+              "references": [
+                "ebsvolume_threat"
+              ],
+              "group_ref": true
+            }
+          },
+          "UniqueThreatNameCount": {
+            "key": "x-aws-ebs-volume-malware-scan.threat_detected_by_name.unique_threats_count_based_on_name",
+            "object": "ebsvolume"
+          }
+        },
+        "ThreatsDetectedItemCount": {
+          "Files": {
+            "key": "x-aws-ebs-volume-malware-scan.total_infected_files",
+            "object": "ebsvolume"
+          }
+        }
+      },
+      "ScanId": [
+        {
+          "key": "x-aws-ebs-volume-malware-scan.scan_id",
+          "object": "ebsvolume"
+        },
+        {
+          "key": "x-aws-finding-service.ebs_volume_malware_scan_ref",
+          "object": "service_action",
+          "references": "ebsvolume"
+        }
+      ],
+      "ScanStartedAt": {
+        "key": "x-aws-ebs-volume-malware-scan.scan_started_time",
+        "object": "ebsvolume",
+        "transformer": "FormatDateTimeObjectToTimestamp"
+      },
+      "ScanType": {
+        "key": "x-aws-ebs-volume-malware-scan.scan_type",
+        "object": "ebsvolume"
+      },
+      "Sources": {
+        "key": "x-aws-ebs-volume-malware-scan.sources",
+        "object": "ebsvolume"
+      },
+      "TriggerFindingId": {
+        "key": "x-aws-ebs-volume-malware-scan.triggered_finding_id",
+        "object": "ebsvolume"
+      }
+    },
+    "RuntimeDetails": {
+      "Context": {
+        "AddressFamily": {
+          "key": "x-aws-runtime-context.address_family",
+          "object": "runtime"
+        },
+        "FileSystemType": {
+          "key": "x-aws-runtime-context.mounted_file_system_type",
+          "object": "runtime"
+        },
+        "Flags": {
+          "key": "x-aws-runtime-context.flags",
+          "object": "runtime"
+        },
+        "IanaProtocolNumber": {
+          "key": "x-aws-runtime-context.iana_protocol_number",
+          "object": "runtime"
+        },
+        "LdPreloadValue": {
+          "key": "x-aws-runtime-context.environmental_variables.LD_PRELOAD",
+          "object": "runtime"
+        },
+        "LibraryPath": {
+          "key": "x-aws-runtime-context.new_library_path",
+          "object": "runtime"
+        },
+        "MemoryRegions": {
+          "key": "x-aws-runtime-context.memory_regions",
+          "object": "runtime"
+        },
+        "ModifiedAt": [
+          {
+            "key": "x-aws-runtime-context.process_modified_time",
+            "object": "runtime",
+            "transformer": "FormatDateTimeObjectToTimestamp"
+          },
+          {
+            "key": "x-aws-kubernetes-workload.runtime_context_ref",
+            "object": "kubernetes",
+            "references": "runtime"
+          }
+        ],
+        "ModifyingProcess": {
+          "Euid": [
+            {
+              "key": "user-account.x_effective_user_id",
+              "object": "runtime_modi_user"
+            },
+            {
+              "key": "process.creator_user_ref",
+              "object": "runtime_modi_process",
+              "references": "runtime_modi_user"
+            }
+          ],
+          "ExecutablePath": {
+            "key": "file.x_path",
+            "object": "runtime_modi_file"
+          },
+          "ExecutableSha256": [
+            {
+              "key": "file.hashes.SHA-256",
+              "object": "runtime_modi_file"
+            },
+            {
+              "key": "process.binary_ref",
+              "object": "runtime_modi_process",
+              "references": "runtime_modi_file"
+            }
+          ],
+          "Lineage": {
+            "Euid": [
+              {
+                "key": "user-account.x_effective_user_id",
+                "object": "runtime_modi_lineage_user"
+              },
+              {
+                "key": "process.creator_user_ref",
+                "object": "runtime_modi_process_lineage",
+                "references": "runtime_modi_lineage_user"
+              }
+            ],
+            "ExecutablePath": {
+              "key": "process.x_absolute_path",
+              "object": "runtime_modi_process_lineage"
+            },
+            "Name": {
+              "key": "process.name",
+              "object": "runtime_modi_process_lineage"
+            },
+            "NamespacePid": [
+              {
+                "key": "process.pid",
+                "object": "runtime_modi_child_process_lineage"
+              },
+              {
+                "key": "process.child_refs",
+                "object": "runtime_modi_process_lineage",
+                "references": ["runtime_modi_child_process_lineage"]
+              }
+            ],
+            "ParentUuid": {
+              "key": "process.x_parent_unique_id",
+              "object": "runtime_modi_process_lineage"
+            },
+            "Pid": {
+              "key": "process.pid",
+              "object": "runtime_modi_process_lineage"
+            },
+            "StartTime": {
+              "key": "process.created",
+              "object": "runtime_modi_process_lineage",
+              "transformer": "FormatDateTimeObjectToTimestamp"
+            },
+            "UserId": [
+              {
+                "key": "user-account.user_id",
+                "object": "runtime_modi_lineage_user",
+                "transformer": "ToString"
+              },
+              {
+                "key": "process.creator_user_ref",
+                "object": "runtime_modi_process_lineage",
+                "references": "runtime_modi_lineage_user"
+              }
+            ],
+            "Uuid": {
+              "key": "process.x_unique_id",
+              "object": "runtime_modi_process_lineage"
+            },
+            "GroupModifyingProcessLineageReferences": {
+              "key": "process.x_lineage_refs",
+              "object": "runtime_modi_process",
+              "references": [
+                "runtime_modi_process_lineage"
+              ],
+              "group_ref": true
+            }
+          },
+          "Name": [
+            {
+              "key": "process.name",
+              "object": "runtime_modi_process"
+            },
+            {
+              "key": "x-aws-runtime-context.modifying_process_ref",
+              "object": "runtime",
+              "references": "runtime_modi_process"
+            },
+            {
+              "key": "x-aws-kubernetes-workload.runtime_context_ref",
+              "object": "kubernetes",
+              "references": "runtime"
+            }
+          ],
+          "NamespacePid": [
+            {
+              "key": "process.pid",
+              "object": "runtime_modi_child_process"
+            },
+            {
+              "key": "process.child_refs",
+              "object": "runtime_modi_process",
+              "references": ["runtime_modi_child_process"]
+            }
+          ],
+          "ParentUuid": {
+            "key": "process.x_parent_unique_id",
+            "object": "runtime_modi_process"
+          },
+          "Pid": {
+            "key": "process.pid",
+            "object": "runtime_modi_process"
+          },
+          "Pwd": {
+            "key": "process.cwd",
+            "object": "runtime_modi_process"
+          },
+          "StartTime": {
+            "key": "process.created",
+            "object": "runtime_modi_process",
+            "transformer": "FormatDateTimeObjectToTimestamp"
+          },
+          "User": {
+            "key": "user-account.display_name",
+            "object": "runtime_modi_user"
+          },
+          "UserId": [
+            {
+              "key": "user-account.user_id",
+              "object": "runtime_modi_user",
+              "transformer": "ToString"
+            },
+            {
+              "key": "process.creator_user_ref",
+              "object": "runtime_modi_process",
+              "references": "runtime_modi_user"
+            }
+          ],
+          "Uuid": {
+            "key": "process.x_unique_id",
+            "object": "runtime_modi_process"
+          }
+        },
+        "ModuleFilePath": [
+          {
+            "key": "file.x_path",
+            "object": "runtime_file"
+          },
+          {
+            "key": "x-aws-runtime-context.module_ref",
+            "object": "runtime",
+            "references": "runtime_file"
+          }
+        ],
+        "ModuleName": [
+          {
+            "key": "file.name",
+            "object": "runtime_file"
+          },
+          {
+            "key": "x-aws-runtime-context.module_ref",
+            "object": "runtime",
+            "references": "runtime_file"
+          },
+          {
+            "key": "x-aws-kubernetes-workload.runtime_context_ref",
+            "object": "kubernetes",
+            "references": "runtime_file"
+          }
+        ],
+        "ModuleSha256": {
+          "key": "file.hashes.SHA-256",
+          "object": "runtime_file"
+        },
+        "MountSource": {
+          "key": "x-aws-runtime-context.host_path",
+          "object": "runtime"
+        },
+        "MountTarget": {
+          "key": "x-aws-runtime-context.container_path",
+          "object": "runtime"
+        },
+        "ReleaseAgentPath": {
+          "key": "x-aws-runtime-context.release_agent_path",
+          "object": "runtime"
+        },
+        "RuncBinaryPath": {
+          "key": "x-aws-runtime-context.runc_implementation_path",
+          "object": "runtime"
+        },
+        "ScriptPath": [
+          {
+            "key": "x-aws-runtime-context.script_path",
+            "object": "runtime"
+          },
+          {
+            "key": "x-aws-kubernetes-workload.runtime_context_ref",
+            "object": "kubernetes",
+            "references": "runtime"
+          }
+        ],
+        "ShellHistoryFilePath": {
+          "key": "x-aws-runtime-context.shell_history_file_path",
+          "object": "runtime"
+        },
+        "SocketPath": {
+          "key": "x-aws-runtime-context.socket_path",
+          "object": "runtime"
+        },
+        "TargetProcess": {
+          "Euid": [
+            {
+              "key": "user-account.x_effective_user_id",
+              "object": "runtime_target_user"
+            },
+            {
+              "key": "process.creator_user_ref",
+              "object": "runtime_target_process",
+              "references": "runtime_target_user"
+            }
+          ],
+          "ExecutablePath": {
+            "key": "file.x_path",
+            "object": "runtime_target_file"
+          },
+          "ExecutableSha256": [
+            {
+              "key": "file.hashes.SHA-256",
+              "object": "runtime_target_file"
+            },
+            {
+              "key": "process.binary_ref",
+              "object": "runtime_target_process",
+              "references": "runtime_target_file"
+            }
+          ],
+          "Lineage": {
+            "Euid": [
+              {
+                "key": "user-account.x_effective_user_id",
+                "object": "runtime_target_lineage_user"
+              },
+              {
+                "key": "process.creator_user_ref",
+                "object": "runtime_target_lineage_process",
+                "references": "runtime_target_lineage_user"
+              }
+            ],
+            "ExecutablePath": {
+              "key": "process.x_absolute_path",
+              "object": "runtime_target_lineage_process"
+            },
+            "Name": {
+              "key": "process.name",
+              "object": "runtime_target_lineage_process"
+            },
+            "NamespacePid": [
+              {
+                "key": "process.pid",
+                "object": "runtime_target_child_lineage_process"
+              },
+              {
+                "key": "process.child_refs",
+                "object": "runtime_target_lineage_process",
+                "references": ["runtime_target_child_lineage_process"]
+              }
+            ],
+            "ParentUuid": {
+              "key": "process.x_parent_unique_id",
+              "object": "runtime_target_lineage_process"
+            },
+            "Pid": {
+              "key": "process.pid",
+              "object": "runtime_target_lineage_process"
+            },
+            "StartTime": {
+              "key": "process.created",
+              "object": "runtime_target_lineage_process",
+              "transformer": "FormatDateTimeObjectToTimestamp"
+            },
+            "UserId": [
+              {
+                "key": "user-account.user_id",
+                "object": "runtime_target_lineage_user",
+                "transformer": "ToString"
+              },
+              {
+                "key": "process.creator_user_ref",
+                "object": "runtime_target_lineage_process",
+                "references": "runtime_target_lineage_user"
+              }
+            ],
+            "Uuid": {
+              "key": "process.x_unique_id",
+              "object": "runtime_target_lineage_process"
+            },
+            "GroupTargetProcessLineageReferences": {
+              "key": "process.x_lineage_refs",
+              "object": "runtime_target_process",
+              "references": [
+                "runtime_target_lineage_process"
+              ],
+              "group_ref": true
+            }
+          },
+          "Name": [
+            {
+              "key": "process.name",
+              "object": "runtime_target_process"
+            },
+            {
+              "key": "x-aws-runtime-context.target_process_ref",
+              "object": "runtime",
+              "references": "runtime_target_process"
+            },
+            {
+              "key": "x-aws-kubernetes-workload.runtime_context_ref",
+              "object": "kubernetes",
+              "references": "runtime"
+            }
+          ],
+          "NamespacePid": [
+            {
+              "key": "process.pid",
+              "object": "runtime_target_child_process"
+            },
+            {
+              "key": "process.child_refs",
+              "object": "runtime_target_process",
+              "references": ["runtime_target_child_process"]
+            }
+          ],
+          "ParentUuid": {
+            "key": "process.x_parent_unique_id",
+            "object": "runtime_target_process"
+          },
+          "Pid": {
+            "key": "process.pid",
+            "object": "runtime_target_process"
+          },
+          "Pwd": {
+            "key": "process.cwd",
+            "object": "runtime_target_process"
+          },
+          "StartTime": {
+            "key": "process.created",
+            "object": "runtime_target_process",
+            "transformer": "FormatDateTimeObjectToTimestamp"
+          },
+          "User": {
+            "key": "user-account.display_name",
+            "object": "runtime_target_user"
+          },
+          "UserId": [
+            {
+              "key": "user-account.user_id",
+              "object": "runtime_target_user",
+              "transformer": "ToString"
+            },
+            {
+              "key": "process.creator_user_ref",
+              "object": "runtime_target_process",
+              "references": "runtime_target_user"
+            }
+          ],
+          "Uuid": {
+            "key": "process.x_unique_id",
+            "object": "runtime_target_process"
+          }
+        }
+      },
+      "Process": {
+        "Euid": [{
+            "key": "user-account.x_effective_user_id",
+            "object": "runtime_obs_user"
+          },
+          {
+            "key": "process.creator_user_ref",
+            "object": "runtime_obs_process",
+            "references": "runtime_obs_user"
+          }
+        ],
+        "ExecutablePath": {
+          "key": "file.x_path",
+          "object": "runtime_obs_file"
+        },
+        "ExecutableSha256": [
+          {
+            "key": "file.hashes.SHA-256",
+            "object": "runtime_obs_file"
+          },
+          {
+            "key": "process.binary_ref",
+            "object": "runtime_obs_process",
+            "references": "runtime_obs_file"
+          }
+        ],
+        "Lineage": {
+          "Euid": [
+            {
+              "key": "user-account.x_effective_user_id",
+              "object": "runtime_obs_lineage_user"
+            },
+            {
+              "key": "process.creator_user_ref",
+              "object": "runtime_obs_lineage_process",
+              "references": "runtime_obs_lineage_user"
+            }
+          ],
+          "ExecutablePath": {
+            "key": "process.x_absolute_path",
+            "object": "runtime_obs_lineage_process"
+          },
+          "Name": {
+            "key": "process.name",
+            "object": "runtime_obs_lineage_process"
+          },
+          "NamespacePid": [
+            {
+              "key": "process.pid",
+              "object": "runtime_obs_lineage_child_process"
+            },
+            {
+              "key": "process.child_refs",
+              "object": "runtime_obs_lineage_process",
+              "references": ["runtime_obs_lineage_child_process"]
+            }
+          ],
+          "ParentUuid": {
+            "key": "process.x_parent_unique_id",
+            "object": "runtime_obs_lineage_process"
+          },
+          "Pid": {
+            "key": "process.pid",
+            "object": "runtime_obs_lineage_process"
+          },
+          "StartTime": {
+            "key": "process.created",
+            "object": "runtime_obs_lineage_process",
+            "transformer": "FormatDateTimeObjectToTimestamp"
+          },
+          "UserId": [
+            {
+              "key": "user-account.user_id",
+              "object": "runtime_obs_lineage_user",
+              "transformer": "ToString"
+            },
+            {
+              "key": "process.creator_user_ref",
+              "object": "runtime_obs_lineage_process",
+              "references": "runtime_obs_lineage_user"
+            }
+          ],
+          "Uuid": {
+            "key": "process.x_unique_id",
+            "object": "runtime_obs_lineage_process"
+          },
+          "GroupModifiedProcessLineageReferences": {
+            "key": "process.x_lineage_refs",
+            "object": "runtime_obs_process",
+            "references": [
+              "runtime_obs_lineage_process"
+            ],
+            "group_ref": true
+          }
+        },
+        "Name": [
+          {
+            "key": "process.name",
+            "object": "runtime_obs_process"
+          },
+          {
+            "key": "x-aws-kubernetes-workload.runtime_observed_process_ref",
+            "object": "kubernetes",
+            "references": "runtime_obs_process"
+          }
+        ],
+        "NamespacePid": [
+          {
+            "key": "process.pid",
+            "object": "runtime_obs_child_process"
+          },
+          {
+            "key": "process.child_refs",
+            "object": "runtime_obs_process",
+            "references": ["runtime_obs_child_process"]
+          }
+        ],
+        "ParentUuid": {
+          "key": "process.x_parent_unique_id",
+          "object": "runtime_obs_process"
+        },
+        "Pid": [
+          {
+            "key": "process.pid",
+            "object": "runtime_obs_process"
+          },
+          {
+            "key": "x-aws-kubernetes-workload.runtime_observed_process_ref",
+            "object": "kubernetes",
+            "references": "runtime_obs_process"
+          }
+        ],
+        "Pwd": {
+          "key": "process.cwd",
+          "object": "runtime_obs_process"
+        },
+        "StartTime": {
+          "key": "process.created",
+          "object": "runtime_obs_process",
+          "transformer": "FormatDateTimeObjectToTimestamp"
+        },
+        "User": {
+          "key": "user-account.display_name",
+          "object": "runtime_obs_user"
+        },
+        "UserId": [
+          {
+            "key": "user-account.user_id",
+            "object": "runtime_obs_user",
+            "transformer": "ToString"
+          },
+          {
+            "key": "process.creator_user_ref",
+            "object": "runtime_obs_process",
+            "references": "runtime_obs_user"
+          }
+        ],
+        "Uuid": {
+          "key": "process.x_unique_id",
+          "object": "runtime_obs_process"
+        }
+      }
+    },
+    "UserFeedback": {
+      "key": "x-ibm-finding.x_finding_feedback",
+      "object": "finding"
+    }
+  }
+}

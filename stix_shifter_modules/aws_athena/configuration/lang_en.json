@@ -2,12 +2,12 @@
     "connection": {
         "help": {
             "label": "Need additional help?",
-            "description": "More details on the datasource setting can be found in the specified link"
+            "description": "More details on the data source setting can be found in the specified link"
         },
         "region": {
-            "label": "Region",
-            "placeholder": "us-east-1",
-            "description": "Specify the region of the Amazon Athena data source"
+            "label": "AWS Region Name",
+            "placeholder": "us-east-2",
+            "description": "Specify the region the data source is located in."
         },
         "s3_bucket_location": {
             "label": "Amazon S3 bucket location",

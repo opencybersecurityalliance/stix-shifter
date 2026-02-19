@@ -7,7 +7,16 @@ class APIClient:
 
     def __init__(self, connection, configuration):
         auth = configuration.get('auth')
-        self.headers = {'Authorization': auth['api_token'],
+        """
+        The Okta API requires the custom HTTP authentication scheme SSWS for API token (API key) authentication. 
+        Requests must have a valid API token specified in the HTTP Authorization header with the SSWS scheme.
+        Ref: https://developer.okta.com/docs/reference/core-okta-api/#api-token-authentication
+        """
+        if 'SSWS' in auth['api_token']: #this check is for backward compatibility
+            self.api_token = auth['api_token']
+        else:
+            self.api_token = 'SSWS '+ auth['api_token']
+        self.headers = {'Authorization': self.api_token,
                         'Content-Type': 'application/json', 'Accept': 'application/json'}
 
         self.client = RestApiClientAsync(connection.get('host'), port=None, headers=self.headers)
@@ -19,7 +28,8 @@ class APIClient:
         Ping the Data Source
         :return: Response object
         """
-        return await self.client.call_api(self.PING_ENDPOINT, 'GET', headers=self.headers, data={})
+        return await self.client.call_api(self.PING_ENDPOINT, 'GET', headers=self.headers, data={},
+                                          timeout=self.timeout)
 
     async def get_search_results(self, query, after_number):
         """
@@ -32,4 +42,4 @@ class APIClient:
         if after_number != '0':
             query = query + '&' + after_number
 
-        return await self.client.call_api(query, 'GET', headers=self.headers, data={})
+        return await self.client.call_api(query, 'GET', headers=self.headers, data={}, timeout=self.timeout)

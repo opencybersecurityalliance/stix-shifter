@@ -2,13 +2,11 @@
     "connection": {
         "host": {
             "label": "Management IP address or hostname",
-            "placeholder": "192.168.1.10",
             "description": "Specify the IP address or hostname of the data source"
         },
         "port": {
             "label": "Host port",
-            "placeholder": "3306",
-            "description": "Specify the associated port number of the data source."
+            "description": "Set the port number that is associated with the hostname or IP address"
         },
         "database": {
             "label": "Database",
@@ -21,10 +19,6 @@
         "cert": {
             "label": "Connection certificate",
             "description": "Use self-signed SSL certificate and CA content(root and intermediate) of data source"
-        },
-        "sni": {
-            "label": "Server Name Indicator",
-            "description": "The Server Name Indicator (SNI) enables a separate hostname to be provided for SSL authentication"
         },
         "options": {
             "table": {

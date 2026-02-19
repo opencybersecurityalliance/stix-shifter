@@ -16,6 +16,7 @@ class APIClient():
         url_modifier_function = None
         auth = configuration.get('auth')
         self.indices = connection.get('indices', None)
+        self.pagination_enabled = connection.get('pagination')
 
         if self.indices and type(self.indices) == str:
             self.indices = self.indices.split(",")
@@ -50,8 +51,7 @@ class APIClient():
                                     connection.get('port'),
                                     headers,
                                     url_modifier_function=url_modifier_function,
-                                    cert_verify=connection.get('selfSignedCert', True),
-                                    sni=connection.get('sni', None)
+                                    cert_verify=connection.get('selfSignedCert')
                                     )
 
         self.timeout = connection['options'].get('timeout')
@@ -59,40 +59,34 @@ class APIClient():
     async def ping_box(self):
         return await self.client.call_api(self.PING_ENDPOINT, 'GET', timeout=self.timeout)
 
-    async def search_pagination(self, query_expression, lastsortvalue=None, length=DEFAULT_LIMIT):
+    async def search(self, query_expression, lastsortvalue=None, length=DEFAULT_LIMIT):
         headers = dict()
         headers['Content-Type'] = 'application/json'
-        endpoint = self.endpoint
-        # add size value
-        if length is not None:
-            endpoint = "{}?size={}".format(endpoint, length)
 
         data = {
             "_source": {
-                "includes": ["@timestamp", "source.*", "destination.*", "event.*", "client.*", "server.*",
+                "includes": ["@timestamp", "source.*", "destination.*", "event.*", "client.*", "server.*", "observer.*",
                              "host.*", "network.*", "process.*", "user.*", "file.*", "url.*", "registry.*", "dns.*",
-                             "tags"]
+                             "email.*", "tags"]
             },
+            "size": length,
             "query": {
                 "query_string": {
                     "query": query_expression
                 }
-            },
-            "sort": [
-                {"@timestamp": "asc"},
-            ]
+            }
         }
 
-        if not (lastsortvalue is None):
-            extra_data = {
-                "search_after": lastsortvalue
-            }
-            data.update(extra_data)
+        if self.pagination_enabled:
+            data["sort"] = [ {"@timestamp": "asc"}, ]
 
-        self.logger.debug("URL endpoint: " + endpoint)
+            if lastsortvalue:
+                data["search_after"] = lastsortvalue
+
+        self.logger.debug("URL endpoint: " + self.endpoint)
         self.logger.debug("URL data: " + json.dumps(data))
 
-        return await self.client.call_api(endpoint, 'GET', headers, data=json.dumps(data), timeout=self.timeout)
+        return await self.client.call_api(self.endpoint, 'GET', headers, data=json.dumps(data), timeout=self.timeout)
 
     async def get_max_result_window(self):
         max_result_window_url = self.setting_endpoint + "/index.max_result_window?include_defaults=true"

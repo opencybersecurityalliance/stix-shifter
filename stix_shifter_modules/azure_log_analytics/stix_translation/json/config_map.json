@@ -1,0 +1,47 @@
+{
+  "int_supported_fields": [
+    "EventID",
+    "Task",
+    "AdditionalData.alertsCount",
+    "LogonType",
+    "ConfidenceScore",
+    "Entities.DestinationPort",
+    "Entities.SessionId"
+  ],
+  "timestamp_supported_fields": [
+    "FirstActivityTime",
+    "FirstModifiedTime",
+    "TimeGenerated",
+    "ClosedTime",
+    "LastActivityTime",
+    "LastModifiedTime",
+    "CreatedTime",
+    "StartTime",
+    "EndTime",
+    "ProcessingEndTime",
+    "TimeCollected"
+  ],
+  "enum_supported_fields": [
+    "AlertSeverity",
+    "Severity",
+    "Type"
+  ],
+  "enum_supported_values": {
+    "Severity": {
+      "25": "Informational",
+      "50": "Low",
+      "75": "Medium",
+      "100": "High"
+    },
+    "Type": {"alert": "SecurityAlert","event": "SecurityEvent","violation": "SecurityIncident"}
+  },
+  "hexadecimal_fields": [
+    "Entities.SessionId"
+  ],
+  "score_fields": ["ConfidenceScore"],
+  "file_hash_fields": [
+      "hashes.'SHA-256'",
+      "hashes.'SHA-1'",
+      "hashes.MD5"
+    ]
+}

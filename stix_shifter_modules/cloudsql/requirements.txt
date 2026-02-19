@@ -1,2 +1,0 @@
-pandas==1.0.3
-ibmcloudsql==0.3.14

@@ -242,8 +242,7 @@
       "object": "file"
     },
     {
-      "key": "first_observed",
-      "cybox": false
+      "key": "first_observed"
     }
   ],
   "tgtFileModifiedAt": [
@@ -252,8 +251,7 @@
       "object": "file"
     },
     {
-      "key": "last_observed",
-      "cybox": false
+      "key": "last_observed"
     }
   ],
   "loginAccountSid": {
@@ -361,8 +359,7 @@
       "object": "process"
     },
     {
-      "key": "first_observed",
-      "cybox": false
+      "key": "first_observed"
     }
   ],
   "tgtProcStartTime": [
@@ -371,8 +368,7 @@
       "object": "process"
     },
     {
-      "key": "first_observed",
-      "cybox": false
+      "key": "first_observed"
     }
   ],
   "srcProcParentStartTime": [
@@ -381,8 +377,7 @@
       "object": "parent_process"
     },
     {
-      "key": "first_observed",
-      "cybox": false
+      "key": "first_observed"
     },
     {
       "key": "process.parent_ref",
@@ -390,8 +385,7 @@
       "references": "parent_process"
     },
     {
-      "key": "first_observed",
-      "cybox": false
+      "key": "first_observed"
     }
   ],
   "srcProcPid": [

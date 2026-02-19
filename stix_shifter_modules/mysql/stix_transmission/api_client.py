@@ -22,7 +22,7 @@ class APIClient():
         try:
             pool = await aiomysql.create_pool(host=self.host, port=self.port,
                                             user=self.user, password=self.password,
-                                            db=self.database)
+                                            db=self.database, connect_timeout=self.timeout)
             async with pool.acquire() as conn:
                 async with conn.cursor() as cur:
                     await cur.execute("SELECT 42;")
@@ -47,7 +47,7 @@ class APIClient():
         try:
             pool = await aiomysql.create_pool(host=self.host, port=self.port,
                                             user=self.user, password=self.password,
-                                            db=self.database)
+                                            db=self.database, connect_timeout=self.timeout)
             async with pool.acquire() as conn:
                 async with conn.cursor() as cursor:
                     column_query = "SHOW COLUMNS FROM %s" % self.table 
@@ -60,8 +60,9 @@ class APIClient():
                     # Uncomment to see data on newly populated table
                     # query = "select * from {} limit 1".format(self.table)
 
-            await cursor.execute(query)  
-            result_collection = await cursor.fetchall()
+                    await cursor.execute(query)  
+                    result_collection = await cursor.fetchall()
+
             results_list = []
             row_count = int(rows)
 

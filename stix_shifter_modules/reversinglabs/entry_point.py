@@ -12,7 +12,6 @@ import os
 
 class EntryPoint(BaseEntryPoint):
 
-    # python main.py translate ibmxfe results '{"type": "identity","id": "identity--f431f809-377b-45e0-aa1c-6a4751cae5ff","name": "IBM X-Force","identity_class": "system"}' '' < ../xfe_result.json --stix-validator
 
     def __init__(self, connection={}, configuration={}, options={}):
         super().__init__(connection, configuration, options)

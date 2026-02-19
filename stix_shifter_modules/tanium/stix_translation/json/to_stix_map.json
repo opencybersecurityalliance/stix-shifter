@@ -1,0 +1,935 @@
+{
+  "id": [
+    {
+      "key": "x-ibm-finding.finding_type",
+      "object": "alert",
+      "value": "alert"
+    },
+    {
+      "key": "x-ibm-finding.alert_id",
+      "object": "alert"
+    }
+  ],
+  "eid": {
+    "key": "x-ibm-finding.x_eid",
+    "object": "alert"
+  },
+  "type": {
+    "key": "x-ibm-finding.x_type",
+    "object": "alert"
+  },
+  "guid": {
+    "key": "x-ibm-finding.x_guid",
+    "object": "alert"
+  },
+  "priority": {
+    "key": "x-ibm-finding.x_priority",
+    "object": "alert"
+  },
+  "intelDocId": {
+    "key": "x-ibm-finding.x_intel_doc_id",
+    "object": "alert"
+  },
+  "groupingId": {
+    "key": "x-ibm-finding.x_grouping_id",
+    "object": "alert"
+  },
+  "intelDocRevisionId": {
+    "key": "x-ibm-finding.x_intel_doc_revision_id",
+    "object": "alert"
+  },
+  "scanConfigId": {
+    "key": "x-ibm-finding.x_scan_config_id",
+    "object": "alert"
+  },
+  "scanConfigRevisionId": {
+    "key": "x-ibm-finding.x_scan_config_revision_id",
+    "object": "alert"
+  },
+  "path": {
+    "key": "x-ibm-finding.x_path",
+    "object": "alert"
+  },
+  "receivedAt": {
+    "key": "x-ibm-finding.x_received_at",
+    "object": "alert"
+  },
+  "suppressedAt": {
+    "key": "x-ibm-finding.x_suppressed_at",
+    "object": "alert"
+  },
+  "findingId": {
+    "key": "x-ibm-finding.x_finding_id",
+    "object": "alert"
+  },
+  "ackedAt": {
+    "key": "x-ibm-finding.x_acked_at",
+    "object": "alert"
+  },
+  "firstEIDResolutionAttempt": {
+    "key": "x-ibm-finding.x_first_eid_resolution_attempt",
+    "object": "alert"
+  },
+  "lastEIDResolutionAttempt": {
+    "key": "x-ibm-finding.x_last_eid_resolution_attempt",
+    "object": "alert"
+  },
+  "createdAt": [
+    {
+      "key": "x-ibm-finding.time_observed",
+      "object": "alert"
+    },
+    {
+      "key": "first_observed"
+    }
+  ],
+  "updatedAt": {
+    "key": "last_observed"
+  },
+  "computerIpAddress": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "target-ip",
+      "transformer": "CheckIPv4"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "target-ip",
+      "transformer": "CheckIPv6"
+    },
+    {
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "alert",
+      "references": "target-ip"
+    },
+    {
+      "key": "x-oca-event.ip_refs",
+      "object": "event",
+      "references": [
+        "ip"
+      ]
+    },
+    {
+      "key": "x-oca-asset.ip_refs",
+      "object": "target-asset",
+      "references": [
+        "target-ip"
+      ]
+    }
+  ],
+  "computerName": [
+    {
+      "key": "x-oca-asset.name",
+      "object": "target-asset"
+    }
+  ],
+  "state": {
+    "key": "x-oca-event.outcome",
+    "object": "event"
+  },
+  "severity": {
+    "key": "x-ibm-finding.severity",
+    "object": "alert",
+    "transformer": "ConvertTextSeverityToNumberValue"
+  },
+  "details": {
+    "match": {
+      "hash": {
+        "key": "x-ibm-finding.x_match_hash",
+        "object": "alert"
+      },
+      "type": {
+        "key": "x-ibm-finding.x_match_type",
+        "object": "alert"
+      },
+      "source": {
+        "key": "x-ibm-finding.x_match_source",
+        "object": "alert"
+      },
+      "version": {
+        "key": "x-ibm-finding.x_match_version",
+        "object": "alert"
+      },
+      "contexts": {
+        "file": {
+          "uniqueEventId": {
+            "key": "x-ibm-finding.x_match_unique_event_id",
+            "object": "alert"
+          }
+        },
+        "event": {
+          "fileCreate": {
+            "path": {
+              "key": "x-ibm-finding.x_match_path",
+              "object": "alert"
+            }
+          },
+          "fileMove": {
+            "srcPath": {
+              "key": "x-ibm-finding.x_match_srcpath",
+              "object": "alert"
+            },
+            "destPath": {
+              "key": "x-ibm-finding.x_match_dstpath",
+              "object": "alert"
+            }
+          },
+          "timestampMs": {
+            "key": "x-ibm-finding.x_match_timestamp",
+            "object": "alert"
+          }
+        }
+      },
+      "properties": {
+        "pid": [
+          {
+            "key": "process.pid",
+            "object": "process"
+          },
+          {
+            "key": "x-ibm-finding.x_match_process_ref",
+            "object": "alert",
+            "references": "process"
+          },
+          {
+            "key": "x-oca-event.process_ref",
+            "object": "event",
+            "references": "process"
+          }
+        ],
+        "file": {
+          "hashes": {
+            "key": "file.hashes",
+            "object": "processFile"
+          },
+          "fullpath": [
+            {
+              "key": "file.name",
+              "object": "processFile",
+              "transformer": "ProcessNameTransformer"
+            },
+            {
+              "key": "directory.path",
+              "object": "processFileDirectory",
+              "transformer": "ProcessCWDPathTransformer"
+            },
+            {
+              "key": "file.parent_directory_ref",
+              "object": "processFile",
+              "references": "processFileDirectory"
+            },
+            {
+              "key": "process.binary_ref",
+              "object": "process",
+              "references": "processFile"
+            }
+          ]
+        },
+        "ppid": [
+          {
+            "key": "process.pid",
+            "object": "parent-process"
+          },
+          {
+            "key": "process.parent_ref",
+            "object": "process",
+            "references": "parent-process"
+          }
+        ],
+        "start_time": {
+          "key": "process.created",
+          "object": "process"
+        },
+        "args": {
+          "key": "process.arguments",
+          "object": "process",
+          "transformer": "ProcessArgsTransformer"
+        },
+        "user": [
+          {
+            "key": "user-account.x_full_username",
+            "object": "source-user"
+          },
+          {
+            "key": "process.creator_user_ref",
+            "object": "process",
+            "references": "source-user"
+          }
+        ],
+        "name": [
+          {
+            "key": "process.name",
+            "object": "process",
+            "transformer": "ProcessNameTransformer"
+          },
+          {
+            "key": "process.cwd",
+            "object": "process",
+            "transformer": "ProcessCWDPathTransformer"
+          }
+        ],
+        "recorder_unique_id": {
+          "key": "x-ibm-finding.x_match_recorder_id",
+          "object": "alert"
+        }
+      }
+    },
+    "finding": {
+      "whats": {
+        "source_name": {
+          "key": "x-ibm-finding.x_finding_source_name",
+          "object": "alert"
+        },
+        "artifact_activity": {
+          "acting_artifact": {
+            "process": {
+              "pid": [
+                {
+                  "key": "process.pid",
+                  "object": "process"
+                },
+                {
+                  "key": "x-oca-event.process_ref",
+                  "object": "event",
+                  "references": "process"
+                },
+                {
+                  "key": "x-ibm-finding.x_finding_process_ref",
+                  "object": "alert",
+                  "references": "process"
+                }
+              ],
+              "user": {
+                "user": {
+                  "user_id": [
+                    {
+                      "key": "user-account.user_id",
+                      "object": "source-user"
+                    },
+                    {
+                      "key": "process.creator_user_ref",
+                      "object": "process",
+                      "references": "source-user"
+                    },
+                    {
+                      "key": "x-ibm-finding.dst_os_user_ref",
+                      "object": "alert",
+                      "references": "source-user"
+                    },
+                    {
+                      "key": "x-oca-event.user_ref",
+                      "object": "event",
+                      "references": "source-user"
+                    }
+                  ],
+                  "name": {
+                    "key": "user-account.display_name",
+                    "object": "source-user"
+                  },
+                  "domain": {
+                    "key": "user-account.is_service_account",
+                    "object": "source-user",
+                    "transformer": "ProcessUserDaemonTransformer"
+                  }
+                }
+              },
+              "file": {
+                "file": {
+                  "hash": {
+                    "key": "file.hashes",
+                    "object": "processFile"
+                  },
+                  "path": [
+                    {
+                      "key": "file.name",
+                      "object": "processFile",
+                      "transformer": "ProcessNameTransformer"
+                    },
+                    {
+                      "key": "directory.path",
+                      "object": "processFileDirectory",
+                      "transformer": "ProcessCWDPathTransformer"
+                    },
+                    {
+                      "key": "file.parent_directory_ref",
+                      "object": "processFile",
+                      "references": "processFileDirectory"
+                    },
+                    {
+                      "key": "process.binary_ref",
+                      "object": "process",
+                      "references": "processFile"
+                    },
+                    {
+                      "key": "x-oca-event.file_ref",
+                      "object": "event",
+                      "references": "processFile"
+                    }
+                  ],
+                  "signature_data": {
+                    "issuer": {
+                      "key": "x509-certificate.issuer",
+                      "object": "certificate"
+                    },
+                    "subject": {
+                      "key": "x509-certificate.subject",
+                      "object": "certificate"
+                    },
+                    "status": {
+                      "key": "x509-certificate.x_status",
+                      "object": "certificate"
+                    }
+                  }
+                },
+                "artifact_hash": {
+                  "key": "file.x_artifact_hash",
+                  "object": "processFile"
+                },
+                "instance_hash": {
+                  "key": "file.x_instance_hash",
+                  "object": "processFile"
+                }
+              },
+              "parent": {
+                "process": {
+                  "pid": [
+                    {
+                      "key": "process.pid",
+                      "object": "parent-process"
+                    },
+                    {
+                      "key": "process.parent_ref",
+                      "object": "process",
+                      "references": "parent-process"
+                    },
+                    {
+                      "key": "x-oca-event.parent_process_ref",
+                      "object": "event",
+                      "references": "process"
+                    }
+                  ],
+                  "arguments": {
+                    "key": "process.arguments",
+                    "object": "parent-process",
+                    "transformer": "ProcessArgsTransformer"
+                  },
+                  "start_time": {
+                    "key": "process.created",
+                    "object": "parent-process"
+                  },
+                  "user": {
+                    "user": {
+                      "user_id": {
+                        "key": "user-account.user_id",
+                        "object": "parent-source-user"
+                      },
+                      "name": {
+                        "key": "user-account.display_name",
+                        "object": "parent-source-user"
+                      },
+                      "domain": [
+                        {
+                          "key": "user-account.is_service_account",
+                          "object": "parent-source-user",
+                          "transformer": "ProcessUserDaemonTransformer"
+                        },
+                        {
+                          "key": "process.creator_user_ref",
+                          "object": "parent-process",
+                          "references": "parent-source-user"
+                        }
+                      ]
+                    }
+                  },
+                  "file": {
+                    "file": {
+                      "hash": {
+                        "key": "file.hashes",
+                        "object": "parent-processFile"
+                      },
+                      "path": [
+                        {
+                          "key": "file.name",
+                          "object": "parent-processFile",
+                          "transformer": "ProcessNameTransformer"
+                        },
+                        {
+                          "key": "directory.path",
+                          "object": "parent-processFileDirectory",
+                          "transformer": "ProcessCWDPathTransformer"
+                        },
+                        {
+                          "key": "file.parent_directory_ref",
+                          "object": "parent-processFile",
+                          "references": "parent-processFileDirectory"
+                        },
+                        {
+                          "key": "process.binary_ref",
+                          "object": "parent-process",
+                          "references": "parent-processFile"
+                        }
+                      ],
+                      "signature_data": {
+                        "issuer": {
+                          "key": "x509-certificate.issuer",
+                          "object": "parent-processFile-certificate"
+                        },
+                        "subject": {
+                          "key": "x509-certificate.subject",
+                          "object": "parent-processFile-certificate"
+                        },
+                        "status": {
+                          "key": "x509-certificate.x_status",
+                          "object": "parent-processFile-certificate"
+                        }
+                      }
+                    },
+                    "artifact_hash": {
+                      "key": "file.x_artifact_hash",
+                      "object": "parent-processFile"
+                    },
+                    "instance_hash": {
+                      "key": "file.x_artifact_hash",
+                      "object": "parent-processFile"
+                    }
+                  },
+                  "handles": {
+                    "key": "process.x_handles",
+                    "object": "parent-process"
+                  },
+                  "tanium_unique_id": {
+                    "key": "process.x_unique_id",
+                    "object": "parent-process"
+                  }
+                },
+                "artifact_hash": {
+                  "key": "process.x_artifact_hash",
+                  "object": "parent-process"
+                },
+                "instance_hash": {
+                  "key": "process.x_instance_hash",
+                  "object": "parent-process"
+                }
+              },
+              "handles": {
+                "key": "process.x_handles",
+                "object": "process"
+              },
+              "arguments": {
+                "key": "process.arguments",
+                "object": "process",
+                "transformer": "ProcessArgsTransformer"
+              },
+              "start_time": {
+                "key": "process.created",
+                "object": "process"
+              },
+              "tanium_unique_id": {
+                "key": "process.x_unique_id",
+                "object": "process"
+              }
+            },
+            "artifact_hash": {
+              "key": "process.x_artifact_hash",
+              "object": "process"
+            },
+            "instance_hash": {
+              "key": "process.x_instance_hash",
+              "object": "process"
+            },
+            "is_intel_target": {
+              "key": "process.x_intel_target",
+              "object": "process"
+            }
+          },
+          "relevant_actions": {
+            "verb": {
+              "key": "x-tanium-action.verb",
+              "object": "action"
+            },
+            "target": {
+              "file": {
+                "path": [
+                  {
+                    "key": "file.name",
+                    "object": "file-action",
+                    "transformer": "ProcessNameTransformer"
+                  },
+                  {
+                    "key": "directory.path",
+                    "object": "file-directory-action",
+                    "transformer": "ProcessCWDPathTransformer"
+                  },
+                  {
+                    "key": "file.parent_directory_ref",
+                    "object": "file-action",
+                    "references": "file-directory-action"
+                  },
+                  {
+                    "key": "x-tanium-action.binary_ref",
+                    "object": "action",
+                    "references": "file-action"
+                  }
+                ],
+                "hash": {
+                  "key": "file.hashes",
+                  "object": "match-file"
+                },
+                "size_bytes": {
+                  "key": "file.x_size_bytes",
+                  "object": "match-file"
+                },
+                "modification_time": {
+                  "key": "file.atime",
+                  "object": "match-file"
+                },
+                "instance_hash_salt": {
+                  "key": "file.x_instance_hash_salt",
+                  "object": "match-file"
+                }
+              },
+              "artifact_hash": {
+                "key": "x-tanium-action.artifact_hash",
+                "object": "action"
+              },
+              "instance_hash": {
+                "key": "x-tanium-action.instance_hash",
+                "object": "action"
+              }
+            },
+            "timestamp": {
+              "key": "x-tanium-action.timestamp",
+              "object": "action"
+            },
+            "tanium_recorder_context": {
+              "file": {
+                "unique_event_id": {
+                  "key": "x-tanium-action.event_id",
+                  "object": "action"
+                }
+              },
+              "event": {
+                "file_create": {
+                  "path": [
+                    {
+                      "key": "file.name",
+                      "object": "file-action",
+                      "transformer": "ProcessNameTransformer"
+                    },
+                    {
+                      "key": "directory.path",
+                      "object": "file-directory-action",
+                      "transformer": "ProcessCWDPathTransformer"
+                    },
+                    {
+                      "key": "file.parent_directory_ref",
+                      "object": "file-action",
+                      "references": "file-directory-action"
+                    },
+                    {
+                      "key": "x-tanium-action.binary_ref",
+                      "object": "action",
+                      "references": "file-action"
+                    }
+                  ]
+                },
+                "timestamp_ms": {
+                  "key": "x-tanium-action.timestamp_ms",
+                  "object": "action"
+                }
+              }
+            },
+            "tanium_recorder_event_table_id": {
+              "key": "x-tanium-action.recorder_event_table_id",
+              "object": "action"
+            },
+            "actionGroup": {
+              "key": "x-ibm-finding.x_action",
+              "object": "alert",
+              "references": [
+                "action"
+              ],
+              "group_ref": true
+            }
+          }
+        }
+      },
+      "domain": {
+        "key": "x-ibm-finding.x_finding_domain",
+        "object": "alert"
+      },
+      "hunt_id": {
+        "key": "x-ibm-finding.x_finding_hunt_id",
+        "object": "alert"
+      },
+      "intel_id": {
+        "key": "x-ibm-finding.x_finding_intel_id",
+        "object": "alert"
+      },
+      "last_seen": {
+        "key": "x-ibm-finding.x_finding_last_seen",
+        "object": "alert"
+      },
+      "threat_id": {
+        "key": "x-ibm-finding.x_finding_threat_id",
+        "object": "alert"
+      },
+      "finding_id": {
+        "key": "x-ibm-finding.x_finding_finding_id",
+        "object": "alert"
+      },
+      "first_seen": {
+        "key": "x-ibm-finding.x_finding_first_seen",
+        "object": "alert"
+      },
+      "source_name": {
+        "key": "x-ibm-finding.x_finding_source_name",
+        "object": "alert"
+      },
+      "reporting_id": {
+        "key": "x-ibm-finding.x_finding_reporting_id",
+        "object": "alert"
+      },
+      "system_info": {
+        "os": [
+          {
+            "key": "software.name",
+            "object": "target-operating-system"
+          },
+          {
+            "key": "x-ibm-finding.dst_os_ref",
+            "object": "alert",
+            "references": "target-operating-system"
+          }
+        ],
+        "patch_level": {
+          "key": "software.version",
+          "object": "target-operating-system"
+        },
+        "bits": {
+          "key": "software.x_bits",
+          "object": "target-operating-system"
+        },
+        "build_number": {
+          "key": "software.x_build_number",
+          "object": "target-operating-system"
+        },
+        "platform": {
+          "key": "software.x_platform_list",
+          "object": "target-operating-system"
+        }
+      }
+    },
+    "intel_id": {
+      "key": "x-ibm-finding.x_intel_id",
+      "object": "alert"
+    },
+    "config_id": {
+      "key": "x-ibm-finding.x_config_id",
+      "object": "alert"
+    },
+    "config_rev_id": {
+      "key": "x-ibm-finding.x_config_rev_id",
+      "object": "alert"
+    }
+  },
+  "matchType": {
+    "key": "x-oca-event.category",
+    "object": "event"
+  },
+  "alertedAt": [
+    {
+      "key": "x-ibm-finding.x_alerted_at",
+      "object": "alert"
+    }
+  ],
+  "intelDoc": {
+    "id": [
+      {
+        "key": "x-tanium-inteldocument.intel_doc_id",
+        "object": "intel-document"
+      },
+      {
+        "key": "x-ibm-finding.x_intel_doc_ref",
+        "object": "alert",
+        "references": "intel-document"
+      }
+    ],
+    "typeVersion": {
+      "key": "x-tanium-inteldocument.type_version",
+      "object": "intel-document"
+    },
+    "md5": {
+      "key": "x-tanium-inteldocument.md5",
+      "object": "intel-document"
+    },
+    "blobId": {
+      "key": "x-tanium-inteldocument.blob_id",
+      "object": "intel-document"
+    },
+    "revisionId": {
+      "key": "x-tanium-inteldocument.revision_id",
+      "object": "intel-document"
+    },
+    "size": {
+      "key": "x-tanium-inteldocument.size",
+      "object": "intel-document"
+    },
+    "compiled": {
+      "terms": {
+        "condition": {
+          "key": "x-compiled-terms.condition",
+          "object": "compiled-terms"
+        },
+        "negate": {
+          "key": "x-compiled-terms.negate",
+          "object": "compiled-terms"
+        },
+        "value": {
+          "key": "x-compiled-terms.value",
+          "object": "compiled-terms"
+        },
+        "object": {
+          "key": "x-compiled-terms.object",
+          "object": "compiled-terms"
+        },
+        "property": {
+          "key": "x-compiled-terms.property",
+          "object": "compiled-terms"
+        },
+        "groupReference": {
+          "key": "x-tanium-inteldocument.x_compiled_terms",
+          "object": "intel-document",
+          "references": [
+            "compiled-terms"
+          ],
+          "group_ref": true
+        }
+      },
+      "operator": {
+        "key": "x-tanium-inteldocument.operator",
+        "object": "intel-document"
+      },
+      "text": {
+        "key": "x-tanium-inteldocument.text",
+        "object": "intel-document"
+      },
+      "syntax_version": {
+        "key": "x-tanium-inteldocument.syntax_version",
+        "object": "intel-document"
+      }
+    },
+    "name": [
+      {
+        "key": "x-ibm-finding.name",
+        "object": "alert"
+      },
+      {
+        "key": "x-oca-event.action",
+        "object": "event"
+      }
+    ],
+    "description": [
+      {
+        "key": "x-ibm-finding.description",
+        "object": "alert"
+      },
+      {
+        "key": "x-oca-event.description",
+        "object": "event"
+      }
+    ],
+    "type": {
+      "key": "x-oca-event.provider",
+      "object": "event"
+    },
+    "mitreAttack": {
+      "techniques": {
+        "name": [
+          {
+            "key": "x-ibm-ttp-tagging.name",
+            "object": "mitre-tag"
+          },
+          {
+            "key": "x-ibm-ttp-tagging.extensions.technique_name",
+            "object": "mitre-tag"
+          },
+          {
+            "key": "x-ibm-finding.ttp_tagging_refs",
+            "object": "alert",
+            "references": "mitre-tag"
+          },
+          {
+            "key": "x-oca-event.ttp_tagging_refs",
+            "object": "event",
+            "references": "mitre-tag"
+          }
+        ],
+        "id": {
+          "key": "x-ibm-ttp-tagging.extensions.technique_id",
+          "object": "mitre-tag"
+        }
+      }
+    },
+    "createdAt": {
+      "key": "x-tanium-inteldocument.x_created",
+      "object": "intel-document"
+    },
+    "updatedAt": {
+      "key": "x-tanium-inteldocument.x_updated",
+      "object": "intel-document"
+    },
+    "platforms": {
+      "key": "x-tanium-inteldocument.x_platform_list",
+      "object": "intel-document"
+    },
+    "isSchemaValid": {
+      "key": "x-tanium-inteldocument.is_schema_valid",
+      "object": "intel-document"
+    },
+    "sourceId": {
+      "key": "x-tanium-inteldocument.source_id",
+      "object": "intel-document"
+    },
+    "alertCount": {
+      "key": "x-ibm-finding.event_count",
+      "object": "alert"
+    },
+    "unresolvedAlertCount": {
+      "key": "x-tanium-inteldocument.unresolved_alert_count",
+      "object": "intel-document"
+    },
+    "customHash": {
+      "key": "x-tanium-inteldocument.custom_hash",
+      "object": "intel-document"
+    },
+    "throttledFindingCount": {
+      "key": "x-tanium-inteldocument.throttled_finding_count",
+      "object": "intel-document"
+    },
+    "allowAutoDisable": {
+      "key": "x-tanium-inteldocument.allow_auto_disable",
+      "object": "intel-document"
+    },
+    "disabled": {
+      "key": "x-tanium-inteldocument.disabled",
+      "object": "intel-document"
+    },
+    "disabledEndpointCount": {
+      "key": "x-tanium-inteldocument.disabled_endpoint_count",
+      "object": "intel-document"
+    },
+    "firstDeploymentTimestamp": {
+      "key": "x-tanium-inteldocument.first_deployment_timestamp",
+      "object": "intel-document"
+    },
+    "lastDeploymentTimestamp": {
+      "key": "x-tanium-inteldocument.last_deployment_timestamp",
+      "object": "intel-document"
+    },
+    "status": {
+      "key": "x-tanium-inteldocument.status",
+      "object": "intel-document"
+    }
+  }
+}

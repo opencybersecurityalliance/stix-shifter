@@ -1,0 +1,563 @@
+{
+  "ip_src": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "src_ip"
+    },
+    {
+      "key": "x-ibm-finding.src_ip_ref",
+      "object": "alert",
+      "references": "src_ip"
+    }
+  ],
+  "ip_dst": [
+    {
+      "key": "ipv4-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "ipv6-addr.value",
+      "object": "dst_ip"
+    },
+    {
+      "key": "x-ibm-finding.dst_ip_ref",
+      "object": "alert",
+      "references": "dst_ip"
+    }
+  ],
+  "mac_src": {
+    "key": "mac-addr.value",
+    "object": "mac_addr_src"
+  },
+  "mac_dst": {
+    "key": "mac-addr.value",
+    "object": "mac_addr_dst"
+  },
+  "port_dst": {
+    "key": "network-traffic.dst_port",
+    "object": "nt"
+  },
+  "port_src": {
+    "key": "network-traffic.src_port",
+    "object": "nt"
+  },
+  "protocol": [
+    {
+      "key": "network-traffic.protocols",
+      "object": "nt",
+      "group": true,
+      "transformer": "ToProtocolValue"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "mac_addr_dst"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "mac_addr_src"
+    }
+  ],
+  "transport_protocol": [
+    {
+      "key": "network-traffic.protocols",
+      "object": "nt",
+      "group": true,
+      "transformer": "ToProtocolValue"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "dst_ip"
+    },
+    {
+      "key": "network-traffic.dst_ref",
+      "object": "nt",
+      "references": "mac_addr_dst"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "src_ip"
+    },
+    {
+      "key": "network-traffic.src_ref",
+      "object": "nt",
+      "references": "mac_addr_src"
+    }
+  ],
+  "id": {
+    "key": "x-ibm-finding.alert_id",
+    "object": "alert"
+  },
+  "time": [
+    {
+      "key": "x-ibm-finding.time_observed",
+      "object": "alert",
+      "transformer": "EpochToTimestamp"
+    },
+    {
+      "key": "first_observed",
+      "transformer": "EpochToTimestamp"
+    },
+    {
+      "key": "last_observed",
+      "transformer": "EpochToTimestamp"
+    }
+  ],
+  "type_name": {
+    "key": "x-ibm-finding.name",
+    "object": "alert"
+  },
+  "description": {
+    "key": "x-ibm-finding.description",
+    "object": "alert"
+  },
+  "risk": {
+    "key": "x-ibm-finding.severity",
+    "object": "alert",
+    "transformer": "ToSeverityValue"
+  },
+  "created_time": {
+    "key": "x-ibm-finding.start",
+    "object": "alert",
+    "transformer": "EpochToTimestamp"
+  },
+  "closed_time": {
+    "key": "x-ibm-finding.end",
+    "object": "alert",
+    "transformer": "EpochToTimestampConversion"
+  },
+  "type_id": {
+    "key": "x-ibm-finding.x_alert_type_id",
+    "object": "alert"
+  },
+  "is_security": {
+    "key": "x-ibm-finding.x_is_cybersecurity_alert",
+    "object": "alert"
+  },
+  "is_incident": {
+    "key": "x-ibm-finding.x_is_incident_alert",
+    "object": "alert"
+  },
+  "appliance_host": {
+    "key": "x-ibm-finding.x_sensor_host",
+    "object": "alert"
+  },
+  "capture_device": {
+    "key": "x-ibm-finding.x_sensor_interface",
+    "object": "alert"
+  },
+  "threat_name": [
+    {
+      "key": "x-ibm-finding.x_threat_name",
+      "object": "alert"
+    },
+    {
+      "key": "x-ibm-finding.finding_type",
+      "object": "alert",
+      "transformer": "ToFindingType"
+    }
+  ],
+  "trigger_id": {
+    "key": "x-ibm-finding.x_rule_id",
+    "object": "alert"
+  },
+  "trigger_type": {
+    "key": "x-ibm-finding.rule_names",
+    "object": "alert",
+    "transformer": "ValueToList"
+  },
+  "zone_dst": [
+    {
+      "key": "x-nozomi-info.zone",
+      "object": "dst_node_info"
+    },
+    {
+      "key": "ipv4-addr.x_nozomi_info_ref",
+      "object": "dst_ip",
+      "references": "dst_node_info"
+    }
+  ],
+  "zone_src": [
+    {
+      "key": "x-nozomi-info.zone",
+      "object": "src_node_info"
+    },
+    {
+      "key": "ipv4-addr.x_nozomi_info_ref",
+      "object": "src_ip",
+      "references": "src_node_info"
+    }
+  ],
+  "dst_roles": {
+    "key": "x-nozomi-info.roles",
+    "object": "dst_node_info"
+  },
+  "src_roles": {
+    "key": "x-nozomi-info.roles",
+    "object": "src_node_info"
+  },
+  "label_src": {
+    "key": "x-nozomi-info.label",
+    "object": "src_node_info"
+  },
+  "label_dst": {
+    "key": "x-nozomi-info.label",
+    "object": "dst_node_info"
+  },
+  "ack": {
+    "key": "x-ibm-finding.x_is_acknowledged",
+    "object": "alert"
+  },
+  "status": {
+    "key": "x-ibm-finding.x_alert_status",
+    "object": "alert"
+  },
+  "note": {
+    "key": "x-ibm-finding.x_user_note",
+    "object": "alert"
+  },
+  "properties": {
+    "cause": {
+        "key": "x-ibm-finding.x_cause",
+        "object": "alert"
+      },
+    "victims": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "victim_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv4List"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "victim_ip",
+        "unwrap": true,
+        "transformer": "FilterIPv6List"
+      },
+      {
+        "key": "x-ibm-finding.ioc_refs",
+        "object": "alert",
+        "references": ["victim_ip"],
+        "group": true
+      }
+    ],
+    "solution": {
+        "key": "x-ibm-finding.x_solution",
+        "object": "alert"
+      },
+    "bad_actor": [
+      {
+        "key": "mac-addr.value",
+        "object": "mac_addr_bad",
+        "transformer": "ValidateMacAddr"
+      },
+      {
+        "key": "x-ibm-finding.ioc_refs",
+        "object": "alert",
+        "references": [
+          "mac_addr_bad"
+        ],
+        "group": true
+      }
+    ],
+    "message": {
+        "key": "x-ibm-finding.x_message",
+        "object": "alert"
+      },
+    "cve_references": {
+      "key": "x-ibm-finding.x_cve_references",
+      "object": "alert"
+    },
+    "is_dst_public": [
+      {
+        "key": "x-nozomi-info.is_public",
+        "object": "dst_node_info"
+      },
+      {
+        "key": "ipv4-addr.x_nozomi_info_ref",
+        "object": "dst_ip",
+        "references": "dst_node_info"
+      }
+    ],
+    "is_src_public": [
+      {
+        "key": "x-nozomi-info.is_public",
+        "object": "src_node_info"
+      },
+      {
+        "key": "ipv4-addr.x_nozomi_info_ref",
+        "object": "src_ip",
+        "references": "src_node_info"
+      }
+    ],
+    "is_dst_node_learned": [
+      {
+        "key": "x-nozomi-info.is_node_learned",
+        "object": "dst_node_info"
+      },
+      {
+        "key": "ipv4-addr.x_nozomi_info_ref",
+        "object": "dst_ip",
+        "references": "dst_node_info"
+      },
+      {
+        "key": "mac-addr.x_nozomi_info_ref",
+        "object": "mac_addr_dst",
+        "references": "dst_node_info"
+      }
+    ],
+    "is_src_node_learned": [
+      {
+        "key": "x-nozomi-info.is_node_learned",
+        "object": "src_node_info"
+      },
+      {
+        "key": "ipv4-addr.x_nozomi_info_ref",
+        "object": "src_ip",
+        "references": "src_node_info"
+      },
+      {
+        "key": "mac-addr.x_nozomi_info_ref",
+        "object": "mac_addr_src",
+        "references": "src_node_info"
+      }
+    ],
+    "is_dst_reputation_bad": {
+      "key": "x-nozomi-info.is_reputation_bad",
+      "object": "dst_node_info"
+    },
+    "is_src_reputation_bad": {
+      "key": "x-nozomi-info.is_reputation_bad",
+      "object": "src_node_info"
+    },
+    "src_is_an_attacker": {
+      "key": "x-nozomi-info.is_an_attacker",
+      "object": "src_node_info"
+    },
+    "network_learnable": {
+      "key": "x-ibm-finding.x_network_learnable",
+      "object": "alert"
+    },
+    "process": {
+      "pid": {
+        "key": "process.pid",
+        "object": "process",
+        "transformer": "ToInteger"
+      },
+      "user": [
+        {
+          "key": "user-account.user_id",
+          "object": "user"
+        },
+        {
+          "key": "process.creator_user_ref",
+          "object": "process",
+          "references": "user"
+        }
+      ],
+      "image_path": [
+        {
+          "key": "directory.path",
+          "object": "file_dir",
+          "transformer": "ToDirectoryPath"
+        },
+        {
+          "key": "file.name",
+          "object": "image_file",
+          "transformer": "ToFileName"
+        },
+        {
+          "key": "file.parent_directory_ref",
+          "object": "image_file",
+          "references": "file_dir"
+        },
+        {
+          "key": "process.binary_ref",
+          "object": "process",
+          "references": "image_file"
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "alert",
+          "references": [
+            "image_file"
+          ],
+          "group": true
+        }
+      ],
+      "command_line": {
+        "key": "process.command_line",
+        "object": "process"
+      },
+      "image_hash_sha256": {
+        "key": "file.hashes.SHA-256",
+        "object": "image_file"
+      },
+      "ancestry": [
+        {
+          "key": "directory.path",
+          "object": "parent_file_dir",
+          "transformer": "ToDirectoryPath"
+        },
+        {
+          "key": "file.name",
+          "object": "parent_file",
+          "transformer": "ToFileName"
+        },
+        {
+          "key": "file.parent_directory_ref",
+          "object": "parent_file",
+          "references": "parent_file_dir"
+        },
+        {
+          "key": "process.command_line",
+          "object": "parent_process"
+        },
+        {
+          "key": "process.binary_ref",
+          "object": "parent_process",
+          "references": "parent_file"
+        },
+        {
+          "key": "process.parent_ref",
+          "object": "process",
+          "references": "parent_process"
+        }
+      ]
+    },
+    "mitre_attack_enterprise": {
+      "techniques": {
+        "id": {
+          "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_id",
+          "object": "ttp_finding_ent"
+        },
+        "name": [
+          {
+            "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+            "object": "ttp_finding_ent"
+          },
+          {
+            "key": "x-ibm-ttp-tagging.name",
+            "object": "ttp_finding_ent"
+          }
+        ],
+        "tactic": [
+          {
+            "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+            "object": "ttp_finding_ent"
+          },
+          {
+            "key": "x-ibm-ttp-tagging.kill_chain_phases",
+            "object": "ttp_finding_ent",
+            "transformer": "ChainNameValue"
+          }
+        ],
+        "groupdstReference": {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "alert",
+          "references": [
+            "ttp_finding_ent"
+          ],
+          "group_ref": true,
+          "group": true
+        }
+      }
+    },
+    "mitre_attack_for_ics": {
+      "techniques": {
+        "id": [
+          {
+            "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_id",
+            "object": "ttp_finding_ics"
+          }
+        ],
+        "name": [
+          {
+            "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.technique_name",
+            "object": "ttp_finding_ics"
+          },
+          {
+            "key": "x-ibm-ttp-tagging.name",
+            "object": "ttp_finding_ics"
+          }
+        ],
+        "tactic": [
+          {
+            "key": "x-ibm-ttp-tagging.extensions.mitre-attack-ext.tactic_name",
+            "object": "ttp_finding_ics"
+          },
+          {
+            "key": "x-ibm-ttp-tagging.kill_chain_phases",
+            "object": "ttp_finding_ics",
+            "transformer": "ChainNameValue"
+          }
+        ],
+        "groupdstReference": {
+          "key": "x-ibm-finding.ttp_tagging_refs",
+          "object": "alert",
+          "references": [
+            "ttp_finding_ics"
+          ],
+          "group_ref": true,
+          "group": true
+        }
+      }
+    },
+    "details_hash_MD5": {
+      "value": {
+        "key": "file.hashes.MD5",
+        "object": "file"
+      }
+    },
+    "details_hash_SHA256": {
+      "value": {
+        "key": "file.hashes.SHA-256",
+        "object": "file"
+      }
+    },
+    "details_hash_SHA1": {
+      "value": {
+        "key": "file.hashes.SHA-1",
+        "object": "file"
+      }
+    },
+    "details_yara_file": {
+      "value": [
+        {
+          "key": "file.name",
+          "object": "file"
+        },
+        {
+          "key": "x-ibm-finding.ioc_refs",
+          "object": "alert",
+          "references": ["file"],
+          "group": true
+        }
+      ]
+    },
+    "details_file_size": {
+      "value": {
+        "key": "file.size",
+        "object": "file",
+        "transformer": "SizeToInteger"
+      }
+    }
+  }
+}

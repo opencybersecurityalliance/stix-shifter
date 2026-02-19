@@ -57,19 +57,16 @@
   ],
   "EventCount": {
     "key": "number_observed",
-    "cybox": false,
     "transformer": "ToInteger"
   },
   "StartTime": [
     {
       "key": "first_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
+      "transformer": "EpochToTimestamp"
     },
     {
       "key": "last_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
+      "transformer": "EpochToTimestamp"
     }
   ],
   "Url": {

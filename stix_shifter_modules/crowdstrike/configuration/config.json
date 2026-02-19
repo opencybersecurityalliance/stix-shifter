@@ -1,7 +1,7 @@
 {
     "connection": {
         "type": {
-            "displayName": "Crowdstrike Falcon",
+            "displayName": "CrowdStrike Falcon",
             "group": "crowdstrike"
         },
         "host": {

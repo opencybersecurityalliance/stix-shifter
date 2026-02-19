@@ -1,6 +1,10 @@
-# Trend Micro Vision One Connector
+# Trend Micro Vision One
 
 Trend Micro Vision One collects and correlates data across email, endpoint, servers, cloud workloads, and networks, enabling visibility and analysis that is difficult or impossible to achieve otherwise.
+
+## Supported STIX Mappings
+
+See the [table of mappings](trendmicro_vision_one_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 ### Dialects
 

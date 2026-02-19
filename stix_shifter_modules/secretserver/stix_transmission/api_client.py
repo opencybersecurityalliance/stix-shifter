@@ -4,14 +4,20 @@ import re
 from datetime import date, timedelta
 from dateutil import parser
 import os
-from datetime import datetime
-from requests import Response
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync, ResponseWrapper, \
     CONNECT_TIMEOUT_DEFAULT
 import random
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
+
+class ClientResponse:
+    message = None
+    def read(self):
+        return self._content
+
+    def __repr__(self):
+        return self.message
 
 class APIClient():
 
@@ -23,7 +29,6 @@ class APIClient():
         self.connect_timeout = int(self.connect_timeout)
         self.server_cert_content = False
         self.auth = None
-        self.sni = None
         self.retry_max = 1
         self.logger = logger.set_logger(__name__)
         self.server_cert_file_content_exists = False
@@ -37,12 +42,13 @@ class APIClient():
 
         self.secret_server_userdetail_url = "/api/v1/users/"
         self.report_endpoint = "api/v1/reports/execute"
+        self.timeout = connection['options'].get('timeout')
 
     async def get_token(self):
         response = await RestApiClientAsync.call_api(self, self.auth_token_url, 'GET', headers=self.headers,
                                           data=self.payload,
                                           urldata=None,
-                                          timeout=None)
+                                          timeout=self.timeout)
 
         return_obj = {}
         response_code = response.code
@@ -60,11 +66,11 @@ class APIClient():
     async def ping_data_source(self):
         response = await RestApiClientAsync.call_api(self, self.auth_token_url, 'GET', headers=self.headers, data=self.payload,
                                           urldata=None,
-                                          timeout=None)
+                                          timeout=self.timeout)
         return response.code
 
     async def create_search(self, query_expression):
-        respObj = Response()
+        respObj = ClientResponse()
         token = await self.get_token()
         if (token):
             self.query = query_expression
@@ -154,7 +160,7 @@ class APIClient():
         }
 
         response = await RestApiClientAsync.call_api(self, self.report_endpoint, 'POST', headers=headers, data=payload, urldata=None,
-                                          timeout=None)
+                                          timeout=self.timeout)
         return_obj = {}
         if response.code != 200:
             response_txt = response.response.text
@@ -200,7 +206,7 @@ class APIClient():
             payload = {}
             response = await RestApiClientAsync.call_api(self, secret_server_user_url, 'GET', headers=headers, data=payload,
                                               urldata=None,
-                                              timeout=None)
+                                              timeout=self.timeout)
 
             secretCollection.append(response.response.text)
         json_data = json.dumps(secretCollection)

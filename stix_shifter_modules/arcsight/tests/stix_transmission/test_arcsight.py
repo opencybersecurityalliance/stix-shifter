@@ -23,7 +23,8 @@ SEARCH_ID = "1594383044445:e929MKkCf6i7ngBa3laxFFUJIZtfXINHULlc0oiE6RA."
 
 class TestArcsightConnection(TestCase):
     @staticmethod
-    def test_is_async():
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_is_async(self):
         """to check connector is async"""
         entry_point = EntryPoint(CONNECTION, CONFIG)
         check_async = entry_point.is_async()
@@ -31,7 +32,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.ping_data_source', autospec=True)
-    def test_ping(mock_ping):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_ping(self, mock_ping):
         """to check the ping status of connector"""
         mock_ping.return_value = get_mock_response(200, '{"sessionId":"2"}', 'byte')
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
@@ -43,7 +45,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.ping_data_source', autospec=True)
-    def test_ping_exception(mock_ping):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_ping_exception(self, mock_ping):
         """to check the ping exception of the connector"""
         mock_ping.return_value = get_mock_response(400, '{"errors": [{"code": 1009, "message": "Server session not '
                                                        'found"}]}', 'byte')
@@ -58,7 +61,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.ping_data_source', autospec=True)
-    def test_auth_exception(mock_ping):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_auth_exception(self, mock_ping):
         """to check auth token generation exception"""
         mock_ping.return_value = get_mock_response(503, '{"error": "Unauthorized"}', 'byte')
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
@@ -73,7 +77,8 @@ class TestArcsightConnection(TestCase):
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api', autospec=True)
     @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id')
-    def test_create_query_connection(mock_session_id, mock_query_res):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_create_query_connection(self, mock_session_id, mock_query_res):
         """to create the query search and get search id"""
         mock_session_id.return_value = 'Dhoup23b3wL7tBlWWIeFPg8JHEf29qD1tNRJba4Jsyg.'
         mock_query_res.return_value = get_mock_response(200, '{"sessionId":"2"}', 'byte')
@@ -90,7 +95,8 @@ class TestArcsightConnection(TestCase):
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api', autospec=True)
     @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_user_session_id')
-    def test_create_query_error(mock_session_id, mock_query_res):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_create_query_error(self, mock_session_id, mock_query_res):
         """query search error check"""
         mock_session_id.return_value = 'Dhoup23b3wL7tBlWWIeFPg8JHEf29qD1tNRJba4Jsyg.'
         mock_query_res.return_value = get_mock_response(400, '{"errors": [{"code": 1111, '
@@ -109,7 +115,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.create_search')
-    def test_create_query_exception(mock_query_exception):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_create_query_exception(self, mock_query_exception):
         """query search exception handling"""
         mock_query_exception.side_effect = ConnectionError(
             "('Connection aborted.', ConnectionResetError(10054, 'An existing "
@@ -128,7 +135,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
-    def test_create_results(mock_create_results):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_create_results(self, mock_create_results):
         """to get the search results"""
         response = {
             "fields": [{
@@ -194,7 +202,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
-    def test_create_results_registry(mock_create_results):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_create_results_registry(self, mock_create_results):
         """to get search result with registry - connector specific"""
         response = {
             "fields": [{
@@ -251,7 +260,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
-    def test_create_results_empty(mock_create_results):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_create_results_empty(self, mock_create_results):
         """to get query results with empty response"""
         response = {}
         mock_create_results.return_value = get_mock_response(200, json.dumps(response), 'byte')
@@ -268,7 +278,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_search_results')
-    def test_create_results_exception(mock_create_results):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_create_results_exception(self, mock_create_results):
         """to get http exception in result search"""
         mock_create_results.side_effect = ConnectionError(
             "('Connection aborted.', ConnectionResetError(10054, 'An existing "
@@ -287,7 +298,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
-    def test_result_error(mock_delete_error):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_result_error(self, mock_delete_error):
         """to get error in result search"""
         error = {"errors": [{'code': 1009, 'message': 'Server session not found'}]}
         mock_delete_error.return_value = get_mock_response(400, json.dumps(error), 'byte')
@@ -302,7 +314,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
-    def test_delete_query_connection(mock_delete_query):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_delete_query_connection(self, mock_delete_query):
         """to delete the query search using search id"""
         mock_delete_query.return_value = get_mock_response(200, "", 'byte')
         transmission = stix_transmission.StixTransmission('arcsight', CONNECTION, CONFIG)
@@ -314,7 +327,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
-    def test_delete_query_error(mock_delete_error):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_delete_query_error(self, mock_delete_error):
         """to delete the query with invalid session id - error"""
         error = {"errors": [{"code": 1002, "message": "User session BCP7NIkbiLBkXx2FwdkU7ma9O7bJAWng1k. is not valid"}]}
         mock_delete_error.return_value = get_mock_response(400, json.dumps(error), 'byte')
@@ -330,7 +344,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.delete_search')
-    def test_delete_query_exception(mock_delete_exception):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_delete_query_exception(self, mock_delete_exception):
         """to get http exception when delete the query search"""
         mock_delete_exception.side_effect = ConnectionError(
             "('Connection aborted.', ConnectionResetError(10054, 'An existing "
@@ -347,7 +362,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
-    def test_create_status(mock_create_status):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_create_status(self, mock_create_status):
         """to get search status of the query - COMPLETED"""
         response = {'status': 'complete', 'result_type': 'histogram', 'hit': 1004,
                     'scanned': 1561219, 'elapsed': '00:00:00.530', 'message': []}
@@ -363,7 +379,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
-    def test_create_status_running(mock_create_status):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_create_status_running(self, mock_create_status):
         """to get search status of the query - RUNNING"""
         response = {'status': 'running', 'result_type': 'histogram', 'hit': 2000,
                     'scanned': 1561210, 'elapsed': '00:00:00.530', 'message': []}
@@ -380,7 +397,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
-    def test_create_status_complete(mock_create_status):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_create_status_complete(self, mock_create_status):
         """to get search status of the query - COMPLETED"""
         response = {'status': 'running', 'result_type': 'histogram', 'hit': 5000,
                     'scanned': 1561210, 'elapsed': '00:00:00.530', 'message': []}
@@ -397,7 +415,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_search_status')
-    def test_create_status_exception(mock_status_exception):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_create_status_exception(self, mock_status_exception):
         """to get http exception when status check"""
         mock_status_exception.side_effect = ConnectionError(
             "('Connection aborted.', ConnectionResetError(10054, 'An existing "
@@ -412,7 +431,8 @@ class TestArcsightConnection(TestCase):
 
     @staticmethod
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
-    def test_status_error(mock_delete_error):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_status_error(self, mock_delete_error):
         """to get error when check with invalid user session id"""
         error = {"errors": [{"code": 1002, "message": "User session BCP7NIkbiLBkXx2FwdkU7ma9O7bJAWng1k. is not valid"}]}
         mock_delete_error.return_value = get_mock_response(400, json.dumps(error), 'byte')
@@ -429,7 +449,8 @@ class TestArcsightConnection(TestCase):
     @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.delete_search')
     @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_search_status')
     @patch('stix_shifter_modules.arcsight.stix_transmission.api_client.APIClient.get_search_results')
-    def test_arcsight_logger_down(mock_results, mock_status, mock_delete):
+    @patch('ssl.SSLContext.load_verify_locations')
+    def test_arcsight_logger_down(self, mock_results, mock_status, mock_delete):
         """arcsight logger down error"""
         error = 'The application is currently unavailable. Please retry shortly.'
         mock_results.return_value = get_mock_response(503, error, 'byte')

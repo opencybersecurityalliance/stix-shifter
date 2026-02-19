@@ -6,7 +6,7 @@ import uuid
 class ResultsTranslator(BaseResultTranslator):
 
     def read_json(self, filepath, options):
-        return '{}'
+        return {}
 
     def translate_results(self, data_source, data):
         # Wrap data in a STIX bundle and insert the data_source identity object as the first object

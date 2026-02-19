@@ -8,7 +8,7 @@ error_mapping = {
     408: ErrorCode.TRANSMISSION_CONNECT,
     503: ErrorCode.TRANSMISSION_CONNECT,
     400: ErrorCode.TRANSMISSION_QUERY_PARSING_ERROR,
-    401: ErrorCode.TRANSMISSION_INVALID_PARAMETER,
+    401: ErrorCode.TRANSMISSION_AUTH_CREDENTIALS,
     403: ErrorCode.TRANSMISSION_FORBIDDEN,
     404: ErrorCode.TRANSMISSION_SEARCH_DOES_NOT_EXISTS,
     410: ErrorCode.TRANSMISSION_REMOTE_SYSTEM_IS_UNAVAILABLE,
@@ -21,7 +21,7 @@ class ErrorMapper:
     DEFAULT_ERROR = ErrorCode.TRANSMISSION_MODULE_DEFAULT_ERROR
 
     @staticmethod
-    def set_error_code(json_data, return_obj):
+    def set_error_code(json_data, return_obj, connector=None):
         code = None
         try:
             code = int(json_data['code'])
@@ -36,4 +36,4 @@ class ErrorMapper:
         if error_code == ErrorMapper.DEFAULT_ERROR:
             ErrorMapper.logger.error("failed to map: %s", str(json_data))
 
-        ErrorMapperBase.set_error_code(return_obj, error_code)
+        ErrorMapperBase.set_error_code(return_obj, error_code, connector=connector)

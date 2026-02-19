@@ -50,7 +50,7 @@ class TestQueryTranslator(unittest.TestCase):
                          "= lower('172.31.76.105')) AND updatedat BETWEEN '2020-10-01T08:43:10.003Z' "
                          "AND '2020-10-30T10:43:10.003Z')"
         }, {
-            "vpcflow": "((lower(sourceaddress) = lower('172.31.76.105') OR lower(destinationaddress) = "
+            "vpcflow": "((lower(srcaddr) = lower('172.31.76.105') OR lower(dstaddr) = "
                        "lower('172.31.76.105')) AND start BETWEEN 1601541790 AND 1604054590)"
         },
         {
@@ -92,7 +92,7 @@ class TestQueryTranslator(unittest.TestCase):
                          ")) LIKE lower('172.31.60.104') AND updatedat BETWEEN '2020-10-01T08:43:10.003Z' AND "
                          "'2020-10-30T10:43:10.003Z')"
         }, {
-            "vpcflow": "(lower(sourceaddress) LIKE lower('172.31.60.104') AND start BETWEEN 1601541790 AND "
+            "vpcflow": "(lower(srcaddr) LIKE lower('172.31.60.104') AND start BETWEEN 1601541790 AND "
                        "1604054590)"
         }, {
             "ocsf": "(lower(src_endpoint.ip) LIKE lower('172.31.60.104') AND time BETWEEN 1601541790000 AND 1604054590000)"
@@ -112,7 +112,7 @@ class TestQueryTranslator(unittest.TestCase):
                          "'$.instancedetails.networkinterfaces.0.privateipaddress') as varchar), '\\d+') AND "
                          "updatedat BETWEEN '2020-10-01T08:43:10.003Z' AND '2020-10-30T10:43:10.003Z')"
         }, {
-            "vpcflow": "(REGEXP_LIKE(CAST(sourceaddress as varchar), '\\d+') AND start BETWEEN 1601541790 AND "
+            "vpcflow": "(REGEXP_LIKE(CAST(srcaddr as varchar), '\\d+') AND start BETWEEN 1601541790 AND "
                        "1604054590)"
         }, {
             "ocsf": "(REGEXP_LIKE(CAST(src_endpoint.ip as varchar), '\\d+') AND time BETWEEN 1601541790000 AND 1604054590000)"
@@ -155,10 +155,10 @@ class TestQueryTranslator(unittest.TestCase):
                          "'$.action.portprobeaction.localportdetails.port') AS varchar) = '22') AND updatedat "
                          "BETWEEN '2020-10-01T08:43:10.003Z' AND '2020-10-30T10:43:10.003Z'))"
         }, {
-            "vpcflow": "((((lower(sourceaddress) = lower('18.210.22.128') OR lower(destinationaddress) = "
-                       "lower('18.210.22.128')) OR (lower(sourceaddress) = lower('172.31.60.104') OR "
-                       "lower(destinationaddress) = lower('172.31.60.104'))) AND start BETWEEN 1601541790 AND "
-                       "1604054590) UNION (CAST(sourceport AS varchar) = '22' AND start BETWEEN "
+            "vpcflow": "((((lower(srcaddr) = lower('18.210.22.128') OR lower(dstaddr) = "
+                       "lower('18.210.22.128')) OR (lower(srcaddr) = lower('172.31.60.104') OR "
+                       "lower(dstaddr) = lower('172.31.60.104'))) AND start BETWEEN 1601541790 AND "
+                       "1604054590) UNION (CAST(srcport AS varchar) = '22' AND start BETWEEN "
                        "1601541790 AND 1604054590))"
         },
         {
@@ -192,7 +192,7 @@ class TestQueryTranslator(unittest.TestCase):
                          ")) LIKE lower('172.31.60.104') AND updatedat BETWEEN '2020-10-01T08:43:10.003Z' AND "
                          "'2020-10-30T10:43:10.003Z')"
         }, {
-            "vpcflow": "(lower(sourceaddress) LIKE lower('172.31.60.104') AND start BETWEEN 1601541790 AND "
+            "vpcflow": "(lower(srcaddr) LIKE lower('172.31.60.104') AND start BETWEEN 1601541790 AND "
                        "1604054590)"
         }, {
             "ocsf": "(lower(src_endpoint.ip) LIKE lower('172.31.60.104') AND time BETWEEN 1601541790 AND 1604054590)"
@@ -224,8 +224,8 @@ class TestQueryTranslator(unittest.TestCase):
                          "lower('172.31.60.104'))) AND updatedat BETWEEN '2020-05-01T08:43:10.003Z' AND "
                          "'2020-10-30T10:43:10.003Z')"
         }, {
-            "vpcflow": "((NOT lower(sourceaddress) = lower('172.31.60.104') OR (NOT lower(sourceaddress) = "
-                       "lower('172.31.60.104') OR NOT lower(destinationaddress) = lower('172.31.60.104'))) AND "
+            "vpcflow": "((NOT lower(srcaddr) = lower('172.31.60.104') OR (NOT lower(srcaddr) = "
+                       "lower('172.31.60.104') OR NOT lower(dstaddr) = lower('172.31.60.104'))) AND "
                        "start BETWEEN 1588322590 AND 1604054590)"
         },
         {

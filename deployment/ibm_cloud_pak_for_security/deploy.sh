@@ -56,7 +56,7 @@ fi
 
 cd $SS_HOME
 if [ ! -f "requirements.txt" ]; then
-  python3 generate_requirements.py
+  python3 -m build_tools.pre_build
 fi
 
 pip3 install virtualenv
@@ -70,7 +70,7 @@ venv-run pip install setuptools wheel twine
 
 rm -rf dist
 MODE=$MODULE
-venv-run -- bash -c "MODE=$MODULE python setup.py bdist_wheel"
+venv-run -- bash -c "MODE=$MODULE python -m build_tools.run_build"
 cd $MYDIR
 rm -rf bundle
 mkdir bundle

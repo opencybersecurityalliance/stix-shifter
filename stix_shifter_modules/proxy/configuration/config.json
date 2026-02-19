@@ -1,7 +1,8 @@
 {
     "connection": {
         "type": {
-            "displayName": "Proxy"
+            "displayName": "Proxy",
+            "group": "Proxy"
         },
         "help": {
             "type": "link",

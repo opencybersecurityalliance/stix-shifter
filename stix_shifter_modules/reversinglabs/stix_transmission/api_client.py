@@ -1,39 +1,33 @@
 from stix_shifter_utils.stix_transmission.utils.RestApiClientAsync import RestApiClientAsync
 import json
 import hashlib
-from aiohttp import BasicAuth
-
-
+from base64 import b64encode
 class APIClient():
 
     def __init__(self, connection, configuration):
         # Uncomment when implementing data source API client.
         auth_values = configuration.get('auth')
-        auth = BasicAuth(auth_values['username'], auth_values['password'])
+        # auth = (auth_values['username'], auth_values['password'])
+        token = b64encode(f"{auth_values['username']}:{auth_values['password']}".encode('utf-8')).decode('utf-8')
         headers = dict()
         headers['Accept'] = 'application/json'
-
+        headers['Authorization'] = f'Basic {token}'
         connection['host'] = 'data.reversinglabs.com'
         url_modifier_function = None
-        self.client = RestApiClientAsync(host=connection.get('host'),
-                                    port=None,
-                                    headers=headers,
-                                    url_modifier_function=url_modifier_function,
-                                    auth=auth
-                                    )
+        self.client = RestApiClientAsync(host=connection.get('host'), port=None, headers=headers, 
+                                    url_modifier_function=url_modifier_function)
         self.connection = connection
         self.namespace = connection.get('namespace')
+        self.timeout = connection['options'].get('timeout')
 
 
     async def ping_reversinglabs(self):
 
-        endpoint = 'api/uri/statistics/uri_state/sha1/4b84b15bff6ee5796152495a230e45e3d7e947d9?format=json'
+        endpoint = '/api/uri/statistics/uri_state/sha1/4b84b15bff6ee5796152495a230e45e3d7e947d9?format=json'
         response = await self.client.call_api(endpoint, 'GET')
-        data = response.read().decode('utf-8')
+        return response.read().decode('utf-8'), response.code
 
-        return {"message": data, "code": response.code}
-
-    async def get_search_results(self, query_expression, range_start=None, range_end=None):
+    async def get_search_results(self, query_expression):
         # Return the search results. Results must be in JSON format before being translated into STIX
         # query_expression = (json.loads(query_expression))
         data_type = query_expression['dataType']
@@ -42,19 +36,19 @@ class APIClient():
 
         if data_type == 'ip' or data_type == 'domain':
             endpoint_uri_state = f'api/uri/statistics/uri_state/sha1/{uri}?format=json'
-            uri_state = await self.client.call_api(endpoint_uri_state, 'GET')
+            uri_state = await self.client.call_api(endpoint_uri_state, 'GET', timeout=self.timeout)
             json_data_uri_state = json.loads(uri_state.read().decode('utf-8')) if uri_state.code == 200 else {}
 
             if uri_state.code == 200:
                 json_data_uri_state['namespace'] = self.namespace
-                return {"message": json_data_uri_state, "code": uri_state.code}
+                return json_data_uri_state, uri_state.code
             else:
                 json_data_uri_state['error'] = uri_state.read().decode('utf-8')
                 json_data_uri_state['code'] = uri_state.code
                 json_data_uri_state['indicator_types'] = [ "unknown" ]
                 json_data_uri_state['description'] =  uri_state.read().decode('utf-8')
                 json_data_uri_state['namespace'] = self.namespace
-                return {"message": json_data_uri_state, "code": uri_state.code}
+                return json_data_uri_state, uri_state.code
 
         elif data_type == 'url':
 
@@ -64,18 +58,17 @@ class APIClient():
                         "url": data,
                         "response_format": "json"
                     }
-
                 }
             })
 
             endpoint_url = 'api/networking/url/v1/report/query/json'
-            url_response = await self.client.call_api(endpoint_url, 'POST', data = post_body)
+            url_response = await self.client.call_api(endpoint_url, 'POST', data = post_body, timeout=self.timeout)
             json_data_url = json.loads(url_response.read().decode('utf-8')) if url_response.code == 200 else {}
 
             if url_response.code == 200:
                 status_code = 200
                 json_data_url['namespace'] = self.namespace
-                return {"message": json_data_url, "code": status_code}
+                return json_data_url, status_code
 
             else:
                 json_data_url['error'] = url_response.read().decode('utf-8')
@@ -83,7 +76,7 @@ class APIClient():
                 json_data_url['indicator_types'] = ["unknown"]
                 json_data_url['description'] = url_response.read().decode('utf-8')
                 json_data_url['namespace'] = self.namespace
-                return {"message": json_data_url, "code": url_response.code}
+                return json_data_url, url_response.code
 
 
         elif data_type == 'hash':
@@ -91,20 +84,20 @@ class APIClient():
             hash_type = HASH_LENGTH.get(str(len(data)), '')
 
             endpoint_malware_presence = f'api/databrowser/malware_presence/query/{hash_type}/{data}?format=json&extended=true'
-            malware_presence = await self.client.call_api(endpoint_malware_presence, 'GET')
+            malware_presence = await self.client.call_api(endpoint_malware_presence, 'GET', timeout=self.timeout)
             json_data_malware_presence = json.loads(malware_presence.read().decode('utf-8')) if malware_presence.code == 200 else {}
 
             if malware_presence.code == 200:
                 status_code = 200
                 json_data_malware_presence['namespace'] = self.namespace
-                return {"message": json_data_malware_presence, "code": status_code}
+                return json_data_malware_presence, status_code
             else:
                 json_data_malware_presence['error'] = malware_presence.read().decode('utf-8')
                 json_data_malware_presence['code'] = malware_presence.code
                 json_data_malware_presence['indicator_types'] = ["unknown"]
                 json_data_malware_presence['description'] = malware_presence.read().decode('utf-8')
                 json_data_malware_presence['namespace'] = self.namespace
-                return {"message": json_data_malware_presence, "code": malware_presence.code}
+                return json_data_malware_presence, malware_presence.code
 
         else:
             return {"code": 401, "error": "IoC Type not supported"}

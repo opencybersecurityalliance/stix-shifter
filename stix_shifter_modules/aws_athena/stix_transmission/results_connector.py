@@ -1,7 +1,9 @@
 import json
 from stix_shifter_utils.modules.base.stix_transmission.base_json_results_connector import BaseJsonResultsConnector
 from stix_shifter_utils.utils.error_response import ErrorResponder
+from stix_shifter_utils.utils.file_helper import read_json
 from stix_shifter_utils.utils import logger
+
 from flatten_json import flatten
 from os import path
 import os
@@ -197,16 +199,15 @@ class ResultsConnector(BaseJsonResultsConnector):
         formatted_result = []
         transmit_basepath = os.path.abspath(__file__)
         translate_basepath = transmit_basepath.split(os.sep)[:-2]
-        filepath = os.sep.join([*translate_basepath, "stix_translation", "json", 'to_stix_map.json'])
+        filepath = os.sep.join([*translate_basepath, "stix_translation", "json", service_type + '_to_stix_map.json'])
         map_file = open(filepath).read()
         map_data = json.loads(map_file)
-        map_data_keys = list(map_data[service_type].keys())
+        map_data_keys = list(map_data.keys())
         ds_key_values = self.gen_dict_extract(key_to_search='ds_key', var=map_data)
         map_data_keys.extend(ds_key_values)
         flattened_obj = dict()
         obj_to_unflatten = dict()
         singular_obj = dict()
-        service_log_dict = dict()
         for obj in flatten_result_cleansed:
             for key, value in obj.items():
                 if key.replace('#', '_') in map_data_keys:
@@ -217,10 +218,8 @@ class ResultsConnector(BaseJsonResultsConnector):
             unflatten_obj = self.unflatten(obj_to_unflatten, '#')
             flattened_obj.update(unflatten_obj)
             flattened_obj.update(singular_obj)
-            service_log_dict = service_log_dict.copy()
             if flattened_obj:
-                service_log_dict[service_type] = flattened_obj
-                formatted_result.append(service_log_dict)
+                formatted_result.append(flattened_obj)
             flattened_obj = dict()
             obj_to_unflatten = dict()
         return formatted_result
@@ -234,8 +233,37 @@ class ResultsConnector(BaseJsonResultsConnector):
                     json_obj[k] = json.loads(v)
                 except Exception:
                     json_obj[k] = v
-            formatted_result.append({'ocsf': json_obj} )
+            
+            process_obj = json_obj.get('process')
+            if process_obj:
+                file_obj = process_obj.get('file')
+                if file_obj:
+                    file_obj['hashes'] = self.update_hash_mapping(file_obj)
+            
+                parent_process = process_obj.get('parent_process')
+                if parent_process:
+                    file_obj = parent_process.get('file')
+                    if file_obj:
+                        file_obj['hashes'] = self.update_hash_mapping(file_obj)
+  
+            formatted_result.append(json_obj)
         return formatted_result
+
+    def update_hash_mapping(self, file_obj):
+        transmit_basepath = os.path.abspath(__file__)
+        translate_basepath = transmit_basepath.split(os.sep)
+        hash_algorithm_map = os.sep.join([*translate_basepath, "stix_translation", "json", "hash_algorithm_map.json"])
+        hash_names = read_json(hash_algorithm_map, options={})
+
+        hashes = {}
+        fingerprints_objs =file_obj.get('fingerprints')
+        
+        for fingerprint in fingerprints_objs:
+            hash_name = hash_names[str(fingerprint.get('algorithm_id'))]
+
+            hashes[hash_name] = fingerprint.get('value')
+
+        return hashes
 
     def gen_dict_extract(self, key_to_search, var):
         """

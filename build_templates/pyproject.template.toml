@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "$package_name"
+version = "$version"
+description = "$description"
+readme = "$readme_file"
+
+# Minimum supported Python version for this package.
+# This is packaging metadata; pip and build tools will enforce this.
+# Recommended to set it to the oldest supported LTS Python version.
+requires-python = ">=3.10"
+
+authors = [ $authors_block ]
+license = "$license_text"
+license-files = [
+    "LICENSE.md",
+    "AUTHORS.md",
+    "NOTICE"
+]
+
+keywords = ["datasource", "stix", "translate", "transform", "transmit"]
+
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12"
+]
+
+dependencies = [
+$dependencies_block
+]
+
+# optional scripts are injected below
+$project_scripts_block
+
+# other entry-point groups (if any)
+$other_entry_points
+
+[project.urls]
+Homepage = "https://github.com/opencybersecurityalliance/stix-shifter"
+Source = "https://github.com/opencybersecurityalliance/stix-shifter"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = [$packages_include]
+
+[tool.setuptools]
+# Keep include-package-data true if you generate a MANIFEST.in and want those files
+include-package-data = true

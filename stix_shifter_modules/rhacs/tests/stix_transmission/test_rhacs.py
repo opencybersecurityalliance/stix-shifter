@@ -2,7 +2,6 @@
 import json
 import unittest
 from unittest.mock import patch
-# from requests.exceptions import ConnectionError, RetryError
 
 from stix_shifter_modules.rhacs.entry_point import EntryPoint
 from stix_shifter.stix_transmission import stix_transmission
@@ -26,7 +25,6 @@ class TestRhacsConnection(unittest.TestCase):
         """format for connection"""
         return {
             "host": "testhost",
-            "sni":"testsni",
             "selfSignedCert":"-----BEGIN CERTIFICATE-----XXXX123-----END CERTIFICATE-----",
             "port": 443,
             "options": {"result_limit": 10}
@@ -674,7 +672,7 @@ class TestRhacsConnection(unittest.TestCase):
         ping_response = transmission.ping()
         assert ping_response is not None
         assert ping_response['success'] is False
-        assert 'rhacs connector error => Invalid Host' in ping_response['error']
+        assert 'rhacs connector error => Unable to load certificate for ssl context: (no start line: cadata does not contain a certificate' in ping_response['error']
 
     @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
     def test_invalid_url_parameter_ping(self, mock_ping):
@@ -684,7 +682,8 @@ class TestRhacsConnection(unittest.TestCase):
         ping_response = transmission.ping()
         assert ping_response is not None
         assert ping_response['success'] is False
-        assert 'rhacs connector error => Invalid parameter or Url' in ping_response['error']
+        assert ping_response['code'] == 'certificate_fail'
+        assert 'rhacs connector error => Unable to load certificate for ssl context: (no start line: cadata does not contain a certificate' in ping_response['error']
 
     @patch('stix_shifter_modules.rhacs.stix_transmission.api_client'
            '.APIClient.__init__')

@@ -32,7 +32,7 @@ class APIClient:
         headers = {}
 
         headers['Cookie'] = await self.session_log_in()
-        return await self.client.call_api(self.STATUS_ENDPOINT, 'GET', headers=headers)
+        return await self.client.call_api(self.STATUS_ENDPOINT, 'GET', headers=headers, timeout=self.timeout)
 
     async def get_search_results(self, query):
         """
@@ -42,7 +42,7 @@ class APIClient:
         """
         headers = {'Cookie': await self.session_log_in()}
         self.logger.debug("query: %s", query)
-        return await self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers=headers, data=query)
+        return await self.client.call_api(self.QUERY_ENDPOINT, 'POST', headers=headers, data=query, timeout=self.timeout)
 
     async def session_log_in(self):
         """
@@ -51,7 +51,7 @@ class APIClient:
         """
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
         url = self.host + self.LOGIN_ENDPOINT
-        response = await self.client.call_api(self.LOGIN_ENDPOINT, 'POST', headers=headers, data=self.auth)
+        response = await self.client.call_api(self.LOGIN_ENDPOINT, 'POST', headers=headers, data=self.auth, timeout=self.timeout)
         cookie = response.get_cookies(url)
         cookie = str(cookie).replace('Set-Cookie: ', '')
         return cookie
@@ -64,4 +64,4 @@ class APIClient:
         headers = {}
         cookie_dict = response_wrapper.response.request_info.headers.get('Cookie')
         headers["Cookie"] = cookie_dict
-        return await self.client.call_api(self.LOGOFF_ENDPOINT, 'GET', headers=headers)
+        return await self.client.call_api(self.LOGOFF_ENDPOINT, 'GET', headers=headers, timeout=self.timeout)

@@ -1963,7 +1963,7 @@ class TestQueryTranslator(unittest.TestCase):
                        "LIKE 'FET_DELETE']"
         result = translation.translate('cybereason', 'query', '{}', stix_pattern)
         assert result['success'] is False
-        assert result['code'] == 'invalid_parameter'
+        assert result['code'] == 'translation_error'
         assert 'Cybereason does not allow AND operation' in result['error']
 
     def test_observation_with_invalid_operator_for_string(self):

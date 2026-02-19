@@ -3,7 +3,13 @@
     "ComparisonExpressionOperators.Or": "or",
     "ComparisonComparators.Equal": "==",
     "ComparisonComparators.NotEqual": "!=",
-    "ComparisonComparators.In": "in",
-    "ComparisonComparators.Matches": "contains",
-    "ComparisonComparators.Like": "startswith, endswith"
+    "ComparisonComparators.In": "in~",
+    "ComparisonComparators.Matches": "matches regex",
+    "ComparisonComparators.Like": "contains",
+    "ComparisonComparators.GreaterThan": ">",
+    "ComparisonComparators.GreaterThanOrEqual": ">=",
+    "ComparisonComparators.LessThan": "<",
+    "ComparisonComparators.LessThanOrEqual": "<=",
+    "ObservationOperators.Or": "or",
+    "ObservationOperators.And": "or"
 }

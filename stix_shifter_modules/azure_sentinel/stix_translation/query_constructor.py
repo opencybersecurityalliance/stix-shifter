@@ -33,6 +33,7 @@ class QueryStringPatternTranslator:
         self.comparator_lookup = self.dmm.map_comparator()
         self._time_range = time_range
         self.pattern = pattern
+        self.alert_type = self.dmm.dialect
 
         # List of queries for each observation
         self.final_query_list = []
@@ -254,8 +255,7 @@ class QueryStringPatternTranslator:
                 "Comparison operator {} unsupported for Azure Sentinel adapter".format(expression_operator.name))
         return self.comparator_lookup[str(expression_operator)]
 
-    @staticmethod
-    def _parse_time_range(qualifier, time_range):
+    def _parse_time_range(self, qualifier, time_range):
         """
         :param qualifier: str, input time range i.e START t'2019-04-10T08:43:10.003Z' STOP t'2019-04-20T10:43:10.003Z'
         :param time_range: int, value available from main.py in options variable
@@ -263,7 +263,11 @@ class QueryStringPatternTranslator:
         """
         try:
             compile_timestamp_regex = re.compile(START_STOP_PATTERN)
-            mapped_field = "eventDateTime"
+            if self.alert_type == 'alert':
+                mapped_field = "eventDateTime"
+            elif self.alert_type == 'alertV2':
+                mapped_field = "createdDateTime"
+            
             if qualifier and compile_timestamp_regex.search(qualifier):
                 time_range_iterator = compile_timestamp_regex.finditer(qualifier)
                 time_range_list = [each.group() for each in time_range_iterator]
@@ -406,5 +410,10 @@ def translate_pattern(pattern: Pattern, data_model_mapping, options):
     time_range = options['time_range']
     query = QueryStringPatternTranslator(pattern, data_model_mapping, time_range)
 
-    translated_query = query.final_query_list
-    return translated_query
+    translated_queries = query.final_query_list
+    final_queries = []
+    if isinstance(translated_queries, list):
+        for translated_query in translated_queries:
+            final_queries.append({query.alert_type: translated_query})
+
+    return final_queries

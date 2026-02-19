@@ -1,0 +1,110 @@
+{
+  "mac-addr": {
+    "fields": {
+      "value": [
+        "machineId"
+      ]
+    }
+  },
+  "x-oca-asset": {
+    "fields": {
+      "hostname": [
+        "host.hostName"
+      ],
+      "extensions.'x-oca-container-ext'.container_id": [
+        "containerId"
+      ],
+      "extensions.'x-oca-container-ext'.name": [
+        "container.name"
+      ],
+      "extensions.'x-oca-container-ext'.image_id": [
+        "container.image.id"
+      ],
+      "extensions.'x-oca-container-ext'.x_repo": [
+        "container.image.repo"
+      ],
+      "extensions.'x-oca-container-ext'.x_tag": [
+        "container.image.tag"
+      ],
+      "extensions.'x-oca-container-ext'.x_digest": [
+        "container.image.digest"
+      ],
+      "extensions.'x-oca-pod-ext'.pod_name": [
+        "container.label.io.kubernetes.pod.name"
+      ],
+      "extensions.'x-oca-pod-ext'.x_namespace": [
+        "container.label.io.kubernetes.pod.namespace"
+      ]
+    }
+  },
+  "x-ibm-finding": {
+    "fields": {
+      "name": [
+        "ruleName"
+      ],
+      "x_severity": [
+        "severity"
+      ],
+      "x_category": [
+        "category"
+      ],
+      "x_threat_originator": [
+        "originator"
+      ],
+      "x_threat_source": [
+        "source"
+      ],
+      "x_agent_id": [
+        "agentId"
+      ]
+    }
+  },
+  "x-sysdig-cluster": {
+    "fields": {
+      "name": [
+        "kubernetes.cluster.name"
+      ],
+      "namespace": [
+        "kubernetes.namespace.name"
+      ]
+    }
+  },
+  "x-sysdig-deployment": {
+    "fields": {
+      "name": [
+        "kubernetes.deployment.name"
+      ]
+    }
+  },
+  "x-sysdig-policy": {
+    "fields": {
+      "rule_name": [
+        "ruleName"
+      ],
+      "rule_type": [
+        "ruleType"
+      ],
+      "rule_subtype": [
+        "ruleSubType"
+      ],
+      "policy_id": [
+        "policyId"
+      ]
+    }
+  },
+  "x-cloud-provider": {
+    "fields": {
+      "account_id": [
+        "aws.accountId"
+      ],
+      "name": [
+        "cloudProvider.name"
+      ],
+      "region": [
+        "aws.region"
+      ]
+    }
+  }
+}
+
+

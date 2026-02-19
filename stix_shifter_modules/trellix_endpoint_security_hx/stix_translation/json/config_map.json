@@ -1,0 +1,13 @@
+{
+  "int_supported_fields": [
+    "Size in bytes",
+    "Local Port",
+    "Remote Port"
+  ],
+  "hash_supported_fields": [
+    "File MD5 Hash"
+  ],
+  "ip_supported_fields": [
+    "Local IP Address", "Remote IP Address"
+  ]
+}

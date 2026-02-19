@@ -18,10 +18,6 @@
             "default": "data-sources-qradar.html",
             "type": "link"
         },
-        "sni": {
-            "type": "text",
-            "optional": true
-        },
         "selfSignedCert": {
             "type": "password",
             "optional": true

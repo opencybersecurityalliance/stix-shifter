@@ -1,4 +1,8 @@
-# Okta Connector
+# Okta
+
+## Supported STIX Mappings
+
+See the [table of mappings](okta_supported_stix.md) for the STIX objects and operators supported by this connector.
 
 **Table of Contents**
 

@@ -2,6 +2,10 @@
 
 This is a connector for searching OneLogin events. 
 
+## Supported STIX Mappings
+
+See the [table of mappings](onelogin_supported_stix.md) for the STIX objects and operators supported by this connector.
+
 ### Format for making STIX translation calls via the CLI
 
 `python main.py <translator_module> <query or result> <STIX identity object> <data>`

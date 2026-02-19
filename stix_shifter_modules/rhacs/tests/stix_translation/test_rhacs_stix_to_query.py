@@ -414,7 +414,7 @@ class TestQueryTranslator(unittest.TestCase):
         stix_pattern = "[x-ibm-finding:extensions.'x-rhacs-finding'.lifecycle_stage = 'runtime'] " \
                        "START t'2022-06-17T08:43:10.003Z' STOP t'2022-06-16T10:43:10.005Z'"
         result = translation.translate('rhacs', 'query', '{}', stix_pattern)
+        print(result)
         assert result['success'] is False
-        assert ErrorCode.TRANSLATION_NOTSUPPORTED.value == result['code']
-        assert result['error'] == 'rhacs connector error => Error when converting STIX ' \
-                                  'pattern to data source query: Start time should be lesser than Stop time'
+        assert ErrorCode.TRANSLATION_MODULE_DEFAULT_ERROR.value == result['code']
+        assert result['error'] == 'rhacs connector error => STIX translation error: Start time should be lesser than Stop time'

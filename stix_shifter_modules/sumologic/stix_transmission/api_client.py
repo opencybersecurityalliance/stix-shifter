@@ -17,6 +17,7 @@ class APIClient:
     def __init__(self, connection, configuration):
         self.endpoint = (PROTOCOL + URL + ENDPOINT) % (connection.get("region"))
         self.auth = configuration.get('auth')
+        self.timeout = connection['options'].get('timeout')
         self.client = SumoLogic(self.auth.get("access_id"), self.auth.get("access_key"), endpoint=self.endpoint)
 
     def ping_data_source(self):

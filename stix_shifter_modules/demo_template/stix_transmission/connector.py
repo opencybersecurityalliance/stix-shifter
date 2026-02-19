@@ -35,7 +35,7 @@ class Connector(BaseJsonSyncConnector):
             min_range = offset
             max_range = offset + length
             # Grab the response, extract the response code, and convert it to readable json
-            response_dict = await self.api_client.get_search_results(search_id, min_range, max_range)
+            response_dict = await self.api_client.run_search(search_id, min_range, max_range)
             response_code = response_dict["code"]
 
             # Construct a response object

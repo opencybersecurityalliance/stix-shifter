@@ -20,15 +20,15 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
     @staticmethod
     def connection():
         return {
-            "host": "hostbla",
-            "selfSignedCert": "hostbla"
+            "host": "hostbla"
         }
 
     @staticmethod
     def configuration():
         return {
             "auth": {
-                "client_email": "hostbla"
+                "client_email": "hostbla",
+                "private_key": "privatebla"
             }
         }
 
@@ -179,7 +179,6 @@ class TestGCPChronicleConnection(unittest.TestCase, object):
         mock_http.side_effect = [mocked_result_response, mocked_delete_response]
         connection_with_result_limit = {
             "host": "hostbla",
-            "selfSignedCert": "hostbla",
             "options": {"result_limit": 3}
         }
         transmission = stix_transmission.StixTransmission('gcp_chronicle', connection_with_result_limit,

@@ -10,6 +10,9 @@ from tests.utils.async_utils import get_mock_response
 class TestDarktraceConnection(unittest.TestCase, object):
     """ class for test Darktrace connection"""
 
+    _configuration = {'auth': {'private_token': '', 'public_token': ''}}
+    _connection = {'host': 'www.test.com', 'options': {'timeout': 30}}
+
     @staticmethod
     def config():
         """format for configuration"""
@@ -49,9 +52,7 @@ class TestDarktraceConnection(unittest.TestCase, object):
         pingresponse = get_mock_response(200, pingmock, response=pingmock)
         mock_ping_source.return_value = pingresponse
 
-        configuration = {'auth': {'private_token': '', 'public_token': ''}}
-        connection = {'host': 'www.test.com'}
-        apiclient = APIClient(connection, configuration)
+        apiclient = APIClient(self._connection, self._configuration)
         ping_response = run_in_thread(apiclient.ping_box)
 
         assert ping_response is not None
@@ -65,9 +66,7 @@ class TestDarktraceConnection(unittest.TestCase, object):
         pingresponse = get_mock_response(200, pingmock, response=pingmock)
         mock_ping_source.return_value = pingresponse
 
-        configuration = {'auth': {'private_token': '', 'public_token': ''}}
-        connection = {'host': 'www.test.com'}
-        apiclient = APIClient(connection, configuration)
+        apiclient = APIClient(self._connection, self._configuration)
         ping_response = run_in_thread(apiclient.get_search_results, 'query')
 
         assert ping_response is not None

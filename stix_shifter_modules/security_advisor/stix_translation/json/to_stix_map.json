@@ -99,16 +99,13 @@
     "object": "x_security_advisor_finding"
   },
   "createTime": {
-    "key": "first_observed",
-    "cybox": false
+    "key": "first_observed"
   },
   "updateTime": {
-    "key": "last_observed",
-    "cybox": false
+    "key": "last_observed"
   },
   "occurence_count": {
     "key": "number_observed",
-    "cybox": false,
     "transformer": "ToInteger"
   }
 }

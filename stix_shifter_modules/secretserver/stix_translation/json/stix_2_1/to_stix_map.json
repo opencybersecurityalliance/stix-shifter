@@ -38,13 +38,11 @@
   "StartTime": [
     {
       "key": "first_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
+      "transformer": "EpochToTimestamp"
     },
     {
       "key": "last_observed",
-      "transformer": "EpochToTimestamp",
-      "cybox": false
+      "transformer": "EpochToTimestamp"
     }
   ],
   "Url": {

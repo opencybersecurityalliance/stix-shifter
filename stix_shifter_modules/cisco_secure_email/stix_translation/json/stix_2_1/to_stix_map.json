@@ -1,0 +1,159 @@
+{
+  "attributes": {
+    "hostName": [
+      {
+        "key": "x-oca-asset.hostname",
+        "object": "host"
+      },
+      {
+        "key": "email-message.x_cisco_host_ref",
+        "object": "email_message",
+        "references": "host"
+      }
+    ],
+    "timestamp": [
+      {
+        "key": "email-message.date",
+        "object": "email_message",
+        "transformer": "FormatDateTimeObjectToTimestamp"
+      },
+      {
+        "key": "first_observed",
+        "transformer": "FormatDateTimeObjectToTimestamp"
+      },
+      {
+        "key": "last_observed",
+        "transformer": "FormatDateTimeObjectToTimestamp"
+      }
+    ],
+    "recipient": [
+      {
+        "key": "email-addr.value",
+        "object": "recipient",
+        "unwrap": "true",
+        "transformer": "ValidateEmailTransformer"
+      },
+      {
+        "key": "email-message.to_refs",
+        "object": "email_message",
+        "references": [
+          "recipient"
+        ]
+      }
+    ],
+    "friendly_from": [
+      {
+        "key": "email-addr.value",
+        "object": "from",
+        "unwrap": "true",
+        "transformer": "ValidateEmailTransformer"
+      },
+      {
+        "key": "email-message.from_ref",
+        "object": "email_message",
+        "references": "from"
+      }
+    ],
+    "sender": [
+      {
+        "key": "email-addr.value",
+        "object": "sender",
+        "transformer": "ValidateEmailTransformer"
+      },
+      {
+        "key": "email-message.sender_ref",
+        "object": "email_message",
+        "references": "sender"
+      }
+    ],
+    "replyTo": [
+      {
+        "key": "email-addr.value",
+        "object": "replyto",
+        "transformer": "ValidateEmailTransformer"
+      },
+      {
+        "key": "x-cisco-email-msgevent.reply_to",
+        "object": "msgevent",
+        "references": "replyto"
+      }
+    ],
+    "subject": [
+      {
+        "key": "email-message.subject",
+        "object": "email_message"
+      }
+    ],
+    "is_multipart": {
+        "key": "email-message.is_multipart",
+        "object": "email_message"
+    },
+    "messageID": {
+      "key": "email-message.x_message_id_header",
+      "object": "email_message",
+      "transformer": "DictToValueTransformer"
+    },
+    "senderIp": [
+      {
+        "key": "ipv4-addr.value",
+        "object": "source_ip"
+      },
+      {
+        "key": "ipv6-addr.value",
+        "object": "source_ip"
+      },
+      {
+        "key": "email-message.x_sender_ip_ref",
+        "object": "email_message",
+        "references": "source_ip"
+      }
+    ],
+    "senderDomain": [
+      {
+        "key": "domain-name.value",
+        "object": "domain_name"
+      },
+      {
+        "key": "domain-name.resolves_to_refs",
+        "object": "domain_name",
+        "references": [
+          "source_ip"
+        ]
+      }
+    ],
+    "senderGroup": {
+      "key": "email-message.x_sender_group",
+      "object": "email_message"
+    },
+    "mid": {
+      "key": "email-message.x_cisco_mid",
+      "object": "email_message",
+      "transformer": "ListToIDTransformer"
+    },
+    "icid": {
+      "key": "email-message.x_cisco_icid",
+      "object": "email_message"
+    },
+    "serialNumber": {
+      "key": "email-message.x_serial_number",
+      "object": "email_message"
+    },
+    "mailPolicy": {
+      "key": "x-cisco-email-msgevent.mail_policy",
+      "object": "msgevent"
+    },
+    "direction": {
+      "key": "x-cisco-email-msgevent.direction",
+      "object": "msgevent"
+    },
+    "messageStatus": {
+      "key": "x-cisco-email-msgevent.message_status",
+      "object": "msgevent",
+      "transformer": "DictToValueTransformer"
+    },
+    "sbrs": {
+      "key": "x-cisco-email-msgevent.sbrs_score",
+      "object": "msgevent"
+    }
+  }
+}

@@ -7,6 +7,7 @@ import json
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.error_response import ErrorResponder
 
+
 class InvalidResponseException(Exception):
     pass
 
@@ -18,7 +19,7 @@ class APIClient:
 
     def __init__(self, connection, configuration):
         self.auth = configuration.get('auth')
-        self.auth['private_key'] = connection.get('selfSignedCert').replace('\\n', '\n')
+        self.auth['private_key'] = self.auth.get('private_key').replace('\\n', '\n')
         self.auth['token_uri'] = self.URI
         self.host = "https://" + connection.get('host')
         self.result_limit = connection['options'].get('result_limit')

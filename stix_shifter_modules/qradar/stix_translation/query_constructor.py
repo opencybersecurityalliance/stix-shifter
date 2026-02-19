@@ -18,7 +18,7 @@ REFERENCE_DATA_TYPES = {"sourceip": ["ipv4", "ipv6", "ipv4_cidr", "ipv6_cidr"],
 
 FILTERING_DATA_TYPES = {"x-qradar:INOFFENSE": "INOFFENSE"}
 
-START_STOP_STIX_QUALIFIER = r"START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{13}\s))STOP"
+START_STOP_STIX_QUALIFIER = r"START((t'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z')|(\s\d{12,}\s))STOP"
 TIMESTAMP = r"^'\d{4}(-\d{2}){2}T\d{2}(:\d{2}){2}(\.\d+)?Z'$"
 TIMESTAMP_MILLISECONDS = r"\.\d+Z$"
 
@@ -131,7 +131,7 @@ class AqlQueryStringPatternTranslator:
                                                                                              value=value)
             else:
                 # There's no aql field for domain-name. using Like operator to find domian name from the url
-                if mapped_field == 'dnsdomainname' and comparator != ComparisonComparators.Like:
+                if self.dmm.dialect == 'events' and mapped_field == 'dnsdomainname' and comparator != ComparisonComparators.Like:
                     comparator = self.comparator_lookup["ComparisonComparators.Like"]
                     value = self._format_like(expression.value)
 

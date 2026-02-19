@@ -1,20 +1,17 @@
 {
   "first_observed": [
     {
-      "key": "first_observed",
-      "cybox": false
+      "key": "first_observed"
     }
   ],
   "last_observed": [
     {
-      "key": "last_observed",
-      "cybox": false
+      "key": "last_observed"
     }
   ],
   "number_observed": [
     {
-      "key": "number_observed",
-      "cybox": false
+      "key": "number_observed"
     }
   ],
   "process.pid": [

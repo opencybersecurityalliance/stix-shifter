@@ -157,12 +157,9 @@ class _ObservationExpressionTranslator:
             field_mapping = self.dmm.map_field(stix_object, stix_path)
             # This scopes the query to the object
             object_scoping = self.object_scoper(object_mapping)
-
+            
             if stix_object == "x-readable-payload" and stix_path == "value":
-                return "_raw=*{}*".format(expression.value)
-            # Special case where we want the risk finding
-            if stix_object == 'x-ibm-finding' and stix_path == 'name':
-                return f'index=_audit ss_name="{expression.value}" action=alert_fired'
+                return "_raw=*{}*".format(expression.value)            
             # Check if mapping has multiple fields
             if isinstance(field_mapping, list):
                 comparison_string = ""
@@ -190,9 +187,32 @@ class _ObservationExpressionTranslator:
                 self.translate(expression.expr2)
             )
 
+    def _field_severity(self, value):
+        """
+        check for severity and convert input value to
+        informational,low,medium,high,critical
+        param value
+        return value(str)
+        """
+        value = int(value)
+        if 1 <= value <= 20:
+            value = "informational"
+        elif 21 <= value <= 40:
+            value = "low"
+        elif 41 <= value <= 60:
+            value = "medium"
+        elif 61 <= value <= 80:
+            value = "high"
+        elif 81 <= value <= 100:
+            value = "critical"
+        else:
+            raise NotImplementedError('only 1-100 integer values are supported with severity field')
+        return value
+        
     def _build_comparison(self, expression, object_scoping, field_mapping):
         comparator = self._lookup_comparison_operator(self, expression.comparator)
-
+        if field_mapping == 'severity':
+            expression.value = self._field_severity(expression.value)
         if isinstance(comparator, str):
             if comparator == "encoders.like":
                 comparison = encoders.like(field_mapping, expression.value)

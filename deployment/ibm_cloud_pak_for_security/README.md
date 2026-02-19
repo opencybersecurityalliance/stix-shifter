@@ -1,12 +1,12 @@
 # Build and deploy connector images into IBM Cloud Pak for Security (CP4S)
 
-The scripts contained here allow you to build an image of a new or existing connector, and deploy that image into your Kubernetes cluster on your CP4S environment. The are also options for deploying an existing image from a Docker registry and for building an image locally so that you may publish it to a registry of your choice. 
+The scripts contained here allow you to build an image of a new or existing connector, and deploy that image into your Kubernetes cluster on your CP4S environment. The are also options for deploying an existing image from a Public registry such as docker hub and for building an image locally so that you may publish it to a registry of your choice. 
 
 The `deploy` script automatically: 
 
 1. Installs the required Python libraries.
 2. [Packages the desired stix-shifter module](https://github.com/opencybersecurityalliance/stix-shifter/blob/master/adapter-guide/develop-stix-adapter.md#Packaging-individual-connectors) into a wheel file.
-3. Builds a Docker image from that wheel file.
+3. Builds a container image from that wheel file.
 4. Signs the image if a certificate is present.
 5. Deploys the image into your cluster.
 
@@ -14,7 +14,7 @@ The `deploy` script automatically:
 
 The following needs to be installed on your local machine: 
 * Python 3
-* Docker
+* Podman (Other Container manangement tool can be used such as Docker)
 * OpenShift CLI (`oc`)
 * Kubernetes CLI (`kubectl`)
 * OpenSSL (`openssl`)
@@ -33,6 +33,10 @@ Since the primary use-case for these scripts is to install a new or updated conn
 8. Log into your CP4S cluster: 
 
     `cloudctl login -a <ICP CLUSTER URL> -u <USERNAME> -p <PASSWORD> -n <NAMESPACE>`
+
+    OR
+
+    `oc login -u <USER> --server=<SERVER URL>`
 
     Note: there is a known issue when logged in as `kubeadmin` user via oc command, `oc login -u kubeadmin`
 

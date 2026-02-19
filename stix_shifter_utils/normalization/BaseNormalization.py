@@ -3,7 +3,6 @@ from cmath import inf
 from stix_shifter_utils.utils import logger
 from stix_shifter_utils.utils.file_helper import read_json as helper_read_json
 from datetime import datetime
-from stix2validator import validate_instance, print_results, ValidationOptions
 import uuid
 
 
@@ -16,7 +15,6 @@ class BaseNormalization(object,metaclass=ABCMeta):
 
     def __init__(self, options):
         self.logger = logger.set_logger(__name__)
-        self.stix_validator = options.get('stix_validator')
 
 
     def create_stix_bundle(self, version="2.1"):
@@ -60,12 +58,6 @@ class BaseNormalization(object,metaclass=ABCMeta):
             if data_source.get('sectors'): stix_identity_sdo['sectors'] = data_source['sectors']
             if data_source.get('contact_information'): stix_identity_sdo['contact_information'] = data_source['contact_information']
 
-            if self.stix_validator:
-                options = ValidationOptions(version="2.1")
-                results = validate_instance(stix_identity_sdo, options)          
-                if results.is_valid is False:            
-                    print_results(results)
-                    raise Exception(f'Invalid parameter set in identity SDO. Please follow STIX 2.1 spec for properties') 
 
             return [stix_identity_sdo]
         
@@ -113,12 +105,6 @@ class BaseNormalization(object,metaclass=ABCMeta):
                     if (not len(extension_object['extension_properties']) > 0):
                         del extension_object['extension_properties']
 
-            if self.stix_validator:
-                options = ValidationOptions(version="2.1")
-                results = validate_instance(extension_object, options)            
-                if results.is_valid is False:              
-                    print_results(results)
-                    raise Exception(f'Invalid parameter set in extension_object SDO. Please follow STIX 2.1 spec for properties') 
 
             stix_extension_sdo = [extension_object]
             return stix_extension_sdo
@@ -249,12 +235,6 @@ class BaseNormalization(object,metaclass=ABCMeta):
                     'modified': now
                 }        
 
-            if self.stix_validator:
-                options = ValidationOptions(version="2.1")
-                results = validate_instance(sighting, options)            
-                if results.is_valid is False:
-                    print_results(results)
-                    raise Exception(f'Invalid parameter set in sighting SDO. Please follow STIX 2.1 spec for properties') 
 
             return [sighting]
         except Exception as err:
@@ -284,12 +264,6 @@ class BaseNormalization(object,metaclass=ABCMeta):
             infrastructure_types = self.normalized_infra_type(infrastructure['infrastructure_types'])
             infrastructure['infrastructure_types'] = infrastructure_types
 
-            if self.stix_validator:
-                options = ValidationOptions(version="2.1")
-                results = validate_instance(infrastructure, options)            
-                if results.is_valid is False:
-                    print_results(results)
-                    raise Exception(f'Invalid parameter set in infrastructure SDO. Please follow STIX 2.1 spec for properties') 
 
             infrastructure_array = [infrastructure]
             relationship = self.createRelationship(infrastructure_array, indicator_id)
@@ -355,13 +329,6 @@ class BaseNormalization(object,metaclass=ABCMeta):
                     malware_types = self.normalized_malware_type(malware['malware_types'])     
                     malware['malware_types'] = malware_types                    
 
-                    # malware SDO properties validation        
-                    if self.stix_validator:
-                        options = ValidationOptions(version="2.1")
-                        results = validate_instance(malware, options)                    
-                        if results.is_valid is False:                        
-                            print_results(results)
-                            raise Exception(f'Invalid parameter set in malware SDO. Please follow STIX 2.1 spec for properties') 
 
                     # if name is not present then compare only malware_types to remove duplicate else check malware types and name.                    
                     if (len([i for i in malware_array if (i['malware_types'] == malware ['malware_types'] and i['name'] == malware ['name'])]) == 0):                        
@@ -417,13 +384,6 @@ class BaseNormalization(object,metaclass=ABCMeta):
             if (extension_id):
                 indicator = self.add_extension(indicator, extension_id, nested_properties, top_properties)
 
-            # indicator SDO properties validation        
-            if self.stix_validator:
-                options = ValidationOptions(version="2.1")
-                results = validate_instance(indicator, options)                    
-                if results.is_valid is False:
-                    print_results(results)                
-                    raise Exception(f'Invalid parameter set in indicator SDO. Please follow STIX 2.1 spec for properties')
 
             return [indicator]
 

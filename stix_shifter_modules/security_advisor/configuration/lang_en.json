@@ -1,8 +1,8 @@
 {
     "connection": {
         "host": {
-            "label": "Host URL",
-            "description": "Specify the host URL of the data source"
+            "label": "Management IP address or hostname",
+            "description": "Specify the IP address or hostname of the data source"
         },
         "help": {
             "label": "Need additional help?",

@@ -331,6 +331,14 @@ class ValueToList(ValueTransformer):
     def transform(obj):
         return [obj]
 
+
+class UnlistIfList(ValueTransformer):
+    """A value transformer that returns the first item if it is a list"""
+    @staticmethod
+    def transform(obj):
+        return obj[0] if isinstance(obj, list) else obj
+
+
 class GraphIDToPID(ValueTransformer):
     """A value transformer that converts a single value into a list container the value"""
 

@@ -277,11 +277,9 @@
     "transformer": "ToIsactive"
   },
   "firstObserved": {
-    "key": "first_observed",
-    "cybox": false
+    "key": "first_observed"
   },
   "lastObserved": {
-    "key": "last_observed",
-    "cybox": false
+    "key": "last_observed"
   }
 }
