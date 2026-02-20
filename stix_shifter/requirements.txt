@@ -1,5 +1,5 @@
 aioboto3>=15.2.0,<16.0.0
-aiohttp-retry==2.8.3
+aiohttp-retry==2.9.1
 aiomysql>=0.3.2,<0.4.0
 antlr4-python3-runtime==4.13.2
 asyncio==3.4.3
