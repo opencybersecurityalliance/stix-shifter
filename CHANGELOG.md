@@ -14,6 +14,77 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 ### Dependency update:
 *List the dependecy upgrade or downgrade.*
 
+## 8.1.0 (2026-02-20)
+
+### Breaking changes:
+* None
+
+### Deprecations:
+* None
+
+### Changes:
+* Modernised core dependencies and applied security updates (contribution by **@toliver-hb**) to address known vulnerabilities and improve STIX pattern parsing reliability. [#1776](https://github.com/opencybersecurityalliance/stix-shifter/pull/1776)
+  * Upgraded **antlr4-python3-runtime** to `4.13.2` and regenerated STIX pattern grammar files.
+  * Added a runtime compatibility workaround for the `stix_bundle` connector to mitigate an upstream issue in `stix2-matcher==3.0.0` that caused `"'datetime.datetime' object is not iterable"` errors.
+  * Removed incorrect timestamp manipulation logic that affected STIX 2.0 pattern handling.
+* Removed unused **NumPy** dependency from core requirements (still required by the Azure Log Analytics connector module). [#1781](https://github.com/opencybersecurityalliance/stix-shifter/pull/1781)
+
+### Fixes:
+* Patched multiple security vulnerabilities via updated dependencies. [#1782](https://github.com/opencybersecurityalliance/stix-shifter/pull/1782), [#1778](https://github.com/opencybersecurityalliance/stix-shifter/pull/1778), and [#1776](https://github.com/opencybersecurityalliance/stix-shifter/pull/1776)
+
+### Dependency update:
+* Bump **pyOpenSSL** → `25.3.0`
+* Bump **antlr4-python3-runtime** → `4.13.2`
+* Bump **aioboto3** → `>=15.2.0,<16.0.0`
+* Constrain **aiomysql** → `>=0.3.2,<0.4.0`
+* Bump **attrs** → `24.2.0`
+* Bump **flask** → `3.1.3`
+* Bump **numpy** (Azure Log Analytics module only) → `>=2.1.0,<3.0.0`
+* Bump **stix2-patterns** → `2.1.2`
+* Bump **urllib3** → `>=2.6.3,<3.0.0`
+* Bump **pandas** (Azure Log Analytics module) → `2.2.2`
+
+--------------------------------------
+
+## 8.0.4 (2026-02-09)
+
+### Breaking changes:
+* None
+
+### Deprecations:
+* None
+
+### Changes:
+* Resolved incompatibility with newer `pip` (v26) caused by a non-PEP517-compliant transient dependency (`aiosonic`) affecting the Datadog connector. [#1774](https://github.com/opencybersecurityalliance/stix-shifter/pull/1774)
+
+### Fixes:
+* Addressed security vulnerability related to **aiomysql** dependency constraints. [#1775](https://github.com/opencybersecurityalliance/stix-shifter/pull/1775)
+
+### Dependency update:
+* Bump **datadog_api_client[async]** → `>=2.40.0,<3.0.0`
+* Constrain **aiomysql** → `>=0.3.2,<0.4.0`
+
+--------------------------------------
+
+## 8.0.3 (2026-01-14)
+
+### Breaking changes:
+* None
+
+### Deprecations:
+* None
+
+### Changes:
+* Increased default connection timeout to **10 seconds** to improve reliability for slower or high-latency environments. [#1772](https://github.com/opencybersecurityalliance/stix-shifter/pull/1772)
+
+### Fixes:
+* None
+
+### Dependency update:
+* None
+
+--------------------------------------
+
 ## 8.0.2 (2025-12-05)
 
 ### Breaking changes:
