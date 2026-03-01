@@ -48,7 +48,6 @@
     "\"DNS Request Domain\" as dnsdomainname",
     "EventID",
     "\"Process Path\" as Image",
-    "\"Parent Process Path\" as ParentImage",
     "\"Process CommandLine\" as ProcessCommandLine",
     "\"Parent Command\" as ParentCommandLine",
     "\"Target Process Path\" as TargetImage",
