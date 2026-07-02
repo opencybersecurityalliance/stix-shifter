@@ -247,7 +247,7 @@ class TestQueryTranslator(unittest.TestCase, object):
     def test_domainname_query(self):
         stix_pattern = "[domain-name:value = 'example.com']"
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE (dnsdomainname LIKE '%example.com%' OR UrlHost LIKE '%example.com%') {} {}".format(default_limit, default_time)
+        where_statement = "WHERE (dnsdomainname LIKE '%example.com%' OR UrlHost = 'example.com') {} {}".format(default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_generic_filehash_query(self):
@@ -313,7 +313,7 @@ class TestQueryTranslator(unittest.TestCase, object):
         search_string = 'example.com'
         stix_pattern = "[url:value LIKE '{}']".format(search_string)
         query = _translate_query(stix_pattern)
-        where_statement = "WHERE url LIKE '%{0}%' {1} {2}".format(search_string, default_limit, default_time)
+        where_statement = "WHERE url LIKE '{0}' {1} {2}".format(search_string, default_limit, default_time)
         _test_query_assertions(query, selections, from_statement, where_statement)
 
     def test_payload_string_matching_with_LIKE(self):
@@ -372,10 +372,48 @@ class TestQueryTranslator(unittest.TestCase, object):
         stix_pattern = "([ipv4-addr:value = '192.168.1.2'] OR [url:value LIKE '%.example.com']) START t'2020-09-11T13:00:52.000Z' STOP t'2020-09-11T13:59:04.000Z'"
         query = _translate_query(stix_pattern)
         where_statement_01 = "WHERE (sourceip = '192.168.1.2' OR destinationip = '192.168.1.2' OR identityip = '192.168.1.2') limit 10000 START 1599829252000 STOP 1599832744000"
-        where_statement_02 = "WHERE url LIKE '%%.example.com%' limit 10000 START 1599829252000 STOP 1599832744000"
+        where_statement_02 = "WHERE url LIKE '%.example.com' limit 10000 START 1599829252000 STOP 1599832744000"
         assert len(query['queries']) == 2
         assert query['queries'][0] == selections + from_statement + where_statement_01
         assert query['queries'][1] == selections + from_statement + where_statement_02
+
+    def test_LIKE_operator_prefix_wildcard(self):
+        stix_pattern = "[url:value LIKE 'S_on%']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE url LIKE 'S_on%' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_LIKE_operator_suffix_wildcard(self):
+        stix_pattern = "[url:value LIKE '%.example.com']"
+        query = _translate_query(stix_pattern)
+        where_statement = "WHERE url LIKE '%.example.com' {} {}".format(default_limit, default_time)
+        _test_query_assertions(query, selections, from_statement, where_statement)
+
+    def test_domainname_equality_field_order_independence(self):
+        from stix_shifter_modules.qradar.stix_translation.query_constructor import AqlQueryStringPatternTranslator
+        from stix_shifter_utils.stix_translation.src.patterns.pattern_objects import ComparisonExpression, ComparisonComparators
+
+        class MockSelf:
+            class dmm:
+                dialect = 'events'
+            comparator_lookup = {"ComparisonComparators.Like": "LIKE"}
+
+            @staticmethod
+            def _is_reference_value(stix_field):
+                return AqlQueryStringPatternTranslator._is_reference_value(stix_field)
+
+        expression = ComparisonExpression('domain-name:value', 'example.com', ComparisonComparators.Equal)
+        mock_self = MockSelf()
+        value = "'example.com'"
+        comparator = "="
+
+        result_default = AqlQueryStringPatternTranslator._parse_mapped_fields(
+            mock_self, expression, value, comparator, 'value', ['dnsdomainname', 'UrlHost'])
+        assert result_default == "dnsdomainname LIKE '%example.com%' OR UrlHost = 'example.com'"
+
+        result_reversed = AqlQueryStringPatternTranslator._parse_mapped_fields(
+            mock_self, expression, value, comparator, 'value', ['UrlHost', 'dnsdomainname'])
+        assert result_reversed == "UrlHost = 'example.com' OR dnsdomainname LIKE '%example.com%'"
 
     def test_registry_search(self):
         stix_pattern = "[windows-registry-key:values[*].name = 'abcd']"
