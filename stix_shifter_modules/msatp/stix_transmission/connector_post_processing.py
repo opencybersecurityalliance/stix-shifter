@@ -182,7 +182,7 @@ class ConnectorPostProcessing:
             query = ConnectorPostProcessing.DEVICE_NETWORK_QUERY.format(query)
         return query
 
-    def post_process(self, response_data, return_obj, api_client_run_search):
+    async def post_process(self, response_data, return_obj, api_client_run_search):
         response_data = merge_alerts(response_data)
         for event_data in response_data:
             table = event_data.get('TableName')
@@ -194,7 +194,7 @@ class ConnectorPostProcessing:
                 # query events table according to alert fields
                 joined_query = self.join_alert_with_events(timestamp, device_name, report_id)
                 print("joining alert with events: ", joined_query)
-                events_data = api_client_run_search(joined_query)
+                events_data = await api_client_run_search(joined_query)
                 if len(events_data) == 0:
                     # if only alert - assign the alert title to x-oca-event
                     event_data['ActionType'] = event_data.get("Title")
