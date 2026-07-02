@@ -1,0 +1,35 @@
+{
+    "connection": {
+        "type": {
+            "displayName": "Securonix",
+            "group": "securonix"
+        },
+        "host": {
+            "type": "text",
+             "regex": "^(https:\\/\\/)([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9_:\\/\\-]*[a-zA-Z0-9])\\.\\w+\\.\\w+"
+        },
+          "help": {
+            "default": "data-sources-securonix.html",
+            "type": "link"
+          },
+        "options": {
+            "validate_pattern": {
+                "default": false
+            },
+            "result_limit": {
+                "default": 1000
+            }
+        }
+    },
+     "configuration": {
+        "auth": {
+            "type" : "fields",
+           "username": {
+                "type": "text"
+            },
+            "password": {
+                "type": "password"
+            }
+        }
+    }
+}

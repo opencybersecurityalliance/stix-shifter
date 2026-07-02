@@ -1,0 +1,25 @@
+{
+    "connection": {
+        "host": {
+            "label": "Securonix Host URL",
+            "description": "Specify the URL of your Securonix instance (e.g., https://yourinstance.securonix.net)"
+        },
+        "help": {
+            "label": "Need additional help?",
+            "description": "More details on the data source setting can be found in the specified link"
+        }
+    },
+    "configuration": {
+        "auth": {
+            "type" : "fields",
+            "username": {
+                "label": "Username",
+                "description": "Securonix Username"
+            },
+            "password": {
+                "label": "Password",
+                "description": "Securonix Password"
+            }
+        }
+    }
+}
