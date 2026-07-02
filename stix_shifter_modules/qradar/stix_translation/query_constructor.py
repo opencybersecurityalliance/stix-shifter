@@ -53,7 +53,11 @@ class AqlQueryStringPatternTranslator:
 
     @staticmethod
     def _format_like(value) -> str:
-        return "'%{value}%'".format(value=value)
+        return "'{}'".format(value)
+
+    @staticmethod
+    def _format_substring_like(value) -> str:
+        return "'%{}%'".format(value)
 
     @staticmethod
     def _escape_value(value, comparator=None) -> str:
@@ -108,35 +112,37 @@ class AqlQueryStringPatternTranslator:
         mapped_fields_count = 1 if is_reference_value else len(mapped_fields_array)
 
         for mapped_field in mapped_fields_array:
+            field_comparator = comparator
+            field_value = value
             # if its a set operator() query construction will be different.
             if expression.object_path in FILTERING_DATA_TYPES.keys():
-                comparison_string += "{}({})".format(FILTERING_DATA_TYPES[expression.object_path], value)
+                comparison_string += "{}({})".format(FILTERING_DATA_TYPES[expression.object_path], field_value)
             elif expression.comparator == ComparisonComparators.IsSubSet:
-                comparison_string += comparator + "(" + "'" + value + "'," + mapped_field + ")"
+                comparison_string += field_comparator + "(" + "'" + field_value + "'," + mapped_field + ")"
             elif is_reference_value:
-                parsed_reference = self._parse_reference(self, stix_field, value_type, mapped_field, value, comparator)
+                parsed_reference = self._parse_reference(self, stix_field, value_type, mapped_field, field_value, field_comparator)
                 if not parsed_reference:
                     continue
                 comparison_string += parsed_reference
             # For [ipv4-addr:value = <CIDR value>]
             elif bool(re.search(observable.REGEX['ipv4_cidr'], str(expression.value))):
-                comparison_string += "INCIDR(" + value + "," + mapped_field + ")"
+                comparison_string += "INCIDR(" + field_value + "," + mapped_field + ")"
             elif (expression.object_path == 'ipv4-addr:value'
                   or expression.object_path == 'ipv6-addr:value'
                   or expression.object_path == 'network-traffic:dst_ref.value'
                   or expression.object_path == 'network-traffic:src_ref.value') \
                   and expression.comparator == ComparisonComparators.Like:
                       comparison_string += "str({mapped_field}) {comparator} {value}".format(mapped_field=mapped_field,
-                                                                                             comparator=comparator,
-                                                                                             value=value)
+                                                                                             comparator=field_comparator,
+                                                                                             value=field_value)
             else:
                 # There's no aql field for domain-name. using Like operator to find domian name from the url
-                if self.dmm.dialect == 'events' and mapped_field == 'dnsdomainname' and comparator != ComparisonComparators.Like:
-                    comparator = self.comparator_lookup["ComparisonComparators.Like"]
-                    value = self._format_like(expression.value)
+                if self.dmm.dialect == 'events' and mapped_field == 'dnsdomainname' and expression.comparator != ComparisonComparators.Like:
+                    field_comparator = self.comparator_lookup["ComparisonComparators.Like"]
+                    field_value = AqlQueryStringPatternTranslator._format_substring_like(expression.value)
 
                 comparison_string += "{mapped_field} {comparator} {value}".format(
-                    mapped_field=mapped_field, comparator=comparator, value=value)
+                    mapped_field=mapped_field, comparator=field_comparator, value=field_value)
 
             if (mapped_fields_count > 1):
                 comparison_string += " OR "
@@ -237,7 +243,7 @@ class AqlQueryStringPatternTranslator:
         elif expression.comparator == ComparisonComparators.Equal or expression.comparator == ComparisonComparators.NotEqual:
             # Should be in single-quotes
             value = self._format_equality(expression.value)
-        # '%' -> '*' wildcard, '_' -> '?' single wildcard
+        # Pass STIX LIKE wildcards (% and _) through unchanged
         elif expression.comparator == ComparisonComparators.Like and not (expression.object_path == 'artifact:payload_bin'):
             value = self._format_like(expression.value)
         else:
