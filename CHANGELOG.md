@@ -14,6 +14,70 @@ We have started this changelogs from version 4.0.0. So, changes on previously re
 ### Dependency update:
 *List the dependecy upgrade or downgrade.*
 
+## 8.1.3 (2026-10-16)
+
+### Breaking changes:
+* None
+
+### Deprecations:
+* None
+
+### Changes:
+* Refactored build tooling (`build_tools/build.py`) to streamline logging output and improve progress tracking:
+  * Demoted verbose build and file-copying messages from `INFO` to `DEBUG` level.
+  * Added `[current/total]` progress counters and elapsed timing metrics per project/connector built.
+  * Cleaned up CLI output by removing decorative divider print statements.
+
+### Fixes:
+* None
+
+### Dependency update:
+* None
+
+--------------------------------------
+
+## 8.1.2 (2026-06-26)
+
+### Breaking changes:
+* None
+
+### Deprecations:
+* None
+
+### Changes:
+* None
+
+### Fixes:
+* None
+
+### Dependency update:
+* Bump and loosen **pyOpenSSL** range pin → `>=26.3.0`
+* Updated deployment container dependencies (**cryptography** `>=49.0.0`, **pyOpenSSL** `>=26.3.0`)
+
+--------------------------------------
+
+## 8.1.1 (2026-04-07)
+
+### Breaking changes:
+* None
+
+### Deprecations:
+* None
+
+### Changes:
+* None
+
+### Fixes:
+* None
+
+### Dependency update:
+* Bump **aiohttp-retry** → `2.9.1`
+* Bump **colorlog** → `6.10.1`
+* Bump **json-fix** → `1.0.2`
+* Bump **pyOpenSSL** → `26.0.0`
+
+--------------------------------------
+
 ## 8.1.0 (2026-02-20)
 
 ### Breaking changes:
