@@ -2,6 +2,7 @@ import os
 import subprocess
 import sys
 import shutil
+import time
 import json
 import io
 import tempfile
@@ -70,7 +71,7 @@ def _generate_connector_mappings(tmp_mapping_dir=TMP_MAPPING_DIR, modules_dir=MO
     ]:
         skip_path = os.path.join(modules_dir, module, SKIP_ME)
         if not os.path.isfile(skip_path):
-            logger.info(f"Processing mapping for {module}...")
+            logger.debug("Processing mapping for %s...", module)
             connector_module = importlib.import_module(f"stix_shifter_modules.{module}.entry_point")
             entry_point = connector_module.EntryPoint()
             mapping = entry_point.get_mapping()
@@ -175,7 +176,7 @@ def _copy_src_folders_to_dir(src_folders: list[str], project_build_dir: Path):
         project_build_dir: Path to the temporary build directory.
     """
     project_build_dir = Path(project_build_dir)
-    logger.info("Copying %d source folders into %s", len(src_folders), project_build_dir)
+    logger.debug("Copying %d source folders into %s", len(src_folders), project_build_dir)
 
     for src in src_folders:
         src_path = (PROJECT_ROOT / src).resolve()
@@ -427,7 +428,7 @@ def _run_build(
     if not pyproject_template_path.exists():
         raise FileNotFoundError(f"pyproject template not found: {pyproject_template_path}")
 
-    logger.info(f"Building {project_name} ...")
+    logger.debug("Building %s ...", project_name)
     logger.debug("temp_parent_dir=%s", temp_parent)
     logger.debug("out_dir=%s", out_dir)
 
@@ -436,7 +437,7 @@ def _run_build(
     # Use context manager so tmp cleaned automatically unless we keep it for debug
     with tempfile.TemporaryDirectory(dir=str(temp_parent)) as tmp_dir:
         project_build_dir = Path(tmp_dir)
-        logger.info("Temporary build dir: %s", project_build_dir)
+        logger.debug("Temporary build dir: %s", project_build_dir)
 
         _copy_src_folders_to_dir(src_folders, project_build_dir) 
         _copy_shared_files(project_build_dir)
@@ -471,7 +472,7 @@ def _run_build(
             cmd.extend(additional_args)
 
         # Use subprocess.run to capture output (avoid blocking reads)
-        logger.info("Running build command: %s", " ".join(cmd))
+        logger.debug("Running build command: %s", " ".join(cmd))
         try:
             result = subprocess.run(
                 cmd,
@@ -514,7 +515,7 @@ def _run_build(
             logger.info("Preserved temporary build directory at %s", destination)
 
     # end with TemporaryDirectory cleaned up (unless copied to preserved_*)
-    logger.info("Wheels placed in: %s", out_dir)
+    logger.debug("Wheels placed in: %s", out_dir)
     return wheel_paths
 
 
@@ -544,10 +545,9 @@ def _process_projects(projects, version_value, additional_args, mode_value, tmp_
     Iterate over each project in the projects mapping and run the full packaging flow
     (collect packages, requirements, entry points; prepare manifest/config; run build; cleanup).
     """
-    for project_name in projects.keys():
-        print("~" * 50)
-        logger.info("Building: %s", project_name)
-
+    total = len(projects)
+    for idx, project_name in enumerate(projects.keys(), 1):
+        start_time = time.time()
         src_folders = projects[project_name]
 
         # Prepare packages
@@ -581,8 +581,8 @@ def _process_projects(projects, version_value, additional_args, mode_value, tmp_
         # Cleanup and restore moved directories
         _cleanup_after_setup(cleanup_file_list, temp_dir_list, project_name)
 
-        logger.info("Completed: %s", project_name)
-        print("~" * 50)
+        elapsed = time.time() - start_time
+        logger.info("[%d/%d] Built %s (%.1fs)", idx, total, project_name, elapsed)
 
 
 # ------------------------------------------------------------------------------
