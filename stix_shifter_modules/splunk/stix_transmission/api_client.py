@@ -21,12 +21,18 @@ class APIClient():
         self.endpoint_start = 'services/'
         self.authenticated = False
         headers = {}
+        auth = configuration.get('auth') or {}
+        if auth.get('api_key'):
+            # Splunk authentication tokens are sent as a Bearer token on every
+            # request, so there is no session key to fetch from auth/login.
+            headers['Authorization'] = "Bearer " + auth['api_key']
+            self.authenticated = True
         self.client = RestApiClientAsync(connection.get('host'),
                                     connection.get('port'),
                                     headers,
                                     cert_verify=connection.get('selfSignedCert')
                                     )
-        self.auth = configuration.get('auth')
+        self.auth = auth
         self.headers = headers
         self.timeout = connection['options'].get('timeout')
 
@@ -38,6 +44,8 @@ class APIClient():
 
     async def set_splunk_auth_token(self, auth, headers):
         """ method to set splunk auth token """
+        if 'username' not in auth or 'password' not in auth:
+            raise Exception('Authentication error: provide either an api_key or a username and password')
         data = {'username': auth['username'], 'password': auth['password'], 'output_mode': 'json'}
         endpoint = self.endpoint_start + 'auth/login'
         try:

@@ -32,6 +32,10 @@
             "password": {
                 "label": "Password",
                 "description": "Password of the user with access to the search API"
+            },
+            "api_key": {
+                "label": "Authentication token (Token based access)",
+                "description": "Splunk authentication token. Sent as a Bearer token instead of logging in with a username and password"
             }
         }
     }
