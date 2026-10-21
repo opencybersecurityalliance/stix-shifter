@@ -3,6 +3,7 @@ import os
 from unittest.mock import patch
 from aiohttp.client_exceptions import ClientConnectionError
 from stix_shifter_modules.splunk.entry_point import EntryPoint
+from stix_shifter_modules.splunk.stix_transmission.api_client import APIClient
 from stix_shifter.stix_transmission import stix_transmission
 from stix_shifter.stix_transmission.stix_transmission import run_in_thread
 from stix_shifter_utils.utils.error_response import ErrorCode
@@ -782,3 +783,71 @@ class TestSplunkConnection(unittest.TestCase, object):
         assert delete_response['success'] is False
         assert delete_response['error'] is not None
         assert "Invalid Host" in delete_response['error']
+
+
+class TestSplunkApiKeyAuth(unittest.TestCase, object):
+    """ class for test splunk authentication token (api_key) auth"""
+
+    connection = {
+        "host": "host",
+        "port": 8080,
+        "options": {}
+    }
+
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
+    def test_api_key_sets_bearer_header_and_skips_login(self, mock_call_api):
+        """api_key is sent as a Bearer token and auth/login is never called"""
+        mock_call_api.return_value = get_mock_response(200, '{}')
+        client = APIClient(self.connection, {"auth": {"api_key": "abc123"}})
+
+        assert client.headers['Authorization'] == "Bearer abc123"
+
+        run_in_thread(client.ping_box)
+        called_endpoints = [c.args[0] for c in mock_call_api.call_args_list]
+        assert called_endpoints == ['services/']
+        assert client.headers['Authorization'] == "Bearer abc123"
+
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
+    def test_api_key_takes_precedence_over_username_password(self, mock_call_api):
+        """api_key wins when username and password are also present"""
+        mock_call_api.return_value = get_mock_response(200, '{}')
+        config = {"auth": {"username": "u", "password": "p", "api_key": "abc123"}}
+        client = APIClient(self.connection, config)
+
+        run_in_thread(client.ping_box)
+        called_endpoints = [c.args[0] for c in mock_call_api.call_args_list]
+        assert 'services/auth/login' not in called_endpoints
+        assert client.headers['Authorization'] == "Bearer abc123"
+
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
+    def test_username_password_still_uses_session_key(self, mock_call_api):
+        """username/password keeps the auth/login session key flow"""
+        mock_call_api.return_value = get_mock_response(200, '{"sessionKey": "sess"}')
+        config = {"auth": {"username": "u", "password": "p"}}
+        client = APIClient(self.connection, config)
+
+        run_in_thread(client.ping_box)
+        called_endpoints = [c.args[0] for c in mock_call_api.call_args_list]
+        assert called_endpoints[0] == 'services/auth/login'
+        assert client.headers['Authorization'] == "Splunk sess"
+
+    @patch('stix_shifter_modules.splunk.stix_transmission.api_client.APIClient.ping_box')
+    def test_ping_with_api_key(self, mock_ping_response):
+        """ping succeeds through the transmission layer with only an api_key"""
+        mock_ping_response.return_value = get_mock_response(200, '["mock", "placeholder"]')
+        transmission = stix_transmission.StixTransmission('splunk', {"host": "host", "port": 8080},
+                                                          {"auth": {"api_key": "abc123"}})
+        ping_response = transmission.ping()
+
+        assert ping_response['success']
+
+    @patch('stix_shifter_utils.stix_transmission.utils.RestApiClientAsync.RestApiClientAsync.call_api')
+    def test_missing_credentials_fails_ping(self, mock_call_api):
+        """no api_key and no username/password returns an auth error"""
+        transmission = stix_transmission.StixTransmission('splunk', {"host": "host", "port": 8080},
+                                                          {"auth": {}})
+        ping_response = transmission.ping()
+
+        assert ping_response['success'] is False
+        assert 'api_key' in ping_response['error']
+        mock_call_api.assert_not_called()

@@ -20,6 +20,21 @@ See the [table of mappings](splunk_supported_stix.md) for the STIX objects and o
    |Query Endpoint  |https://<server_ip>:<port>/services/search/jobs|POST
    |Result Endpoint|https://<server_ip>:<port>/services/search/v2/jobs/<search_id>/results|GET
    
+### Authentication
+
+The connector supports two ways to authenticate:
+
+- **Username and password**: the connector logs in through `services/auth/login` and uses the returned session key.
+  ```json
+  {"auth": {"username": "xxxx", "password": "xxxx"}}
+  ```
+- **Authentication token**: create a token in Splunk (Settings > Tokens) and pass it as `api_key`. It is sent as `Authorization: Bearer <token>` on every request, so no login call is made. Token authentication must be enabled on the Splunk instance.
+  ```json
+  {"auth": {"api_key": "xxxx"}}
+  ```
+
+If both are provided, `api_key` is used.
+
 ### Format for calling stix-shifter from the command line
 ```
 python main.py `<translate or transmit>` `<translator_module>` `<query or result>` `<STIX identity object>` `<data>`
