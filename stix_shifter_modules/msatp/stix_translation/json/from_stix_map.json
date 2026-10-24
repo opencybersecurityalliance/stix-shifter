@@ -315,7 +315,7 @@
       ],
       "account_login": [
         "DeviceProcessEvents.AccountUpn",
-        "DeviceEvents.AccountUpn",
+        "DeviceEvents.InitiatingProcessAccountUpn",
         "DeviceProcessEvents.InitiatingProcessAccountUpn",
         "DeviceNetworkEvents.InitiatingProcessAccountUpn",
         "DeviceRegistryEvents.InitiatingProcessAccountUpn",

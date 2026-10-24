@@ -1,0 +1,210 @@
+{
+  "action": {
+    "key": "x-oca-event.action",
+    "object": "x-oca-event"
+  },
+  "description": {
+    "key": "x-oca-event.description",
+    "object": "x-oca-event"
+  },
+  "category": {
+    "key": "x-oca-event.category",
+    "object": "x-oca-event"
+  },
+  "severity": {
+    "key": "x-oca-event.severity",
+    "object": "x-oca-event"
+  },
+  "eventtime": {
+    "key": "x-oca-event.created",
+    "object": "x-oca-event"
+  },
+  "username": {
+    "key": "user-account.user_id",
+    "object": "user-account"
+  },
+  "sourceip": {
+    "key": "ipv4-addr.value",
+    "object": "ipv4-addr"
+  },
+  "destinationip": {
+    "key": "ipv4-addr.value",
+    "object": "ipv4-addr"
+  },
+  "ipaddress": {
+    "key": "ipv4-addr.value",
+    "object": "ipv4-addr"
+  },
+  "sourceprocessname": {
+    "key": "process.name",
+    "object": "process"
+  },
+  "resourcename": {
+    "key": "x-oca-asset.hostname",
+    "object": "x-oca-asset"
+  },
+  "resourcehostname": {
+    "key": "x-oca-asset.hostname",
+    "object": "x-oca-asset"
+  },
+  "timeline": {
+    "key": "x-oca-event.timeline",
+    "object": "x-oca-event"
+  },
+  "timeline_by_month": {
+    "key": "x-oca-event.timeline_by_month",
+    "object": "x-oca-event"
+  },
+  "timeline_by_week": {
+    "key": "x-oca-event.timeline_by_week",
+    "object": "x-oca-event"
+  },
+  "timeline_by_hour": {
+    "key": "x-oca-event.timeline_by_hour",
+    "object": "x-oca-event"
+  },
+  "timeline_by_minute": {
+    "key": "x-oca-event.timeline_by_minute",
+    "object": "x-oca-event"
+  },
+  "rg_timezoneoffset": {
+    "key": "x-oca-event.rg_timezoneoffset",
+    "object": "x-oca-event"
+  },
+  "rg_functionality": {
+    "key": "x-oca-event.rg_functionality",
+    "object": "x-oca-event"
+  },
+  "rg_resourcetypeid": {
+    "key": "x-oca-event.rg_resourcetypeid",
+    "object": "x-oca-event"
+  },
+  "rg_vendor": {
+    "key": "x-oca-event.rg_vendor",
+    "object": "x-oca-event"
+  },
+  "resourcegroupname": {
+    "key": "x-oca-event.resourcegroupname",
+    "object": "x-oca-event"
+  },
+  "resourcegroupid": {
+    "key": "x-oca-event.resourcegroupid",
+    "object": "x-oca-event"
+  },
+  "accountresourcekey": {
+    "key": "x-oca-event.accountresourcekey",
+    "object": "x-oca-event"
+  },
+  "accountname": {
+    "key": "x-oca-event.accountname",
+    "object": "x-oca-event"
+  },
+  "userid": {
+    "key": "x-oca-event.userid",
+    "object": "x-oca-event"
+  },
+  "tenantid": {
+    "key": "x-oca-event.tenantid",
+    "object": "x-oca-event"
+  },
+  "tenantname": {
+    "key": "x-oca-event.tenantname",
+    "object": "x-oca-event"
+  },
+  "eventid": {
+    "key": "x-oca-event.eventid",
+    "object": "x-oca-event"
+  },
+  "id": {
+    "key": "x-oca-event.id",
+    "object": "x-oca-event"
+  },
+  "jobid": {
+    "key": "x-oca-event.jobid",
+    "object": "x-oca-event"
+  },
+  "ingestionnodeid": {
+    "key": "x-oca-event.ingestionnodeid",
+    "object": "x-oca-event"
+  },
+  "routekey": {
+    "key": "x-oca-event.routekey",
+    "object": "x-oca-event"
+  },
+  "datetime": {
+    "key": "x-oca-event.datetime",
+    "object": "x-oca-event"
+  },
+  "collectiontimestamp": {
+    "key": "x-oca-event.collectiontimestamp",
+    "object": "x-oca-event"
+  },
+  "receivedtime": {
+    "key": "x-oca-event.receivedtime",
+    "object": "x-oca-event"
+  },
+  "publishedtime": {
+    "key": "x-oca-event.publishedtime",
+    "object": "x-oca-event"
+  },
+  "categorizedtime": {
+    "key": "x-oca-event.categorizedtime",
+    "object": "x-oca-event"
+  },
+  "jobstarttime": {
+    "key": "x-oca-event.jobstarttime",
+    "object": "x-oca-event"
+  },
+  "_indexed_at_tdt": {
+    "key": "x-oca-event._indexed_at_tdt",
+    "object": "x-oca-event"
+  },
+  "collectionmethod": {
+    "key": "x-oca-event.collectionmethod",
+    "object": "x-oca-event"
+  },
+  "categoryseverity": {
+    "key": "x-oca-event.categoryseverity",
+    "object": "x-oca-event"
+  },
+  "version": {
+    "key": "x-oca-event.version",
+    "object": "x-oca-event"
+  },
+  "year": {
+    "key": "x-oca-event.year",
+    "object": "x-oca-event"
+  },
+  "month": {
+    "key": "x-oca-event.month",
+    "object": "x-oca-event"
+  },
+  "week": {
+    "key": "x-oca-event.week",
+    "object": "x-oca-event"
+  },
+  "dayofyear": {
+    "key": "x-oca-event.dayofyear",
+    "object": "x-oca-event"
+  },
+  "dayofmonth": {
+    "key": "x-oca-event.dayofmonth",
+    "object": "x-oca-event"
+  },
+  "dayofweek": {
+    "key": "x-oca-event.dayofweek",
+    "object": "x-oca-event"
+  },
+  "hour": {
+    "key": "x-oca-event.hour",
+    "object": "x-oca-event"
+  },
+  "minute": {
+    "key": "x-oca-event.minute",
+    "object": "x-oca-event"
+  },
+  "customfield2": {
+    "key": "x-oca-event.customfield2",
+    "object": "x-oca-event"
+  }
+}
